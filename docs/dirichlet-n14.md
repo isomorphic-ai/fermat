@@ -105,22 +105,30 @@ t'^14-u'^14 = 2^(9m+4) 7^(3n'+4) w'^14,
 ```
 
 with coprime `t',u'`. For the rigorous descent bound, put `a = r² + 7s²`.
-Norm comparison gives `a < t`. Moreover `4|rs| ≤ a` and `|R| ≤ 7a³`, so
-`max(t'^14,u'^14) ≤ 14a³ < a^14`; hence `t',u' < a < t`. Infinite descent
-finishes.
+Norm comparison gives `a < |t|`. Moreover `4|rs| ≤ a` and `|R| ≤ 7a³`, so
+`max(t'^14,u'^14) ≤ 14a³ < a^14`; hence `|t'|,|u'| < a < |t|`. Infinite
+descent finishes.
 
 ## Lean status
 
-`Fermat/Fourteen/Dirichlet.lean` currently checks:
+The checked proof is split into the following modules:
 
-- the exact factorization (3);
-- coprimality of `φ` with `tu` and with `ψ`;
-- the generalized equation (5);
-- the abstract infinite-descent engine.
+- `Fermat/Quadratic/NegSeven.lean` constructs
+  `ℤ[(1+√-7)/2]`, proves its norm-Euclidean algorithm (with rounding error
+  at most `11/16`), and classifies its units as `±1`;
+- `Fermat/Fourteen/PowerExtraction.lean` proves the specialized signed
+  fourteenth-power representation and returns the extracted root to
+  `ℤ[√-7]` by a modulo-`2` argument;
+- `Fermat/Fourteen/FirstCase.lean` completes the case `7 ∤ tuv`;
+- `Fermat/Fourteen/DescentSetup.lean` performs the first factor allocation in
+  the generalized equation;
+- `Fermat/Fourteen/DescentArithmetic.lean` proves the three-factor
+  coprimality, mod-`8` orientation, and strict size estimates;
+- `Fermat/Fourteen/DescentConstruction.lean` constructs the smaller solution,
+  including the exceptional `n = 0` valuation, and proves
+  `Fermat.Fourteen.Dirichlet.holdsAt_fourteen_dirichlet`.
 
-The remaining central obligation is the specialized representation theorem in
-`ℤ[√-7]`, followed by the explicit construction and size bound for the smaller
-solution.
+The theorem's dependency chain does not contain the `n = 7` result.
 
 ## Unit-sign repair
 
@@ -140,6 +148,6 @@ is unavailable for exponent `14`.
 For the first case, the omission is harmless because either sign still makes
 the `√-7` coefficient divisible by `7`. For the descent case, Lean's version
 retains the unit and allocates it among the signed real factors. No global UFD
-claim about `ℤ[√-7]` will be used: it is a nonmaximal order, so the required
-power-extraction result must be proved with its primitive, parity, and
-conductor hypotheses stated explicitly.
+claim about `ℤ[√-7]` is used: it is a nonmaximal order. Power extraction is
+instead performed in the Euclidean maximal order `ℤ[(1+√-7)/2]`; the parity
+hypothesis then forces the root back into `ℤ[√-7]`.
