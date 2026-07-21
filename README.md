@@ -13,9 +13,11 @@ The scope follows the historic source archive in `../fermat-data`. It excludes
 Wiles/Taylor–Wiles, modularity, elliptic curves, Kummer's general regular-prime
 theory, broad computational verification, and first-case-only results.
 
-The common theorem statement is `Fermat.HoldsAt n` over nonzero integers. The
-development will keep the historical descent arguments visible while splitting
-their algebraic and number-theoretic lemmas into reusable Lean modules.
+The common theorem statement is `Fermat.HoldsAt n`, an abbreviation for
+mathlib's `FermatLastTheoremFor n`. Mathlib already contains complete descent
+proofs for `n = 3` and `n = 4`; this project reuses those checked proofs and
+focuses its new work on `n = 5` and `n = 7`. The `n = 14` result follows from
+the `n = 7` result by divisibility of exponents.
 
 ## Build
 
