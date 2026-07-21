@@ -21,7 +21,7 @@ def scaledPhi (chi : ℤ) : ℤ := 7 ^ 2 * chi
 
 private theorem zmod_seven_pow_fourteen_eq_sq :
     ∀ x : ZMod 7, x ^ 14 = x ^ 2 := by
-  native_decide
+  decide
 
 /-- Neither of the two coprime leading entries in the generalized equation
 is divisible by `7`. -/

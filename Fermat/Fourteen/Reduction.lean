@@ -20,7 +20,7 @@ def FirstCaseImpossible : Prop :=
 
 private theorem zmod_seven_sum_fourteen_eq_zero :
     ∀ a b : ZMod 7, a ^ 14 + b ^ 14 = 0 → a = 0 ∧ b = 0 := by
-  native_decide
+  decide
 
 /-- In a primitive solution, the term on the right cannot be divisible by
 `7`.  This is the elementary `-1` nonresidue calculation modulo `7`. -/

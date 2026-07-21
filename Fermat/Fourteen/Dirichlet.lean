@@ -154,7 +154,7 @@ theorem final_factors_sub (r s : ℤ) :
 `ψ` is not divisible by `7` when neither `t` nor `u` is. -/
 private theorem zmod_seven_aux :
     ∀ a b : ZMod 7, a ≠ 0 → b ≠ 0 → (a ^ 2 - b ^ 2) ^ 2 + a ^ 2 * b ^ 2 ≠ 0 := by
-  native_decide
+  decide
 
 theorem not_seven_dvd_psi (t u : ℤ) (ht : ¬(7 : ℤ) ∣ t) (hu : ¬(7 : ℤ) ∣ u) :
     ¬(7 : ℤ) ∣ psi t u := by
