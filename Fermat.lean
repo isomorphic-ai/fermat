@@ -1,3 +1,3 @@
 import Fermat.Basic
 import Fermat.Classical
-import Fermat.Fourteen.Dirichlet
+import Fermat.Fourteen.Reduction
