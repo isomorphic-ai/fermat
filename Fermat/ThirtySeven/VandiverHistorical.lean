@@ -26,6 +26,7 @@ open scoped NumberField nonZeroDivisors
 
 open Fermat.Irregular.VandiverHistoricalDescent
 open Fermat.Irregular.VandiverCriterion
+open Fermat.Irregular.VandiverLemmaOne
 
 noncomputable section
 
@@ -160,6 +161,205 @@ lemma historicalState_theta_not_dvd37 {ζ : K}
     hζ.zeta_sub_one_prime'.dvd_of_dvd_pow homegaPow
   exact hζ.zeta_sub_one_prime'.not_unit
     (s.coprime_omega_theta.isUnit_of_dvd' homega htheta)
+
+/-! ## Identifying the real distinguished factor -/
+
+/-- For a factorization with real entries at exponent `37`, the unique
+linear factor carrying the excess `(ζ - 1)`-power is the factor at the
+root `1`.
+
+The allocated distinguished root is some `ζ^i`.  If its divided linear
+factor is still divisible by `ζ - 1`, complex conjugation shows that the
+factor at `ζ⁻ⁱ` has the same property.  Injectivity of the factor residues
+therefore gives `ζ^i = ζ⁻ⁱ`.  Since `37` is odd, this forces `i = 0`.
+
+This is the precise realness argument used implicitly when Vandiver assigns
+the high ramified power to `ω + θ`; no ideal-class theorem enters. -/
+theorem distinguishedRoot_eq_one_of_real37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {x y z : 𝓞 K} {ε : (𝓞 K)ˣ} {m : ℕ}
+    (e : x ^ 37 + y ^ 37 = ε *
+      ((hζ.unit'.1 - 1) ^ (m + 1) * z) ^ 37)
+    (hy : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ y)
+    (hxreal : NumberField.IsCMField.ringOfIntegersComplexConj K x = x)
+    (hyreal : NumberField.IsCMField.ringOfIntegersComplexConj K y = y) :
+    zeta_sub_one_dvd_root (by norm_num : 37 ≠ 2) hζ e hy =
+      oneNthRoot (K := K) (p := 37) := by
+  let π : 𝓞 K := (hζ.unit' : 𝓞 K) - 1
+  let η0 := zeta_sub_one_dvd_root (by norm_num : 37 ≠ 2) hζ e hy
+  let q0 : 𝓞 K :=
+    div_zeta_sub_one (by norm_num : 37 ≠ 2) hζ e η0
+  have hπ0 : π ≠ 0 :=
+    hζ.unit'_coe.sub_one_ne_zero (by norm_num)
+  have hq0 : π ∣ q0 := by
+    simpa only [π, q0, η0] using
+      (Ideal.Quotient.eq_zero_iff_dvd
+        ((hζ.unit' : 𝓞 K) - 1)
+        (div_zeta_sub_one (by norm_num : 37 ≠ 2) hζ e
+          (zeta_sub_one_dvd_root
+            (by norm_num : 37 ≠ 2) hζ e hy))).mp
+        (zeta_sub_one_dvd_root_spec
+          (by norm_num : 37 ≠ 2) hζ e hy)
+  have hetaPow : (η0 : 𝓞 K) ^ 37 = 1 := by
+    exact (Polynomial.mem_nthRootsFinset
+      (by norm_num : 0 < 37) (1 : 𝓞 K)).mp η0.prop
+  obtain ⟨i, hi, heta⟩ :=
+    hζ.unit'_coe.eq_pow_of_pow_eq_one hetaPow
+  by_cases hi0 : i = 0
+  · apply Subtype.ext
+    change (η0 : 𝓞 K) = 1
+    rw [← heta, hi0, pow_zero]
+  · have hiPos : 0 < i := Nat.pos_of_ne_zero hi0
+    let j : ℕ := 37 - i
+    have hj : j < 37 := by
+      dsimp [j]
+      omega
+    let ηj : Polynomial.nthRootsFinset 37 (1 : 𝓞 K) :=
+      ⟨(hζ.unit' : 𝓞 K) ^ j, by
+        rw [Polynomial.mem_nthRootsFinset (by norm_num : 0 < 37)]
+        rw [← pow_mul, show j * 37 = 37 * j by omega, pow_mul,
+          hζ.unit'_coe.pow_eq_one, one_pow]⟩
+    let qj : 𝓞 K :=
+      div_zeta_sub_one (by norm_num : 37 ≠ 2) hζ e ηj
+    have hzpowU : hζ.unit' ^ 37 = 1 := by
+      apply Units.ext
+      apply NumberField.RingOfIntegers.ext
+      change ζ ^ 37 = 1
+      exact hζ.pow_eq_one
+    have hinvpowU : (hζ.unit'⁻¹) ^ i = hζ.unit' ^ j := by
+      apply mul_left_cancel (a := hζ.unit' ^ i)
+      calc
+        hζ.unit' ^ i * (hζ.unit'⁻¹) ^ i = 1 := by
+          rw [← mul_pow]
+          simp
+        _ = hζ.unit' ^ (i + j) := by
+          rw [show i + j = 37 by dsimp [j]; omega, hzpowU]
+        _ = hζ.unit' ^ i * hζ.unit' ^ j := by rw [pow_add]
+    have hconjζ :
+        NumberField.IsCMField.ringOfIntegersComplexConj K
+          (hζ.unit' : 𝓞 K) = (hζ.unit'⁻¹ : (𝓞 K)ˣ) := by
+      exact congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K)
+        (unitsComplexConj_zeta37 hζ)
+    let u : (𝓞 K)ˣ := -hζ.unit'⁻¹
+    have hconjπ :
+        NumberField.IsCMField.ringOfIntegersComplexConj K π =
+          (u : 𝓞 K) * π := by
+      dsimp [π, u]
+      rw [map_sub, map_one, hconjζ]
+      have hinv :
+          (hζ.unit'⁻¹ : (𝓞 K)ˣ) * (hζ.unit' : 𝓞 K) = 1 := by
+        rw [← Units.val_mul]
+        simp
+      simp only [neg_mul, mul_sub, hinv]
+      ring
+    have hconjη0 :
+        NumberField.IsCMField.ringOfIntegersComplexConj K (η0 : 𝓞 K) =
+          (ηj : 𝓞 K) := by
+      rw [← heta, map_pow, hconjζ]
+      exact congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) hinvpowU
+    obtain ⟨k, hk⟩ := hq0
+    have hCq0 :
+        NumberField.IsCMField.ringOfIntegersComplexConj K q0 =
+          NumberField.IsCMField.ringOfIntegersComplexConj K π *
+            NumberField.IsCMField.ringOfIntegersComplexConj K k := by
+      rw [hk, map_mul]
+    have hq0mul : q0 * π = x + y * (η0 : 𝓞 K) := by
+      exact div_zeta_sub_one_mul_zeta_sub_one
+        (by norm_num : 37 ≠ 2) hζ e η0
+    have hconjfactor := congrArg
+      (NumberField.IsCMField.ringOfIntegersComplexConj K) hq0mul
+    rw [map_mul, map_add, map_mul, hxreal, hyreal,
+      hconjπ, hconjη0] at hconjfactor
+    have hqjmul : qj * π = x + y * (ηj : 𝓞 K) := by
+      exact div_zeta_sub_one_mul_zeta_sub_one
+        (by norm_num : 37 ≠ 2) hζ e ηj
+    have hqjEq : qj = π * ((u : 𝓞 K) ^ 2 *
+        NumberField.IsCMField.ringOfIntegersComplexConj K k) := by
+      apply mul_right_cancel₀ hπ0
+      calc
+        qj * π = x + y * (ηj : 𝓞 K) := hqjmul
+        _ = NumberField.IsCMField.ringOfIntegersComplexConj K q0 *
+            ((u : 𝓞 K) * π) := hconjfactor.symm
+        _ = ((u : 𝓞 K) * π *
+              NumberField.IsCMField.ringOfIntegersComplexConj K k) *
+            ((u : 𝓞 K) * π) := by rw [hCq0, hconjπ]
+        _ = (π * ((u : 𝓞 K) ^ 2 *
+              NumberField.IsCMField.ringOfIntegersComplexConj K k)) * π := by
+            ring
+    have hqj : π ∣ qj := ⟨_, hqjEq⟩
+    have hηeq : η0 = ηj := by
+      apply div_zeta_sub_one_Injective
+        (by norm_num : 37 ≠ 2) hζ e hy
+      calc
+        Ideal.Quotient.mk (Ideal.span {π}) q0 = 0 :=
+          (Ideal.Quotient.eq_zero_iff_dvd π q0).2 ⟨k, hk⟩
+        _ = Ideal.Quotient.mk (Ideal.span {π}) qj :=
+          ((Ideal.Quotient.eq_zero_iff_dvd π qj).2 hqj).symm
+    have hpows : (hζ.unit' : 𝓞 K) ^ i =
+        (hζ.unit' : 𝓞 K) ^ j := by
+      calc
+        (hζ.unit' : 𝓞 K) ^ i = (η0 : 𝓞 K) := heta
+        _ = (ηj : 𝓞 K) := congrArg Subtype.val hηeq
+        _ = (hζ.unit' : 𝓞 K) ^ j := rfl
+    have hij : i = j := hζ.unit'_coe.pow_inj hi hj hpows
+    dsimp [j] at hij
+    omega
+
+/-- In a real historical state, the distinguished factor is `ω + θ` and
+it carries far more than the `38` local powers needed for Lemma 1. -/
+theorem historicalState_omega_add_theta_highDivisibility37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ)
+    (hs : RealSourceAdmissible hζ s) :
+    ((hζ.unit' : 𝓞 K) - 1) ^ 38 ∣ s.omega + s.theta := by
+  let e := historicalState_regularEquation37 hζ s
+  let hy := historicalState_theta_not_dvd37 hζ s
+  have hroot := distinguishedRoot_eq_one_of_real37 hζ e hy hs.1 hs.2.1
+  have hhigh := distinguishedFactor_highDivisibility
+    (by norm_num : 37 ≠ 2) hζ e hy
+  rw [hroot] at hhigh
+  simp only [oneNthRoot, mul_one] at hhigh
+  have hle : 38 ≤ (2 * s.m - 1) * 37 + 1 := by
+    have hm := s.one_lt_m
+    omega
+  exact (pow_dvd_pow_of_dvd_of_le dvd_rfl hle).trans hhigh
+
+/-- The fixed-denominator linear factor at `ζ` for a historical state. -/
+noncomputable def historicalZetaFactor37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ) : 𝓞 K :=
+  div_zeta_sub_one (by norm_num : 37 ≠ 2) hζ
+    (historicalState_regularEquation37 hζ s)
+    (zetaNthRoot (K := K) (p := 37) hζ)
+
+/-- The fixed-denominator conjugate linear factor at `ζ⁻¹`. -/
+noncomputable def historicalInverseZetaFactor37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ) : 𝓞 K :=
+  div_zeta_sub_one (by norm_num : 37 ≠ 2) hζ
+    (historicalState_regularEquation37 hζ s)
+    (inverseZetaNthRoot (K := K) (p := 37) hζ)
+
+/-- The unit-normalized inverse factor.  Multiplication by `-ζ` changes
+the fixed denominator `ζ - 1` to its conjugate normalization. -/
+noncomputable def normalizedHistoricalInverseZetaFactor37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ) : 𝓞 K :=
+  ((-hζ.unit' : (𝓞 K)ˣ) : 𝓞 K) *
+    historicalInverseZetaFactor37 hζ s
+
+/-- The actual normalized factor product to which Vandiver applies
+Lemma 1 is Kummer-primary in every real historical state. -/
+theorem historicalConjugateFactorProduct_isKummerPrimary37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ)
+    (hs : RealSourceAdmissible hζ s) :
+    IsKummerPrimary hζ
+      (historicalZetaFactor37 hζ s *
+        normalizedHistoricalInverseZetaFactor37 hζ s ^ 36) := by
+  simpa only [historicalZetaFactor37,
+    normalizedHistoricalInverseZetaFactor37,
+    historicalInverseZetaFactor37] using
+    normalizedConjugateLinearFactor_isKummerPrimary
+      (by norm_num : 37 ≠ 2) hζ
+      (historicalState_regularEquation37 hζ s)
+      (historicalState_theta_not_dvd37 hζ s)
+      (historicalState_omega_add_theta_highDivisibility37 hζ s hs)
 
 /-! ## Conjugation-compatible principal generators -/
 
