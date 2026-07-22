@@ -1,5 +1,6 @@
 import Fermat.Basic
 import Fermat.Classical
+import Fermat.Eleven.Cyclotomic
 import Fermat.Five.Dirichlet
 import Fermat.Fourteen.DescentConstruction
 import Fermat.Seven.Lebesgue.TheoremTwo
@@ -24,5 +25,10 @@ theorem holdsAt_fourteen : HoldsAt 14 :=
 certificate for `\mathbb{Q}(\zeta_{13})` and the formal Lamé–Kummer descent. -/
 theorem holdsAt_thirteen : HoldsAt 13 :=
   Thirteen.Cyclotomic.holdsAt_thirteen_cyclotomic
+
+/-- Fermat's theorem for exponent eleven, via the class-number-one
+certificate for `\mathbb{Q}(\zeta_{11})` and the formal Lamé–Kummer descent. -/
+theorem holdsAt_eleven : HoldsAt 11 :=
+  Eleven.Cyclotomic.holdsAt_eleven_cyclotomic
 
 end Fermat
