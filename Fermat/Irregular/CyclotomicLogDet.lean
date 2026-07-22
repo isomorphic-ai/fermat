@@ -369,6 +369,93 @@ theorem card_realResidueGroup37 : Fintype.card RealResidueGroup37 = 18 := by
   rw [hfinite] at hcard
   omega
 
+/-- The unit represented by the integer `j + 1`, for `j = 0, ..., 17`. -/
+def standardUnit37 (j : Fin 18) : (ZMod 37)ˣ :=
+  ZMod.unitOfCoprime (j.val + 1) (by
+    apply Nat.Coprime.symm
+    exact (by decide : Nat.Prime 37).coprime_iff_not_dvd.mpr (by omega))
+
+/-- The real residue class represented by `j + 1`, for `j = 0, ..., 17`. -/
+def standardRealResidue37 (j : Fin 18) : RealResidueGroup37 :=
+  QuotientGroup.mk (standardUnit37 j)
+
+/-- Membership in the sign subgroup means equality to one of its two elements. -/
+theorem signSubgroup37_mem_iff (u : (ZMod 37)ˣ) :
+    u ∈ signSubgroup37 ↔ u = 1 ∨ u = -1 := by
+  constructor
+  · intro hu
+    obtain ⟨k, hk⟩ := Subgroup.mem_zpowers_iff.mp hu
+    rw [neg_one_zpow_eq_ite] at hk
+    by_cases heven : Even k
+    · left
+      simpa [heven] using hk.symm
+    · right
+      simpa [heven] using hk.symm
+  · rintro (rfl | rfl)
+    · exact Subgroup.one_mem _
+    · exact Subgroup.mem_zpowers (-1)
+
+/-- Distinct integers in `1, ..., 18` remain distinct modulo the sign relation. -/
+theorem standardRealResidue37_injective : Function.Injective standardRealResidue37 := by
+  intro i j hij
+  rw [standardRealResidue37, standardRealResidue37,
+    QuotientGroup.eq_iff_div_mem, signSubgroup37_mem_iff] at hij
+  rcases hij with hdiv | hdiv
+  · have hu : standardUnit37 i = standardUnit37 j := div_eq_one.mp hdiv
+    have hz : (i.val + 1 : ZMod 37) = (j.val + 1 : ZMod 37) := by
+      simpa [standardUnit37] using congrArg Units.val hu
+    have hz' : ((i.val + 1 : ℕ) : ZMod 37) = ((j.val + 1 : ℕ) : ZMod 37) := by
+      push_cast
+      exact hz
+    rw [ZMod.natCast_eq_natCast_iff] at hz'
+    apply Fin.ext
+    have heq := Nat.ModEq.eq_of_lt_of_lt hz' (by omega) (by omega)
+    omega
+  · have hu : standardUnit37 i = -(standardUnit37 j) := by
+      calc
+        standardUnit37 i = (standardUnit37 i / standardUnit37 j) * standardUnit37 j :=
+          (div_mul_cancel _ _).symm
+        _ = (-1) * standardUnit37 j := by rw [hdiv]
+        _ = -(standardUnit37 j) := neg_one_mul _
+    have hz : (i.val + 1 : ZMod 37) = -(j.val + 1 : ZMod 37) := by
+      simpa [standardUnit37] using congrArg Units.val hu
+    have hzsum : (i.val + 1 + (j.val + 1) : ZMod 37) = 0 := by
+      rw [hz]
+      ring
+    have hzsum' : ((i.val + 1 + (j.val + 1) : ℕ) : ZMod 37) = 0 := by
+      push_cast
+      exact hzsum
+    have hdvd : 37 ∣ i.val + 1 + (j.val + 1) :=
+      (ZMod.natCast_eq_zero_iff _ _).mp hzsum'
+    have hlt : i.val + 1 + (j.val + 1) < 37 := by omega
+    exfalso
+    exact (Nat.not_dvd_of_pos_of_lt (by omega) hlt) hdvd
+
+/-- The standard representatives `1, ..., 18` enumerate the real residue group. -/
+def standardRealResiduesEquiv37 : Fin 18 ≃ RealResidueGroup37 :=
+  Equiv.ofBijective standardRealResidue37
+    ((Fintype.bijective_iff_injective_and_card _).2
+      ⟨standardRealResidue37_injective, by
+        rw [Fintype.card_fin, card_realResidueGroup37]⟩)
+
+@[simp]
+theorem standardRealResiduesEquiv37_apply (j : Fin 18) :
+    standardRealResiduesEquiv37 j = standardRealResidue37 j := rfl
+
+@[simp]
+theorem standardRealResidue37_zero : standardRealResidue37 0 = 1 := by
+  rw [standardRealResidue37, QuotientGroup.eq_one_iff]
+  have hu : standardUnit37 0 = 1 := by
+    apply Units.ext
+    simp [standardUnit37]
+  rw [hu]
+  exact Subgroup.one_mem _
+
+@[simp]
+theorem standardRealResiduesEquiv37_symm_one : standardRealResiduesEquiv37.symm 1 = 0 := by
+  rw [← standardRealResidue37_zero, ← standardRealResiduesEquiv37_apply]
+  exact standardRealResiduesEquiv37.symm_apply_apply 0
+
 /-! ## Normalizing the fixed sine determinant -/
 
 open Fermat.Irregular.CyclotomicPlaces37
