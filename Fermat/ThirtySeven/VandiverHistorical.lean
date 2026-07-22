@@ -261,6 +261,160 @@ theorem relevantIdealQuotientsPrincipal_iff_minus_of_plus37
     simpa only [relevantIdealQuotient37,
       conjugateRelevantIdealQuotient37] using hminus hζ e hy η
 
+/-! ### Stable principal ideals have cyclotomic conjugation quotients -/
+
+section StablePrincipalGenerator
+
+open NumberField NumberField.IsCMField
+
+/-- Complex conjugation acts trivially modulo the prime `(ζ - 1)` on every
+cyclotomic integer.  The proof compares the power-basis expansions at `ζ`
+and `ζ⁻¹`; both roots reduce to `1`. -/
+lemma ringOfIntegersComplexConj_eq_mod_zeta_sub_one37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (a : 𝓞 K) :
+    Ideal.Quotient.mk
+        (Ideal.span ({(hζ.unit' : 𝓞 K) - 1} : Set (𝓞 K)))
+        (ringOfIntegersComplexConj K a) =
+      Ideal.Quotient.mk
+        (Ideal.span ({(hζ.unit' : 𝓞 K) - 1} : Set (𝓞 K))) a := by
+  have ha := hζ.integralPowerBasis.basis.sum_repr a
+  let c := hζ.integralPowerBasis.basis.repr
+  let φn := hζ.integralPowerBasis.dim
+  simp_rw [PowerBasis.basis_eq_pow,
+    IsPrimitiveRoot.integralPowerBasis_gen] at ha
+  have ha' := congrArg (ringOfIntegersComplexConj K) ha
+  replace ha' : ∑ x : Fin φn, (c a) x • ringOfIntegersComplexConj K
+      (⟨ζ, hζ.isIntegral (by norm_num)⟩ ^ (x : ℕ)) =
+        ringOfIntegersComplexConj K a := by
+    refine Eq.trans ?_ ha'
+    rw [map_sum]
+    congr 1
+    ext x
+    congr 1
+    rw [map_zsmul]
+  have hpow : ∀ x : Fin φn,
+      ringOfIntegersComplexConj K
+          (⟨ζ, hζ.isIntegral (by norm_num)⟩ ^ (x : ℕ)) =
+        ⟨ζ⁻¹, hζ.inv.isIntegral (by norm_num)⟩ ^ (x : ℕ) := by
+    intro x
+    ext
+    change complexConj K (ζ ^ (x : ℕ)) = (ζ⁻¹) ^ (x : ℕ)
+    rw [map_pow,
+      Fermat.Irregular.CircularUnitIndex.complexConj_zeta37_inv hζ]
+  conv_lhs at ha' =>
+    congr
+    congr
+    ext x
+    rw [hpow x]
+  have hconj := aux hζ hζ.inv ha'
+  have horig := aux hζ hζ ha
+  exact hconj.trans horig.symm
+
+/-- Conjugating a principal integral ideal conjugates its generator. -/
+lemma conjugateIdeal37_span (a : 𝓞 K) :
+    conjugateIdeal37 (Ideal.span {a}) =
+      Ideal.span {ringOfIntegersComplexConj K a} := by
+  simp only [conjugateIdeal37, Ideal.map_span, Set.image_singleton]
+  rfl
+
+/-- A generator prime to `(ζ - 1)` of a conjugation-stable principal ideal
+has conjugation quotient exactly `ζ ^ j`.
+
+Stability first gives an arbitrary unit quotient `v`.  Applying conjugation
+twice shows `conj(v) = v⁻¹`; the CM unit theorem then gives
+`v = ±ζ^j`.  Since conjugation is the identity modulo `(ζ - 1)` and the
+generator is nonzero in that quotient, `v ≡ 1`; this rules out `-ζ^j`
+because `2 ∉ (ζ - 1)`. -/
+lemma conjugation_eq_zeta_pow_of_stable_principal37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (a : 𝓞 K)
+    (ha : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ a)
+    (hstable : conjugateIdeal37 (Ideal.span {a}) = Ideal.span {a}) :
+    ∃ j : ℕ, ringOfIntegersComplexConj K a =
+      (hζ.unit' ^ j : (𝓞 K)ˣ) * a := by
+  have hassoc : Associated (ringOfIntegersComplexConj K a) a := by
+    rw [← Ideal.span_singleton_eq_span_singleton]
+    rw [← conjugateIdeal37_span]
+    exact hstable
+  obtain ⟨u, hu⟩ := hassoc
+  let v : (𝓞 K)ˣ := u⁻¹
+  have ha0 : a ≠ 0 := by
+    intro h
+    apply ha
+    rw [h]
+    exact dvd_zero _
+  have hv : ringOfIntegersComplexConj K a = (v : 𝓞 K) * a := by
+    change ringOfIntegersComplexConj K a = (u⁻¹ : (𝓞 K)ˣ) * a
+    calc
+      ringOfIntegersComplexConj K a =
+          ringOfIntegersComplexConj K a * u * (u⁻¹ : (𝓞 K)ˣ) := by simp
+      _ = (u⁻¹ : (𝓞 K)ˣ) * a := by rw [hu]; ac_rfl
+  have hvconj : unitsComplexConj K v = v⁻¹ := by
+    have hc := congrArg (ringOfIntegersComplexConj K) hv
+    rw [map_mul] at hc
+    have hcc : ringOfIntegersComplexConj K
+        (ringOfIntegersComplexConj K a) = a := by
+      ext
+      exact complexConj_apply_apply K a
+    rw [hcc] at hc
+    rw [hv] at hc
+    have hnorm : unitsComplexConj K v * v = 1 := by
+      apply Units.ext
+      change ringOfIntegersComplexConj K (v : 𝓞 K) * (v : 𝓞 K) = 1
+      apply mul_right_cancel₀ ha0
+      calc
+        (ringOfIntegersComplexConj K (v : 𝓞 K) * (v : 𝓞 K)) * a =
+            ringOfIntegersComplexConj K (v : 𝓞 K) *
+              ((v : 𝓞 K) * a) := by rw [mul_assoc]
+        _ = a := hc.symm
+        _ = (1 : 𝓞 K) * a := by simp
+    exact mul_eq_one_iff_eq_inv.mp hnorm
+  obtain ⟨j, hj⟩ := unit_inv_conj_is_root_of_unity hζ v (by norm_num)
+  have hv_sq : v ^ 2 = (hζ.unit' ^ j) ^ 2 := by
+    simpa only [hvconj, inv_inv, pow_two] using hj
+  rcases Units.eq_or_eq_neg_of_sq_eq_sq v (hζ.unit' ^ j) hv_sq with hjv | hjv
+  · exact ⟨j, by simpa [hjv] using hv⟩
+  · exfalso
+    let P : Ideal (𝓞 K) :=
+      Ideal.span ({(hζ.unit' : 𝓞 K) - 1} : Set (𝓞 K))
+    let Q := 𝓞 K ⧸ P
+    have hPprime : Prime P := by
+      simpa only [P] using hζ.prime_span_sub_one
+    have hP0 : P ≠ ⊥ := hPprime.ne_zero
+    letI : P.IsPrime := (Ideal.prime_iff_isPrime hP0).mp hPprime
+    have haQ : algebraMap (𝓞 K) Q a ≠ 0 := by
+      change Ideal.Quotient.mk P a ≠ 0
+      rw [Ne, Ideal.Quotient.eq_zero_iff_mem]
+      simpa only [P, Ideal.mem_span_singleton] using ha
+    have hvQ : algebraMap (𝓞 K) Q (v : 𝓞 K) = 1 := by
+      apply mul_right_cancel₀ haQ
+      calc
+        algebraMap (𝓞 K) Q (v : 𝓞 K) * algebraMap (𝓞 K) Q a =
+            algebraMap (𝓞 K) Q ((v : 𝓞 K) * a) := by rw [map_mul]
+        _ = algebraMap (𝓞 K) Q (ringOfIntegersComplexConj K a) := by
+          rw [hv]
+        _ = algebraMap (𝓞 K) Q a :=
+          ringOfIntegersComplexConj_eq_mod_zeta_sub_one37 hζ a
+        _ = 1 * algebraMap (𝓞 K) Q a := by rw [one_mul]
+    have hneg : (1 : Q) = -1 := by
+      calc
+        (1 : Q) = algebraMap (𝓞 K) Q (v : 𝓞 K) := hvQ.symm
+        _ = algebraMap (𝓞 K) Q
+            (-((hζ.unit' ^ j : (𝓞 K)ˣ) : 𝓞 K)) := by
+          rw [hjv]
+          rfl
+        _ = -1 := by
+          change -(algebraMap (𝓞 K) Q
+            (((hζ.unit' : 𝓞 K) ^ j))) = -1
+          rw [map_pow]
+          change -(algebraMap (𝓞 K) Q (hζ.unit' : 𝓞 K)) ^ j = -1
+          rw [eq_one_mod_one_sub, one_pow]
+    apply hζ.two_not_mem_one_sub_zeta (by norm_num)
+    rw [← Ideal.Quotient.eq_zero_iff_mem, map_ofNat,
+      ← neg_one_eq_one_iff_two_eq_zero]
+    exact hneg.symm
+
+end StablePrincipalGenerator
+
 /-- The inverse of 2 modulo 37, used to make a generator real. -/
 def realGeneratorHalfExponent37 : ℕ := 19
 
