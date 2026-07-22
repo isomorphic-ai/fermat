@@ -197,6 +197,16 @@ theorem prod_characters_one_sub_apply_mul (g : G) (z : R) :
     Nat.card_eq_fintype_card] at h
   exact h
 
+/-- Polynomial form of the local Artin factor over every character. -/
+theorem prod_characters_one_sub_C_mul_X [Infinite R] (g : G) :
+    (∏ χ : G →* Rˣ, (1 - C (((χ g : Rˣ) : R)) * X)) =
+      (1 - X ^ orderOf g) ^ (Fintype.card G / orderOf g) := by
+  apply Polynomial.funext
+  intro z
+  simp only [Polynomial.eval_prod, eval_sub, eval_one, eval_mul, eval_C, eval_X,
+    eval_pow]
+  exact prod_characters_one_sub_apply_mul (R := R) g z
+
 end
 
 end Fermat.Irregular.FiniteCharacterFactor

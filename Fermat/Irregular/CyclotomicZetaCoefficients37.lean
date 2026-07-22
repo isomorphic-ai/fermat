@@ -1,5 +1,6 @@
 import Fermat.Irregular.CyclotomicSinnottBridge37
 import Fermat.Irregular.IdealCount
+import Fermat.Irregular.CharacterEulerFactor
 import Mathlib.NumberTheory.LSeries.Dirichlet
 
 open scoped NumberField Classical BigOperators ArithmeticFunction.zeta
@@ -12,6 +13,7 @@ open Finset
 open Fermat.Irregular.CyclotomicLogDet
 open Fermat.Irregular.CyclotomicDirichlet37
 open Fermat.Irregular.CyclotomicSinnottBridge37
+open Fermat.Irregular.LocalEulerFactor
 
 local instance : Fact (Nat.Prime 37) := ⟨by decide⟩
 local instance : Fintype (RealResidueGroup37 →* ℂˣ) := Fintype.ofFinite _
@@ -206,6 +208,76 @@ theorem cyclotomicZetaFactorization37_of_primePower_idealCounts
     CyclotomicZetaFactorization37 K :=
   cyclotomicZetaFactorization37_of_idealCount_eq_expected
     (idealCount_eq_expected_of_primePowers hprime)
+
+/-- The image in the real residue group of an integer prime to `37`. -/
+def realResidueOfCoprime37 (q : ℕ) (hq : q.Coprime 37) : RealResidueGroup37 :=
+  QuotientGroup.mk (ZMod.unitOfCoprime q hq)
+
+theorem quotientCharacterToDirichlet37_apply_nat_of_coprime
+    (q : ℕ) (hq : q.Coprime 37) (χ : RealResidueGroup37 →* ℂˣ) :
+    quotientCharacterToDirichlet37 χ (q : ZMod 37) =
+      ((χ (realResidueOfCoprime37 q hq) : ℂˣ) : ℂ) := by
+  rw [show (q : ZMod 37) = ((ZMod.unitOfCoprime q hq : (ZMod 37)ˣ) : ZMod 37) by
+    simp only [ZMod.coe_unitOfCoprime]]
+  exact quotientCharacterToDirichlet37_apply_unit χ (ZMod.unitOfCoprime q hq)
+
+theorem primePowerSeries_characterCoefficient_of_coprime
+    (q : ℕ) (hq : q.Coprime 37)
+    (χ : { χ : RealResidueGroup37 →* ℂˣ // χ ≠ 1 }) :
+    primePowerSeries q (characterCoefficient χ) =
+      geometricSeries (((χ.1 (realResidueOfCoprime37 q hq) : ℂˣ) : ℂ)) := by
+  have hq0 : q ≠ 0 := by
+    intro h
+    subst q
+    norm_num at hq
+  apply PowerSeries.ext
+  intro k
+  rw [coeff_primePowerSeries, coeff_geometricSeries]
+  change (if q ^ k = 0 then 0 else
+    quotientCharacterToDirichlet37 χ ((q ^ k : ℕ) : ZMod 37)) = _
+  rw [if_neg (pow_ne_zero k hq0)]
+  rw [Nat.cast_pow, map_pow,
+    quotientCharacterToDirichlet37_apply_nat_of_coprime q hq]
+
+theorem primePowerSeries_zeta (q : ℕ) (hq0 : q ≠ 0) :
+    primePowerSeries q
+        (((ArithmeticFunction.zeta : ArithmeticFunction ℕ) : ArithmeticFunction ℂ)) =
+      geometricSeries 1 := by
+  apply PowerSeries.ext
+  intro k
+  rw [coeff_primePowerSeries, coeff_geometricSeries]
+  rw [ArithmeticFunction.natCoe_apply,
+    ArithmeticFunction.zeta_apply_ne (pow_ne_zero k hq0)]
+  simp
+
+theorem primePowerSeries_expectedIdealCount_of_coprime
+    (q : ℕ) (hqprime : q.Prime) (hq : q.Coprime 37) :
+    primePowerSeries q expectedIdealCount =
+      ∏ χ : RealResidueGroup37 →* ℂˣ,
+        geometricSeries (((χ (realResidueOfCoprime37 q hq) : ℂˣ) : ℂ)) := by
+  rw [expectedIdealCount, primePowerSeries_mul hqprime,
+    primePowerSeries_finset_prod hqprime univ]
+  rw [primePowerSeries_zeta q hqprime.ne_zero]
+  simp_rw [primePowerSeries_characterCoefficient_of_coprime q hq]
+  exact geometricSeries_one_mul_prod_nontrivial_characters
+    (realResidueOfCoprime37 q hq)
+
+/-- The unramified local coefficient predicted by the eighteen even characters. -/
+theorem expectedIdealCount_primePow_of_coprime
+    (q k : ℕ) (hqprime : q.Prime) (hq : q.Coprime 37) :
+    expectedIdealCount (q ^ k) =
+      if orderOf (realResidueOfCoprime37 q hq) ∣ k then
+        (Nat.multichoose
+          (18 / orderOf (realResidueOfCoprime37 q hq))
+          (k / orderOf (realResidueOfCoprime37 q hq)) : ℂ)
+      else 0 := by
+  rw [← coeff_primePowerSeries]
+  rw [primePowerSeries_expectedIdealCount_of_coprime q hqprime hq]
+  have h := coeff_prod_geometricSeries_characters
+    (G := RealResidueGroup37) (realResidueOfCoprime37 q hq) k
+  rw [card_realResidueGroup37] at h
+  exact h
+
 
 end
 
