@@ -48,9 +48,12 @@ The exponent-11 and exponent-13 results use kernel-checked class-number-one
 certificates and the formal Lamé--Kummer descent supplied by `flt-regular`.
 They are exposed as `Fermat.holdsAt_eleven` and `Fermat.holdsAt_thirteen`.
 
-For exponent 37, Case I, the complete irregular-index scan, the sharp
-`v₃₇(B₁₁₈₄) = 2` computation, and the uploaded circular-unit residue
-matrix are formalized. There is deliberately no public
+For exponent 37, Case I and every Bernoulli numerator condition in
+Vandiver's criterion are formalized; the latter are now proved directly by
+finite Faulhaber computations, without assuming Kummer's congruence. The
+uploaded circular-unit matrix has also been realized by concrete corrected
+residue homomorphisms, proving that its relative index in the real-unit
+group is prime to `37`. There is deliberately no public
 `Fermat.holdsAt_thirtySeven` yet; see `docs/irregular-n37.md` for the exact
 remaining theorem boundary.
 

@@ -26,20 +26,31 @@ layers.  The repository keeps them separate:
 - `Fermat/Irregular/VandiverData.lean` and
   `Fermat/ThirtySeven/VandiverData.lean` combine that reduction with the
   unique-index scan and the `B₁₁₈₄` certificate.
-- `Fermat/Irregular/CircularUnits.lean` proves the generic
-  residue-determinant-to-lattice-index implication.  The two exponent-37
-  certificate modules check an explicit inverse of the uploaded `17 × 17`
-  matrix and all 289 of its finite-field residue-symbol entries.
+- `Fermat/ThirtySeven/DirectVandiverData.lean` goes further and proves all
+  seventeen required Bernoulli numerator conditions directly by Faulhaber's
+  formula.  It needs no Kummer-congruence hypothesis and handles the
+  exceptional denominator of `B₇₂` explicitly.
+- `Fermat/Irregular/CircularUnits.lean` and
+  `Fermat/Irregular/CircularUnitIndex.lean` prove the generic
+  residue-determinant-to-unit-index bridge and define the seventeen concrete
+  normalized circular units.  The finite certificate modules check an
+  explicit inverse of the uploaded `17 × 17` matrix and all 289 of its
+  finite-field entries.
+- `Fermat/ThirtySeven/ResidueHomomorphisms.lean` constructs the actual
+  characteristic-149 specializations and residue characters.  A
+  complex-conjugation correction makes the characters vanish on all roots
+  of unity while preserving the matrix entries on real circular units.  The
+  resulting theorem proves that the circular-unit relative index inside the
+  real-unit group is prime to `37`.
 
 There is not yet a public `Fermat.holdsAt_thirtySeven`.  Case II needs
 Vandiver's irregular-prime criterion: if `37 ∤ h⁺` and none of the relevant
-Bernoulli numerators is divisible by `37³`, then Case II is impossible.  The uploaded
-finite data through the Bernoulli cube condition and the residue-symbol
-determinant is now kernel-checked.  Mathlib and `flt-regular` still contain
-neither Vandiver's singular-primary-unit descent nor the circular-unit index
-theorem that converts the residue-symbol lattice index into `37 ∤ h⁺`; the
-power-residue maps on cyclotomic units also have to be constructed.  These
-bridges must be formalized rather than assumed.
+Bernoulli numerators is divisible by `37³`, then Case II is impossible.  The
+entire Bernoulli condition and the residue-symbol-to-real-unit-index chain are
+now kernel-checked.  Mathlib and `flt-regular` still contain neither
+Vandiver's singular-primary-unit descent nor the Sinnott--Kummer index formula
+that identifies this concrete relative index with the class number `h⁺`.
+These final two global bridges must be formalized rather than assumed.
 
 The exact primary source is H. S. Vandiver, *On Fermat's Last Theorem*,
 Transactions of the AMS 31 (1929), 613–642,

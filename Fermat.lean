@@ -4,6 +4,7 @@ import Fermat.Classical
 import Fermat.Eleven.Cyclotomic
 import Fermat.Five.Dirichlet
 import Fermat.Fourteen.DescentConstruction
+import Fermat.Irregular.CircularUnitIndex
 import Fermat.Irregular.CircularUnits
 import Fermat.Irregular.KummerCongruence
 import Fermat.Irregular.VandiverData
@@ -12,9 +13,11 @@ import Fermat.Thirteen.Cyclotomic
 import Fermat.ThirtySeven.ArithmeticCertificate
 import Fermat.ThirtySeven.CircularUnitCertificate
 import Fermat.ThirtySeven.CircularUnitResidues
+import Fermat.ThirtySeven.DirectVandiverData
 import Fermat.ThirtySeven.FirstCase
 import Fermat.ThirtySeven.HighBernoulli
 import Fermat.ThirtySeven.NeighborFolding
+import Fermat.ThirtySeven.ResidueHomomorphisms
 import Fermat.ThirtySeven.VandiverData
 
 namespace Fermat
