@@ -1,4 +1,5 @@
 import Fermat.Irregular.BernoulliData
+import Fermat.Irregular.DirectBernoulli
 
 /-!
 # The high Bernoulli certificate for exponent thirty-seven
@@ -379,5 +380,28 @@ theorem bernoulli_1184_numerator_not_dvd_cube :
   apply numerator_not_dvd_pow_of_padicValRat_lt hB0 hden
   rw [bernoulli_1184_padicValRat]
   norm_num
+
+/-- The same numerator condition through the prime-independent Faulhaber
+endpoint.  This theorem checks that the generic engine retains the exact
+finite certificate first developed in this exponent-specific file. -/
+theorem bernoulli_1184_numerator_not_dvd_cube_via_generic_faulhaber :
+    ¬(37 : ℤ) ^ 3 ∣ (bernoulli 1184).num := by
+  apply Fermat.Irregular.DirectBernoulli.bernoulli_numerator_not_dvd_cube_of_faulhaber
+      (p := 37) (n := 1184) (c := 7476560) (r := 2738)
+  · norm_num
+  · norm_num
+  · decide
+  · norm_num
+  · apply Fermat.Irregular.DirectBernoulli.pIntegral_of_denominatorPrimeTo
+    apply bernoulli_denominatorPrimeTo (p := 37)
+    · decide
+    · norm_num
+  · exact choose_1185_1182
+  · simpa using powerSum_mod_thirtySeven_pow_four
+  · norm_num
+  · norm_num
+  · apply bernoulli_denominatorPrimeTo (p := 37)
+    · decide
+    · norm_num
 
 end Fermat.ThirtySeven.HighBernoulli
