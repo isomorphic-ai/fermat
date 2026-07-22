@@ -1,4 +1,5 @@
 import Fermat.ThirtySeven.CircularUnitCertificate
+import Fermat.Irregular.CircularUnitFamily
 import Mathlib.NumberTheory.NumberField.CMField
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Embeddings
@@ -260,6 +261,24 @@ theorem not_dvd_realUnitRelIndex_of_not_dvd_unitIndex {p : ℕ} {iota : Type*}
   apply hnot
   rw [← htower]
   exact dvd_mul_of_dvd_left hp _
+
+omit [NumberField K] [NumberField.IsCMField K] [Algebra.IsIntegral ℚ K] in
+/-- A nonsingular evaluation matrix on a full basis, together with reality
+of the chosen units, proves that their relative index inside the real units
+is prime to `p`.  This packages the two generic index steps used by every
+odd-prime circular-unit certificate. -/
+theorem not_dvd_realUnitRelIndex_of_eval_det_ne_zero
+    {p : ℕ} {iota : Type*} [Fintype iota] [DecidableEq iota]
+    (b : Basis iota ℤ (UnitsModTorsion K)) (u : iota → (𝓞 K)ˣ)
+    (hu : ∀ i, u i ∈ NumberField.IsCMField.realUnits K)
+    (f : iota → UnitsModTorsion K →ₗ[ℤ] ZMod p)
+    (hdet : (evalMatrix (classOfUnit ∘ u) f).det ≠ 0) :
+    ¬ p ∣ (Subgroup.closure (Set.range u) ⊔
+        NumberField.Units.torsion K).relIndex
+      (NumberField.IsCMField.realUnits K ⊔
+        NumberField.Units.torsion K) :=
+  not_dvd_realUnitRelIndex_of_not_dvd_unitIndex u hu
+    (not_dvd_unitIndex_of_eval_det_ne_zero b u f hdet)
 
 end ComplexConjugation
 
