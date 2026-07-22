@@ -31,6 +31,31 @@ def expectedIdealCount : ArithmeticFunction ℂ :=
   ArithmeticFunction.zeta * ∏ chi : {chi : RealResidueGroup37 →* ℂˣ // chi ≠ 1},
     characterCoefficient chi
 
+theorem characterCoefficient_isMultiplicative
+    (chi : {chi : RealResidueGroup37 →* ℂˣ // chi ≠ 1}) :
+    (characterCoefficient chi).IsMultiplicative := by
+  exact DirichletCharacter.isMultiplicative_toArithmeticFunction
+    (quotientCharacterToDirichlet37 chi)
+
+theorem isMultiplicative_finset_prod
+    {alpha : Type*} [DecidableEq alpha]
+    (S : Finset alpha) (f : alpha → ArithmeticFunction ℂ)
+    (hf : ∀ a ∈ S, (f a).IsMultiplicative) :
+    (∏ a ∈ S, f a : ArithmeticFunction ℂ).IsMultiplicative := by
+  induction S using Finset.induction_on with
+  | empty => exact ArithmeticFunction.isMultiplicative_one
+  | @insert a S ha ih =>
+      rw [prod_insert ha]
+      exact (hf a (mem_insert_self a S)).mul
+        (ih (fun b hb ↦ hf b (mem_insert_of_mem hb)))
+
+theorem expectedIdealCount_isMultiplicative :
+    expectedIdealCount.IsMultiplicative := by
+  rw [expectedIdealCount]
+  exact ArithmeticFunction.isMultiplicative_zeta.natCast.mul
+    (isMultiplicative_finset_prod univ characterCoefficient
+      (fun chi _ ↦ characterCoefficient_isMultiplicative chi))
+
 theorem dedekindZeta_eq_LSeries_idealCount
     (F : Type*) [Field F] [NumberField F] (s : ℂ) :
     NumberField.dedekindZeta F s = LSeries (idealCount F) s := by
@@ -142,6 +167,29 @@ theorem cyclotomicZetaFactorization37_of_idealCount_eq_expected
   rw [dedekindZeta_eq_LSeries_idealCount]
   rw [hcoeff]
   exact LSeries_expectedIdealCount hs
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- It is enough to prove that ideal counting is multiplicative and to identify
+its value on powers of rational primes.  All global coefficient bookkeeping is
+then automatic from unique factorization in `ℕ`. -/
+theorem idealCount_eq_expected_of_multiplicative_of_primePowers
+    (hmult : (idealCount K⁺).IsMultiplicative)
+    (hprime : ∀ q k : ℕ, q.Prime →
+      idealCount K⁺ (q ^ k) = expectedIdealCount (q ^ k)) :
+    idealCount K⁺ = expectedIdealCount := by
+  exact (ArithmeticFunction.IsMultiplicative.eq_iff_eq_on_prime_powers
+    (idealCount K⁺) hmult expectedIdealCount expectedIdealCount_isMultiplicative).mpr hprime
+
+/-- The complete Artin factorization follows from precisely the two local
+algebraic inputs: multiplicativity of ideal counts and the prime-power splitting
+formula. -/
+theorem cyclotomicZetaFactorization37_of_primePower_idealCounts
+    (hmult : (idealCount K⁺).IsMultiplicative)
+    (hprime : ∀ q k : ℕ, q.Prime →
+      idealCount K⁺ (q ^ k) = expectedIdealCount (q ^ k)) :
+    CyclotomicZetaFactorization37 K :=
+  cyclotomicZetaFactorization37_of_idealCount_eq_expected
+    (idealCount_eq_expected_of_multiplicative_of_primePowers hmult hprime)
 
 end
 
