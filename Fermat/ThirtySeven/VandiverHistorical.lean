@@ -1011,6 +1011,62 @@ theorem exists_realEquationNineGenerator37
   obtain ⟨η, hη⟩ := hassoc_q
   exact ⟨μ, η, hJμ, hμreal, by simpa [mul_comm] using hη.symm⟩
 
+/-- The exact high-divisibility conclusion of Vandiver's equation (9a),
+once the difference equation preceding (9) has been obtained.
+
+The generic factor-allocation theorem selects a `37`th root `η` for which
+
+`(ζ - 1)^((2*m-2)*37+1) ∣ ρₐ - η*ρ₋ₐ`.
+
+Multiplying the pair symmetrically by `η^18` and `η^19` turns this into a
+literal difference.  Both 37th powers are unchanged; the exponents are the
+two half-powers surrounding `19`, the inverse of `2` modulo `37`.  No
+class-number hypothesis is used in this step. -/
+theorem equationNineA_normalized37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (m : ℕ) (hm : 1 < m) (ρa ρminus ρzero : 𝓞 K) (ε : (𝓞 K)ˣ)
+    (hdiff : ρa ^ 37 - ρminus ^ 37 =
+      ε * ((hζ.unit'.1 - 1) ^ (2 * m - 1) * ρzero) ^ 37)
+    (hminus : ¬ hζ.unit'.1 - 1 ∣ ρminus) :
+    ∃ ρa' ρminus' : 𝓞 K,
+      ρa' ^ 37 = ρa ^ 37 ∧
+      ρminus' ^ 37 = ρminus ^ 37 ∧
+      (hζ.unit'.1 - 1) ^ ((2 * m - 2) * 37 + 1) ∣
+        ρa' - ρminus' := by
+  have hexp : 2 * m - 1 = (2 * m - 2) + 1 := by omega
+  have e' : ρa ^ 37 + (-ρminus) ^ 37 =
+      ε * ((hζ.unit'.1 - 1) ^ ((2 * m - 2) + 1) * ρzero) ^ 37 := by
+    rw [← hexp]
+    simpa only [Odd.neg_pow (by norm_num : Odd 37), sub_eq_add_neg] using hdiff
+  have hy' : ¬ hζ.unit'.1 - 1 ∣ -ρminus := by
+    simpa using hminus
+  let η := zeta_sub_one_dvd_root (by norm_num : 37 ≠ 2) hζ e' hy'
+  have hηdiv : (hζ.unit'.1 - 1) ^ ((2 * m - 2) * 37 + 1) ∣
+      ρa - (η : 𝓞 K) * ρminus := by
+    simpa only [sub_eq_add_neg, neg_mul, mul_comm] using
+      (distinguishedFactor_highDivisibility (by norm_num : 37 ≠ 2)
+        hζ e' hy')
+  have hηpow : (η : 𝓞 K) ^ 37 = 1 :=
+    (Polynomial.mem_nthRootsFinset (by norm_num : 0 < 37) (1 : 𝓞 K)).mp η.prop
+  let ρa' : 𝓞 K := (η : 𝓞 K) ^ 18 * ρa
+  let ρminus' : 𝓞 K := (η : 𝓞 K) ^ 19 * ρminus
+  refine ⟨ρa', ρminus', ?_, ?_, ?_⟩
+  · dsimp [ρa']
+    rw [mul_pow, ← pow_mul]
+    rw [show 18 * 37 = 37 * 18 by norm_num, pow_mul, hηpow, one_pow,
+      one_mul]
+  · dsimp [ρminus']
+    rw [mul_pow, ← pow_mul]
+    rw [show 19 * 37 = 37 * 19 by norm_num, pow_mul, hηpow, one_pow,
+      one_mul]
+  · have hrewrite : ρa' - ρminus' =
+        (η : 𝓞 K) ^ 18 * (ρa - (η : 𝓞 K) * ρminus) := by
+      dsimp [ρa', ρminus']
+      rw [pow_succ' (η : 𝓞 K) 18]
+      ring
+    rw [hrewrite]
+    exact dvd_mul_of_dvd_right hηdiv ((η : 𝓞 K) ^ 18)
+
 /-- A `37`th root of a real unit can be adjusted by a power of `ζ`
 without changing its `37`th power so that the root itself is real. This is
 the real-root normalization used implicitly between Vandiver's equations
