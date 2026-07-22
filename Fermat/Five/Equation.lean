@@ -24,6 +24,27 @@ theorem FifthEquation.ne_zero {x y z : ℤ} (h : FifthEquation x y z) :
   exact ⟨fun hx ↦ hxyz (by simp [hx]), fun hy ↦ hxyz (by simp [hy]),
     fun hz ↦ hxyz (by simp [hz])⟩
 
+/-- Simultaneously changing all three signs preserves the equation. -/
+theorem FifthEquation.neg {x y z : ℤ} (h : FifthEquation x y z) :
+    FifthEquation (-x) (-y) (-z) := by
+  refine ⟨?_, h.2.1.neg_left.neg_right, ?_⟩
+  · exact mul_ne_zero (mul_ne_zero (neg_ne_zero.mpr h.ne_zero.1)
+      (neg_ne_zero.mpr h.ne_zero.2.1)) (neg_ne_zero.mpr h.ne_zero.2.2)
+  · simp only [(show Odd 5 by norm_num).neg_pow]
+    rw [← neg_add, h.2.2]
+    ring
+
+/-- Every nonzero solution has a simultaneous sign normalization with a
+positive right-hand base. -/
+theorem FifthEquation.exists_positive_right {x y z : ℤ} (h : FifthEquation x y z) :
+    ∃ x' y' z' : ℤ, FifthEquation x' y' z' ∧ 0 < z' := by
+  by_cases hz : 0 < z
+  · exact ⟨x, y, z, h, hz⟩
+  · have hzneg : z < 0 := by
+      have := h.ne_zero.2.2
+      omega
+    exact ⟨-x, -y, -z, h.neg, by omega⟩
+
 /-- A primitive Fermat equation yields Dirichlet's generalized equation,
 regardless of which of its three entries is divisible by `5`. -/
 theorem exists_fifthEquation_of_pairwise
