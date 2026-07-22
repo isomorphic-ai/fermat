@@ -366,6 +366,157 @@ theorem exists_equationEight_of_sevenASevenD37
     (IsFractionRing.coeSubmodule_isPrincipal (𝓞 K) K).mp hIF'
   exact exists_unit_mul_pow_eq_of_isPrincipal_ideal I a hI hIpow
 
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+/-- The elementary elimination between equation (8) at `a` and `-a`.
+
+For a unit `t`, subtracting the two displayed equations and using
+`t * t⁻¹ = 1` gives
+
+`(1-t)η(ρₐ^37-ρ₋ₐ^37) = (1+t)(ω+θ)`.
+
+This is the algebraic identity immediately preceding Vandiver's
+factorization in equation (9). -/
+lemma equationEight_pair_difference37
+    (t eta : (𝓞 K)ˣ) (omega theta rhoa rhominus : 𝓞 K)
+    (ha : omega + (t : 𝓞 K) * theta =
+      (1 - (t : 𝓞 K)) * eta * rhoa ^ 37)
+    (hminus : omega + (t⁻¹ : (𝓞 K)ˣ) * theta =
+      (1 - (t⁻¹ : (𝓞 K)ˣ)) * eta * rhominus ^ 37) :
+    (1 - (t : 𝓞 K)) * eta * (rhoa ^ 37 - rhominus ^ 37) =
+      (1 + (t : 𝓞 K)) * (omega + theta) := by
+  have htinv : (t : 𝓞 K) * (t⁻¹ : (𝓞 K)ˣ) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  have hcoef : (1 - (t : 𝓞 K)) =
+      -(t : 𝓞 K) * (1 - (t⁻¹ : (𝓞 K)ˣ)) := by
+    linear_combination -htinv
+  have hfirst : (1 - (t : 𝓞 K)) * eta * rhoa ^ 37 =
+      omega + (t : 𝓞 K) * theta := ha.symm
+  have hsecond : (1 - (t : 𝓞 K)) * eta * rhominus ^ 37 =
+      -((t : 𝓞 K) * omega + theta) := by
+    rw [hcoef]
+    calc
+      (-(t : 𝓞 K) * (1 - (t⁻¹ : (𝓞 K)ˣ))) * eta * rhominus ^ 37 =
+          -(t : 𝓞 K) *
+            ((1 - (t⁻¹ : (𝓞 K)ˣ)) * eta * rhominus ^ 37) := by ring
+      _ = -(t : 𝓞 K) *
+            (omega + (t⁻¹ : (𝓞 K)ˣ) * theta) := by rw [hminus]
+      _ = -((t : 𝓞 K) * omega + theta) := by
+        linear_combination -theta * htinv
+  rw [mul_sub, hfirst, hsecond]
+  ring
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- Equations (8) at `a,-a`, together with (8a), give the exact difference
+equation used before (9):
+
+`ρₐ^37 - ρ₋ₐ^37 = ε * (((ζ-1)^(2*m-1) * ρ₀)^37)`.
+
+The proof makes every unit explicit.  It uses that `1 + ζ^a` is a
+cyclotomic unit, that `1 - ζ^a` is associated to `ζ - 1`, and the checked
+identity `κ = (-ζ⁻¹)(ζ-1)²`.  The exponent calculation is
+
+`2 * (37*m - 18) - 1 = (2*m - 1) * 37`.
+
+No ideal-class hypothesis occurs here. -/
+theorem exists_equationEight_difference37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (a m : ℕ) (ha : a.Coprime 37) (hm : 1 < m)
+    (omega theta rhoa rhominus rhozero : 𝓞 K)
+    (etaa etazero : (𝓞 K)ˣ)
+    (hea : omega + (hζ.unit' ^ a : (𝓞 K)ˣ) * theta =
+      (1 - (hζ.unit' ^ a : (𝓞 K)ˣ)) * etaa * rhoa ^ 37)
+    (heminus : omega + ((hζ.unit' ^ a)⁻¹ : (𝓞 K)ˣ) * theta =
+      (1 - ((hζ.unit' ^ a)⁻¹ : (𝓞 K)ˣ)) * etaa * rhominus ^ 37)
+    (hezero : omega + theta =
+      etazero * kappa hζ ^ (37 * m - 18) * rhozero ^ 37) :
+    ∃ ε : (𝓞 K)ˣ,
+      rhoa ^ 37 - rhominus ^ 37 =
+        ε * (((hζ.unit' : 𝓞 K) - 1) ^ (2 * m - 1) * rhozero) ^ 37 := by
+  let t : (𝓞 K)ˣ := hζ.unit' ^ a
+  have htprim : IsPrimitiveRoot (t : 𝓞 K) 37 :=
+    hζ.unit'_coe.pow_of_coprime a ha
+  let hplus : IsUnit ((1 : 𝓞 K) + t) := by
+    simpa [add_comm] using
+      htprim.geom_sum_isUnit (by norm_num) (by norm_num : Nat.Coprime 2 37)
+  let uplus : (𝓞 K)ˣ := hplus.unit
+  have huplus : (uplus : 𝓞 K) = 1 + (t : 𝓞 K) := by
+    exact hplus.unit_spec
+  obtain ⟨u, hu⟩ :=
+    hζ.unit'_coe.associated_sub_one_pow_sub_one_of_coprime ha
+  let uden : (𝓞 K)ˣ := -u
+  have huden : (1 : 𝓞 K) - (t : 𝓞 K) =
+      (uden : 𝓞 K) * ((hζ.unit' : 𝓞 K) - 1) := by
+    dsimp [t, uden]
+    calc
+      (1 : 𝓞 K) - (hζ.unit' : 𝓞 K) ^ a =
+          -((hζ.unit' : 𝓞 K) ^ a - 1) := by ring
+      _ = -(((hζ.unit' : 𝓞 K) - 1) * (u : 𝓞 K)) := by rw [hu]
+      _ = (-(u : 𝓞 K)) * ((hζ.unit' : 𝓞 K) - 1) := by ring
+  have helim := equationEight_pair_difference37 t etaa omega theta rhoa rhominus
+    (by simpa only [t] using hea) (by simpa only [t] using heminus)
+  let E : ℕ := 37 * m - 18
+  let N : ℕ := (2 * m - 1) * 37
+  have hexp : 2 * E = N + 1 := by
+    dsimp [E, N]
+    omega
+  have hkappa : kappa hζ ^ E =
+      ((kappaUnit37 hζ ^ E : (𝓞 K)ˣ) : 𝓞 K) *
+        ((hζ.unit' : 𝓞 K) - 1) ^ (N + 1) := by
+    rw [kappa_pow_eq_kappaUnit37_pow_mul, hexp]
+  have hkappa' : kappa hζ ^ E =
+      ((kappaUnit37 hζ ^ E : (𝓞 K)ˣ) : 𝓞 K) *
+        ((hζ.unit' : 𝓞 K) - 1) *
+          ((hζ.unit' : 𝓞 K) - 1) ^ N := by
+    rw [hkappa, pow_succ']
+    ring
+  let leftUnit : (𝓞 K)ˣ := uden * etaa
+  let rightUnit : (𝓞 K)ˣ := uplus * etazero * kappaUnit37 hζ ^ E
+  have hpi : (hζ.unit' : 𝓞 K) - 1 ≠ 0 :=
+    hζ.unit'_coe.sub_one_ne_zero (by norm_num)
+  have hcancel : (leftUnit : 𝓞 K) * (rhoa ^ 37 - rhominus ^ 37) =
+      (rightUnit : 𝓞 K) *
+        ((hζ.unit' : 𝓞 K) - 1) ^ N * rhozero ^ 37 := by
+    apply mul_left_cancel₀ hpi
+    calc
+      ((hζ.unit' : 𝓞 K) - 1) *
+          ((leftUnit : 𝓞 K) * (rhoa ^ 37 - rhominus ^ 37)) =
+          (1 - (t : 𝓞 K)) * etaa *
+            (rhoa ^ 37 - rhominus ^ 37) := by
+        dsimp [leftUnit]
+        rw [huden]
+        ring
+      _ = (1 + (t : 𝓞 K)) * (omega + theta) := helim
+      _ = ((hζ.unit' : 𝓞 K) - 1) *
+          ((rightUnit : 𝓞 K) *
+            ((hζ.unit' : 𝓞 K) - 1) ^ N * rhozero ^ 37) := by
+        have hezero' : omega + theta =
+            etazero * kappa hζ ^ E * rhozero ^ 37 := by
+          simpa only [E] using hezero
+        rw [← huplus, hezero', hkappa']
+        dsimp [rightUnit]
+        ring
+  let ε : (𝓞 K)ˣ := leftUnit⁻¹ * rightUnit
+  refine ⟨ε, ?_⟩
+  have hdiff : rhoa ^ 37 - rhominus ^ 37 =
+      (ε : 𝓞 K) * ((hζ.unit' : 𝓞 K) - 1) ^ N * rhozero ^ 37 := by
+    calc
+      rhoa ^ 37 - rhominus ^ 37 =
+          (leftUnit⁻¹ : (𝓞 K)ˣ) *
+            ((leftUnit : 𝓞 K) * (rhoa ^ 37 - rhominus ^ 37)) := by
+        rw [← mul_assoc, ← Units.val_mul]
+        simp
+      _ = (leftUnit⁻¹ : (𝓞 K)ˣ) *
+          ((rightUnit : 𝓞 K) *
+            ((hζ.unit' : 𝓞 K) - 1) ^ N * rhozero ^ 37) := by rw [hcancel]
+      _ = (ε : 𝓞 K) * ((hζ.unit' : 𝓞 K) - 1) ^ N * rhozero ^ 37 := by
+        dsimp [ε]
+        ring
+  rw [hdiff]
+  dsimp [N]
+  rw [mul_pow, ← pow_mul]
+  ring
+
 /-- The conjugate of an integral ideal under CM complex conjugation. -/
 def conjugateIdeal37 (I : Ideal (𝓞 K)) : Ideal (𝓞 K) :=
   I.map (NumberField.IsCMField.ringOfIntegersComplexConj K).toRingHom
