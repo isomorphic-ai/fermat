@@ -44,6 +44,106 @@ def IsKummerPrimary {ζ : K} (hζ : IsPrimitiveRoot ζ p) (a : 𝓞 K) : Prop :=
       ((hζ.unit' : 𝓞 K) - 1) ^ p ∣
         a - (c : 𝓞 K) ^ p
 
+/-- Every `p`th power is congruent to the `p`th power of a rational
+integer modulo `(ζ - 1)^p`.
+
+Choose `c : ℤ` with `a ≡ c (mod ζ - 1)`.  In the binomial expansion of
+`(c + (ζ - 1)k)^p`, the last term visibly contains `(ζ - 1)^p`, while
+every mixed term contains both `(ζ - 1)` and the rational prime `p`.
+The standard cyclotomic association
+
+`p ~ (ζ - 1)^(p-1)`
+
+then supplies the remaining `p - 1` factors. -/
+theorem exists_int_pow_congruent_mod_primary
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (a : 𝓞 K) :
+    ∃ c : ℤ,
+      ((hζ.unit' : 𝓞 K) - 1) ^ p ∣
+        a ^ p - (c : 𝓞 K) ^ p := by
+  let π : 𝓞 K := (hζ.unit' : 𝓞 K) - 1
+  obtain ⟨c, k, hk⟩ := exists_zeta_sub_one_dvd_sub_Int hζ a
+  have ha : a = (c : 𝓞 K) + π * k := by
+    rw [sub_eq_iff_eq_add] at hk
+    simpa only [π, add_comm] using hk
+  obtain ⟨r, hr⟩ := exists_add_pow_prime_eq (Fact.out : p.Prime)
+      (c : 𝓞 K) (π * k)
+  have hpdiv : π ^ (p - 1) ∣ (p : 𝓞 K) := by
+    simpa only [π] using (associated_zeta_sub_one_pow_prime hζ).dvd
+  obtain ⟨t, ht⟩ := hpdiv
+  have hlast : π ^ p ∣ (π * k) ^ p := by
+    rw [mul_pow]
+    exact dvd_mul_right _ _
+  have hmixed : π ^ p ∣
+      (p : 𝓞 K) * (c : 𝓞 K) * (π * k) * r := by
+    refine ⟨t * (c : 𝓞 K) * k * r, ?_⟩
+    rw [ht]
+    calc
+      π ^ (p - 1) * t * (c : 𝓞 K) * (π * k) * r =
+          (π ^ (p - 1) * π) * (t * (c : 𝓞 K) * k * r) := by ring
+      _ = π ^ p * (t * (c : 𝓞 K) * k * r) := by
+        rw [← pow_succ, Nat.sub_add_cancel
+          (Fact.out : p.Prime).one_lt.le]
+  refine ⟨c, ?_⟩
+  rw [ha, hr]
+  convert dvd_add hlast hmixed using 1
+  all_goals ring
+
+/-- A pair of nonramified factors that agree modulo `(ζ - 1)^p` gives a
+Kummer-primary generator after the standard `a * b^(p-1)` recombination.
+
+The congruence is elementary:
+
+`a * b^(p-1) ≡ b^p ≡ c^p (mod (ζ - 1)^p)`.
+
+This is the local calculation immediately before Vandiver invokes his
+global Lemma 1. -/
+theorem isKummerPrimary_mul_pow_pred_of_congruent
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (a b : 𝓞 K)
+    (ha : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ a)
+    (hb : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ b)
+    (hab : ((hζ.unit' : 𝓞 K) - 1) ^ p ∣ a - b) :
+    IsKummerPrimary hζ (a * b ^ (p - 1)) := by
+  let π : 𝓞 K := (hζ.unit' : 𝓞 K) - 1
+  have hpred : p - 1 ≠ 0 := by
+    have := (Fact.out : p.Prime).one_lt
+    omega
+  have hbpow : ¬ π ∣ b ^ (p - 1) := by
+    intro h
+    apply hb
+    exact (hζ.zeta_sub_one_prime'.dvd_pow_iff_dvd hpred).mp h
+  refine ⟨hζ.zeta_sub_one_prime'.not_dvd_mul ha hbpow, ?_⟩
+  obtain ⟨c, hc⟩ := exists_int_pow_congruent_mod_primary hζ b
+  refine ⟨c, ?_⟩
+  have hfirst : π ^ p ∣ (a - b) * b ^ (p - 1) :=
+    dvd_mul_of_dvd_left (by simpa only [π] using hab) _
+  have hsum := dvd_add hfirst hc
+  have hbpowid : b ^ p = b * b ^ (p - 1) := by
+    rw [← pow_succ', Nat.sub_add_cancel
+      (Fact.out : p.Prime).one_lt.le]
+  convert hsum using 1
+  rw [hbpowid]
+  ring
+
+/-- Unit-normalized version of
+`isKummerPrimary_mul_pow_pred_of_congruent`.  This is convenient when a
+linear factor has first been divided by the fixed uniformizer `ζ - 1` and
+must be rescaled to the historically used denominator `ζ^a - 1`. -/
+theorem isKummerPrimary_unit_mul_pow_pred_of_congruent
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (u : (𝓞 K)ˣ) (a b : 𝓞 K)
+    (ha : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ a)
+    (hb : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ b)
+    (hab : ((hζ.unit' : 𝓞 K) - 1) ^ p ∣
+      (u : 𝓞 K) * a - b) :
+    IsKummerPrimary hζ ((u : 𝓞 K) * a * b ^ (p - 1)) := by
+  have hu : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ (u : 𝓞 K) := by
+    intro h
+    exact hζ.zeta_sub_one_prime'.not_unit
+      (isUnit_of_dvd_unit h u.isUnit)
+  simpa only [mul_assoc] using
+    isKummerPrimary_mul_pow_pred_of_congruent hζ
+      ((u : 𝓞 K) * a) b
+      (hζ.zeta_sub_one_prime'.not_dvd_mul hu ha) hb hab
+
 /-- Exact conclusion of Vandiver's Lemma 1.
 
 At exponent `37`, the numerical hypothesis behind this proposition is the
@@ -99,6 +199,39 @@ theorem exists_equationSevenA_generator
       _ = Ideal.span {a * b ^ (p - 1)} := by
             rw [Ideal.span_singleton_pow,
               Ideal.span_singleton_mul_span_singleton]
+  obtain ⟨r, hr⟩ := (hlemma hζ hprimary hpow).principal
+  exact ⟨r, hr⟩
+
+/-- Unit-normalized form of equation (7a).
+
+Multiplying the displayed primary generator by a unit does not change its
+principal ideal.  This form lets callers normalize conjugate linear factors
+so that their local congruence is literal, while retaining the original
+factor ideals `I` and `J`. -/
+theorem exists_equationSevenA_generator_of_unit
+    (hlemma : LemmaOne K p)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (u : (𝓞 K)ˣ) (I J : Ideal (𝓞 K)) (a b : 𝓞 K)
+    (hIpow : I ^ p = Ideal.span {a})
+    (hJpow : J ^ p = Ideal.span {b})
+    (hprimary : IsKummerPrimary hζ
+      ((u : 𝓞 K) * (a * b ^ (p - 1)))) :
+    ∃ r : 𝓞 K, I * J ^ (p - 1) = Ideal.span {r} := by
+  have hpow : (I * J ^ (p - 1)) ^ p =
+      Ideal.span {(u : 𝓞 K) * (a * b ^ (p - 1))} := by
+    calc
+      (I * J ^ (p - 1)) ^ p =
+          I ^ p * (J ^ p) ^ (p - 1) := by
+            rw [mul_pow, ← pow_mul, ← pow_mul,
+              Nat.mul_comm (p - 1) p]
+      _ = Ideal.span {a} * (Ideal.span {b}) ^ (p - 1) := by
+            rw [hIpow, hJpow]
+      _ = Ideal.span {a * b ^ (p - 1)} := by
+            rw [Ideal.span_singleton_pow,
+              Ideal.span_singleton_mul_span_singleton]
+      _ = Ideal.span {(u : 𝓞 K) * (a * b ^ (p - 1))} :=
+        Ideal.span_singleton_eq_span_singleton.mpr
+          (associated_unit_mul_right _ _ u.isUnit)
   obtain ⟨r, hr⟩ := (hlemma hζ hprimary hpow).principal
   exact ⟨r, hr⟩
 

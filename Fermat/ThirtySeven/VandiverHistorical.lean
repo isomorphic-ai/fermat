@@ -398,6 +398,34 @@ theorem exists_equationEight_of_lemmaOneSevenD37
   exact exists_equationEight_of_sevenASevenD37
     I J a b r s hI0 hJ0 hIpow hJpow hsevenA hsevenD
 
+set_option maxRecDepth 2000 in
+/-- Unit-normalized assembly of Vandiver's equations (7a), (7d), and (8).
+
+In the literal historical factors, replacing the fixed denominator
+`ζ - 1` by `ζ^a - 1` introduces a cyclotomic unit.  The primary generator
+is therefore naturally `u * (a * b^36)`.  Since `u` does not change the
+principal ideal, Lemma 1 still principalizes `I * J^36`; the rest is the
+same checked Bézout calculation as in
+`exists_equationEight_of_lemmaOneSevenD37`. -/
+theorem exists_equationEight_of_lemmaOneSevenDUnit37
+    (hlemma : Fermat.Irregular.VandiverLemmaOne.LemmaOne K 37)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (u : (𝓞 K)ˣ) (I J : Ideal (𝓞 K)) (a b s : 𝓞 K)
+    (hI0 : I ≠ 0) (hJ0 : J ≠ 0)
+    (hIpow : I ^ 37 = Ideal.span {a})
+    (hJpow : J ^ 37 = Ideal.span {b})
+    (hprimary :
+      Fermat.Irregular.VandiverLemmaOne.IsKummerPrimary hζ
+        ((u : 𝓞 K) * (a * b ^ 36)))
+    (hsevenD : I * J = Ideal.span {s}) :
+    ∃ (ρ : 𝓞 K) (η : (𝓞 K)ˣ),
+      I = Ideal.span {ρ} ∧ a = η * ρ ^ 37 := by
+  obtain ⟨r, hsevenA⟩ :=
+    Fermat.Irregular.VandiverLemmaOne.exists_equationSevenA_generator_of_unit
+      hlemma hζ u I J a b hIpow hJpow (by simpa using hprimary)
+  exact exists_equationEight_of_sevenASevenD37
+    I J a b r s hI0 hJ0 hIpow hJpow hsevenA hsevenD
+
 omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
 /-- The elementary elimination between equation (8) at `a` and `-a`.
 
