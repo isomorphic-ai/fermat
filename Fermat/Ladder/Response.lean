@@ -31,6 +31,12 @@ namespace Fermat.Ladder.Response
 
 open Matrix
 
+/-- The constructor-level verdict exposed to finite-data consumers. -/
+inductive Verdict where
+  | pass
+  | contradicted
+  deriving DecidableEq, Repr
+
 /-- One kernel-checked sample of the ladder's response function. -/
 structure Point where
   exponent : ℕ
@@ -55,6 +61,12 @@ theorem exitDepth_pos (point : Point) : 0 < point.exitDepth := by
 theorem exitDepth_le_seven (point : Point) : point.exitDepth ≤ 7 := by
   rw [← point.depth_coherent]
   exact point.measured.exitDepth_le_seven
+
+/-- Read the verdict directly from the checked run carried by a point. -/
+def verdict (point : Point) : Verdict :=
+  match point.measured.run.outcome with
+  | .pass _ => .pass
+  | .contradicted _ => .contradicted
 
 end Point
 
@@ -112,6 +124,18 @@ def coordinates (points : List Point) : List (ℕ × ℕ) :=
 /-- The generator-search-friendly projection of `responseCurve`. -/
 def responseData : List (ℕ × ℕ) :=
   coordinates responseCurve
+
+/-- Exponents one and two pass; every remaining sampled exponent is
+contradicted.  The tags are computed from the actual `Outcome` constructors. -/
+def responseVerdicts : List Verdict :=
+  responseCurve.map Point.verdict
+
+theorem responseVerdicts_eq : responseVerdicts =
+    [.pass, .pass, .contradicted, .contradicted, .contradicted,
+      .contradicted, .contradicted, .contradicted, .contradicted,
+      .contradicted, .contradicted, .contradicted, .contradicted,
+      .contradicted] :=
+  rfl
 
 /-- The battery response as an actual finite function.  Index `0` records
 exponent `1`, and in general index `i` records exponent `i + 1`. -/
