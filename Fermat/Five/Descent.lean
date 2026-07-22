@@ -1,4 +1,5 @@
 import Fermat.Five.PowerSplitting
+import Fermat.Five.PowerExtraction
 
 /-!
 # Dirichlet's two descents for exponent five
@@ -16,6 +17,8 @@ second coordinate rules out both families.
 -/
 
 namespace Fermat.Five.Dirichlet
+
+open Fermat.Five.PowerExtraction
 
 /-- The quartic factor occurring in both of Dirichlet's descents. -/
 def F (t s : ℕ) : ℕ := t ^ 4 + 10 * t ^ 2 * s ^ 2 + 5 * s ^ 4
@@ -275,6 +278,27 @@ theorem EvenCoordinates.ofOppositeParity {s t' s' : ℕ}
     have hleftEven : Even (2 * s ^ 2) := ⟨s ^ 2, by ring⟩
     exact (Nat.not_even_iff_odd.mpr hleftOdd) hleftEven
 
+/-- The algebraic extraction, converted to the exact natural-number
+coordinate relation used by the odd descent. -/
+theorem OddState.extractCoordinates {h t s w v : ℕ} (d : OddState h t s w)
+    (hF : F t s = 16 * v ^ 5) : ∃ t' s' : ℕ, OddCoordinates s t' s' := by
+  obtain ⟨P, hPpos, hcop, hPodd, hQodd, hQfive, hPfive, hnorm⟩ := d.normData hF
+  obtain ⟨t', s', htpos, hspos, hcop', htodd, hsodd, htfive, hrel⟩ :=
+    exists_odd_coordinates_nat P (s ^ 2) v hPpos (pow_pos d.s_pos 2) hcop
+      hPodd hQodd hQfive hPfive hnorm
+  refine ⟨t', s', hrel, htpos, hspos, hcop', htodd, hsodd, htfive⟩
+
+/-- The algebraic extraction, converted to the exact natural-number
+coordinate relation used by the opposite-parity descent. -/
+theorem EvenState.extractCoordinates {g h t s w v : ℕ} (d : EvenState g h t s w)
+    (hF : F t s = v ^ 5) : ∃ t' s' : ℕ, EvenCoordinates s t' s' := by
+  rcases d.normData hF with ⟨hPpos, hQpos, hcop, hPodd, hQeven, hQfive,
+    hPfive, hnorm⟩
+  obtain ⟨t', s', htpos, hspos, hcop', htodd, hseven, htfive, hrel⟩ :=
+    exists_oppositeParity_coordinates_nat (t ^ 2 + 5 * s ^ 2) (2 * s ^ 2) v
+      hPpos hQpos hcop hPodd hQeven hQfive hPfive hnorm
+  refine ⟨t', s', hrel, htpos, hspos, hcop', htodd, hseven, htfive⟩
+
 private theorem five_dvd_new_second {K s t' s' : ℕ} (hs : 5 ∣ s)
     (ht : ¬5 ∣ t') (hrel : K * s ^ 2 = 5 * s' * F t' s') : 5 ∣ s' := by
   have h25s : 25 ∣ s ^ 2 := by
@@ -299,7 +323,8 @@ private theorem smaller_of_coordinate_relation {K s t' s' : ℕ}
   have hmul := (Nat.mul_lt_mul_left (show 0 < 5 * s' by positivity)).mpr hF
   have hmain : 25 * s' ^ 5 < K * s ^ 2 := by
     rw [hrel]
-    convert hmul using 1 <;> ring
+    convert hmul using 1
+    all_goals ring
   by_contra hnlt
   have hss : s ≤ s' := Nat.le_of_not_gt hnlt
   have hsquares : s ^ 2 ≤ s' ^ 2 := Nat.pow_le_pow_left hss 2
@@ -328,12 +353,16 @@ theorem EvenCoordinates.smaller {s t' s' : ℕ} (c : EvenCoordinates s t' s') :
 
 private theorem five_pow_double (h : ℕ) : 5 ^ (2 * h) = (5 ^ h) ^ 2 := by
   calc
-    5 ^ (2 * h) = 5 ^ (h * 2) := by congr 1 <;> omega
+    5 ^ (2 * h) = 5 ^ (h * 2) := by
+      congr 1
+      omega
     _ = (5 ^ h) ^ 2 := pow_mul 5 h 2
 
 private theorem two_pow_double (g : ℕ) : 2 ^ (2 * g) = (2 ^ g) ^ 2 := by
   calc
-    2 ^ (2 * g) = 2 ^ (g * 2) := by congr 1 <;> omega
+    2 ^ (2 * g) = 2 ^ (g * 2) := by
+      congr 1
+      omega
     _ = (2 ^ g) ^ 2 := pow_mul 2 g 2
 
 /-- The exact odd recurrence `h ↦ 2h+1`. -/
@@ -403,6 +432,23 @@ theorem EvenState.nextOfCoordinates {g h t s w u t' s' : ℕ}
       ring
     _ = (u ^ 2) ^ 5 := by rw [hu]; ring
 
+/-- A source-normalized odd state produces one with the historical exponent
+`2h+1` and a strictly smaller positive second coordinate. -/
+theorem OddState.descends {h t s w : ℕ} (d : OddState h t s w) :
+    ∃ h' t' s' w' : ℕ, OddState h' t' s' w' ∧ s' < s := by
+  obtain ⟨u, v, hu, hF⟩ := d.split
+  obtain ⟨t', s', c⟩ := d.extractCoordinates hF
+  exact ⟨2 * h + 1, t', s', u ^ 2, d.nextOfCoordinates hu c, c.smaller⟩
+
+/-- A source-normalized opposite-parity state produces one with exponents
+`(2g-1,2h+1)` and a strictly smaller positive second coordinate. -/
+theorem EvenState.descends {g h t s w : ℕ} (d : EvenState g h t s w) :
+    ∃ g' h' t' s' w' : ℕ, EvenState g' h' t' s' w' ∧ s' < s := by
+  obtain ⟨u, v, hu, hF⟩ := d.split
+  obtain ⟨t', s', c⟩ := d.extractCoordinates hF
+  exact ⟨2 * g - 1, 2 * h + 1, t', s', u ^ 2,
+    d.nextOfCoordinates hu c, c.smaller⟩
+
 /-- Minimal-positive-coordinate engine for the odd normalization. -/
 theorem no_oddState_of_descends
     (hdesc : ∀ {h t s w : ℕ}, OddState h t s w →
@@ -432,5 +478,13 @@ theorem no_evenState_of_descends
   have hminimal : Nat.find hP ≤ s₁ :=
     Nat.find_min' hP ⟨g₁, h₁, t₁, w₁, d₁⟩
   exact (Nat.not_lt_of_ge hminimal) hlt
+
+/-- There is no state in Dirichlet's odd-coordinate descent family. -/
+theorem no_oddState (h t s w : ℕ) : ¬OddState h t s w :=
+  no_oddState_of_descends (fun d ↦ d.descends) h t s w
+
+/-- There is no state in Dirichlet's opposite-parity descent family. -/
+theorem no_evenState (g h t s w : ℕ) : ¬EvenState g h t s w :=
+  no_evenState_of_descends (fun d ↦ d.descends) g h t s w
 
 end Fermat.Five.Dirichlet
