@@ -78,8 +78,9 @@ private theorem coprime_power_difference {A W B : ℤ}
   rw [← IsCoprime.mul_sub_left_right_iff (x := A) (y := W * B) (z := A ^ 5)] at h
   simpa only [show A * A ^ 5 = A ^ 6 by ring] using h
 
-private theorem zmod_four_fourteenth_ne_three (a : ZMod 4) : a ^ 14 ≠ 3 := by
-  native_decide +revert
+private theorem zmod_four_fourteenth_ne_three :
+    ∀ a : ZMod 4, a ^ 14 ≠ 3 := by
+  decide
 
 /-- The exceptional allocation `7 ∣ T` in Lebesgue's power extraction is
 impossible.  This is the rigorous counterpart of the source's observation
