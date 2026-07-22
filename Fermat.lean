@@ -5,6 +5,9 @@ import Fermat.Five.Dirichlet
 import Fermat.Fourteen.DescentConstruction
 import Fermat.Seven.Lebesgue.TheoremTwo
 import Fermat.Thirteen.Cyclotomic
+import Fermat.ThirtySeven.ArithmeticCertificate
+import Fermat.ThirtySeven.FirstCase
+import Fermat.ThirtySeven.NeighborFolding
 
 namespace Fermat
 
