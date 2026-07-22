@@ -1,4 +1,5 @@
 import Fermat.ThirtySeven.CircularUnitCertificate
+import Mathlib.NumberTheory.NumberField.CMField
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Embeddings
 import Mathlib.NumberTheory.NumberField.Units.Regulator
@@ -181,7 +182,70 @@ theorem circularUnit37_coe {zeta : K} (hzeta : IsPrimitiveRoot zeta 37) (i : Fin
           _ = -(zeta ^ (i.val + 2) - 1) := by rw [mul_geom_sum]
           _ = 1 - zeta ^ (i.val + 2) := by ring]
 
+section ComplexConjugation
+
+variable [NumberField K] [NumberField.IsCMField K] [Algebra.IsIntegral ℚ K]
+
+/-- Complex conjugation sends the chosen primitive `37`th root to its inverse. -/
+theorem complexConj_zeta37_inv {zeta : K} (hzeta : IsPrimitiveRoot zeta 37) :
+    NumberField.IsCMField.complexConj K zeta = zeta⁻¹ := by
+  let rootUnit : (𝓞 K)ˣ :=
+    (hzeta.toInteger_isPrimitiveRoot.isUnit (by norm_num)).unit
+  have hpow : rootUnit ^ 37 = 1 := by
+    apply Units.ext
+    apply RingOfIntegers.ext
+    simpa [rootUnit] using hzeta.pow_eq_one
+  have ht : rootUnit ∈ NumberField.Units.torsion K := by
+    rw [NumberField.Units.torsion, CommGroup.mem_torsion, isOfFinOrder_iff_pow_eq_one]
+    exact ⟨37, by norm_num, hpow⟩
+  have hc := NumberField.IsCMField.unitsComplexConj_torsion K ⟨rootUnit, ht⟩
+  have hc' : NumberField.IsCMField.unitsComplexConj K rootUnit = rootUnit⁻¹ := by
+    simpa using hc
+  have hv := congrArg Units.val hc'
+  simpa [rootUnit, NumberField.IsCMField.unitsComplexConj,
+    NumberField.IsCMField.ringOfIntegersComplexConj,
+    NumberField.RingOfIntegers.ext_iff] using congrArg ((↑) : 𝓞 K → K) hv
+
+/-- The normalization exponent makes each of the seventeen circular units real: it is fixed by
+the CM-field complex conjugation. -/
+theorem circularUnit37_unitsComplexConj {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (i : Fin 17) :
+    NumberField.IsCMField.unitsComplexConj K (circularUnit37 hzeta i) =
+      circularUnit37 hzeta i := by
+  apply Units.ext
+  apply RingOfIntegers.ext
+  change NumberField.IsCMField.complexConj K
+      (((circularUnit37 hzeta i : (𝓞 K)ˣ) : 𝓞 K) : K) =
+    (((circularUnit37 hzeta i : (𝓞 K)ˣ) : 𝓞 K) : K)
+  rw [circularUnit37_coe]
+  simp only [div_eq_mul_inv, map_mul, map_inv₀, map_pow, map_sub, map_one,
+    complexConj_zeta37_inv hzeta]
+  have h74 : zeta ^ 74 = 1 := by
+    rw [show 74 = 37 * 2 by norm_num, pow_mul, hzeta.pow_eq_one, one_pow]
+  have hne₁ : zeta - 1 ≠ 0 := sub_ne_zero.mpr (hzeta.ne_one (by norm_num))
+  have hne₂ : 1 - zeta ≠ 0 := sub_ne_zero.mpr (Ne.symm (hzeta.ne_one (by norm_num)))
+  fin_cases i <;> norm_num [normalizationExponent37] <;>
+    field_simp [hzeta.ne_zero, hne₁, hne₂] <;>
+    simp only [hzeta.pow_eq_one, h74] <;>
+    ring
+
+/-- Equivalently, every `circularUnit37` belongs to Mathlib's subgroup of real units. -/
+theorem circularUnit37_mem_realUnits {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (i : Fin 17) :
+    circularUnit37 hzeta i ∈ NumberField.IsCMField.realUnits K :=
+  (NumberField.IsCMField.unitsComplexConj_eq_self_iff K _).mp
+    (circularUnit37_unitsComplexConj hzeta i)
+
+end ComplexConjugation
+
 variable [NumberField K]
+
+/-- A `37`th cyclotomic field is a CM field.  This named theorem lets residue-map constructions
+install the required instance locally. -/
+theorem cyclotomic37_isCMField [IsCyclotomicExtension {37} ℚ K] :
+    NumberField.IsCMField K :=
+  IsCyclotomicExtension.Rat.isCMField K (S := ({37} : Set ℕ))
+    ⟨37, Set.mem_singleton 37, by norm_num⟩
 
 /-- A `37`th cyclotomic number field has unit rank `17`. -/
 theorem cyclotomic37_unitRank [IsCyclotomicExtension {37} ℚ K] :
