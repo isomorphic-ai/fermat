@@ -1,4 +1,5 @@
 import Fermat.FiftyNine.CircularUnitCertificate
+import Fermat.FiftyNine.CircularUnitResidues
 import Fermat.FiftyNine.FirstCase
 import Fermat.Irregular.CircularUnitFamily
 import Fermat.Irregular.CircularUnitIndex
@@ -25,6 +26,7 @@ open Fermat.Irregular.CircularUnitIndex
 variable {K : Type*} [Field K] [NumberField K]
 
 local instance : Fact (Nat.Prime 59) := ⟨Fermat.FiftyNine.prime_59⟩
+local instance : Fact (Nat.Prime 827) := ⟨Fermat.FiftyNine.prime_827⟩
 
 local instance : Module ℤ (UnitsModTorsion K) :=
   @AddCommGroup.toIntModule (UnitsModTorsion K) (inferInstance)
@@ -69,6 +71,24 @@ theorem not_dvd_circularUnits59_realIndex_of_evalMatrix_eq
       (fun i ↦ circularUnitFamily_mem_realUnits hzeta (by norm_num) i) f
   rw [heval]
   exact Fermat.FiftyNine.CircularUnitCertificate.matrix_det_ne_zero
+
+/-- The bundled finite certificate constructs the required residue
+functionals, so the real relative index conclusion is unconditional. -/
+theorem not_dvd_circularUnits59_realIndex
+    [IsCyclotomicExtension {59} ℚ K]
+    {zeta : K} (hzeta : IsPrimitiveRoot zeta 59) :
+    letI : NumberField.IsCMField K :=
+      cyclotomicPrime_isCMField (K := K) (p := 59)
+        Fermat.FiftyNine.prime_59 (by norm_num)
+    ¬ 59 ∣
+      (Subgroup.closure (Set.range (circularUnits59 hzeta)) ⊔
+        NumberField.Units.torsion K).relIndex
+        (NumberField.IsCMField.realUnits K ⊔
+          NumberField.Units.torsion K) := by
+  simpa only [circularUnits59] using
+    Fermat.FiftyNine.CircularUnitResidues.residueCertificate
+      |>.not_dvd_circularUnitFamily_real_index_of_cyclotomic hzeta
+        Fermat.FiftyNine.CircularUnitCertificate.matrix_det_ne_zero
 
 end
 

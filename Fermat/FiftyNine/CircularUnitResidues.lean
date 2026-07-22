@@ -1,6 +1,7 @@
 import Fermat.FiftyNine.CircularUnitCertificate
 import Fermat.FiftyNine.FirstCase
 import Fermat.Irregular.CircularUnitFamily
+import Fermat.Irregular.CircularUnitResidues
 
 /-!
 # Finite-field provenance of the exponent-59 unit matrix
@@ -58,5 +59,22 @@ theorem matrix_entry_certificate (j i : Fin 28) :
     normalizedUnitValue j i ^ 14 =
       (671 : ZMod 827) ^ (matrix j i).val := by
   fin_cases j <;> fin_cases i <;> decide
+
+/-- The complete finite exponent-`59` certificate, packaged for the generic
+residue-character construction. -/
+def residueCertificate :
+    Fermat.Irregular.CircularUnitResidues.Certificate 59 827 where
+  hp2 := by norm_num
+  symbolExponent := 14
+  q_sub_one := by norm_num
+  root := 671
+  root_isPrimitive := IsPrimitiveRoot.iff_orderOf.mpr root_order
+  matrix := matrix
+  entry_certificate := by
+    intro j i
+    simpa [Fermat.Irregular.CircularUnitResidues.normalizedUnitValue,
+      Fermat.Irregular.CircularUnitResidues.embeddingRoot,
+      normalizedUnitValue, embeddingRoot, normalizationExponent, unitIndex] using
+      matrix_entry_certificate j i
 
 end Fermat.FiftyNine.CircularUnitResidues
