@@ -16,11 +16,20 @@ theory, broad computational verification, and first-case-only results.
 The common theorem statement is `Fermat.HoldsAt n`, an abbreviation for
 mathlib's `FermatLastTheoremFor n`. Mathlib already contains complete descent
 proofs for `n = 3` and `n = 4`; this project reuses those checked proofs and
-focuses its new work on `n = 5` and `n = 7`. The `n = 14` result follows from
-the `n = 7` result by divisibility of exponents. The project also contains a
-complete formalization of Dirichlet's original, independent 1832 descent for
-`n = 14`, exposed as `Fermat.Fourteen.Dirichlet.holdsAt_fourteen_dirichlet`;
-see `docs/dirichlet-n14.md` for its proof ledger and the unit-sign correction
+focuses its new work on `n = 5` and `n = 7`.
+
+The exponent-five result follows Dirichlet's completed 1828 proof, including
+both historical parity branches and the exact denominator-`16` descent. It is
+exposed as `Fermat.holdsAt_five` and
+`Fermat.Five.Dirichlet.holdsAt_five_dirichlet`; see
+`docs/dirichlet-n5.md` for the page-level source ledger and the modern
+maximal-order and Pell-unit repairs.
+
+The `n = 14` result follows from the `n = 7` result by divisibility of
+exponents. The project also contains a complete formalization of Dirichlet's
+original, independent 1832 descent for `n = 14`, exposed as
+`Fermat.Fourteen.Dirichlet.holdsAt_fourteen_dirichlet`; see
+`docs/dirichlet-n14.md` for its proof ledger and the unit-sign correction
 needed by the historical argument.
 
 ## Build
