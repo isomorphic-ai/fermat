@@ -25,9 +25,17 @@ exposed as `Fermat.holdsAt_five` and
 `docs/dirichlet-n5.md` for the page-level source ledger and the modern
 maximal-order and Pell-unit repairs.
 
+The exponent-seven result follows Lebesgue's 1840 proof together with his
+published Addition. The Addition repairs the third of the four allocations
+that the original note incorrectly dismissed. The checked result is exposed
+as `Fermat.holdsAt_seven` and
+`Fermat.Seven.Lebesgue.holdsAt_seven_lebesgue`; see
+`docs/lebesgue-n7.md` for the exact descent ledger and the repaired branch.
+
 The `n = 14` result follows from the `n = 7` result by divisibility of
 exponents. The project also contains a complete formalization of Dirichlet's
 original, independent 1832 descent for `n = 14`, exposed as
+`Fermat.holdsAt_fourteen` and
 `Fermat.Fourteen.Dirichlet.holdsAt_fourteen_dirichlet`; see
 `docs/dirichlet-n14.md` for its proof ledger and the unit-sign correction
 needed by the historical argument.
