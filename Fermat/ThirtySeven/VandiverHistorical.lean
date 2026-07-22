@@ -74,6 +74,92 @@ lemma unitsComplexConj_zeta37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37) :
   change NumberField.IsCMField.complexConj K ζ = ζ⁻¹
   exact Fermat.Irregular.CircularUnitIndex.complexConj_zeta37_inv hζ
 
+/-! ## Exact normalization to the upstream factor-ideal equation -/
+
+/-- The cyclotomic unit in the exact identity
+
+`κ = (-ζ⁻¹) * (ζ - 1)²`.
+
+Naming it makes the change from Vandiver's real parameter `κ` to the
+`(ζ - 1)`-adic normalization used by the generic factor-ideal machinery
+completely explicit. -/
+def kappaUnit37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37) : (𝓞 K)ˣ :=
+  -hζ.unit'⁻¹
+
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+/-- The literal unit identity relating Vandiver's `κ` to `(ζ - 1)²`. -/
+lemma kappa_eq_kappaUnit37_mul_sq {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    kappa hζ = (kappaUnit37 hζ : 𝓞 K) *
+      ((hζ.unit' : 𝓞 K) - 1) ^ 2 := by
+  simp only [kappa, kappaUnit37, Units.val_neg, neg_mul, pow_two]
+  have hz : ((hζ.unit'⁻¹ : (𝓞 K)ˣ) : 𝓞 K) *
+      (hζ.unit' : 𝓞 K) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  have hinv : (1 : 𝓞 K) - (hζ.unit'⁻¹ : (𝓞 K)ˣ) =
+      (hζ.unit'⁻¹ : (𝓞 K)ˣ) * ((hζ.unit' : 𝓞 K) - 1) := by
+    rw [mul_sub, mul_one, hz]
+  rw [hinv]
+  ring
+
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+/-- Power form of `kappa_eq_kappaUnit37_mul_sq`. -/
+lemma kappa_pow_eq_kappaUnit37_pow_mul {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (m : ℕ) :
+    kappa hζ ^ m = ((kappaUnit37 hζ ^ m : (𝓞 K)ˣ) : 𝓞 K) *
+      ((hζ.unit' : 𝓞 K) - 1) ^ (2 * m) := by
+  rw [kappa_eq_kappaUnit37_mul_sq, mul_pow, ← Units.val_pow_eq_pow_val,
+    ← pow_mul]
+
+/-- The coefficient unit obtained when Vandiver's equation (6) is written
+in the `(ζ - 1)`-adic format used by `FltRegular.CaseII.InductionStep`. -/
+def historicalRegularUnit37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (s : HistoricalState hζ) : (𝓞 K)ˣ :=
+  s.eta * kappaUnit37 hζ ^ (s.m * 37)
+
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+/-- Every historical state at exponent `37` is literally an input to the
+generic factor-ideal construction, with upstream depth parameter
+`2 * m - 1`:
+
+`ω^37 + θ^37 = ε * (((ζ - 1)^(2*m) * ξ)^37)`.
+
+Thus all algebra and coprimality lemmas in the existing regular-prime
+induction step up to its class-group principalization point can be reused
+without alteration. -/
+lemma historicalState_regularEquation37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ) :
+    s.omega ^ 37 + s.theta ^ 37 = historicalRegularUnit37 hζ s *
+      (((hζ.unit' : 𝓞 K) - 1) ^ ((2 * s.m - 1) + 1) * s.xi) ^ 37 := by
+  have hm : 1 ≤ 2 * s.m := by
+    have := s.one_lt_m
+    omega
+  rw [Nat.sub_add_cancel hm]
+  rw [s.equation, kappa_pow_eq_kappaUnit37_pow_mul]
+  simp only [historicalRegularUnit37, mul_pow, ← Units.val_pow_eq_pow_val,
+    Units.val_mul]
+  rw [← pow_mul]
+  ac_rfl
+
+/-- In every historical state, `θ` is prime to `(ζ - 1)`.  This discharges
+the `hy` input of the generic factor-ideal construction directly from the
+state equation and pairwise coprimality. -/
+lemma historicalState_theta_not_dvd37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ) :
+    ¬ (hζ.unit' : 𝓞 K) - 1 ∣ s.theta := by
+  intro htheta
+  have hsum : (hζ.unit' : 𝓞 K) - 1 ∣
+      s.omega ^ 37 + s.theta ^ 37 :=
+    zeta_sub_one_dvd (p := 37) hζ
+      (historicalState_regularEquation37 hζ s)
+  have homegaPow : (hζ.unit' : 𝓞 K) - 1 ∣ s.omega ^ 37 := by
+    simpa using dvd_sub hsum (dvd_pow (n := 37) htheta (by norm_num))
+  have homega : (hζ.unit' : 𝓞 K) - 1 ∣ s.omega :=
+    hζ.zeta_sub_one_prime'.dvd_of_dvd_pow homegaPow
+  exact hζ.zeta_sub_one_prime'.not_unit
+    (s.coprime_omega_theta.isUnit_of_dvd' homega htheta)
+
 /-! ## Conjugation-compatible principal generators -/
 
 /-! ### The exact plus/minus ideal-class split
