@@ -20,7 +20,7 @@ leaving only the smallest unavailable real-ideal descent lemma explicit.
 
 namespace Fermat.ThirtySeven.VandiverHistorical
 
-open scoped NumberField
+open scoped NumberField nonZeroDivisors
 
 open Fermat.Irregular.VandiverHistoricalDescent
 open Fermat.Irregular.VandiverCriterion
@@ -74,6 +74,192 @@ lemma unitsComplexConj_zeta37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37) :
   exact Fermat.Irregular.CircularUnitIndex.complexConj_zeta37_inv hζ
 
 /-! ## Conjugation-compatible principal generators -/
+
+/-! ### The exact plus/minus ideal-class split
+
+The plus-class-number result does **not** by itself prove
+`RelevantIdealQuotientsPrincipal` at the irregular prime `37`: a genuine
+`37`-torsion minus class may remain.  The definitions and theorems below
+make that obstruction literal.  For a relevant quotient `I`, its symmetric
+component is `I * conj(I)` and its antisymmetric component is
+`I / conj(I)`.  Since `I ^ 37` is already principal, once the symmetric
+component is principal, principalizing `I` is equivalent to principalizing
+the antisymmetric component.
+
+This is the precise interface between the Sinnott--Kummer plus-class theorem
+and Kummer's primary test on the remaining irregular minus component. -/
+
+/-- The conjugate of an integral ideal under CM complex conjugation. -/
+def conjugateIdeal37 (I : Ideal (𝓞 K)) : Ideal (𝓞 K) :=
+  I.map (NumberField.IsCMField.ringOfIntegersComplexConj K).toRingHom
+
+/-- Complex conjugation preserves whether an integral ideal is zero. -/
+@[simp] lemma conjugateIdeal37_eq_zero_iff (I : Ideal (𝓞 K)) :
+    conjugateIdeal37 I = 0 ↔ I = 0 := by
+  exact Ideal.map_eq_bot_iff_of_injective
+    (NumberField.IsCMField.ringOfIntegersComplexConj K).injective
+
+/-- Conjugate an integral-ideal quotient by conjugating numerator and
+denominator. -/
+def conjugateIdealQuotient37 (A B : Ideal (𝓞 K)) :
+    FractionalIdeal (𝓞 K)⁰ K :=
+  (conjugateIdeal37 A : FractionalIdeal (𝓞 K)⁰ K) /
+    (conjugateIdeal37 B : FractionalIdeal (𝓞 K)⁰ K)
+
+/-- The actual fractional ideal whose principality is requested by
+`RelevantIdealQuotientsPrincipal` at exponent `37`. -/
+noncomputable def relevantIdealQuotient37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {x y z : 𝓞 K} {ε₀ : (𝓞 K)ˣ} {m : ℕ}
+    (e : x ^ 37 + y ^ 37 =
+      ε₀ * ((hζ.unit'.1 - 1) ^ (m + 1) * z) ^ 37)
+    (hy : ¬ hζ.unit'.1 - 1 ∣ y)
+    (η : Polynomial.nthRootsFinset 37 (1 : 𝓞 K)) :
+    FractionalIdeal (𝓞 K)⁰ K :=
+  (root_div_zeta_sub_one_dvd_gcd (K := K) (p := 37)
+      (x := x) (y := y) (z := z) (ε := ε₀) (m := m)
+        (by norm_num) hζ e hy η : FractionalIdeal (𝓞 K)⁰ K) /
+    (a_eta_zero_dvd_p_pow (K := K) (p := 37)
+      (x := x) (y := y) (z := z) (ε := ε₀) (m := m)
+        (by norm_num) hζ e hy : FractionalIdeal (𝓞 K)⁰ K)
+
+/-- The conjugate of the relevant exponent-`37` quotient. -/
+noncomputable def conjugateRelevantIdealQuotient37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {x y z : 𝓞 K} {ε₀ : (𝓞 K)ˣ} {m : ℕ}
+    (e : x ^ 37 + y ^ 37 =
+      ε₀ * ((hζ.unit'.1 - 1) ^ (m + 1) * z) ^ 37)
+    (hy : ¬ hζ.unit'.1 - 1 ∣ y)
+    (η : Polynomial.nthRootsFinset 37 (1 : 𝓞 K)) :
+    FractionalIdeal (𝓞 K)⁰ K :=
+  conjugateIdealQuotient37
+    (root_div_zeta_sub_one_dvd_gcd (K := K) (p := 37)
+      (x := x) (y := y) (z := z) (ε := ε₀) (m := m)
+        (by norm_num) hζ e hy η)
+    (a_eta_zero_dvd_p_pow (K := K) (p := 37)
+      (x := x) (y := y) (z := z) (ε := ε₀) (m := m)
+        (by norm_num) hζ e hy)
+
+/-- Every symmetric relevant quotient class is principal.  This is the
+ideal-theoretic plus-component statement to be supplied by the plus class
+number through relative ideal norm and extension. -/
+def RelevantIdealQuotientPlusComponentsPrincipal37 : Prop :=
+  ∀ {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {x y z : 𝓞 K} {ε₀ : (𝓞 K)ˣ} {m : ℕ}
+    (e : x ^ 37 + y ^ 37 =
+      ε₀ * ((hζ.unit'.1 - 1) ^ (m + 1) * z) ^ 37)
+    (hy : ¬ hζ.unit'.1 - 1 ∣ y)
+    (η : Polynomial.nthRootsFinset 37 (1 : 𝓞 K)),
+    Submodule.IsPrincipal
+      (((relevantIdealQuotient37 hζ e hy η *
+          conjugateRelevantIdealQuotient37 hζ e hy η) :
+        FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K)
+
+/-- Every antisymmetric relevant quotient class is principal.  At `37`,
+this is exactly the residual minus-component assertion that cannot follow
+from `37 ∤ h⁺` alone. -/
+def RelevantIdealQuotientMinusComponentsPrincipal37 : Prop :=
+  ∀ {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {x y z : 𝓞 K} {ε₀ : (𝓞 K)ˣ} {m : ℕ}
+    (e : x ^ 37 + y ^ 37 =
+      ε₀ * ((hζ.unit'.1 - 1) ^ (m + 1) * z) ^ 37)
+    (hy : ¬ hζ.unit'.1 - 1 ∣ y)
+    (η : Polynomial.nthRootsFinset 37 (1 : 𝓞 K)),
+    Submodule.IsPrincipal
+      (((relevantIdealQuotient37 hζ e hy η /
+          conjugateRelevantIdealQuotient37 hζ e hy η) :
+        FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K)
+
+section RelevantIdealMinusComponent
+
+variable {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+  {x y z : 𝓞 K} {ε₀ : (𝓞 K)ˣ} {m : ℕ}
+  (e : x ^ 37 + y ^ 37 =
+    ε₀ * ((hζ.unit'.1 - 1) ^ (m + 1) * z) ^ 37)
+  (hy : ¬ hζ.unit'.1 - 1 ∣ y)
+
+local notation "𝔞" =>
+  root_div_zeta_sub_one_dvd_gcd (K := K) (p := 37)
+    (x := x) (y := y) (z := z) (ε := ε₀) (m := m)
+      (by norm_num) hζ e hy
+local notation "𝔞₀" =>
+  a_eta_zero_dvd_p_pow (K := K) (p := 37)
+    (x := x) (y := y) (z := z) (ε := ε₀) (m := m)
+      (by norm_num) hζ e hy
+
+/-- A relevant quotient is zero exactly when its conjugate is zero. -/
+lemma relevantIdealQuotient37_conjugate_eq_zero_iff
+    (η : Polynomial.nthRootsFinset 37 (1 : 𝓞 K)) :
+    ((𝔞 η / 𝔞₀ : FractionalIdeal (𝓞 K)⁰ K) = 0) ↔
+      conjugateIdealQuotient37 (𝔞 η) 𝔞₀ = 0 := by
+  simp only [conjugateIdealQuotient37, div_eq_mul_inv,
+    mul_eq_zero, inv_eq_zero, FractionalIdeal.coeIdeal_eq_zero]
+  constructor <;> rintro (h | h)
+  · exact Or.inl ((conjugateIdeal37_eq_zero_iff _).mpr h)
+  · exact Or.inr ((conjugateIdeal37_eq_zero_iff _).mpr h)
+  · exact Or.inl ((conjugateIdeal37_eq_zero_iff _).mp h)
+  · exact Or.inr ((conjugateIdeal37_eq_zero_iff _).mp h)
+
+/-- After the symmetric plus component is principal, the original relevant
+quotient is principal exactly when its antisymmetric minus component is.
+
+The proof uses the unconditional fact that the quotient's `37`th power is
+principal and the coprimality of `37` and `2`. -/
+lemma relevantIdealQuotient37_isPrincipal_iff_minus
+    (η : Polynomial.nthRootsFinset 37 (1 : 𝓞 K))
+    (hplus : Submodule.IsPrincipal
+      ((((𝔞 η / 𝔞₀ : FractionalIdeal (𝓞 K)⁰ K) *
+          conjugateIdealQuotient37 (𝔞 η) 𝔞₀) :
+        FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K)) :
+    Submodule.IsPrincipal
+        ((𝔞 η / 𝔞₀ : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) ↔
+      Submodule.IsPrincipal
+        (((𝔞 η / 𝔞₀ : FractionalIdeal (𝓞 K)⁰ K) /
+            conjugateIdealQuotient37 (𝔞 η) 𝔞₀ :
+          FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
+  let I : FractionalIdeal (𝓞 K)⁰ K :=
+    (𝔞 η : FractionalIdeal (𝓞 K)⁰ K) /
+      (𝔞₀ : FractionalIdeal (𝓞 K)⁰ K)
+  let J : FractionalIdeal (𝓞 K)⁰ K :=
+    conjugateIdealQuotient37 (𝔞 η) 𝔞₀
+  have hzero : I = 0 ↔ J = 0 :=
+    relevantIdealQuotient37_conjugate_eq_zero_iff hζ e hy η
+  change Submodule.IsPrincipal (I : Submodule (𝓞 K) K) ↔
+    Submodule.IsPrincipal
+      ((I / J : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K)
+  by_cases hI0 : I = 0
+  · have hJ0 : J = 0 := hzero.mp hI0
+    rw [hI0, hJ0]
+    simp only [zero_div, FractionalIdeal.coe_zero]
+  · have hJ0 : J ≠ 0 := fun h ↦ hI0 (hzero.mpr h)
+    apply fractionalIdeal_isPrincipal_iff_minus_of_plus (p := 37)
+      (by norm_num) hI0 hJ0
+    · exact relevantIdealQuotient_pow_isPrincipal
+        (K := K) (p := 37) (by norm_num) hζ e hy η
+    · exact hplus
+
+end RelevantIdealMinusComponent
+
+/-- Provided the symmetric plus components are principal, the old broad
+principalization interface is equivalent—not merely implied—to eliminating
+the explicit antisymmetric minus components. -/
+theorem relevantIdealQuotientsPrincipal_iff_minus_of_plus37
+    (hplus : RelevantIdealQuotientPlusComponentsPrincipal37 (K := K)) :
+    RelevantIdealQuotientsPrincipal (K := K) (p := 37) (by norm_num) ↔
+      RelevantIdealQuotientMinusComponentsPrincipal37 (K := K) := by
+  constructor
+  · intro hprincipal ζ hζ x y z ε₀ m e hy η
+    have hI := hprincipal hζ e hy η
+    have hiff := relevantIdealQuotient37_isPrincipal_iff_minus hζ e hy η
+      (hplus hζ e hy η)
+    simpa only [relevantIdealQuotient37,
+      conjugateRelevantIdealQuotient37] using hiff.mp hI
+  · intro hminus ζ hζ x y z ε₀ m e hy η
+    have hiff := relevantIdealQuotient37_isPrincipal_iff_minus hζ e hy η
+      (hplus hζ e hy η)
+    apply hiff.mpr
+    simpa only [relevantIdealQuotient37,
+      conjugateRelevantIdealQuotient37] using hminus hζ e hy η
 
 /-- The inverse of 2 modulo 37, used to make a generator real. -/
 def realGeneratorHalfExponent37 : ℕ := 19
