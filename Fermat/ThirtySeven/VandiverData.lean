@@ -45,4 +45,13 @@ theorem bernoulliCubeCondition_thirtySeven
   apply bernoulliCubeCondition_of_kummer_of_irregular (by norm_num) hKummer
   exact irregularIndex_numerator_not_dvd_cube
 
+/-- The historical Kummer route to all of Vandiver's Bernoulli conditions
+at `p = 37`.  The formal Voronoi theorem supplies every regular-index
+congruence, while the unique exceptional index `32` is handled by the
+certified computation of `B_1184`. -/
+theorem bernoulliCubeCondition_thirtySeven_via_kummer :
+    BernoulliCubeCondition 37 := by
+  apply bernoulliCubeCondition_of_irregular (by norm_num)
+  exact irregularIndex_numerator_not_dvd_cube
+
 end Fermat.ThirtySeven.VandiverData

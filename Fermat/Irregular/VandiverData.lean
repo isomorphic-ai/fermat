@@ -1,4 +1,4 @@
-import Fermat.Irregular.KummerCongruence
+import Fermat.Irregular.KummerTheorem
 
 /-!
 # The finite Bernoulli data in Vandiver's second-case criterion
@@ -28,8 +28,10 @@ def BernoulliCubeCondition (p : ℕ) : Prop :=
 prove Vandiver's all-index condition it is enough to check the high Bernoulli
 number only at indices where `p` divides the numerator of `B_j`.
 
-The hypotheses `hKummer` are exactly the still-global Kummer congruences;
-`hIrregular` contains only the exceptional finite computations. -/
+The explicit hypotheses `hKummer` make this reduction usable with any
+source of Kummer congruences; `hIrregular` contains only the exceptional
+finite computations.  The theorem below supplies `hKummer` unconditionally
+from the Voronoi--Kummer theorem. -/
 theorem bernoulliCubeCondition_of_kummer_of_irregular
     {p : ℕ} [Fact p.Prime] (hp : 5 ≤ p)
     (hKummer : ∀ j ∈ indices p,
@@ -50,5 +52,24 @@ theorem bernoulliCubeCondition_of_kummer_of_irregular
       simp
     exact regularIndex_bernoulli_mul_prime_numerator_not_dvd_cube
       hp hj'.1 hj'.2.1 hj'.2.2 hBj hirregular (hKummer j hj)
+
+/-- The unconditional Kummer reduction: for a prime `p ≥ 5`, only the
+irregular low indices need a separate high-Bernoulli computation.
+
+All regular indices are discharged by the formal Voronoi proof of Kummer's
+congruence in `KummerTheorem`. -/
+theorem bernoulliCubeCondition_of_irregular
+    {p : ℕ} [Fact p.Prime] (hp : 5 ≤ p)
+    (hIrregular : ∀ j ∈ indices p,
+      (p : ℤ) ∣ (bernoulli j).num →
+        ¬(p : ℤ) ^ 3 ∣ (bernoulli (j * p)).num) :
+    BernoulliCubeCondition p := by
+  apply bernoulliCubeCondition_of_kummer_of_irregular hp
+  · intro j hj
+    have hj' : 2 ≤ j ∧ j ≤ p - 3 ∧ Even j := by
+      simpa [indices, and_assoc] using hj
+    exact KummerTheorem.kummerCongruenceModPrime_irregularRange
+      hp hj'.1 hj'.2.1 hj'.2.2
+  · exact hIrregular
 
 end Fermat.Irregular.VandiverData
