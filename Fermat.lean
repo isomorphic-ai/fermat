@@ -8,6 +8,7 @@ import Fermat.Fourteen.DescentConstruction
 import Fermat.Irregular.CircularUnitIndex
 import Fermat.Irregular.CircularUnits
 import Fermat.Irregular.CyclotomicLogCofactor37
+import Fermat.Irregular.CyclotomicDirichlet37
 import Fermat.Irregular.KummerCongruence
 import Fermat.Irregular.VandiverData
 import Fermat.Seven.Lebesgue.TheoremTwo

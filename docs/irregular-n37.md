@@ -52,6 +52,17 @@ layers.  The repository keeps them separate:
   Sinnott--Kummer seam is specifically the analytic identification of those
   coefficients with the relevant Dirichlet `L`-values and class-number
   formula, not a finite determinant or indexing assertion.
+- `Fermat/Irregular/CyclotomicDirichlet37.lean` carries that calculation to
+  the exact per-character analytic boundary.  It identifies quotient-group
+  characters with even Dirichlet characters modulo `37`, proves every
+  nontrivial lift primitive, changes the Fourier coefficient into half of
+  the classical 36-term chord-log sum, and proves the associated Gauss-sum
+  norm is `sqrt 37`.  The remaining chord identity is named
+  `ChordLogLValueFormula37`; with Mathlib's additive-character convention it
+  is exactly
+  `S(ψ) = -τ(ψ⁻¹) L(1,ψ)`.  From this single formula the file derives
+  the expected `sqrt(37)¹⁷`-scaled product of the seventeen nontrivial even
+  `L(1)`-values.
 
 There is not yet a public `Fermat.holdsAt_thirtySeven`.  Case II needs
 Vandiver's irregular-prime criterion: if `37 ∤ h⁺` and none of the relevant
