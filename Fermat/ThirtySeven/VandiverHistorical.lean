@@ -73,6 +73,107 @@ lemma unitsComplexConj_zeta37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37) :
   change NumberField.IsCMField.complexConj K ζ = ζ⁻¹
   exact Fermat.Irregular.CircularUnitIndex.complexConj_zeta37_inv hζ
 
+/-! ## Conjugation-compatible principal generators -/
+
+/-- The inverse of 2 modulo 37, used to make a generator real. -/
+def realGeneratorHalfExponent37 : ℕ := 19
+
+theorem two_mul_realGeneratorHalfExponent37_mod :
+    2 * realGeneratorHalfExponent37 % 37 = 1 := by
+  decide
+
+/-- The explicit adjustment of a principal generator by the half-power of
+its cyclotomic conjugation quotient. -/
+def realAdjustedGenerator37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (a : 𝓞 K) (j : ℕ) : 𝓞 K :=
+  (hζ.unit' ^ (realGeneratorHalfExponent37 * j) : (𝓞 K)ˣ) * a
+
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+lemma realAdjustedGenerator37_associated {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (a : 𝓞 K) (j : ℕ) :
+    Associated (realAdjustedGenerator37 hζ a j) a := by
+  let v : (𝓞 K)ˣ := hζ.unit' ^ (realGeneratorHalfExponent37 * j)
+  refine ⟨v⁻¹, ?_⟩
+  change (v : 𝓞 K) * a * (v⁻¹ : (𝓞 K)ˣ) = a
+  calc
+    (v : 𝓞 K) * a * (v⁻¹ : (𝓞 K)ˣ) =
+        a * ((v : 𝓞 K) * (v⁻¹ : (𝓞 K)ˣ)) := by ac_rfl
+    _ = a := by rw [← Units.val_mul]; simp
+
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+lemma realAdjustedGenerator37_pow_thirtySeven {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (a : 𝓞 K) (j : ℕ) :
+    realAdjustedGenerator37 hζ a j ^ 37 = a ^ 37 := by
+  rw [realAdjustedGenerator37, mul_pow]
+  have hzpow : hζ.unit' ^ 37 = 1 := by
+    ext
+    exact hζ.pow_eq_one
+  have hvpow :
+      (hζ.unit' ^ (realGeneratorHalfExponent37 * j)) ^ 37 = 1 := by
+    rw [← pow_mul]
+    rw [show (realGeneratorHalfExponent37 * j) * 37 =
+      37 * (realGeneratorHalfExponent37 * j) by omega]
+    rw [pow_mul, hzpow, one_pow]
+  rw [← Units.val_pow_eq_pow_val, hvpow]
+  simp
+
+lemma realAdjustedGenerator37_real
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (a : 𝓞 K) (j : ℕ)
+    (ha : NumberField.IsCMField.ringOfIntegersComplexConj K a =
+      (hζ.unit' ^ j : (𝓞 K)ˣ) * a) :
+    NumberField.IsCMField.ringOfIntegersComplexConj K
+      (realAdjustedGenerator37 hζ a j) =
+        realAdjustedGenerator37 hζ a j := by
+  let k := realGeneratorHalfExponent37 * j
+  let v : (𝓞 K)ˣ := hζ.unit' ^ k
+  have hzpow : hζ.unit' ^ 37 = 1 := by
+    ext
+    exact hζ.pow_eq_one
+  have hv_sq : v ^ 2 = hζ.unit' ^ j := by
+    dsimp [v, k, realGeneratorHalfExponent37]
+    rw [← pow_mul]
+    have hexp : (19 * j) * 2 = j + 37 * j := by omega
+    rw [hexp, pow_add, pow_mul, hzpow, one_pow, mul_one]
+  change NumberField.IsCMField.ringOfIntegersComplexConj K
+      ((v : 𝓞 K) * a) = (v : 𝓞 K) * a
+  rw [map_mul]
+  have hvconj : NumberField.IsCMField.ringOfIntegersComplexConj K (v : 𝓞 K) =
+      (v⁻¹ : (𝓞 K)ˣ) := by
+    have hvconjU :
+        NumberField.IsCMField.unitsComplexConj K v = v⁻¹ := by
+      dsimp [v]
+      rw [map_pow, unitsComplexConj_zeta37 hζ, inv_pow]
+    exact congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) hvconjU
+  rw [hvconj, ha]
+  rw [← mul_assoc, ← Units.val_mul, ← hv_sq]
+  congr 1
+  rw [pow_two, ← mul_assoc]
+  simp
+
+/-- If complex conjugation changes a principal generator by a power
+ζ ^ j, multiplying the generator by ζ ^ (19 * j) makes it real.
+
+This is the explicit odd-order normalization in the real-generator step
+behind Vandiver's equations (7b)--(10a): 19 is the inverse of 2 modulo
+37, so
+
+conj (ζ ^ (19*j) * a) = ζ ^ (j-19*j) * a = ζ ^ (19*j) * a.
+
+The resulting generator is associated to the original one, hence generates
+the same principal ideal. What remains in
+RealPrincipalGeneratorElimination37 is to prove that the conjugation
+quotients supplied by the relevant ideal calculation have precisely this
+ζ ^ j form and then to carry out Vandiver's eliminations. -/
+lemma exists_real_associated_generator_of_conj_eq_zeta_pow
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (a : 𝓞 K) (j : ℕ)
+    (ha : NumberField.IsCMField.ringOfIntegersComplexConj K a =
+      (hζ.unit' ^ j : (𝓞 K)ˣ) * a) :
+    ∃ b : 𝓞 K, Associated b a ∧
+      NumberField.IsCMField.ringOfIntegersComplexConj K b = b := by
+  exact ⟨realAdjustedGenerator37 hζ a j,
+    realAdjustedGenerator37_associated hζ a j,
+    realAdjustedGenerator37_real hζ a j ha⟩
+
 /-- A `37`th root of a real unit can be adjusted by a power of `ζ`
 without changing its `37`th power so that the root itself is real. This is
 the real-root normalization used implicitly between Vandiver's equations
@@ -280,6 +381,115 @@ structure WeightedReductionData37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
     epsilon₃ / epsilon₂
   factorSupport_strict : primeIdealFactorSupport37 z ⊂ primeIdealFactorSupport37 s.xi
 
+/-- The output of Vandiver's elimination before its three principal
+generators have been made literally real.
+
+Compared with WeightedReductionData37, this structure asks for the exact
+cyclotomic conjugation quotients of x, y, and z. The theorem
+weightedReductionData_of_conjugationPowers37 below performs the explicit
+ζ^(19*j) adjustment and proves that it preserves the weighted equation,
+coprimality, nonvanishing, and the strict prime-support descent. -/
+structure ConjugationPowerReductionData37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ) where
+  x : 𝓞 K
+  y : 𝓞 K
+  z : 𝓞 K
+  epsilon₁ : (𝓞 K)ˣ
+  epsilon₂ : (𝓞 K)ˣ
+  epsilon₃ : (𝓞 K)ˣ
+  rationalBase : ℤ
+  highCongruence :
+    ((1 : 𝓞 K) - hζ.unit') ^ ((2 * s.m - 2) * 37) ∣
+      (((epsilon₁ / epsilon₂ : (𝓞 K)ˣ) : 𝓞 K) -
+        (rationalBase : 𝓞 K) ^ 37)
+  weightedEquation :
+    epsilon₁ * x ^ 37 + epsilon₂ * y ^ 37 =
+      epsilon₃ * (kappa hζ ^ (2 * s.m - 1) * z) ^ 37
+  z_ne_zero : z ≠ 0
+  coprime_xy : IsCoprime x y
+  coprime_yz : IsCoprime y z
+  coprime_xz : IsCoprime x z
+  conjugationExponent_x : ℕ
+  conjugationExponent_y : ℕ
+  conjugationExponent_z : ℕ
+  conjugation_x :
+    NumberField.IsCMField.ringOfIntegersComplexConj K x =
+      (hζ.unit' ^ conjugationExponent_x : (𝓞 K)ˣ) * x
+  conjugation_y :
+    NumberField.IsCMField.ringOfIntegersComplexConj K y =
+      (hζ.unit' ^ conjugationExponent_y : (𝓞 K)ˣ) * y
+  conjugation_z :
+    NumberField.IsCMField.ringOfIntegersComplexConj K z =
+      (hζ.unit' ^ conjugationExponent_z : (𝓞 K)ˣ) * z
+  real_eta : NumberField.IsCMField.unitsComplexConj K (epsilon₃ / epsilon₂) =
+    epsilon₃ / epsilon₂
+  factorSupport_strict : primeIdealFactorSupport37 z ⊂ primeIdealFactorSupport37 s.xi
+
+/-- Normalize all three weighted generators by the explicit half powers of
+their conjugation quotients. Since those multipliers are 37th roots of
+unity, every 37th power in Vandiver's equation is unchanged. -/
+noncomputable def weightedReductionData_of_conjugationPowers37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) {s : HistoricalState hζ}
+    (d : ConjugationPowerReductionData37 hζ s) :
+    WeightedReductionData37 hζ s where
+  x := realAdjustedGenerator37 hζ d.x d.conjugationExponent_x
+  y := realAdjustedGenerator37 hζ d.y d.conjugationExponent_y
+  z := realAdjustedGenerator37 hζ d.z d.conjugationExponent_z
+  epsilon₁ := d.epsilon₁
+  epsilon₂ := d.epsilon₂
+  epsilon₃ := d.epsilon₃
+  rationalBase := d.rationalBase
+  highCongruence := d.highCongruence
+  weightedEquation := by
+    simpa only [mul_pow, realAdjustedGenerator37_pow_thirtySeven] using
+      d.weightedEquation
+  z_ne_zero := by
+    dsimp [realAdjustedGenerator37]
+    exact mul_ne_zero
+      (hζ.unit' ^ (realGeneratorHalfExponent37 *
+        d.conjugationExponent_z)).isUnit.ne_zero d.z_ne_zero
+  coprime_xy :=
+    (isCoprime_mul_unit_left_left
+      (hζ.unit' ^ (realGeneratorHalfExponent37 * d.conjugationExponent_x)).isUnit
+      d.x
+      (realAdjustedGenerator37 hζ d.y d.conjugationExponent_y)).mpr
+      ((isCoprime_mul_unit_left_right
+        (hζ.unit' ^ (realGeneratorHalfExponent37 * d.conjugationExponent_y)).isUnit
+        d.x d.y).mpr d.coprime_xy)
+  coprime_yz :=
+    (isCoprime_mul_unit_left_left
+      (hζ.unit' ^ (realGeneratorHalfExponent37 * d.conjugationExponent_y)).isUnit
+      d.y
+      (realAdjustedGenerator37 hζ d.z d.conjugationExponent_z)).mpr
+      ((isCoprime_mul_unit_left_right
+        (hζ.unit' ^ (realGeneratorHalfExponent37 * d.conjugationExponent_z)).isUnit
+        d.y d.z).mpr d.coprime_yz)
+  coprime_xz :=
+    (isCoprime_mul_unit_left_left
+      (hζ.unit' ^ (realGeneratorHalfExponent37 * d.conjugationExponent_x)).isUnit
+      d.x
+      (realAdjustedGenerator37 hζ d.z d.conjugationExponent_z)).mpr
+      ((isCoprime_mul_unit_left_right
+        (hζ.unit' ^ (realGeneratorHalfExponent37 * d.conjugationExponent_z)).isUnit
+        d.x d.z).mpr d.coprime_xz)
+  real_x :=
+    realAdjustedGenerator37_real hζ d.x d.conjugationExponent_x d.conjugation_x
+  real_y :=
+    realAdjustedGenerator37_real hζ d.y d.conjugationExponent_y d.conjugation_y
+  real_z :=
+    realAdjustedGenerator37_real hζ d.z d.conjugationExponent_z d.conjugation_z
+  real_eta := d.real_eta
+  factorSupport_strict := by
+    have hsupp :
+        primeIdealFactorSupport37
+            (realAdjustedGenerator37 hζ d.z d.conjugationExponent_z) =
+          primeIdealFactorSupport37 d.z := by
+      unfold primeIdealFactorSupport37
+      rw [Ideal.span_singleton_eq_span_singleton.mpr
+        (realAdjustedGenerator37_associated hζ d.z d.conjugationExponent_z)]
+    rw [hsupp]
+    exact d.factorSupport_strict
+
 private noncomputable def adjustedRoot37 {ζ : K}
     (hζ : IsPrimitiveRoot ζ 37) (a v : (𝓞 K)ˣ)
     (hv : a = v ^ 37) : (𝓞 K)ˣ :=
@@ -366,22 +576,26 @@ noncomputable def equationSevenToTenData_of_weighted37 {ζ : K}
 historical calculation.
 
 `RelevantIdealQuotientsPrincipal` supplies the principal ideals used in
-(7b). What is additionally needed is a conjugation-compatible choice of
-their generators. Substituting those real generators into (8), subtracting
-the `a` and `-a` equations as in (9a), and eliminating `ω² + θ²` and
-`ωθ` in (10a) must produce the explicit `WeightedReductionData37` above.
+(7b). What is additionally needed is to show that the conjugation quotient
+of each selected generator is a power of `ζ`. The explicit
+`ζ^(19*j)` normalization above then makes all three generators real
+without changing their 37th powers. Substituting those generators into (8),
+subtracting the `a` and `-a` equations as in (9a), and eliminating
+`ω² + θ²` and `ωθ` in (10a) must produce the explicit
+`ConjugationPowerReductionData37` above.
 
 This boundary is deliberately below the level of the descent conclusion:
-the high local congruence, weighted equation, realness, coprimality, and the
-strict inclusion of prime-ideal supports are all concrete fields which a
-future proof must construct. The Kummer step, real-root normalization,
-equation (10b), invariant preservation, and infinite descent are not part of
-this hypothesis. -/
+the high local congruence, weighted equation, exact conjugation quotients,
+coprimality, and the strict inclusion of prime-ideal supports are all
+concrete fields which a future proof must construct. Making the generators
+real, preserving their equation and supports, the Kummer step, real-root
+normalization, equation (10b), invariant preservation, and infinite descent
+are not part of this hypothesis. -/
 def RealPrincipalGeneratorElimination37 {ζ : K}
     (hζ : IsPrimitiveRoot ζ 37) : Prop :=
   RelevantIdealQuotientsPrincipal (K := K) (p := 37) (by norm_num) →
     ∀ s : HistoricalState hζ, RealSourceAdmissible hζ s →
-      Nonempty (WeightedReductionData37 hζ s)
+      Nonempty (ConjugationPowerReductionData37 hζ s)
 
 /-- The concrete real-generator elimination supplies the full historical
 reduction relation required by the abstract well-founded descent. -/
@@ -391,7 +605,9 @@ theorem equationsSevenToTenReduction_37
     (heliminate : RealPrincipalGeneratorElimination37 hζ) :
     EquationsSevenToTenReduction hζ (RealSourceAdmissible hζ) := by
   intro s hs
-  exact (heliminate hprincipal s hs).map (equationSevenToTenData_of_weighted37 hζ)
+  exact (heliminate hprincipal s hs).map fun d ↦
+    equationSevenToTenData_of_weighted37 hζ
+      (weightedReductionData_of_conjugationPowers37 hζ d)
 
 /-- The exponent-`37` historical second case, conditional only on the exact
 deep unit conclusion, relevant principalization, and the remaining
