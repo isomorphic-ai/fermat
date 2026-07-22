@@ -1,13 +1,21 @@
 import Fermat.Basic
+import Fermat.Cases
 import Fermat.Classical
 import Fermat.Eleven.Cyclotomic
 import Fermat.Five.Dirichlet
 import Fermat.Fourteen.DescentConstruction
+import Fermat.Irregular.CircularUnits
+import Fermat.Irregular.KummerCongruence
+import Fermat.Irregular.VandiverData
 import Fermat.Seven.Lebesgue.TheoremTwo
 import Fermat.Thirteen.Cyclotomic
 import Fermat.ThirtySeven.ArithmeticCertificate
+import Fermat.ThirtySeven.CircularUnitCertificate
+import Fermat.ThirtySeven.CircularUnitResidues
 import Fermat.ThirtySeven.FirstCase
+import Fermat.ThirtySeven.HighBernoulli
 import Fermat.ThirtySeven.NeighborFolding
+import Fermat.ThirtySeven.VandiverData
 
 namespace Fermat
 
