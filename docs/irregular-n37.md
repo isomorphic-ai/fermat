@@ -64,6 +64,17 @@ layers.  The repository keeps them separate:
   the expected `sqrt(37)¹⁷`-scaled product of the seventeen nontrivial even
   `L(1)`-values.
 
+- `Fermat/Irregular/CyclotomicLValue37.lean` proves all but the
+  analytic-continuation endpoint of that chord identity.  Dirichlet's test
+  and Abel's limit theorem give the naturally ordered unit-circle series
+  `sum z^n/n = -log(1-z)`; conjugate-root pairing recovers the real chord
+  logarithms; and Mathlib's finite Fourier transform gives exactly the
+  inverse-character Gauss sum, including its sign.  Consequently,
+  `ChordLogLValueFormula37` now follows from the single named proposition
+  `DirichletSeriesAtOneFormula37`, which says that these natural-order
+  primitive Dirichlet series converge at `s = 1` to Mathlib's analytically
+  continued `LFunction 1`.
+
 There is not yet a public `Fermat.holdsAt_thirtySeven`.  Case II needs
 Vandiver's irregular-prime criterion: if `37 ∤ h⁺` and none of the relevant
 Bernoulli numerators is divisible by `37³`, then Case II is impossible.  The
