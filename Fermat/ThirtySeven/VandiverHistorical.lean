@@ -112,6 +112,21 @@ theorem realFractionalIdeal_isPrincipal_of_pow37
     (by norm_num) (Fermat.ThirtySeven.SinnottKummer.not_dvd_classNumber hzeta)
     I hpow
 
+set_option maxRecDepth 2000 in
+/-- Element-level form of the same real-class calculation.  This is the
+literal conclusion used in Vandiver's (7d) and after (9): if a real ideal
+has `37`th power `(a)`, then it has a real generator `ρ`, and `a` differs
+from `ρ ^ 37` by a real unit. -/
+theorem exists_real_unit_mul_pow_generator37
+    {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (I : Ideal (𝓞 K⁺)) (a : 𝓞 K⁺)
+    (hpow : I ^ 37 = Ideal.span {a}) :
+    ∃ (ρ : 𝓞 K⁺) (ε : (𝓞 K⁺)ˣ),
+      I = Ideal.span {ρ} ∧ a = ε * ρ ^ 37 := by
+  exact exists_unit_mul_pow_eq_of_ideal_pow_eq_span
+    (F := K⁺) (p := 37) (by norm_num)
+    (Fermat.ThirtySeven.SinnottKummer.not_dvd_classNumber hzeta) I a hpow
+
 /-- The conjugate of an integral ideal under CM complex conjugation. -/
 def conjugateIdeal37 (I : Ideal (𝓞 K)) : Ideal (𝓞 K) :=
   I.map (NumberField.IsCMField.ringOfIntegersComplexConj K).toRingHom

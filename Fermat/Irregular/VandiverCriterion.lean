@@ -222,6 +222,50 @@ theorem fractionalIdeal_isPrincipal_of_pow_of_not_dvd_classNumber
   · simpa only [NumberField.classNumber] using
       (orderOf_dvd_card (x := ClassGroup.mk F hI.unit'))
 
+/-- Integral-ideal form of
+`fractionalIdeal_isPrincipal_of_pow_of_not_dvd_classNumber`. -/
+theorem ideal_isPrincipal_of_pow_of_not_dvd_classNumber
+    {F : Type*} [Field F] [NumberField F]
+    {p : ℕ} (hp : p.Prime) (hclass : ¬ p ∣ NumberField.classNumber F)
+    (I : Ideal (𝓞 F))
+    (hpow : Submodule.IsPrincipal (I ^ p : Ideal (𝓞 F))) :
+    Submodule.IsPrincipal (I : Ideal (𝓞 F)) := by
+  have hpow' : Submodule.IsPrincipal
+      ((((I : FractionalIdeal (𝓞 F)⁰ F) ^ p) :
+        FractionalIdeal (𝓞 F)⁰ F) : Submodule (𝓞 F) F) := by
+    rw [← FractionalIdeal.coeIdeal_pow]
+    exact (IsFractionRing.coeSubmodule_isPrincipal (𝓞 F) F).mpr hpow
+  have hI' := fractionalIdeal_isPrincipal_of_pow_of_not_dvd_classNumber
+    hp hclass (I : FractionalIdeal (𝓞 F)⁰ F) hpow'
+  exact (IsFractionRing.coeSubmodule_isPrincipal (𝓞 F) F).mp hI'
+
+/-- Generator form of real-ideal principalization.  If `I ^ p = (a)` and
+`p ∤ h`, then `I = (ρ)` and consequently `a = ε * ρ ^ p` for a
+unit `ε`.
+
+This is the exact element-level conclusion Vandiver writes in (7d) and
+after (9), once the corresponding ideal has been shown to belong to the
+maximal real field. -/
+theorem exists_unit_mul_pow_eq_of_ideal_pow_eq_span
+    {F : Type*} [Field F] [NumberField F]
+    {p : ℕ} (hp : p.Prime) (hclass : ¬ p ∣ NumberField.classNumber F)
+    (I : Ideal (𝓞 F)) (a : 𝓞 F)
+    (hpow : I ^ p = Ideal.span {a}) :
+    ∃ (ρ : 𝓞 F) (ε : (𝓞 F)ˣ),
+      I = Ideal.span {ρ} ∧ a = ε * ρ ^ p := by
+  have hIp : Submodule.IsPrincipal (I ^ p : Ideal (𝓞 F)) := by
+    rw [hpow]
+    infer_instance
+  have hI := ideal_isPrincipal_of_pow_of_not_dvd_classNumber
+    hp hclass I hIp
+  obtain ⟨ρ, hρ⟩ := hI.principal
+  change I = Ideal.span {ρ} at hρ
+  have hassoc : Associated (ρ ^ p) a := by
+    rw [← Ideal.span_singleton_eq_span_singleton,
+      ← Ideal.span_singleton_pow, ← hρ, hpow]
+  obtain ⟨ε, hε⟩ := hassoc
+  exact ⟨ρ, ε, hρ, by simpa [mul_comm] using hε.symm⟩
+
 /-! ## The induction step with local principalization -/
 
 section InductionStep
