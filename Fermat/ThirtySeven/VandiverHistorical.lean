@@ -1,6 +1,7 @@
 import Fermat.Irregular.VandiverHistoricalDescent
 import Fermat.Irregular.CircularUnitIndex
 import Fermat.ThirtySeven.DirectVandiverData
+import Fermat.ThirtySeven.SinnottKummer
 import FltRegular.NumberTheory.Cyclotomic.MoreLemmas
 
 /-!
@@ -88,6 +89,28 @@ the antisymmetric component.
 
 This is the precise interface between the Sinnott--Kummer plus-class theorem
 and Kummer's primary test on the remaining irregular minus component. -/
+
+local notation3 "K⁺" => NumberField.maximalRealSubfield K
+
+/-- The exact class-group consequence of the exponent-`37`
+Sinnott--Kummer theorem used by Vandiver in (7b) and again after (9): a
+fractional ideal of the maximal real field whose `37`th power is principal
+is already principal.
+
+The fact that a particular conjugation-invariant ideal of `K` is the
+extension of such a real ideal is a separate descent-of-ideals statement;
+keeping the two steps separate prevents the plus-class computation from
+being misapplied to an arbitrary ideal of the CM field. -/
+theorem realFractionalIdeal_isPrincipal_of_pow37
+    {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (I : FractionalIdeal (𝓞 K⁺)⁰ K⁺)
+    (hpow : Submodule.IsPrincipal
+      ((I ^ 37 : FractionalIdeal (𝓞 K⁺)⁰ K⁺) :
+        Submodule (𝓞 K⁺) K⁺)) :
+    Submodule.IsPrincipal (I : Submodule (𝓞 K⁺) K⁺) := by
+  exact fractionalIdeal_isPrincipal_of_pow_of_not_dvd_classNumber
+    (by norm_num) (Fermat.ThirtySeven.SinnottKummer.not_dvd_classNumber hzeta)
+    I hpow
 
 /-- The conjugate of an integral ideal under CM complex conjugation. -/
 def conjugateIdeal37 (I : Ideal (𝓞 K)) : Ideal (𝓞 K) :=

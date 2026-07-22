@@ -192,6 +192,36 @@ theorem fractionalIdeal_isPrincipal_iff_minus_of_plus
     exact fractionalIdeal_isPrincipal_div hI hJraw
   · exact fractionalIdeal_isPrincipal_of_plus_minus hp2 hJ0 hp hplus
 
+/-- A `p`-torsion fractional-ideal class is trivial when `p` is prime to
+the class number.
+
+This is the class-group calculation used in Vandiver's equations (7b) and
+(9): there the fractional ideal belongs to the maximal real field, its
+`p`th power is principal, and the relevant hypothesis is precisely
+`p ∤ h⁺`.  Notice that this statement is about an ideal of the real
+field itself; it makes no assertion that an arbitrary ideal of the CM field
+descends to the real field. -/
+theorem fractionalIdeal_isPrincipal_of_pow_of_not_dvd_classNumber
+    {F : Type*} [Field F] [NumberField F]
+    {p : ℕ} (hp : p.Prime) (hclass : ¬ p ∣ NumberField.classNumber F)
+    (I : FractionalIdeal (𝓞 F)⁰ F)
+    (hpow : Submodule.IsPrincipal
+      ((I ^ p : FractionalIdeal (𝓞 F)⁰ F) : Submodule (𝓞 F) F)) :
+    Submodule.IsPrincipal (I : Submodule (𝓞 F) F) := by
+  by_cases hI : I = 0
+  · rw [hI, FractionalIdeal.coe_zero]
+    exact bot_isPrincipal
+  rw [← Ne, ← isUnit_iff_ne_zero] at hI
+  change Submodule.IsPrincipal
+    ((hI.unit' : FractionalIdeal (𝓞 F)⁰ F) : Submodule (𝓞 F) F)
+  rw [← ClassGroup.mk_eq_one_iff]
+  apply orderOf_eq_one_iff.mp
+  apply Nat.eq_one_of_dvd_coprimes (hp.coprime_iff_not_dvd.mpr hclass)
+  · rw [orderOf_dvd_iff_pow_eq_one, ← map_pow, ClassGroup.mk_eq_one_iff]
+    simpa only [Units.val_pow_eq_pow_val, IsUnit.val_unit'] using hpow
+  · simpa only [NumberField.classNumber] using
+      (orderOf_dvd_card (x := ClassGroup.mk F hI.unit'))
+
 /-! ## The induction step with local principalization -/
 
 section InductionStep
