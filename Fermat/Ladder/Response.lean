@@ -29,6 +29,8 @@ ladder instead of being contradicted.
 
 namespace Fermat.Ladder.Response
 
+open Matrix
+
 /-- One kernel-checked sample of the ladder's response function. -/
 structure Point where
   exponent : ℕ
@@ -110,6 +112,24 @@ def coordinates (points : List Point) : List (ℕ × ℕ) :=
 /-- The generator-search-friendly projection of `responseCurve`. -/
 def responseData : List (ℕ × ℕ) :=
   coordinates responseCurve
+
+/-- The battery response as an actual finite function.  Index `0` records
+exponent `1`, and in general index `i` records exponent `i + 1`. -/
+def exitDepthFunction : Fin 14 → ℕ :=
+  ![One.exitDepth, Two.exitDepth, Three.exitDepth, Four.exitDepth,
+    Five.exitDepth, Six.exitDepth, Seven.exitDepth, Eight.exitDepth,
+    Nine.exitDepth, Ten.exitDepth, Eleven.exitDepth, Twelve.exitDepth,
+    Thirteen.exitDepth, Fourteen.exitDepth]
+
+theorem exitDepthFunction_values : List.ofFn exitDepthFunction =
+    [1, 2, 3, 4, 5, 1, 6, 1, 1, 1, 6, 1, 6, 1] :=
+  rfl
+
+/-- The functional and proof-carrying presentations have identical depth
+coordinates. -/
+theorem responseData_depths :
+    responseData.map Prod.snd = List.ofFn exitDepthFunction :=
+  rfl
 
 theorem responseCurve_length : responseCurve.length = 14 := rfl
 
