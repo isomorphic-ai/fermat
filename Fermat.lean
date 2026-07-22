@@ -11,6 +11,7 @@ import Fermat.Irregular.CyclotomicLogCofactor37
 import Fermat.Irregular.CyclotomicDirichlet37
 import Fermat.Irregular.KummerCongruence
 import Fermat.Irregular.VandiverData
+import Fermat.Ladder.Response
 import Fermat.Seven.Lebesgue.TheoremTwo
 import Fermat.Thirteen.Cyclotomic
 import Fermat.Thirteen.SevenFold
