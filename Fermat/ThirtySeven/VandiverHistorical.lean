@@ -1385,6 +1385,127 @@ theorem secondCaseStartsHistoricalDescent_37 {ζ : K}
 
 /-! ## The algebraic passage from equation (10) to equation (10b) -/
 
+/-! ### The concrete cyclotomic coefficients at `a = 1`, `b = 2`
+
+Vandiver allows any two suitable conjugate pairs in equation (10).  The
+choices `a = 1` and `b = 2` make the unit simplification completely
+explicit.  If
+
+`A = ζ + ζ⁻¹` and `B = ζ² + ζ⁻²`,
+
+then
+
+`2 - A = κ`, `A - B = κ (A + 1)`, and
+`2 - B = κ (A + 2)`.
+
+The last two factors are units: `A + 1` is `ζ⁻¹(1+ζ+ζ²)`,
+and `A + 2` is `ζ⁻¹(1+ζ)²`. -/
+
+/-- The real cyclotomic trace `A = ζ + ζ⁻¹` used in equation
+(10). -/
+def equationTenTraceOne37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37) : 𝓞 K :=
+  (hζ.unit' : 𝓞 K) + (hζ.unit'⁻¹ : (𝓞 K)ˣ)
+
+/-- The real cyclotomic trace `B = ζ² + ζ⁻²` used in equation
+(10). -/
+def equationTenTraceTwo37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37) : 𝓞 K :=
+  (hζ.unit' : 𝓞 K) ^ 2 + (hζ.unit'⁻¹ : (𝓞 K)ˣ) ^ 2
+
+/-- The cyclotomic unit `ζ⁻¹(1+ζ+ζ²) = A+1`. -/
+def equationTenTraceOneUnit37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) : (𝓞 K)ˣ :=
+  hζ.unit'⁻¹ *
+    (hζ.unit'_coe.geom_sum_isUnit (by norm_num)
+      (by norm_num : Nat.Coprime 3 37)).unit
+
+/-- The cyclotomic unit `ζ⁻¹(1+ζ)² = A+2`. -/
+def equationTenTraceTwoUnit37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) : (𝓞 K)ˣ :=
+  hζ.unit'⁻¹ *
+    (hζ.unit'_coe.geom_sum_isUnit (by norm_num)
+      (by norm_num : Nat.Coprime 2 37)).unit ^ 2
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+lemma equationTenTraceOneUnit37_val {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    (equationTenTraceOneUnit37 hζ : 𝓞 K) =
+      equationTenTraceOne37 hζ + 1 := by
+  have huinv : (hζ.unit'⁻¹ : (𝓞 K)ˣ) * (hζ.unit' : 𝓞 K) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  have hgeom :
+      (((hζ.unit'_coe.geom_sum_isUnit (by norm_num)
+        (by norm_num : Nat.Coprime 3 37)).unit : (𝓞 K)ˣ) : 𝓞 K) =
+        1 + (hζ.unit' : 𝓞 K) + (hζ.unit' : 𝓞 K) ^ 2 := by
+    rw [(hζ.unit'_coe.geom_sum_isUnit (by norm_num)
+      (by norm_num : Nat.Coprime 3 37)).unit_spec]
+    norm_num [Finset.sum_range_succ]
+  simp only [equationTenTraceOneUnit37, Units.val_mul]
+  rw [hgeom]
+  simp only [equationTenTraceOne37]
+  linear_combination (1 + (hζ.unit' : 𝓞 K)) * huinv
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+lemma equationTenTraceTwoUnit37_val {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    (equationTenTraceTwoUnit37 hζ : 𝓞 K) =
+      equationTenTraceOne37 hζ + 2 := by
+  have huinv : (hζ.unit'⁻¹ : (𝓞 K)ˣ) * (hζ.unit' : 𝓞 K) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  have hgeom :
+      (((hζ.unit'_coe.geom_sum_isUnit (by norm_num)
+        (by norm_num : Nat.Coprime 2 37)).unit : (𝓞 K)ˣ) : 𝓞 K) =
+        1 + (hζ.unit' : 𝓞 K) := by
+    rw [(hζ.unit'_coe.geom_sum_isUnit (by norm_num)
+      (by norm_num : Nat.Coprime 2 37)).unit_spec]
+    norm_num [Finset.sum_range_succ]
+  simp only [equationTenTraceTwoUnit37, Units.val_mul,
+    Units.val_pow_eq_pow_val]
+  rw [hgeom]
+  simp only [equationTenTraceOne37]
+  linear_combination (2 + (hζ.unit' : 𝓞 K)) * huinv
+
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+/-- The first concrete coefficient is literally Vandiver's `κ`. -/
+lemma two_sub_equationTenTraceOne37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    2 - equationTenTraceOne37 hζ = kappa hζ := by
+  have huinv : (hζ.unit' : 𝓞 K) * (hζ.unit'⁻¹ : (𝓞 K)ˣ) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  simp only [equationTenTraceOne37, kappa]
+  linear_combination -huinv
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- The trace difference `A-B` is `κ` times the explicit unit `A+1`. -/
+lemma equationTenTraceOne_sub_two37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    equationTenTraceOne37 hζ - equationTenTraceTwo37 hζ =
+      kappa hζ * (equationTenTraceOneUnit37 hζ : 𝓞 K) := by
+  rw [equationTenTraceOneUnit37_val]
+  have huinv : (hζ.unit' : 𝓞 K) * (hζ.unit'⁻¹ : (𝓞 K)ˣ) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  rw [← two_sub_equationTenTraceOne37 hζ]
+  simp only [equationTenTraceOne37, equationTenTraceTwo37]
+  linear_combination 2 * huinv
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- The second concrete coefficient `2-B` is `κ` times the explicit
+unit `A+2`. -/
+lemma two_sub_equationTenTraceTwo37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    2 - equationTenTraceTwo37 hζ =
+      kappa hζ * (equationTenTraceTwoUnit37 hζ : 𝓞 K) := by
+  rw [equationTenTraceTwoUnit37_val]
+  have huinv : (hζ.unit' : 𝓞 K) * (hζ.unit'⁻¹ : (𝓞 K)ˣ) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  rw [← two_sub_equationTenTraceOne37 hζ]
+  simp only [equationTenTraceOne37, equationTenTraceTwo37]
+  linear_combination 2 * huinv
+
 omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
 /-- Vandiver's elimination in equation (10a), separated from the
 ideal-theoretic construction of its inputs.
@@ -1407,6 +1528,52 @@ lemma equationTenA_quadraticElimination37
       (A - B) * (Uzero * Xzero) := by
   rw [← ha, ← hb, ← hzero]
   ring
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- Equation (10a) at the concrete indices `a = 1`, `b = 2`, after
+cancelling the common nonzero factor `κ`.  This is Vandiver's literal
+cyclotomic-unit simplification from (10a) to the weighted three-term
+equation: the coefficient of `Xb ^ 37` is absorbed into the unit `-Ub`,
+while the other two coefficient quotients are the explicit geometric-sum
+units above. -/
+theorem equationTenB_cyclotomicSimplification37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (ω θ Xa Xb Xzero : 𝓞 K) (Ua Ub Uzero : (𝓞 K)ˣ)
+    (ha : ω ^ 2 + equationTenTraceOne37 hζ * (ω * θ) + θ ^ 2 =
+      Ua * Xa ^ 37)
+    (hb : ω ^ 2 + equationTenTraceTwo37 hζ * (ω * θ) + θ ^ 2 =
+      Ub * Xb ^ 37)
+    (hzero : ω ^ 2 + 2 * (ω * θ) + θ ^ 2 = Uzero * Xzero) :
+    (equationTenTraceTwoUnit37 hζ * Ua : (𝓞 K)ˣ) * Xa ^ 37 +
+        (-Ub : (𝓞 K)ˣ) * Xb ^ 37 =
+      (equationTenTraceOneUnit37 hζ * Uzero : (𝓞 K)ˣ) * Xzero := by
+  have hkappa0 : kappa hζ ≠ 0 := by
+    rw [kappa_eq_kappaUnit37_mul_sq]
+    exact mul_ne_zero (kappaUnit37 hζ).isUnit.ne_zero
+      (pow_ne_zero 2 (sub_ne_zero.mpr
+        (hζ.unit'_coe.ne_one (by norm_num))))
+  have helim := equationTenA_quadraticElimination37
+    ω θ (equationTenTraceOne37 hζ) (equationTenTraceTwo37 hζ)
+    Ua Ub Uzero Xa Xb Xzero ha hb hzero
+  rw [two_sub_equationTenTraceTwo37,
+    two_sub_equationTenTraceOne37,
+    equationTenTraceOne_sub_two37] at helim
+  apply mul_left_cancel₀ hkappa0
+  calc
+    kappa hζ *
+        ((equationTenTraceTwoUnit37 hζ * Ua : (𝓞 K)ˣ) * Xa ^ 37 +
+          (-Ub : (𝓞 K)ˣ) * Xb ^ 37) =
+        kappa hζ * (equationTenTraceTwoUnit37 hζ : 𝓞 K) *
+            ((Ua : 𝓞 K) * Xa ^ 37) -
+          kappa hζ * ((Ub : 𝓞 K) * Xb ^ 37) := by
+            simp only [Units.val_mul, Units.val_neg]
+            ring
+    _ = kappa hζ * (equationTenTraceOneUnit37 hζ : 𝓞 K) *
+          ((Uzero : 𝓞 K) * Xzero) := helim
+    _ = kappa hζ *
+        ((equationTenTraceOneUnit37 hζ * Uzero : (𝓞 K)ˣ) * Xzero) := by
+          simp only [Units.val_mul]
+          ring
 
 /-- The actual finite support of the distinct prime-ideal factors of the
 principal ideal `(x)`. -/
