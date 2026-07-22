@@ -266,6 +266,63 @@ theorem exists_unit_mul_pow_eq_of_ideal_pow_eq_span
   obtain ⟨ε, hε⟩ := hassoc
   exact ⟨ρ, ε, hρ, by simpa [mul_comm] using hε.symm⟩
 
+/-- The class-group Bézout step between Vandiver's equations (7a), (7d),
+and (8), specialized to exponent `37`.
+
+If `I * J ^ 36` and `I * J` are principal, then `J ^ 35` is principal.
+Together with principality of `J ^ 37`, coprimality of `35` and `37`
+principalizes `J`; dividing the principal product `I * J` by `J` then
+principalizes `I`.
+
+The statement is deliberately phrased for arbitrary fractional ideals.  In
+Vandiver's application `J` is the conjugate of `I`, (7a) supplies the first
+product, and (7d) supplies the second. -/
+theorem fractionalIdeal_isPrincipal_of_vandiverSeven37
+    {A L : Type*} [CommRing A] [IsDedekindDomain A]
+    [Field L] [Algebra A L] [IsFractionRing A L]
+    {I J : FractionalIdeal A⁰ L} (hI0 : I ≠ 0) (hJ0 : J ≠ 0)
+    (hJ37 : Submodule.IsPrincipal
+      ((J ^ 37 : FractionalIdeal A⁰ L) : Submodule A L))
+    (hsevenA : Submodule.IsPrincipal
+      ((I * J ^ 36 : FractionalIdeal A⁰ L) : Submodule A L))
+    (hsevenD : Submodule.IsPrincipal
+      ((I * J : FractionalIdeal A⁰ L) : Submodule A L)) :
+    Submodule.IsPrincipal (I : Submodule A L) := by
+  have hJ35 : Submodule.IsPrincipal
+      ((J ^ 35 : FractionalIdeal A⁰ L) : Submodule A L) := by
+    have hquot := fractionalIdeal_isPrincipal_div hsevenA hsevenD
+    have heq : (I * J ^ 36) / (I * J) = J ^ 35 := by
+      apply (div_eq_iff (mul_ne_zero hI0 hJ0)).mpr
+      rw [show J ^ 36 = J ^ 35 * J by rw [← pow_succ]]
+      ac_rfl
+    rw [← heq]
+    exact hquot
+  have hJ : Submodule.IsPrincipal (J : Submodule A L) :=
+    fractionalIdeal_isPrincipal_of_coprime_powers (by norm_num) J hJ35 hJ37
+  have hquot := fractionalIdeal_isPrincipal_div hsevenD hJ
+  have heq : (I * J) / J = I := by
+    apply (div_eq_iff hJ0).mpr
+    rfl
+  rw [heq] at hquot
+  exact hquot
+
+/-- Once an integral ideal `I` is known principal, an equality
+`I ^ p = (a)` can be expressed with a chosen generator and a unit:
+`a = ε * ρ ^ p`. -/
+theorem exists_unit_mul_pow_eq_of_isPrincipal_ideal
+    {R : Type*} [CommRing R] [IsDomain R]
+    {p : ℕ} (I : Ideal R) (a : R)
+    (hI : Submodule.IsPrincipal (I : Ideal R))
+    (hpow : I ^ p = Ideal.span {a}) :
+    ∃ (ρ : R) (ε : Rˣ), I = Ideal.span {ρ} ∧ a = ε * ρ ^ p := by
+  obtain ⟨ρ, hρ⟩ := hI.principal
+  change I = Ideal.span {ρ} at hρ
+  have hassoc : Associated (ρ ^ p) a := by
+    rw [← Ideal.span_singleton_eq_span_singleton,
+      ← Ideal.span_singleton_pow, ← hρ, hpow]
+  obtain ⟨ε, hε⟩ := hassoc
+  exact ⟨ρ, ε, hρ, by simpa [mul_comm] using hε.symm⟩
+
 /-! ## The induction step with local principalization -/
 
 section InductionStep

@@ -217,6 +217,69 @@ theorem exists_equationSevenD_of_idealPower37
   simpa only [map_mul, map_pow] using
     congrArg (algebraMap (𝓞 K⁺) (𝓞 K)) ha
 
+set_option maxRecDepth 2000 in
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- Vandiver's passage from the two principal products in (7a) and (7d)
+to equation (8).
+
+The ideal equalities are stated literally.  If `I = 𝔦ₐ` and
+`J = 𝔦₋ₐ`, then (7a) says `I * J^36` is principal, while (7d)
+says `I * J` is principal.  Their quotient makes `J^35` principal.  Since
+`J^37` is principal as well, the checked Bézout lemma
+`fractionalIdeal_isPrincipal_of_vandiverSeven37` principalizes `I`.
+Finally `I^37 = (a)` gives the element equation
+`a = η * ρ^37`, which is exactly (8). -/
+theorem exists_equationEight_of_sevenASevenD37
+    (I J : Ideal (𝓞 K)) (a b r s : 𝓞 K)
+    (hI0 : I ≠ 0) (hJ0 : J ≠ 0)
+    (hIpow : I ^ 37 = Ideal.span {a})
+    (hJpow : J ^ 37 = Ideal.span {b})
+    (hsevenA : I * J ^ 36 = Ideal.span {r})
+    (hsevenD : I * J = Ideal.span {s}) :
+    ∃ (ρ : 𝓞 K) (η : (𝓞 K)ˣ),
+      I = Ideal.span {ρ} ∧ a = η * ρ ^ 37 := by
+  let IF : FractionalIdeal (𝓞 K)⁰ K := I
+  let JF : FractionalIdeal (𝓞 K)⁰ K := J
+  have hIF0 : IF ≠ 0 := by
+    dsimp [IF]
+    intro h
+    rw [FractionalIdeal.coeIdeal_eq_zero] at h
+    exact hI0 h
+  have hJF0 : JF ≠ 0 := by
+    dsimp [JF]
+    intro h
+    rw [FractionalIdeal.coeIdeal_eq_zero] at h
+    exact hJ0 h
+  have hJ37 : Submodule.IsPrincipal
+      ((JF ^ 37 : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
+    rw [FractionalIdeal.isPrincipal_iff]
+    refine ⟨(b : K), ?_⟩
+    dsimp [JF]
+    rw [← FractionalIdeal.coeIdeal_span_singleton, ← hJpow,
+      FractionalIdeal.coeIdeal_pow]
+  have h7a : Submodule.IsPrincipal
+      ((IF * JF ^ 36 : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
+    rw [FractionalIdeal.isPrincipal_iff]
+    refine ⟨(r : K), ?_⟩
+    dsimp [IF, JF]
+    rw [← FractionalIdeal.coeIdeal_span_singleton, ← hsevenA,
+      FractionalIdeal.coeIdeal_mul, FractionalIdeal.coeIdeal_pow]
+  have h7d : Submodule.IsPrincipal
+      ((IF * JF : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
+    rw [FractionalIdeal.isPrincipal_iff]
+    refine ⟨(s : K), ?_⟩
+    dsimp [IF, JF]
+    rw [← FractionalIdeal.coeIdeal_span_singleton, ← hsevenD,
+      FractionalIdeal.coeIdeal_mul]
+  have hIF : Submodule.IsPrincipal (IF : Submodule (𝓞 K) K) :=
+    fractionalIdeal_isPrincipal_of_vandiverSeven37 hIF0 hJF0 hJ37 h7a h7d
+  have hIF' : Submodule.IsPrincipal
+      ((I : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
+    simpa only [IF] using hIF
+  have hI : Submodule.IsPrincipal (I : Ideal (𝓞 K)) :=
+    (IsFractionRing.coeSubmodule_isPrincipal (𝓞 K) K).mp hIF'
+  exact exists_unit_mul_pow_eq_of_isPrincipal_ideal I a hI hIpow
+
 /-- The conjugate of an integral ideal under CM complex conjugation. -/
 def conjugateIdeal37 (I : Ideal (𝓞 K)) : Ideal (𝓞 K) :=
   I.map (NumberField.IsCMField.ringOfIntegersComplexConj K).toRingHom
