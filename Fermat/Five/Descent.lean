@@ -92,6 +92,14 @@ theorem odd_F_of_odd_even {t s : ℕ} (ht : Odd t) (hs : Even s) : Odd (F t s) :
   simp only [F]
   ring
 
+theorem odd_F_of_even_odd {t s : ℕ} (ht : Even t) (hs : Odd s) : Odd (F t s) := by
+  rcases ht with ⟨a, rfl⟩
+  rcases hs with ⟨b, rfl⟩
+  refine ⟨8 * a ^ 4 + 20 * a ^ 2 * (4 * b ^ 2 + 4 * b + 1) +
+      40 * b ^ 4 + 80 * b ^ 3 + 60 * b ^ 2 + 20 * b + 2, ?_⟩
+  simp only [F]
+  ring
+
 theorem odd_factor_coprime {h t s : ℕ} (hts : t.Coprime s)
     (hfive : ¬5 ∣ t) : (5 ^ h * s).Coprime (F t s) := by
   exact ((five_coprime_F hfive).pow_left h).mul_left (s_coprime_F hts)
@@ -250,6 +258,22 @@ structure EvenCoordinates (s t' s' : ℕ) : Prop where
   t_odd : Odd t'
   s_even : Even s'
   t_not_five : ¬5 ∣ t'
+
+/-- The coefficient relation orients the opposite parity returned by the
+quadratic extraction: the first coordinate is odd and the second is even. -/
+theorem EvenCoordinates.ofOppositeParity {s t' s' : ℕ}
+    (hrel : 2 * s ^ 2 = 5 * s' * F t' s') (htpos : 0 < t') (hspos : 0 < s')
+    (hcop : t'.Coprime s')
+    (hparity : (Odd t' ∧ Even s') ∨ (Even t' ∧ Odd s'))
+    (htfive : ¬5 ∣ t') : EvenCoordinates s t' s' := by
+  rcases hparity with hgood | hbad
+  · exact ⟨hrel, htpos, hspos, hcop, hgood.1, hgood.2, htfive⟩
+  · exfalso
+    have hright : Odd (5 * s' * F t' s') :=
+      ((show Odd 5 by norm_num).mul hbad.2).mul (odd_F_of_even_odd hbad.1 hbad.2)
+    have hleftOdd : Odd (2 * s ^ 2) := by rwa [hrel]
+    have hleftEven : Even (2 * s ^ 2) := ⟨s ^ 2, by ring⟩
+    exact (Nat.not_even_iff_odd.mpr hleftOdd) hleftEven
 
 private theorem five_dvd_new_second {K s t' s' : ℕ} (hs : 5 ∣ s)
     (ht : ¬5 ∣ t') (hrel : K * s ^ 2 = 5 * s' * F t' s') : 5 ∣ s' := by
