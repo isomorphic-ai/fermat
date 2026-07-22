@@ -133,6 +133,10 @@ end NumberField
 
 section ThirtySeven
 
+open Fermat.Irregular.CircularUnitFamily
+
+local instance : Fact (Nat.Prime 37) := ⟨by decide⟩
+
 /-- The exponent representing `(1-a)/2` modulo `37` for the column indexed by
 `a = i + 2`. -/
 def normalizationExponent37 (i : Fin 17) : ℕ :=
@@ -182,6 +186,24 @@ theorem circularUnit37_coe {zeta : K} (hzeta : IsPrimitiveRoot zeta 37) (i : Fin
               -((zeta - 1) * ∑ j ∈ Finset.range (i.val + 2), zeta ^ j) := by ring
           _ = -(zeta ^ (i.val + 2) - 1) := by rw [mul_geom_sum]
           _ = 1 - zeta ^ (i.val + 2) := by ring]
+
+/-- The original exponent-`37` normalization agrees with the canonical
+odd-prime normalization used by every later certificate. -/
+theorem normalizationExponent37_eq_canonical (i : Fin 17) :
+    normalizationExponent37 i =
+      canonicalNormalizationExponent (p := 37) (i.val + 2) := by
+  fin_cases i <;> decide
+
+/-- Backward compatibility is exact: the original seventeen units are the
+specialization of the generic odd-prime family, not merely associated
+generators of the same subgroup. -/
+theorem circularUnit37_eq_circularUnitFamily {zeta : K}
+    (hzeta : IsPrimitiveRoot zeta 37) (i : Fin 17) :
+    circularUnit37 hzeta i = circularUnitFamily hzeta (by norm_num) i := by
+  apply Units.ext
+  apply RingOfIntegers.ext
+  rw [circularUnit37_coe, circularUnitFamily_coe,
+    normalizationExponent37_eq_canonical]
 
 section ComplexConjugation
 
