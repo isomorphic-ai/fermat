@@ -1,4 +1,5 @@
 import Fermat.Irregular.CyclotomicSinnottBridge37
+import Fermat.Irregular.IdealCount
 import Mathlib.NumberTheory.LSeries.Dirichlet
 
 open scoped NumberField Classical BigOperators ArithmeticFunction.zeta
@@ -19,6 +20,13 @@ local instance : Fintype (RealResidueGroup37 →* ℂˣ) := Fintype.ofFinite _
 def idealCount (F : Type*) [Field F] [NumberField F] : ArithmeticFunction ℂ :=
   toArithmeticFunction (fun n ↦
     (Nat.card {I : Ideal (NumberField.RingOfIntegers F) // Ideal.absNorm I = n} : ℂ))
+
+/-- Counting integral ideals by absolute norm is multiplicative. -/
+theorem idealCount_isMultiplicative
+    (F : Type*) [Field F] [NumberField F] :
+    (idealCount F).IsMultiplicative := by
+  exact Fermat.Irregular.IdealCount.idealCountArithmetic_isMultiplicative
+    (S := NumberField.RingOfIntegers F)
 
 /-- The arithmetic function belonging to a nontrivial even character modulo 37. -/
 def characterCoefficient
@@ -180,16 +188,24 @@ theorem idealCount_eq_expected_of_multiplicative_of_primePowers
   exact (ArithmeticFunction.IsMultiplicative.eq_iff_eq_on_prime_powers
     (idealCount K⁺) hmult expectedIdealCount expectedIdealCount_isMultiplicative).mpr hprime
 
-/-- The complete Artin factorization follows from precisely the two local
-algebraic inputs: multiplicativity of ideal counts and the prime-power splitting
-formula. -/
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- The global coefficient identity follows from the prime-power splitting
+formula; ideal-count multiplicativity is now unconditional. -/
+theorem idealCount_eq_expected_of_primePowers
+    (hprime : ∀ q k : ℕ, q.Prime →
+      idealCount K⁺ (q ^ k) = expectedIdealCount (q ^ k)) :
+    idealCount K⁺ = expectedIdealCount :=
+  idealCount_eq_expected_of_multiplicative_of_primePowers
+    (idealCount_isMultiplicative K⁺) hprime
+
+/-- The complete Artin factorization now follows from the single local
+prime-power ideal-count formula. -/
 theorem cyclotomicZetaFactorization37_of_primePower_idealCounts
-    (hmult : (idealCount K⁺).IsMultiplicative)
     (hprime : ∀ q k : ℕ, q.Prime →
       idealCount K⁺ (q ^ k) = expectedIdealCount (q ^ k)) :
     CyclotomicZetaFactorization37 K :=
   cyclotomicZetaFactorization37_of_idealCount_eq_expected
-    (idealCount_eq_expected_of_multiplicative_of_primePowers hmult hprime)
+    (idealCount_eq_expected_of_primePowers hprime)
 
 end
 
