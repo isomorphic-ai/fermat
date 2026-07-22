@@ -1,3 +1,5 @@
+import Fermat.FiftyNine.ArithmeticCertificate
+import Fermat.FiftyNine.CircularUnitCertificate
 import Fermat.FiftyNine.Folding
 import Fermat.FiftyNine.SecondCase
 import Fermat.Ladder.Basic
@@ -73,9 +75,13 @@ theorem agencyClaim_checked : agencyClaim := by
   intro x y z hxy hyz hxz hfermat
   exact firstCase_of_pairwise_coprime hxy hyz hxz hfermat
 
-/-- Fold seven is precisely the named singular-primary second-case seam. -/
+/-- Fold seven contains the complete finite Bernoulli condition and the
+nonsingular unit matrix.  Only the named global singular-primary bridge is
+supplied as a parameter. -/
 def flexibilityClaim : Prop :=
-  OneComponentSecondCaseBridge
+  Fermat.Irregular.VandiverData.BernoulliCubeCondition 59 ∧
+    Fermat.FiftyNine.CircularUnitCertificate.matrix.det ≠ 0 ∧
+    OneComponentSecondCaseBridge
 
 def trace (hsecond : OneComponentSecondCaseBridge) : CaseTrace 59 where
   awareness_substrate := ⟨awarenessClaim, awarenessClaim_checked⟩
@@ -84,11 +90,14 @@ def trace (hsecond : OneComponentSecondCaseBridge) : CaseTrace 59 where
   presence_geometry := ⟨presenceClaim, presenceClaim_checked⟩
   alignment_logic := ⟨alignmentClaim, alignmentClaim_checked⟩
   agency_arithmetic := ⟨agencyClaim, agencyClaim_checked⟩
-  flexibility_potential := ⟨flexibilityClaim, hsecond⟩
+  flexibility_potential := ⟨flexibilityClaim,
+    Fermat.FiftyNine.ArithmeticCertificate.bernoulliCubeCondition_fiftyNine,
+    Fermat.FiftyNine.CircularUnitCertificate.matrix_det_ne_zero,
+    hsecond⟩
   conclude := by
-    intro _ _ _ _ _ _ hsecond'
+    intro _ _ _ _ _ _ hfoldSeven
     exact .contradicted
-      (holdsAt_fiftyNine_of_oneComponentSecondCaseBridge hsecond')
+      (holdsAt_fiftyNine_of_oneComponentSecondCaseBridge hfoldSeven.2.2)
 
 def run (hsecond : OneComponentSecondCaseBridge) : Checked 59 where
   folds := sevenFolds 59
