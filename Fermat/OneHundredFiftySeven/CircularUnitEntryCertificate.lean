@@ -1,6 +1,6 @@
 import Fermat.Irregular.CircularUnitResidues
 import Fermat.OneHundredFiftySeven.FoldCertificates
-import Fermat.OneHundredFiftySeven.CircularUnitMatrix
+import Fermat.OneHundredFiftySeven.CircularUnitCertificate
 
 /-!
 # Entry provenance for the exponent-157 circular-unit matrix

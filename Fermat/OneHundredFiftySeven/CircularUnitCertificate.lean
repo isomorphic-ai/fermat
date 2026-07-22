@@ -1,6 +1,3 @@
-import Fermat.OneHundredFiftySeven.CircularUnitCertificate.Rows00_19
-import Fermat.OneHundredFiftySeven.CircularUnitCertificate.Rows20_39
-import Fermat.OneHundredFiftySeven.CircularUnitCertificate.Rows40_59
 import Fermat.OneHundredFiftySeven.CircularUnitCertificate.Rows60_76
 
 /-!

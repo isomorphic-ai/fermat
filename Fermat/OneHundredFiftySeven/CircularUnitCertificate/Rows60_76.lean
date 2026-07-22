@@ -1,4 +1,4 @@
-import Fermat.OneHundredFiftySeven.CircularUnitMatrix
+import Fermat.OneHundredFiftySeven.CircularUnitCertificate.Rows40_59
 
 /-!
 # Rows 60--76 of the exponent-157 circular-unit inverse
