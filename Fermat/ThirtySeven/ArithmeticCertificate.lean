@@ -76,11 +76,38 @@ local instance : Fact (Nat.Prime 37) := ⟨by norm_num⟩
   rw [bernoulli'_def]
   norm_num [Finset.sum_range_succ, bernoulli'_eq_zero_of_odd, Nat.choose]
 
+@[simp] private theorem bernoulli'_thirty_four :
+    bernoulli' 34 = 2577687858367 / 6 := by
+  rw [bernoulli'_def]
+  norm_num [Finset.sum_range_succ, bernoulli'_eq_zero_of_odd, Nat.choose]
+
 /-- The exact Bernoulli number at the unique irregular index for `37`. -/
 theorem bernoulli_32_exact :
     bernoulli 32 = -(7709321041217 : ℚ) / 510 := by
   rw [bernoulli_eq_bernoulli'_of_ne_one (by decide)]
   exact bernoulli'_thirty_two
+
+/-! ## The complete irregular-index scan -/
+
+/-- Even indices in the classical range whose Bernoulli numerator is
+divisible by `p`. -/
+def irregularIndices (p : ℕ) : Finset ℕ :=
+  (Finset.Icc 2 (p - 3)).filter fun n ↦ Even n ∧ (p : ℤ) ∣ (bernoulli n).num
+
+/-- Thirty-seven has the unique irregular index `32`. -/
+theorem irregularIndices_thirtySeven : irregularIndices 37 = {32} := by
+  ext n
+  simp only [irregularIndices, Finset.mem_filter, Finset.mem_Icc,
+    Finset.mem_singleton]
+  constructor
+  · rintro ⟨⟨hn2, hn34⟩, heven, hdvd⟩
+    interval_cases n <;>
+      norm_num [bernoulli_eq_bernoulli'_of_ne_one, bernoulli'_eq_zero_of_odd] at heven
+    all_goals
+      norm_num [bernoulli_eq_bernoulli'_of_ne_one, bernoulli'_eq_zero_of_odd] at hdvd
+    all_goals norm_num
+  · rintro rfl
+    norm_num [bernoulli_eq_bernoulli'_of_ne_one]
 
 /-! ## The exact `37`-adic information in `B₃₂` -/
 
