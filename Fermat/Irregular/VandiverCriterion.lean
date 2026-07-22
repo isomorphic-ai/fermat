@@ -104,6 +104,33 @@ theorem fractionalIdeal_isPrincipal_of_coprime_powers
   · rw [← map_pow, ClassGroup.mk_eq_one_iff]
     simpa only [Units.val_pow_eq_pow_val, IsUnit.val_unit'] using hn
 
+/-- Integral-ideal form of
+`fractionalIdeal_isPrincipal_of_coprime_powers`. -/
+theorem ideal_isPrincipal_of_coprime_powers
+    {A L : Type*} [CommRing A] [IsDedekindDomain A]
+    [Field L] [Algebra A L] [IsFractionRing A L]
+    {m n : ℕ} (hmn : m.Coprime n) (I : Ideal A)
+    (hm : Submodule.IsPrincipal (I ^ m : Ideal A))
+    (hn : Submodule.IsPrincipal (I ^ n : Ideal A)) :
+    Submodule.IsPrincipal (I : Ideal A) := by
+  have hm' : Submodule.IsPrincipal
+      (((I ^ m : Ideal A) : FractionalIdeal A⁰ L) : Submodule A L) :=
+    (IsFractionRing.coeSubmodule_isPrincipal A L).mpr hm
+  have hn' : Submodule.IsPrincipal
+      (((I ^ n : Ideal A) : FractionalIdeal A⁰ L) : Submodule A L) :=
+    (IsFractionRing.coeSubmodule_isPrincipal A L).mpr hn
+  have hmF : Submodule.IsPrincipal
+      ((((I : FractionalIdeal A⁰ L) ^ m) : FractionalIdeal A⁰ L) :
+        Submodule A L) := by
+    simpa only [FractionalIdeal.coeIdeal_pow] using hm'
+  have hnF : Submodule.IsPrincipal
+      ((((I : FractionalIdeal A⁰ L) ^ n) : FractionalIdeal A⁰ L) :
+        Submodule A L) := by
+    simpa only [FractionalIdeal.coeIdeal_pow] using hn'
+  have hIF := fractionalIdeal_isPrincipal_of_coprime_powers
+    hmn (I : FractionalIdeal A⁰ L) hmF hnF
+  exact (IsFractionRing.coeSubmodule_isPrincipal A L).mp hIF
+
 /-- The product of two principal fractional ideals is principal. -/
 theorem fractionalIdeal_isPrincipal_mul
     {A L : Type*} [CommRing A] [IsDedekindDomain A]

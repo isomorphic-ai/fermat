@@ -834,6 +834,97 @@ lemma exists_real_associated_generator_of_conj_eq_zeta_pow
     realAdjustedGenerator37_associated hζ a j,
     realAdjustedGenerator37_real hζ a j ha⟩
 
+set_option maxRecDepth 3000 in
+/-- The real-generator conclusion used immediately after Vandiver's
+equation (9).
+
+Suppose `J ^ 37 = (q)`, the element `q` is fixed by conjugation, and `J` is
+prime to `( ζ - 1 )`.  Applying the already-proved relative-norm form of
+(7d) gives
+
+`q² = ε * ρ^37`
+
+with `ρ` real.  Comparing principal ideals and using injectivity of the
+37th-power map on the unique-factorization monoid of integral ideals shows
+that `J²` is principal.  Since `J^37` is principal and
+`gcd(2,37)=1`, `J` itself is principal.  Its conjugation stability follows
+from the reality of `q`; the explicit `ζ^(19*j)` normalization then
+chooses a real generator `μ`.  Finally
+
+`q = η * μ^37`,
+
+which is the element equation written after (9) in the 1929 paper. -/
+theorem exists_realEquationNineGenerator37
+    {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (J : Ideal (𝓞 K)) (q : 𝓞 K)
+    (hprime : ¬ Ideal.span
+      ({(hzeta.unit' : 𝓞 K) - 1} : Set (𝓞 K)) ∣ J)
+    (hqreal : NumberField.IsCMField.ringOfIntegersComplexConj K q = q)
+    (hpow : J ^ 37 = Ideal.span {q}) :
+    ∃ (μ : 𝓞 K) (η : (𝓞 K)ˣ),
+      J = Ideal.span {μ} ∧
+      NumberField.IsCMField.ringOfIntegersComplexConj K μ = μ ∧
+      q = η * μ ^ 37 := by
+  obtain ⟨ρ, ε, -, -, hnorm⟩ :=
+    exists_equationSevenD_of_idealPower37 hzeta J q hpow
+  let ρK : 𝓞 K := algebraMap (𝓞 K⁺) (𝓞 K) ρ
+  let εK : (𝓞 K)ˣ := Units.map
+    (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom ε
+  have hq_sq : q ^ 2 = (εK : 𝓞 K) * ρK ^ 37 := by
+    simpa only [pow_two, hqreal, ρK, εK, Units.coe_map] using hnorm
+  have hassoc : Associated (q ^ 2) (ρK ^ 37) := by
+    refine ⟨εK⁻¹, ?_⟩
+    rw [hq_sq]
+    calc
+      ((εK : 𝓞 K) * ρK ^ 37) * (εK⁻¹ : (𝓞 K)ˣ) =
+          ρK ^ 37 * ((εK : 𝓞 K) * (εK⁻¹ : (𝓞 K)ˣ)) := by
+        ac_rfl
+      _ = ρK ^ 37 := by rw [← Units.val_mul]; simp
+  have hspan : Ideal.span {q ^ 2} = Ideal.span {ρK ^ 37} :=
+    Ideal.span_singleton_eq_span_singleton.mpr hassoc
+  have hpoweq : (J ^ 2) ^ 37 = (Ideal.span {ρK}) ^ 37 := by
+    calc
+      (J ^ 2) ^ 37 = (J ^ 37) ^ 2 := by
+        rw [← pow_mul, ← pow_mul]
+      _ = (Ideal.span {q}) ^ 2 := by rw [hpow]
+      _ = Ideal.span {q ^ 2} := Ideal.span_singleton_pow q 2
+      _ = Ideal.span {ρK ^ 37} := hspan
+      _ = (Ideal.span {ρK}) ^ 37 := (Ideal.span_singleton_pow ρK 37).symm
+  have hJ2eq : J ^ 2 = Ideal.span {ρK} :=
+    pow_left_injective (M := Ideal (𝓞 K)) (by norm_num : 37 ≠ 0) hpoweq
+  have hJ2 : Submodule.IsPrincipal (J ^ 2 : Ideal (𝓞 K)) := by
+    rw [hJ2eq]
+    infer_instance
+  have hJ37 : Submodule.IsPrincipal (J ^ 37 : Ideal (𝓞 K)) := by
+    rw [hpow]
+    infer_instance
+  have hJprincipal : Submodule.IsPrincipal (J : Ideal (𝓞 K)) :=
+    ideal_isPrincipal_of_coprime_powers (L := K) (by norm_num) J hJ2 hJ37
+  have hstable : conjugateIdeal37 J = J := by
+    apply pow_left_injective (M := Ideal (𝓞 K)) (by norm_num : 37 ≠ 0)
+    calc
+      conjugateIdeal37 J ^ 37 = conjugateIdeal37 (J ^ 37) := by
+        exact (Ideal.map_pow
+          (NumberField.IsCMField.ringOfIntegersComplexConj K).toRingHom J 37).symm
+      _ = conjugateIdeal37 (Ideal.span {q}) := by rw [hpow]
+      _ = Ideal.span
+          {NumberField.IsCMField.ringOfIntegersComplexConj K q} :=
+        conjugateIdeal37_span q
+      _ = Ideal.span {q} := by rw [hqreal]
+      _ = J ^ 37 := hpow.symm
+  obtain ⟨a, j, hJa, -, hconj⟩ := exists_conjugation_power_generator37
+    hzeta J hJprincipal hprime hstable
+  obtain ⟨μ, hμa, hμreal⟩ :=
+    exists_real_associated_generator_of_conj_eq_zeta_pow hzeta a j hconj
+  have hJμ : J = Ideal.span {μ} := by
+    rw [hJa]
+    exact Ideal.span_singleton_eq_span_singleton.mpr hμa.symm
+  have hassoc_q : Associated (μ ^ 37) q := by
+    rw [← Ideal.span_singleton_eq_span_singleton,
+      ← Ideal.span_singleton_pow, ← hJμ, hpow]
+  obtain ⟨η, hη⟩ := hassoc_q
+  exact ⟨μ, η, hJμ, hμreal, by simpa [mul_comm] using hη.symm⟩
+
 /-- A `37`th root of a real unit can be adjusted by a power of `ζ`
 without changing its `37`th power so that the root itself is real. This is
 the real-root normalization used implicitly between Vandiver's equations
