@@ -749,6 +749,29 @@ theorem secondCaseStartsHistoricalDescent_37 {ζ : K}
 
 /-! ## The algebraic passage from equation (10) to equation (10b) -/
 
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+/-- Vandiver's elimination in equation (10a), separated from the
+ideal-theoretic construction of its inputs.
+
+Writing `S = ω² + θ²` and `T = ωθ`, the three equations immediately
+before (10a) have left sides `S + A*T`, `S + B*T`, and `S + 2*T`.
+Multiplying the first by `2-B`, the second by `2-A`, and subtracting
+eliminates both `S` and `T` against the third equation:
+
+`(2-B)(S+A*T) - (2-A)(S+B*T) = (A-B)(S+2*T)`.
+
+In the paper, `A = ζ^a + ζ⁻ᵃ` and `B = ζ^b + ζ⁻ᵇ`.  The subsequent
+cyclotomic-unit simplification turns this identity into equation (10b). -/
+lemma equationTenA_quadraticElimination37
+    (ω θ A B Ua Ub Uzero Xa Xb Xzero : 𝓞 K)
+    (ha : ω ^ 2 + A * (ω * θ) + θ ^ 2 = Ua * Xa ^ 37)
+    (hb : ω ^ 2 + B * (ω * θ) + θ ^ 2 = Ub * Xb ^ 37)
+    (hzero : ω ^ 2 + 2 * (ω * θ) + θ ^ 2 = Uzero * Xzero) :
+    (2 - B) * (Ua * Xa ^ 37) - (2 - A) * (Ub * Xb ^ 37) =
+      (A - B) * (Uzero * Xzero) := by
+  rw [← ha, ← hb, ← hzero]
+  ring
+
 /-- The actual finite support of the distinct prime-ideal factors of the
 principal ideal `(x)`. -/
 def primeIdealFactorSupport37 (x : 𝓞 K) : Finset (Ideal (𝓞 K)) :=
@@ -978,68 +1001,67 @@ noncomputable def equationSevenToTenData_of_weighted37 {ζ : K}
     intro v hv
     exact Finset.card_lt_card d.factorSupport_strict
 
-/-! ## The remaining real-principal-generator seam -/
+/-! ## The remaining real-ideal construction seam -/
 
-/-- The one ideal-theoretic lemma still absent from Mathlib for Vandiver's
-historical calculation.
+/-- The source-faithful remainder of Vandiver's equations (7b)--(10a).
 
-`RelevantIdealQuotientsPrincipal` supplies the principal ideals used in
-(7b). What is additionally needed is to show that the conjugation quotient
-of each selected generator is a power of `ζ`. The explicit
-`ζ^(19*j)` normalization above then makes all three generators real
-without changing their 37th powers. Substituting those generators into (8),
-subtracting the `a` and `-a` equations as in (9a), and eliminating
-`ω² + θ²` and `ωθ` in (10a) must produce the explicit
-`ConjugationPowerReductionData37` above.
+The 1929 proof does **not** assume the broad modern predicate
+`RelevantIdealQuotientsPrincipal`.  In (7b), only the conjugation-symmetric
+product `𝔦ₐ 𝔦₋ₐ` is used; it belongs to the maximal real field.  After
+(9), the paper explicitly observes that the new quotient is unchanged by
+the substitution `ζ ↦ ζ⁻¹`, so its ideal again belongs to the real field.
+For each of these two ideals, `exists_real_unit_mul_pow_generator37`
+already derives the required real generator from the unconditional theorem
+`37 ∤ h⁺`.
 
-This boundary is deliberately below the level of the descent conclusion:
-the high local congruence, weighted equation, exact conjugation quotients,
-coprimality, and the strict inclusion of prime-ideal supports are all
-concrete fields which a future proof must construct. Making the generators
-real, preserving their equation and supports, the Kummer step, real-root
-normalization, equation (10b), invariant preservation, and infinite descent
-are not part of this hypothesis. -/
+What remains here is therefore to construct those two real ideals from a
+historical state, verify their displayed 37th-power identities, and carry
+out (7a)--(9a) plus the cyclotomic-unit simplification surrounding (10a).
+The purely quadratic elimination in (10a) is separately proved by
+`equationTenA_quadraticElimination37`.
+
+This boundary is deliberately below the descent conclusion: the high local
+congruence, weighted equation, exact conjugation quotients, coprimality, and
+strict support inclusion are concrete fields.  Making the generators real,
+preserving their equation and supports, the Kummer step, equation (10b),
+and the infinite descent are proved outside this hypothesis. -/
 def RealPrincipalGeneratorElimination37 {ζ : K}
     (hζ : IsPrimitiveRoot ζ 37) : Prop :=
-  RelevantIdealQuotientsPrincipal (K := K) (p := 37) (by norm_num) →
-    ∀ s : HistoricalState hζ, RealSourceAdmissible hζ s →
-      Nonempty (ConjugationPowerReductionData37 hζ s)
+  ∀ s : HistoricalState hζ, RealSourceAdmissible hζ s →
+    Nonempty (ConjugationPowerReductionData37 hζ s)
 
 /-- The concrete real-generator elimination supplies the full historical
 reduction relation required by the abstract well-founded descent. -/
 theorem equationsSevenToTenReduction_37
     {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
-    (hprincipal : RelevantIdealQuotientsPrincipal (K := K) (p := 37) (by norm_num))
     (heliminate : RealPrincipalGeneratorElimination37 hζ) :
     EquationsSevenToTenReduction hζ (RealSourceAdmissible hζ) := by
   intro s hs
-  exact (heliminate hprincipal s hs).map fun d ↦
+  exact (heliminate s hs).map fun d ↦
     equationSevenToTenData_of_weighted37 hζ
       (weightedReductionData_of_conjugationPowers37 hζ d)
 
 /-- The exponent-`37` historical second case, conditional only on the exact
-deep unit conclusion, relevant principalization, and the remaining
-conjugation-compatible real-generator elimination. -/
+deep unit conclusion and the remaining source-faithful construction through
+equation (10a).  No global principalization of CM ideal quotients is used. -/
 theorem secondCaseExcluded_37_of_historical
     {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
-    (hprincipal : RelevantIdealQuotientsPrincipal (K := K) (p := 37) (by norm_num))
     (heliminate : RealPrincipalGeneratorElimination37 hζ)
     (hkummer : KummerUnitPowerConclusion K 37) :
     Fermat.SecondCaseExcluded 37 :=
   secondCaseExcluded_of_historical_descent (by norm_num) hζ
     (RealSourceAdmissible hζ) (secondCaseStartsHistoricalDescent_37 hζ)
-    (equationsSevenToTenReduction_37 hζ hprincipal heliminate) hkummer
+    (equationsSevenToTenReduction_37 hζ heliminate) hkummer
 
 /-- Assemble the exact source statement of Vandiver's Lemma 2 with the
 directly checked exponent-`37` Bernoulli cube data. No semiprimary deepening
 hypothesis is used on this historical route. -/
 theorem secondCaseExcluded_37_of_vandiverLemmaTwo
     {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
-    (hprincipal : RelevantIdealQuotientsPrincipal (K := K) (p := 37) (by norm_num))
     (heliminate : RealPrincipalGeneratorElimination37 hζ)
     (hLemmaTwo : Fermat.Irregular.VandiverUnitLemma.VandiverLemmaTwo K 37) :
     Fermat.SecondCaseExcluded 37 :=
-  secondCaseExcluded_37_of_historical hζ hprincipal heliminate
+  secondCaseExcluded_37_of_historical hζ heliminate
     (Fermat.Irregular.VandiverUnitLemma.kummerUnitPowerConclusion_of_lemmaTwo
       (by norm_num) hLemmaTwo
       Fermat.ThirtySeven.DirectVandiverData.bernoulliCubeCondition_thirtySeven_direct)
