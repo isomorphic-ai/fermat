@@ -157,6 +157,24 @@ theorem extendRealIdeal37_span (ρ : 𝓞 K⁺) :
       Ideal.span {algebraMap (𝓞 K⁺) (𝓞 K) ρ} := by
   simp only [extendRealIdeal37, Ideal.map_span, Set.image_singleton]
 
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- Extension from the real ring of integers is injective on ideals.  This
+is faithful flatness for the finite integral extension
+`𝓞 K⁺ → 𝓞 K`. -/
+theorem extendRealIdeal37_injective :
+    Function.Injective (extendRealIdeal37 (K := K)) := by
+  intro I J hIJ
+  have hcomap := congrArg
+    (Ideal.comap (algebraMap (𝓞 K⁺) (𝓞 K))) hIJ
+  simpa only [extendRealIdeal37,
+    Ideal.comap_map_eq_self_of_faithfullyFlat] using hcomap
+
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+/-- Extension commutes with ideal powers. -/
+theorem extendRealIdeal37_pow (I : Ideal (𝓞 K⁺)) (n : ℕ) :
+    extendRealIdeal37 (I ^ n) = extendRealIdeal37 I ^ n := by
+  exact Ideal.map_pow (algebraMap (𝓞 K⁺) (𝓞 K)) I n
+
 set_option maxRecDepth 2000 in
 /-- The complete plus-class-number bridge needed at each of Vandiver's
 real ideals in (7b) and (9).  A real ideal with 37th power `(a)` extends to
@@ -186,6 +204,31 @@ theorem exists_extendedRealGenerator37
     (NumberField.IsCMField.ringOfIntegersComplexConj K).commutes ρ, ?_⟩
   · rw [hI, extendRealIdeal37_span]
   · rw [ha, map_mul, map_pow]
+
+set_option maxRecDepth 2000 in
+/-- Version of `exists_extendedRealGenerator37` whose 37th-power identity
+is proved after extension to the cyclotomic ring, as it is in Vandiver's
+factorizations (7b) and (9).  Faithful flatness reflects that identity back
+to the real ideal, where `37 ∤ h⁺` supplies the generator. -/
+theorem exists_extendedRealGenerator37_of_pow_eq_span
+    {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (I : Ideal (𝓞 K⁺)) (a : 𝓞 K⁺)
+    (hpow : extendRealIdeal37 I ^ 37 =
+      Ideal.span {algebraMap (𝓞 K⁺) (𝓞 K) a}) :
+    ∃ (ρ : 𝓞 K⁺) (ε : (𝓞 K⁺)ˣ),
+      extendRealIdeal37 I =
+          Ideal.span {algebraMap (𝓞 K⁺) (𝓞 K) ρ} ∧
+      conjugateIdeal37 (extendRealIdeal37 I) = extendRealIdeal37 I ∧
+      NumberField.IsCMField.ringOfIntegersComplexConj K
+          (algebraMap (𝓞 K⁺) (𝓞 K) ρ) =
+        algebraMap (𝓞 K⁺) (𝓞 K) ρ ∧
+      algebraMap (𝓞 K⁺) (𝓞 K) a =
+        algebraMap (𝓞 K⁺) (𝓞 K) (ε : 𝓞 K⁺) *
+          algebraMap (𝓞 K⁺) (𝓞 K) ρ ^ 37 := by
+  apply exists_extendedRealGenerator37 hzeta I a
+  apply extendRealIdeal37_injective (K := K)
+  rw [extendRealIdeal37_pow, extendRealIdeal37_span]
+  exact hpow
 
 /-- Complex conjugation preserves whether an integral ideal is zero. -/
 @[simp] lemma conjugateIdeal37_eq_zero_iff (I : Ideal (𝓞 K)) :
