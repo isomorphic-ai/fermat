@@ -36,6 +36,53 @@ noncomputable section
 variable {K : Type*} {p : ℕ} [Fact p.Prime] [Field K] [NumberField K]
   [IsCyclotomicExtension {p} ℚ K]
 
+/-- The primitive root `ζ`, regarded as an element of the finite set of
+`p`th roots of unity in the cyclotomic integers. -/
+def zetaNthRoot {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    Polynomial.nthRootsFinset p (1 : 𝓞 K) :=
+  ⟨hζ.unit', hζ.unit'_coe.mem_nthRootsFinset
+    (Fact.out : p.Prime).pos⟩
+
+/-- The inverse primitive root `ζ⁻¹`, regarded as an integral `p`th root
+of unity. -/
+def inverseZetaNthRoot {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    Polynomial.nthRootsFinset p (1 : 𝓞 K) :=
+  ⟨(hζ.unit'⁻¹ : (𝓞 K)ˣ), by
+    rw [Polynomial.mem_nthRootsFinset (Fact.out : p.Prime).pos]
+    rw [← Units.val_pow_eq_pow_val]
+    have hz : hζ.unit' ^ p = 1 := by
+      apply Units.ext
+      apply NumberField.RingOfIntegers.ext
+      change ζ ^ p = 1
+      exact hζ.pow_eq_one
+    rw [inv_pow, hz, inv_one]
+    rfl⟩
+
+/-- The root `1`, regarded as an element of the finite set of `p`th roots
+of unity in the cyclotomic integers. -/
+def oneNthRoot : Polynomial.nthRootsFinset p (1 : 𝓞 K) :=
+  ⟨1, Polynomial.one_mem_nthRootsFinset (Fact.out : p.Prime).pos⟩
+
+omit [IsCyclotomicExtension {p} ℚ K] in
+/-- A primitive root is distinct from the root `1` inside
+`nthRootsFinset`. -/
+theorem zetaNthRoot_ne_one {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    zetaNthRoot hζ ≠ oneNthRoot := by
+  rw [ne_eq, Subtype.ext_iff]
+  exact hζ.unit'_coe.ne_one (Fact.out : p.Prime).one_lt
+
+omit [IsCyclotomicExtension {p} ℚ K] in
+/-- The inverse of a primitive root is also distinct from `1`. -/
+theorem inverseZetaNthRoot_ne_one {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    inverseZetaNthRoot hζ ≠ oneNthRoot := by
+  rw [ne_eq, Subtype.ext_iff]
+  intro h
+  have h' : hζ.unit'⁻¹ = 1 := Units.ext h
+  have hz : hζ.unit' = 1 := by
+    rw [← inv_inv hζ.unit', h', inv_one]
+  exact hζ.unit'_coe.ne_one (Fact.out : p.Prime).one_lt
+    (congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) hz)
+
 /-- The local congruence in Kummer's definition of a primary cyclotomic
 integer, including primeness to the unique ramified prime above `p`. -/
 def IsKummerPrimary {ζ : K} (hζ : IsPrimitiveRoot ζ p) (a : 𝓞 K) : Prop :=
@@ -143,6 +190,138 @@ theorem isKummerPrimary_unit_mul_pow_pred_of_congruent
     isKummerPrimary_mul_pow_pred_of_congruent hζ
       ((u : 𝓞 K) * a) b
       (hζ.zeta_sub_one_prime'.not_dvd_mul hu ha) hb hab
+
+section NormalizedConjugateFactors
+
+variable {L : Type} {q : ℕ} [Fact q.Prime] [Field L] [NumberField L]
+  [IsCyclotomicExtension {q} ℚ L]
+
+/-- The exact local comparison of the two conjugate linear factors used in
+Vandiver's equation (7a).
+
+Write
+
+`q₊ = (x + y*ζ)/(ζ - 1)` and
+`q₋ = (x + y*ζ⁻¹)/(ζ - 1)`.
+
+If `(ζ - 1)^(q+1)` divides the real factor `x + y`, then
+
+`q₊ ≡ (-ζ) q₋ (mod (ζ - 1)^q)`.
+
+Indeed, after multiplying by `ζ - 1`, the difference is exactly
+`(1 + ζ) * (x + y)`, and one factor of `ζ - 1` cancels.  The same depth
+hypothesis makes the factor at the root `1` ramified.  Injectivity of the
+factor residues then proves that the two factors at `ζ` and `ζ⁻¹` are
+both prime to `ζ - 1`.
+
+This packages the full elementary local input required by
+`isKummerPrimary_mul_pow_pred_of_congruent`; no class-field theorem is
+used. -/
+theorem normalizedConjugateLinearFactors
+    (hq2 : q ≠ 2) {ζ : L} (hζ : IsPrimitiveRoot ζ q)
+    {x y z : 𝓞 L} {ε : (𝓞 L)ˣ} {m : ℕ}
+    (e : x ^ q + y ^ q = ε *
+      ((hζ.unit'.1 - 1) ^ (m + 1) * z) ^ q)
+    (hy : ¬ (hζ.unit' : 𝓞 L) - 1 ∣ y)
+    (hsum : ((hζ.unit' : 𝓞 L) - 1) ^ (q + 1) ∣ x + y) :
+    let qplus : 𝓞 L := div_zeta_sub_one hq2 hζ e
+      (zetaNthRoot (K := L) (p := q) hζ)
+    let qminus : 𝓞 L := div_zeta_sub_one hq2 hζ e
+      (inverseZetaNthRoot (K := L) (p := q) hζ)
+    ¬ (hζ.unit' : 𝓞 L) - 1 ∣ qplus ∧
+    ¬ (hζ.unit' : 𝓞 L) - 1 ∣ qminus ∧
+    ((hζ.unit' : 𝓞 L) - 1) ^ q ∣
+      qplus - (((-hζ.unit' : (𝓞 L)ˣ) : 𝓞 L) * qminus) := by
+  let π : 𝓞 L := (hζ.unit' : 𝓞 L) - 1
+  let qplus : 𝓞 L := div_zeta_sub_one hq2 hζ e
+    (zetaNthRoot (K := L) (p := q) hζ)
+  let qminus : 𝓞 L := div_zeta_sub_one hq2 hζ e
+    (inverseZetaNthRoot (K := L) (p := q) hζ)
+  let qone : 𝓞 L := div_zeta_sub_one hq2 hζ e
+    (oneNthRoot (K := L) (p := q))
+  have hπ0 : π ≠ 0 := hζ.unit'_coe.sub_one_ne_zero
+    (Fact.out : q.Prime).one_lt
+  have hqone_mul : qone * π = x + y := by
+    simpa only [qone, oneNthRoot, π, mul_one] using
+      div_zeta_sub_one_mul_zeta_sub_one hq2 hζ e
+        (oneNthRoot (K := L) (p := q))
+  have hqonePow : π ^ q ∣ qone := by
+    rw [← mul_dvd_mul_iff_right hπ0]
+    rw [← pow_succ, hqone_mul]
+    simpa only [π] using hsum
+  have hqone : π ∣ qone :=
+    (dvd_pow_self π (Fact.out : q.Prime).ne_zero).trans hqonePow
+  have hqplus : ¬ π ∣ qplus := by
+    intro h
+    apply zetaNthRoot_ne_one hζ
+    apply div_zeta_sub_one_Injective hq2 hζ e hy
+    calc
+      Ideal.Quotient.mk (Ideal.span {π}) qplus = 0 :=
+        (Ideal.Quotient.eq_zero_iff_dvd π qplus).2 h
+      _ = Ideal.Quotient.mk (Ideal.span {π}) qone :=
+        ((Ideal.Quotient.eq_zero_iff_dvd π qone).2 hqone).symm
+  have hqminus : ¬ π ∣ qminus := by
+    intro h
+    apply inverseZetaNthRoot_ne_one hζ
+    apply div_zeta_sub_one_Injective hq2 hζ e hy
+    calc
+      Ideal.Quotient.mk (Ideal.span {π}) qminus = 0 :=
+        (Ideal.Quotient.eq_zero_iff_dvd π qminus).2 h
+      _ = Ideal.Quotient.mk (Ideal.span {π}) qone :=
+        ((Ideal.Quotient.eq_zero_iff_dvd π qone).2 hqone).symm
+  have hinv : (hζ.unit' : 𝓞 L) * (hζ.unit'⁻¹ : (𝓞 L)ˣ) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  have hpair_mul :
+      (qplus - (((-hζ.unit' : (𝓞 L)ˣ) : 𝓞 L) * qminus)) * π =
+        (1 + (hζ.unit' : 𝓞 L)) * (x + y) := by
+    rw [sub_mul, mul_assoc]
+    rw [show qplus * π =
+        x + y * (zetaNthRoot (K := L) (p := q) hζ : 𝓞 L) by
+      exact div_zeta_sub_one_mul_zeta_sub_one hq2 hζ e
+        (zetaNthRoot (K := L) (p := q) hζ)]
+    rw [show qminus * π =
+        x + y * (inverseZetaNthRoot (K := L) (p := q) hζ : 𝓞 L) by
+      exact div_zeta_sub_one_mul_zeta_sub_one hq2 hζ e
+        (inverseZetaNthRoot (K := L) (p := q) hζ)]
+    dsimp only [zetaNthRoot, inverseZetaNthRoot]
+    simp only [Units.val_neg]
+    linear_combination y * hinv
+  have hpair : π ^ q ∣
+      qplus - (((-hζ.unit' : (𝓞 L)ˣ) : 𝓞 L) * qminus) := by
+    rw [← mul_dvd_mul_iff_right hπ0]
+    rw [← pow_succ, hpair_mul]
+    exact dvd_mul_of_dvd_right (by simpa only [π] using hsum) _
+  exact ⟨hqplus, hqminus, hpair⟩
+
+/-- The primary-generator conclusion for the normalized conjugate factor
+pair.  This is the direct composition of the checked factor comparison
+above with the generic Kummer-primary recombination theorem. -/
+theorem normalizedConjugateLinearFactor_isKummerPrimary
+    (hq2 : q ≠ 2) {ζ : L} (hζ : IsPrimitiveRoot ζ q)
+    {x y z : 𝓞 L} {ε : (𝓞 L)ˣ} {m : ℕ}
+    (e : x ^ q + y ^ q = ε *
+      ((hζ.unit'.1 - 1) ^ (m + 1) * z) ^ q)
+    (hy : ¬ (hζ.unit' : 𝓞 L) - 1 ∣ y)
+    (hsum : ((hζ.unit' : 𝓞 L) - 1) ^ (q + 1) ∣ x + y) :
+    let qplus : 𝓞 L := div_zeta_sub_one hq2 hζ e
+      (zetaNthRoot (K := L) (p := q) hζ)
+    let qminus : 𝓞 L := div_zeta_sub_one hq2 hζ e
+      (inverseZetaNthRoot (K := L) (p := q) hζ)
+    IsKummerPrimary hζ
+      (qplus * (((( -hζ.unit' : (𝓞 L)ˣ) : 𝓞 L) * qminus) ^ (q - 1))) := by
+  dsimp only
+  obtain ⟨hqplus, hqminus, hpair⟩ :=
+    normalizedConjugateLinearFactors hq2 hζ e hy hsum
+  have hu : ¬ (hζ.unit' : 𝓞 L) - 1 ∣
+      ((-hζ.unit' : (𝓞 L)ˣ) : 𝓞 L) := by
+    intro h
+    exact hζ.zeta_sub_one_prime'.not_unit
+      (isUnit_of_dvd_unit h (-hζ.unit').isUnit)
+  exact isKummerPrimary_mul_pow_pred_of_congruent hζ _ _ hqplus
+    (hζ.zeta_sub_one_prime'.not_dvd_mul hu hqminus) hpair
+
+end NormalizedConjugateFactors
 
 /-- Exact conclusion of Vandiver's Lemma 1.
 
