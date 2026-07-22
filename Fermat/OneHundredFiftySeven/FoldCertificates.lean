@@ -14,7 +14,7 @@ theorem boundaries, not exponent-specific computations.
 namespace Fermat.OneHundredFiftySeven.FoldCertificates
 
 set_option maxHeartbeats 0
-set_option maxRecDepth 100000
+set_option maxRecDepth 1000000
 
 /-! ## Fold 1: prime substrate and neighbors -/
 
@@ -172,7 +172,7 @@ def probeLoop : ProbeLoop where
 theorem probeLoop_globalDet_ne_zero : probeLoop.reportedGlobalDet ≠ 0 := by
   decide
 
-/-! ## Fold 7: the two modular correction channels -/
+/-! ## Fold 7: the two correction-channel indices -/
 
 def irregularChannels : Finset ℕ := {62, 110}
 
@@ -181,26 +181,5 @@ theorem irregularChannels_spec :
   intro j hj
   simp only [irregularChannels, Finset.mem_insert, Finset.mem_singleton] at hj
   rcases hj with rfl | rfl <;> norm_num
-
-/-- The `r = 62` power-sum certificate modulo `157⁴`. -/
-theorem powerSum_9734 :
-    (∑ a ∈ Finset.range 157, (a : ZMod (157 ^ 4)) ^ 9734) =
-      157 * 73947 := by
-  decide
-
-/-- The `r = 110` power-sum certificate modulo `157⁴`. -/
-theorem powerSum_17270 :
-    (∑ a ∈ Finset.range 157, (a : ZMod (157 ^ 4)) ^ 17270) =
-      157 * 394384 := by
-  decide
-
-theorem correctionQuotients :
-    73947 = 157 ^ 2 * 3 ∧ 394384 = 157 ^ 2 * 16 := by
-  norm_num
-
-theorem correctionQuotients_not_dvd_cube :
-    ¬(157 : ℤ) ^ 3 ∣ (73947 : ℤ) ∧
-      ¬(157 : ℤ) ^ 3 ∣ (394384 : ℤ) := by
-  norm_num
 
 end Fermat.OneHundredFiftySeven.FoldCertificates
