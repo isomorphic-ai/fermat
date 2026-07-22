@@ -1,10 +1,10 @@
 import Fermat.Cases
-import Fermat.Irregular.VandiverCriterion
+import Fermat.Irregular.VandiverHistoricalDescent
 import Fermat.Ladder.Basic
 import Fermat.SixtySeven.CircularUnitCertificate
 import Fermat.SixtySeven.FirstCase
-import Fermat.SixtySeven.HighBernoulli
 import Fermat.SixtySeven.NeighborFolding
+import Fermat.SixtySeven.VandiverData
 
 /-!
 # Seven-fold ladder trace for exponent 67
@@ -15,14 +15,14 @@ large finite certificates checked in Lean: the lifted `B_3886` numerator
 condition and the nonsingular `32 × 32` circular-unit matrix.
 
 The complete verdict is parameterized by one explicitly named historical
-boundary.  It is exactly the pair of local cyclotomic statements consumed by
-the repository's checked irregular-prime descent; no class-number or
-singular-primary implication is smuggled in as a finite computation.
+bridge collecting Vandiver's three remaining source boundaries; no
+class-number or singular-primary implication is smuggled in as a finite
+computation.
 -/
 
 namespace Fermat.Ladder.SixtySeven
 
-open Fermat.Irregular.VandiverCriterion
+open Fermat.Irregular.VandiverHistoricalDescent
 
 local instance : Fact (Nat.Prime 67) := ⟨Fermat.SixtySeven.prime_67⟩
 local instance : NeZero 67 := ⟨by norm_num⟩
@@ -35,20 +35,28 @@ abbrev CyclotomicField67 := CyclotomicField 67 ℚ
 local instance : IsCyclotomicExtension {67} ℚ CyclotomicField67 :=
   CyclotomicField.isCyclotomicExtension 67 ℚ
 
-/-- The two deep local hypotheses used by the checked cyclotomic descent.
-For irregular primes these are precisely the singular-primary seam; the
-finite Bernoulli and circular-unit calculations do not by themselves prove
-either component. -/
-def HistoricalSecondCaseBridge : Prop :=
-  RelevantIdealQuotientsPrincipal (K := CyclotomicField67) (p := 67)
-      (by norm_num) ∧
-    SemiprimaryUnitPowerConclusion CyclotomicField67 67
+/-- The exact source boundaries in Vandiver's historical proof: passage
+from a rational second-case solution to equation (6), the construction in
+equations (7b)--(10b), and Vandiver's Lemma 2.  The well-founded descent
+after those inputs is already checked generically. -/
+structure HistoricalSecondCaseBridge where
+  zeta : CyclotomicField67
+  primitive : IsPrimitiveRoot zeta 67
+  admissible : HistoricalAdmissibility primitive
+  starts : SecondCaseStartsHistoricalDescent primitive admissible
+  reduces : EquationsSevenToTenReduction primitive admissible
+  lemmaTwo :
+    Fermat.Irregular.VandiverUnitLemma.VandiverLemmaTwo CyclotomicField67 67
 
 theorem secondCaseExcluded_of_historicalBridge
     (hbridge : HistoricalSecondCaseBridge) :
     Fermat.SecondCaseExcluded 67 := by
-  exact secondCaseExcluded_of_local_hypotheses
-    (K := CyclotomicField67) (p := 67) (by norm_num) hbridge.1 hbridge.2
+  exact secondCaseExcluded_of_vandiver_lemmaTwo
+    (K := CyclotomicField67) (p := 67)
+    (by norm_num) (by norm_num)
+    hbridge.primitive hbridge.admissible hbridge.starts hbridge.reduces
+    hbridge.lemmaTwo
+    Fermat.SixtySeven.VandiverData.bernoulliCubeCondition_sixtySeven
 
 /-! ## Seven exponent-specific checked claims -/
 
@@ -104,11 +112,11 @@ theorem agencyClaim_checked : agencyClaim :=
 /-- The unconditional finite core at fold seven.  The matrix statement is
 deliberately nonsingularity, not the absent conclusion `67 ∤ h⁺`. -/
 def flexibilityClaim : Prop :=
-  ¬(67 : ℤ) ^ 3 ∣ (bernoulli 3886).num ∧
+  Fermat.Irregular.VandiverData.BernoulliCubeCondition 67 ∧
     Fermat.SixtySeven.CircularUnitCertificate.matrix.det ≠ 0
 
 theorem flexibilityClaim_checked : flexibilityClaim :=
-  ⟨Fermat.SixtySeven.HighBernoulli.bernoulli_3886_numerator_not_dvd_cube,
+  ⟨Fermat.SixtySeven.VandiverData.bernoulliCubeCondition_sixtySeven,
     Fermat.SixtySeven.CircularUnitCertificate.matrix_det_ne_zero⟩
 
 def trace (hbridge : HistoricalSecondCaseBridge) : CaseTrace 67 where
