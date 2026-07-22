@@ -74,6 +74,22 @@ the relationship with the historical exponents five and seven.  The note
 itself observes that these identities do not close an elementary
 exponent-thirteen descent; they are not logical premises of FLT13.
 
+The alternative module `Fermat.Thirteen.SevenFold` checks both identities
+and arranges the result as the same explicit eight-stage package used for
+exponent eleven.  Its Bernoulli stratum is decompressed independently: for
+each `k = 2, 4, 6, 8, 10`, Lean computes
+
+```text
+sum (m = 1, ..., 12) m^k  (mod 13^2)
+```
+
+and proves it is nonzero.  The generic square-modulus Faulhaber theorem then
+gives `13 ∤ num(B_k)` for every low index without using Kummer's congruence.
+This numerical statement is kept distinct from `IsRegularPrime 13`, since
+the converse class-group theorem is not currently in Mathlib.  The exact
+class-number-one certificate is already the first sufficient branch for the
+formal Lamé--Kummer descent.
+
 ## Lean theorem map
 
 - `Fermat.Thirteen.Cyclotomic.ringOfIntegers_isPrincipalIdealRing` is the
@@ -82,7 +98,14 @@ exponent-thirteen descent; they are not logical premises of FLT13.
   one into regularity.
 - `Fermat.Thirteen.Cyclotomic.holdsAt_thirteen_cyclotomic` applies the
   formal Lamé–Kummer theorem.
+- `Fermat.Thirteen.SevenFold.bernoulliNumeratorRegular_thirteen` is the
+  direct five-index Faulhaber certificate.
+- `Fermat.Thirteen.SevenFold.quadratic_fold` and `secondary_composition`
+  check the structural folds from the ZIP.
+- `Fermat.Thirteen.SevenFold.faulhaber_and_flt_thirteen` retains the
+  decompressed Bernoulli layer together with the checked endpoint.
 - `Fermat.holdsAt_thirteen` is the public project theorem.
+- `Fermat.holdsAt_thirteen_sevenFold` exposes the alternative package.
 
 ## Trust audit
 

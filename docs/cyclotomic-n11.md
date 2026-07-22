@@ -49,7 +49,24 @@ the whole ring of integers a principal ideal ring.
 
 The note's quadratic-period and `Psi_11` identities explain how this proof
 fits the pattern visible at exponents five and seven.  They are explanatory
-rather than premises of the class-number-one/Kummer proof.
+rather than premises of the class-number-one/Kummer proof.  The alternative
+module `Fermat.Eleven.SevenFold` now checks both identities and arranges the
+result as the explicit eight-stage package (seven input folds plus descent).
+
+Its Bernoulli stratum is decompressed independently: for each
+`k = 2, 4, 6, 8`, Lean computes the finite sum
+
+```text
+sum (m = 1, ..., 10) m^k  (mod 11^2)
+```
+
+and proves it is nonzero.  The generic Faulhaber theorem in
+`Fermat.Regular.Faulhaber` then proves
+`11 ∤ num(B_k)` at every index, without Kummer's congruence.  This numerical
+condition is intentionally not identified with `IsRegularPrime`: that
+class-group equivalence is Kummer's deeper regular-prime criterion and is
+not currently available in Mathlib.  Here the independently checked
+class-number-one branch already suffices to close FLT.
 
 ## Lean theorem map
 
@@ -59,7 +76,14 @@ rather than premises of the class-number-one/Kummer proof.
   class number one.
 - `Fermat.Eleven.Cyclotomic.holdsAt_eleven_cyclotomic` applies the formal
   Lamé–Kummer theorem.
+- `Fermat.Eleven.SevenFold.bernoulliNumeratorRegular_eleven` is the direct
+  four-index Faulhaber certificate.
+- `Fermat.Eleven.SevenFold.quadratic_fold` and `secondary_composition`
+  check the two structural polynomial folds from the ZIP.
+- `Fermat.Eleven.SevenFold.faulhaber_and_flt_eleven` retains the
+  decompressed Bernoulli layer together with the checked endpoint.
 - `Fermat.holdsAt_eleven` is the public project theorem.
+- `Fermat.holdsAt_eleven_sevenFold` exposes the alternative package.
 
 ## Trust audit
 

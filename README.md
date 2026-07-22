@@ -47,6 +47,14 @@ needed by the historical argument.
 The exponent-11 and exponent-13 results use kernel-checked class-number-one
 certificates and the formal Lamé--Kummer descent supplied by `flt-regular`.
 They are exposed as `Fermat.holdsAt_eleven` and `Fermat.holdsAt_thirteen`.
+The alternative seven-fold packages retain the neighbor closures, exact
+quadratic-period and secondary composition identities, and direct finite
+Faulhaber certificates for every low Bernoulli numerator.  These are exposed
+through `Fermat.holdsAt_eleven_sevenFold`,
+`Fermat.holdsAt_thirteen_sevenFold`, and the corresponding
+`Eleven.SevenFold` and `Thirteen.SevenFold` namespaces.  The Faulhaber branch
+does not import Kummer's congruence; the class-number-one branch is the first
+sufficient branch for the final descent.
 
 For exponent 37, Case I and every Bernoulli numerator condition in
 Vandiver's criterion are formalized; the latter are now proved directly by
