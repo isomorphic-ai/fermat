@@ -203,6 +203,39 @@ theorem idealCountArithmetic_isMultiplicative :
     rw [if_neg (Nat.mul_ne_zero hm hn), if_neg hm, if_neg hn]
     exact_mod_cast natCard_normFiber_mul (S := S) hm hn hcop
 
+/-- Multisets consisting entirely of prime ideals. -/
+abbrev PrimeFactorMultiset (S : Type*) [CommRing S] :=
+  {s : Multiset (Ideal S) // ∀ P ∈ s, Prime P}
+
+/-- Unique ideal factorization as an actual equivalence: nonzero ideals are
+equivalent to finite multisets of prime ideals. -/
+def nonzeroIdealEquivPrimeFactorMultiset :
+    {I : Ideal S // I ≠ 0} ≃ PrimeFactorMultiset S where
+  toFun I := ⟨UniqueFactorizationMonoid.normalizedFactors I.1,
+    fun P hP ↦ UniqueFactorizationMonoid.prime_of_normalized_factor P hP⟩
+  invFun s := ⟨s.1.prod, s.1.prod_ne_zero_of_prime s.2⟩
+  left_inv I := by
+    apply Subtype.ext
+    exact Ideal.prod_normalizedFactors_eq_self I.2
+  right_inv s := by
+    apply Subtype.ext
+    exact UniqueFactorizationMonoid.normalizedFactors_prod_of_prime s.2
+
+omit [Module.Finite ℤ S] [CharZero S] in
+/-- If every factor in a multiset of ideals has norm `q^f`, the product has
+norm `q^(f * card)`. -/
+theorem absNorm_multiset_prod_of_forall_eq_pow
+    (s : Multiset (Ideal S)) (q f : ℕ)
+    (hs : ∀ P ∈ s, Ideal.absNorm P = q ^ f) :
+    Ideal.absNorm s.prod = q ^ (f * s.card) := by
+  rw [map_multiset_prod]
+  calc
+    (s.map Ideal.absNorm).prod = (s.map fun _ ↦ q ^ f).prod := by
+      congr 1
+      exact Multiset.map_congr rfl hs
+    _ = (q ^ f) ^ s.card := by simp
+    _ = q ^ (f * s.card) := by rw [pow_mul]
+
 end
 
 end Fermat.Irregular.IdealCount
