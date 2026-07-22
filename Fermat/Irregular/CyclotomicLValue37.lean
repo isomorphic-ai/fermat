@@ -16,7 +16,8 @@ inverse-character Gauss sum.
 
 Consequently, ChordLogLValueFormula37 follows from the single remaining proposition
 DirichletSeriesAtOneFormula37: natural-order convergence of the relevant primitive Dirichlet
-series to Mathlib's analytically continued LFunction value at one.
+series to Mathlib's analytically continued LFunction value at one.  The subsequent module
+`CyclotomicSeriesAtOne37` proves this proposition by Abel summation.
 -/
 
 open scoped Classical BigOperators Topology
@@ -378,7 +379,7 @@ lemma fullDirichletChordLogSum37_eq_neg_gaussSum_mul_LFunction_of_tendsto
           congrArg Neg.neg heq
         _ = -gaussSum ψ⁻¹ (ZMod.stdAddChar (N := 37)) * ψ.LFunction 1 := by ring
 
-/-- The sole remaining analytic-continuation input for the chord-log formula: the natural-order
+/-- The analytic-continuation input isolated by this module for the chord-log formula: the natural-order
 Dirichlet series of every nontrivial even character modulo 37 converges at the boundary to
 Mathlib's analytically continued LFunction value. -/
 def DirichletSeriesAtOneFormula37 : Prop :=

@@ -61,7 +61,10 @@ Vandiver's criterion are formalized; the latter are now proved directly by
 finite Faulhaber computations, without assuming Kummer's congruence. The
 uploaded circular-unit matrix has also been realized by concrete corrected
 residue homomorphisms, proving that its relative index in the real-unit
-group is prime to `37`. There is deliberately no public
+group is prime to `37`. The complete per-character analytic calculation is
+also checked: the natural Dirichlet series at `s = 1` is proved to converge
+to Mathlib's continued `LFunction 1`, closing the chord-log Fourier identity.
+There is deliberately no public
 `Fermat.holdsAt_thirtySeven` yet; see `docs/irregular-n37.md` for the exact
 remaining theorem boundary.
 

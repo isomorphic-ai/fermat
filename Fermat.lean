@@ -10,6 +10,7 @@ import Fermat.Irregular.CircularUnits
 import Fermat.Irregular.CyclotomicLogCofactor37
 import Fermat.Irregular.CyclotomicDirichlet37
 import Fermat.Irregular.CyclotomicLValue37
+import Fermat.Irregular.CyclotomicSeriesAtOne37
 import Fermat.Irregular.KummerCongruence
 import Fermat.Irregular.VandiverData
 import Fermat.Ladder.Response

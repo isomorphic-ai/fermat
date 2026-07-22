@@ -48,10 +48,8 @@ layers.  The repository keeps them separate:
   archimedean calculation.  They enumerate the eighteen real places, prove
   the half chord product directly from `Φ37(1) = 37`, and identify the fixed
   `17 × 17` sine determinant with `2¹⁷` times the norm of the product of
-  the seventeen nontrivial Fourier coefficients.  Thus the remaining
-  Sinnott--Kummer seam is specifically the analytic identification of those
-  coefficients with the relevant Dirichlet `L`-values and class-number
-  formula, not a finite determinant or indexing assertion.
+  the seventeen nontrivial Fourier coefficients.  Thus no finite determinant
+  or place-indexing assertion remains in the Sinnott--Kummer seam.
 - `Fermat/Irregular/CyclotomicDirichlet37.lean` carries that calculation to
   the exact per-character analytic boundary.  It identifies quotient-group
   characters with even Dirichlet characters modulo `37`, proves every
@@ -64,16 +62,24 @@ layers.  The repository keeps them separate:
   the expected `sqrt(37)¹⁷`-scaled product of the seventeen nontrivial even
   `L(1)`-values.
 
-- `Fermat/Irregular/CyclotomicLValue37.lean` proves all but the
-  analytic-continuation endpoint of that chord identity.  Dirichlet's test
+- `Fermat/Irregular/CyclotomicLValue37.lean` reduces the chord identity to its
+  analytic-continuation endpoint.  Dirichlet's test
   and Abel's limit theorem give the naturally ordered unit-circle series
   `sum z^n/n = -log(1-z)`; conjugate-root pairing recovers the real chord
   logarithms; and Mathlib's finite Fourier transform gives exactly the
-  inverse-character Gauss sum, including its sign.  Consequently,
-  `ChordLogLValueFormula37` now follows from the single named proposition
+  inverse-character Gauss sum, including its sign.  Consequently, in that
+  file `ChordLogLValueFormula37` follows from the single named proposition
   `DirichletSeriesAtOneFormula37`, which says that these natural-order
   primitive Dirichlet series converge at `s = 1` to Mathlib's analytically
   continued `LFunction 1`.
+- `Fermat/Irregular/CyclotomicSeriesAtOne37.lean` proves that last proposition.
+  Periodicity bounds the character partial sums; summation by parts expresses
+  the absolutely convergent series at `1+t` as a telescoping Abel average;
+  and a kernel-checked Toeplitz argument sends that average to the natural
+  limit as `t → 0⁺`.  Continuity of the nontrivial Dirichlet `LFunction` then
+  identifies the limit with `LFunction 1`.  The file therefore proves
+  `ChordLogLValueFormula37` unconditionally and closes the per-character
+  analytic identification of all seventeen Fourier coefficients.
 
 There is not yet a public `Fermat.holdsAt_thirtySeven`.  Case II needs
 Vandiver's irregular-prime criterion: if `37 ∤ h⁺` and none of the relevant
@@ -83,9 +89,10 @@ now kernel-checked.  Mathlib and `flt-regular` still contain neither
 Vandiver's singular-primary-unit descent nor the Sinnott--Kummer index formula
 that identifies this concrete relative index with the class number `h⁺`.
 These final two global bridges must be formalized rather than assumed.  On
-the circular-unit side, all finite Fourier, cofactor, place-ordering, and
-trivial-character factors preceding that analytic identification are now
-kernel-checked.
+the circular-unit side, all finite Fourier, cofactor, place-ordering,
+trivial-character, boundary-convergence, and Dirichlet-`L`-value factors are
+now kernel-checked; the remaining circular-unit bridge is the global
+Sinnott--Kummer index/class-number formula.
 
 The exact primary source is H. S. Vandiver, *On Fermat's Last Theorem*,
 Transactions of the AMS 31 (1929), 613–642,
