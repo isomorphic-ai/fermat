@@ -413,6 +413,36 @@ lemma conjugation_eq_zeta_pow_of_stable_principal37
       ← neg_one_eq_one_iff_two_eq_zero]
     exact hneg.symm
 
+/-- A conjugation-stable principal ideal prime to `(ζ - 1)` admits a
+generator, still prime to `(ζ - 1)`, together with the exact cyclotomic
+conjugation exponent required by `ConjugationPowerReductionData37`. -/
+lemma exists_conjugation_power_generator37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (I : Ideal (𝓞 K))
+    (hprincipal : Submodule.IsPrincipal
+      (I : Submodule (𝓞 K) (𝓞 K)))
+    (hprime : ¬ Ideal.span
+      ({(hζ.unit' : 𝓞 K) - 1} : Set (𝓞 K)) ∣ I)
+    (hstable : conjugateIdeal37 I = I) :
+    ∃ (a : 𝓞 K) (j : ℕ),
+      I = Ideal.span {a} ∧
+      ¬ (hζ.unit' : 𝓞 K) - 1 ∣ a ∧
+      ringOfIntegersComplexConj K a =
+        (hζ.unit' ^ j : (𝓞 K)ˣ) * a := by
+  obtain ⟨a, haI⟩ := hprincipal.principal
+  change I = Ideal.span {a} at haI
+  have ha : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ a := by
+    intro ha
+    apply hprime
+    rw [haI, Ideal.dvd_span_singleton, Ideal.mem_span_singleton]
+    exact ha
+  have hstableA : conjugateIdeal37 (Ideal.span {a}) =
+      Ideal.span {a} := by
+    rw [← haI]
+    exact hstable
+  obtain ⟨j, hj⟩ := conjugation_eq_zeta_pow_of_stable_principal37
+    hζ a ha hstableA
+  exact ⟨a, j, haI, ha, hj⟩
+
 end StablePrincipalGenerator
 
 /-- The inverse of 2 modulo 37, used to make a generator real. -/
