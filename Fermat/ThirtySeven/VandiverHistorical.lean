@@ -1,4 +1,5 @@
 import Fermat.Irregular.VandiverHistoricalDescent
+import Fermat.Irregular.VandiverLemmaOne
 import Fermat.Irregular.CircularUnitIndex
 import Fermat.ThirtySeven.DirectVandiverData
 import Fermat.ThirtySeven.SinnottKummer
@@ -365,6 +366,37 @@ theorem exists_equationEight_of_sevenASevenD37
   have hI : Submodule.IsPrincipal (I : Ideal (𝓞 K)) :=
     (IsFractionRing.coeSubmodule_isPrincipal (𝓞 K) K).mp hIF'
   exact exists_unit_mul_pow_eq_of_isPrincipal_ideal I a hI hIpow
+
+set_option maxRecDepth 2000 in
+/-- Source-faithful assembly of Vandiver's Lemma 1, equations (7a) and
+(7d), and equation (8).
+
+The primary element in Lemma 1 is exactly `a * b^36`: its principal ideal
+is the 37th power of `I * J^36`.  `exists_equationSevenA_generator` turns
+the narrow Takagi/Furtwängler boundary into the displayed ideal identity
+(7a); the already kernel-checked Bézout calculation with (7d) then produces
+the generator in (8).
+
+Thus callers no longer need to assume equation (7a) itself.  They need only
+prove the concrete primary congruence and supply the named historical
+Lemma-1 theorem. -/
+theorem exists_equationEight_of_lemmaOneSevenD37
+    (hlemma : Fermat.Irregular.VandiverLemmaOne.LemmaOne K 37)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (I J : Ideal (𝓞 K)) (a b s : 𝓞 K)
+    (hI0 : I ≠ 0) (hJ0 : J ≠ 0)
+    (hIpow : I ^ 37 = Ideal.span {a})
+    (hJpow : J ^ 37 = Ideal.span {b})
+    (hprimary :
+      Fermat.Irregular.VandiverLemmaOne.IsKummerPrimary hζ (a * b ^ 36))
+    (hsevenD : I * J = Ideal.span {s}) :
+    ∃ (ρ : 𝓞 K) (η : (𝓞 K)ˣ),
+      I = Ideal.span {ρ} ∧ a = η * ρ ^ 37 := by
+  obtain ⟨r, hsevenA⟩ :=
+    Fermat.Irregular.VandiverLemmaOne.exists_equationSevenA_generator
+      hlemma hζ I J a b hIpow hJpow (by simpa using hprimary)
+  exact exists_equationEight_of_sevenASevenD37
+    I J a b r s hI0 hJ0 hIpow hJpow hsevenA hsevenD
 
 omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
 /-- The elementary elimination between equation (8) at `a` and `-a`.
