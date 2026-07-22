@@ -37,6 +37,26 @@ theorem four_order_mod_59 : orderOf (4 : ZMod 59) = 29 := by
   letI : Fact (Nat.Prime 29) := ⟨by norm_num⟩
   exact orderOf_eq_prime (by decide) (by decide)
 
+/-- The first prime auxiliary candidate `709 = 12*59+1` fails: the
+nonzero 59th powers of `4` and `3` are consecutive. -/
+theorem failed_twelve_channel_709 :
+    (4 : ZMod 709) ^ 59 = 1 + (3 : ZMod 709) ^ 59 := by
+  decide
+
+/-- The selected square-root sheet at the successful auxiliary prime. -/
+theorem sqrt_minus_fiftyNine_mod_827 :
+    (770 : ZMod 827) ^ 2 = -59 := by
+  decide
+
+/-- The quadratic period `eta = 798` selects that square root. -/
+theorem quadratic_period_branch_mod_827 :
+    (2 : ZMod 827) * 798 + 1 = 770 := by
+  decide
+
+/-- The exact norm selecting one of the two quadratic sheets. -/
+theorem branch_selector_norm : 28 ^ 2 + 28 + 15 = 827 := by
+  norm_num
+
 /-- A proof at exponent `29` closes the left neighbor `58` by squaring. -/
 theorem holdsAt_fiftyEight_of_twentyNine
     (h29 : Fermat.HoldsAt 29) : Fermat.HoldsAt 58 :=
