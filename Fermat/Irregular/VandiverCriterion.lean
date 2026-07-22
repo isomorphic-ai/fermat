@@ -75,6 +75,123 @@ def SemiprimaryUnitPowerConclusion (K : Type) (p : ℕ)
     (∃ n : ℤ, (p : 𝓞 K) ∣ (u - n : 𝓞 K)) →
       ∃ v : (𝓞 K)ˣ, u = v ^ p
 
+/-! ## Separating plus and minus ideal-class components -/
+
+/-- A fractional ideal whose two coprime powers are principal is itself
+principal.  Unlike the regular-prime helper in `flt-regular`, this statement
+does not assume that either exponent is coprime to the order of the whole
+class group. -/
+theorem fractionalIdeal_isPrincipal_of_coprime_powers
+    {A L : Type*} [CommRing A] [IsDedekindDomain A]
+    [Field L] [Algebra A L] [IsFractionRing A L]
+    {m n : ℕ} (hmn : m.Coprime n) (I : FractionalIdeal A⁰ L)
+    (hm : Submodule.IsPrincipal
+      ((I ^ m : FractionalIdeal A⁰ L) : Submodule A L))
+    (hn : Submodule.IsPrincipal
+      ((I ^ n : FractionalIdeal A⁰ L) : Submodule A L)) :
+    Submodule.IsPrincipal (I : Submodule A L) := by
+  by_cases hI : I = 0
+  · rw [hI, FractionalIdeal.coe_zero]
+    exact bot_isPrincipal
+  rw [← Ne, ← isUnit_iff_ne_zero] at hI
+  change Submodule.IsPrincipal
+    ((hI.unit' : FractionalIdeal A⁰ L) : Submodule A L)
+  rw [← ClassGroup.mk_eq_one_iff]
+  apply (pow_eq_one_iff_of_coprime hmn).mp
+  constructor
+  · rw [← map_pow, ClassGroup.mk_eq_one_iff]
+    simpa only [Units.val_pow_eq_pow_val, IsUnit.val_unit'] using hm
+  · rw [← map_pow, ClassGroup.mk_eq_one_iff]
+    simpa only [Units.val_pow_eq_pow_val, IsUnit.val_unit'] using hn
+
+/-- The product of two principal fractional ideals is principal. -/
+theorem fractionalIdeal_isPrincipal_mul
+    {A L : Type*} [CommRing A] [IsDedekindDomain A]
+    [Field L] [Algebra A L] [IsFractionRing A L]
+    {I J : FractionalIdeal A⁰ L}
+    (hI : Submodule.IsPrincipal (I : Submodule A L))
+    (hJ : Submodule.IsPrincipal (J : Submodule A L)) :
+    Submodule.IsPrincipal
+      ((I * J : FractionalIdeal A⁰ L) : Submodule A L) := by
+  rw [FractionalIdeal.isPrincipal_iff] at hI hJ ⊢
+  obtain ⟨x, hx⟩ := hI
+  obtain ⟨y, hy⟩ := hJ
+  refine ⟨x * y, ?_⟩
+  rw [hx, hy, FractionalIdeal.spanSingleton_mul_spanSingleton]
+
+/-- The quotient of two principal fractional ideals is principal. -/
+theorem fractionalIdeal_isPrincipal_div
+    {A L : Type*} [CommRing A] [IsDedekindDomain A]
+    [Field L] [Algebra A L] [IsFractionRing A L]
+    {I J : FractionalIdeal A⁰ L}
+    (hI : Submodule.IsPrincipal (I : Submodule A L))
+    (hJ : Submodule.IsPrincipal (J : Submodule A L)) :
+    Submodule.IsPrincipal
+      ((I / J : FractionalIdeal A⁰ L) : Submodule A L) := by
+  rw [FractionalIdeal.isPrincipal_iff] at hI hJ ⊢
+  obtain ⟨x, hx⟩ := hI
+  obtain ⟨y, hy⟩ := hJ
+  refine ⟨x / y, ?_⟩
+  rw [hx, hy, FractionalIdeal.spanSingleton_div_spanSingleton]
+
+/-- If the `p`-power, symmetric product `I * J`, and antisymmetric
+quotient `I / J` are principal, then `I` is principal whenever `p` is
+coprime to `2`.
+
+For cyclotomic complex conjugation one takes `J = conj(I)`: the last two
+hypotheses are precisely the plus and minus components of the ideal class. -/
+theorem fractionalIdeal_isPrincipal_of_plus_minus
+    {A L : Type*} [CommRing A] [IsDedekindDomain A]
+    [Field L] [Algebra A L] [IsFractionRing A L]
+    {p : ℕ} (hp2 : p.Coprime 2) {I J : FractionalIdeal A⁰ L}
+    (hJ : J ≠ 0)
+    (hp : Submodule.IsPrincipal
+      ((I ^ p : FractionalIdeal A⁰ L) : Submodule A L))
+    (hplus : Submodule.IsPrincipal
+      ((I * J : FractionalIdeal A⁰ L) : Submodule A L))
+    (hminus : Submodule.IsPrincipal
+      ((I / J : FractionalIdeal A⁰ L) : Submodule A L)) :
+    Submodule.IsPrincipal (I : Submodule A L) := by
+  apply fractionalIdeal_isPrincipal_of_coprime_powers hp2 I hp
+  have hprod := fractionalIdeal_isPrincipal_mul hplus hminus
+  have heq : (I * J) * (I / J) = I ^ 2 := by
+    rw [div_eq_mul_inv, pow_two]
+    calc
+      (I * J) * (I * J⁻¹) = (I * I) * (J * J⁻¹) := by ac_rfl
+      _ = I * I := by rw [mul_inv_cancel₀ hJ, mul_one]
+  rw [← heq]
+  exact hprod
+
+/-- Once the symmetric product `I * J` is principal and the class of `I`
+is `p`-torsion for odd `p`, principalizing `I` is exactly equivalent to
+principalizing the antisymmetric quotient `I / J`.
+
+With `J = conj(I)`, this is the precise residual minus-class obstruction
+after a plus-class-number argument has handled `I * conj(I)`. -/
+theorem fractionalIdeal_isPrincipal_iff_minus_of_plus
+    {A L : Type*} [CommRing A] [IsDedekindDomain A]
+    [Field L] [Algebra A L] [IsFractionRing A L]
+    {p : ℕ} (hp2 : p.Coprime 2) {I J : FractionalIdeal A⁰ L}
+    (hI0 : I ≠ 0) (hJ0 : J ≠ 0)
+    (hp : Submodule.IsPrincipal
+      ((I ^ p : FractionalIdeal A⁰ L) : Submodule A L))
+    (hplus : Submodule.IsPrincipal
+      ((I * J : FractionalIdeal A⁰ L) : Submodule A L)) :
+    Submodule.IsPrincipal (I : Submodule A L) ↔
+      Submodule.IsPrincipal
+        ((I / J : FractionalIdeal A⁰ L) : Submodule A L) := by
+  constructor
+  · intro hI
+    have hJraw := fractionalIdeal_isPrincipal_div hplus hI
+    have hJI : (I * J) / I = J := by
+      rw [div_eq_mul_inv]
+      calc
+        I * J * I⁻¹ = J * (I * I⁻¹) := by ac_rfl
+        _ = J := by rw [mul_inv_cancel₀ hI0, mul_one]
+    rw [hJI] at hJraw
+    exact fractionalIdeal_isPrincipal_div hI hJraw
+  · exact fractionalIdeal_isPrincipal_of_plus_minus hp2 hJ0 hp hplus
+
 /-! ## The induction step with local principalization -/
 
 section InductionStep
