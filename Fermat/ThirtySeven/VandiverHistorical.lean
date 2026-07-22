@@ -127,6 +127,96 @@ theorem exists_real_unit_mul_pow_generator37
     (F := K⁺) (p := 37) (by norm_num)
     (Fermat.ThirtySeven.SinnottKummer.not_dvd_classNumber hzeta) I a hpow
 
+set_option maxRecDepth 2000 in
+/-- Vandiver's real-ideal step in the relative-norm form naturally
+produced by (7b).  If `J ^ 37 = (a)` in the cyclotomic ring, multiplicativity
+of the relative ideal norm gives
+
+`Norm(J) ^ 37 = (intNorm(a))`
+
+in the maximal real ring.  The unconditional result `37 ∤ h⁺` then
+provides a real generator `ρ` and a real unit `ε` with
+`intNorm(a) = ε * ρ ^ 37`.
+
+This packages the class-number argument in (7b) without any general
+descent theorem for conjugation-stable ideals. -/
+theorem exists_realGenerator_of_relativeNorm37
+    {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (J : Ideal (𝓞 K)) (a : 𝓞 K)
+    (hpow : J ^ 37 = Ideal.span {a}) :
+    ∃ (ρ : 𝓞 K⁺) (ε : (𝓞 K⁺)ˣ),
+      Ideal.relNorm (𝓞 K⁺) J = Ideal.span {ρ} ∧
+      Algebra.intNorm (𝓞 K⁺) (𝓞 K) a = ε * ρ ^ 37 := by
+  apply exists_real_unit_mul_pow_generator37 hzeta
+    (Ideal.relNorm (𝓞 K⁺) J) (Algebra.intNorm (𝓞 K⁺) (𝓞 K) a)
+  calc
+    Ideal.relNorm (𝓞 K⁺) J ^ 37 =
+        Ideal.relNorm (𝓞 K⁺) (J ^ 37) := by
+      rw [map_pow]
+    _ = Ideal.relNorm (𝓞 K⁺) (Ideal.span {a}) := by rw [hpow]
+    _ = Ideal.span {Algebra.intNorm (𝓞 K⁺) (𝓞 K) a} :=
+      Ideal.relNorm_singleton (𝓞 K⁺) a
+
+/-- In the quadratic CM extension, the integral norm of a cyclotomic
+integer is the product of that integer and its complex conjugate.
+
+The proof makes the two automorphisms literal: the Galois group over the
+maximal real field has cardinality two, and its elements are the identity
+and `complexConj`. -/
+theorem algebraMap_intNorm_eq_mul_conj37 (a : 𝓞 K) :
+    algebraMap (𝓞 K⁺) (𝓞 K) (Algebra.intNorm (𝓞 K⁺) (𝓞 K) a) =
+      a * NumberField.IsCMField.ringOfIntegersComplexConj K a := by
+  classical
+  apply NumberField.RingOfIntegers.ext
+  change algebraMap K⁺ K
+      (algebraMap (𝓞 K⁺) K⁺ (Algebra.intNorm (𝓞 K⁺) (𝓞 K) a)) =
+    (a : K) * NumberField.IsCMField.complexConj K (a : K)
+  rw [Algebra.algebraMap_intNorm (A := 𝓞 K⁺) (K := K⁺) (L := K)
+    (B := 𝓞 K)]
+  rw [Algebra.norm_eq_prod_automorphisms]
+  let c : Gal(K/K⁺) := NumberField.IsCMField.complexConj K
+  have hc : (1 : Gal(K/K⁺)) ≠ c :=
+    (NumberField.IsCMField.complexConj_ne_one K).symm
+  have hcard : Fintype.card Gal(K/K⁺) = 2 := by
+    rw [← Nat.card_eq_fintype_card, IsGalois.card_aut_eq_finrank,
+      Algebra.IsQuadraticExtension.finrank_eq_two K⁺ K]
+  have hpair : ({1, c} : Finset (Gal(K/K⁺))) = Finset.univ := by
+    apply Finset.eq_of_subset_of_card_le (Finset.subset_univ _)
+    simp [hcard, hc]
+  rw [← hpair]
+  simp [c, hc]
+
+set_option maxRecDepth 2000 in
+/-- Vandiver's equation (7d), derived directly from the ideal-power
+factorization preceding (7b).
+
+If `J ^ 37 = (a)`, relative ideal norm and `37 ∤ h⁺` produce a real
+generator `ρ` and real unit `ε`; the quadratic norm identity above then
+gives the exact cyclotomic-ring equation
+
+`a * conj(a) = ε * ρ ^ 37`.
+
+This is the complete class-number step of (7b)--(7d). -/
+theorem exists_equationSevenD_of_idealPower37
+    {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (J : Ideal (𝓞 K)) (a : 𝓞 K)
+    (hpow : J ^ 37 = Ideal.span {a}) :
+    ∃ (ρ : 𝓞 K⁺) (ε : (𝓞 K⁺)ˣ),
+      Ideal.relNorm (𝓞 K⁺) J = Ideal.span {ρ} ∧
+      NumberField.IsCMField.ringOfIntegersComplexConj K
+          (algebraMap (𝓞 K⁺) (𝓞 K) ρ) =
+        algebraMap (𝓞 K⁺) (𝓞 K) ρ ∧
+      a * NumberField.IsCMField.ringOfIntegersComplexConj K a =
+        algebraMap (𝓞 K⁺) (𝓞 K) (ε : 𝓞 K⁺) *
+          algebraMap (𝓞 K⁺) (𝓞 K) ρ ^ 37 := by
+  obtain ⟨ρ, ε, hI, ha⟩ :=
+    exists_realGenerator_of_relativeNorm37 hzeta J a hpow
+  refine ⟨ρ, ε, hI,
+    (NumberField.IsCMField.ringOfIntegersComplexConj K).commutes ρ, ?_⟩
+  rw [← algebraMap_intNorm_eq_mul_conj37]
+  simpa only [map_mul, map_pow] using
+    congrArg (algebraMap (𝓞 K⁺) (𝓞 K)) ha
+
 /-- The conjugate of an integral ideal under CM complex conjugation. -/
 def conjugateIdeal37 (I : Ideal (𝓞 K)) : Ideal (𝓞 K) :=
   I.map (NumberField.IsCMField.ringOfIntegersComplexConj K).toRingHom
