@@ -42,6 +42,16 @@ layers.  The repository keeps them separate:
   of unity while preserving the matrix entries on real circular units.  The
   resulting theorem proves that the circular-unit relative index inside the
   real-unit group is prime to `37`.
+- `Fermat/Irregular/CyclotomicPlaces37.lean`,
+  `Fermat/Irregular/CyclotomicSineProduct37.lean`, and
+  `Fermat/Irregular/CyclotomicLogCofactor37.lean` give the complementary
+  archimedean calculation.  They enumerate the eighteen real places, prove
+  the half chord product directly from `Φ37(1) = 37`, and identify the fixed
+  `17 × 17` sine determinant with `2¹⁷` times the norm of the product of
+  the seventeen nontrivial Fourier coefficients.  Thus the remaining
+  Sinnott--Kummer seam is specifically the analytic identification of those
+  coefficients with the relevant Dirichlet `L`-values and class-number
+  formula, not a finite determinant or indexing assertion.
 
 There is not yet a public `Fermat.holdsAt_thirtySeven`.  Case II needs
 Vandiver's irregular-prime criterion: if `37 ∤ h⁺` and none of the relevant
@@ -50,7 +60,10 @@ entire Bernoulli condition and the residue-symbol-to-real-unit-index chain are
 now kernel-checked.  Mathlib and `flt-regular` still contain neither
 Vandiver's singular-primary-unit descent nor the Sinnott--Kummer index formula
 that identifies this concrete relative index with the class number `h⁺`.
-These final two global bridges must be formalized rather than assumed.
+These final two global bridges must be formalized rather than assumed.  On
+the circular-unit side, all finite Fourier, cofactor, place-ordering, and
+trivial-character factors preceding that analytic identification are now
+kernel-checked.
 
 The exact primary source is H. S. Vandiver, *On Fermat's Last Theorem*,
 Transactions of the AMS 31 (1929), 613–642,
