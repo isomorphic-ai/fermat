@@ -49,14 +49,15 @@ structure HistoricalSecondCaseBridge where
     Fermat.Irregular.VandiverUnitLemma.VandiverLemmaTwo CyclotomicField67 67
 
 theorem secondCaseExcluded_of_historicalBridge
-    (hbridge : HistoricalSecondCaseBridge) :
+    (hbridge : HistoricalSecondCaseBridge)
+    (hBernoulli :
+      Fermat.Irregular.VandiverData.BernoulliCubeCondition 67) :
     Fermat.SecondCaseExcluded 67 := by
   exact secondCaseExcluded_of_vandiver_lemmaTwo
     (K := CyclotomicField67) (p := 67)
     (by norm_num) (by norm_num)
     hbridge.primitive hbridge.admissible hbridge.starts hbridge.reduces
-    hbridge.lemmaTwo
-    Fermat.SixtySeven.VandiverData.bernoulliCubeCondition_sixtySeven
+    hbridge.lemmaTwo hBernoulli
 
 /-! ## Seven exponent-specific checked claims -/
 
@@ -128,12 +129,12 @@ def trace (hbridge : HistoricalSecondCaseBridge) : CaseTrace 67 where
   agency_arithmetic := ⟨agencyClaim, agencyClaim_checked⟩
   flexibility_potential := ⟨flexibilityClaim, flexibilityClaim_checked⟩
   conclude := by
-    intro _ _ _ _ _ hfirst _
+    intro _ _ _ _ _ hfirst hfinite
     exact .contradicted
       (Fermat.holdsAt_of_auxiliaryPrime_of_secondCaseExcluded
         Fermat.SixtySeven.prime_67 (by norm_num)
         Fermat.SixtySeven.prime_269 hfirst.1 hfirst.2
-        (secondCaseExcluded_of_historicalBridge hbridge))
+        (secondCaseExcluded_of_historicalBridge hbridge hfinite.1))
 
 def run (hbridge : HistoricalSecondCaseBridge) : Checked 67 where
   folds := sevenFolds 67
@@ -168,6 +169,7 @@ theorem holdsAt_sixtySeven (hbridge : HistoricalSecondCaseBridge) :
     Fermat.SixtySeven.prime_269
     Fermat.SixtySeven.noConsecutivePowers_67_269
     Fermat.SixtySeven.exponentNotPower_67_269
-    (secondCaseExcluded_of_historicalBridge hbridge)
+    (secondCaseExcluded_of_historicalBridge hbridge
+      Fermat.SixtySeven.VandiverData.bernoulliCubeCondition_sixtySeven)
 
 end Fermat.Ladder.SixtySeven
