@@ -91,6 +91,45 @@ local notation "η₀" => zeta_sub_one_dvd_root hp hζ e hy
 local notation "𝔞" => root_div_zeta_sub_one_dvd_gcd hp hζ e hy
 local notation "𝔞₀" => a_eta_zero_dvd_p_pow hp hζ e hy
 
+/-- The `p`-th power of every relevant quotient is principal, without any
+class-number hypothesis.
+
+Thus `RelevantIdealQuotientsPrincipal` asks only for the vanishing of these
+explicit `p`-torsion ideal classes.  The proof combines the principal
+quotient `𝔠 η / 𝔠 η₀` with the principal ramified factor
+`(ζ - 1) ^ (m * p)`. -/
+lemma relevantIdealQuotient_pow_isPrincipal
+    (η : nthRootsFinset p (1 : 𝓞 K)) :
+    Submodule.IsPrincipal
+      ((((𝔞 η / 𝔞₀ : FractionalIdeal (𝓞 K)⁰ K) ^ p) :
+          FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
+  have hquot : Submodule.IsPrincipal
+      ((((𝔞 η / 𝔞 η₀ : FractionalIdeal (𝓞 K)⁰ K) ^ p) :
+          FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
+    rw [div_pow, ← FractionalIdeal.coeIdeal_pow, ← FractionalIdeal.coeIdeal_pow,
+      root_div_zeta_sub_one_dvd_gcd_spec, root_div_zeta_sub_one_dvd_gcd_spec]
+    exact c_div_principal hp hζ e hy η η₀
+  rw [← a_eta_zero_dvd_p_pow_spec, mul_comm, FractionalIdeal.coeIdeal_mul,
+    ← div_div, div_pow, FractionalIdeal.isPrincipal_iff] at hquot
+  obtain ⟨q, hq⟩ := hquot
+  have h𝔭 : (𝔭 : FractionalIdeal (𝓞 K)⁰ K) ≠ 0 := by
+    rw [← FractionalIdeal.coeIdeal_bot,
+      (FractionalIdeal.coeIdeal_injective'
+        (le_rfl : (𝓞 K)⁰ ≤ (𝓞 K)⁰)).ne_iff]
+    rw [Ne, Ideal.span_singleton_eq_bot]
+    exact hζ.unit'_coe.sub_one_ne_zero hpri.out.one_lt
+  rw [FractionalIdeal.coeIdeal_pow] at hq
+  rw [div_eq_iff (pow_ne_zero p (pow_ne_zero m h𝔭))] at hq
+  rw [FractionalIdeal.isPrincipal_iff]
+  refine ⟨q * (π : K) ^ (m * p), ?_⟩
+  rw [← FractionalIdeal.spanSingleton_mul_spanSingleton, hq]
+  congr 1
+  change ((𝔭 : FractionalIdeal (𝓞 K)⁰ K) ^ m) ^ p =
+    FractionalIdeal.spanSingleton (𝓞 K)⁰ ((π : K) ^ (m * p))
+  rw [← pow_mul, ← FractionalIdeal.coeIdeal_pow, Ideal.span_singleton_pow,
+    FractionalIdeal.coeIdeal_span_singleton, map_pow]
+  simp only [map_sub, map_one]
+
 private lemma exists_relevant_representatives
     (hz : ¬ π ∣ z)
     (hprincipal : RelevantIdealQuotientsPrincipal (K := K) hp)
