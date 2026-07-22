@@ -1,5 +1,6 @@
 import Fermat.Irregular.CyclotomicPlaces37
 import Mathlib.GroupTheory.FiniteAbelian.Duality
+import Mathlib.LinearAlgebra.Matrix.SchurComplement
 import Mathlib.RingTheory.RootsOfUnity.AlgebraicallyClosed
 
 /-!
@@ -148,6 +149,11 @@ def fourierCoefficient (f : G → ℂ) (χ : G →* ℂˣ) : ℂ :=
   ∑ t : G, f t * ((χ t : ℂˣ) : ℂ)⁻¹
 
 @[simp]
+theorem fourierCoefficient_one (f : G → ℂ) :
+    fourierCoefficient f (1 : G →* ℂˣ) = ∑ t : G, f t := by
+  simp [fourierCoefficient]
+
+@[simp]
 theorem characterEigenvalue_eq_fourierCoefficient (f : G → ℂ) (i : G) :
     characterEigenvalue f i = fourierCoefficient f (characterEquiv i) := rfl
 
@@ -168,6 +174,170 @@ theorem det_convolutionMatrix_eq_prod_fourierCoefficient (f : G → ℂ) :
       ∏ χ : G →* ℂˣ, fourierCoefficient f χ := by
   rw [det_convolutionMatrix_eq_prod_characterEigenvalue]
   exact Equiv.prod_comp characterEquiv (fourierCoefficient f)
+
+/-! ## The augmentation cofactor -/
+
+variable {n : ℕ}
+
+/-- The row-operation matrix which fixes row `i₀` and subtracts row `i₀` from every other
+row.  It is a rank-one perturbation of the identity. -/
+def rowSubtractPivotTransform (i₀ : Fin (n + 1)) : Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ :=
+  1 + Matrix.replicateCol (Fin 1) (fun i ↦ if i = i₀ then (0 : ℂ) else -1) *
+    Matrix.replicateRow (Fin 1) (fun j ↦ if j = i₀ then (1 : ℂ) else 0)
+
+theorem rowSubtractPivotTransform_det (i₀ : Fin (n + 1)) :
+    (rowSubtractPivotTransform i₀).det = 1 := by
+  let u : Fin (n + 1) → ℂ := fun i ↦ if i = i₀ then 0 else -1
+  let v : Fin (n + 1) → ℂ := fun j ↦ if j = i₀ then 1 else 0
+  have hd : v ⬝ᵥ u = 0 := by
+    rw [dotProduct]
+    apply Finset.sum_eq_zero
+    intro i _
+    by_cases hi : i = i₀ <;> simp [u, v, hi]
+  change (1 + Matrix.replicateCol (Fin 1) u * Matrix.replicateRow (Fin 1) v).det = 1
+  calc
+    _ = 1 + v ⬝ᵥ u :=
+      Matrix.det_one_add_replicateCol_mul_replicateRow (ι := Fin 1) u v
+    _ = 1 := by rw [hd, add_zero]
+
+@[simp]
+theorem rowSubtractPivotTransform_apply (i₀ i j : Fin (n + 1)) :
+    rowSubtractPivotTransform i₀ i j =
+      (if i = j then 1 else 0) +
+        (if i = i₀ then 0 else -1) * (if j = i₀ then 1 else 0) := by
+  simp [rowSubtractPivotTransform, Matrix.add_apply, Matrix.one_apply,
+    Matrix.mul_apply, Matrix.replicateCol_apply, Matrix.replicateRow_apply]
+
+/-- Multiplying by `rowSubtractPivotTransform` performs the advertised simultaneous row
+subtractions. -/
+theorem rowSubtractPivotTransform_mul_apply
+    (A : Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ) (i₀ i j : Fin (n + 1)) :
+    (rowSubtractPivotTransform i₀ * A) i j =
+      if i = i₀ then A i j else A i j - A i₀ j := by
+  rw [Matrix.mul_apply]
+  simp_rw [rowSubtractPivotTransform_apply]
+  by_cases hi : i = i₀
+  · subst i
+    simp
+  · simp [hi, Finset.sum_add_distrib, sub_eq_add_neg, add_mul]
+
+/-- A convolution matrix in an arbitrary enumeration by `Fin (n + 1)`. -/
+def reindexedConvolutionMatrix (e : Fin (n + 1) ≃ G) (f : G → ℂ) :
+    Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ :=
+  Matrix.reindex e.symm e.symm (convolutionMatrix f)
+
+omit [Fintype G] in
+@[simp]
+theorem reindexedConvolutionMatrix_apply (e : Fin (n + 1) ≃ G) (f : G → ℂ)
+    (i j : Fin (n + 1)) :
+    reindexedConvolutionMatrix e f i j = f (e i * (e j)⁻¹) := by
+  simp [reindexedConvolutionMatrix, Matrix.reindex_apply, convolutionMatrix]
+
+/-- Subtract the identity-indexed row of a reindexed convolution matrix from all its other
+rows.  This is the augmentation matrix whose complementary minor is the regulator-type
+determinant. -/
+def augmentationDifferenceMatrix (e : Fin (n + 1) ≃ G) (f : G → ℂ) :
+    Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ :=
+  rowSubtractPivotTransform (e.symm 1) * reindexedConvolutionMatrix e f
+
+omit [Fintype G] in
+theorem augmentationDifferenceMatrix_apply (e : Fin (n + 1) ≃ G) (f : G → ℂ)
+    (i j : Fin (n + 1)) :
+    augmentationDifferenceMatrix e f i j =
+      if i = e.symm 1 then f ((e j)⁻¹) else f (e i * (e j)⁻¹) - f ((e j)⁻¹) := by
+  rw [augmentationDifferenceMatrix, rowSubtractPivotTransform_mul_apply]
+  by_cases hi : i = e.symm 1
+  · subst i
+    simp
+  · simp [hi]
+
+/-- The simultaneous row subtractions do not change the convolution determinant. -/
+theorem augmentationDifferenceMatrix_det (e : Fin (n + 1) ≃ G) (f : G → ℂ) :
+    (augmentationDifferenceMatrix e f).det = (convolutionMatrix f).det := by
+  rw [augmentationDifferenceMatrix, Matrix.det_mul, rowSubtractPivotTransform_det, one_mul,
+    reindexedConvolutionMatrix, Matrix.det_reindex_self]
+
+/-- Every nonidentity row of the augmentation matrix has sum zero. -/
+theorem augmentationDifferenceMatrix_row_sum_eq_zero
+    (e : Fin (n + 1) ≃ G) (f : G → ℂ) (i : Fin (n + 1))
+    (hi : i ≠ e.symm 1) :
+    ∑ j, augmentationDifferenceMatrix e f i j = 0 := by
+  simp_rw [augmentationDifferenceMatrix_apply, if_neg hi]
+  rw [Finset.sum_sub_distrib]
+  have hsum :
+      (∑ j : Fin (n + 1), f (e i * (e j)⁻¹)) =
+        ∑ j : Fin (n + 1), f ((e j)⁻¹) := by
+    let leftIndex : Fin (n + 1) ≃ G :=
+      e.trans ((Equiv.inv G).trans (Equiv.mulLeft (e i)))
+    let inverseIndex : Fin (n + 1) ≃ G := e.trans (Equiv.inv G)
+    calc
+      (∑ j : Fin (n + 1), f (e i * (e j)⁻¹)) =
+          ∑ j : Fin (n + 1), f (leftIndex j) := by rfl
+      _ = ∑ g : G, f g := Equiv.sum_comp leftIndex f
+      _ = ∑ j : Fin (n + 1), f (inverseIndex j) :=
+        (Equiv.sum_comp inverseIndex f).symm
+      _ = ∑ j : Fin (n + 1), f ((e j)⁻¹) := by rfl
+  rw [hsum, sub_self]
+
+/-- The distinguished row sum is the augmentation (the trivial-character Fourier
+coefficient) of the kernel. -/
+theorem augmentationDifferenceMatrix_pivot_row_sum
+    (e : Fin (n + 1) ≃ G) (f : G → ℂ) :
+    ∑ j, augmentationDifferenceMatrix e f (e.symm 1) j = ∑ g : G, f g := by
+  simp_rw [augmentationDifferenceMatrix_apply]
+  let inverseIndex : Fin (n + 1) ≃ G := e.trans (Equiv.inv G)
+  calc
+    (∑ j : Fin (n + 1), f ((e j)⁻¹)) =
+        ∑ j : Fin (n + 1), f (inverseIndex j) := by rfl
+    _ = ∑ g : G, f g := Equiv.sum_comp inverseIndex f
+
+/-- Augmentation-cofactor formula for a finite abelian group determinant.  After subtracting
+the identity row from all other rows, deleting that row and any chosen column extracts the
+trivial Fourier factor, up to the explicit cofactor sign. -/
+theorem det_convolutionMatrix_eq_augmentation_mul_cofactor
+    (e : Fin (n + 1) ≃ G) (f : G → ℂ) (j₀ : Fin (n + 1)) :
+    (convolutionMatrix f).det =
+      (-1 : ℂ) ^ ((e.symm 1).val + j₀.val) * (∑ g : G, f g) *
+        ((augmentationDifferenceMatrix e f).submatrix
+          (Fin.succAbove (e.symm 1)) (Fin.succAbove j₀)).det := by
+  rw [← augmentationDifferenceMatrix_det e f]
+  have hdet := Matrix.det_eq_sum_row_mul_submatrix_succAbove_succAbove_det
+    (augmentationDifferenceMatrix e f) (e.symm 1) j₀
+    (augmentationDifferenceMatrix_row_sum_eq_zero e f)
+  rw [augmentationDifferenceMatrix_pivot_row_sum] at hdet
+  simpa using hdet
+
+/-- Choosing the identity-indexed column makes the cofactor sign positive. -/
+theorem det_convolutionMatrix_eq_augmentation_mul_principalCofactor
+    (e : Fin (n + 1) ≃ G) (f : G → ℂ) :
+    (convolutionMatrix f).det = (∑ g : G, f g) *
+      ((augmentationDifferenceMatrix e f).submatrix
+        (Fin.succAbove (e.symm 1)) (Fin.succAbove (e.symm 1))).det := by
+  simpa [← two_mul, pow_mul] using
+    (det_convolutionMatrix_eq_augmentation_mul_cofactor e f (e.symm 1))
+
+/-- Fourier form of the augmentation-cofactor formula.  This is the exact algebraic bridge
+between the product over all characters and a regulator-type complementary minor. -/
+theorem prod_fourierCoefficient_eq_augmentation_mul_cofactor
+    (e : Fin (n + 1) ≃ G) (f : G → ℂ) (j₀ : Fin (n + 1)) :
+    (∏ χ : G →* ℂˣ, fourierCoefficient f χ) =
+      (-1 : ℂ) ^ ((e.symm 1).val + j₀.val) * (∑ g : G, f g) *
+        ((augmentationDifferenceMatrix e f).submatrix
+          (Fin.succAbove (e.symm 1)) (Fin.succAbove j₀)).det := by
+  rw [← det_convolutionMatrix_eq_prod_fourierCoefficient]
+  exact det_convolutionMatrix_eq_augmentation_mul_cofactor e f j₀
+
+/-- The principal augmentation cofactor is the product of the nontrivial Fourier factors,
+provided the trivial factor is nonzero. -/
+theorem augmentation_principalCofactor_det_eq_prod_nontrivial_fourierCoefficient
+    (e : Fin (n + 1) ≃ G) (f : G → ℂ) (haugmentation : (∑ g : G, f g) ≠ 0) :
+    ((augmentationDifferenceMatrix e f).submatrix
+        (Fin.succAbove (e.symm 1)) (Fin.succAbove (e.symm 1))).det =
+      ∏ χ : {χ : G →* ℂˣ // χ ≠ 1}, fourierCoefficient f χ := by
+  apply mul_left_cancel₀ haugmentation
+  rw [← det_convolutionMatrix_eq_augmentation_mul_principalCofactor e f,
+    det_convolutionMatrix_eq_prod_fourierCoefficient,
+    Fintype.prod_eq_mul_prod_subtype_ne, fourierCoefficient_one]
 
 /-! ## The real residue group at 37 -/
 
