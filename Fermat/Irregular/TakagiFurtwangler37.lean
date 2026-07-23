@@ -2,6 +2,7 @@ import Fermat.Irregular.VandiverLemmaOne
 import Fermat.ThirtySeven.SinnottKummer
 import Mathlib.FieldTheory.KummerExtension
 import Mathlib.NumberTheory.RamificationInertia.Unramified
+import Mathlib.RingTheory.DedekindDomain.Different
 
 /-!
 # The Takagi--Furtwängler boundary for Vandiver's Lemma 1 at exponent 37
@@ -16,7 +17,8 @@ At `p = 37` we construct the Kummer extension attached to a hypothetical
 nonprincipal ideal root.  The radicand is not a `37`th power, so
 `X ^ 37 - a` is irreducible; its adjoining-root field is a cyclic Galois
 extension of degree `37`, with Galois group explicitly equivalent to
-`ZMod 37`.
+`ZMod 37`.  A different-ideal calculation also proves unramifiedness at
+every prime containing neither `37` nor `a`.
 
 This exposes two genuinely class-field-theoretic inputs.  The local Kummer
 ramification theorem says that the ideal-power identity and primary
@@ -269,6 +271,102 @@ theorem kummerExtension37_numberField
 
 /-! ## Finite-prime ramification and the reciprocity boundary -/
 
+/-- The concrete Kummer extension is unramified at every prime which
+contains neither `37` nor the radicand.
+
+This predicate is deliberately stated using the actual upper prime ideal,
+so it records the precise result furnished by the different-ideal
+calculation below. -/
+def KummerExtension37UnramifiedAwayFrom37AndRadicand
+    {a : 𝓞 K}
+    (hirr : Irreducible (X ^ 37 - C (a : K))) : Prop :=
+  letI := Fact.mk hirr
+  letI : Field (KummerExtension37 K a) := AdjoinRoot.instField
+  letI : Algebra K (KummerExtension37 K a) := inferInstance
+  letI : Module.Finite K (KummerExtension37 K a) :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField (KummerExtension37 K a) :=
+    NumberField.of_module_finite K (KummerExtension37 K a)
+  ∀ Q : PrimeSpectrum (𝓞 (KummerExtension37 K a)),
+    algebraMap (𝓞 K) (𝓞 (KummerExtension37 K a)) (37 : 𝓞 K) ∉ Q.asIdeal →
+    algebraMap (𝓞 K) (𝓞 (KummerExtension37 K a)) a ∉ Q.asIdeal →
+      Algebra.IsUnramifiedAt (𝓞 K) Q.asIdeal
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- Ramification in `K(√[37]{a})/K` can occur only above `37` or at a
+prime containing `a`.
+
+Let `α = √[37]{a}`.  The element `α` is an algebraic integer, generates
+the extension, and has minimal polynomial `X ^ 37 - a` over `𝓞 K`.
+Consequently `37 * α ^ 36` belongs to the relative different.  If an
+upper prime contains neither `37` nor `a = α ^ 37`, it cannot contain
+this derivative, hence cannot divide the different and is unramified. -/
+theorem kummerExtension37_unramifiedAwayFrom37AndRadicand
+    {a : 𝓞 K}
+    (hirr : Irreducible (X ^ 37 - C (a : K))) :
+    KummerExtension37UnramifiedAwayFrom37AndRadicand hirr := by
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  intro Q h37 ha
+  let α : L := root (X ^ 37 - C (a : K))
+  let g : (𝓞 K)[X] := X ^ 37 - C a
+  have hαintZ : IsIntegral ℤ α := by
+    apply IsIntegral.of_pow (by norm_num : 0 < 37)
+    rw [show α ^ 37 = algebraMap K L (a : K) by
+      exact kummerExtension37_root_pow a]
+    exact (NumberField.RingOfIntegers.isIntegral_coe a).map
+      (IsScalarTower.toAlgHom ℤ K L)
+  let αO : 𝓞 L := ⟨α, hαintZ⟩
+  have hαOcoe : algebraMap (𝓞 L) L αO = α := rfl
+  have hαOpow :
+      αO ^ 37 = algebraMap (𝓞 K) (𝓞 L) a := by
+    apply NumberField.RingOfIntegers.ext
+    exact kummerExtension37_root_pow a
+  have hgen : Algebra.adjoin K {algebraMap (𝓞 L) L αO} = ⊤ := by
+    simpa only [hαOcoe, α, L, KummerExtension37] using
+      (AdjoinRoot.adjoinRoot_eq_top (R := K)
+        (f := X ^ 37 - C (a : K)))
+  have hminpolyK :
+      minpoly K α = X ^ 37 - C (a : K) := by
+    simpa only [α, L, KummerExtension37] using
+      (AdjoinRoot.minpoly_powerBasis_gen_of_monic
+        (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)))
+  have hminpoly :
+      minpoly (𝓞 K) αO = g := by
+    apply Polynomial.map_injective (algebraMap (𝓞 K) K)
+      (NumberField.RingOfIntegers.coe_injective (K := K))
+    rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L
+      (IsIntegralClosure.isIntegral (𝓞 K) L αO)]
+    simp [hαOcoe, hminpolyK, g]
+  rw [← not_dvd_differentIdeal_iff]
+  intro hQdiff
+  have hderiv :
+      aeval αO (derivative (minpoly (𝓞 K) αO)) ∈
+        differentIdeal (𝓞 K) (𝓞 L) :=
+    aeval_derivative_mem_differentIdeal
+      (A := 𝓞 K) (K := K) (L := L) αO hgen
+  have hderivQ : aeval αO (derivative (minpoly (𝓞 K) αO)) ∈ Q.asIdeal :=
+    (Ideal.dvd_iff_le.mp hQdiff) hderiv
+  have hcoef :
+      algebraMap (𝓞 K) (𝓞 L) (36 : 𝓞 K) + 1 = (37 : 𝓞 L) := by
+    rw [map_ofNat]
+    norm_num
+  have hderivQ' : (37 : 𝓞 L) * αO ^ 36 ∈ Q.asIdeal := by
+    simpa [hminpoly, g, hcoef] using hderivQ
+  have hαO : αO ∉ Q.asIdeal := by
+    intro hα
+    apply ha
+    have hp := Q.asIdeal.pow_mem_of_mem hα 37 (by norm_num)
+    rwa [hαOpow] at hp
+  rcases Q.isPrime.mem_or_mem hderivQ' with h | h
+  · exact h37 (by simpa using h)
+  · exact hαO (Q.isPrime.mem_of_pow_mem 36 h)
+
 /-- A finite extension of number fields is unramified at every finite
 place if it is unramified at every nonzero prime of the upper ring of
 integers. -/
@@ -302,6 +400,61 @@ def KummerExtension37Unramified
   letI : NumberField (KummerExtension37 K a) :=
     NumberField.of_module_finite K (KummerExtension37 K a)
   IsUnramifiedAtFinitePlaces K (KummerExtension37 K a)
+
+/-- The restriction of finite-prime unramifiedness to the only primes not
+already covered by
+`kummerExtension37_unramifiedAwayFrom37AndRadicand`: primes containing
+`37` or the radicand. -/
+def KummerExtension37UnramifiedAtPotentiallyRamifiedPrimes
+    {a : 𝓞 K}
+    (hirr : Irreducible (X ^ 37 - C (a : K))) : Prop :=
+  letI := Fact.mk hirr
+  letI : Field (KummerExtension37 K a) := AdjoinRoot.instField
+  letI : Algebra K (KummerExtension37 K a) := inferInstance
+  letI : Module.Finite K (KummerExtension37 K a) :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField (KummerExtension37 K a) :=
+    NumberField.of_module_finite K (KummerExtension37 K a)
+  ∀ Q : PrimeSpectrum (𝓞 (KummerExtension37 K a)),
+    Q.asIdeal ≠ ⊥ →
+    (algebraMap (𝓞 K) (𝓞 (KummerExtension37 K a)) (37 : 𝓞 K) ∈ Q.asIdeal ∨
+      algebraMap (𝓞 K) (𝓞 (KummerExtension37 K a)) a ∈ Q.asIdeal) →
+      Algebra.IsUnramifiedAt (𝓞 K) Q.asIdeal
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- For the canonical degree-`37` Kummer extension, proving
+unramifiedness at every finite prime is equivalent to treating only the
+primes containing `37` or `a`.  The complementary primes are discharged
+unconditionally by the different-ideal calculation above. -/
+theorem kummerExtension37_unramified_iff_atPotentiallyRamifiedPrimes
+    {a : 𝓞 K}
+    (hirr : Irreducible (X ^ 37 - C (a : K))) :
+    KummerExtension37Unramified hirr ↔
+      KummerExtension37UnramifiedAtPotentiallyRamifiedPrimes hirr := by
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  change
+    (∀ Q : PrimeSpectrum (𝓞 L), Q.asIdeal ≠ ⊥ →
+      Algebra.IsUnramifiedAt (𝓞 K) Q.asIdeal) ↔
+    (∀ Q : PrimeSpectrum (𝓞 L), Q.asIdeal ≠ ⊥ →
+      (algebraMap (𝓞 K) (𝓞 L) (37 : 𝓞 K) ∈ Q.asIdeal ∨
+        algebraMap (𝓞 K) (𝓞 L) a ∈ Q.asIdeal) →
+      Algebra.IsUnramifiedAt (𝓞 K) Q.asIdeal)
+  constructor
+  · intro hall Q hQ _
+    exact hall Q hQ
+  · intro hbad Q hQ
+    by_cases h37 :
+        algebraMap (𝓞 K) (𝓞 L) (37 : 𝓞 K) ∈ Q.asIdeal
+    · exact hbad Q hQ (Or.inl h37)
+    by_cases ha : algebraMap (𝓞 K) (𝓞 L) a ∈ Q.asIdeal
+    · exact hbad Q hQ (Or.inr ha)
+    exact kummerExtension37_unramifiedAwayFrom37AndRadicand hirr Q h37 ha
 
 /-- The exact real-class-group output of the Takagi--Furtwängler step at
 exponent `37`.
@@ -346,6 +499,43 @@ def PrimaryIdealRootGivesUnramifiedKummer37 (K : Type*)
       KummerExtension37Unramified
         (irreducible_kummerPolynomial_of_nonprincipal_idealRoot
           (by norm_num) hpow hnonprincipal)
+
+/-- The remaining local ramification statement after the checked
+different-ideal calculation.
+
+For primes containing `a`, one must use `(a) = I ^ 37` to rescale the
+Kummer root by a local generator of `I`.  For primes containing `37`, one
+must use the primary congruence to eliminate wild ramification. -/
+def PrimaryIdealRootPotentialRamificationResolved37 (K : Type*)
+    [Field K] [NumberField K] [IsCyclotomicExtension {37} ℚ K] : Prop :=
+  ∀ {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {a : 𝓞 K} {I : Ideal (𝓞 K)},
+    ∀ (_hprimary : IsKummerPrimary hζ a)
+      (hpow : I ^ 37 = Ideal.span {a})
+      (hnonprincipal : ¬ Submodule.IsPrincipal (I : Ideal (𝓞 K))),
+      KummerExtension37UnramifiedAtPotentiallyRamifiedPrimes
+        (irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+          (by norm_num) hpow hnonprincipal)
+
+set_option maxRecDepth 1000 in
+/-- The local Kummer boundary is equivalent to resolving only primes
+containing `37` or the radicand. -/
+theorem primaryIdealRootGivesUnramifiedKummer37_iff_potentialRamificationResolved :
+    PrimaryIdealRootGivesUnramifiedKummer37 K ↔
+      PrimaryIdealRootPotentialRamificationResolved37 K := by
+  constructor
+  · intro h ζ hζ a I hprimary hpow hnonprincipal
+    exact
+      (kummerExtension37_unramified_iff_atPotentiallyRamifiedPrimes
+        (irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+          (by norm_num) hpow hnonprincipal)).mp
+        (h hζ hprimary hpow hnonprincipal)
+  · intro h ζ hζ a I hprimary hpow hnonprincipal
+    exact
+      (kummerExtension37_unramified_iff_atPotentiallyRamifiedPrimes
+        (irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+          (by norm_num) hpow hnonprincipal)).mpr
+        (h hζ hprimary hpow hnonprincipal)
 
 /-- The global Takagi--Furtwängler reflection input, stated on the actual
 unramified Kummer extension rather than on the original principalization
