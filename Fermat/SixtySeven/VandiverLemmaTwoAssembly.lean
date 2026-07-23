@@ -1,0 +1,81 @@
+import Fermat.Irregular.VandiverLemmaTwoBridge
+import Fermat.Irregular.VandiverRealUnits
+import Fermat.SixtySeven.VandiverDeepReality
+import Fermat.SixtySeven.VandiverNormalizedRelationDerivative
+
+/-!
+# Assembly of Vandiver's Lemma II at exponent 67
+
+This module assembles the real-unit, finite-index, relation-normalization,
+and group-theoretic parts of Lemma II.  Its sole input is the positive
+polynomial-relation derivative statement isolated in
+`PositiveRelationDerivativeCongruences67`.
+-/
+
+open scoped BigOperators NumberField
+
+namespace Fermat.SixtySeven.VandiverLemmaTwoAssembly
+
+noncomputable section
+
+open Fermat.Irregular.VandiverLemmaTwoCore
+open Fermat.Irregular.VandiverUnitLemma
+open Fermat.SixtySeven.VandiverDeepReality
+open Fermat.SixtySeven.VandiverDiagonalUnits
+open Fermat.SixtySeven.VandiverNormalizedRelationDerivative
+
+local instance : Fact (Nat.Prime 67) := ⟨by norm_num⟩
+
+variable {K : Type} [Field K] [NumberField K]
+  [IsCyclotomicExtension {67} ℚ K]
+
+local instance : NumberField.IsCMField K :=
+  IsCyclotomicExtension.IsCMField (p := 67) K (by norm_num)
+
+/-- The literal repository interface for Vandiver's Lemma II at `67`,
+reduced only to the positive polynomial-relation derivative theorem. -/
+theorem vandiverLemmaTwo_of_positiveRelationDerivativeCongruences67
+    (hpositive : ∀ {zeta : K} (hzeta : IsPrimitiveRoot zeta 67),
+      PositiveRelationDerivativeCongruences67 hzeta) :
+    VandiverLemmaTwo K 67 := by
+  intro zeta hzeta u hdeep
+  let uReal : NumberField.IsCMField.realUnits K :=
+    deepRealUnit67 hzeta u hdeep
+  have hcongAmbient :
+      PrimitiveRelationCubeCongruences 67 u
+        (diagonalVandiverUnit67 hzeta) :=
+    primitiveRelationCubeCongruences_of_positive
+      hzeta u hdeep (hpositive hzeta)
+  have hcongReal :
+      PrimitiveRelationCubeCongruences 67 uReal
+        (diagonalVandiverUnitFamily67 hzeta) := by
+    intro t a ht hrel hprimitive
+    apply hcongAmbient t a ht
+    · have hrel' := congrArg
+          ((↑) : NumberField.IsCMField.realUnits K → (𝓞 K)ˣ) hrel
+      simpa only [uReal, deepRealUnit67_coe,
+        diagonalVandiverUnitFamily67_coe, Subgroup.coe_pow,
+        Subgroup.coe_zpow, Subgroup.coe_prod] using hrel'
+    · exact hprimitive
+  letI :
+      (Subgroup.closure
+        (Set.range (diagonalVandiverUnitFamily67 hzeta))).FiniteIndex :=
+    real_closure_finiteIndex hzeta
+  have halternative :=
+    Fermat.Irregular.VandiverLemmaTwoBridge.isPower_or_bernoulliObstruction
+      (by norm_num)
+      (Fermat.Irregular.VandiverRealUnits.odd_pow_injective
+        (K := K) 67 (by decide))
+      uReal (diagonalVandiverUnitFamily67 hzeta) hcongReal
+  rcases halternative with hpower | hobstruction
+  · left
+    obtain ⟨v, hv⟩ := hpower
+    refine ⟨(v : (𝓞 K)ˣ), ?_⟩
+    have hv' := congrArg
+      ((↑) : NumberField.IsCMField.realUnits K → (𝓞 K)ˣ) hv
+    simpa only [uReal, deepRealUnit67_coe, Subgroup.coe_pow] using hv'
+  · exact Or.inr hobstruction
+
+end
+
+end Fermat.SixtySeven.VandiverLemmaTwoAssembly
