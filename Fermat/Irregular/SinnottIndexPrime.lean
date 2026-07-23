@@ -141,7 +141,7 @@ theorem circularUnit_realIndex_eq_classNumber_iff
       _ = A * 2 * NumberField.Units.regOfFamily
             (circularUnitRegFamily hzeta) * (H : ℝ) /
             (2 * Real.sqrt |(NumberField.discr K⁺ : ℝ)|) := by
-        simpa only [A, I, H] using hraw
+        simpa only [A, I, H, Nat.cast_ofNat] using hraw
       _ = A * (Y * (H : ℝ)) := hright
   have hX : X ≠ 0 := by
     exact NumberField.dedekindZeta_residue_ne_zero K⁺

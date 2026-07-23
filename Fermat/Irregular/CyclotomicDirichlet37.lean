@@ -124,7 +124,12 @@ def quotientCharactersEquivEvenDirichlet37 :
   · intro h
     apply (quotientCharactersEquivEvenDirichlet37.injective)
     apply Subtype.ext
-    simpa using h
+    change quotientCharacterToDirichlet37 χ =
+      quotientCharacterToDirichlet37 (1 : RealResidueGroup37 →* ℂˣ)
+    rw [h]
+    apply MulChar.ext
+    intro u
+    simp [quotientCharacterToDirichlet37]
   · rintro rfl
     apply MulChar.ext
     intro u
