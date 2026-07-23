@@ -730,8 +730,14 @@ theorem kummerExtension67_unramifiedAt_of_idealPower_awayFrom67
       α * algebraMap K L (d : K) =
         algebraMap K L (c : K) * β := by
     have h := congrArg (algebraMap (𝓞 L) L) hrel
-    simpa only [map_mul, β, α,
-      IsScalarTower.algebraMap_apply (𝓞 K) K L] using h
+    have hαOcoe :
+        algebraMap (𝓞 L) L (kummerRootInteger67 hirr) = α := rfl
+    rw [map_mul, map_mul] at h
+    rw [← IsScalarTower.algebraMap_apply (𝓞 K) (𝓞 L) L d,
+      ← IsScalarTower.algebraMap_apply (𝓞 K) (𝓞 L) L c] at h
+    rw [← IsScalarTower.algebraMap_apply (𝓞 K) K L d,
+      ← IsScalarTower.algebraMap_apply (𝓞 K) K L c]
+    simpa only [β, hαOcoe] using h
   have hcL : algebraMap K L (c : K) ≠ 0 := by
     simpa using
       (algebraMap K L).injective.ne
@@ -840,7 +846,7 @@ theorem kummerExtension67_unramifiedAt_of_idealPower_awayFrom67
     rw [← hcoef]
     exact hderivQ''
   rcases Q.isPrime.mem_or_mem hderivQ' with h | h
-  · exact h67 (by simpa using h)
+  · exact h67 (by simpa only [map_ofNat] using h)
   · exact hbQ (Q.isPrime.mem_of_pow_mem 66 h)
 
 /-! ## Wild rescaling above `67` -/
@@ -891,7 +897,8 @@ theorem exists_primary_shift_polynomial67
         Nat.Prime.dvd_choose_self (by norm_num) hi0 hi67
       obtain ⟨m, hm⟩ := hchoose
       have hπ66 : π ^ 66 ∣ (67 : 𝓞 K) := by
-        simpa only [π] using (associated_zeta_sub_one_pow_prime hζ).dvd
+        simpa only [π, Nat.reduceSub, Nat.cast_ofNat] using
+          (associated_zeta_sub_one_pow_prime hζ).dvd
       obtain ⟨u, hu⟩ := hπ66
       refine ⟨cA ^ (67 - i) * (m : 𝓞 K) * u * π ^ (i - 1), ?_⟩
       have hcast : (Nat.choose 67 i : 𝓞 K) =
@@ -1165,7 +1172,7 @@ theorem kummerExtension67_unramifiedAt_of_primary_above67
   obtain ⟨u, hπu⟩ :=
     associated_zeta_sub_one_pow_prime hζ
   have hπu' : π ^ 66 * (u : 𝓞 K) = (67 : 𝓞 K) := by
-    simpa only [π] using hπu
+    simpa only [π, Nat.reduceSub, Nat.cast_ofNat] using hπu
   have hEvalDerivG :
       aeval β (derivative g) =
         algebraMap (𝓞 K) L (u : 𝓞 K) * α ^ 66 := by
@@ -1316,9 +1323,12 @@ theorem kummerExtension67_unramifiedAwayFrom67AndRadicand
         (f := X ^ 67 - C (a : K)))
   have hminpolyK :
       minpoly K α = X ^ 67 - C (a : K) := by
-    simpa only [α, L, KummerExtension67] using
-      (AdjoinRoot.minpoly_powerBasis_gen_of_monic
-        (monic_X_pow_sub_C (a : K) (by norm_num : 67 ≠ 0)))
+    change minpoly K (root (X ^ 67 - C (a : K))) =
+      X ^ 67 - C (a : K)
+    rw [← AdjoinRoot.powerBasis_gen
+      (monic_X_pow_sub_C (a : K) (by norm_num : 67 ≠ 0)).ne_zero]
+    exact AdjoinRoot.minpoly_powerBasis_gen_of_monic
+      (monic_X_pow_sub_C (a : K) (by norm_num : 67 ≠ 0))
   have hminpoly :
       minpoly (𝓞 K) αO = g := by
     apply Polynomial.map_injective (algebraMap (𝓞 K) K)
@@ -1347,7 +1357,7 @@ theorem kummerExtension67_unramifiedAwayFrom67AndRadicand
     have hp := Q.asIdeal.pow_mem_of_mem hα 67 (by norm_num)
     rwa [hαOpow] at hp
   rcases Q.isPrime.mem_or_mem hderivQ' with h | h
-  · exact h67 (by simpa using h)
+  · exact h67 (by simpa only [map_ofNat] using h)
   · exact hαO (Q.isPrime.mem_of_pow_mem 66 h)
 
 /-- A finite extension of number fields is unramified at every finite

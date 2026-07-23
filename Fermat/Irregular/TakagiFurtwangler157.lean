@@ -732,8 +732,14 @@ theorem kummerExtension157_unramifiedAt_of_idealPower_awayFrom157
       α * algebraMap K L (d : K) =
         algebraMap K L (c : K) * β := by
     have h := congrArg (algebraMap (𝓞 L) L) hrel
-    simpa only [map_mul, β, α,
-      IsScalarTower.algebraMap_apply (𝓞 K) K L] using h
+    have hαOcoe :
+        algebraMap (𝓞 L) L (kummerRootInteger157 hirr) = α := rfl
+    rw [map_mul, map_mul] at h
+    rw [← IsScalarTower.algebraMap_apply (𝓞 K) (𝓞 L) L d,
+      ← IsScalarTower.algebraMap_apply (𝓞 K) (𝓞 L) L c] at h
+    rw [← IsScalarTower.algebraMap_apply (𝓞 K) K L d,
+      ← IsScalarTower.algebraMap_apply (𝓞 K) K L c]
+    simpa only [β, hαOcoe] using h
   have hcL : algebraMap K L (c : K) ≠ 0 := by
     simpa using
       (algebraMap K L).injective.ne
@@ -842,7 +848,7 @@ theorem kummerExtension157_unramifiedAt_of_idealPower_awayFrom157
     rw [← hcoef]
     exact hderivQ''
   rcases Q.isPrime.mem_or_mem hderivQ' with h | h
-  · exact h157 (by simpa using h)
+  · exact h157 (by simpa only [map_ofNat] using h)
   · exact hbQ (Q.isPrime.mem_of_pow_mem 156 h)
 
 /-! ## Wild rescaling above `157` -/
@@ -893,7 +899,8 @@ theorem exists_primary_shift_polynomial157
         Nat.Prime.dvd_choose_self (by norm_num) hi0 hi157
       obtain ⟨m, hm⟩ := hchoose
       have hπ156 : π ^ 156 ∣ (157 : 𝓞 K) := by
-        simpa only [π] using (associated_zeta_sub_one_pow_prime hζ).dvd
+        simpa only [π, Nat.reduceSub, Nat.cast_ofNat] using
+          (associated_zeta_sub_one_pow_prime hζ).dvd
       obtain ⟨u, hu⟩ := hπ156
       refine ⟨cA ^ (157 - i) * (m : 𝓞 K) * u * π ^ (i - 1), ?_⟩
       have hcast : (Nat.choose 157 i : 𝓞 K) =
@@ -1167,7 +1174,7 @@ theorem kummerExtension157_unramifiedAt_of_primary_above157
   obtain ⟨u, hπu⟩ :=
     associated_zeta_sub_one_pow_prime hζ
   have hπu' : π ^ 156 * (u : 𝓞 K) = (157 : 𝓞 K) := by
-    simpa only [π] using hπu
+    simpa only [π, Nat.reduceSub, Nat.cast_ofNat] using hπu
   have hEvalDerivG :
       aeval β (derivative g) =
         algebraMap (𝓞 K) L (u : 𝓞 K) * α ^ 156 := by
@@ -1318,9 +1325,12 @@ theorem kummerExtension157_unramifiedAwayFrom157AndRadicand
         (f := X ^ 157 - C (a : K)))
   have hminpolyK :
       minpoly K α = X ^ 157 - C (a : K) := by
-    simpa only [α, L, KummerExtension157] using
-      (AdjoinRoot.minpoly_powerBasis_gen_of_monic
-        (monic_X_pow_sub_C (a : K) (by norm_num : 157 ≠ 0)))
+    change minpoly K (root (X ^ 157 - C (a : K))) =
+      X ^ 157 - C (a : K)
+    rw [← AdjoinRoot.powerBasis_gen
+      (monic_X_pow_sub_C (a : K) (by norm_num : 157 ≠ 0)).ne_zero]
+    exact AdjoinRoot.minpoly_powerBasis_gen_of_monic
+      (monic_X_pow_sub_C (a : K) (by norm_num : 157 ≠ 0))
   have hminpoly :
       minpoly (𝓞 K) αO = g := by
     apply Polynomial.map_injective (algebraMap (𝓞 K) K)
@@ -1349,7 +1359,7 @@ theorem kummerExtension157_unramifiedAwayFrom157AndRadicand
     have hp := Q.asIdeal.pow_mem_of_mem hα 157 (by norm_num)
     rwa [hαOpow] at hp
   rcases Q.isPrime.mem_or_mem hderivQ' with h | h
-  · exact h157 (by simpa using h)
+  · exact h157 (by simpa only [map_ofNat] using h)
   · exact hαO (Q.isPrime.mem_of_pow_mem 156 h)
 
 /-- A finite extension of number fields is unramified at every finite
