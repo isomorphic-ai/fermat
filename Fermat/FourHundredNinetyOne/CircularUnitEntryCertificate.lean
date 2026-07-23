@@ -99,6 +99,14 @@ def phaseValue (r : Cyc) : ZMod 983 :=
 /-- The 245 kernel-checked discrete logarithms of the relative phases. -/
 theorem phase_value_certificate (r : Cyc) :
     phaseValue r = (2 : ZMod 983) ^ (symbolPhase r).val := by
+  have hr : classRoot r ≠ 0 :=
+    pow_ne_zero _ (root_isPrimitive.ne_zero (by norm_num))
+  have hzero : classRoot 0 ≠ 0 :=
+    pow_ne_zero _ (root_isPrimitive.ne_zero (by norm_num))
+  have hzero1 : 1 - classRoot 0 ≠ 0 := by
+    decide +kernel
+  unfold phaseValue weight
+  field_simp [hr, hzero, hzero1]
   decide +revert
 
 /-- Every original row has its recorded real cyclic coordinate. -/
@@ -107,7 +115,17 @@ theorem row_root_relation (j : Fin 244) :
         embeddingRoot (p := 491) (2 : ZMod 983) j ∨
       classRoot (coord (rowPermutation j)) =
         (embeddingRoot (p := 491) (2 : ZMod 983) j)⁻¹ := by
-  decide +revert
+  let x := embeddingRoot (p := 491) (2 : ZMod 983) j
+  have hx : x ≠ 0 :=
+    (embeddingRoot_isPrimitive (p := 491) (q := 983) (by norm_num)
+      root_isPrimitive j).ne_zero (by norm_num)
+  have h :
+      classRoot (coord (rowPermutation j)) = x ∨
+        classRoot (coord (rowPermutation j)) * x = 1 := by
+    decide +revert
+  rcases h with h | h
+  · exact Or.inl h
+  · exact Or.inr ((mul_eq_one_iff_eq_inv₀ hx).mp h)
 
 /-- Multiplication by a unit coordinate adds the cyclic exponents, up to
 the harmless real-class sign. -/
@@ -116,7 +134,17 @@ theorem product_root_relation (j i : Fin 244) :
         embeddingRoot (p := 491) (2 : ZMod 983) j ^ (i.val + 2) ∨
       classRoot (coord (rowPermutation j) + coord (columnPermutation i)) =
         (embeddingRoot (p := 491) (2 : ZMod 983) j ^ (i.val + 2))⁻¹ := by
-  decide +revert
+  let x := embeddingRoot (p := 491) (2 : ZMod 983) j ^ (i.val + 2)
+  have hx : x ≠ 0 :=
+    pow_ne_zero _ ((embeddingRoot_isPrimitive (p := 491) (q := 983)
+      (by norm_num) root_isPrimitive j).ne_zero (by norm_num))
+  have h :
+      classRoot (coord (rowPermutation j) + coord (columnPermutation i)) = x ∨
+        classRoot (coord (rowPermutation j) + coord (columnPermutation i)) * x = 1 := by
+    decide +revert
+  rcases h with h | h
+  · exact Or.inl h
+  · exact Or.inr ((mul_eq_one_iff_eq_inv₀ hx).mp h)
 
 theorem classRoot_ne_zero (r : Cyc) : classRoot r ≠ 0 := by
   exact pow_ne_zero _ (root_isPrimitive.ne_zero (by norm_num))
