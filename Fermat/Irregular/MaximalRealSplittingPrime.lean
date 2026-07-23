@@ -145,8 +145,8 @@ theorem galEquivZMod_map_fixingSubgroup_maximalReal :
   have hcard_fix : Nat.card E.fixingSubgroup = 2 := by
     rw [Nat.card_congr E.fixingSubgroupEquiv.toEquiv,
       IsGalois.card_aut_eq_finrank]
-    simpa [E, maximalRealIntermediate] using
-      (Algebra.IsQuadraticExtension.finrank_eq_two K⁺ K)
+    change Module.finrank K⁺ K = 2
+    exact Algebra.IsQuadraticExtension.finrank_eq_two K⁺ K
   have heq := Subgroup.eq_of_le_of_card_ge hle (by
     rw [Subgroup.card_mapSubgroup, hcard_fix, hcard_sign])
   simpa [E] using heq.symm

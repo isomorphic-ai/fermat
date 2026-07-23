@@ -50,7 +50,7 @@ theorem torsion_eq_one_or_neg_one_of_isTotallyReal (x : NumberField.Units.torsio
   let φ : (𝓞 F)ˣ →* F :=
     (algebraMap (𝓞 F) F).toMonoidHom.comp (Units.coeHom (𝓞 F))
   have hxfin : IsOfFinOrder (φ x.1) :=
-    MonoidHom.isOfFinOrder φ ((CommGroup.mem_torsion _ x.1).1 x.2)
+    MonoidHom.isOfFinOrder φ ((CommGroup.mem_torsion x.1).mp x.2)
   by_cases! hc : 2 < orderOf (φ x.1)
   · have hpos : 0 < NumberField.InfinitePlace.nrRealPlaces F := by
       rw [← NumberField.IsTotallyReal.finrank]
