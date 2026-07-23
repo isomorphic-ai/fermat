@@ -3287,6 +3287,68 @@ theorem equationTenB_cyclotomicSimplification37
           simp only [Units.val_mul]
           ring
 
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- Equation (10a) at `a = 1`, `b = 2` in the form in which it is
+actually produced by the three historical equations: all three right-hand
+sides still carry Vandiver's common ramified factor `κ`.
+
+The quadratic elimination therefore contains two copies of `κ`, one from
+the input equations and one from the coefficient differences.  Cancelling
+the nonzero product `κ²` gives the same weighted three-term equation as in
+`equationTenB_cyclotomicSimplification37`. -/
+theorem equationTenB_commonKappa37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (ω θ Xa Xb Xzero : 𝓞 K) (Ua Ub Uzero : (𝓞 K)ˣ)
+    (ha : ω ^ 2 + equationTenTraceOne37 hζ * (ω * θ) + θ ^ 2 =
+      kappa hζ * (Ua * Xa ^ 37))
+    (hb : ω ^ 2 + equationTenTraceTwo37 hζ * (ω * θ) + θ ^ 2 =
+      kappa hζ * (Ub * Xb ^ 37))
+    (hzero : ω ^ 2 + 2 * (ω * θ) + θ ^ 2 =
+      kappa hζ * (Uzero * Xzero ^ 37)) :
+    (equationTenTraceTwoUnit37 hζ * Ua : (𝓞 K)ˣ) * Xa ^ 37 +
+        (-Ub : (𝓞 K)ˣ) * Xb ^ 37 =
+      (equationTenTraceOneUnit37 hζ * Uzero : (𝓞 K)ˣ) *
+        Xzero ^ 37 := by
+  have hkappa0 : kappa hζ ≠ 0 := by
+    rw [kappa_eq_kappaUnit37_mul_sq]
+    exact mul_ne_zero (kappaUnit37 hζ).isUnit.ne_zero
+      (pow_ne_zero 2 (sub_ne_zero.mpr
+        (hζ.unit'_coe.ne_one (by norm_num))))
+  have ha' : ω ^ 2 + equationTenTraceOne37 hζ * (ω * θ) + θ ^ 2 =
+      (kappa hζ * Ua) * Xa ^ 37 := by
+    simpa only [mul_assoc] using ha
+  have hb' : ω ^ 2 + equationTenTraceTwo37 hζ * (ω * θ) + θ ^ 2 =
+      (kappa hζ * Ub) * Xb ^ 37 := by
+    simpa only [mul_assoc] using hb
+  have hzero' : ω ^ 2 + 2 * (ω * θ) + θ ^ 2 =
+      (kappa hζ * Uzero) * Xzero ^ 37 := by
+    simpa only [mul_assoc] using hzero
+  have helim := equationTenA_quadraticElimination37
+    ω θ (equationTenTraceOne37 hζ) (equationTenTraceTwo37 hζ)
+    (kappa hζ * Ua) (kappa hζ * Ub) (kappa hζ * Uzero)
+    Xa Xb (Xzero ^ 37) ha' hb' hzero'
+  rw [two_sub_equationTenTraceTwo37,
+    two_sub_equationTenTraceOne37,
+    equationTenTraceOne_sub_two37] at helim
+  apply mul_left_cancel₀ (mul_ne_zero hkappa0 hkappa0)
+  calc
+    kappa hζ * kappa hζ *
+        ((equationTenTraceTwoUnit37 hζ * Ua : (𝓞 K)ˣ) * Xa ^ 37 +
+          (-Ub : (𝓞 K)ˣ) * Xb ^ 37) =
+        kappa hζ * (equationTenTraceTwoUnit37 hζ : 𝓞 K) *
+            (kappa hζ * ((Ua : 𝓞 K) * Xa ^ 37)) -
+          kappa hζ * (kappa hζ * ((Ub : 𝓞 K) * Xb ^ 37)) := by
+            simp only [Units.val_mul, Units.val_neg]
+            ring
+    _ = kappa hζ * (equationTenTraceOneUnit37 hζ : 𝓞 K) *
+          (kappa hζ * ((Uzero : 𝓞 K) * Xzero ^ 37)) := by
+            simpa only [mul_assoc] using helim
+    _ = kappa hζ * kappa hζ *
+        ((equationTenTraceOneUnit37 hζ * Uzero : (𝓞 K)ˣ) *
+          Xzero ^ 37) := by
+            simp only [Units.val_mul]
+            ring
+
 /-- The actual finite support of the distinct prime-ideal factors of the
 principal ideal `(x)`. -/
 def primeIdealFactorSupport37 (x : 𝓞 K) : Finset (Ideal (𝓞 K)) :=
