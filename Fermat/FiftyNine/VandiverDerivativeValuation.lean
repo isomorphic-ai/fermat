@@ -6,12 +6,15 @@ import Fermat.FiftyNine.VandiverDiagonalArithmetic
 /-!
 # The valuation step in Vandiver's diagonal calculation at 59
 
-The finite diagonal sum leaves, at source index `k`, the rational factor
+Choose the integral lift `3067` of the positive diagonal character sum.
+After the outer factor `58`, the finite diagonal calculation leaves the
+rational factor
 
-`355 * B_(2*k*59) / (2*k*59) * (946^(2*k*59) - 1)`.
+`177886 * B_(2*k*59) / (2*k*59) * (946^(2*k*59) - 1)`.
 
+Here `177886 = 58 * 3067` and its least residue modulo `59^2` is `355`.
 All factors except the displayed `59` in the denominator and the Bernoulli
-numerator are `59`-adic units.  Consequently divisibility of this rational
+numerator are `59`-adic units. Consequently divisibility of this rational
 by `59^2` is exactly divisibility of the exponent times the Bernoulli
 numerator by `59^3`.
 -/
@@ -31,7 +34,7 @@ def derivativeBernoulliIndex59 (k : SourceIndex 59) : ℕ :=
 /-- The diagonal coefficient remaining after Vandiver's outer factor
 `p - 1` and the positive integral character sum have been included. -/
 def diagonalDerivativeFactor59 (k : SourceIndex 59) : ℚ :=
-  (355 : ℚ) *
+  (177886 : ℚ) *
     (bernoulli (derivativeBernoulliIndex59 k) /
       (derivativeBernoulliIndex59 k : ℚ)) *
     ((946 : ℚ) ^ derivativeBernoulliIndex59 k - 1)
@@ -144,7 +147,7 @@ theorem padicValRat_intCast_mul_diagonalDerivativeFactor59
       padicValNat.eq_zero_of_not_dvd]
     · norm_num
     · simpa [N] using fiftyNine_not_dvd_rootFactor59 k
-  have hcoefficientVal : padicValRat 59 (355 : ℚ) = 0 := by
+  have hcoefficientVal : padicValRat 59 (177886 : ℚ) = 0 := by
     exact padicValRat_eq_zero_of_numerator_not_dvd
       (by norm_num [DenominatorPrimeTo]) (by norm_num)
   have hBval : padicValRat 59 B =
@@ -153,7 +156,7 @@ theorem padicValRat_intCast_mul_diagonalDerivativeFactor59
       (by simpa [B, N] using bernoulli_denominatorPrimeTo59 k)
   have hBnum : B.num ≠ 0 := Rat.num_ne_zero.mpr hB
   change padicValRat 59
-      ((a : ℚ) * (((355 : ℚ) * (B / (N : ℚ))) *
+      ((a : ℚ) * (((177886 : ℚ) * (B / (N : ℚ))) *
         ((946 : ℚ) ^ N - 1))) =
     padicValInt 59 (a * B.num) - 1
   rw [padicValRat.mul (Int.cast_ne_zero.mpr ha)
