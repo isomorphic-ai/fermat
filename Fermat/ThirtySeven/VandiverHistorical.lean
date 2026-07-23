@@ -1842,6 +1842,63 @@ lemma conjugation_eq_zeta_pow_of_stable_principal37
       ← neg_one_eq_one_iff_two_eq_zero]
     exact hneg.symm
 
+/-- Squaring removes the only obstruction to making the conjugation
+quotient of a stable principal ideal a pure `37`th root of unity.
+
+Without the hypothesis that the generator is prime to `ζ - 1`, the CM-unit
+argument gives
+
+`conj(a) = (± ζ^j) * a`.
+
+The sign cannot in general be removed: the ramified ideal `(ζ - 1)` is the
+basic counterexample.  Its square disappears, however, so the generator
+`a ^ 2` always has conjugation quotient a power of `ζ`.  This is precisely
+the form needed for the squared generator in Vandiver's equation (8a). -/
+lemma conjugation_sq_eq_zeta_pow_of_stable_principal37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (a : 𝓞 K)
+    (ha0 : a ≠ 0)
+    (hstable : conjugateIdeal37 (Ideal.span {a}) = Ideal.span {a}) :
+    ∃ j : ℕ, ringOfIntegersComplexConj K (a ^ 2) =
+      (hζ.unit' ^ j : (𝓞 K)ˣ) * a ^ 2 := by
+  have hassoc : Associated (ringOfIntegersComplexConj K a) a := by
+    rw [← Ideal.span_singleton_eq_span_singleton]
+    rw [← conjugateIdeal37_span]
+    exact hstable
+  obtain ⟨u, hu⟩ := hassoc
+  let v : (𝓞 K)ˣ := u⁻¹
+  have hv : ringOfIntegersComplexConj K a = (v : 𝓞 K) * a := by
+    change ringOfIntegersComplexConj K a = (u⁻¹ : (𝓞 K)ˣ) * a
+    calc
+      ringOfIntegersComplexConj K a =
+          ringOfIntegersComplexConj K a * u * (u⁻¹ : (𝓞 K)ˣ) := by simp
+      _ = (u⁻¹ : (𝓞 K)ˣ) * a := by rw [hu]; ac_rfl
+  have hvconj : unitsComplexConj K v = v⁻¹ := by
+    have hc := congrArg (ringOfIntegersComplexConj K) hv
+    rw [map_mul] at hc
+    have hcc : ringOfIntegersComplexConj K
+        (ringOfIntegersComplexConj K a) = a := by
+      ext
+      exact complexConj_apply_apply K a
+    rw [hcc, hv] at hc
+    have hnorm : unitsComplexConj K v * v = 1 := by
+      apply Units.ext
+      change ringOfIntegersComplexConj K (v : 𝓞 K) * (v : 𝓞 K) = 1
+      apply mul_right_cancel₀ ha0
+      calc
+        (ringOfIntegersComplexConj K (v : 𝓞 K) * (v : 𝓞 K)) * a =
+            ringOfIntegersComplexConj K (v : 𝓞 K) *
+              ((v : 𝓞 K) * a) := by rw [mul_assoc]
+        _ = a := hc.symm
+        _ = (1 : 𝓞 K) * a := by simp
+    exact mul_eq_one_iff_eq_inv.mp hnorm
+  obtain ⟨j, hj⟩ := unit_inv_conj_is_root_of_unity hζ v (by norm_num)
+  have hv_sq : v ^ 2 = (hζ.unit' ^ j) ^ 2 := by
+    simpa only [hvconj, inv_inv, pow_two] using hj
+  refine ⟨2 * j, ?_⟩
+  rw [map_pow, hv, mul_pow, ← Units.val_pow_eq_pow_val, hv_sq]
+  congr 1
+  rw [← pow_mul, Nat.mul_comm]
+
 /-- A conjugation-stable principal ideal prime to `(ζ - 1)` admits a
 generator, still prime to `(ζ - 1)`, together with the exact cyclotomic
 conjugation exponent required by `ConjugationPowerReductionData37`. -/
@@ -2063,6 +2120,116 @@ theorem exists_realEquationNineGenerator37
       ← Ideal.span_singleton_pow, ← hJμ, hpow]
   obtain ⟨η, hη⟩ := hassoc_q
   exact ⟨μ, η, hJμ, hμreal, by simpa [mul_comm] using hη.symm⟩
+
+set_option maxRecDepth 3000 in
+/-- The principalization part of the real-generator argument does not need
+the ideal to be prime to `ζ - 1`.
+
+If `J ^ 37 = (q)` and `q` is real, relative norm makes `J ^ 2`
+principal.  The coprime exponents `2` and `37` then principalize `J`, and
+reality of `q` makes `J` stable under complex conjugation.  Primeness to
+the ramified ideal is needed only for removing the possible minus sign from
+the conjugation quotient of an individual generator. -/
+theorem ideal_isPrincipal_and_stable_of_real_pow37
+    {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (J : Ideal (𝓞 K)) (q : 𝓞 K)
+    (hqreal : NumberField.IsCMField.ringOfIntegersComplexConj K q = q)
+    (hpow : J ^ 37 = Ideal.span {q}) :
+    Submodule.IsPrincipal (J : Ideal (𝓞 K)) ∧
+      conjugateIdeal37 J = J := by
+  obtain ⟨ρ, ε, -, -, hnorm⟩ :=
+    exists_equationSevenD_of_idealPower37 hzeta J q hpow
+  let ρK : 𝓞 K := algebraMap (𝓞 K⁺) (𝓞 K) ρ
+  let εK : (𝓞 K)ˣ := Units.map
+    (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom ε
+  have hq_sq : q ^ 2 = (εK : 𝓞 K) * ρK ^ 37 := by
+    simpa only [pow_two, hqreal, ρK, εK, Units.coe_map] using hnorm
+  have hassoc : Associated (q ^ 2) (ρK ^ 37) := by
+    refine ⟨εK⁻¹, ?_⟩
+    rw [hq_sq]
+    calc
+      ((εK : 𝓞 K) * ρK ^ 37) * (εK⁻¹ : (𝓞 K)ˣ) =
+          ρK ^ 37 * ((εK : 𝓞 K) * (εK⁻¹ : (𝓞 K)ˣ)) := by
+        ac_rfl
+      _ = ρK ^ 37 := by rw [← Units.val_mul]; simp
+  have hspan : Ideal.span {q ^ 2} = Ideal.span {ρK ^ 37} :=
+    Ideal.span_singleton_eq_span_singleton.mpr hassoc
+  have hpoweq : (J ^ 2) ^ 37 = (Ideal.span {ρK}) ^ 37 := by
+    calc
+      (J ^ 2) ^ 37 = (J ^ 37) ^ 2 := by
+        rw [← pow_mul, ← pow_mul]
+      _ = (Ideal.span {q}) ^ 2 := by rw [hpow]
+      _ = Ideal.span {q ^ 2} := Ideal.span_singleton_pow q 2
+      _ = Ideal.span {ρK ^ 37} := hspan
+      _ = (Ideal.span {ρK}) ^ 37 :=
+        (Ideal.span_singleton_pow ρK 37).symm
+  have hJ2eq : J ^ 2 = Ideal.span {ρK} :=
+    pow_left_injective (M := Ideal (𝓞 K)) (by norm_num : 37 ≠ 0) hpoweq
+  have hJ2 : Submodule.IsPrincipal (J ^ 2 : Ideal (𝓞 K)) := by
+    rw [hJ2eq]
+    infer_instance
+  have hJ37 : Submodule.IsPrincipal (J ^ 37 : Ideal (𝓞 K)) := by
+    rw [hpow]
+    infer_instance
+  have hJprincipal : Submodule.IsPrincipal (J : Ideal (𝓞 K)) :=
+    ideal_isPrincipal_of_coprime_powers (L := K) (by norm_num) J hJ2 hJ37
+  have hstable : conjugateIdeal37 J = J := by
+    apply pow_left_injective (M := Ideal (𝓞 K)) (by norm_num : 37 ≠ 0)
+    calc
+      conjugateIdeal37 J ^ 37 = conjugateIdeal37 (J ^ 37) := by
+        exact (Ideal.map_pow
+          (NumberField.IsCMField.ringOfIntegersComplexConj K).toRingHom J 37).symm
+      _ = conjugateIdeal37 (Ideal.span {q}) := by rw [hpow]
+      _ = Ideal.span
+          {NumberField.IsCMField.ringOfIntegersComplexConj K q} :=
+        conjugateIdeal37_span q
+      _ = Ideal.span {q} := by rw [hqreal]
+      _ = J ^ 37 := hpow.symm
+  exact ⟨hJprincipal, hstable⟩
+
+set_option maxRecDepth 3000 in
+/-- Equation-(8a) generator extraction in the form needed later in the
+historical descent.
+
+The ideal may contain the ramified prime, so an individual generator can
+have conjugation quotient `-ζ^j`.  The theorem records the square of the
+generator instead; its quotient is always a pure power of `ζ`. -/
+theorem exists_squaredConjugationGenerator_of_real_pow37
+    {zeta : K} (hzeta : IsPrimitiveRoot zeta 37)
+    (J : Ideal (𝓞 K)) (q : 𝓞 K) (hq0 : q ≠ 0)
+    (hqreal : NumberField.IsCMField.ringOfIntegersComplexConj K q = q)
+    (hpow : J ^ 37 = Ideal.span {q}) :
+    ∃ (ρ : 𝓞 K) (η : (𝓞 K)ˣ) (j : ℕ),
+      J = Ideal.span {ρ} ∧
+      q = η * ρ ^ 37 ∧
+      NumberField.IsCMField.ringOfIntegersComplexConj K (ρ ^ 2) =
+        (hzeta.unit' ^ j : (𝓞 K)ˣ) * ρ ^ 2 := by
+  obtain ⟨hprincipal, hstable⟩ :=
+    ideal_isPrincipal_and_stable_of_real_pow37 hzeta J q hqreal hpow
+  obtain ⟨ρ, hJρ⟩ := hprincipal.principal
+  change J = Ideal.span {ρ} at hJρ
+  have hρ0 : ρ ≠ 0 := by
+    intro hρ
+    apply hq0
+    rw [← Ideal.span_singleton_eq_bot]
+    calc
+      Ideal.span {q} = J ^ 37 := hpow.symm
+      _ = (Ideal.span {ρ}) ^ 37 := by rw [hJρ]
+      _ = 0 := by
+        rw [hρ]
+        norm_num
+        rw [Ideal.zero_eq_bot]
+  have hstableρ : conjugateIdeal37 (Ideal.span {ρ}) =
+      Ideal.span {ρ} := by
+    rw [← hJρ]
+    exact hstable
+  obtain ⟨j, hj⟩ :=
+    conjugation_sq_eq_zeta_pow_of_stable_principal37 hzeta ρ hρ0 hstableρ
+  have hassoc_q : Associated (ρ ^ 37) q := by
+    rw [← Ideal.span_singleton_eq_span_singleton,
+      ← Ideal.span_singleton_pow, ← hJρ, hpow]
+  obtain ⟨η, hη⟩ := hassoc_q
+  exact ⟨ρ, η, j, hJρ, by simpa [mul_comm] using hη.symm, hj⟩
 
 /-- Complex conjugation sends any integral 37th root of unity to its
 36th power, i.e. its inverse. -/
