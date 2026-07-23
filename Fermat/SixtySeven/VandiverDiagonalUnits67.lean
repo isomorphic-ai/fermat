@@ -307,7 +307,11 @@ theorem correctedResidueLog_basicVandiverUnit67 {zeta : K}
     ((basicSymbolExponent67 row j).val : ZMod 67)
   rw [certificate67.residueLog_eq_of_pow_eq u _ hpow]
   rw [Nat.cast_mul]
-  have hhalf : (2 : ZMod 67)⁻¹ * 2 = 1 := by decide
+  have hhalf : (2 : ZMod 67)⁻¹ * 2 = 1 :=
+    inv_mul_cancel₀ (by
+      intro h
+      have hdiv : 67 ∣ 2 := (ZMod.natCast_eq_zero_iff 2 67).mp h
+      norm_num at hdiv)
   calc
     (2 : ZMod 67)⁻¹ *
         ((basicSymbolExponent67 row j).val * 2 : ZMod 67) =

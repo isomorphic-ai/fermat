@@ -55,8 +55,11 @@ theorem zeta_sub_one_pow_add_sixtySix_dvd_pow_sub_pow67
     simpa only [pi, add_comm] using hk
   obtain ⟨r, hr⟩ := exists_add_pow_prime_eq
     (show Nat.Prime 67 by norm_num) y (pi ^ m * k)
+  have h66 : (67 - 1 : ℕ) = 66 := by norm_num
+  have hCast67 : (((67 : ℕ) : 𝓞 K)) = (67 : 𝓞 K) := by norm_num
   have hpdiv : pi ^ 66 ∣ (67 : 𝓞 K) := by
-    simpa only [pi] using (associated_zeta_sub_one_pow_prime hzeta).dvd
+    simpa only [pi, h66, hCast67] using
+      (associated_zeta_sub_one_pow_prime hzeta).dvd
   obtain ⟨q, hq⟩ := hpdiv
   have hlast : pi ^ (m + 66) ∣ (pi ^ m * k) ^ 67 := by
     have hle : m + 66 ≤ m * 67 := by omega
@@ -91,9 +94,11 @@ theorem cube_prime_power_isVandiverDeep {zeta : K}
   have h133 := zeta_sub_one_pow_add_sixtySix_dvd_pow_sub_pow67
     hzeta 67 (by omega)
       ((w : 𝓞 K) ^ 67) ((c : 𝓞 K) ^ 67) h67'
+  have hExp133 : (67 + 66 : ℕ) = 133 := by norm_num
+  have hSq67 : (67 * 67 : ℕ) = 67 ^ 2 := by norm_num
   have h133' : pi ^ 133 ∣
       (w : 𝓞 K) ^ (67 ^ 2) - (c : 𝓞 K) ^ (67 ^ 2) := by
-    simpa only [pi, ← pow_mul] using h133
+    simpa only [pi, ← pow_mul, hExp133, hSq67] using h133
   have h199 := zeta_sub_one_pow_add_sixtySix_dvd_pow_sub_pow67
     hzeta 133 (by omega)
       ((w : 𝓞 K) ^ (67 ^ 2)) ((c : 𝓞 K) ^ (67 ^ 2)) h133'

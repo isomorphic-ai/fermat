@@ -44,7 +44,10 @@ theorem matrix_entry_certificate (j i : Fin 32) :
       (16 : ZMod 269) ^ (matrix j i).val := by
   set_option maxHeartbeats 0 in
     set_option maxRecDepth 100000 in
-      fin_cases j <;> fin_cases i <;> decide
+      rw [normalizedUnitValue, div_pow]
+      apply (div_eq_iff ?_).2
+      · decide +kernel +revert
+      · decide +kernel +revert
 
 /-! ## Generic residue-character assembly -/
 

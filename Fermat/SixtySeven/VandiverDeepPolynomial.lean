@@ -65,9 +65,11 @@ theorem sixtySeven_sq_dvd_of_deep {zeta : K}
     (pow_dvd_pow_of_dvd hbase 132).trans
       ((pow_dvd_pow ((1 : 𝓞 K) - hzeta.unit') (by omega)).trans hdeep)
   have hp := (associated_zeta_sub_one_pow_prime hzeta).pow_pow (n := 2)
+  have hExp132 : (67 - 1 : ℕ) * 2 = 132 := by norm_num
+  have hCast67 : (((67 : ℕ) : 𝓞 K)) = (67 : 𝓞 K) := by norm_num
   have hp' : Associated (((hzeta.unit' : 𝓞 K) - 1) ^ 132)
       ((67 : 𝓞 K) ^ 2) := by
-    simpa only [← pow_mul] using hp
+    simpa only [← pow_mul, hExp132, hCast67] using hp
   exact hp'.dvd_iff_dvd_left.mp h132
 
 /-- Raising a deeply congruent unit to Vandiver's outer exponent preserves
@@ -98,8 +100,11 @@ theorem deep_integer_not_divisible67 {zeta : K}
     ¬(67 : ℤ) ∣ c := by
   intro hc
   let pi : 𝓞 K := (hzeta.unit' : 𝓞 K) - 1
+  have h66 : (67 - 1 : ℕ) = 66 := by norm_num
+  have hCast67 : (((67 : ℕ) : 𝓞 K)) = (67 : 𝓞 K) := by norm_num
   have hpipow : pi ^ 66 ∣ (67 : 𝓞 K) := by
-    simpa only [pi] using (associated_zeta_sub_one_pow_prime hzeta).dvd
+    simpa only [pi, h66, hCast67] using
+      (associated_zeta_sub_one_pow_prime hzeta).dvd
   have hpi67 : pi ∣ (67 : 𝓞 K) :=
     (dvd_pow_self pi (by norm_num : (66 : ℕ) ≠ 0)).trans hpipow
   obtain ⟨d, rfl⟩ := hc
@@ -287,8 +292,11 @@ theorem exists_vanishingRelationPolynomial67 {zeta : K}
   · have hH' :
         beta * Polynomial.eval₂ (Int.castRingHom (𝓞 K)) hzeta.toInteger Q =
           Polynomial.eval₂ (Int.castRingHom (𝓞 K)) hzeta.toInteger H := by
+      have hcast :
+          algebraMap ℤ (𝓞 K) = Int.castRingHom (𝓞 K) :=
+        RingHom.eq_intCast' _
       simpa only [Polynomial.aeval_def,
-        IsPrimitiveRoot.integralPowerBasis_gen] using hH
+        IsPrimitiveRoot.integralPowerBasis_gen, hcast] using hH
     have hzeroO : Polynomial.aeval hzeta.toInteger
         (vanishingRelationPolynomial67 P Q H C) = 0 := by
       rw [Polynomial.aeval_def]
