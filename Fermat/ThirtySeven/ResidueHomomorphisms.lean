@@ -71,8 +71,11 @@ theorem residueLog_eq_of_pow_eq (u : (ZMod 149)ˣ) (m : ℕ)
     residueLog (Additive.ofMul u) = (m : ZMod 37) := by
   have hsub : fourthPowerToRootPowers u =
       (⟨rootUnit ^ m, m, rfl⟩ : Subgroup.zpowers rootUnit) := by
-    ext
-    simpa [fourthPowerToRootPowers, rootUnit] using h
+    unfold fourthPowerToRootPowers
+    apply Subtype.ext
+    change u ^ 4 = rootUnit ^ m
+    apply Units.ext
+    simpa [rootUnit] using h
   change rootUnit_isPrimitive.zmodEquivZPowers.symm
     (Additive.ofMul (fourthPowerToRootPowers u)) = (m : ZMod 37)
   rw [hsub, rootUnit_isPrimitive.zmodEquivZPowers_symm_apply_pow]
@@ -116,7 +119,12 @@ theorem reductionHom_circularUnit37 (j i : Fin 17) :
       normalizedUnitValue j i := by
   rw [circularUnit37_val]
   simp only [map_mul, map_pow, map_sum, reductionHom_zeta]
-  fin_cases j <;> fin_cases i <;> decide
+  rw [normalizedUnitValue]
+  simp only [normalizationExponent37, normalizationExponent, unitIndex]
+  have hne : 1 - embeddingRoot j ≠ 0 :=
+    sub_ne_zero.mpr (Ne.symm ((embeddingRoot_isPrimitive j).ne_one (by norm_num)))
+  apply (eq_div_iff hne).2
+  rw [mul_assoc, geom_sum_mul_neg]
 
 section CM
 

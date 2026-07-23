@@ -137,12 +137,14 @@ theorem bernoulli_58_denominator_not_dvd : ¬67 ∣ (354 : ℕ) := by
 /-- The package's reduced residue `B₅₈ / 67 = 15 (mod 67)`. -/
 theorem bernoulli_58_scaled_residue :
     ((1260949452968358833761892179015463 : ZMod 67) / 354) = 15 := by
+  apply (div_eq_iff (by decide : (354 : ZMod 67) ≠ 0)).2
   decide
 
 /-- The normalized character residue `B₅₈ / (58·67) = 43`. -/
 theorem bernoulli_58_character_residue :
     ((1260949452968358833761892179015463 : ZMod 67) /
       ((58 : ZMod 67) * 354)) = 43 := by
+  apply (div_eq_iff (by decide : ((58 : ZMod 67) * 354) ≠ 0)).2
   decide
 
 theorem two_pow_58_mod_67 : (2 : ZMod 67) ^ 58 = 39 := by
@@ -152,6 +154,7 @@ theorem primary_quotient_mod_67 :
     ((2 : ZMod 67) ^ 58 - 1) *
       ((1260949452968358833761892179015463 : ZMod 67) /
         ((58 : ZMod 67) * 354)) = 26 := by
+  rw [bernoulli_58_character_residue]
   decide
 
 theorem two_pow_66_mod_67_sq :

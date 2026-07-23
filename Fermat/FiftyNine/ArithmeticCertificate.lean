@@ -116,17 +116,20 @@ theorem bernoulli_44_numerator_not_dvd_sq :
 /-- The package's normalized residue `B44 / 59 = 9 (mod 59)`. -/
 theorem bernoulli_44_scaled_residue :
     (-(471750331852559732797 : ℤ) : ZMod 59) / 690 = 9 := by
+  apply (div_eq_iff (by decide : (690 : ZMod 59) ≠ 0)).2
   decide
 
 /-- The normalization used in the primary quotient. -/
 theorem bernoulli_44_index_scaled_residue :
     (-(471750331852559732797 : ℤ) : ZMod 59) / (44 * 690) = 23 := by
+  apply (div_eq_iff (by decide : (44 * 690 : ZMod 59) ≠ 0)).2
   decide
 
 /-- The local nonzero primary shadow from the proof package. -/
 theorem primary_quotient_mod_59 :
     ((2 : ZMod 59) ^ 44 - 1) *
       ((-(471750331852559732797 : ℤ) : ZMod 59) / (44 * 690)) = 38 := by
+  rw [bernoulli_44_index_scaled_residue]
   decide
 
 /-- The independent non-Wieferich shadow at `59`. -/
