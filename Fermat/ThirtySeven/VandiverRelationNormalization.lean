@@ -55,8 +55,11 @@ theorem zeta_sub_one_pow_add_thirtySix_dvd_pow_sub_pow37
     simpa only [pi, add_comm] using hk
   obtain ⟨r, hr⟩ := exists_add_pow_prime_eq
     (show Nat.Prime 37 by norm_num) y (pi ^ m * k)
+  have h36 : (37 - 1 : ℕ) = 36 := by norm_num
+  have hCast37 : (((37 : ℕ) : 𝓞 K)) = (37 : 𝓞 K) := by norm_num
   have hpdiv : pi ^ 36 ∣ (37 : 𝓞 K) := by
-    simpa only [pi] using (associated_zeta_sub_one_pow_prime hzeta).dvd
+    simpa only [pi, h36, hCast37] using
+      (associated_zeta_sub_one_pow_prime hzeta).dvd
   obtain ⟨q, hq⟩ := hpdiv
   have hlast : pi ^ (m + 36) ∣ (pi ^ m * k) ^ 37 := by
     have hle : m + 36 ≤ m * 37 := by omega
@@ -91,9 +94,11 @@ theorem cube_prime_power_isVandiverDeep {zeta : K}
   have h73 := zeta_sub_one_pow_add_thirtySix_dvd_pow_sub_pow37
     hzeta 37 (by omega)
       ((w : 𝓞 K) ^ 37) ((c : 𝓞 K) ^ 37) h37'
+  have hExp73 : (37 + 36 : ℕ) = 73 := by norm_num
+  have hSq37 : (37 * 37 : ℕ) = 37 ^ 2 := by norm_num
   have h73' : pi ^ 73 ∣
       (w : 𝓞 K) ^ (37 ^ 2) - (c : 𝓞 K) ^ (37 ^ 2) := by
-    simpa only [pi, ← pow_mul] using h73
+    simpa only [pi, ← pow_mul, hExp73, hSq37] using h73
   have h109 := zeta_sub_one_pow_add_thirtySix_dvd_pow_sub_pow37
     hzeta 73 (by omega)
       ((w : 𝓞 K) ^ (37 ^ 2)) ((c : 𝓞 K) ^ (37 ^ 2)) h73'
