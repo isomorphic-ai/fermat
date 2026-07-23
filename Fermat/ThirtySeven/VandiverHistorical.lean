@@ -3036,6 +3036,188 @@ lemma two_sub_equationTenTraceTwo37 {ζ : K}
   simp only [equationTenTraceOne37, equationTenTraceTwo37]
   linear_combination 2 * huinv
 
+/-! ### Transporting equation (8) to the pair `a = 2,-2` -/
+
+omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
+/-- The integral unit attached to the primitive root `ζ²` is literally
+the square of the unit attached to `ζ`. -/
+lemma powTwoPrimitiveRoot_unit37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    (hζ.pow_of_coprime 2 (by norm_num)).unit' = hζ.unit' ^ 2 := by
+  ext
+  rfl
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- Changing the chosen primitive root from `ζ` to `ζ²` multiplies
+Vandiver's real ramified factor `κ` by the explicit cyclotomic unit
+`A+2`. -/
+lemma kappa_powTwoPrimitiveRoot37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    kappa (hζ.pow_of_coprime 2 (by norm_num)) =
+      kappa hζ * (equationTenTraceTwoUnit37 hζ : 𝓞 K) := by
+  rw [← two_sub_equationTenTraceTwo37 hζ]
+  simp only [kappa, powTwoPrimitiveRoot_unit37 hζ,
+    Units.val_pow_eq_pow_val, equationTenTraceTwo37]
+  change (1 - (hζ.unit' : 𝓞 K) ^ 2) *
+      (1 - (hζ.unit'⁻¹ : (𝓞 K)ˣ) ^ 2) =
+    2 - ((hζ.unit' : 𝓞 K) ^ 2 +
+      (hζ.unit'⁻¹ : (𝓞 K)ˣ) ^ 2)
+  have huinv : (hζ.unit' : 𝓞 K) *
+      (hζ.unit'⁻¹ : (𝓞 K)ˣ) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  have huinv2 : (hζ.unit' : 𝓞 K) ^ 2 *
+      (hζ.unit'⁻¹ : (𝓞 K)ˣ) ^ 2 = 1 := by
+    rw [← mul_pow, huinv, one_pow]
+  ring_nf
+  rw [huinv2]
+  ring
+
+/-- The trace `ζ+ζ⁻¹` is fixed by complex conjugation. -/
+lemma equationTenTraceOne_real37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    NumberField.IsCMField.ringOfIntegersComplexConj K
+        (equationTenTraceOne37 hζ) =
+      equationTenTraceOne37 hζ := by
+  have hz :
+      NumberField.IsCMField.ringOfIntegersComplexConj K
+          (hζ.unit' : 𝓞 K) =
+        (hζ.unit'⁻¹ : (𝓞 K)ˣ) :=
+    congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) (unitsComplexConj_zeta37 hζ)
+  have hzinv :
+      NumberField.IsCMField.ringOfIntegersComplexConj K
+          (hζ.unit'⁻¹ : (𝓞 K)ˣ) =
+        (hζ.unit' : 𝓞 K) := by
+    apply NumberField.RingOfIntegers.ext
+    change NumberField.IsCMField.complexConj K ζ⁻¹ = ζ
+    rw [map_inv₀,
+      Fermat.Irregular.CircularUnitIndex.complexConj_zeta37_inv hζ,
+      inv_inv]
+  simp only [equationTenTraceOne37, map_add, hz, hzinv, add_comm]
+
+/-- The cyclotomic unit `A+2` used to transport the historical state to
+the primitive root `ζ²` is real. -/
+lemma equationTenTraceTwoUnit_real37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    NumberField.IsCMField.unitsComplexConj K
+        (equationTenTraceTwoUnit37 hζ) =
+      equationTenTraceTwoUnit37 hζ := by
+  apply Units.ext
+  change NumberField.IsCMField.ringOfIntegersComplexConj K
+      (equationTenTraceTwoUnit37 hζ : 𝓞 K) =
+    (equationTenTraceTwoUnit37 hζ : 𝓞 K)
+  rw [equationTenTraceTwoUnit37_val, map_add,
+    equationTenTraceOne_real37 hζ, map_ofNat]
+
+/-- The same historical equation, expressed with primitive root `ζ²`.
+The factor `A+2` introduced into `κ` is removed from `ξ` by a unit, so
+the equation, nonvanishing, and all three coprimalities are unchanged. -/
+noncomputable def historicalStateAtTwo37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ) :
+    HistoricalState (hζ.pow_of_coprime 2 (by norm_num)) :=
+  let u := equationTenTraceTwoUnit37 hζ
+  { omega := s.omega
+    theta := s.theta
+    xi := (((u⁻¹) ^ s.m : (𝓞 K)ˣ) : 𝓞 K) * s.xi
+    eta := s.eta
+    m := s.m
+    one_lt_m := s.one_lt_m
+    xi_ne_zero := mul_ne_zero (u⁻¹ ^ s.m).isUnit.ne_zero s.xi_ne_zero
+    coprime_omega_theta := s.coprime_omega_theta
+    coprime_theta_xi :=
+      (isCoprime_mul_unit_left_right (u⁻¹ ^ s.m).isUnit
+        s.theta s.xi).mpr s.coprime_theta_xi
+    coprime_omega_xi :=
+      (isCoprime_mul_unit_left_right (u⁻¹ ^ s.m).isUnit
+        s.omega s.xi).mpr s.coprime_omega_xi
+    equation := by
+      rw [s.equation]
+      have hu : (u : 𝓞 K) ^ s.m *
+          ((u⁻¹ : (𝓞 K)ˣ) : 𝓞 K) ^ s.m = 1 := by
+        rw [← mul_pow, ← Units.val_mul]
+        simp
+      have hbase :
+          kappa (hζ.pow_of_coprime 2 (by norm_num)) ^ s.m *
+              ((((u⁻¹) ^ s.m : (𝓞 K)ˣ) : 𝓞 K) * s.xi) =
+            kappa hζ ^ s.m * s.xi := by
+        rw [kappa_powTwoPrimitiveRoot37 hζ, mul_pow]
+        simp only [Units.val_pow_eq_pow_val]
+        calc
+          (kappa hζ ^ s.m * (u : 𝓞 K) ^ s.m) *
+              (((u⁻¹ : (𝓞 K)ˣ) : 𝓞 K) ^ s.m * s.xi) =
+              kappa hζ ^ s.m *
+                (((u : 𝓞 K) ^ s.m *
+                  ((u⁻¹ : (𝓞 K)ˣ) : 𝓞 K) ^ s.m) * s.xi) := by ring
+          _ = kappa hζ ^ s.m * s.xi := by rw [hu, one_mul]
+      rw [hbase] }
+
+/-- Real admissibility is preserved by the change of primitive root from
+`ζ` to `ζ²`. -/
+lemma historicalStateAtTwo_admissible37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ)
+    (hs : RealSourceAdmissible hζ s) :
+    RealSourceAdmissible (hζ.pow_of_coprime 2 (by norm_num))
+      (historicalStateAtTwo37 hζ s) := by
+  let u := equationTenTraceTwoUnit37 hζ
+  have hureal : NumberField.IsCMField.unitsComplexConj K u = u := by
+    simpa only [u] using equationTenTraceTwoUnit_real37 hζ
+  have huinvpow :
+      NumberField.IsCMField.ringOfIntegersComplexConj K
+          (((u⁻¹) ^ s.m : (𝓞 K)ˣ) : 𝓞 K) =
+        (((u⁻¹) ^ s.m : (𝓞 K)ˣ) : 𝓞 K) := by
+    have huinvpowU :
+        NumberField.IsCMField.unitsComplexConj K ((u⁻¹) ^ s.m) =
+          (u⁻¹) ^ s.m := by
+      rw [map_pow, map_inv, hureal]
+    exact congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) huinvpowU
+  refine ⟨hs.1, hs.2.1, ?_, hs.2.2.2⟩
+  change NumberField.IsCMField.ringOfIntegersComplexConj K
+      ((((u⁻¹) ^ s.m : (𝓞 K)ˣ) : 𝓞 K) * s.xi) =
+    (((u⁻¹) ^ s.m : (𝓞 K)ˣ) : 𝓞 K) * s.xi
+  rw [map_mul, huinvpow, hs.2.2.1]
+
+set_option maxRecDepth 3000 in
+/-- Vandiver's paired equation (8) at `a=2,-2`.  It is obtained by
+applying the already-proved `a=1,-1` construction to the primitive root
+`ζ²`; the unit transport above restores the original historical state.
+The generators remain prime to the original uniformizer because
+`ζ²-1` is associated to `ζ-1`. -/
+theorem exists_historicalEquationEight_pair_two37
+    (hlemma : LemmaOne K 37)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ)
+    (hs : RealSourceAdmissible hζ s) :
+    ∃ (ρtwo ρminus : 𝓞 K) (η : (𝓞 K)ˣ),
+      NumberField.IsCMField.unitsComplexConj K η = η ∧
+      s.omega + (hζ.unit' ^ 2 : (𝓞 K)ˣ) * s.theta =
+        (1 - (hζ.unit' ^ 2 : (𝓞 K)ˣ)) * η * ρtwo ^ 37 ∧
+      s.omega + ((hζ.unit' ^ 2)⁻¹ : (𝓞 K)ˣ) * s.theta =
+        (1 - ((hζ.unit' ^ 2)⁻¹ : (𝓞 K)ˣ)) * η * ρminus ^ 37 ∧
+      NumberField.IsCMField.ringOfIntegersComplexConj K ρtwo = ρminus ∧
+      ¬ (hζ.unit' : 𝓞 K) - 1 ∣ ρtwo ∧
+      ¬ (hζ.unit' : 𝓞 K) - 1 ∣ ρminus := by
+  let hζtwo := hζ.pow_of_coprime 2 (by norm_num)
+  let stwo := historicalStateAtTwo37 hζ s
+  have hstwo : RealSourceAdmissible hζtwo stwo := by
+    simpa only [hζtwo, stwo] using
+      historicalStateAtTwo_admissible37 hζ s hs
+  obtain ⟨ρtwo, ρminus, η, hη, htwo, hminus, hconj,
+      hρtwo, hρminus⟩ :=
+    exists_historicalEquationEight_pair_one37 hlemma hζtwo stwo hstwo
+  have hassoc :
+      Associated ((hζ.unit' : 𝓞 K) - 1)
+        ((hζtwo.unit' : 𝓞 K) - 1) := by
+    simpa only [hζtwo, powTwoPrimitiveRoot_unit37 hζ,
+      Units.val_pow_eq_pow_val] using
+      hζ.unit'_coe.associated_sub_one_pow_sub_one_of_coprime
+        (by norm_num : Nat.Coprime 2 37)
+  refine ⟨ρtwo, ρminus, η, hη, ?_, ?_, hconj, ?_, ?_⟩
+  · simpa only [stwo, historicalStateAtTwo37, hζtwo,
+      powTwoPrimitiveRoot_unit37 hζ, Units.val_pow_eq_pow_val] using htwo
+  · simpa only [stwo, historicalStateAtTwo37, hζtwo,
+      powTwoPrimitiveRoot_unit37 hζ] using hminus
+  · exact fun h ↦ hρtwo ((hassoc.dvd_iff_dvd_left).mp h)
+  · exact fun h ↦ hρminus ((hassoc.dvd_iff_dvd_left).mp h)
+
 omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
 /-- Vandiver's elimination in equation (10a), separated from the
 ideal-theoretic construction of its inputs.
