@@ -192,7 +192,13 @@ odd-prime normalization used by every later certificate. -/
 theorem normalizationExponent37_eq_canonical (i : Fin 17) :
     normalizationExponent37 i =
       canonicalNormalizationExponent (p := 37) (i.val + 2) := by
-  fin_cases i <;> decide
+  have htwo : (2 : ZMod 37)⁻¹ = 19 := by
+    apply ZMod.inv_eq_of_mul_eq_one 37 2 19
+    linear_combination CharP.cast_eq_zero (ZMod 37) 37
+  fin_cases i <;>
+    norm_num [normalizationExponent37, canonicalNormalizationExponent,
+      div_eq_mul_inv, htwo, ZMod.neg_val', ZMod.val_natCast,
+      ZMod.val_ofNat]
 
 /-- Backward compatibility is exact: the original seventeen units are the
 specialization of the generic odd-prime family, not merely associated
