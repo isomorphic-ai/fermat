@@ -55,7 +55,7 @@ theorem vandiverLemmaTwo_of_positiveRelationDerivativeCongruences67
           ((↑) : NumberField.IsCMField.realUnits K → (𝓞 K)ˣ) hrel
       simpa only [uReal, deepRealUnit67_coe,
         diagonalVandiverUnitFamily67_coe, Subgroup.coe_pow,
-        Subgroup.coe_zpow, Subgroup.coe_prod] using hrel'
+        Subgroup.coe_zpow, SubmonoidClass.coe_finsetProd] using hrel'
     · exact hprimitive
   letI :
       (Subgroup.closure
