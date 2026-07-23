@@ -1,4 +1,5 @@
 import Fermat.Irregular.TakagiFurtwangler37
+import Fermat.Irregular.KummerRealFixedField37
 import FltRegular.NumberTheory.Hilbert94
 import Mathlib.NumberTheory.RamificationInertia.Galois
 
@@ -20,6 +21,9 @@ noncomputable section
 
 open Polynomial
 open Fermat.Irregular.TakagiFurtwangler37
+open Fermat.Irregular.VandiverLemmaOne
+open Fermat.Irregular.KummerConjugationDescent37
+open Fermat.Irregular.KummerRealFixedField37
 
 /-! ## Comparing the two finite-prime unramifiedness interfaces -/
 
@@ -180,6 +184,11 @@ local instance : Fact (Nat.Prime 37) := ⟨by norm_num⟩
 variable {K : Type} [Field K] [NumberField K]
   [IsCyclotomicExtension {37} ℚ K]
 
+local instance : NumberField.IsCMField K :=
+  IsCyclotomicExtension.IsCMField (p := 37) K (by norm_num)
+
+local notation3 "K⁺" => NumberField.maximalRealSubfield K
+
 /-- The actual cyclic degree-37 Kummer extension, once unramified at every
 finite prime, contributes `37`-torsion to the full cyclotomic class group.
 
@@ -280,6 +289,164 @@ theorem hasNonprincipalIdealWithPrincipalPower_of_unramifiedCyclicExtension37
     (hasNonprincipalIdealWithPrincipalPower_iff_dvd_classNumber
       (F := F) (p := 37) (by norm_num)).mpr
   simpa only [NumberField.classNumber] using hdvd
+
+/-! ## The explicit conjugation-fixed real extension -/
+
+/-- The fixed field of the lifted conjugation is an everywhere-unramified
+cyclic extension of degree `37` over the maximal real subfield.
+
+The algebraic fixed-field package comes from
+`KummerRealFixedField37`.  Finite-prime unramifiedness descends from the
+given unramified Kummer extension by the coprime-degree theorem above:
+each ramification index divides both `2` and `37`. -/
+noncomputable def realFixedFieldUnramifiedCyclicExtension37
+    {a : 𝓞 K}
+    (hirr : Irreducible (X ^ 37 - C (a : K)))
+    (hanti : ConjugationAntiInvariantWitness37 a)
+    (hunramified : KummerExtension37Unramified hirr) :
+    UnramifiedCyclicExtension37 K⁺ := by
+  letI : Fact (Irreducible (X ^ 37 - C (a : K))) := ⟨hirr⟩
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K)
+      (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  letI : Algebra K⁺ L :=
+    algebraKummerOverReal37 (K := K) (a := a)
+  letI : IsScalarTower K⁺ K L :=
+    scalarTowerKummerOverReal37 (K := K) (a := a)
+  letI : FiniteDimensional K⁺ L :=
+    finiteDimensionalKummerOverReal37 (K := K) (a := a)
+  let E := realFixedField37 hanti
+  letI : Field E := inferInstance
+  letI : Algebra K⁺ E := inferInstance
+  letI : Algebra E L := inferInstance
+  letI : IsScalarTower K⁺ E L :=
+    IntermediateField.isScalarTower_mid' E
+  letI : FiniteDimensional K⁺ E :=
+    FiniteDimensional.of_finrank_pos <| by
+      rw [show Module.finrank K⁺ E = 37 by
+        exact finrank_realFixedField37 (a := a) hanti]
+      norm_num
+  letI : FiniteDimensional E L :=
+    FiniteDimensional.right K⁺ E L
+  letI : NumberField E := NumberField.of_module_finite K⁺ E
+  letI : IsGalois K⁺ E :=
+    isGalois_realFixedField37 (a := a) hanti
+  letI : IsCyclic (E ≃ₐ[K⁺] E) :=
+    isCyclic_realFixedFieldAut37 (a := a) hanti
+  have hrealUnramified : IsUnramifiedAtFinitePlaces K⁺ E :=
+    @isUnramifiedAtFinitePlaces_of_degreeTwo_degreeThirtySeven
+      K⁺ K E L
+      inferInstance inferInstance
+      inferInstance inferInstance
+      inferInstance inferInstance
+      inferInstance inferInstance
+      inferInstance inferInstance
+      (algebraKummerOverReal37 (K := K) (a := a))
+      inferInstance inferInstance
+      (scalarTowerKummerOverReal37 (K := K) (a := a))
+      inferInstance
+      inferInstance inferInstance inferInstance inferInstance
+      inferInstance inferInstance
+      (Algebra.IsQuadraticExtension.finrank_eq_two K⁺ K)
+      (finrank_realFixedField37 (a := a) hanti)
+      hunramified
+  exact UnramifiedCyclicExtension37.ofIsUnramifiedAtFinitePlaces
+    (finrank_realFixedField37 (a := a) hanti)
+    hrealUnramified
+
+/-- Hilbert 94 applied to the explicit conjugation-fixed field: an
+anti-invariant, everywhere-unramified degree-`37` Kummer extension gives
+nontrivial `37`-torsion in the maximal-real class group. -/
+theorem antiInvariantKummerReflection37
+    {a : 𝓞 K}
+    (hirr : Irreducible (X ^ 37 - C (a : K)))
+    (hanti : ConjugationAntiInvariantWitness37 a)
+    (hunramified : KummerExtension37Unramified hirr) :
+    HasNonprincipalIdealWithPrincipalPower K⁺ 37 :=
+  hasNonprincipalIdealWithPrincipalPower_of_unramifiedCyclicExtension37
+    (realFixedFieldUnramifiedCyclicExtension37
+      hirr hanti hunramified)
+
+set_option maxRecDepth 2000 in
+/-- The conjugate-pair instance of Vandiver's Lemma 1 at exponent `37`.
+
+If the ideal root were nonprincipal, the local Kummer theorem would make
+the corresponding extension everywhere unramified.  The exact identity
+for `x * conj(x)^36` supplies the lifted conjugation, so the theorem above
+would force `37` to divide the maximal-real class number, contradicting
+the checked Sinnott--Kummer computation. -/
+theorem conjugatePairIdealRoot_isPrincipal37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {x : 𝓞 K} {I : Ideal (𝓞 K)}
+    (hprimary : IsKummerPrimary hζ (conjugatePairRadicand37 x))
+    (hpow :
+      I ^ 37 = Ideal.span {conjugatePairRadicand37 x}) :
+    Submodule.IsPrincipal (I : Ideal (𝓞 K)) := by
+  by_contra hnonprincipal
+  let hirr :
+      Irreducible
+        (X ^ 37 - C (conjugatePairRadicand37 x : K)) :=
+    irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+      (by norm_num : Nat.Prime 37) hpow hnonprincipal
+  have hunramified : KummerExtension37Unramified hirr :=
+    primaryIdealRootGivesUnramifiedKummer37
+      hζ hprimary hpow hnonprincipal
+  have htorsion :
+      HasNonprincipalIdealWithPrincipalPower K⁺ 37 :=
+    antiInvariantKummerReflection37 hirr
+      (conjugatePairAntiInvariantWitness37 x)
+      hunramified
+  have hdvd : 37 ∣ NumberField.classNumber K⁺ :=
+    (hasNonprincipalIdealWithPrincipalPower_iff_dvd_classNumber
+      (F := K⁺) (p := 37) (by norm_num)).mp htorsion
+  exact Fermat.ThirtySeven.SinnottKummer.not_dvd_classNumber hζ hdvd
+
+set_option maxRecDepth 2000 in
+/-- Equation (7a) for a conjugate pair, without assuming the universal
+form of Vandiver's Lemma 1.
+
+If `I^37 = (x)`, `J^37 = (conj(x))`, and the normalized product
+`x * conj(x)^36` is primary, the explicit real fixed-field reflection
+principalizes `I * J^36`. -/
+theorem exists_conjugatePairEquationSevenAGenerator37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (I J : Ideal (𝓞 K)) (x y : 𝓞 K)
+    (hIpow : I ^ 37 = Ideal.span {x})
+    (hJpow : J ^ 37 = Ideal.span {y})
+    (hconj :
+      NumberField.IsCMField.ringOfIntegersComplexConj K x = y)
+    (hprimary : IsKummerPrimary hζ (x * y ^ 36)) :
+    ∃ r : 𝓞 K, I * J ^ 36 = Ideal.span {r} := by
+  have hradicand :
+      conjugatePairRadicand37 x = x * y ^ 36 := by
+    simp only [conjugatePairRadicand37, hconj]
+  have hpow :
+      (I * J ^ 36) ^ 37 =
+        Ideal.span {conjugatePairRadicand37 x} := by
+    calc
+      (I * J ^ 36) ^ 37 =
+          I ^ 37 * (J ^ 37) ^ 36 := by
+        rw [mul_pow, ← pow_mul, ← pow_mul,
+          Nat.mul_comm 36 37]
+      _ = Ideal.span {x} * (Ideal.span {y}) ^ 36 := by
+        rw [hIpow, hJpow]
+      _ = Ideal.span {x * y ^ 36} := by
+        rw [Ideal.span_singleton_pow,
+          Ideal.span_singleton_mul_span_singleton]
+      _ = Ideal.span {conjugatePairRadicand37 x} := by
+        rw [hradicand]
+  have hprimary' :
+      IsKummerPrimary hζ (conjugatePairRadicand37 x) := by
+    rw [hradicand]
+    exact hprimary
+  obtain ⟨r, hr⟩ :=
+    (conjugatePairIdealRoot_isPrincipal37
+      hζ hprimary' hpow).principal
+  exact ⟨r, hr⟩
 
 /-- The exact global existence theorem needed after the concrete Kummer
 extension has been constructed and proved unramified: Takagi reflection
