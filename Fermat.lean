@@ -13,6 +13,7 @@ import Fermat.Irregular.CyclotomicLValue37
 import Fermat.Irregular.CyclotomicSeriesAtOne37
 import Fermat.Irregular.KummerCongruence
 import Fermat.Irregular.VandiverData
+import Fermat.Ladder.FaulhaberResponse
 import Fermat.Ladder.HistoricalResponse
 import Fermat.Ladder.Response
 import Fermat.Seven.Lebesgue.TheoremTwo
@@ -49,9 +50,14 @@ theorem holdsAt_thirteen : HoldsAt 13 :=
   Thirteen.Cyclotomic.holdsAt_thirteen_cyclotomic
 
 /-- The same exponent-thirteen endpoint packaged with its decompressed
-quadratic-fold and direct Faulhaber certificates. -/
+quadratic fold and direct Faulhaber proof through Kummer's criterion. -/
 theorem holdsAt_thirteen_sevenFold : HoldsAt 13 :=
   Thirteen.SevenFold.holdsAt_thirteen_sevenFold
+
+/-- Fermat's theorem for exponent thirteen from the five direct Faulhaber
+power-sum certificates, Kummer's criterion, and `flt_regular`. -/
+theorem holdsAt_thirteen_faulhaber : HoldsAt 13 :=
+  Thirteen.SevenFold.holdsAt_thirteen_faulhaber
 
 /-- Fermat's theorem for exponent eleven, via the class-number-one
 certificate for `\mathbb{Q}(\zeta_{11})` and the formal Lamé–Kummer descent. -/
@@ -59,9 +65,14 @@ theorem holdsAt_eleven : HoldsAt 11 :=
   Eleven.Cyclotomic.holdsAt_eleven_cyclotomic
 
 /-- The same exponent-eleven endpoint packaged with its decompressed
-quadratic-fold and direct Faulhaber certificates. -/
+quadratic fold and direct Faulhaber proof through Kummer's criterion. -/
 theorem holdsAt_eleven_sevenFold : HoldsAt 11 :=
   Eleven.SevenFold.holdsAt_eleven_sevenFold
+
+/-- Fermat's theorem for exponent eleven from the four direct Faulhaber
+power-sum certificates, Kummer's criterion, and `flt_regular`. -/
+theorem holdsAt_eleven_faulhaber : HoldsAt 11 :=
+  Eleven.SevenFold.holdsAt_eleven_faulhaber
 
 /-- Fermat's theorem for exponent thirty-seven, through the complete
 historical Vandiver assembly reused by the seven-fold ladder. -/

@@ -1,6 +1,6 @@
 import Fermat.Classical
 import Fermat.Fourteen.DescentConstruction
-import Fermat.Regular.Faulhaber
+import Fermat.Regular.KummerCriterion
 import Fermat.Thirteen.Cyclotomic
 
 /-!
@@ -11,11 +11,10 @@ package alongside the shorter class-number-one proof.  Its Bernoulli layer
 is proved directly by five finite Faulhaber power sums, independently of
 Kummer's congruence.
 
-The class-number-one certificate already closes FLT at stage 6.  Thus the
-Faulhaber branch records the decompressed coefficient structure but is not a
-premise of the final `flt_regular` call.  A proof that this numerical branch
-alone implies `IsRegularPrime 13` would be Kummer's deeper regular-prime
-criterion, presently absent from Mathlib.
+The class-number-one certificate already closes FLT at stage 6.  The
+Faulhaber branch now supplies a second, logically independent endpoint:
+the formal Kummer criterion turns its five Bernoulli numerator certificates
+into `IsRegularPrime 13`, and the checked `flt_regular` descent closes FLT.
 -/
 
 namespace Fermat.Thirteen.SevenFold
@@ -97,17 +96,29 @@ theorem bernoulliNumeratorRegular_thirteen :
   bernoulliNumeratorRegular_of_powerSums (by norm_num)
     (fun _ hk ↦ powerSum_not_dvd_sq hk)
 
+theorem isRegularPrime_thirteen_faulhaber :
+    IsRegularPrime 13 :=
+  isRegularPrime_of_bernoulliNumeratorRegular (by norm_num)
+    bernoulliNumeratorRegular_thirteen
+
 /-! ## 8. Checked descent engine -/
 
-/-- The complete endpoint retained beside the decompressed certificates.
-The class-number branch is the first sufficient branch in this instance. -/
+/-- The complete alternative endpoint whose regularity premise is supplied
+by the direct five-index Faulhaber computation. -/
+theorem holdsAt_thirteen_faulhaber : Fermat.HoldsAt 13 :=
+  holdsAt_of_bernoulliNumeratorRegular (by norm_num)
+    bernoulliNumeratorRegular_thirteen
+
+/-- Backwards-compatible name for the decompressed seven-fold endpoint. -/
 theorem holdsAt_thirteen_sevenFold : Fermat.HoldsAt 13 :=
-  Fermat.Thirteen.Cyclotomic.holdsAt_thirteen_cyclotomic
+  holdsAt_thirteen_faulhaber
 
 /-- A compact public package showing that both the decompressed Bernoulli
-layer and the final exponent theorem have been checked. -/
+layer and the final exponent theorem are joined by Kummer's criterion. -/
 theorem faulhaber_and_flt_thirteen :
     BernoulliNumeratorRegular 13 ∧ Fermat.HoldsAt 13 :=
-  ⟨bernoulliNumeratorRegular_thirteen, holdsAt_thirteen_sevenFold⟩
+  let hregular := bernoulliNumeratorRegular_thirteen
+  ⟨hregular,
+    holdsAt_of_bernoulliNumeratorRegular (by norm_num) hregular⟩
 
 end Fermat.Thirteen.SevenFold

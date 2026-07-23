@@ -5,8 +5,9 @@ import Fermat.Thirteen.SevenFold
 # Seven-fold ladder trace for exponent thirteen
 
 The class-number-one / regular-prime branch first settles the exponent at
-arithmetic fold six.  The five-index direct Faulhaber computation remains
-checked at fold seven as an independent decompressed alternative.
+arithmetic fold six.  A second proof-backed run traverses all seven folds
+and closes FLT from the five-index direct Faulhaber computation via
+Kummer's criterion.
 -/
 
 namespace Fermat.Ladder.Thirteen
@@ -106,5 +107,84 @@ theorem exitDepth_first_sufficient :
       ∀ i, i < measured.schedule.exitIndex →
         measured.schedule.decision i = .continue :=
   ⟨rfl, measured.schedule.at_exit, measured.schedule.before_exit⟩
+
+/-- The primary depth-six run is backed by the independent class-number-one
+endpoint. -/
+def proofBacked : ProofBacked 13 where
+  measured := measured
+  holds := Fermat.Thirteen.Cyclotomic.holdsAt_thirteen_cyclotomic
+  outcome_eq := by
+    change Outcome.contradicted _ = Outcome.contradicted _
+    rfl
+
+/-! ## Alternative full-depth Faulhaber run -/
+
+namespace Faulhaber
+
+/-- In the alternative run, fold six records only the neutral executed
+arithmetic layer; regularity is not assumed before the Faulhaber fold. -/
+def agencyClaim : Prop :=
+  AgencyFold 13
+
+theorem agencyClaim_checked : agencyClaim :=
+  agencyFold 13
+
+/-- A causal trace whose contradiction payload is constructed from the
+fold-seven Bernoulli certificate. -/
+def trace : CaseTrace 13 where
+  awareness_substrate :=
+    ⟨Thirteen.awarenessClaim, Thirteen.awarenessClaim_checked⟩
+  structure_algebra :=
+    ⟨Thirteen.structureClaim, Thirteen.structureClaim_checked⟩
+  sharpening_analysis :=
+    ⟨Thirteen.sharpeningClaim, Thirteen.sharpeningClaim_checked⟩
+  presence_geometry :=
+    ⟨Thirteen.presenceClaim, Thirteen.presenceClaim_checked⟩
+  alignment_logic :=
+    ⟨Thirteen.alignmentClaim, Thirteen.alignmentClaim_checked⟩
+  agency_arithmetic := ⟨agencyClaim, agencyClaim_checked⟩
+  flexibility_potential :=
+    ⟨Thirteen.flexibilityClaim, Thirteen.flexibilityClaim_checked⟩
+  conclude := by
+    intro _ _ _ _ _ _ hfaulhaber
+    exact .contradicted
+      (holdsAt_of_bernoulliNumeratorRegular (by norm_num) hfaulhaber)
+
+def run : Checked 13 where
+  folds := sevenFolds 13
+  trace := trace
+
+def measured : Measured 13 :=
+  Measured.atFold run ⟨6, by decide⟩
+
+/-- Machine-readable exit depth of the alternative Faulhaber route. -/
+def exitDepth : ℕ := 7
+
+theorem exitDepth_eq_measured : measured.exitDepth = exitDepth := rfl
+
+theorem exitDepth_le_seven : exitDepth ≤ 7 := by
+  norm_num [exitDepth]
+
+theorem exitDepth_first_sufficient :
+    measured.exitDepth = exitDepth ∧
+      measured.schedule.decision measured.schedule.exitIndex =
+        .exit measured.schedule.outcome ∧
+      ∀ i, i < measured.schedule.exitIndex →
+        measured.schedule.decision i = .continue :=
+  ⟨rfl, measured.schedule.at_exit, measured.schedule.before_exit⟩
+
+theorem holdsAt : Fermat.HoldsAt 13 :=
+  Fermat.Thirteen.SevenFold.holdsAt_thirteen_faulhaber
+
+/-- The alternative depth-seven verdict reuses the completed Faulhaber
+endpoint rather than a shadow proof. -/
+def proofBacked : ProofBacked 13 where
+  measured := measured
+  holds := holdsAt
+  outcome_eq := by
+    change Outcome.contradicted _ = Outcome.contradicted _
+    rfl
+
+end Faulhaber
 
 end Fermat.Ladder.Thirteen

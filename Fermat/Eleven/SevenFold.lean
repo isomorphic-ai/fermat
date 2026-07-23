@@ -1,7 +1,7 @@
 import Fermat.Classical
 import Fermat.Eleven.Cyclotomic
 import Fermat.Five.Dirichlet
-import Fermat.Regular.Faulhaber
+import Fermat.Regular.KummerCriterion
 
 /-!
 # The decompressed seven-fold package at exponent eleven
@@ -11,11 +11,10 @@ package alongside the shorter class-number-one proof.  In particular, its
 Bernoulli layer is proved directly by four finite Faulhaber power sums; it
 does not use Kummer's congruence.
 
-The class-number-one certificate already closes FLT at stage 6, so the
-Faulhaber branch is an independently checked decomposition rather than a
-logical premise of the final `flt_regular` invocation.  Turning that branch
-alone into `IsRegularPrime 11` would require Kummer's class-group/Bernoulli
-criterion, which is not currently in Mathlib.
+The class-number-one certificate already closes FLT at stage 6.  The
+Faulhaber branch now supplies a second, logically independent endpoint:
+the formal Kummer criterion turns its four Bernoulli numerator certificates
+into `IsRegularPrime 11`, and the checked `flt_regular` descent closes FLT.
 -/
 
 namespace Fermat.Eleven.SevenFold
@@ -97,17 +96,29 @@ theorem bernoulliNumeratorRegular_eleven :
   bernoulliNumeratorRegular_of_powerSums (by norm_num)
     (fun _ hk ↦ powerSum_not_dvd_sq hk)
 
+theorem isRegularPrime_eleven_faulhaber :
+    IsRegularPrime 11 :=
+  isRegularPrime_of_bernoulliNumeratorRegular (by norm_num)
+    bernoulliNumeratorRegular_eleven
+
 /-! ## 8. Checked descent engine -/
 
-/-- The complete endpoint retained beside the decompressed certificates.
-The class-number branch is the first sufficient branch in this instance. -/
+/-- The complete alternative endpoint whose regularity premise is supplied
+by the direct four-index Faulhaber computation. -/
+theorem holdsAt_eleven_faulhaber : Fermat.HoldsAt 11 :=
+  holdsAt_of_bernoulliNumeratorRegular (by norm_num)
+    bernoulliNumeratorRegular_eleven
+
+/-- Backwards-compatible name for the decompressed seven-fold endpoint. -/
 theorem holdsAt_eleven_sevenFold : Fermat.HoldsAt 11 :=
-  Fermat.Eleven.Cyclotomic.holdsAt_eleven_cyclotomic
+  holdsAt_eleven_faulhaber
 
 /-- A compact public package showing that both the decompressed Bernoulli
-layer and the final exponent theorem have been checked. -/
+layer and the final exponent theorem are joined by Kummer's criterion. -/
 theorem faulhaber_and_flt_eleven :
     BernoulliNumeratorRegular 11 ∧ Fermat.HoldsAt 11 :=
-  ⟨bernoulliNumeratorRegular_eleven, holdsAt_eleven_sevenFold⟩
+  let hregular := bernoulliNumeratorRegular_eleven
+  ⟨hregular,
+    holdsAt_of_bernoulliNumeratorRegular (by norm_num) hregular⟩
 
 end Fermat.Eleven.SevenFold

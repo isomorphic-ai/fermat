@@ -10,9 +10,17 @@ then explicitly imports the Lamé–Kummer class-number-one theorem.
 The imported theorem is supplied here by the kernel-checked
 [`flt-regular`](https://github.com/leanprover-community/flt-regular)
 development, pinned at commit
-`ff3daecc6c506b3748b28ff7fbe7ce7e6a23e3e5` for Lean/Mathlib `v4.30.0`.
+`edd24b3f160b0fd5ce0ee489b69f8247117ff1ed` for Lean
+`v4.31.0-rc1`.
 Its `flt_regular` theorem contains both Kummer cases, including the
 second-case descent; no project axiom is used at that boundary.
+
+The independent Bernoulli route uses the kernel-checked
+[`KummerCriterion`](https://github.com/riccardobrasca/KummerCriterion)
+development at commit
+`88e6dd6748a1ba5baac97244aeb27b3e1a5e6286`.  Its main theorem proves the
+class-group/Bernoulli equivalence that joins the direct Faulhaber
+calculation to `IsRegularPrime`.
 
 ## The class-number-one calculation
 
@@ -63,10 +71,10 @@ sum (m = 1, ..., 10) m^k  (mod 11^2)
 and proves it is nonzero.  The generic Faulhaber theorem in
 `Fermat.Regular.Faulhaber` then proves
 `11 ∤ num(B_k)` at every index, without Kummer's congruence.  This numerical
-condition is intentionally not identified with `IsRegularPrime`: that
-class-group equivalence is Kummer's deeper regular-prime criterion and is
-not currently available in Mathlib.  Here the independently checked
-class-number-one branch already suffices to close FLT.
+condition is converted to `IsRegularPrime 11` by the formal Kummer
+criterion, and `flt_regular` then closes FLT.  Thus the Faulhaber
+certificate is now a load-bearing alternative proof, while the independent
+class-number-one branch remains the first sufficient branch.
 
 ## Lean theorem map
 
@@ -78,12 +86,19 @@ class-number-one branch already suffices to close FLT.
   Lamé–Kummer theorem.
 - `Fermat.Eleven.SevenFold.bernoulliNumeratorRegular_eleven` is the direct
   four-index Faulhaber certificate.
+- `Fermat.Regular.Faulhaber.bernoulliNumeratorRegular_iff_isRegularPrime`
+  is the generic checked Kummer bridge.
+- `Fermat.Eleven.SevenFold.holdsAt_eleven_faulhaber` is the complete
+  Faulhaber endpoint.
 - `Fermat.Eleven.SevenFold.quadratic_fold` and `secondary_composition`
   check the two structural polynomial folds from the ZIP.
 - `Fermat.Eleven.SevenFold.faulhaber_and_flt_eleven` retains the
   decompressed Bernoulli layer together with the checked endpoint.
 - `Fermat.holdsAt_eleven` is the public project theorem.
-- `Fermat.holdsAt_eleven_sevenFold` exposes the alternative package.
+- `Fermat.holdsAt_eleven_faulhaber` and
+  `Fermat.holdsAt_eleven_sevenFold` expose the alternative package.
+- `Fermat.Ladder.Eleven.Faulhaber.exitDepth = 7` is the machine-readable
+  depth of its independent full ladder run.
 
 ## Trust audit
 

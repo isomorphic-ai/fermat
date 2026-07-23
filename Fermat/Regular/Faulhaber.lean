@@ -14,9 +14,10 @@ divisible by `p^2` proves that `p` does not divide the reduced numerator of
 does not use Kummer's congruence.
 
 The predicate `BernoulliNumeratorRegular` deliberately has a different name
-from `IsRegularPrime`.  The latter is defined by the cyclotomic class number;
-identifying it with this Bernoulli condition is Kummer's deeper regular-prime
-criterion and is not presently available in Mathlib.
+from `IsRegularPrime`.  The latter is defined by the cyclotomic class number.
+The adjacent module `Fermat.Regular.KummerCriterion` imports the formal proof
+of Kummer's deeper criterion and identifies the two predicates for odd
+primes.
 -/
 
 namespace Fermat.Regular.Faulhaber

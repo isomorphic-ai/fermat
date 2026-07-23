@@ -19,8 +19,8 @@ The completed public fixed-exponent results are:
 | 4 | `Fermat.holdsAt_four` | Mathlib's checked classical descent |
 | 5 | `Fermat.holdsAt_five` | Dirichlet's two-branch descent |
 | 7 | `Fermat.holdsAt_seven` | Lebesgue's 1840 proof and Addition |
-| 11 | `Fermat.holdsAt_eleven` | Lamé--Kummer regular-prime descent |
-| 13 | `Fermat.holdsAt_thirteen` | Lamé--Kummer regular-prime descent |
+| 11 | `Fermat.holdsAt_eleven` | class number one; direct Faulhaber alternative |
+| 13 | `Fermat.holdsAt_thirteen` | class number one; direct Faulhaber alternative |
 | 14 | `Fermat.holdsAt_fourteen` | Dirichlet's independent 1832 descent |
 | 37 | `Fermat.holdsAt_thirtySeven` | Vandiver--Takagi--Furtwängler |
 | 59 | `Fermat.holdsAt_fiftyNine` | Vandiver--Takagi--Furtwängler |
@@ -54,9 +54,10 @@ Each completed exponent has its own directory under `Fermat/`.
 - `Fermat/Five/`, `Fermat/Seven/`, and `Fermat/Fourteen/` contain
   decompressed historical descents.  The modules separate normalization,
   coprimality, power extraction, allocation, and the final infinite descent.
-- `Fermat/Eleven/` and `Fermat/Thirteen/` contain the class-number-one
-  Lamé--Kummer route and an alternative `SevenFold.lean` route with explicit
-  neighbor folds and Faulhaber certificates.
+- `Fermat/Eleven/` and `Fermat/Thirteen/` contain two independent regularity
+  routes: the class-number-one certificate and a direct `SevenFold.lean`
+  Faulhaber certificate closed by the formal Kummer criterion.  Both then
+  reuse the checked Lamé--Kummer descent.
 - `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`, and
   `Fermat/OneHundredFiftySeven/` contain the irregular-prime campaigns.
   Their final public endpoints are the corresponding
@@ -97,8 +98,16 @@ Exponent-specific modules instantiate these generic results with explicit
 finite data.  Large matrices and Bernoulli numbers are checked using compact
 kernel-verifiable certificates rather than trusted external computations.
 
-[`Fermat/Regular/`](Fermat/Regular/) contains reusable regular-prime and
-Faulhaber infrastructure.  [`Fermat/Quadratic/`](Fermat/Quadratic/) contains
+[`Fermat/Regular/`](Fermat/Regular/) contains reusable Faulhaber
+infrastructure and the checked bridge
+
+```text
+power sums → Bernoulli numerators → Kummer regularity → FLT.
+```
+
+The deep Bernoulli/class-group equivalence comes from the pinned
+[`KummerCriterion`](https://github.com/riccardobrasca/KummerCriterion)
+formalization.  [`Fermat/Quadratic/`](Fermat/Quadratic/) contains
 quadratic-ring and unit calculations shared by several elementary descents.
 
 ### The seven-fold ladder
@@ -115,6 +124,16 @@ decomposition independently of the final theorem statement.
   [1, 2, 3, 4, 5, 1, 6, 1, 1, 1, 6, 1, 6, 1]
   ```
 
+- `FaulhaberResponse.lean` retains the independent, proof-backed full-depth
+  alternatives for `11` and `13`:
+
+  ```lean
+  Fermat.Ladder.FaulhaberResponse.responseData
+  -- [(11, 7), (13, 7)]
+  ```
+
+  The original response curve still records depth `6` for those exponents,
+  because their class-number-one route is the first sufficient branch.
 - `ThirtySeven.lean`, `FiftyNine.lean`, `SixtySeven.lean`, and
   `OneHundredFiftySeven.lean` reuse the completed historical proofs.  Their
   measured outcome is tied by `ProofBacked.outcome_eq` to the corresponding
@@ -141,8 +160,9 @@ sibling archive `../fermat-data` in the campaign workspace.
 
 ## Building
 
-The project pins Lean `v4.30.0`, Mathlib `v4.30.0`, and a fixed revision of
-[`flt-regular`](https://github.com/leanprover-community/flt-regular).
+The project pins Lean `v4.31.0-rc1` and exact revisions of Mathlib,
+[`flt-regular`](https://github.com/leanprover-community/flt-regular), and
+[`KummerCriterion`](https://github.com/riccardobrasca/KummerCriterion).
 
 On a fresh checkout:
 
@@ -156,6 +176,7 @@ include:
 
 ```bash
 lake build Fermat.Ladder.Response
+lake build Fermat.Ladder.FaulhaberResponse
 lake build Fermat.Ladder.HistoricalResponse
 lake build Fermat.ThirtySeven.VandiverHistoricalAssembly37
 ```
@@ -166,6 +187,8 @@ A quick consumer file can simply use:
 import Fermat
 
 #check Fermat.holdsAt_thirtySeven
+#check Fermat.holdsAt_eleven_faulhaber
+#eval Fermat.Ladder.FaulhaberResponse.responseData
 #check Fermat.Ladder.HistoricalResponse.campaignProofs
 #eval Fermat.Ladder.HistoricalResponse.responseData
 ```
