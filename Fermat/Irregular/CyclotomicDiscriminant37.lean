@@ -218,7 +218,9 @@ theorem differentIdeal_real_eq_span_zetaDifferent {zeta : K}
       Ideal.span {zetaDifferentGenerator37 hzeta} := by
   have hfield : Algebra.adjoin K⁺
       ({algebraMap (NumberField.RingOfIntegers K) K hzeta.toInteger} : Set K) = ⊤ := by
-    simpa only [hzeta.coe_toInteger] using adjoin_zeta_over_real_field_eq_top hzeta
+    rw [show algebraMap (NumberField.RingOfIntegers K) K hzeta.toInteger = zeta by
+      exact hzeta.coe_toInteger]
+    exact adjoin_zeta_over_real_field_eq_top hzeta
   have h := conductor_mul_differentIdeal
     (NumberField.RingOfIntegers K⁺) K⁺ K hzeta.toInteger hfield
   rw [conductor_eq_top_of_adjoin_eq_top (adjoin_zeta_over_real_eq_top hzeta),
