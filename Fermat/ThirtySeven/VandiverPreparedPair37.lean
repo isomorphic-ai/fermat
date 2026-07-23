@@ -38,6 +38,8 @@ structure PreparedEquationEightPair37
   rminus : 𝓞 K
   mu : 𝓞 K
   coefficient : (𝓞 K)ˣ
+  coefficient_real :
+    NumberField.IsCMField.unitsComplexConj K coefficient = coefficient
   equation_plus :
     s.omega + (t : 𝓞 K) * s.theta =
       (1 - (t : 𝓞 K)) * coefficient * rplus ^ 37
@@ -224,6 +226,8 @@ theorem exists_preparedEquationEightPair37
     (a : ℕ) (ha : a.Coprime 37)
     (rhoPlus rhoMinus rhoZero : 𝓞 K)
     (eta etaZero : (𝓞 K)ˣ)
+    (hetaReal :
+      NumberField.IsCMField.unitsComplexConj K eta = eta)
     (hplus :
       s.omega + (hζ.unit' ^ a : (𝓞 K)ˣ) * s.theta =
         (1 - (hζ.unit' ^ a : (𝓞 K)ˣ)) * eta * rhoPlus ^ 37)
@@ -288,6 +292,11 @@ theorem exists_preparedEquationEightPair37
   let rplus : 𝓞 K := (delta⁻¹ : (𝓞 K)ˣ) * nplus
   let rminus : 𝓞 K := (delta⁻¹ : (𝓞 K)ˣ) * nminus
   let coefficient : (𝓞 K)ˣ := eta * delta ^ 37
+  have hcoefficientReal :
+      NumberField.IsCMField.unitsComplexConj K coefficient =
+        coefficient := by
+    dsimp [coefficient]
+    rw [map_mul, map_pow, hetaReal, hdeltaReal]
   have hdeltaCancel :
       (delta : 𝓞 K) ^ 37 *
           ((delta⁻¹ : (𝓞 K)ˣ) : 𝓞 K) ^ 37 = 1 := by
@@ -400,6 +409,7 @@ theorem exists_preparedEquationEightPair37
       rminus := rminus
       mu := mu
       coefficient := coefficient
+      coefficient_real := hcoefficientReal
       equation_plus := hequationPlus
       equation_minus := hequationMinus
       conjugate := hconjugate
@@ -506,7 +516,7 @@ theorem exists_preparedEquationEightPair_one37
       s.omega + s.theta =
         etaZero * kappa hζ ^ (37 * s.m - 18) * rhoZero ^ 37) :
     Nonempty (PreparedEquationEightPair37 hζ s hζ.unit') := by
-  obtain ⟨rhoPlus, rhoMinus, eta, -, hplus, hminus,
+  obtain ⟨rhoPlus, rhoMinus, eta, hetaReal, hplus, hminus,
       hconj, -, hminusNot⟩ :=
     _root_.Fermat.ThirtySeven.TakagiHistorical37.exists_historicalEquationEight_pair_one37_unconditional
       hζ s hs
@@ -516,6 +526,7 @@ theorem exists_preparedEquationEightPair_one37
   simpa only [pow_one] using
     exists_preparedEquationEightPair37 hζ s 1
       (by norm_num) rhoPlus rhoMinus rhoZero eta etaZero
+      hetaReal
       (by simpa only [pow_one] using hplus)
       (by simpa only [pow_one] using hminus)
       hzero hconj hpair hminusNot
@@ -530,7 +541,7 @@ theorem exists_preparedEquationEightPair_two37
       s.omega + s.theta =
         etaZero * kappa hζ ^ (37 * s.m - 18) * rhoZero ^ 37) :
     Nonempty (PreparedEquationEightPair37 hζ s (hζ.unit' ^ 2)) := by
-  obtain ⟨rhoPlus, rhoMinus, eta, -, hplus, hminus,
+  obtain ⟨rhoPlus, rhoMinus, eta, hetaReal, hplus, hminus,
       hconj, -, hminusNot⟩ :=
     _root_.Fermat.ThirtySeven.TakagiHistorical37.exists_historicalEquationEight_pair_two37_unconditional
       hζ s hs
@@ -539,6 +550,7 @@ theorem exists_preparedEquationEightPair_two37
       hζ s rhoPlus rhoMinus eta hplus hminus
   exact exists_preparedEquationEightPair37 hζ s 2
     (by norm_num) rhoPlus rhoMinus rhoZero eta etaZero
+    hetaReal
     hplus hminus hzero hconj hpair hminusNot
 
 end
