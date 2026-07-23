@@ -278,8 +278,11 @@ lemma tendsto_additiveChordSeriesPartial37
     · exact (tendsto_boundary_series_neg_log (norm_stdAddChar37 a)
         (stdAddChar37_ne_one ha0)).mul_const _
   have hsum := tendsto_finsetSum (s := Finset.univ) (fun a _ ↦ ha a)
-  simpa only [additiveChordSeriesPartial37, complexDirichletChordLogSum37,
-    Finset.sum_neg_distrib, neg_mul] using hsum
+  change Tendsto
+    (fun N ↦ ∑ a : ZMod 37,
+      (∑ n ∈ range N, (ZMod.stdAddChar a) ^ n / n) * ψ⁻¹ a)
+    atTop (𝓝 (-complexDirichletChordLogSum37 ψ))
+  simpa only [complexDirichletChordLogSum37, Finset.sum_neg_distrib, neg_mul] using hsum
 
 /-- The exact finite Fourier transform, with Mathlib's positive-exponential additive character
 and the inverse-character Gauss sum. -/

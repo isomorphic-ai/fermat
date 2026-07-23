@@ -74,6 +74,9 @@ theorem embedding_zeta {zeta : K} (hzeta : IsPrimitiveRoot zeta p)
       (cyclotomic.irreducible_rat
         (Nat.Prime.pos (Fact.out : Nat.Prime p)))).apply_symm_apply
           (root (p := p) j))
+  rw [hzeta.embeddingsEquivPrimitiveRoots_apply_coe ℂ
+    (cyclotomic.irreducible_rat
+      (Nat.Prime.pos (Fact.out : Nat.Prime p)))] at h
   simpa only [embedding, root] using h
 
 def place {zeta : K} (hzeta : IsPrimitiveRoot zeta p)
