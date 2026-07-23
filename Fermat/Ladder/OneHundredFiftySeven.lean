@@ -133,4 +133,13 @@ theorem holdsAt_oneHundredFiftySeven :
     Fermat.HoldsAt 157 :=
   Fermat.OneHundredFiftySeven.holdsAt_oneHundredFiftySeven
 
+/-- The measured ladder verdict is explicitly backed by the completed
+historical proof at exponent `157`. -/
+def proofBacked : ProofBacked 157 where
+  measured := measured
+  holds := holdsAt_oneHundredFiftySeven
+  outcome_eq := by
+    change Outcome.contradicted _ = Outcome.contradicted _
+    rfl
+
 end Fermat.Ladder.OneHundredFiftySeven

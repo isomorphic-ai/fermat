@@ -194,6 +194,30 @@ def atFold {n : ℕ} (run : Checked n) (fold : Fin 7) : Measured n where
 
 end Measured
 
+/-- A measured contradiction whose payload is explicitly the already-proved
+fixed-exponent theorem.  Exponent-specific ladders use this wrapper to expose
+that their measured verdict reuses the campaign theorem rather than carrying
+an unrelated shadow proof. -/
+structure ProofBacked (n : ℕ) where
+  measured : Measured n
+  holds : Fermat.HoldsAt n
+  outcome_eq : measured.run.outcome = .contradicted holds
+
+namespace ProofBacked
+
+def exitDepth {n : ℕ} (backed : ProofBacked n) : ℕ :=
+  backed.measured.exitDepth
+
+theorem exitDepth_pos {n : ℕ} (backed : ProofBacked n) :
+    0 < backed.exitDepth :=
+  backed.measured.exitDepth_pos
+
+theorem exitDepth_le_seven {n : ℕ} (backed : ProofBacked n) :
+    backed.exitDepth ≤ 7 :=
+  backed.measured.exitDepth_le_seven
+
+end ProofBacked
+
 theorem awarenessFold (n : ℕ) : AwarenessFold n := by
   simp [AwarenessFold]
 

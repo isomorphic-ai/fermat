@@ -13,6 +13,7 @@ import Fermat.Irregular.CyclotomicLValue37
 import Fermat.Irregular.CyclotomicSeriesAtOne37
 import Fermat.Irregular.KummerCongruence
 import Fermat.Irregular.VandiverData
+import Fermat.Ladder.HistoricalResponse
 import Fermat.Ladder.Response
 import Fermat.Seven.Lebesgue.TheoremTwo
 import Fermat.Thirteen.Cyclotomic
@@ -61,5 +62,25 @@ theorem holdsAt_eleven : HoldsAt 11 :=
 quadratic-fold and direct Faulhaber certificates. -/
 theorem holdsAt_eleven_sevenFold : HoldsAt 11 :=
   Eleven.SevenFold.holdsAt_eleven_sevenFold
+
+/-- Fermat's theorem for exponent thirty-seven, through the complete
+historical Vandiver assembly reused by the seven-fold ladder. -/
+theorem holdsAt_thirtySeven : HoldsAt 37 :=
+  ThirtySeven.holdsAt_thirtySeven
+
+/-- Fermat's theorem for exponent fifty-nine, through the complete
+historical Vandiver assembly reused by the seven-fold ladder. -/
+theorem holdsAt_fiftyNine : HoldsAt 59 :=
+  FiftyNine.holdsAt_fiftyNine
+
+/-- Fermat's theorem for exponent sixty-seven, through the complete
+historical Vandiver assembly reused by the seven-fold ladder. -/
+theorem holdsAt_sixtySeven : HoldsAt 67 :=
+  SixtySeven.holdsAt_sixtySeven
+
+/-- Fermat's theorem for exponent one hundred fifty-seven, including the
+two-probe finite loop and historical Vandiver descent reused by the ladder. -/
+theorem holdsAt_oneHundredFiftySeven : HoldsAt 157 :=
+  OneHundredFiftySeven.holdsAt_oneHundredFiftySeven
 
 end Fermat

@@ -126,4 +126,17 @@ theorem exitDepth_first_sufficient :
         measured.schedule.decision i = .continue :=
   ⟨rfl, measured.schedule.at_exit, measured.schedule.before_exit⟩
 
+/-- Public reuse of the completed fixed-exponent theorem. -/
+theorem holdsAt_fiftyNine : Fermat.HoldsAt 59 :=
+  Fermat.FiftyNine.holdsAt_fiftyNine
+
+/-- The measured ladder verdict is explicitly backed by the completed
+historical proof at exponent `59`. -/
+def proofBacked : ProofBacked 59 where
+  measured := measured
+  holds := holdsAt_fiftyNine
+  outcome_eq := by
+    change Outcome.contradicted _ = Outcome.contradicted _
+    rfl
+
 end Fermat.Ladder.FiftyNine

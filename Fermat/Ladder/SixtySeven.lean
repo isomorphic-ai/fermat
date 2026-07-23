@@ -132,4 +132,13 @@ theorem holdsAt_sixtySeven :
     Fermat.HoldsAt 67 := by
   exact Fermat.SixtySeven.holdsAt_sixtySeven
 
+/-- The measured ladder verdict is explicitly backed by the completed
+historical proof at exponent `67`. -/
+def proofBacked : ProofBacked 67 where
+  measured := measured
+  holds := holdsAt_sixtySeven
+  outcome_eq := by
+    change Outcome.contradicted _ = Outcome.contradicted _
+    rfl
+
 end Fermat.Ladder.SixtySeven
