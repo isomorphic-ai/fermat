@@ -1,9 +1,8 @@
-import Fermat.Cases
-import Fermat.Irregular.VandiverHistoricalDescent
 import Fermat.Ladder.Basic
 import Fermat.SixtySeven.CircularUnitCertificate
 import Fermat.SixtySeven.FirstCase
 import Fermat.SixtySeven.NeighborFolding
+import Fermat.SixtySeven.SecondCase
 import Fermat.SixtySeven.VandiverData
 
 /-!
@@ -14,50 +13,16 @@ elimination of the first case at `q = 269`.  Fold seven contains the two
 large finite certificates checked in Lean: the lifted `B_3886` numerator
 condition and the nonsingular `32 × 32` circular-unit matrix.
 
-The complete verdict is parameterized by one explicitly named historical
-bridge collecting Vandiver's three remaining source boundaries; no
-class-number or singular-primary implication is smuggled in as a finite
-computation.
+The seventh fold combines those finite inputs with the kernel-checked
+Takagi--Furtwängler principalization and Vandiver equations (6)--(10), so
+the trace now exits unconditionally.
 -/
 
 namespace Fermat.Ladder.SixtySeven
 
-open Fermat.Irregular.VandiverHistoricalDescent
-
 local instance : Fact (Nat.Prime 67) := ⟨Fermat.SixtySeven.prime_67⟩
 local instance : NeZero 67 := ⟨by norm_num⟩
 local instance : NeZero (67 : ℚ) := ⟨by norm_num⟩
-
-/-! ## The exact remaining historical boundary -/
-
-abbrev CyclotomicField67 := CyclotomicField 67 ℚ
-
-local instance : IsCyclotomicExtension {67} ℚ CyclotomicField67 :=
-  CyclotomicField.isCyclotomicExtension 67 ℚ
-
-/-- The exact source boundaries in Vandiver's historical proof: passage
-from a rational second-case solution to equation (6), the construction in
-equations (7b)--(10b), and Vandiver's Lemma 2.  The well-founded descent
-after those inputs is already checked generically. -/
-structure HistoricalSecondCaseBridge where
-  zeta : CyclotomicField67
-  primitive : IsPrimitiveRoot zeta 67
-  admissible : HistoricalAdmissibility primitive
-  starts : SecondCaseStartsHistoricalDescent primitive admissible
-  reduces : EquationsSevenToTenReduction primitive admissible
-  lemmaTwo :
-    Fermat.Irregular.VandiverUnitLemma.VandiverLemmaTwo CyclotomicField67 67
-
-theorem secondCaseExcluded_of_historicalBridge
-    (hbridge : HistoricalSecondCaseBridge)
-    (hBernoulli :
-      Fermat.Irregular.VandiverData.BernoulliCubeCondition 67) :
-    Fermat.SecondCaseExcluded 67 := by
-  exact secondCaseExcluded_of_vandiver_lemmaTwo
-    (K := CyclotomicField67) (p := 67)
-    (by norm_num) (by norm_num)
-    hbridge.primitive hbridge.admissible hbridge.starts hbridge.reduces
-    hbridge.lemmaTwo hBernoulli
 
 /-! ## Seven exponent-specific checked claims -/
 
@@ -110,17 +75,20 @@ theorem agencyClaim_checked : agencyClaim :=
   ⟨Fermat.SixtySeven.noConsecutivePowers_67_269,
     Fermat.SixtySeven.exponentNotPower_67_269⟩
 
-/-- The unconditional finite core at fold seven.  The matrix statement is
-deliberately nonsingularity, not the absent conclusion `67 ∤ h⁺`. -/
+/-- Fold seven contains the complete finite Bernoulli condition, the
+nonsingular unit matrix, and the unconditional historical second-case
+exclusion. -/
 def flexibilityClaim : Prop :=
   Fermat.Irregular.VandiverData.BernoulliCubeCondition 67 ∧
-    Fermat.SixtySeven.CircularUnitCertificate.matrix.det ≠ 0
+    Fermat.SixtySeven.CircularUnitCertificate.matrix.det ≠ 0 ∧
+    Fermat.SecondCaseExcluded 67
 
 theorem flexibilityClaim_checked : flexibilityClaim :=
   ⟨Fermat.SixtySeven.VandiverData.bernoulliCubeCondition_sixtySeven,
-    Fermat.SixtySeven.CircularUnitCertificate.matrix_det_ne_zero⟩
+    Fermat.SixtySeven.CircularUnitCertificate.matrix_det_ne_zero,
+    Fermat.SixtySeven.secondCaseExcluded_sixtySeven⟩
 
-def trace (hbridge : HistoricalSecondCaseBridge) : CaseTrace 67 where
+def trace : CaseTrace 67 where
   awareness_substrate := ⟨awarenessClaim, awarenessClaim_checked⟩
   structure_algebra := ⟨structureClaim, structureClaim_checked⟩
   sharpening_analysis := ⟨sharpeningClaim, sharpeningClaim_checked⟩
@@ -134,42 +102,34 @@ def trace (hbridge : HistoricalSecondCaseBridge) : CaseTrace 67 where
       (Fermat.holdsAt_of_auxiliaryPrime_of_secondCaseExcluded
         Fermat.SixtySeven.prime_67 (by norm_num)
         Fermat.SixtySeven.prime_269 hfirst.1 hfirst.2
-        (secondCaseExcluded_of_historicalBridge hbridge hfinite.1))
+        hfinite.2.2)
 
-def run (hbridge : HistoricalSecondCaseBridge) : Checked 67 where
+def run : Checked 67 where
   folds := sevenFolds 67
-  trace := trace hbridge
+  trace := trace
 
-def measured (hbridge : HistoricalSecondCaseBridge) : Measured 67 :=
-  Measured.atFold (run hbridge) ⟨6, by decide⟩
+def measured : Measured 67 :=
+  Measured.atFold run ⟨6, by decide⟩
 
 /-- Machine-readable measured exit depth. -/
 def exitDepth : ℕ := 7
 
-theorem exitDepth_eq_measured (hbridge : HistoricalSecondCaseBridge) :
-    (measured hbridge).exitDepth = exitDepth := rfl
+theorem exitDepth_eq_measured :
+    measured.exitDepth = exitDepth := rfl
 
 theorem exitDepth_le_seven : exitDepth ≤ 7 := by
   norm_num [exitDepth]
 
-theorem exitDepth_first_sufficient (hbridge : HistoricalSecondCaseBridge) :
-    (measured hbridge).exitDepth = exitDepth ∧
-      (measured hbridge).schedule.decision
-          (measured hbridge).schedule.exitIndex =
-        .exit (measured hbridge).schedule.outcome ∧
-      ∀ i, i < (measured hbridge).schedule.exitIndex →
-        (measured hbridge).schedule.decision i = .continue :=
-  ⟨rfl, (measured hbridge).schedule.at_exit,
-    (measured hbridge).schedule.before_exit⟩
+theorem exitDepth_first_sufficient :
+    measured.exitDepth = exitDepth ∧
+      measured.schedule.decision measured.schedule.exitIndex =
+        .exit measured.schedule.outcome ∧
+      ∀ i, i < measured.schedule.exitIndex →
+        measured.schedule.decision i = .continue :=
+  ⟨rfl, measured.schedule.at_exit, measured.schedule.before_exit⟩
 
-theorem holdsAt_sixtySeven (hbridge : HistoricalSecondCaseBridge) :
+theorem holdsAt_sixtySeven :
     Fermat.HoldsAt 67 := by
-  exact Fermat.holdsAt_of_auxiliaryPrime_of_secondCaseExcluded
-    Fermat.SixtySeven.prime_67 (by norm_num)
-    Fermat.SixtySeven.prime_269
-    Fermat.SixtySeven.noConsecutivePowers_67_269
-    Fermat.SixtySeven.exponentNotPower_67_269
-    (secondCaseExcluded_of_historicalBridge hbridge
-      Fermat.SixtySeven.VandiverData.bernoulliCubeCondition_sixtySeven)
+  exact Fermat.SixtySeven.holdsAt_sixtySeven
 
 end Fermat.Ladder.SixtySeven
