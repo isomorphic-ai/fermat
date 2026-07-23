@@ -50,6 +50,10 @@ abbrev VandiverFactorIndex157 := Fin 78
 theorem card_vandiverFactorIndex157 :
     Fintype.card VandiverFactorIndex157 = 78 := by decide
 
+/-- The power of the chosen root occurring in the `j`th conjugate. -/
+def conjugateExponent157 (j : VandiverFactorIndex157) : ℕ :=
+  VandiverDiagonalUnitResidues.conjugateExponent157 j
+
 /-- Vandiver's literal positive integral weight. -/
 def diagonalWeight157 (i : Fin 77) (j : VandiverFactorIndex157) : ℕ :=
   integralDiagonalWeight 157 teichmullerRoot157 (i.val + 1) j.val

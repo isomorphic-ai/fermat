@@ -40,7 +40,7 @@ def sourceDerivativeOrder157 (k : SourceIndex 157) : ℕ :=
 
 /-- Vandiver's positive integral diagonal polynomial series. -/
 def integralDiagonalSeries157 (n : SourceIndex 157) : PowerSeries ℚ :=
-  integralDiagonalExp 157 226 78 (sourceNumber n)
+  integralDiagonalExp 157 226 123 (sourceNumber n)
 
 /-- The exact positive integer coefficient multiplying the common
 Bernoulli derivative at row `k`, column `n`. -/
@@ -77,7 +77,7 @@ theorem formalDerivative_integralDiagonalSeries157
         baseDerivativeFactor157 k := by
   rw [integralDiagonalSeries157,
     formalDerivativeAtZero_logarithmicDerivative_integralDiagonalExp
-      157 226 78 (sourceNumber n) (sourceDerivativeOrder157 k)
+      157 226 123 (sourceNumber n) (sourceDerivativeOrder157 k)
       (by norm_num) (sourceDerivativeOrder157_pos k)]
   have horder : sourceDerivativeOrder157 k =
       2 * (sourceNumber k * 157) - 1 := by
