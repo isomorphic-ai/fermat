@@ -197,6 +197,11 @@ lemma unit_fixed_of_zeta_sub_one_sq_dvd_sub_conj59 {ζ : K}
     NumberField.IsCMField.unitsComplexConj K u = u := by
   obtain ⟨j, hj⟩ := unit_inv_conj_is_root_of_unity hζ u (by norm_num)
   let cu : (𝓞 K)ˣ := NumberField.IsCMField.unitsComplexConj K u
+  have hcu :
+      NumberField.IsCMField.ringOfIntegersComplexConj K (u : 𝓞 K) =
+        (cu : 𝓞 K) := by
+    apply NumberField.RingOfIntegers.ext
+    rfl
   let r : (𝓞 K)ˣ := (hζ.unit' ^ j) ^ 2
   have hu : u = r * cu := by
     calc
@@ -217,7 +222,7 @@ lemma unit_fixed_of_zeta_sub_one_sq_dvd_sub_conj59 {ζ : K}
     ⟨cu, by simpa only [hfactor]⟩
   have hrootdiv : ((hζ.unit' : 𝓞 K) - 1) ^ 2 ∣
       (((((hζ.unit' ^ j) ^ 2 : (𝓞 K)ˣ) : 𝓞 K)) - 1) :=
-    hassoc.dvd_iff_dvd_right.mpr (by simpa only [cu] using hdiv)
+    hassoc.dvd_iff_dvd_right.mpr (hcu ▸ hdiv)
   have hroot := zeta_pow_sq_eq_one_of_zeta_sub_one_sq_dvd59 hζ j hrootdiv
   rw [hroot] at hj
   have hucu : u = cu := by
@@ -592,17 +597,18 @@ lemma historicalState_kappaPower_dvd_omega_add_theta59 {ζ : K}
     (historicalState_theta_not_dvd59 hζ s)
   rw [hroot] at hhigh
   simp only [oneNthRoot, mul_one] at hhigh
-  obtain ⟨c, hc⟩ : ∃ c : 𝓞 K,
+  obtain ⟨c, hc⟩ := hhigh
+  have hcN :
       s.omega + s.theta =
         ((hζ.unit' : 𝓞 K) - 1) ^ N * c := by
-    simpa only [N] using hhigh
+    simpa only [N] using hc
   let u : (𝓞 K)ˣ := kappaUnit59 hζ ^ E
   refine ⟨(u⁻¹ : (𝓞 K)ˣ) * c, ?_⟩
   rw [kappa_pow_eq_kappaUnit59_pow_mul, hexp]
   change s.omega + s.theta =
     ((u : 𝓞 K) * ((hζ.unit' : 𝓞 K) - 1) ^ N) *
       ((u⁻¹ : (𝓞 K)ˣ) * c)
-  rw [hc]
+  rw [hcN]
   calc
     ((hζ.unit' : 𝓞 K) - 1) ^ N * c =
         (((u : 𝓞 K) * (u⁻¹ : (𝓞 K)ˣ)) *
@@ -1306,7 +1312,10 @@ theorem exists_historicalEquationSevenD59
     Units.map (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom ε
   have hnorm' : a * b = (εK : 𝓞 K) * ρK ^ 59 := by
     rw [← hbconj]
-    simpa only [ρK, εK, Units.coe_map] using hnorm
+    change a * NumberField.IsCMField.ringOfIntegersComplexConj K a =
+      algebraMap (𝓞 K⁺) (𝓞 K) (ε : 𝓞 K⁺) *
+        (algebraMap (𝓞 K⁺) (𝓞 K) ρ) ^ 59
+    exact hnorm
   have hpow : (I * J) ^ 59 = (Ideal.span {ρK}) ^ 59 := by
     calc
       (I * J) ^ 59 = I ^ 59 * J ^ 59 := by rw [mul_pow]
@@ -2382,7 +2391,10 @@ theorem exists_realEquationNineGenerator59
   let εK : (𝓞 K)ˣ := Units.map
     (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom ε
   have hq_sq : q ^ 2 = (εK : 𝓞 K) * ρK ^ 59 := by
-    simpa only [pow_two, hqreal, ρK, εK, Units.coe_map] using hnorm
+    change q ^ 2 =
+      algebraMap (𝓞 K⁺) (𝓞 K) (ε : 𝓞 K⁺) *
+        (algebraMap (𝓞 K⁺) (𝓞 K) ρ) ^ 59
+    simpa only [pow_two, hqreal] using hnorm
   have hassoc : Associated (q ^ 2) (ρK ^ 59) := by
     refine ⟨εK⁻¹, ?_⟩
     rw [hq_sq]
@@ -2458,7 +2470,10 @@ theorem ideal_isPrincipal_and_stable_of_real_pow59
   let εK : (𝓞 K)ˣ := Units.map
     (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom ε
   have hq_sq : q ^ 2 = (εK : 𝓞 K) * ρK ^ 59 := by
-    simpa only [pow_two, hqreal, ρK, εK, Units.coe_map] using hnorm
+    change q ^ 2 =
+      algebraMap (𝓞 K⁺) (𝓞 K) (ε : 𝓞 K⁺) *
+        (algebraMap (𝓞 K⁺) (𝓞 K) ρ) ^ 59
+    simpa only [pow_two, hqreal] using hnorm
   have hassoc : Associated (q ^ 2) (ρK ^ 59) := by
     refine ⟨εK⁻¹, ?_⟩
     rw [hq_sq]
@@ -2687,6 +2702,7 @@ theorem equationNineA_normalized59
   let η := zeta_sub_one_dvd_root (by norm_num : 59 ≠ 2) hζ e' hy'
   have hηdiv : (hζ.unit'.1 - 1) ^ ((2 * m - 2) * 59 + 1) ∣
       ρa - (η : 𝓞 K) * ρminus := by
+    dsimp only [η]
     simpa only [sub_eq_add_neg, neg_mul, mul_comm] using
       (distinguishedFactor_highDivisibility (by norm_num : 59 ≠ 2)
         hζ e' hy')
@@ -2742,6 +2758,7 @@ theorem equationNineA_normalized_conjugate59
   let η := zeta_sub_one_dvd_root (by norm_num : 59 ≠ 2) hζ e' hy'
   have hηdiv : (hζ.unit'.1 - 1) ^ ((2 * m - 2) * 59 + 1) ∣
       ρa - (η : 𝓞 K) * ρminus := by
+    dsimp only [η]
     simpa only [sub_eq_add_neg, neg_mul, mul_comm] using
       (distinguishedFactor_highDivisibility (by norm_num : 59 ≠ 2)
         hζ e' hy')
@@ -2903,14 +2920,12 @@ theorem secondCaseStartsHistoricalDescent_59 {ζ : K}
   let ξ : 𝓞 K := (u : 𝓞 K) * (t : 𝓞 K)
   have hyt : IsCoprime (y : 𝓞 K) (t : 𝓞 K) := by
     have hcast := hyz.intCast (R := 𝓞 K)
-    have hcast' : IsCoprime (y : 𝓞 K) (((59 : ℤ) : 𝓞 K) * (t : 𝓞 K)) := by
-      simpa only [Int.cast_mul] using hcast
-    exact hcast'.of_mul_right_right
+    rw [Int.cast_mul] at hcast
+    exact hcast.of_mul_right_right
   have hxt : IsCoprime (x : 𝓞 K) (t : 𝓞 K) := by
     have hcast := hxz.intCast (R := 𝓞 K)
-    have hcast' : IsCoprime (x : 𝓞 K) (((59 : ℤ) : 𝓞 K) * (t : 𝓞 K)) := by
-      simpa only [Int.cast_mul] using hcast
-    exact hcast'.of_mul_right_right
+    rw [Int.cast_mul] at hcast
+    exact hcast.of_mul_right_right
   let s : HistoricalState hζ :=
     { omega := x
       theta := y
