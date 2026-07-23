@@ -161,7 +161,9 @@ theorem exists_int_ratio_pow3481_congruent59
   obtain ⟨cb, hcb⟩ :=
     exists_zeta_sub_one_sq_dvd_sub_int_of_real59 hζ b hb_real
   have hπ58 : π ^ 58 ∣ (59 : 𝓞 K) := by
-    simpa only [π] using (associated_zeta_sub_one_pow_prime hζ).dvd
+    have hp := (associated_zeta_sub_one_pow_prime hζ).dvd
+    norm_num at hp
+    simpa only [π] using hp
   have hπ2_59 : π ^ 2 ∣ (59 : 𝓞 K) :=
     (pow_dvd_pow π (by norm_num : 2 ≤ 58)).trans hπ58
   have hca_not : ¬ (59 : ℤ) ∣ ca := by
@@ -229,11 +231,14 @@ theorem exists_int_ratio_pow3481_congruent59
   have hUV :
       π ^ 118 ∣
         (U : 𝓞 K) - (V : 𝓞 K) * (c : 𝓞 K) ^ 3481 := by
+    have htoInteger : hζ.toInteger = (hζ.unit' : 𝓞 K) := by
+      apply NumberField.RingOfIntegers.ext
+      rfl
     have hapow : ¬ π ∣ a ^ 3481 := by
       intro h
       exact haπ (hζ.zeta_sub_one_prime'.dvd_of_dvd_pow h)
     apply hζ.zeta_sub_one_prime'.pow_dvd_of_dvd_mul_left 118 hapow
-    simpa only [π] using hcombined
+    simpa only [π, htoInteger] using hcombined
   refine ⟨c, ?_⟩
   have hscaled := dvd_mul_of_dvd_left hUV
     (((V⁻¹ : (𝓞 K)ˣ) : 𝓞 K))
