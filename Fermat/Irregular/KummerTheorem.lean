@@ -238,7 +238,7 @@ theorem kummerCongruenceModPrime_of_witness
 
   refine ⟨isPIntegral_of_hasPadicValAtLeast_zero hX,
     isPIntegral_of_hasPadicValAtLeast_zero hX', ?_⟩
-  simpa only [PadicValAtLeast, X] using hdiff
+  simpa [PadicValAtLeast, HasPadicValAtLeast, X] using hdiff
 
 /-! ## Existence of the cancelling residue -/
 

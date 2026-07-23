@@ -307,8 +307,8 @@ theorem additiveRemainder_derivative_hasPadicValAtLeast_two
   rw [formalDerivativeAtZero_additiveRemainder, hc]
   have hp2 := HasPadicValAtLeast.primePow (p := p) 2
   have hc0 := HasPadicValAtLeast.intCast (p := p) c
-  simpa only [Int.cast_mul, Int.cast_pow, Int.cast_natCast] using
-    hp2.mul hc0
+  convert hp2.mul hc0 using 1
+  all_goals norm_num
 
 /-- The polynomial hypotheses from Vandiver's preceding step produce an
 additive remainder representation after exponential substitution. -/
