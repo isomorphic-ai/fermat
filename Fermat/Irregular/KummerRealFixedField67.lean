@@ -78,9 +78,13 @@ theorem conjugationLift67_ne_one
   intro htau
   apply NumberField.IsCMField.complexConj_ne_one K
   ext x
+  change NumberField.IsCMField.complexConj K x = x
   apply (algebraMap K L).injective
   have hx := DFunLike.congr_fun htau (algebraMap K L x)
-  simpa only [conjugationLift67_algebraMap, one_apply] using hx
+  change
+    conjugationLift67 hanti (algebraMap K L x) =
+      algebraMap K L x at hx
+  simpa only [conjugationLift67_algebraMap] using hx
 
 theorem orderOf_conjugationLift67
     (hanti : ConjugationAntiInvariantWitness67 a) :
@@ -268,10 +272,12 @@ theorem natCard_kummerRealAut67
     exact hlower
   have hupper :
       Nat.card (L ≃ₐ[K⁺] L) ≤ Module.finrank K⁺ L := by
-    simpa only [Nat.card_eq_fintype_card] using
-      (@AlgEquiv.card_le K⁺ L _ _
+    have h :=
+      @AlgEquiv.card_le K⁺ L _ _
         (algebraKummerOverReal67 (K := K) (a := a))
-        (finiteDimensionalKummerOverReal67 (K := K) (a := a)))
+        (finiteDimensionalKummerOverReal67 (K := K) (a := a))
+    rw [← Nat.card_eq_fintype_card] at h
+    exact h
   rw [finrank_kummerExtension67_over_real (a := a)] at hupper
   omega
 
