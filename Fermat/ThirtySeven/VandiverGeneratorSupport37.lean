@@ -218,6 +218,281 @@ theorem products_and_square_coprimality37
 
 end ElementaryCoprimality
 
+section CyclotomicSpecialization
+
+variable {K : Type} [Field K] [NumberField K]
+
+local instance : Fact (Nat.Prime 37) := ⟨by norm_num⟩
+
+/-- Distinct powers, with exponents in the standard range, differ by an
+associate of the cyclotomic uniformizer.  This is the convenient
+element-level form of pairwise association for the finite set of 37th roots
+of unity. -/
+lemma associated_zetaPowers_sub37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {a b : ℕ} (ha : a < 37) (hb : b < 37) (hab : a ≠ b) :
+    Associated
+      ((hζ.unit' : 𝓞 K) ^ a - (hζ.unit' : 𝓞 K) ^ b)
+      ((hζ.unit' : 𝓞 K) - 1) := by
+  have hroot (j : ℕ) :
+      (hζ.unit' : 𝓞 K) ^ j ∈
+        Polynomial.nthRootsFinset 37 (1 : 𝓞 K) := by
+    rw [Polynomial.mem_nthRootsFinset (by norm_num : 0 < 37)]
+    rw [← pow_mul, Nat.mul_comm j 37, pow_mul,
+      hζ.unit'_coe.pow_eq_one, one_pow]
+  have hne :
+      (hζ.unit' : 𝓞 K) ^ a ≠ (hζ.unit' : 𝓞 K) ^ b := by
+    intro heq
+    exact hab (hζ.unit'_coe.pow_inj ha hb heq)
+  exact
+    (hζ.unit'_coe.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+      (by norm_num : Nat.Prime 37) (hroot a) (hroot b) hne).symm
+
+/-- The coefficient `(1-ζ^a)ε` in equation (8) is associated to the
+standard uniformizer whenever `0 < a < 37`. -/
+lemma associated_one_sub_zetaPow_mul_unit37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (a : ℕ) (ha0 : a ≠ 0) (ha37 : a < 37)
+    (ε : (𝓞 K)ˣ) :
+    Associated
+      ((1 - (hζ.unit' : 𝓞 K) ^ a) * (ε : 𝓞 K))
+      ((hζ.unit' : 𝓞 K) - 1) := by
+  have hsub :
+      Associated ((hζ.unit' : 𝓞 K) ^ a - 1)
+        ((hζ.unit' : 𝓞 K) - 1) := by
+    simpa only [pow_zero] using
+      associated_zetaPowers_sub37 hζ ha37 (by norm_num) ha0
+  have honeSub :
+      Associated (1 - (hζ.unit' : 𝓞 K) ^ a)
+        ((hζ.unit' : 𝓞 K) - 1) := by
+    have hneg :
+        Associated (-((hζ.unit' : 𝓞 K) ^ a - 1))
+          ((hζ.unit' : 𝓞 K) ^ a - 1) := by
+      simpa only [Units.val_neg, Units.val_one, neg_mul, one_mul] using
+        associated_unit_mul_left
+        ((hζ.unit' : 𝓞 K) ^ a - 1)
+        ((-1 : (𝓞 K)ˣ) : 𝓞 K) (-1 : (𝓞 K)ˣ).isUnit
+    simpa only [neg_sub] using hneg.trans hsub
+  exact associated_mul_unit_left_iff.mpr honeSub
+
+/-- In the group of integral cyclotomic units, the inverse of `ζ` is
+`ζ^36`. -/
+lemma zetaUnit_inv_eq_pow_thirtySix37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) :
+    hζ.unit'⁻¹ = hζ.unit' ^ 36 := by
+  symm
+  apply eq_inv_of_mul_eq_one_left
+  rw [← pow_succ]
+  apply Units.ext
+  exact hζ.unit'_coe.pow_eq_one
+
+/-- Likewise, the inverse of `ζ²` is `ζ^35`. -/
+lemma zetaUnit_sq_inv_eq_pow_thirtyFive37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) :
+    (hζ.unit' ^ 2)⁻¹ = hζ.unit' ^ 35 := by
+  symm
+  apply eq_inv_of_mul_eq_one_left
+  rw [← pow_add]
+  norm_num
+  apply Units.ext
+  exact hζ.unit'_coe.pow_eq_one
+
+variable [IsCyclotomicExtension {37} ℚ K]
+
+/-- Power-form specialization of the four equation-(8) generators.
+
+The four roots are represented by the standard exponents `1, 36, 2, 35`.
+The coefficient units are intentionally independent: this lets the theorem
+apply unchanged after any unit rescaling of the four generators.  All eight
+atomic coprimalities are derived internally, and the conclusion is already
+in the exact product/square form required by
+`ConjugationPowerReductionData37`. -/
+theorem equationEight_generators_products_coprime_powForms37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {ω θ r₁ rminus₁ r₂ rminus₂ r₀ : 𝓞 K}
+    (ε₁ εminus₁ ε₂ εminus₂ : (𝓞 K)ˣ) (d : 𝓞 K)
+    (hr₀ : r₀ ≠ 0)
+    (hωθ : IsCoprime ω θ)
+    (heq₁ :
+      ω + (hζ.unit' : 𝓞 K) * θ =
+        (1 - (hζ.unit' : 𝓞 K)) * ε₁ * r₁ ^ 37)
+    (heqminus₁ :
+      ω + (hζ.unit' : 𝓞 K) ^ 36 * θ =
+        (1 - (hζ.unit' : 𝓞 K) ^ 36) * εminus₁ *
+          rminus₁ ^ 37)
+    (heq₂ :
+      ω + (hζ.unit' : 𝓞 K) ^ 2 * θ =
+        (1 - (hζ.unit' : 𝓞 K) ^ 2) * ε₂ * r₂ ^ 37)
+    (heqminus₂ :
+      ω + (hζ.unit' : 𝓞 K) ^ 35 * θ =
+        (1 - (hζ.unit' : 𝓞 K) ^ 35) * εminus₂ *
+          rminus₂ ^ 37)
+    (hzero : ω + θ = d * r₀ ^ 37)
+    (hr₁π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ r₁)
+    (hrminus₁π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ rminus₁)
+    (hr₂π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ r₂)
+    (hrminus₂π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ rminus₂) :
+    r₀ ^ 2 ≠ 0 ∧
+      IsCoprime (r₁ * rminus₁) (r₂ * rminus₂) ∧
+      IsCoprime (r₂ * rminus₂) (r₀ ^ 2) ∧
+      IsCoprime (r₁ * rminus₁) (r₀ ^ 2) := by
+  let π : 𝓞 K := (hζ.unit' : 𝓞 K) - 1
+  have hπ0 : π ≠ 0 := by
+    exact hζ.unit'_coe.sub_one_ne_zero (by norm_num)
+  have hc₁ :
+      Associated
+        ((1 - (hζ.unit' : 𝓞 K)) * (ε₁ : 𝓞 K)) π := by
+    simpa only [π, pow_one] using
+      associated_one_sub_zetaPow_mul_unit37 hζ 1
+        (by norm_num) (by norm_num) ε₁
+  have hcminus₁ :
+      Associated
+        ((1 - (hζ.unit' : 𝓞 K) ^ 36) * (εminus₁ : 𝓞 K)) π := by
+    simpa only [π] using
+      associated_one_sub_zetaPow_mul_unit37 hζ 36
+        (by norm_num) (by norm_num) εminus₁
+  have hc₂ :
+      Associated
+        ((1 - (hζ.unit' : 𝓞 K) ^ 2) * (ε₂ : 𝓞 K)) π := by
+    simpa only [π] using
+      associated_one_sub_zetaPow_mul_unit37 hζ 2
+        (by norm_num) (by norm_num) ε₂
+  have hcminus₂ :
+      Associated
+        ((1 - (hζ.unit' : 𝓞 K) ^ 35) * (εminus₂ : 𝓞 K)) π := by
+    simpa only [π] using
+      associated_one_sub_zetaPow_mul_unit37 hζ 35
+        (by norm_num) (by norm_num) εminus₂
+  have ht₁₂ :
+      Associated
+        ((hζ.unit' : 𝓞 K) - (hζ.unit' : 𝓞 K) ^ 2) π := by
+    simpa only [π, pow_one] using
+      associated_zetaPowers_sub37 hζ
+        (a := 1) (b := 2) (by norm_num) (by norm_num) (by norm_num)
+  have ht₁minus₂ :
+      Associated
+        ((hζ.unit' : 𝓞 K) - (hζ.unit' : 𝓞 K) ^ 35) π := by
+    simpa only [π, pow_one] using
+      associated_zetaPowers_sub37 hζ
+        (a := 1) (b := 35) (by norm_num) (by norm_num) (by norm_num)
+  have htminus₁₂ :
+      Associated
+        ((hζ.unit' : 𝓞 K) ^ 36 - (hζ.unit' : 𝓞 K) ^ 2) π := by
+    simpa only [π] using
+      associated_zetaPowers_sub37 hζ
+        (a := 36) (b := 2) (by norm_num) (by norm_num) (by norm_num)
+  have htminus₁minus₂ :
+      Associated
+        ((hζ.unit' : 𝓞 K) ^ 36 - (hζ.unit' : 𝓞 K) ^ 35) π := by
+    simpa only [π] using
+      associated_zetaPowers_sub37 hζ
+        (a := 36) (b := 35) (by norm_num) (by norm_num) (by norm_num)
+  have ht₁zero :
+      Associated ((hζ.unit' : 𝓞 K) - 1) π :=
+    Associated.refl π
+  have htminus₁zero :
+      Associated ((hζ.unit' : 𝓞 K) ^ 36 - 1) π := by
+    simpa only [π, pow_zero] using
+      associated_zetaPowers_sub37 hζ
+        (a := 36) (b := 0) (by norm_num) (by norm_num) (by norm_num)
+  have ht₂zero :
+      Associated ((hζ.unit' : 𝓞 K) ^ 2 - 1) π := by
+    simpa only [π, pow_zero] using
+      associated_zetaPowers_sub37 hζ
+        (a := 2) (b := 0) (by norm_num) (by norm_num) (by norm_num)
+  have htminus₂zero :
+      Associated ((hζ.unit' : 𝓞 K) ^ 35 - 1) π := by
+    simpa only [π, pow_zero] using
+      associated_zetaPowers_sub37 hζ
+        (a := 35) (b := 0) (by norm_num) (by norm_num) (by norm_num)
+  have h₁₂ : IsCoprime r₁ r₂ :=
+    coprime_generators_of_distinct_linearEquations37 hπ0 hωθ
+      hc₁ hc₂ ht₁₂ heq₁ heq₂
+  have h₁minus₂ : IsCoprime r₁ rminus₂ :=
+    coprime_generators_of_distinct_linearEquations37 hπ0 hωθ
+      hc₁ hcminus₂ ht₁minus₂ heq₁ heqminus₂
+  have hminus₁₂ : IsCoprime rminus₁ r₂ :=
+    coprime_generators_of_distinct_linearEquations37 hπ0 hωθ
+      hcminus₁ hc₂ htminus₁₂ heqminus₁ heq₂
+  have hminus₁minus₂ : IsCoprime rminus₁ rminus₂ :=
+    coprime_generators_of_distinct_linearEquations37 hπ0 hωθ
+      hcminus₁ hcminus₂ htminus₁minus₂ heqminus₁ heqminus₂
+  have h₁zero : IsCoprime r₁ r₀ :=
+    coprime_generator_zero_of_linearEquations37
+      hζ.zeta_sub_one_prime' hr₁π hωθ hc₁ ht₁zero heq₁ hzero
+  have hminus₁zero : IsCoprime rminus₁ r₀ :=
+    coprime_generator_zero_of_linearEquations37
+      hζ.zeta_sub_one_prime' hrminus₁π hωθ hcminus₁
+        htminus₁zero heqminus₁ hzero
+  have h₂zero : IsCoprime r₂ r₀ :=
+    coprime_generator_zero_of_linearEquations37
+      hζ.zeta_sub_one_prime' hr₂π hωθ hc₂ ht₂zero heq₂ hzero
+  have hminus₂zero : IsCoprime rminus₂ r₀ :=
+    coprime_generator_zero_of_linearEquations37
+      hζ.zeta_sub_one_prime' hrminus₂π hωθ hcminus₂
+        htminus₂zero heqminus₂ hzero
+  exact products_and_square_coprimality37 hr₀
+    h₁₂ h₁minus₂ hminus₁₂ hminus₁minus₂
+    h₁zero hminus₁zero h₂zero hminus₂zero
+
+/-- Direct equation-(8) specialization with the inverse-root notation used
+in the historical paired equations.  It rewrites `ζ⁻¹` and `(ζ²)⁻¹` to the
+standard exponents and delegates all eight atomic coprimalities to
+`equationEight_generators_products_coprime_powForms37`. -/
+theorem equationEight_generators_products_coprime37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {ω θ r₁ rminus₁ r₂ rminus₂ r₀ : 𝓞 K}
+    (ε₁ εminus₁ ε₂ εminus₂ : (𝓞 K)ˣ) (d : 𝓞 K)
+    (hr₀ : r₀ ≠ 0)
+    (hωθ : IsCoprime ω θ)
+    (heq₁ :
+      ω + (hζ.unit' : 𝓞 K) * θ =
+        (1 - (hζ.unit' : 𝓞 K)) * ε₁ * r₁ ^ 37)
+    (heqminus₁ :
+      ω + (hζ.unit'⁻¹ : (𝓞 K)ˣ) * θ =
+        (1 - (hζ.unit'⁻¹ : (𝓞 K)ˣ)) * εminus₁ *
+          rminus₁ ^ 37)
+    (heq₂ :
+      ω + (hζ.unit' ^ 2 : (𝓞 K)ˣ) * θ =
+        (1 - (hζ.unit' ^ 2 : (𝓞 K)ˣ)) * ε₂ * r₂ ^ 37)
+    (heqminus₂ :
+      ω + ((hζ.unit' ^ 2)⁻¹ : (𝓞 K)ˣ) * θ =
+        (1 - ((hζ.unit' ^ 2)⁻¹ : (𝓞 K)ˣ)) * εminus₂ *
+          rminus₂ ^ 37)
+    (hzero : ω + θ = d * r₀ ^ 37)
+    (hr₁π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ r₁)
+    (hrminus₁π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ rminus₁)
+    (hr₂π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ r₂)
+    (hrminus₂π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ rminus₂) :
+    r₀ ^ 2 ≠ 0 ∧
+      IsCoprime (r₁ * rminus₁) (r₂ * rminus₂) ∧
+      IsCoprime (r₂ * rminus₂) (r₀ ^ 2) ∧
+      IsCoprime (r₁ * rminus₁) (r₀ ^ 2) := by
+  have heqminus₁' :
+      ω + (hζ.unit' : 𝓞 K) ^ 36 * θ =
+        (1 - (hζ.unit' : 𝓞 K) ^ 36) * εminus₁ *
+          rminus₁ ^ 37 := by
+    rw [← Units.val_pow_eq_pow_val,
+      ← zetaUnit_inv_eq_pow_thirtySix37 hζ]
+    exact heqminus₁
+  have heq₂' :
+      ω + (hζ.unit' : 𝓞 K) ^ 2 * θ =
+        (1 - (hζ.unit' : 𝓞 K) ^ 2) * ε₂ * r₂ ^ 37 := by
+    simpa only [Units.val_pow_eq_pow_val] using heq₂
+  have heqminus₂' :
+      ω + (hζ.unit' : 𝓞 K) ^ 35 * θ =
+        (1 - (hζ.unit' : 𝓞 K) ^ 35) * εminus₂ *
+          rminus₂ ^ 37 := by
+    rw [← Units.val_pow_eq_pow_val,
+      ← zetaUnit_sq_inv_eq_pow_thirtyFive37 hζ]
+    exact heqminus₂
+  exact equationEight_generators_products_coprime_powForms37
+    hζ ε₁ εminus₁ ε₂ εminus₂ d hr₀ hωθ
+    heq₁ heqminus₁' heq₂' heqminus₂' hzero
+    hr₁π hrminus₁π hr₂π hrminus₂π
+
+end CyclotomicSpecialization
+
 section PrincipalIdealSupport
 
 variable {K : Type} [Field K] [NumberField K]
