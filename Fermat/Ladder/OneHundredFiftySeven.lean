@@ -1,18 +1,19 @@
 import Fermat.Ladder.Basic
+import Fermat.OneHundredFiftySeven.CircularUnitCertificate
 import Fermat.OneHundredFiftySeven.FoldCertificates
 import Fermat.OneHundredFiftySeven.SecondCase
+import Fermat.OneHundredFiftySeven.VandiverData
 
 /-!
-# Conditional seven-fold ladder trace for exponent 157
+# Seven-fold ladder trace for exponent 157
 
 The first six folds are exponent-specific kernel-checked data.  Fold six
 eliminates the first case and records the package's finite loop of exactly
-two circular-unit probes.  The run exits only at fold seven, where the
-explicit `TwoComponentSecondCaseBridge` excludes the second case.
+two circular-unit probes.  Fold seven contains the exact Bernoulli channels
+`62` and `110`, the nonsingular `77 × 77` matrix from the successful second
+probe at `q = 7537`, and the complete historical second-case exclusion.
 
-Until the shared historical bridge is formalized, the trace is a function of
-that exact proposition.  Thus this file exposes the measured response without
-claiming an unconditional FLT theorem prematurely.
+The trace therefore exits unconditionally at its measured depth seven.
 -/
 
 namespace Fermat.Ladder.OneHundredFiftySeven
@@ -75,48 +76,61 @@ theorem agencyClaim_checked : agencyClaim :=
   ⟨noConsecutivePowers_157_1571, exponentNotPower_157_1571,
     probeLoop.count_eq_two⟩
 
-/-- Fold seven is exactly the remaining primary-singular second-case
-endpoint; no finite certificate is promoted into it by definition. -/
-def flexibilityClaim : Prop := TwoComponentSecondCaseBridge
+/-- Fold seven contains both Bernoulli correction channels, the successful
+global circular-unit probe, and the unconditional historical second-case
+exclusion. -/
+def flexibilityClaim : Prop :=
+  Fermat.Irregular.VandiverData.BernoulliCubeCondition 157 ∧
+    Fermat.OneHundredFiftySeven.CircularUnitMatrix.matrix.det ≠ 0 ∧
+    Fermat.SecondCaseExcluded 157
 
-def trace (hsecond : TwoComponentSecondCaseBridge) : CaseTrace 157 where
+theorem flexibilityClaim_checked : flexibilityClaim :=
+  ⟨Fermat.OneHundredFiftySeven.VandiverData.bernoulliCubeCondition_oneHundredFiftySeven,
+    Fermat.OneHundredFiftySeven.CircularUnitCertificate.matrix_det_ne_zero,
+    Fermat.OneHundredFiftySeven.secondCaseExcluded_oneHundredFiftySeven⟩
+
+def trace : CaseTrace 157 where
   awareness_substrate := ⟨awarenessClaim, awarenessClaim_checked⟩
   structure_algebra := ⟨structureClaim, structureClaim_checked⟩
   sharpening_analysis := ⟨sharpeningClaim, sharpeningClaim_checked⟩
   presence_geometry := ⟨presenceClaim, presenceClaim_checked⟩
   alignment_logic := ⟨alignmentClaim, alignmentClaim_checked⟩
   agency_arithmetic := ⟨agencyClaim, agencyClaim_checked⟩
-  flexibility_potential := ⟨flexibilityClaim, hsecond⟩
+  flexibility_potential := ⟨flexibilityClaim, flexibilityClaim_checked⟩
   conclude := by
-    intro _ _ _ _ _ _ hsecond'
+    intro _ _ _ _ _ hfirst hfinite
     exact .contradicted
-      (holdsAt_oneHundredFiftySeven_of_twoComponentSecondCaseBridge hsecond')
+      (Fermat.holdsAt_of_auxiliaryPrime_of_secondCaseExcluded
+        prime_157 (by norm_num) prime_1571
+        hfirst.1 hfirst.2.1 hfinite.2.2)
 
-def run (hsecond : TwoComponentSecondCaseBridge) : Checked 157 where
+def run : Checked 157 where
   folds := sevenFolds 157
-  trace := trace hsecond
+  trace := trace
 
-def measured (hsecond : TwoComponentSecondCaseBridge) : Measured 157 :=
-  Measured.atFold (run hsecond) ⟨6, by decide⟩
+def measured : Measured 157 :=
+  Measured.atFold run ⟨6, by decide⟩
 
 /-- The package reaches the seventh fold: fold six closes the first case,
 and fold seven is the first fold that can close both cases. -/
 def exitDepth : ℕ := 7
 
-theorem exitDepth_eq_measured (hsecond : TwoComponentSecondCaseBridge) :
-    (measured hsecond).exitDepth = exitDepth := rfl
+theorem exitDepth_eq_measured :
+    measured.exitDepth = exitDepth := rfl
 
 theorem exitDepth_le_seven : exitDepth ≤ 7 := by
   norm_num [exitDepth]
 
-theorem exitDepth_first_sufficient (hsecond : TwoComponentSecondCaseBridge) :
-    (measured hsecond).exitDepth = exitDepth ∧
-      (measured hsecond).schedule.decision
-          (measured hsecond).schedule.exitIndex =
-        .exit (measured hsecond).schedule.outcome ∧
-      ∀ i, i < (measured hsecond).schedule.exitIndex →
-        (measured hsecond).schedule.decision i = .continue :=
-  ⟨rfl, (measured hsecond).schedule.at_exit,
-    (measured hsecond).schedule.before_exit⟩
+theorem exitDepth_first_sufficient :
+    measured.exitDepth = exitDepth ∧
+      measured.schedule.decision measured.schedule.exitIndex =
+        .exit measured.schedule.outcome ∧
+      ∀ i, i < measured.schedule.exitIndex →
+        measured.schedule.decision i = .continue :=
+  ⟨rfl, measured.schedule.at_exit, measured.schedule.before_exit⟩
+
+theorem holdsAt_oneHundredFiftySeven :
+    Fermat.HoldsAt 157 :=
+  Fermat.OneHundredFiftySeven.holdsAt_oneHundredFiftySeven
 
 end Fermat.Ladder.OneHundredFiftySeven
