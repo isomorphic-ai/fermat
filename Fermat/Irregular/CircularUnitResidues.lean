@@ -102,8 +102,11 @@ theorem residueLog_eq_of_pow_eq (u : (ZMod q)ˣ) (m : ℕ)
     C.residueLog (Additive.ofMul u) = (m : ZMod p) := by
   have hsub : C.powerToRootPowers u =
       (⟨C.rootUnit ^ m, m, rfl⟩ : Subgroup.zpowers C.rootUnit) := by
-    ext
-    simpa [powerToRootPowers, rootUnit] using h
+    unfold powerToRootPowers
+    apply Subtype.ext
+    change u ^ C.symbolExponent = C.rootUnit ^ m
+    apply Units.ext
+    simpa [rootUnit] using h
   change C.rootUnit_isPrimitive.zmodEquivZPowers.symm
     (Additive.ofMul (C.powerToRootPowers u)) = (m : ZMod p)
   rw [hsub, C.rootUnit_isPrimitive.zmodEquivZPowers_symm_apply_pow]
