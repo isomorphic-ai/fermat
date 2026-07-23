@@ -146,8 +146,7 @@ theorem scaledPolynomialExp59sq_derivative_hasPadicValAtLeast_two
   have hp2 := HasPadicValAtLeast.primePow (p := 59) 2
   have hmoment :=
     HasPadicValAtLeast.intCast (p := 59) (polynomialMomentInt P N)
-  simpa only [Int.cast_mul, Int.cast_pow, Int.cast_natCast] using
-    hp2.mul hmoment
+  convert hp2.mul hmoment using 1
 
 /-- Since `P(1) ≡ 1 mod 59²`, the positive relation polynomial is not
 divisible by `59` at `1`. -/

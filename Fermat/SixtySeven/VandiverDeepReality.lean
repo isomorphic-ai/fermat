@@ -151,6 +151,11 @@ theorem unit_fixed_of_zeta_sub_one_sq_dvd_sub_conj67 {zeta : K}
   obtain ⟨j, hj⟩ :=
     unit_inv_conj_is_root_of_unity hzeta u (by norm_num)
   let cu : (𝓞 K)ˣ := NumberField.IsCMField.unitsComplexConj K u
+  have hcu :
+      NumberField.IsCMField.ringOfIntegersComplexConj K (u : 𝓞 K) =
+        (cu : 𝓞 K) := by
+    apply NumberField.RingOfIntegers.ext
+    rfl
   let r : (𝓞 K)ˣ := (hzeta.unit' ^ j) ^ 2
   have hu : u = r * cu := by
     calc
@@ -173,7 +178,7 @@ theorem unit_fixed_of_zeta_sub_one_sq_dvd_sub_conj67 {zeta : K}
     ⟨cu, by simpa only [hfactor]⟩
   have hrootdiv : ((hzeta.unit' : 𝓞 K) - 1) ^ 2 ∣
       (((((hzeta.unit' ^ j) ^ 2 : (𝓞 K)ˣ) : 𝓞 K)) - 1) :=
-    hassoc.dvd_iff_dvd_right.mpr (by simpa only [cu] using hdiv)
+    hassoc.dvd_iff_dvd_right.mpr (hcu ▸ hdiv)
   have hroot :=
     zeta_pow_sq_eq_one_of_zeta_sub_one_sq_dvd67 hzeta j hrootdiv
   rw [hroot] at hj
