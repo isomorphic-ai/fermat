@@ -1,6 +1,9 @@
 import Fermat.Irregular.VandiverLemmaOne
 import Fermat.ThirtySeven.SinnottKummer
 import Mathlib.FieldTheory.KummerExtension
+import Mathlib.Algebra.Polynomial.Taylor
+import Mathlib.Data.Nat.Choose.Dvd
+import Mathlib.NumberTheory.NumberField.Cyclotomic.Ideal
 import Mathlib.NumberTheory.RamificationInertia.Unramified
 import Mathlib.RingTheory.DedekindDomain.Different
 import Mathlib.RingTheory.DedekindDomain.Dvr
@@ -840,6 +843,415 @@ theorem kummerExtension37_unramifiedAt_of_idealPower_awayFrom37
   · exact h37 (by simpa using h)
   · exact hbQ (Q.isPrime.mem_of_pow_mem 36 h)
 
+/-! ## Wild rescaling above `37` -/
+
+/-- Kummer's primary congruence produces the monic polynomial of the
+wildly rescaled generator
+
+`(√[37]{a} - c) / (ζ - 1)`.
+
+Writing `π = ζ - 1`, substitute `πX + c` into `X^37 - a`.  Every
+coefficient is divisible by `π^37`: the constant coefficient by the
+primary congruence, and each mixed coefficient by
+`37 ∣ choose 37 i` together with `π^36 ∣ 37`.  Dividing by `π^37`
+therefore leaves a monic polynomial of degree exactly `37`. -/
+theorem exists_primary_shift_polynomial37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {a : 𝓞 K}
+    (hprimary : IsKummerPrimary hζ a) :
+    ∃ (c : ℤ) (g : (𝓞 K)[X]),
+      g.Monic ∧ g.natDegree = 37 ∧
+      let π : 𝓞 K := (hζ.unit' : 𝓞 K) - 1
+      let cA : 𝓞 K := c
+      let f : (𝓞 K)[X] := X ^ 37 - C a
+      let F : (𝓞 K)[X] :=
+        (taylor cA f).comp (C π * X)
+      F = C (π ^ 37) * g := by
+  rcases hprimary.2 with ⟨c, hc⟩
+  let π : 𝓞 K := (hζ.unit' : 𝓞 K) - 1
+  let cA : 𝓞 K := c
+  let f : (𝓞 K)[X] := X ^ 37 - C a
+  let F : (𝓞 K)[X] :=
+    (taylor cA f).comp (C π * X)
+  have hdiv : C (π ^ 37) ∣ F := by
+    dsimp only [F, f, cA, π]
+    rw [Polynomial.C_dvd_iff_dvd_coeff]
+    intro i
+    rw [comp_C_mul_X_coeff, taylor_apply]
+    simp only [sub_comp, pow_comp, X_comp, C_comp]
+    rw [coeff_sub, coeff_X_add_C_pow]
+    by_cases hi0 : i = 0
+    · subst i
+      simp only [Nat.sub_zero, Nat.choose_zero_right, Nat.cast_one,
+        mul_one, coeff_C_zero, pow_zero, mul_one]
+      convert dvd_neg.mpr hc using 1
+      ring
+    by_cases hi37 : i < 37
+    · have hchoose : 37 ∣ Nat.choose 37 i :=
+        Nat.Prime.dvd_choose_self (by norm_num) hi0 hi37
+      obtain ⟨m, hm⟩ := hchoose
+      have hπ36 : π ^ 36 ∣ (37 : 𝓞 K) := by
+        simpa only [π] using (associated_zeta_sub_one_pow_prime hζ).dvd
+      obtain ⟨u, hu⟩ := hπ36
+      refine ⟨cA ^ (37 - i) * (m : 𝓞 K) * u * π ^ (i - 1), ?_⟩
+      have hcast : (Nat.choose 37 i : 𝓞 K) =
+          (37 : 𝓞 K) * (m : 𝓞 K) := by
+        rw [hm]
+        norm_num
+      have hpi : π ^ i = π ^ (i - 1) * π := by
+        rw [← pow_succ]
+        congr 1
+        omega
+      have hpi37 : π ^ 37 = π ^ 36 * π := by
+        simpa using pow_succ π 36
+      rw [coeff_C, if_neg hi0, sub_zero, hcast, hu, hpi, hpi37]
+      ring
+    · have hi : 37 ≤ i := Nat.le_of_not_gt hi37
+      by_cases heq : i = 37
+      · subst i
+        norm_num
+      · have hlt : 37 < i := lt_of_le_of_ne hi (Ne.symm heq)
+        rw [Nat.choose_eq_zero_of_lt hlt]
+        simp [coeff_C, hi0]
+  rcases hdiv with ⟨g, hg⟩
+  have hπ0 : π ≠ 0 := by
+    exact hζ.unit'_coe.sub_one_ne_zero (by norm_num)
+  have hπ370 : π ^ 37 ≠ 0 := pow_ne_zero 37 hπ0
+  have hF37 : F.coeff 37 = π ^ 37 := by
+    dsimp only [F, f, cA]
+    rw [comp_C_mul_X_coeff, taylor_apply]
+    simp only [sub_comp, pow_comp, X_comp, C_comp]
+    rw [coeff_sub, coeff_X_add_C_pow]
+    norm_num
+  have hg37 : g.coeff 37 = 1 := by
+    have h := congrArg (fun q : (𝓞 K)[X] => q.coeff 37) hg
+    change F.coeff 37 = (C (π ^ 37) * g).coeff 37 at h
+    rw [hF37, coeff_C_mul] at h
+    have h' : π ^ 37 * 1 = π ^ 37 * g.coeff 37 := by
+      simpa using h
+    exact (mul_left_cancel₀ hπ370 h').symm
+  have hgdeg : g.natDegree ≤ 37 := by
+    rw [natDegree_le_iff_coeff_eq_zero]
+    intro N hN
+    have hF0 : F.coeff N = 0 := by
+      dsimp only [F, f, cA]
+      rw [comp_C_mul_X_coeff, taylor_apply]
+      simp only [sub_comp, pow_comp, X_comp, C_comp]
+      rw [coeff_sub, coeff_X_add_C_pow,
+        Nat.choose_eq_zero_of_lt hN]
+      have hN0 : N ≠ 0 := by omega
+      rw [Nat.cast_zero, mul_zero, coeff_C, if_neg hN0,
+        sub_zero, zero_mul]
+    have h := congrArg (fun q : (𝓞 K)[X] => q.coeff N) hg
+    change F.coeff N = (C (π ^ 37) * g).coeff N at h
+    rw [hF0, coeff_C_mul] at h
+    exact (mul_eq_zero.mp h.symm).resolve_left hπ370
+  have hgeq : g.natDegree = 37 :=
+    le_antisymm hgdeg
+      (le_natDegree_of_ne_zero (by simpa only [hg37] using
+        (one_ne_zero : (1 : 𝓞 K) ≠ 0)))
+  refine ⟨c, g, monic_of_natDegree_le_of_coeff_eq_one 37 hgdeg hg37,
+    hgeq, ?_⟩
+  simpa only [π, cA, f, F] using hg
+
+set_option maxRecDepth 2000 in
+/-- A Kummer-primary radicand eliminates the remaining wild
+ramification above `37`.
+
+For an upper prime `Q` above `37`, cyclotomic ramification identifies its
+lower prime with `(ζ - 1)`.  The primary congruence gives the integral
+generator `β = (√[37]{a} - c)/(ζ - 1)` and the monic polynomial produced
+above.  Differentiating its defining identity gives
+
+`g'(β) = u * √[37]{a} ^ 36`
+
+for a unit `u`.  The radicand is prime to `ζ - 1`, so the right-hand side
+is a unit at `Q`; the different criterion proves unramifiedness. -/
+theorem kummerExtension37_unramifiedAt_of_primary_above37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {a : 𝓞 K} {I : Ideal (𝓞 K)}
+    (hprimary : IsKummerPrimary hζ a)
+    (hpow : I ^ 37 = Ideal.span {a})
+    (hnonprincipal : ¬ Submodule.IsPrincipal (I : Ideal (𝓞 K))) :
+    let hirr :=
+      irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+        (by norm_num : Nat.Prime 37) hpow hnonprincipal
+    letI := Fact.mk hirr
+    letI : Field (KummerExtension37 K a) := AdjoinRoot.instField
+    letI : Algebra K (KummerExtension37 K a) := inferInstance
+    letI : Module.Finite K (KummerExtension37 K a) :=
+      (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+    letI : NumberField (KummerExtension37 K a) :=
+      NumberField.of_module_finite K (KummerExtension37 K a)
+    ∀ (Q : PrimeSpectrum (𝓞 (KummerExtension37 K a))),
+      Q.asIdeal ≠ ⊥ →
+      algebraMap (𝓞 K) (𝓞 (KummerExtension37 K a))
+          (37 : 𝓞 K) ∈ Q.asIdeal →
+      Algebra.IsUnramifiedAt (𝓞 K) Q.asIdeal := by
+  let hirr :=
+    irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+      (by norm_num : Nat.Prime 37) hpow hnonprincipal
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  change ∀ (Q : PrimeSpectrum (𝓞 L)), Q.asIdeal ≠ ⊥ →
+    algebraMap (𝓞 K) (𝓞 L) (37 : 𝓞 K) ∈ Q.asIdeal →
+      Algebra.IsUnramifiedAt (𝓞 K) Q.asIdeal
+  intro Q hQ0 h37Q
+  let P := Q.asIdeal.under (𝓞 K)
+  letI : P.IsPrime := inferInstance
+  letI : Q.asIdeal.LiesOver P := Ideal.LiesOver.mk rfl
+  have hP0 : P ≠ ⊥ := mt Ideal.eq_bot_of_comap_eq_bot hQ0
+  have h37P : (37 : 𝓞 K) ∈ P := by
+    exact h37Q
+  have hPover :
+      Ideal.span {(37 : ℤ)} = P.under ℤ := by
+    refine Ideal.IsMaximal.eq_of_le
+      (Int.ideal_span_isMaximal_of_prime 37) Ideal.IsPrime.ne_top' ?_
+    rw [Ideal.span_singleton_le_iff_mem, Ideal.mem_comap]
+    have hmap37 :
+        algebraMap ℤ (𝓞 K) (37 : ℤ) = (37 : 𝓞 K) := by
+      norm_num
+    rw [hmap37]
+    exact h37P
+  letI : P.LiesOver (Ideal.span {(37 : ℤ)}) :=
+    Ideal.LiesOver.mk hPover
+  have hPeq :
+      P = Ideal.span {hζ.toInteger - 1} :=
+    IsCyclotomicExtension.Rat.eq_span_zeta_sub_one_of_liesOver'
+      37 K hζ P
+  let π : 𝓞 K := (hζ.unit' : 𝓞 K) - 1
+  have htoInteger : hζ.toInteger = (hζ.unit' : 𝓞 K) := by
+    apply NumberField.RingOfIntegers.ext
+    rfl
+  have hPeqπ : P = Ideal.span {π} := by
+    simpa only [π, htoInteger] using hPeq
+  have haP : a ∉ P := by
+    rw [hPeqπ]
+    simpa only [Ideal.mem_span_singleton] using hprimary.1
+  obtain ⟨c, g, hgmonic, hgdegree, hFg⟩ :=
+    exists_primary_shift_polynomial37 hζ hprimary
+  let cA : 𝓞 K := c
+  let f : (𝓞 K)[X] := X ^ 37 - C a
+  let F : (𝓞 K)[X] :=
+    (taylor cA f).comp (C π * X)
+  let α : L := root (X ^ 37 - C (a : K))
+  let β : L :=
+    (α - algebraMap (𝓞 K) L cA) /
+      algebraMap (𝓞 K) L π
+  have hπ0 : π ≠ 0 :=
+    hζ.unit'_coe.sub_one_ne_zero (by norm_num)
+  have hπL0 : algebraMap (𝓞 K) L π ≠ 0 := by
+    simpa using
+      (FaithfulSMul.algebraMap_injective (𝓞 K) L).ne hπ0
+  have haffine :
+      algebraMap (𝓞 K) L π * β +
+        algebraMap (𝓞 K) L cA = α := by
+    dsimp only [β]
+    field_simp
+    ring_nf
+  have hEvalF : aeval β F = 0 := by
+    dsimp only [F]
+    rw [aeval_comp]
+    simp only [map_mul, aeval_C, aeval_X]
+    rw [taylor_apply, aeval_comp]
+    simp only [map_add, aeval_X, aeval_C]
+    rw [haffine]
+    dsimp only [f]
+    simp only [map_sub, map_pow, aeval_X, aeval_C]
+    rw [show α ^ 37 = algebraMap K L (a : K) by
+      exact kummerExtension37_root_pow a]
+    change algebraMap K L (algebraMap (𝓞 K) K a) -
+      algebraMap K L (algebraMap (𝓞 K) K a) = 0
+    ring
+  have hEvalG : aeval β g = 0 := by
+    have h := congrArg (fun q : (𝓞 K)[X] => aeval β q) hFg
+    change aeval β F = aeval β (C (π ^ 37) * g) at h
+    rw [hEvalF] at h
+    simp only [map_mul, aeval_C] at h
+    have hπpowL0 : algebraMap (𝓞 K) L (π ^ 37) ≠ 0 := by
+      rw [map_pow]
+      exact pow_ne_zero 37 hπL0
+    exact (mul_eq_zero.mp h.symm).resolve_left hπpowL0
+  have hβintA : IsIntegral (𝓞 K) β :=
+    ⟨g, hgmonic, hEvalG⟩
+  letI : IsScalarTower ℤ (𝓞 K) L :=
+    IsScalarTower.of_algebraMap_eq fun z => by
+      change (z : L) =
+        algebraMap (𝓞 K) L (z : 𝓞 K)
+      simp only [IsScalarTower.algebraMap_apply (𝓞 K) K L]
+      simp
+  have htowerCheck : IsScalarTower ℤ (𝓞 K) L :=
+    inferInstance
+  have hβintZ : IsIntegral ℤ β :=
+    @isIntegral_trans ℤ (𝓞 K) L _ _ _ _ _ _ htowerCheck _ β hβintA
+  let βO : 𝓞 L := ⟨β, hβintZ⟩
+  have hβOcoe : algebraMap (𝓞 L) L βO = β := rfl
+  have hαgen : Algebra.adjoin K {α} = ⊤ := by
+    simpa only [α, L, KummerExtension37] using
+      (AdjoinRoot.adjoinRoot_eq_top (R := K)
+        (f := X ^ 37 - C (a : K)))
+  have hαmem : α ∈ Algebra.adjoin K {β} := by
+    rw [← haffine]
+    apply (Algebra.adjoin K {β}).add_mem
+    · apply (Algebra.adjoin K {β}).mul_mem
+      · simpa only [IsScalarTower.algebraMap_apply (𝓞 K) K L] using
+          (Algebra.adjoin K {β}).algebraMap_mem (π : K)
+      · exact Algebra.subset_adjoin (Set.mem_singleton β)
+    · simpa only [IsScalarTower.algebraMap_apply (𝓞 K) K L] using
+        (Algebra.adjoin K {β}).algebraMap_mem (cA : K)
+  have hgen : Algebra.adjoin K {β} = ⊤ := by
+    apply top_unique
+    rw [← hαgen]
+    exact Algebra.adjoin_le (by
+      intro x hx
+      have hx' : x = α := by
+        simpa only [Set.mem_singleton_iff] using hx
+      subst x
+      exact hαmem)
+  have hgenIF : IntermediateField.adjoin K {β} = ⊤ := by
+    apply IntermediateField.toSubalgebra_injective
+    rw [IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic
+      (IsIntegral.isAlgebraic (IsIntegral.of_finite K β))]
+    exact hgen
+  have hfin : Module.finrank K L = 37 :=
+    kummerExtension37_finrank hζ hirr
+  have hminDegree :
+      (minpoly K β).natDegree = 37 := by
+    rw [← hfin]
+    exact (Field.primitive_element_iff_minpoly_natDegree_eq K β).mp hgenIF
+  let gK : K[X] := g.map (algebraMap (𝓞 K) K)
+  have hgKmonic : gK.Monic := hgmonic.map _
+  have hgKdegree : gK.natDegree = 37 := by
+    exact hgmonic.natDegree_map (algebraMap (𝓞 K) K) |>.trans hgdegree
+  have hEvalGK : aeval β gK = 0 := by
+    dsimp only [gK]
+    simp only [aeval_def, eval₂_map]
+    exact hEvalG
+  have hminpolyK : minpoly K β = gK := by
+    have hdvd : minpoly K β ∣ gK := minpoly.dvd K β hEvalGK
+    symm
+    apply Polynomial.eq_of_monic_of_dvd_of_natDegree_le
+      (minpoly.monic (IsIntegral.of_finite K β))
+      hgKmonic hdvd
+    rw [hgKdegree, hminDegree]
+  have hminpoly :
+      minpoly (𝓞 K) βO = g := by
+    apply Polynomial.map_injective (algebraMap (𝓞 K) K)
+      NumberField.RingOfIntegers.coe_injective
+    rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L
+      (IsIntegralClosure.isIntegral (𝓞 K) L βO)]
+    change minpoly K β = Polynomial.map (algebraMap (𝓞 K) K) g
+    exact hminpolyK
+  have hEvalDerivF :
+      aeval β (derivative F) =
+        algebraMap (𝓞 K) L π *
+          algebraMap (𝓞 K) L (37 : 𝓞 K) * α ^ 36 := by
+    dsimp only [F]
+    rw [derivative_comp]
+    simp only [derivative_mul, derivative_C, zero_mul, derivative_X,
+      mul_one, zero_add, map_mul, aeval_C]
+    rw [taylor_apply]
+    simp only [sub_comp, pow_comp, X_comp, C_comp,
+      derivative_sub, derivative_C, sub_zero, f]
+    rw [derivative_X_add_C_pow, aeval_comp]
+    simp only [map_mul, map_pow, map_add, aeval_C, aeval_X]
+    rw [haffine]
+    ring_nf
+  obtain ⟨u, hπu⟩ :=
+    associated_zeta_sub_one_pow_prime hζ
+  have hπu' : π ^ 36 * (u : 𝓞 K) = (37 : 𝓞 K) := by
+    simpa only [π] using hπu
+  have hEvalDerivG :
+      aeval β (derivative g) =
+        algebraMap (𝓞 K) L (u : 𝓞 K) * α ^ 36 := by
+    have h := congrArg derivative hFg
+    have heval :=
+      congrArg (fun q : (𝓞 K)[X] => aeval β q) h
+    change aeval β (derivative F) =
+      aeval β (derivative (C (π ^ 37) * g)) at heval
+    rw [hEvalDerivF] at heval
+    simp only [derivative_mul, derivative_C, zero_mul,
+      zero_add, map_mul, aeval_C] at heval
+    have hπ37L0 :
+        algebraMap (𝓞 K) L (π ^ 37) ≠ 0 := by
+      rw [map_pow]
+      exact pow_ne_zero 37 hπL0
+    have hπ37 : π ^ 37 = π * π ^ 36 := by
+      simpa using pow_succ' π 36
+    have hbase : π * (37 : 𝓞 K) = π ^ 37 * (u : 𝓞 K) := by
+      rw [← hπu', hπ37]
+      ring
+    have hfactor :
+        algebraMap (𝓞 K) L π *
+              algebraMap (𝓞 K) L (37 : 𝓞 K) * α ^ 36 =
+          algebraMap (𝓞 K) L (π ^ 37) *
+            (algebraMap (𝓞 K) L (u : 𝓞 K) * α ^ 36) := by
+      rw [← map_mul, hbase, map_mul]
+      ring
+    rw [hfactor] at heval
+    exact (mul_left_cancel₀ hπ37L0 heval).symm
+  let αO : 𝓞 L := kummerRootInteger37 hirr
+  have hαOcoe : algebraMap (𝓞 L) L αO = α := rfl
+  have hEvalDerivGO :
+      aeval βO (derivative g) =
+        algebraMap (𝓞 K) (𝓞 L) (u : 𝓞 K) * αO ^ 36 := by
+    apply NumberField.RingOfIntegers.ext
+    change algebraMap (𝓞 L) L (aeval βO (derivative g)) =
+      algebraMap (𝓞 L) L
+        (algebraMap (𝓞 K) (𝓞 L) (u : 𝓞 K) * αO ^ 36)
+    have hmapEval :
+        algebraMap (𝓞 L) L (aeval βO (derivative g)) =
+          aeval β (derivative g) := by
+      simp only [aeval_def]
+      rw [hom_eval₂]
+      simp only [hβOcoe]
+      rw [IsScalarTower.algebraMap_eq (𝓞 K) (𝓞 L) L]
+    rw [hmapEval, hEvalDerivG]
+    simp only [map_mul, map_pow, hαOcoe,
+      IsScalarTower.algebraMap_apply (𝓞 K) (𝓞 L) L]
+  have hαOQ : αO ∉ Q.asIdeal := by
+    intro hαQ
+    apply haP
+    have hpowmem :=
+      Q.asIdeal.pow_mem_of_mem hαQ 37 (by norm_num)
+    change kummerRootInteger37 hirr ^ 37 ∈ Q.asIdeal at hpowmem
+    rw [kummerRootInteger37_pow hirr] at hpowmem
+    exact hpowmem
+  have huQ :
+      algebraMap (𝓞 K) (𝓞 L) (u : 𝓞 K) ∉ Q.asIdeal := by
+    intro huMem
+    exact Q.isPrime.ne_top
+      (Ideal.eq_top_of_isUnit_mem Q.asIdeal huMem
+        (u.isUnit.map (algebraMap (𝓞 K) (𝓞 L))))
+  have hderivNot :
+      aeval βO (derivative g) ∉ Q.asIdeal := by
+    rw [hEvalDerivGO]
+    intro hprod
+    rcases Q.isPrime.mem_or_mem hprod with huMem | hαpow
+    · exact huQ huMem
+    · exact hαOQ (Q.isPrime.mem_of_pow_mem 36 hαpow)
+  have hgenO :
+      Algebra.adjoin K {algebraMap (𝓞 L) L βO} = ⊤ := by
+    simpa only [hβOcoe] using hgen
+  rw [← not_dvd_differentIdeal_iff]
+  intro hQdiff
+  have hderiv :
+      aeval βO (derivative (minpoly (𝓞 K) βO)) ∈
+        differentIdeal (𝓞 K) (𝓞 L) :=
+    aeval_derivative_mem_differentIdeal
+      (A := 𝓞 K) (K := K) (L := L) βO hgenO
+  have hderivQ :
+      aeval βO (derivative (minpoly (𝓞 K) βO)) ∈
+        Q.asIdeal :=
+    (Ideal.dvd_iff_le.mp hQdiff) hderiv
+  rw [hminpoly] at hderivQ
+  exact hderivNot hderivQ
+
 /-! ## Finite-prime ramification and the reciprocity boundary -/
 
 /-- The concrete Kummer extension is unramified at every prime which
@@ -1056,10 +1468,7 @@ Away from `37`, the ideal identity `(a) = I ^ 37` makes every valuation of
 `a` a multiple of `37`.  At the unique prime above `37`, the Kummer-primary
 congruence removes the remaining possible wild ramification.  Together
 these assertions say that the concrete extension `K(√[37]{a})/K` is
-unramified at every finite prime.
-
-This is not presently derivable from Mathlib: its Kummer-extension API has
-no local ramification theorem for `X ^ p - a`. -/
+unramified at every finite prime. -/
 def PrimaryIdealRootGivesUnramifiedKummer37 (K : Type*)
     [Field K] [NumberField K] [IsCyclotomicExtension {37} ℚ K] : Prop :=
   ∀ {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
@@ -1070,6 +1479,36 @@ def PrimaryIdealRootGivesUnramifiedKummer37 (K : Type*)
       KummerExtension37Unramified
         (irreducible_kummerPolynomial_of_nonprincipal_idealRoot
           (by norm_num) hpow hnonprincipal)
+
+set_option maxRecDepth 2000 in
+/-- The complete local Takagi--Furtwängler ramification theorem at `37`.
+
+At primes above `37` this is
+`kummerExtension37_unramifiedAt_of_primary_above37`; at every other
+prime it is
+`kummerExtension37_unramifiedAt_of_idealPower_awayFrom37`. -/
+theorem primaryIdealRootGivesUnramifiedKummer37 :
+    PrimaryIdealRootGivesUnramifiedKummer37 K := by
+  intro ζ hζ a I hprimary hpow hnonprincipal
+  let hirr :=
+    irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+      (by norm_num : Nat.Prime 37) hpow hnonprincipal
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  change ∀ (Q : PrimeSpectrum (𝓞 L)), Q.asIdeal ≠ ⊥ →
+    Algebra.IsUnramifiedAt (𝓞 K) Q.asIdeal
+  intro Q hQ0
+  by_cases h37 :
+      algebraMap (𝓞 K) (𝓞 L) (37 : 𝓞 K) ∈ Q.asIdeal
+  · exact kummerExtension37_unramifiedAt_of_primary_above37
+      hζ hprimary hpow hnonprincipal Q hQ0 h37
+  · exact kummerExtension37_unramifiedAt_of_idealPower_awayFrom37
+      hζ hpow hnonprincipal Q hQ0 h37
 
 /-- The remaining local ramification statement after the checked
 different-ideal calculation.
