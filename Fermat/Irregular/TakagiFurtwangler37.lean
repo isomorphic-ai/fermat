@@ -3,6 +3,8 @@ import Fermat.ThirtySeven.SinnottKummer
 import Mathlib.FieldTheory.KummerExtension
 import Mathlib.NumberTheory.RamificationInertia.Unramified
 import Mathlib.RingTheory.DedekindDomain.Different
+import Mathlib.RingTheory.DedekindDomain.Dvr
+import Mathlib.RingTheory.Localization.Integral
 
 /-!
 # The Takagi--Furtwängler boundary for Vandiver's Lemma 1 at exponent 37
@@ -369,6 +371,474 @@ theorem span_kummerRootInteger37_eq_map_of_idealPower
     _ = (I ^ 37).map (algebraMap (𝓞 K) (𝓞 L)) := by rw [hpow]
     _ = (I.map (algebraMap (𝓞 K) (𝓞 L))) ^ 37 :=
       Ideal.map_pow _ _ _
+
+/-! ## Local rescaling away from `37` -/
+
+set_option maxRecDepth 1500 in
+/-- At a nonzero upper prime, the Kummer root is a local generator of
+the extension of `I`.
+
+The localization of the lower Dedekind domain is a discrete valuation
+ring, so the localized ideal `I` has a generator `t`.  Mapping
+`(√[37]{a}) = I O_L` into the corresponding semilocal localization shows
+that the Kummer root and `t` differ by a unit. -/
+theorem exists_local_unit_rescaling37
+    {a : 𝓞 K} {I : Ideal (𝓞 K)}
+    (hpow : I ^ 37 = Ideal.span {a})
+    (hnonprincipal : ¬ Submodule.IsPrincipal (I : Ideal (𝓞 K))) :
+    let hirr :=
+      irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+        (by norm_num : Nat.Prime 37) hpow hnonprincipal
+    letI := Fact.mk hirr
+    letI : Field (KummerExtension37 K a) := AdjoinRoot.instField
+    letI : Algebra K (KummerExtension37 K a) := inferInstance
+    letI : Module.Finite K (KummerExtension37 K a) :=
+      (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+    letI : NumberField (KummerExtension37 K a) :=
+      NumberField.of_module_finite K (KummerExtension37 K a)
+    ∀ (Q : PrimeSpectrum (𝓞 (KummerExtension37 K a))),
+      Q.asIdeal ≠ ⊥ →
+      let P := Q.asIdeal.under (𝓞 K)
+      let Aₚ := Localization.AtPrime P
+      let Bₚ := Localization
+        (Algebra.algebraMapSubmonoid
+          (𝓞 (KummerExtension37 K a)) P.primeCompl)
+      ∃ u : Bₚˣ,
+        algebraMap (𝓞 (KummerExtension37 K a)) Bₚ
+            (kummerRootInteger37 hirr) =
+          algebraMap Aₚ Bₚ
+            (Submodule.IsPrincipal.generator
+              (I.map (algebraMap (𝓞 K) Aₚ))) * u := by
+  let hirr :=
+    irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+      (by norm_num : Nat.Prime 37) hpow hnonprincipal
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  change ∀ (Q : PrimeSpectrum (𝓞 L)), Q.asIdeal ≠ ⊥ →
+    let P := Q.asIdeal.under (𝓞 K)
+    let Aₚ := Localization.AtPrime P
+    let Bₚ := Localization
+      (Algebra.algebraMapSubmonoid (𝓞 L) P.primeCompl)
+    ∃ u : Bₚˣ,
+      algebraMap (𝓞 L) Bₚ (kummerRootInteger37 hirr) =
+        algebraMap Aₚ Bₚ
+          (Submodule.IsPrincipal.generator
+            (I.map (algebraMap (𝓞 K) Aₚ))) * u
+  intro Q hQ0
+  let P := Q.asIdeal.under (𝓞 K)
+  letI : P.IsPrime := inferInstance
+  have hP0 : P ≠ ⊥ := mt Ideal.eq_bot_of_comap_eq_bot hQ0
+  let Aₚ := Localization.AtPrime P
+  letI : IsDiscreteValuationRing Aₚ :=
+    IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain
+      (𝓞 K) hP0 Aₚ
+  let Bₚ := Localization
+    (Algebra.algebraMapSubmonoid (𝓞 L) P.primeCompl)
+  let J : Ideal Aₚ := I.map (algebraMap (𝓞 K) Aₚ)
+  let t : Aₚ := Submodule.IsPrincipal.generator J
+  have ht : Ideal.span {t} = J :=
+    Ideal.span_singleton_generator J
+  have hα :
+      Ideal.span
+          {algebraMap (𝓞 L) Bₚ (kummerRootInteger37 hirr)} =
+        I.map (algebraMap (𝓞 K) Bₚ) := by
+    calc
+      Ideal.span
+          {algebraMap (𝓞 L) Bₚ (kummerRootInteger37 hirr)} =
+          (Ideal.span {kummerRootInteger37 hirr}).map
+            (algebraMap (𝓞 L) Bₚ) := by
+              rw [Ideal.map_span]
+              simp
+      _ = (I.map (algebraMap (𝓞 K) (𝓞 L))).map
+            (algebraMap (𝓞 L) Bₚ) := by
+              rw [span_kummerRootInteger37_eq_map_of_idealPower
+                hpow hnonprincipal]
+      _ = I.map (algebraMap (𝓞 K) Bₚ) := by
+        rw [Ideal.map_map,
+          IsScalarTower.algebraMap_eq (𝓞 K) (𝓞 L) Bₚ]
+  have ht' :
+      Ideal.span {algebraMap Aₚ Bₚ t} =
+        I.map (algebraMap (𝓞 K) Bₚ) := by
+    calc
+      Ideal.span {algebraMap Aₚ Bₚ t} =
+          (Ideal.span {t}).map (algebraMap Aₚ Bₚ) := by
+            rw [Ideal.map_span]
+            simp
+      _ = J.map (algebraMap Aₚ Bₚ) := by rw [ht]
+      _ = (I.map (algebraMap (𝓞 K) Aₚ)).map
+          (algebraMap Aₚ Bₚ) := rfl
+      _ = I.map (algebraMap (𝓞 K) Bₚ) := by
+        rw [Ideal.map_map,
+          IsScalarTower.algebraMap_eq (𝓞 K) Aₚ Bₚ]
+  have hassoc :
+      Associated
+        (algebraMap (𝓞 L) Bₚ (kummerRootInteger37 hirr))
+        (algebraMap Aₚ Bₚ t) :=
+    Ideal.span_singleton_eq_span_singleton.mp (hα.trans ht'.symm)
+  rcases hassoc with ⟨u, hu⟩
+  refine ⟨u⁻¹, ?_⟩
+  rw [← hu]
+  simp
+  rfl
+
+set_option maxRecDepth 1500 in
+/-- The local unit rescaling can be represented by a global integer
+`b ∈ O_L` which remains a unit at the chosen upper prime.
+
+More precisely, there are nonzero `c d ∈ O_K` with
+`√[37]{a} * d = c * b`.  Thus `b` is a base-field rescaling of the
+Kummer root, remains a primitive element of the extension, and is a unit
+at `Q`. -/
+theorem exists_global_tame_rescaling37
+    {a : 𝓞 K} {I : Ideal (𝓞 K)}
+    (hpow : I ^ 37 = Ideal.span {a})
+    (hnonprincipal : ¬ Submodule.IsPrincipal (I : Ideal (𝓞 K))) :
+    let hirr :=
+      irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+        (by norm_num : Nat.Prime 37) hpow hnonprincipal
+    letI := Fact.mk hirr
+    letI : Field (KummerExtension37 K a) := AdjoinRoot.instField
+    letI : Algebra K (KummerExtension37 K a) := inferInstance
+    letI : Module.Finite K (KummerExtension37 K a) :=
+      (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+    letI : NumberField (KummerExtension37 K a) :=
+      NumberField.of_module_finite K (KummerExtension37 K a)
+    ∀ (Q : PrimeSpectrum (𝓞 (KummerExtension37 K a))),
+      Q.asIdeal ≠ ⊥ →
+      ∃ b : 𝓞 (KummerExtension37 K a),
+        b ∉ Q.asIdeal ∧
+        ∃ c d : 𝓞 K, c ≠ 0 ∧ d ≠ 0 ∧
+          kummerRootInteger37 hirr *
+              algebraMap (𝓞 K)
+                (𝓞 (KummerExtension37 K a)) d =
+            algebraMap (𝓞 K)
+                (𝓞 (KummerExtension37 K a)) c * b := by
+  let hirr :=
+    irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+      (by norm_num : Nat.Prime 37) hpow hnonprincipal
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  change ∀ (Q : PrimeSpectrum (𝓞 L)), Q.asIdeal ≠ ⊥ →
+    ∃ b : 𝓞 L, b ∉ Q.asIdeal ∧
+      ∃ c d : 𝓞 K, c ≠ 0 ∧ d ≠ 0 ∧
+        kummerRootInteger37 hirr *
+            algebraMap (𝓞 K) (𝓞 L) d =
+          algebraMap (𝓞 K) (𝓞 L) c * b
+  intro Q hQ0
+  let P := Q.asIdeal.under (𝓞 K)
+  letI : P.IsPrime := inferInstance
+  letI : Q.asIdeal.LiesOver P := Ideal.LiesOver.mk rfl
+  have hP0 : P ≠ ⊥ := mt Ideal.eq_bot_of_comap_eq_bot hQ0
+  let Aₚ := Localization.AtPrime P
+  letI : IsDiscreteValuationRing Aₚ :=
+    IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain
+      (𝓞 K) hP0 Aₚ
+  let Bₚ := Localization
+    (Algebra.algebraMapSubmonoid (𝓞 L) P.primeCompl)
+  let J : Ideal Aₚ := I.map (algebraMap (𝓞 K) Aₚ)
+  let t : Aₚ := Submodule.IsPrincipal.generator J
+  obtain ⟨u, hαu⟩ :=
+    exists_local_unit_rescaling37 hpow hnonprincipal Q hQ0
+  obtain ⟨c, dc, hct⟩ :=
+    IsLocalization.exists_mk'_eq P.primeCompl t
+  have hI0 : I ≠ ⊥ := by
+    intro hI
+    apply hnonprincipal
+    rw [hI]
+    infer_instance
+  have hAinj : Function.Injective (algebraMap (𝓞 K) Aₚ) :=
+    IsLocalization.injective Aₚ P.primeCompl_le_nonZeroDivisors
+  have hJ0 : J ≠ ⊥ :=
+    (Ideal.map_eq_bot_iff_of_injective hAinj).not.mpr hI0
+  have ht0 : t ≠ 0 := by
+    intro ht0
+    apply hJ0
+    change Submodule.IsPrincipal.generator J = 0 at ht0
+    rw [← Ideal.span_singleton_generator J, ht0]
+    simp
+  have hc0 : c ≠ 0 := by
+    intro hc0
+    apply ht0
+    rw [← hct, hc0]
+    simp
+  obtain ⟨b, sb, hbu⟩ :=
+    IsLocalization.exists_mk'_eq
+      (Algebra.algebraMapSubmonoid (𝓞 L) P.primeCompl) (u : Bₚ)
+  rcases sb with ⟨sb, hsb⟩
+  rcases hsb with ⟨s, hs, hsb⟩
+  subst sb
+  have hbunit : IsUnit (algebraMap (𝓞 L) Bₚ b) := by
+    rw [← IsLocalization.mk'_spec' Bₚ b
+      ⟨algebraMap (𝓞 K) (𝓞 L) s,
+        Algebra.mem_algebraMapSubmonoid_of_mem ⟨s, hs⟩⟩,
+      hbu]
+    exact
+      (IsLocalization.map_units Bₚ
+        ⟨algebraMap (𝓞 K) (𝓞 L) s,
+          Algebra.mem_algebraMapSubmonoid_of_mem ⟨s, hs⟩⟩).mul u.isUnit
+  have hdisj :
+      Disjoint
+        ((Algebra.algebraMapSubmonoid
+          (𝓞 L) P.primeCompl : Submonoid (𝓞 L)) : Set (𝓞 L))
+        (Q.asIdeal : Set (𝓞 L)) :=
+    Ideal.disjoint_primeCompl_of_liesOver Q.asIdeal P
+  have hmapQ :
+      Q.asIdeal.map (algebraMap (𝓞 L) Bₚ) ≠ ⊤ :=
+    (IsLocalization.map_algebraMap_ne_top_iff_disjoint
+      (Algebra.algebraMapSubmonoid (𝓞 L) P.primeCompl)
+      Bₚ Q.asIdeal).mpr hdisj
+  have hbQ : b ∉ Q.asIdeal := by
+    intro hb
+    apply hmapQ
+    exact Ideal.eq_top_of_isUnit_mem _
+      (Ideal.mem_map_of_mem (algebraMap (𝓞 L) Bₚ) hb) hbunit
+  have htclear :
+      algebraMap Aₚ Bₚ t *
+          algebraMap (𝓞 K) Bₚ (dc : 𝓞 K) =
+        algebraMap (𝓞 K) Bₚ c := by
+    calc
+      algebraMap Aₚ Bₚ t *
+          algebraMap (𝓞 K) Bₚ (dc : 𝓞 K) =
+          algebraMap Aₚ Bₚ
+            (t * algebraMap (𝓞 K) Aₚ (dc : 𝓞 K)) := by
+              rw [map_mul,
+                IsScalarTower.algebraMap_apply (𝓞 K) Aₚ Bₚ]
+      _ = algebraMap Aₚ Bₚ
+          (IsLocalization.mk' Aₚ c dc *
+            algebraMap (𝓞 K) Aₚ (dc : 𝓞 K)) := by rw [hct]
+      _ = algebraMap Aₚ Bₚ (algebraMap (𝓞 K) Aₚ c) := by
+        rw [IsLocalization.mk'_spec]
+      _ = algebraMap (𝓞 K) Bₚ c :=
+        (IsScalarTower.algebraMap_apply (𝓞 K) Aₚ Bₚ c).symm
+  have huclear :
+      algebraMap (𝓞 K) Bₚ s * (u : Bₚ) =
+        algebraMap (𝓞 L) Bₚ b := by
+    simpa only [IsScalarTower.algebraMap_apply (𝓞 K) (𝓞 L) Bₚ]
+      using
+        (show
+          algebraMap (𝓞 L) Bₚ
+                (algebraMap (𝓞 K) (𝓞 L) s) *
+              (u : Bₚ) =
+            algebraMap (𝓞 L) Bₚ b by
+          rw [← hbu]
+          exact IsLocalization.mk'_spec' Bₚ b
+            ⟨algebraMap (𝓞 K) (𝓞 L) s,
+              Algebra.mem_algebraMapSubmonoid_of_mem ⟨s, hs⟩⟩)
+  have hrelLoc :
+      algebraMap (𝓞 L) Bₚ (kummerRootInteger37 hirr) *
+          algebraMap (𝓞 K) Bₚ ((dc : 𝓞 K) * s) =
+        algebraMap (𝓞 K) Bₚ c *
+          algebraMap (𝓞 L) Bₚ b := by
+    rw [map_mul, hαu]
+    calc
+      (algebraMap Aₚ Bₚ t * (u : Bₚ)) *
+          (algebraMap (𝓞 K) Bₚ (dc : 𝓞 K) *
+            algebraMap (𝓞 K) Bₚ s) =
+          (algebraMap Aₚ Bₚ t *
+            algebraMap (𝓞 K) Bₚ (dc : 𝓞 K)) *
+          (algebraMap (𝓞 K) Bₚ s * (u : Bₚ)) := by ring
+      _ = algebraMap (𝓞 K) Bₚ c *
+          algebraMap (𝓞 L) Bₚ b := by rw [htclear, huclear]
+  have hM :
+      Algebra.algebraMapSubmonoid (𝓞 L) P.primeCompl ≤
+        nonZeroDivisors (𝓞 L) :=
+    Submonoid.map_le_of_le_comap _ <|
+      P.primeCompl_le_nonZeroDivisors.trans <|
+        nonZeroDivisors_le_comap_nonZeroDivisors_of_injective
+          (algebraMap (𝓞 K) (𝓞 L))
+          (FaithfulSMul.algebraMap_injective (𝓞 K) (𝓞 L))
+  have hBinj : Function.Injective (algebraMap (𝓞 L) Bₚ) :=
+    IsLocalization.injective Bₚ hM
+  have hrel :
+      kummerRootInteger37 hirr *
+          algebraMap (𝓞 K) (𝓞 L) ((dc : 𝓞 K) * s) =
+        algebraMap (𝓞 K) (𝓞 L) c * b := by
+    apply hBinj
+    simpa only [map_mul,
+      IsScalarTower.algebraMap_apply (𝓞 K) (𝓞 L) Bₚ] using hrelLoc
+  have hdc0 : (dc : 𝓞 K) ≠ 0 := by
+    intro h
+    exact dc.2 (h ▸ P.zero_mem)
+  have hs0 : s ≠ 0 := by
+    intro h
+    exact hs (h ▸ P.zero_mem)
+  exact ⟨b, hbQ, c, (dc : 𝓞 K) * s, hc0,
+    mul_ne_zero hdc0 hs0, hrel⟩
+
+set_option maxRecDepth 1800 in
+/-- The ideal-power identity eliminates every finite ramification prime
+away from `37`.
+
+At an upper prime `Q`, choose the global rescaling `b` above.  It is a
+unit at `Q`, still generates the Kummer field, and satisfies
+`b ^ 37 ∈ K`.  Its minimal polynomial therefore has the form
+`X ^ 37 - k`, whose derivative is `37 * b ^ 36`.  If `Q` does not lie
+above `37`, this derivative is a unit at `Q`; the different criterion
+then proves unramifiedness. -/
+theorem kummerExtension37_unramifiedAt_of_idealPower_awayFrom37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    {a : 𝓞 K} {I : Ideal (𝓞 K)}
+    (hpow : I ^ 37 = Ideal.span {a})
+    (hnonprincipal : ¬ Submodule.IsPrincipal (I : Ideal (𝓞 K))) :
+    let hirr :=
+      irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+        (by norm_num : Nat.Prime 37) hpow hnonprincipal
+    letI := Fact.mk hirr
+    letI : Field (KummerExtension37 K a) := AdjoinRoot.instField
+    letI : Algebra K (KummerExtension37 K a) := inferInstance
+    letI : Module.Finite K (KummerExtension37 K a) :=
+      (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+    letI : NumberField (KummerExtension37 K a) :=
+      NumberField.of_module_finite K (KummerExtension37 K a)
+    ∀ (Q : PrimeSpectrum (𝓞 (KummerExtension37 K a))),
+      Q.asIdeal ≠ ⊥ →
+      algebraMap (𝓞 K) (𝓞 (KummerExtension37 K a))
+          (37 : 𝓞 K) ∉ Q.asIdeal →
+      Algebra.IsUnramifiedAt (𝓞 K) Q.asIdeal := by
+  let hirr :=
+    irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+      (by norm_num : Nat.Prime 37) hpow hnonprincipal
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  change ∀ (Q : PrimeSpectrum (𝓞 L)), Q.asIdeal ≠ ⊥ →
+    algebraMap (𝓞 K) (𝓞 L) (37 : 𝓞 K) ∉ Q.asIdeal →
+      Algebra.IsUnramifiedAt (𝓞 K) Q.asIdeal
+  intro Q hQ0 h37
+  obtain ⟨b, hbQ, c, d, hc0, hd0, hrel⟩ :=
+    exists_global_tame_rescaling37 hpow hnonprincipal Q hQ0
+  let α : L := root (X ^ 37 - C (a : K))
+  let β : L := algebraMap (𝓞 L) L b
+  have hrelL :
+      α * algebraMap K L (d : K) =
+        algebraMap K L (c : K) * β := by
+    have h := congrArg (algebraMap (𝓞 L) L) hrel
+    simpa only [map_mul, β, α,
+      IsScalarTower.algebraMap_apply (𝓞 K) K L] using h
+  have hcL : algebraMap K L (c : K) ≠ 0 := by
+    simpa using
+      (algebraMap K L).injective.ne
+        (NumberField.RingOfIntegers.coe_injective.ne hc0)
+  have hdL : algebraMap K L (d : K) ≠ 0 := by
+    simpa using
+      (algebraMap K L).injective.ne
+        (NumberField.RingOfIntegers.coe_injective.ne hd0)
+  have hβeq :
+      β = algebraMap K L ((d : K) / (c : K)) * α := by
+    rw [map_div₀ (algebraMap K L) (d : K) (c : K)]
+    field_simp
+    simpa only [mul_comm] using hrelL.symm
+  have hαeq :
+      α = algebraMap K L ((c : K) / (d : K)) * β := by
+    rw [map_div₀ (algebraMap K L) (c : K) (d : K)]
+    field_simp
+    simpa only [mul_comm] using hrelL
+  have hαgen : Algebra.adjoin K {α} = ⊤ := by
+    simpa only [α, L, KummerExtension37] using
+      (AdjoinRoot.adjoinRoot_eq_top (R := K)
+        (f := X ^ 37 - C (a : K)))
+  have hαmem : α ∈ Algebra.adjoin K {β} := by
+    rw [hαeq]
+    exact (Algebra.adjoin K {β}).mul_mem
+      ((Algebra.adjoin K {β}).algebraMap_mem ((c : K) / (d : K)))
+      (Algebra.subset_adjoin (Set.mem_singleton β))
+  have hgen : Algebra.adjoin K {β} = ⊤ := by
+    apply top_unique
+    rw [← hαgen]
+    exact Algebra.adjoin_le (by
+      intro x hx
+      have hx' : x = α := by
+        simpa only [Set.mem_singleton_iff] using hx
+      subst x
+      exact hαmem)
+  have hgenIF : IntermediateField.adjoin K {β} = ⊤ := by
+    apply IntermediateField.toSubalgebra_injective
+    rw [IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic
+      (IsIntegral.isAlgebraic (IsIntegral.of_finite K β))]
+    exact hgen
+  let k : K := ((d : K) / (c : K)) ^ 37 * (a : K)
+  have hβpow : β ^ 37 = algebraMap K L k := by
+    calc
+      β ^ 37 =
+          (algebraMap K L ((d : K) / (c : K)) * α) ^ 37 := by
+            rw [hβeq]
+      _ = algebraMap K L ((d : K) / (c : K)) ^ 37 * α ^ 37 := by
+        rw [mul_pow]
+      _ = algebraMap K L ((d : K) / (c : K)) ^ 37 *
+          algebraMap K L (a : K) := by
+        rw [show α ^ 37 = algebraMap K L (a : K) by
+          exact kummerExtension37_root_pow a]
+      _ = algebraMap K L k := by simp [k]
+  have hfin : Module.finrank K L = 37 :=
+    kummerExtension37_finrank hζ hirr
+  have hβpow' :
+      β ^ Module.finrank K L = algebraMap K L k := by
+    simpa only [hfin] using hβpow
+  have hirrβ :
+      Irreducible (X ^ 37 - C k) := by
+    simpa only [hfin] using
+      (irreducible_X_pow_sub_C_of_root_adjoin_eq_top hβpow' hgenIF)
+  have hβroot : aeval β (X ^ 37 - C k) = 0 := by
+    simp [hβpow]
+  have hminpolyK : minpoly K β = X ^ 37 - C k := by
+    symm
+    simpa using minpoly.eq_of_irreducible hirrβ hβroot
+  have hkintL : IsIntegral ℤ (algebraMap K L k) := by
+    rw [← hβpow]
+    exact (NumberField.RingOfIntegers.isIntegral_coe b).pow 37
+  have hkint : IsIntegral ℤ k :=
+    (isIntegral_algebraMap_iff (algebraMap K L).injective).mp hkintL
+  let kO : 𝓞 K := ⟨k, hkint⟩
+  let g : (𝓞 K)[X] := X ^ 37 - C kO
+  have hminpoly :
+      minpoly (𝓞 K) b = g := by
+    apply Polynomial.map_injective (algebraMap (𝓞 K) K)
+      NumberField.RingOfIntegers.coe_injective
+    rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L
+      (IsIntegralClosure.isIntegral (𝓞 K) L b)]
+    change minpoly K β =
+      Polynomial.map (algebraMap (𝓞 K) K) g
+    rw [hminpolyK]
+    simp [g, kO]
+  rw [← not_dvd_differentIdeal_iff]
+  intro hQdiff
+  have hderiv :
+      aeval b (derivative (minpoly (𝓞 K) b)) ∈
+        differentIdeal (𝓞 K) (𝓞 L) :=
+    aeval_derivative_mem_differentIdeal
+      (A := 𝓞 K) (K := K) (L := L) b hgen
+  have hderivQ :
+      aeval b (derivative (minpoly (𝓞 K) b)) ∈ Q.asIdeal :=
+    (Ideal.dvd_iff_le.mp hQdiff) hderiv
+  have hcoef :
+      algebraMap (𝓞 K) (𝓞 L) (36 : 𝓞 K) + 1 =
+        (37 : 𝓞 L) := by
+    rw [map_ofNat]
+    norm_num
+  have hderivQ'' :
+      (algebraMap (𝓞 K) (𝓞 L) (36 : 𝓞 K) + 1) *
+          b ^ 36 ∈ Q.asIdeal := by
+    simpa [hminpoly, g] using hderivQ
+  have hderivQ' : (37 : 𝓞 L) * b ^ 36 ∈ Q.asIdeal := by
+    rw [← hcoef]
+    exact hderivQ''
+  rcases Q.isPrime.mem_or_mem hderivQ' with h | h
+  · exact h37 (by simpa using h)
+  · exact hbQ (Q.isPrime.mem_of_pow_mem 36 h)
 
 /-! ## Finite-prime ramification and the reciprocity boundary -/
 
