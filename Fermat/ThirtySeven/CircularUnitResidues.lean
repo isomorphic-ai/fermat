@@ -51,6 +51,10 @@ corresponding fourth-power residue symbol. -/
 theorem matrix_entry_certificate (j i : Fin 17) :
     normalizedUnitValue j i ^ 4 =
       (16 : ZMod 149) ^ (matrix j i).val := by
-  fin_cases j <;> fin_cases i <;> decide
+  fin_cases j <;> fin_cases i <;>
+    simp only [normalizedUnitValue, embeddingRoot, normalizationExponent, unitIndex,
+      matrix, div_pow] <;>
+    apply (div_eq_iff (by decide)).2 <;>
+    decide
 
 end Fermat.ThirtySeven.CircularUnitResidues
