@@ -76,6 +76,156 @@ lemma unitsComplexConj_zeta37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37) :
   change NumberField.IsCMField.complexConj K ζ = ζ⁻¹
   exact Fermat.Irregular.CircularUnitIndex.complexConj_zeta37_inv hζ
 
+/-- Complex conjugation changes the standard uniformizer `ζ - 1` by the
+explicit unit `-ζ⁻¹`. -/
+lemma ringOfIntegersComplexConj_zeta_sub_one37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) :
+    NumberField.IsCMField.ringOfIntegersComplexConj K
+        ((hζ.unit' : 𝓞 K) - 1) =
+      ((-hζ.unit'⁻¹ : (𝓞 K)ˣ) : 𝓞 K) *
+        ((hζ.unit' : 𝓞 K) - 1) := by
+  rw [map_sub, map_one]
+  have hconjζ :
+      NumberField.IsCMField.ringOfIntegersComplexConj K
+          (hζ.unit' : 𝓞 K) = (hζ.unit'⁻¹ : (𝓞 K)ˣ) :=
+    congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) (unitsComplexConj_zeta37 hζ)
+  rw [hconjζ]
+  have hinv :
+      (hζ.unit'⁻¹ : (𝓞 K)ˣ) * (hζ.unit' : 𝓞 K) = 1 := by
+    rw [← Units.val_mul]
+    simp
+  simp only [Units.val_neg, neg_mul, mul_sub, hinv]
+  ring
+
+/-- Divisibility by a power of `ζ - 1` is preserved by complex
+conjugation.  The explicit unit in
+`ringOfIntegersComplexConj_zeta_sub_one37` keeps the proof entirely at
+element level. -/
+lemma zeta_sub_one_pow_dvd_conj_of_dvd37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (n : ℕ) (a : 𝓞 K)
+    (h : ((hζ.unit' : 𝓞 K) - 1) ^ n ∣ a) :
+    ((hζ.unit' : 𝓞 K) - 1) ^ n ∣
+      NumberField.IsCMField.ringOfIntegersComplexConj K a := by
+  obtain ⟨b, rfl⟩ := h
+  rw [map_mul, map_pow, ringOfIntegersComplexConj_zeta_sub_one37, mul_pow]
+  refine ⟨(((-hζ.unit'⁻¹ : (𝓞 K)ˣ) ^ n : (𝓞 K)ˣ) : 𝓞 K) *
+      NumberField.IsCMField.ringOfIntegersComplexConj K b, ?_⟩
+  simp only [Units.val_pow_eq_pow_val]
+  ring
+
+/-- Every 37th power is fixed by complex conjugation modulo
+`(ζ - 1)^37`.  Both powers are compared with the same rational 37th
+power; conjugating the first comparison is legitimate by the preceding
+uniformizer calculation. -/
+lemma zeta_sub_one_pow_thirtySeven_dvd_pow_sub_conj_pow37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (a : 𝓞 K) :
+    ((hζ.unit' : 𝓞 K) - 1) ^ 37 ∣
+      a ^ 37 -
+        NumberField.IsCMField.ringOfIntegersComplexConj K a ^ 37 := by
+  obtain ⟨c, hc⟩ := exists_int_pow_congruent_mod_primary hζ a
+  have hcconj := zeta_sub_one_pow_dvd_conj_of_dvd37 hζ 37
+    (a ^ 37 - (c : 𝓞 K) ^ 37) hc
+  have hcconj' : ((hζ.unit' : 𝓞 K) - 1) ^ 37 ∣
+      NumberField.IsCMField.ringOfIntegersComplexConj K a ^ 37 -
+        (c : 𝓞 K) ^ 37 := by
+    simpa only [map_sub, map_pow, map_intCast] using hcconj
+  convert dvd_sub hc hcconj' using 1
+  ring
+
+/-- A 37th root of unity which is `1` modulo `(ζ - 1)^2` is literally
+`1`.  A nontrivial power `ζ^k - 1` is associated to the single
+uniformizer `ζ - 1`, so it cannot contain its square. -/
+lemma zeta_pow_sq_eq_one_of_zeta_sub_one_sq_dvd37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (j : ℕ)
+    (hdiv : ((hζ.unit' : 𝓞 K) - 1) ^ 2 ∣
+      ((((hζ.unit' ^ j) ^ 2 : (𝓞 K)ˣ) : 𝓞 K) - 1)) :
+    (hζ.unit' ^ j) ^ 2 = 1 := by
+  let k : ℕ := (2 * j) % 37
+  have hklt : k < 37 := by
+    dsimp [k]
+    omega
+  have hpowmod :
+      ((((hζ.unit' ^ j) ^ 2 : (𝓞 K)ˣ) : 𝓞 K)) =
+        (hζ.unit' : 𝓞 K) ^ k := by
+    simp only [Units.val_pow_eq_pow_val]
+    rw [← pow_mul]
+    have hmod := pow_mod_orderOf (hζ.unit' : 𝓞 K) (2 * j)
+    rw [← hζ.unit'_coe.eq_orderOf] at hmod
+    simpa only [k, mul_comm] using hmod.symm
+  by_cases hk : k = 0
+  · apply Units.ext
+    change ((((hζ.unit' ^ j) ^ 2 : (𝓞 K)ˣ) : 𝓞 K)) = 1
+    rw [hpowmod, hk, pow_zero]
+  · have hknotdvd : ¬ 37 ∣ k := by
+      intro h
+      obtain ⟨t, ht⟩ := h
+      apply hk
+      omega
+    have hkcoprime : k.Coprime 37 := by
+      apply Nat.coprime_comm.mpr
+      exact (show Nat.Prime 37 by norm_num).coprime_iff_not_dvd.mpr hknotdvd
+    have hassoc : Associated
+        ((hζ.unit' : 𝓞 K) - 1)
+        ((hζ.unit' : 𝓞 K) ^ k - 1) :=
+      hζ.unit'_coe.associated_sub_one_pow_sub_one_of_coprime hkcoprime
+    have hsquare : ((hζ.unit' : 𝓞 K) - 1) ^ 2 ∣
+        (hζ.unit' : 𝓞 K) - 1 :=
+      hassoc.dvd_iff_dvd_right.mpr (by simpa only [hpowmod] using hdiv)
+    obtain ⟨c, hc⟩ := hsquare
+    have hπ0 : (hζ.unit' : 𝓞 K) - 1 ≠ 0 :=
+      hζ.unit'_coe.sub_one_ne_zero (by norm_num)
+    have hone : (1 : 𝓞 K) = ((hζ.unit' : 𝓞 K) - 1) * c := by
+      apply mul_left_cancel₀ hπ0
+      calc
+        ((hζ.unit' : 𝓞 K) - 1) * 1 =
+            (hζ.unit' : 𝓞 K) - 1 := by ring
+        _ = ((hζ.unit' : 𝓞 K) - 1) ^ 2 * c := hc
+        _ = ((hζ.unit' : 𝓞 K) - 1) *
+            (((hζ.unit' : 𝓞 K) - 1) * c) := by ring
+    exact False.elim <| hζ.zeta_sub_one_prime'.not_unit
+      (isUnit_iff_dvd_one.mpr ⟨c, hone⟩)
+
+/-- A cyclotomic unit whose conjugation defect is divisible by
+`(ζ - 1)^2` is real.  The CM unit theorem writes the defect as a square
+of a power of `ζ`; the preceding rigidity lemma kills that power. -/
+lemma unit_fixed_of_zeta_sub_one_sq_dvd_sub_conj37 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 37) (u : (𝓞 K)ˣ)
+    (hdiv : ((hζ.unit' : 𝓞 K) - 1) ^ 2 ∣
+      (u : 𝓞 K) -
+        NumberField.IsCMField.ringOfIntegersComplexConj K (u : 𝓞 K)) :
+    NumberField.IsCMField.unitsComplexConj K u = u := by
+  obtain ⟨j, hj⟩ := unit_inv_conj_is_root_of_unity hζ u (by norm_num)
+  let cu : (𝓞 K)ˣ := NumberField.IsCMField.unitsComplexConj K u
+  let r : (𝓞 K)ˣ := (hζ.unit' ^ j) ^ 2
+  have hu : u = r * cu := by
+    calc
+      u = (u * cu⁻¹) * cu := by simp
+      _ = r * cu := by simpa only [cu, r] using congrArg (· * cu) hj
+  have hu' := congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) hu
+  have hfactor :
+      (u : 𝓞 K) - (cu : 𝓞 K) =
+        (((((hζ.unit' ^ j) ^ 2 : (𝓞 K)ˣ) : 𝓞 K) - 1) * (cu : 𝓞 K)) := by
+    change (u : 𝓞 K) - (cu : 𝓞 K) =
+      ((r : 𝓞 K) - 1) * (cu : 𝓞 K)
+    rw [hu']
+    simp only [Units.val_mul]
+    ring
+  have hassoc : Associated
+      (((((hζ.unit' ^ j) ^ 2 : (𝓞 K)ˣ) : 𝓞 K)) - 1)
+      ((u : 𝓞 K) - (cu : 𝓞 K)) :=
+    ⟨cu, by simpa only [hfactor]⟩
+  have hrootdiv : ((hζ.unit' : 𝓞 K) - 1) ^ 2 ∣
+      (((((hζ.unit' ^ j) ^ 2 : (𝓞 K)ˣ) : 𝓞 K)) - 1) :=
+    hassoc.dvd_iff_dvd_right.mpr (by simpa only [cu] using hdiv)
+  have hroot := zeta_pow_sq_eq_one_of_zeta_sub_one_sq_dvd37 hζ j hrootdiv
+  rw [hroot] at hj
+  have hucu : u = cu := by
+    calc
+      u = (u * cu⁻¹) * cu := by simp
+      _ = 1 * cu := by rw [hj]
+      _ = cu := by simp
+  exact hucu.symm
+
 /-! ## Exact normalization to the upstream factor-ideal equation -/
 
 /-- The cyclotomic unit in the exact identity
@@ -484,6 +634,38 @@ theorem ringOfIntegersComplexConj_historicalZetaFactor37
     _ = ((-hζ.unit' : (𝓞 K)ˣ) : 𝓞 K) * qminus := by
       rw [huinv]
       ring
+
+/-- The normalized historical factor at `ζ` is prime to the ramified
+uniformizer. -/
+theorem historicalZetaFactor_not_ramified37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ)
+    (hs : RealSourceAdmissible hζ s) :
+    ¬ (hζ.unit' : 𝓞 K) - 1 ∣ historicalZetaFactor37 hζ s := by
+  have hlocal := normalizedConjugateLinearFactors
+    (by norm_num : 37 ≠ 2) hζ
+    (historicalState_regularEquation37 hζ s)
+    (historicalState_theta_not_dvd37 hζ s)
+    (historicalState_omega_add_theta_highDivisibility37 hζ s hs)
+  simpa only [historicalZetaFactor37] using hlocal.1
+
+/-- The normalized historical factor and its conjugate agree modulo
+`(ζ - 1)^37`.  This is the local compatibility behind Vandiver's claim
+that the unit in equation (8) may be chosen real. -/
+theorem historicalZetaFactor_sub_conj_highDivisibility37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ)
+    (hs : RealSourceAdmissible hζ s) :
+    ((hζ.unit' : 𝓞 K) - 1) ^ 37 ∣
+      historicalZetaFactor37 hζ s -
+        NumberField.IsCMField.ringOfIntegersComplexConj K
+          (historicalZetaFactor37 hζ s) := by
+  have hlocal := normalizedConjugateLinearFactors
+    (by norm_num : 37 ≠ 2) hζ
+    (historicalState_regularEquation37 hζ s)
+    (historicalState_theta_not_dvd37 hζ s)
+    (historicalState_omega_add_theta_highDivisibility37 hζ s hs)
+  rw [ringOfIntegersComplexConj_historicalZetaFactor37 hζ s hs]
+  simpa only [historicalZetaFactor37, historicalInverseZetaFactor37,
+    normalizedHistoricalInverseZetaFactor37] using hlocal.2.2
 
 set_option maxRecDepth 2000 in
 /-- Vandiver's equation (7a) for the literal historical factor pair,
@@ -895,6 +1077,195 @@ theorem exists_historicalEquationEight37
     (historicalZetaFactorIdeal_pow37 hζ s)
     (historicalInverseZetaFactorIdeal_pow37 hζ s)
     hsevenA hsevenD
+
+set_option maxRecDepth 3000 in
+/-- The unit in the literal historical equation (8) is real.
+
+The factor at `ζ` agrees with its conjugate modulo `(ζ - 1)^37`, and so
+does every 37th power.  After cancelling the generator, which is prime to
+`ζ - 1`, the unit's conjugation defect is divisible by `(ζ - 1)^2`.
+`unit_fixed_of_zeta_sub_one_sq_dvd_sub_conj37` then removes its possible
+cyclotomic torsion component.  This is the compatibility needed to obtain
+equation (8) at `a` and `-a` with one common unit. -/
+theorem historicalEquationEight_unit_real37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ)
+    (hs : RealSourceAdmissible hζ s) (ρ : 𝓞 K) (η : (𝓞 K)ˣ)
+    (heq : historicalZetaFactor37 hζ s = η * ρ ^ 37) :
+    NumberField.IsCMField.unitsComplexConj K η = η := by
+  let π : 𝓞 K := (hζ.unit' : 𝓞 K) - 1
+  have hqnot : ¬ π ∣ historicalZetaFactor37 hζ s := by
+    simpa only [π] using historicalZetaFactor_not_ramified37 hζ s hs
+  have hρnot : ¬ π ∣ ρ := by
+    intro hρ
+    apply hqnot
+    rw [heq]
+    exact dvd_mul_of_dvd_right (dvd_pow (n := 37) hρ (by norm_num)) _
+  have hρpowNot : ¬ π ∣ ρ ^ 37 := by
+    intro h
+    exact hρnot ((hζ.zeta_sub_one_prime'.dvd_pow_iff_dvd
+      (by norm_num : 37 ≠ 0)).mp h)
+  have hq37 := historicalZetaFactor_sub_conj_highDivisibility37 hζ s hs
+  have hq2 : π ^ 2 ∣
+      historicalZetaFactor37 hζ s -
+        NumberField.IsCMField.ringOfIntegersComplexConj K
+          (historicalZetaFactor37 hζ s) := by
+    exact (pow_dvd_pow_of_dvd_of_le (dvd_refl π) (by norm_num : 2 ≤ 37)).trans
+      (by simpa only [π] using hq37)
+  have hρ37 :=
+    zeta_sub_one_pow_thirtySeven_dvd_pow_sub_conj_pow37 hζ ρ
+  have hρ2 : π ^ 2 ∣
+      ρ ^ 37 -
+        NumberField.IsCMField.ringOfIntegersComplexConj K ρ ^ 37 := by
+    exact (pow_dvd_pow_of_dvd_of_le (dvd_refl π) (by norm_num : 2 ≤ 37)).trans
+      (by simpa only [π] using hρ37)
+  have herror : π ^ 2 ∣
+      NumberField.IsCMField.ringOfIntegersComplexConj K (η : 𝓞 K) *
+        (ρ ^ 37 -
+          NumberField.IsCMField.ringOfIntegersComplexConj K ρ ^ 37) :=
+    dvd_mul_of_dvd_right hρ2 _
+  have hmul : π ^ 2 ∣
+      ((η : 𝓞 K) -
+        NumberField.IsCMField.ringOfIntegersComplexConj K (η : 𝓞 K)) *
+          ρ ^ 37 := by
+    have h := dvd_sub hq2 herror
+    convert h using 1
+    rw [heq]
+    simp only [map_mul, map_pow]
+    ring
+  have hunit : π ^ 2 ∣
+      (η : 𝓞 K) -
+        NumberField.IsCMField.ringOfIntegersComplexConj K (η : 𝓞 K) := by
+    let d : 𝓞 K := (η : 𝓞 K) -
+      NumberField.IsCMField.ringOfIntegersComplexConj K (η : 𝓞 K)
+    have hπ0 : π ≠ 0 := hζ.unit'_coe.sub_one_ne_zero (by norm_num)
+    have hπmul : π ∣ d * ρ ^ 37 :=
+      (dvd_pow_self π (by norm_num : 2 ≠ 0)).trans
+        (by simpa only [d] using hmul)
+    have hd : π ∣ d := by
+      rcases hζ.zeta_sub_one_prime'.dvd_mul.mp hπmul with hd | hρ
+      · exact hd
+      · exact False.elim (hρpowNot hρ)
+    obtain ⟨d₁, hd₁⟩ := hd
+    obtain ⟨c, hc⟩ := hmul
+    have hcancel : d₁ * ρ ^ 37 = π * c := by
+      apply mul_left_cancel₀ hπ0
+      calc
+        π * (d₁ * ρ ^ 37) = d * ρ ^ 37 := by rw [hd₁]; ring
+        _ = π ^ 2 * c := hc
+        _ = π * (π * c) := by ring
+    have hd₁div : π ∣ d₁ := by
+      have hπd₁ : π ∣ d₁ * ρ ^ 37 := ⟨c, hcancel⟩
+      rcases hζ.zeta_sub_one_prime'.dvd_mul.mp hπd₁ with hd₁ | hρ
+      · exact hd₁
+      · exact False.elim (hρpowNot hρ)
+    obtain ⟨d₂, hd₂⟩ := hd₁div
+    refine ⟨d₂, ?_⟩
+    change d = π ^ 2 * d₂
+    rw [hd₁, hd₂]
+    ring
+  exact unit_fixed_of_zeta_sub_one_sq_dvd_sub_conj37 hζ η
+    (by simpa only [π] using hunit)
+
+set_option maxRecDepth 3000 in
+/-- Strengthened equation (8): the chosen coefficient unit is fixed by
+complex conjugation.  Consequently its conjugate equation uses exactly
+the same unit, as in Vandiver's displayed formulas for `a` and `-a`. -/
+theorem exists_historicalEquationEight_realUnit37
+    (hlemma : LemmaOne K 37)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ)
+    (hs : RealSourceAdmissible hζ s) :
+    ∃ (ρ : 𝓞 K) (η : (𝓞 K)ˣ),
+      historicalZetaFactorIdeal37 hζ s = Ideal.span {ρ} ∧
+      historicalZetaFactor37 hζ s = η * ρ ^ 37 ∧
+      NumberField.IsCMField.unitsComplexConj K η = η := by
+  obtain ⟨ρ, η, hI, heq⟩ :=
+    exists_historicalEquationEight37 hlemma hζ s hs
+  exact ⟨ρ, η, hI, heq,
+    historicalEquationEight_unit_real37 hζ s hs ρ η heq⟩
+
+set_option maxRecDepth 3000 in
+/-- Vandiver's paired equation (8) at `a = 1` and `a = -1`, with one
+common real unit and with both generators prime to `ζ - 1`.
+
+Starting from the normalized factor divided by `ζ - 1` changes the
+coefficient to `-η` when it is rewritten with denominator `1 - ζ`.
+Because `η` is real, conjugation gives the inverse-root equation with
+exactly the same `-η`. -/
+theorem exists_historicalEquationEight_pair_one37
+    (hlemma : LemmaOne K 37)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37) (s : HistoricalState hζ)
+    (hs : RealSourceAdmissible hζ s) :
+    ∃ (ρone ρminus : 𝓞 K) (η : (𝓞 K)ˣ),
+      NumberField.IsCMField.unitsComplexConj K η = η ∧
+      s.omega + (hζ.unit' : 𝓞 K) * s.theta =
+        (1 - (hζ.unit' : 𝓞 K)) * η * ρone ^ 37 ∧
+      s.omega + (hζ.unit'⁻¹ : (𝓞 K)ˣ) * s.theta =
+        (1 - (hζ.unit'⁻¹ : (𝓞 K)ˣ)) * η * ρminus ^ 37 ∧
+      ¬ (hζ.unit' : 𝓞 K) - 1 ∣ ρone ∧
+      ¬ (hζ.unit' : 𝓞 K) - 1 ∣ ρminus := by
+  obtain ⟨ρ, η₀, -, heq, hη₀real⟩ :=
+    exists_historicalEquationEight_realUnit37 hlemma hζ s hs
+  let η : (𝓞 K)ˣ := -η₀
+  let ρminus : 𝓞 K :=
+    NumberField.IsCMField.ringOfIntegersComplexConj K ρ
+  have hηreal : NumberField.IsCMField.unitsComplexConj K η = η := by
+    apply Units.ext
+    change NumberField.IsCMField.ringOfIntegersComplexConj K
+      (-(η₀ : 𝓞 K)) = -(η₀ : 𝓞 K)
+    rw [map_neg]
+    exact congrArg Neg.neg (congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) hη₀real)
+  have hqmul : historicalZetaFactor37 hζ s *
+      ((hζ.unit' : 𝓞 K) - 1) =
+        s.omega + s.theta * (hζ.unit' : 𝓞 K) :=
+    div_zeta_sub_one_mul_zeta_sub_one
+      (by norm_num : 37 ≠ 2) hζ
+      (historicalState_regularEquation37 hζ s)
+      (zetaNthRoot (K := K) (p := 37) hζ)
+  have hone :
+      s.omega + (hζ.unit' : 𝓞 K) * s.theta =
+        (1 - (hζ.unit' : 𝓞 K)) * η * ρ ^ 37 := by
+    calc
+      s.omega + (hζ.unit' : 𝓞 K) * s.theta =
+          s.omega + s.theta * (hζ.unit' : 𝓞 K) := by ring
+      _ = historicalZetaFactor37 hζ s *
+          ((hζ.unit' : 𝓞 K) - 1) := hqmul.symm
+      _ = ((η₀ : 𝓞 K) * ρ ^ 37) *
+          ((hζ.unit' : 𝓞 K) - 1) := by rw [heq]
+      _ = (1 - (hζ.unit' : 𝓞 K)) * η * ρ ^ 37 := by
+        dsimp [η]
+        ring
+  have hconjζ :
+      NumberField.IsCMField.ringOfIntegersComplexConj K
+          (hζ.unit' : 𝓞 K) = (hζ.unit'⁻¹ : (𝓞 K)ˣ) :=
+    congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) (unitsComplexConj_zeta37 hζ)
+  have hηreal' :
+      NumberField.IsCMField.ringOfIntegersComplexConj K (η : 𝓞 K) = η :=
+    congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) hηreal
+  have hminus :
+      s.omega + (hζ.unit'⁻¹ : (𝓞 K)ˣ) * s.theta =
+        (1 - (hζ.unit'⁻¹ : (𝓞 K)ˣ)) * η * ρminus ^ 37 := by
+    have hc := congrArg
+      (NumberField.IsCMField.ringOfIntegersComplexConj K) hone
+    simp only [map_add, map_mul, map_sub, map_one, map_pow,
+      hs.1, hs.2.1, hconjζ, hηreal'] at hc
+    simpa only [ρminus] using hc
+  have hρnot : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ ρ := by
+    intro hρ
+    apply historicalZetaFactor_not_ramified37 hζ s hs
+    rw [heq]
+    exact dvd_mul_of_dvd_right (dvd_pow (n := 37) hρ (by norm_num)) _
+  have hρminusNot : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ ρminus := by
+    intro hρminus
+    have hc := zeta_sub_one_pow_dvd_conj_of_dvd37 hζ 1 ρminus
+      (by simpa only [pow_one] using hρminus)
+    have hcc :
+        NumberField.IsCMField.ringOfIntegersComplexConj K ρminus = ρ := by
+      dsimp [ρminus]
+      apply NumberField.RingOfIntegers.ext
+      exact NumberField.IsCMField.complexConj_apply_apply K ρ
+    apply hρnot
+    simpa only [pow_one, hcc] using hc
+  exact ⟨ρ, ρminus, η, hηreal, hone, hminus, hρnot, hρminusNot⟩
 
 omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
 /-- The elementary elimination between equation (8) at `a` and `-a`.
