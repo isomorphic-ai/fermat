@@ -397,7 +397,11 @@ theorem bernoulli_1184_numerator_not_dvd_cube_via_generic_faulhaber :
     · decide
     · norm_num
   · exact choose_1185_1182
-  · simpa using powerSum_mod_thirtySeven_pow_four
+  · calc
+      (∑ a ∈ Finset.range 37,
+          (a : ZMod (37 ^ 4)) ^ 1184) = 101306 :=
+        powerSum_mod_thirtySeven_pow_four
+      _ = 37 * 2738 := by norm_num
   · norm_num
   · norm_num
   · apply bernoulli_denominatorPrimeTo (p := 37)

@@ -135,7 +135,7 @@ theorem additiveRemainder_derivative_hasPadicValAtLeast_one
   have hp1 := HasPadicValAtLeast.primePow (p := p) 1
   have hc0 := HasPadicValAtLeast.intCast (p := p) c
   norm_num [Int.cast_mul] at hp1 ⊢
-  simpa only [Int.cast_natCast] using hp1.mul hc0
+  simpa only [Int.cast_natCast, add_zero] using hp1.mul hc0
 
 /-! ## Inverse-series recursion -/
 

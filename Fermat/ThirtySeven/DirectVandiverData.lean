@@ -305,6 +305,7 @@ private theorem powerSumRat_eq {n r : ℕ}
     omega
   have htRat := congrArg (fun z : ℤ ↦ (z : ℚ)) ht'
   push_cast at htRat
+  rw [show (37 : ℚ) ^ 4 = 1874161 by norm_num]
   simpa [powerSumInt] using htRat
 
 /-! ## The finite residue table -/
