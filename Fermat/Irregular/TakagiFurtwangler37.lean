@@ -269,6 +269,107 @@ theorem kummerExtension37_numberField
     (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
   exact NumberField.of_module_finite K (KummerExtension37 K a)
 
+/-! ## The integral Kummer root and its ideal -/
+
+omit [IsCyclotomicExtension {37} ℚ K] in
+/-- The distinguished Kummer root, regarded as an algebraic integer. -/
+noncomputable def kummerRootInteger37
+    {a : 𝓞 K}
+    (hirr : Irreducible (X ^ 37 - C (a : K))) :
+    letI := Fact.mk hirr
+    letI : Field (KummerExtension37 K a) := AdjoinRoot.instField
+    letI : Algebra K (KummerExtension37 K a) := inferInstance
+    letI : Module.Finite K (KummerExtension37 K a) :=
+      (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+    letI : NumberField (KummerExtension37 K a) :=
+      NumberField.of_module_finite K (KummerExtension37 K a)
+    𝓞 (KummerExtension37 K a) := by
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  let α : L := root (X ^ 37 - C (a : K))
+  have hαintZ : IsIntegral ℤ α := by
+    apply IsIntegral.of_pow (by norm_num : 0 < 37)
+    rw [show α ^ 37 = algebraMap K L (a : K) by
+      exact kummerExtension37_root_pow a]
+    exact (NumberField.RingOfIntegers.isIntegral_coe a).map
+      (IsScalarTower.toAlgHom ℤ K L)
+  exact ⟨α, hαintZ⟩
+
+/-- The integral Kummer root still satisfies its defining equation. -/
+theorem kummerRootInteger37_pow
+    {a : 𝓞 K}
+    (hirr : Irreducible (X ^ 37 - C (a : K))) :
+    letI := Fact.mk hirr
+    letI : Field (KummerExtension37 K a) := AdjoinRoot.instField
+    letI : Algebra K (KummerExtension37 K a) := inferInstance
+    letI : Module.Finite K (KummerExtension37 K a) :=
+      (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+    letI : NumberField (KummerExtension37 K a) :=
+      NumberField.of_module_finite K (KummerExtension37 K a)
+    kummerRootInteger37 hirr ^ 37 =
+      algebraMap (𝓞 K) (𝓞 (KummerExtension37 K a)) a := by
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  apply NumberField.RingOfIntegers.ext
+  exact kummerExtension37_root_pow a
+
+set_option maxRecDepth 1000 in
+/-- If `(a) = I ^ 37`, the principal ideal of the integral Kummer root is
+exactly the extension of `I` to the Kummer field.
+
+Both ideals have the same `37`th power; injectivity of powers in the
+Dedekind ideal monoid gives the result.  This identity is the starting
+point for the local rescaling at primes in the support of `a`. -/
+theorem span_kummerRootInteger37_eq_map_of_idealPower
+    {a : 𝓞 K} {I : Ideal (𝓞 K)}
+    (hpow : I ^ 37 = Ideal.span {a})
+    (hnonprincipal : ¬ Submodule.IsPrincipal (I : Ideal (𝓞 K))) :
+    let hirr :=
+      irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+        (by norm_num : Nat.Prime 37) hpow hnonprincipal
+    letI := Fact.mk hirr
+    letI : Field (KummerExtension37 K a) := AdjoinRoot.instField
+    letI : Algebra K (KummerExtension37 K a) := inferInstance
+    letI : Module.Finite K (KummerExtension37 K a) :=
+      (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+    letI : NumberField (KummerExtension37 K a) :=
+      NumberField.of_module_finite K (KummerExtension37 K a)
+    Ideal.span {kummerRootInteger37 hirr} =
+      I.map (algebraMap (𝓞 K) (𝓞 (KummerExtension37 K a))) := by
+  let hirr :=
+    irreducible_kummerPolynomial_of_nonprincipal_idealRoot
+      (by norm_num : Nat.Prime 37) hpow hnonprincipal
+  letI := Fact.mk hirr
+  let L := KummerExtension37 K a
+  letI : Field L := AdjoinRoot.instField
+  letI : Algebra K L := inferInstance
+  letI : Module.Finite K L :=
+    (monic_X_pow_sub_C (a : K) (by norm_num : 37 ≠ 0)).finite_adjoinRoot
+  letI : NumberField L := NumberField.of_module_finite K L
+  apply pow_left_injective (M := Ideal (𝓞 L)) (by norm_num : 37 ≠ 0)
+  calc
+    Ideal.span {kummerRootInteger37 hirr} ^ 37 =
+        Ideal.span {kummerRootInteger37 hirr ^ 37} :=
+      Ideal.span_singleton_pow _ _
+    _ = Ideal.span {algebraMap (𝓞 K) (𝓞 L) a} := by
+      rw [kummerRootInteger37_pow hirr]
+    _ = (Ideal.span {a}).map (algebraMap (𝓞 K) (𝓞 L)) := by
+      rw [Ideal.map_span]
+      simp
+    _ = (I ^ 37).map (algebraMap (𝓞 K) (𝓞 L)) := by rw [hpow]
+    _ = (I.map (algebraMap (𝓞 K) (𝓞 L))) ^ 37 :=
+      Ideal.map_pow _ _ _
+
 /-! ## Finite-prime ramification and the reciprocity boundary -/
 
 /-- The concrete Kummer extension is unramified at every prime which
