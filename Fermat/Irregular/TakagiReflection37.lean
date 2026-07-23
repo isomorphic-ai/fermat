@@ -106,6 +106,26 @@ structure UnramifiedCyclicExtension37
   [cyclicFL : IsCyclic (L ≃ₐ[F] L)]
   finrank_eq : Module.finrank F L = 37
 
+/-- Package field-theoretic data and upper-prime unramifiedness into the
+form consumed by Hilbert 94. -/
+def UnramifiedCyclicExtension37.ofIsUnramifiedAtFinitePlaces
+    {F L : Type} [Field F] [NumberField F]
+    [Field L] [NumberField L] [Algebra F L] [FiniteDimensional F L]
+    [IsGalois F L] [IsCyclic (L ≃ₐ[F] L)]
+    (hdegree : Module.finrank F L = 37)
+    (hunramified : IsUnramifiedAtFinitePlaces F L) :
+    UnramifiedCyclicExtension37 F where
+  L := L
+  fieldL := inferInstance
+  numberFieldL := inferInstance
+  algebraFL := inferInstance
+  finiteDimensionalFL := inferInstance
+  galoisFL := inferInstance
+  unramifiedFL :=
+    isUnramified_of_isUnramifiedAtFinitePlaces hunramified
+  cyclicFL := inferInstance
+  finrank_eq := hdegree
+
 /-- Hilbert 94 turns a cyclic unramified degree-37 extension into an
 explicit nonprincipal ideal whose 37th power is principal. -/
 theorem hasNonprincipalIdealWithPrincipalPower_of_unramifiedCyclicExtension37
