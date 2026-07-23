@@ -41,6 +41,70 @@ theorem logarithmicDerivative_mul
           d⁄dX ℚ g * (f * f⁻¹) * g⁻¹ := by ring
     _ = d⁄dX ℚ f * f⁻¹ + d⁄dX ℚ g * g⁻¹ := by rw [hginv, hfinv]; ring
 
+@[simp]
+theorem constantCoeff_rescale (c : ℚ) (f : PowerSeries ℚ) :
+    PowerSeries.constantCoeff (PowerSeries.rescale c f) =
+      PowerSeries.constantCoeff f := by
+  rw [← PowerSeries.coeff_zero_eq_constantCoeff_apply,
+    PowerSeries.coeff_rescale, pow_zero, one_mul,
+    PowerSeries.coeff_zero_eq_constantCoeff_apply]
+
+/-- Rescaling commutes with inversion when the series is a unit. -/
+theorem rescale_inv (c : ℚ) (f : PowerSeries ℚ)
+    (hf : PowerSeries.constantCoeff f ≠ 0) :
+    PowerSeries.rescale c f⁻¹ = (PowerSeries.rescale c f)⁻¹ := by
+  have hc : PowerSeries.constantCoeff (PowerSeries.rescale c f) =
+      PowerSeries.constantCoeff f := constantCoeff_rescale c f
+  apply (PowerSeries.eq_inv_iff_mul_eq_one (hc.trans_ne hf)).2
+  rw [← map_mul, PowerSeries.inv_mul_cancel f hf, map_one]
+
+/-- Formal chain rule for the substitution `X ↦ cX`. -/
+theorem derivative_rescale (c : ℚ) (f : PowerSeries ℚ) :
+    d⁄dX ℚ (PowerSeries.rescale c f) =
+      PowerSeries.C c * PowerSeries.rescale c (d⁄dX ℚ f) := by
+  ext n
+  simp only [PowerSeries.coeff_derivative, PowerSeries.coeff_rescale,
+    PowerSeries.coeff_C_mul]
+  rw [pow_succ]
+  ring
+
+/-- The logarithmic derivative has the usual chain rule under rescaling. -/
+theorem logarithmicDerivative_rescale
+    (c : ℚ) (f : PowerSeries ℚ)
+    (hf : PowerSeries.constantCoeff f ≠ 0) :
+    logarithmicDerivative (PowerSeries.rescale c f) =
+      PowerSeries.C c *
+        PowerSeries.rescale c (logarithmicDerivative f) := by
+  rw [logarithmicDerivative, derivative_rescale, ← rescale_inv c f hf,
+    logarithmicDerivative, map_mul]
+  ring
+
+/-- The formal exponential has constant logarithmic derivative one. -/
+@[simp]
+theorem logarithmicDerivative_exp :
+    logarithmicDerivative (PowerSeries.exp ℚ) = 1 := by
+  rw [logarithmicDerivative, PowerSeries.derivative_exp,
+    PowerSeries.mul_inv_cancel]
+  norm_num
+
+/-- Logarithmic derivatives turn a finite product into a finite sum. -/
+theorem logarithmicDerivative_prod
+    {ι : Type*} (s : Finset ι) (f : ι → PowerSeries ℚ)
+    (hf : ∀ i ∈ s, PowerSeries.constantCoeff (f i) ≠ 0) :
+    logarithmicDerivative (∏ i ∈ s, f i) =
+      ∑ i ∈ s, logarithmicDerivative (f i) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp [logarithmicDerivative]
+  | @insert a s ha ih =>
+      simp only [Finset.prod_insert ha, Finset.sum_insert ha]
+      rw [logarithmicDerivative_mul]
+      · rw [ih (fun i hi ↦ hf i (Finset.mem_insert_of_mem hi))]
+      · exact hf a (Finset.mem_insert_self a s)
+      · simp only [map_prod]
+        exact Finset.prod_ne_zero_iff.mpr
+          (fun i hi ↦ hf i (Finset.mem_insert_of_mem hi))
+
 theorem constantCoeff_pow_ne_zero (f : PowerSeries ℚ) (n : ℕ)
     (hf : PowerSeries.constantCoeff f ≠ 0) :
     PowerSeries.constantCoeff (f ^ n) ≠ 0 := by
