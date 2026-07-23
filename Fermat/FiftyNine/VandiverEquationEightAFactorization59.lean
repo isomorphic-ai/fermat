@@ -422,7 +422,11 @@ theorem historicalEquationEightAComplement_ne_top59
       π ^ 58 ∣
         (1 - (r : 𝓞 K)) * (1 - (hζ.unit' : 𝓞 K)) := by
     exact ((associated_zeta_sub_one_pow_prime hζ).dvd_iff_dvd_left).mpr
-      (by simpa only [π] using h59prod)
+      (by
+        simpa only [π] using
+          (show ((59 : ℕ) : 𝓞 K) ∣
+              (1 - (r : 𝓞 K)) * (1 - (hζ.unit' : 𝓞 K)) by
+            convert h59prod using 1))
   have hbad : π ^ 58 ∣ π ^ 2 :=
     (hprodAssoc.dvd_iff_dvd_right).mp hπ58prod
   have hle :

@@ -422,7 +422,11 @@ theorem historicalEquationEightAComplement_ne_top157
       π ^ 156 ∣
         (1 - (r : 𝓞 K)) * (1 - (hζ.unit' : 𝓞 K)) := by
     exact ((associated_zeta_sub_one_pow_prime hζ).dvd_iff_dvd_left).mpr
-      (by simpa only [π] using h157prod)
+      (by
+        simpa only [π] using
+          (show ((157 : ℕ) : 𝓞 K) ∣
+              (1 - (r : 𝓞 K)) * (1 - (hζ.unit' : 𝓞 K)) by
+            convert h157prod using 1))
   have hbad : π ^ 156 ∣ π ^ 2 :=
     (hprodAssoc.dvd_iff_dvd_right).mp hπ156prod
   have hle :
