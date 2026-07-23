@@ -58,7 +58,10 @@ corresponding fourteenth-power residue symbol. -/
 theorem matrix_entry_certificate (j i : Fin 28) :
     normalizedUnitValue j i ^ 14 =
       (671 : ZMod 827) ^ (matrix j i).val := by
-  fin_cases j <;> fin_cases i <;> decide
+  rw [normalizedUnitValue, div_pow]
+  apply (div_eq_iff ?_).2
+  · decide +kernel +revert
+  · decide +kernel +revert
 
 /-- The complete finite exponent-`59` certificate, packaged for the generic
 residue-character construction. -/

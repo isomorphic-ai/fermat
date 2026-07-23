@@ -55,8 +55,11 @@ theorem zeta_sub_one_pow_add_fiftyEight_dvd_pow_sub_pow59
     simpa only [pi, add_comm] using hk
   obtain ⟨r, hr⟩ := exists_add_pow_prime_eq
     (show Nat.Prime 59 by norm_num) y (pi ^ m * k)
+  have h58 : (59 - 1 : ℕ) = 58 := by norm_num
+  have hCast59 : (((59 : ℕ) : 𝓞 K)) = (59 : 𝓞 K) := by norm_num
   have hpdiv : pi ^ 58 ∣ (59 : 𝓞 K) := by
-    simpa only [pi] using (associated_zeta_sub_one_pow_prime hzeta).dvd
+    simpa only [pi, h58, hCast59] using
+      (associated_zeta_sub_one_pow_prime hzeta).dvd
   obtain ⟨q, hq⟩ := hpdiv
   have hlast : pi ^ (m + 58) ∣ (pi ^ m * k) ^ 59 := by
     have hle : m + 58 ≤ m * 59 := by omega
@@ -91,9 +94,11 @@ theorem cube_prime_power_isVandiverDeep {zeta : K}
   have h117 := zeta_sub_one_pow_add_fiftyEight_dvd_pow_sub_pow59
     hzeta 59 (by omega)
       ((w : 𝓞 K) ^ 59) ((c : 𝓞 K) ^ 59) h59'
+  have hExp117 : (59 + 58 : ℕ) = 117 := by norm_num
+  have hSq59 : (59 * 59 : ℕ) = 59 ^ 2 := by norm_num
   have h117' : pi ^ 117 ∣
       (w : 𝓞 K) ^ (59 ^ 2) - (c : 𝓞 K) ^ (59 ^ 2) := by
-    simpa only [pi, ← pow_mul] using h117
+    simpa only [pi, ← pow_mul, hExp117, hSq59] using h117
   have h175 := zeta_sub_one_pow_add_fiftyEight_dvd_pow_sub_pow59
     hzeta 117 (by omega)
       ((w : 𝓞 K) ^ (59 ^ 2)) ((c : 𝓞 K) ^ (59 ^ 2)) h117'
