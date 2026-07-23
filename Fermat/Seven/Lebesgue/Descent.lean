@@ -203,7 +203,8 @@ private theorem base_case_impossible {p q r : ℕ} (hp : Odd p) (hq : Odd q)
   obtain ⟨r₀, rfl⟩ := hr
   apply zmod_eight_base (p₀ : ZMod 8) (q₀ : ZMod 8) (r₀ : ZMod 8)
   simpa only [DescentEquation, Nat.cast_add, Nat.cast_mul, Nat.cast_pow,
-    Nat.cast_ofNat] using congrArg (fun n : ℕ => (n : ZMod 8)) heq
+    Nat.cast_ofNat, Nat.cast_one] using
+      congrArg (fun n : ℕ => (n : ZMod 8)) heq
 
 private theorem zmod_seven_zero_of_sq_eq_fourth :
     ∀ p q : ZMod 7, p ^ 2 = q ^ 4 → p = 0 → q = 0 := by
@@ -619,7 +620,7 @@ private theorem corrected_third_allocation_impossible {a q s t : ℕ}
   have hthird' :
       (q : ℤ) ^ 2 - 2 * (T : ℤ) ^ 2 * 3 * 7 ^ 4 * (s * t : ℕ) ^ 2 =
         (T : ℤ) ^ 4 * (s : ℤ) ^ 4 - 7 ^ 7 * (t : ℤ) ^ 4 := by
-    simpa only [T] using hthird
+    simpa only [T, Nat.cast_pow, Nat.cast_ofNat] using hthird
   have hqeqInt :
       (q : ℤ) ^ 2 + 7 ^ 7 * (t : ℤ) ^ 4 =
         (T : ℤ) ^ 4 * (s : ℤ) ^ 4 +
@@ -770,7 +771,7 @@ private theorem first_allocation_descends {a q s t : ℕ} (ha : 0 < a)
   have hfirst' :
       (q : ℤ) ^ 2 - 2 * (T : ℤ) ^ 2 * 3 * 7 ^ 4 * (s * t : ℕ) ^ 2 =
         (s : ℤ) ^ 4 - (T : ℤ) ^ 4 * 7 ^ 7 * (t : ℤ) ^ 4 := by
-    simpa only [T] using hfirst
+    simpa only [T, Nat.cast_pow, Nat.cast_ofNat] using hfirst
   have hqeqInt :
       (q : ℤ) ^ 2 + (T : ℤ) ^ 4 * 7 ^ 7 * (t : ℤ) ^ 4 =
         (s : ℤ) ^ 4 +
