@@ -10,9 +10,8 @@ import Fermat.Ladder.Basic
 The first six folds are unconditional exponent-specific certificates from
 the uploaded safe-prime package.  Fold six reaches the complete
 Sophie--Germain first-case theorem but cannot settle FLT because `59` is
-irregular.  Fold seven exits only after receiving the explicitly named
-`OneComponentSecondCaseBridge`; no hidden assumption is placed in an
-earlier fold.
+irregular.  Fold seven combines the finite Bernoulli and unit certificates
+with the kernel-checked historical Vandiver descent.
 -/
 
 namespace Fermat.Ladder.FiftyNine
@@ -75,15 +74,15 @@ theorem agencyClaim_checked : agencyClaim := by
   intro x y z hxy hyz hxz hfermat
   exact firstCase_of_pairwise_coprime hxy hyz hxz hfermat
 
-/-- Fold seven contains the complete finite Bernoulli condition and the
-nonsingular unit matrix.  Only the named global singular-primary bridge is
-supplied as a parameter. -/
+/-- Fold seven contains the complete finite Bernoulli condition, the
+nonsingular unit matrix, and the unconditional historical second-case
+exclusion. -/
 def flexibilityClaim : Prop :=
   Fermat.Irregular.VandiverData.BernoulliCubeCondition 59 ∧
     Fermat.FiftyNine.CircularUnitCertificate.matrix.det ≠ 0 ∧
-    OneComponentSecondCaseBridge
+    Fermat.SecondCaseExcluded 59
 
-def trace (hsecond : OneComponentSecondCaseBridge) : CaseTrace 59 where
+def trace : CaseTrace 59 where
   awareness_substrate := ⟨awarenessClaim, awarenessClaim_checked⟩
   structure_algebra := ⟨structureClaim, structureClaim_checked⟩
   sharpening_analysis := ⟨sharpeningClaim, sharpeningClaim_checked⟩
@@ -93,37 +92,38 @@ def trace (hsecond : OneComponentSecondCaseBridge) : CaseTrace 59 where
   flexibility_potential := ⟨flexibilityClaim,
     Fermat.FiftyNine.ArithmeticCertificate.bernoulliCubeCondition_fiftyNine,
     Fermat.FiftyNine.CircularUnitCertificate.matrix_det_ne_zero,
-    hsecond⟩
+    secondCaseExcluded_fiftyNine⟩
   conclude := by
     intro _ _ _ _ _ _ hfoldSeven
     exact .contradicted
-      (holdsAt_fiftyNine_of_oneComponentSecondCaseBridge hfoldSeven.2.2)
+      (Fermat.holdsAt_of_auxiliaryPrime_of_secondCaseExcluded
+        prime_59 (by norm_num) prime_827
+        noConsecutivePowers_59_827 exponentNotPower_59_827
+        hfoldSeven.2.2)
 
-def run (hsecond : OneComponentSecondCaseBridge) : Checked 59 where
+def run : Checked 59 where
   folds := sevenFolds 59
-  trace := trace hsecond
+  trace := trace
 
-def measured (hsecond : OneComponentSecondCaseBridge) : Measured 59 :=
-  Measured.atFold (run hsecond) ⟨6, by decide⟩
+def measured : Measured 59 :=
+  Measured.atFold run ⟨6, by decide⟩
 
 /-- The package traverses the entire seven-fold battery.  Its first honest
-FLT exit is the singular-primary second-case bridge at fold seven. -/
+FLT exit is the historical second-case contradiction at fold seven. -/
 def exitDepth : ℕ := 7
 
-theorem exitDepth_eq_measured (hsecond : OneComponentSecondCaseBridge) :
-    (measured hsecond).exitDepth = exitDepth := rfl
+theorem exitDepth_eq_measured :
+    measured.exitDepth = exitDepth := rfl
 
 theorem exitDepth_le_seven : exitDepth ≤ 7 := by
   norm_num [exitDepth]
 
-theorem exitDepth_first_sufficient (hsecond : OneComponentSecondCaseBridge) :
-    (measured hsecond).exitDepth = exitDepth ∧
-      (measured hsecond).schedule.decision
-          (measured hsecond).schedule.exitIndex =
-        .exit (measured hsecond).schedule.outcome ∧
-      ∀ i, i < (measured hsecond).schedule.exitIndex →
-        (measured hsecond).schedule.decision i = .continue :=
-  ⟨rfl, (measured hsecond).schedule.at_exit,
-    (measured hsecond).schedule.before_exit⟩
+theorem exitDepth_first_sufficient :
+    measured.exitDepth = exitDepth ∧
+      measured.schedule.decision measured.schedule.exitIndex =
+        .exit measured.schedule.outcome ∧
+      ∀ i, i < measured.schedule.exitIndex →
+        measured.schedule.decision i = .continue :=
+  ⟨rfl, measured.schedule.at_exit, measured.schedule.before_exit⟩
 
 end Fermat.Ladder.FiftyNine
