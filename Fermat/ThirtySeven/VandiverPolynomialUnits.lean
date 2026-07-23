@@ -32,6 +32,7 @@ noncomputable section
 
 open Polynomial PowerSeries
 open Fermat.Irregular.VandiverLemmaTwoCore
+open Fermat.Irregular.VandiverLogDerivative
 open Fermat.Irregular.VandiverPowerSeriesLog
 open Fermat.Irregular.VandiverDiagonalLogDerivative
 open Fermat.ThirtySeven.VandiverDiagonalUnits
@@ -138,6 +139,183 @@ theorem eval₂_diagonalVandiverPolynomial37 {zeta : K}
   rw [Polynomial.eval₂_pow]
   congr 1
   exact eval₂_basicVandiverPolynomial37 hzeta j
+
+/-! ## Polynomials attached to an arbitrary integer exponent relation -/
+
+/-- The positive polynomial attached to natural exponents `b`.  The outer
+factor `36 = 37 - 1` is exactly Vandiver's factor in equation (3b). -/
+def positiveRelationPolynomial37
+    (b : SourceIndex 37 → ℕ) : Polynomial ℤ :=
+  ∏ i, diagonalVandiverPolynomial37 i ^ (36 * b i)
+
+/-- Exponential substitution commutes with the positive relation product. -/
+theorem polynomialExp37_positiveRelationPolynomial37
+    (b : SourceIndex 37 → ℕ) :
+    polynomialExp37 (positiveRelationPolynomial37 b) =
+      ∏ i,
+        Fermat.ThirtySeven.VandiverDiagonalDerivative.integralDiagonalSeries37 i ^
+          (36 * b i) := by
+  rw [positiveRelationPolynomial37, polynomialExp37,
+    Polynomial.eval₂_finsetProd]
+  apply Finset.prod_congr rfl
+  intro i hi
+  rw [Polynomial.eval₂_pow]
+  congr 1
+  exact polynomialExp37_diagonalVandiverPolynomial37 i
+
+/-- Every diagonal series has nonzero constant coefficient. -/
+theorem constantCoeff_integralDiagonalSeries37_ne_zero
+    (i : SourceIndex 37) :
+    PowerSeries.constantCoeff
+      (Fermat.ThirtySeven.VandiverDiagonalDerivative.integralDiagonalSeries37 i) ≠
+        0 := by
+  rw [Fermat.ThirtySeven.VandiverDiagonalDerivative.integralDiagonalSeries37,
+    integralDiagonalExp]
+  simp only [map_prod, constantCoeff_integralDiagonalFactor]
+  apply Finset.prod_ne_zero_iff.mpr
+  intro j hj
+  exact pow_ne_zero _ (by norm_num)
+
+/-- The logarithmic derivative of a positive polynomial product is the
+expected natural-exponent sum. -/
+theorem logarithmicDerivative_positiveRelationPolynomial37
+    (b : SourceIndex 37 → ℕ) :
+    logarithmicDerivative
+        (polynomialExp37 (positiveRelationPolynomial37 b)) =
+      ∑ i, PowerSeries.C ((36 * b i : ℕ) : ℚ) *
+        logarithmicDerivative
+          (Fermat.ThirtySeven.VandiverDiagonalDerivative.integralDiagonalSeries37 i) := by
+  rw [polynomialExp37_positiveRelationPolynomial37 b]
+  rw [logarithmicDerivative_prod]
+  · apply Finset.sum_congr rfl
+    intro i hi
+    rw [logarithmicDerivative_pow]
+    exact constantCoeff_integralDiagonalSeries37_ne_zero i
+  · intro i hi
+    apply constantCoeff_pow_ne_zero
+    exact constantCoeff_integralDiagonalSeries37_ne_zero i
+
+/-- High derivatives of the preceding identity, in the exact normalization
+used by `relationDerivative37`. -/
+theorem formalDerivativeAtZero_positiveRelationPolynomial37
+    (b : SourceIndex 37 → ℕ) (k : SourceIndex 37) :
+    formalDerivativeAtZero
+      (Fermat.ThirtySeven.VandiverDiagonalDerivative.sourceDerivativeOrder37 k)
+      (logarithmicDerivative
+        (polynomialExp37 (positiveRelationPolynomial37 b))) =
+      ∑ i, ((36 * b i : ℕ) : ℚ) *
+        formalDerivativeAtZero
+          (Fermat.ThirtySeven.VandiverDiagonalDerivative.sourceDerivativeOrder37 k)
+          (logarithmicDerivative
+            (Fermat.ThirtySeven.VandiverDiagonalDerivative.integralDiagonalSeries37 i)) := by
+  rw [logarithmicDerivative_positiveRelationPolynomial37 b,
+    formalDerivativeAtZero_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  rw [formalDerivativeAtZero_C_mul]
+
+/-- Clearing negative exponents does not change the source derivative:
+the integer relation derivative is the logarithmic derivative of the
+positive numerator minus that of the positive denominator. -/
+theorem relationDerivative37_eq_positive_sub_negative
+    (a : SourceIndex 37 → ℤ) (k : SourceIndex 37) :
+    Fermat.ThirtySeven.VandiverDiagonalDerivative.relationDerivative37 a k =
+      formalDerivativeAtZero
+        (Fermat.ThirtySeven.VandiverDiagonalDerivative.sourceDerivativeOrder37 k)
+        (logarithmicDerivative
+          (polynomialExp37
+            (positiveRelationPolynomial37 (fun i ↦ (a i).toNat)))) -
+      formalDerivativeAtZero
+        (Fermat.ThirtySeven.VandiverDiagonalDerivative.sourceDerivativeOrder37 k)
+        (logarithmicDerivative
+          (polynomialExp37
+            (positiveRelationPolynomial37
+              (fun i ↦ (-a i).toNat)))) := by
+  rw [formalDerivativeAtZero_positiveRelationPolynomial37,
+    formalDerivativeAtZero_positiveRelationPolynomial37]
+  rw [Fermat.ThirtySeven.VandiverDiagonalDerivative.relationDerivative37,
+    ← Finset.sum_sub_distrib]
+  apply Finset.sum_congr rfl
+  intro i hi
+  push_cast
+  have haQ :
+      ((a i).toNat : ℚ) - ((-a i).toNat : ℚ) = (a i : ℚ) := by
+    exact_mod_cast Int.toNat_sub_toNat_neg (a i)
+  rw [← haQ]
+  ring
+
+/-- The positive and negative parts of an integer exponent recombine in
+any commutative group. -/
+theorem zpow_mul_pow_negToNat_eq_pow_toNat
+    {G : Type*} [CommGroup G] (x : G) (a : ℤ) :
+    x ^ a * x ^ (-a).toNat = x ^ a.toNat := by
+  rw [← zpow_natCast x a.toNat, ← zpow_natCast x (-a).toNat,
+    ← zpow_add]
+  congr 1
+  exact (eq_sub_iff_add_eq).mp (Int.toNat_sub_toNat_neg a).symm
+
+/-- A Laurent exponent relation becomes a denominator-cleared positive
+relation. -/
+theorem positive_relation_of_zpow_relation
+    {G : Type*} [CommGroup G] {u : G}
+    (E : SourceIndex 37 → G) (t : ℕ)
+    (a : SourceIndex 37 → ℤ)
+    (hrel : u ^ t = ∏ i, E i ^ a i) :
+    (∏ i, E i ^ (a i).toNat) =
+      u ^ t * ∏ i, E i ^ (-a i).toNat := by
+  rw [hrel, ← Finset.prod_mul_distrib]
+  apply Finset.prod_congr rfl
+  intro i hi
+  exact (zpow_mul_pow_negToNat_eq_pow_toNat (E i) (a i)).symm
+
+/-- The ambient unit represented by the unscaled positive exponent
+product.  Its 36th power is the value of
+`positiveRelationPolynomial37`. -/
+def positiveRelationUnit37 {zeta : K}
+    (hzeta : IsPrimitiveRoot zeta 37)
+    (b : SourceIndex 37 → ℕ) : (𝓞 K)ˣ :=
+  ∏ i, diagonalVandiverUnit37 hzeta i ^ b i
+
+/-- Evaluation of a positive relation polynomial is the 36th power of
+its corresponding unit product. -/
+theorem eval₂_positiveRelationPolynomial37 {zeta : K}
+    (hzeta : IsPrimitiveRoot zeta 37)
+    (b : SourceIndex 37 → ℕ) :
+    Polynomial.eval₂ (Int.castRingHom (𝓞 K)) hzeta.toInteger
+        (positiveRelationPolynomial37 b) =
+      (positiveRelationUnit37 hzeta b ^ 36 : 𝓞 K) := by
+  rw [positiveRelationPolynomial37, Polynomial.eval₂_finsetProd,
+    positiveRelationUnit37, Units.coe_prod]
+  simp_rw [Units.val_pow_eq_pow_val]
+  rw [← Finset.prod_pow Finset.univ 36
+    (fun i ↦ (diagonalVandiverUnit37 hzeta i : 𝓞 K) ^ b i)]
+  apply Finset.prod_congr rfl
+  intro i hi
+  rw [Polynomial.eval₂_pow, eval₂_diagonalVandiverPolynomial37,
+    ← pow_mul]
+  congr 1
+  omega
+
+/-- An actual unit relation gives the exact denominator-cleared evaluation
+identity to which the cyclotomic polynomial remainder theorem is applied. -/
+theorem eval₂_positive_relation_of_relation {zeta : K}
+    (hzeta : IsPrimitiveRoot zeta 37)
+    (u : (𝓞 K)ˣ) (t : ℕ) (a : SourceIndex 37 → ℤ)
+    (hrel : u ^ t =
+      ∏ i, diagonalVandiverUnit37 hzeta i ^ a i) :
+    Polynomial.eval₂ (Int.castRingHom (𝓞 K)) hzeta.toInteger
+        (positiveRelationPolynomial37 (fun i ↦ (a i).toNat)) =
+      (u : 𝓞 K) ^ (36 * t) *
+        Polynomial.eval₂ (Int.castRingHom (𝓞 K)) hzeta.toInteger
+          (positiveRelationPolynomial37 (fun i ↦ (-a i).toNat)) := by
+  rw [eval₂_positiveRelationPolynomial37,
+    eval₂_positiveRelationPolynomial37]
+  have hpos := positive_relation_of_zpow_relation
+    (E := diagonalVandiverUnit37 hzeta) t a hrel
+  have hpow := congrArg (fun x : (𝓞 K)ˣ ↦ x ^ 36) hpos
+  have hval := congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) hpow
+  simpa only [positiveRelationUnit37, Units.val_pow_eq_pow_val,
+    Units.val_mul, mul_pow, ← pow_mul, Nat.mul_comm] using hval
 
 end
 
