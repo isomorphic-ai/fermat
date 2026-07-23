@@ -187,7 +187,7 @@ theorem normalizedUnitValue_column69_eq_base (c : Fin 77) :
     w ^ 123 * ∑ k ∈ Finset.range 69, w ^ k
   have hnormal :
       canonicalNormalizationExponent (p := 157) (67 + 2) = 123 := by
-    decide
+    decide +kernel
   rw [hnormal]
   change w ^ 123 * (1 - w ^ 69) / (1 - w) =
     w ^ 123 * ∑ k ∈ Finset.range 69, w ^ k
@@ -210,7 +210,9 @@ theorem baseBasicValue157_symbol (c : Fin 78) :
   · let c' : Fin 77 := ⟨c.val, hc⟩
     have hentry := certificate157.entry_certificate c' ⟨67, by norm_num⟩
     rw [normalizedUnitValue_column69_eq_base c'] at hentry
-    simpa [basicSymbolByRealExponent157, hc, c'] using hentry
+    simpa [certificate157,
+      Fermat.OneHundredFiftySeven.CircularUnitResidues.certificate,
+      basicSymbolByRealExponent157, hc, c'] using hentry
   · have hc77 : c.val = 77 := by omega
     have hceq : c = ⟨77, by norm_num⟩ := Fin.ext hc77
     rw [hceq]

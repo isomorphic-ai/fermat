@@ -65,9 +65,11 @@ theorem oneHundredFiftySeven_sq_dvd_of_deep {zeta : K}
     (pow_dvd_pow_of_dvd hbase 312).trans
       ((pow_dvd_pow ((1 : 𝓞 K) - hzeta.unit') (by omega)).trans hdeep)
   have hp := (associated_zeta_sub_one_pow_prime hzeta).pow_pow (n := 2)
+  have hExp312 : (157 - 1 : ℕ) * 2 = 312 := by norm_num
+  have hCast157 : (((157 : ℕ) : 𝓞 K)) = (157 : 𝓞 K) := by norm_num
   have hp' : Associated (((hzeta.unit' : 𝓞 K) - 1) ^ 312)
       ((157 : 𝓞 K) ^ 2) := by
-    simpa only [← pow_mul] using hp
+    simpa only [← pow_mul, hExp312, hCast157] using hp
   exact hp'.dvd_iff_dvd_left.mp h132
 
 /-- Raising a deeply congruent unit to Vandiver's outer exponent preserves
@@ -98,8 +100,11 @@ theorem deep_integer_not_divisible157 {zeta : K}
     ¬(157 : ℤ) ∣ c := by
   intro hc
   let pi : 𝓞 K := (hzeta.unit' : 𝓞 K) - 1
+  have h156 : (157 - 1 : ℕ) = 156 := by norm_num
+  have hCast157 : (((157 : ℕ) : 𝓞 K)) = (157 : 𝓞 K) := by norm_num
   have hpipow : pi ^ 156 ∣ (157 : 𝓞 K) := by
-    simpa only [pi] using (associated_zeta_sub_one_pow_prime hzeta).dvd
+    simpa only [pi, h156, hCast157] using
+      (associated_zeta_sub_one_pow_prime hzeta).dvd
   have hpi157 : pi ∣ (157 : 𝓞 K) :=
     (dvd_pow_self pi (by norm_num : (156 : ℕ) ≠ 0)).trans hpipow
   obtain ⟨d, rfl⟩ := hc
@@ -287,8 +292,11 @@ theorem exists_vanishingRelationPolynomial157 {zeta : K}
   · have hH' :
         beta * Polynomial.eval₂ (Int.castRingHom (𝓞 K)) hzeta.toInteger Q =
           Polynomial.eval₂ (Int.castRingHom (𝓞 K)) hzeta.toInteger H := by
+      have hcast :
+          algebraMap ℤ (𝓞 K) = Int.castRingHom (𝓞 K) :=
+        RingHom.eq_intCast' _
       simpa only [Polynomial.aeval_def,
-        IsPrimitiveRoot.integralPowerBasis_gen] using hH
+        IsPrimitiveRoot.integralPowerBasis_gen, hcast] using hH
     have hzeroO : Polynomial.aeval hzeta.toInteger
         (vanishingRelationPolynomial157 P Q H C) = 0 := by
       rw [Polynomial.aeval_def]

@@ -192,7 +192,11 @@ theorem correctedResidueLog_basicVandiverUnit157 {zeta : K}
     basicEdgeSymbol157 row j
   rw [certificate157.residueLog_eq_of_pow_eq u _ hpow]
   rw [Nat.cast_mul, ZMod.natCast_zmod_val]
-  have hhalf : (2 : ZMod 157)⁻¹ * 2 = 1 := by decide
+  have hhalf : (2 : ZMod 157)⁻¹ * 2 = 1 :=
+    inv_mul_cancel₀ (by
+      intro h
+      have hdiv : 157 ∣ 2 := (ZMod.natCast_eq_zero_iff 2 157).mp h
+      norm_num at hdiv)
   calc
     (2 : ZMod 157)⁻¹ * (basicEdgeSymbol157 row j * 2) =
         (2⁻¹ * 2) * basicEdgeSymbol157 row j := by ring

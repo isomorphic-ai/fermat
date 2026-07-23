@@ -55,8 +55,11 @@ theorem zeta_sub_one_pow_add_oneHundredFiftySix_dvd_pow_sub_pow157
     simpa only [pi, add_comm] using hk
   obtain ⟨r, hr⟩ := exists_add_pow_prime_eq
     (show Nat.Prime 157 by norm_num) y (pi ^ m * k)
+  have h156 : (157 - 1 : ℕ) = 156 := by norm_num
+  have hCast157 : (((157 : ℕ) : 𝓞 K)) = (157 : 𝓞 K) := by norm_num
   have hpdiv : pi ^ 156 ∣ (157 : 𝓞 K) := by
-    simpa only [pi] using (associated_zeta_sub_one_pow_prime hzeta).dvd
+    simpa only [pi, h156, hCast157] using
+      (associated_zeta_sub_one_pow_prime hzeta).dvd
   obtain ⟨q, hq⟩ := hpdiv
   have hlast : pi ^ (m + 156) ∣ (pi ^ m * k) ^ 157 := by
     have hle : m + 156 ≤ m * 157 := by omega
@@ -91,9 +94,11 @@ theorem cube_prime_power_isVandiverDeep {zeta : K}
   have h133 := zeta_sub_one_pow_add_oneHundredFiftySix_dvd_pow_sub_pow157
     hzeta 157 (by omega)
       ((w : 𝓞 K) ^ 157) ((c : 𝓞 K) ^ 157) h157'
+  have hExp313 : (157 + 156 : ℕ) = 313 := by norm_num
+  have hSq157 : (157 * 157 : ℕ) = 157 ^ 2 := by norm_num
   have h133' : pi ^ 313 ∣
       (w : 𝓞 K) ^ (157 ^ 2) - (c : 𝓞 K) ^ (157 ^ 2) := by
-    simpa only [pi, ← pow_mul] using h133
+    simpa only [pi, ← pow_mul, hExp313, hSq157] using h133
   have h199 := zeta_sub_one_pow_add_oneHundredFiftySix_dvd_pow_sub_pow157
     hzeta 313 (by omega)
       ((w : 𝓞 K) ^ (157 ^ 2)) ((c : 𝓞 K) ^ (157 ^ 2)) h133'
