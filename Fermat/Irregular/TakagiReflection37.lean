@@ -1,5 +1,6 @@
 import Fermat.Irregular.TakagiFurtwangler37
 import FltRegular.NumberTheory.Hilbert94
+import Mathlib.NumberTheory.RamificationInertia.Galois
 
 /-!
 # The global Takagi--Furtwängler reflection layer at exponent 37
@@ -46,6 +47,131 @@ theorem isUnramified_of_isUnramifiedAtFinitePlaces
   have hover : P.under (𝓞 k) = p :=
     (Ideal.over_def P p).symm
   simpa only [hover] using hindex
+
+/-- Coprime-degree descent of finite-prime unramifiedness in the
+degree-`2`/degree-`37` compositum configuration.
+
+Suppose `K/F` is Galois of degree `2`, `E/F` is Galois of degree `37`,
+and both fields embed compatibly into `L`.  If `L/K` is unramified at
+every finite prime, then so is `E/F`.
+
+For a prime of `E`, extend it to `L`.  Multiplicativity of ramification
+indices in the two towers shows that its ramification index over `F` is
+at most the corresponding index in `K/F`, hence at most `2`.  Galois
+ramification theory for `E/F` also makes that index divide `37`; primality
+then forces it to equal `1`. -/
+theorem isUnramifiedAtFinitePlaces_of_degreeTwo_degreeThirtySeven
+    {F K E L : Type}
+    [Field F] [NumberField F]
+    [Field K] [NumberField K]
+    [Field E] [NumberField E]
+    [Field L] [NumberField L]
+    [Algebra F K] [Algebra F E] [Algebra F L]
+    [Algebra K L] [Algebra E L]
+    [IsScalarTower F K L] [IsScalarTower F E L]
+    [FiniteDimensional F K] [FiniteDimensional F E]
+    [FiniteDimensional K L] [FiniteDimensional E L]
+    [IsGalois F K] [IsGalois F E]
+    (hFK : Module.finrank F K = 2)
+    (hFE : Module.finrank F E = 37)
+    (hLK : IsUnramifiedAtFinitePlaces K L) :
+    IsUnramifiedAtFinitePlaces F E := by
+  intro R hR0
+  letI : R.asIdeal.IsPrime := R.isPrime
+  obtain ⟨Q⟩ := R.asIdeal.nonempty_primesOver (S := 𝓞 L)
+  letI : Q.1.IsPrime := Q.2.1
+  letI : Q.1.LiesOver R.asIdeal := Q.2.2
+  have hQ0 : Q.1 ≠ ⊥ :=
+    Ideal.ne_bot_of_liesOver_of_ne_bot hR0 Q.1
+  let P : Ideal (𝓞 K) := Q.1.under (𝓞 K)
+  let q : Ideal (𝓞 F) := Q.1.under (𝓞 F)
+  letI : P.IsPrime := Ideal.IsPrime.under (𝓞 K) Q.1
+  letI : q.IsPrime := Ideal.IsPrime.under (𝓞 F) Q.1
+  letI : Q.1.LiesOver P := by
+    change Q.1.LiesOver (Q.1.under (𝓞 K))
+    infer_instance
+  letI : Q.1.LiesOver q := by
+    change Q.1.LiesOver (Q.1.under (𝓞 F))
+    infer_instance
+  letI : R.asIdeal.LiesOver q :=
+    Ideal.LiesOver.tower_bot Q.1 R.asIdeal q
+  letI : P.LiesOver q :=
+    Ideal.LiesOver.tower_bot Q.1 P q
+  have hlocalLK : Algebra.IsUnramifiedAt (𝓞 K) Q.1 :=
+    hLK ⟨Q.1, Q.2.1⟩ hQ0
+  letI : Algebra.IsUnramifiedAt (𝓞 K) Q.1 := hlocalLK
+  have hePQ : Ideal.ramificationIdx P Q.1 = 1 := by
+    simpa only [P] using
+      Ideal.ramificationIdx_eq_one_of_isUnramifiedAt
+        (R := 𝓞 K) hQ0
+  have htowerK :
+      Ideal.ramificationIdx q Q.1 =
+        Ideal.ramificationIdx q P *
+          Ideal.ramificationIdx P Q.1 :=
+    Ideal.ramificationIdx_algebra_tower' q P Q.1
+  have htowerE :
+      Ideal.ramificationIdx q Q.1 =
+        Ideal.ramificationIdx q R.asIdeal *
+          Ideal.ramificationIdx R.asIdeal Q.1 :=
+    Ideal.ramificationIdx_algebra_tower' q R.asIdeal Q.1
+  have hq0 : q ≠ ⊥ := by
+    rw [Ideal.over_def R.asIdeal q]
+    exact Ideal.under_ne_bot (𝓞 F) hR0
+  letI : q.IsMaximal :=
+    Ring.DimensionLEOne.maximalOfPrime hq0 inferInstance
+  have heP_le : Ideal.ramificationIdx q P ≤ 2 := by
+    have hfundK :=
+      Ideal.ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn
+        hq0 (𝓞 K) Gal(K/F)
+    have hePIn :
+        Ideal.ramificationIdxIn q (𝓞 K) =
+          Ideal.ramificationIdx q P :=
+      Ideal.ramificationIdxIn_eq_ramificationIdx q P Gal(K/F)
+    have hcardK : Nat.card Gal(K/F) = 2 := by
+      rw [IsGalois.card_aut_eq_finrank, hFK]
+    have hdvdP : Ideal.ramificationIdx q P ∣ 2 := by
+      rw [hcardK] at hfundK
+      rw [← hePIn]
+      exact ⟨
+        (q.primesOver (𝓞 K)).ncard *
+          q.inertiaDegIn (𝓞 K),
+        by
+          simpa [mul_assoc, mul_left_comm, mul_comm] using hfundK.symm⟩
+    exact Nat.le_of_dvd (by norm_num) hdvdP
+  have heR_le : Ideal.ramificationIdx q R.asIdeal ≤ 2 := by
+    have hQ_le : Ideal.ramificationIdx q Q.1 ≤ 2 := by
+      rw [htowerK, hePQ, mul_one]
+      exact heP_le
+    rw [htowerE] at hQ_le
+    exact
+      (Nat.le_mul_of_pos_right _
+        (Nat.pos_iff_ne_zero.mpr
+          (Ideal.IsDedekindDomain.ramificationIdx_ne_zero_of_liesOver
+            Q.1 hR0))).trans hQ_le
+  have hfundE :=
+    Ideal.ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn
+      hq0 (𝓞 E) Gal(E/F)
+  have heIn_eq :
+      Ideal.ramificationIdxIn q (𝓞 E) =
+        Ideal.ramificationIdx q R.asIdeal :=
+    Ideal.ramificationIdxIn_eq_ramificationIdx q R.asIdeal Gal(E/F)
+  have hcardE : Nat.card Gal(E/F) = 37 := by
+    rw [IsGalois.card_aut_eq_finrank, hFE]
+  have hdvd : Ideal.ramificationIdx q R.asIdeal ∣ 37 := by
+    rw [hcardE] at hfundE
+    rw [← heIn_eq]
+    exact ⟨
+      (q.primesOver (𝓞 E)).ncard *
+        q.inertiaDegIn (𝓞 E),
+      by
+        simpa [mul_assoc, mul_left_comm, mul_comm] using hfundE.symm⟩
+  have heR : Ideal.ramificationIdx q R.asIdeal = 1 := by
+    rcases (Nat.dvd_prime (by norm_num : Nat.Prime 37)).mp hdvd with h | h
+    · exact h
+    · omega
+  exact
+    (Algebra.isUnramifiedAt_iff_of_isDedekindDomain hR0).mpr
+      (by simpa only [q, Ideal.over_def R.asIdeal q] using heR)
 
 /-! ## The direct Hilbert-94 consequence over the cyclotomic field -/
 
