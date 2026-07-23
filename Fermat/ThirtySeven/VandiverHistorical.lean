@@ -1201,6 +1201,7 @@ theorem exists_historicalEquationEight_pair_one37
         (1 - (hζ.unit' : 𝓞 K)) * η * ρone ^ 37 ∧
       s.omega + (hζ.unit'⁻¹ : (𝓞 K)ˣ) * s.theta =
         (1 - (hζ.unit'⁻¹ : (𝓞 K)ˣ)) * η * ρminus ^ 37 ∧
+      NumberField.IsCMField.ringOfIntegersComplexConj K ρone = ρminus ∧
       ¬ (hζ.unit' : 𝓞 K) - 1 ∣ ρone ∧
       ¬ (hζ.unit' : 𝓞 K) - 1 ∣ ρminus := by
   obtain ⟨ρ, η₀, -, heq, hη₀real⟩ :=
@@ -1265,7 +1266,7 @@ theorem exists_historicalEquationEight_pair_one37
       exact NumberField.IsCMField.complexConj_apply_apply K ρ
     apply hρnot
     simpa only [pow_one, hcc] using hc
-  exact ⟨ρ, ρminus, η, hηreal, hone, hminus, hρnot, hρminusNot⟩
+  exact ⟨ρ, ρminus, η, hηreal, hone, hminus, rfl, hρnot, hρminusNot⟩
 
 omit [NumberField K] [IsCyclotomicExtension {37} ℚ K] in
 /-- The elementary elimination between equation (8) at `a` and `-a`.
@@ -2063,6 +2064,30 @@ theorem exists_realEquationNineGenerator37
   obtain ⟨η, hη⟩ := hassoc_q
   exact ⟨μ, η, hJμ, hμreal, by simpa [mul_comm] using hη.symm⟩
 
+/-- Complex conjugation sends any integral 37th root of unity to its
+36th power, i.e. its inverse. -/
+lemma ringOfIntegersComplexConj_nthRoot37
+    (η : Polynomial.nthRootsFinset 37 (1 : 𝓞 K)) :
+    NumberField.IsCMField.ringOfIntegersComplexConj K (η : 𝓞 K) =
+      (η : 𝓞 K) ^ 36 := by
+  have hηpow : (η : 𝓞 K) ^ 37 = 1 :=
+    (Polynomial.mem_nthRootsFinset (by norm_num : 0 < 37) (1 : 𝓞 K)).mp η.prop
+  let u : (𝓞 K)ˣ :=
+    ⟨(η : 𝓞 K), (η : 𝓞 K) ^ 36,
+      by simpa only [← pow_succ'] using hηpow,
+      by simpa only [mul_comm, ← pow_succ'] using hηpow⟩
+  have hupow : u ^ 37 = 1 := by
+    apply Units.ext
+    simpa only [u, Units.val_pow_eq_pow_val, Units.val_one] using hηpow
+  have huTorsion : u ∈ NumberField.Units.torsion K := by
+    rw [NumberField.Units.torsion, CommGroup.mem_torsion,
+      isOfFinOrder_iff_pow_eq_one]
+    exact ⟨37, by norm_num, hupow⟩
+  have hc : NumberField.IsCMField.unitsComplexConj K u = u⁻¹ := by
+    simpa using NumberField.IsCMField.unitsComplexConj_torsion
+      (K := K) (⟨u, huTorsion⟩ : NumberField.Units.torsion K)
+  exact congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) hc
+
 /-- The exact high-divisibility conclusion of Vandiver's equation (9a),
 once the difference equation preceding (9) has been obtained.
 
@@ -2118,6 +2143,79 @@ theorem equationNineA_normalized37
       ring
     rw [hrewrite]
     exact dvd_mul_of_dvd_right hηdiv ((η : 𝓞 K) ^ 18)
+
+/-- Conjugation-compatible form of equation (9a).
+
+When the two inputs are conjugate, the symmetric normalization by the
+18th and 19th powers of the distinguished 37th root preserves that
+relation: conjugation changes the root to its inverse and
+`-18 ≡ 19 (mod 37)`.  The normalized inverse generator remains prime to
+`ζ - 1`. -/
+theorem equationNineA_normalized_conjugate37
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
+    (m : ℕ) (hm : 1 < m) (ρa ρminus ρzero : 𝓞 K) (ε : (𝓞 K)ˣ)
+    (hdiff : ρa ^ 37 - ρminus ^ 37 =
+      ε * ((hζ.unit'.1 - 1) ^ (2 * m - 1) * ρzero) ^ 37)
+    (hconj : NumberField.IsCMField.ringOfIntegersComplexConj K ρa = ρminus)
+    (hminus : ¬ hζ.unit'.1 - 1 ∣ ρminus) :
+    ∃ ρa' ρminus' : 𝓞 K,
+      ρa' ^ 37 = ρa ^ 37 ∧
+      ρminus' ^ 37 = ρminus ^ 37 ∧
+      (hζ.unit'.1 - 1) ^ ((2 * m - 2) * 37 + 1) ∣
+        ρa' - ρminus' ∧
+      NumberField.IsCMField.ringOfIntegersComplexConj K ρa' = ρminus' ∧
+      ¬ hζ.unit'.1 - 1 ∣ ρminus' := by
+  have hexp : 2 * m - 1 = (2 * m - 2) + 1 := by omega
+  have e' : ρa ^ 37 + (-ρminus) ^ 37 =
+      ε * ((hζ.unit'.1 - 1) ^ ((2 * m - 2) + 1) * ρzero) ^ 37 := by
+    rw [← hexp]
+    simpa only [Odd.neg_pow (by norm_num : Odd 37), sub_eq_add_neg] using hdiff
+  have hy' : ¬ hζ.unit'.1 - 1 ∣ -ρminus := by
+    simpa using hminus
+  let η := zeta_sub_one_dvd_root (by norm_num : 37 ≠ 2) hζ e' hy'
+  have hηdiv : (hζ.unit'.1 - 1) ^ ((2 * m - 2) * 37 + 1) ∣
+      ρa - (η : 𝓞 K) * ρminus := by
+    simpa only [sub_eq_add_neg, neg_mul, mul_comm] using
+      (distinguishedFactor_highDivisibility (by norm_num : 37 ≠ 2)
+        hζ e' hy')
+  have hηpow : (η : 𝓞 K) ^ 37 = 1 :=
+    (Polynomial.mem_nthRootsFinset (by norm_num : 0 < 37) (1 : 𝓞 K)).mp η.prop
+  have hηconj :
+      NumberField.IsCMField.ringOfIntegersComplexConj K (η : 𝓞 K) =
+        (η : 𝓞 K) ^ 36 :=
+    ringOfIntegersComplexConj_nthRoot37 η
+  have hηunit : IsUnit (η : 𝓞 K) := by
+    apply isUnit_iff_dvd_one.mpr
+    refine ⟨(η : 𝓞 K) ^ 36, ?_⟩
+    simpa only [← pow_succ'] using hηpow.symm
+  let ρa' : 𝓞 K := (η : 𝓞 K) ^ 18 * ρa
+  let ρminus' : 𝓞 K := (η : 𝓞 K) ^ 19 * ρminus
+  refine ⟨ρa', ρminus', ?_, ?_, ?_, ?_, ?_⟩
+  · dsimp [ρa']
+    rw [mul_pow, ← pow_mul]
+    rw [show 18 * 37 = 37 * 18 by norm_num, pow_mul, hηpow, one_pow,
+      one_mul]
+  · dsimp [ρminus']
+    rw [mul_pow, ← pow_mul]
+    rw [show 19 * 37 = 37 * 19 by norm_num, pow_mul, hηpow, one_pow,
+      one_mul]
+  · have hrewrite : ρa' - ρminus' =
+        (η : 𝓞 K) ^ 18 * (ρa - (η : 𝓞 K) * ρminus) := by
+      dsimp [ρa', ρminus']
+      rw [pow_succ' (η : 𝓞 K) 18]
+      ring
+    rw [hrewrite]
+    exact dvd_mul_of_dvd_right hηdiv ((η : 𝓞 K) ^ 18)
+  · dsimp [ρa', ρminus']
+    rw [map_mul, map_pow, hηconj, hconj, ← pow_mul]
+    rw [show 36 * 18 = 37 * 17 + 19 by norm_num,
+      pow_add, pow_mul, hηpow, one_pow, one_mul]
+  · dsimp [ρminus']
+    intro hram
+    rcases hζ.zeta_sub_one_prime'.dvd_mul.mp hram with hroot | hρ
+    · exact hζ.zeta_sub_one_prime'.not_unit
+        (isUnit_of_dvd_unit hroot (hηunit.pow 19))
+    · exact hminus hρ
 
 /-- A `37`th root of a real unit can be adjusted by a power of `ζ`
 without changing its `37`th power so that the root itself is real. This is
