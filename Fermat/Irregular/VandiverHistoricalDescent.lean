@@ -86,10 +86,10 @@ noncomputable def distinctPrimeIdealFactorCount (x : 𝓞 K) : ℕ :=
 
 /-- The output of Vandiver's equations (7b)--(10b) for one historical state.
 
-The field `highCongruence` is the congruence obtained from (9a) before its
-depth is weakened in equation (10). The last three fields encode (10b): once
-the quotient unit has a `p`-th root, a new state exists with exponent
-`2 * m - 1` and strictly fewer distinct prime-ideal factors of `ξ`.
+The field `highCongruence` is exactly the congruence in equation (10), at
+depth `2 * p`. The last three fields encode (10b): once the quotient unit has
+a `p`-th root, a new state exists with exponent `2 * m - 1` and strictly fewer
+distinct prime-ideal factors of `ξ`.
 
 Keeping this as data, rather than a proposition which merely says that some
 next state exists, makes the exact invocation of Vandiver's Lemma 2 visible
@@ -99,7 +99,7 @@ structure EquationSevenToTenData {ζ : K} (hζ : IsPrimitiveRoot ζ p)
   quotientUnit : (𝓞 K)ˣ
   rationalBase : ℤ
   highCongruence :
-    ((1 : 𝓞 K) - hζ.unit') ^ ((2 * s.m - 2) * p) ∣
+    ((1 : 𝓞 K) - hζ.unit') ^ (2 * p) ∣
       ((quotientUnit : 𝓞 K) - (rationalBase : 𝓞 K) ^ p)
   nextState :
     (v : (𝓞 K)ˣ) → quotientUnit = v ^ p → HistoricalState hζ
@@ -137,25 +137,17 @@ def EquationsSevenToTenReduction {ζ : K}
   ∀ s : HistoricalState hζ, admissible s →
     Nonempty (EquationSevenToTenData hζ admissible s)
 
-/-! ## The exact depth calculation in equation (10) -/
+/-! ## The exact depth in equation (10) -/
 
-/-- Because Vandiver keeps `m > 1`, the exponent furnished by (9a) is at
-least the `2 * p` required by Lemma 2. -/
-lemma two_mul_le_two_mul_sub_two (m : ℕ) (hm : 1 < m) :
-    2 ≤ 2 * m - 2 := by
-  omega
-
-/-- The high congruence furnished by equations (7b)--(9a) implies exactly
-Vandiver's equation (10), at depth `(1 - ζ) ^ (2 * p)`. -/
+/-- The congruence recorded by the reduction data is exactly Vandiver's
+equation (10), at depth `(1 - ζ) ^ (2 * p)`. -/
 lemma equationTen_deepCongruence {ζ : K} (hζ : IsPrimitiveRoot ζ p)
     (admissible : HistoricalAdmissibility hζ)
     (s : HistoricalState hζ)
     (d : EquationSevenToTenData hζ admissible s) :
     ((1 : 𝓞 K) - hζ.unit') ^ (2 * p) ∣
       ((d.quotientUnit : 𝓞 K) - (d.rationalBase : 𝓞 K) ^ p) := by
-  exact (pow_dvd_pow ((1 : 𝓞 K) - hζ.unit') (by
-    have := two_mul_le_two_mul_sub_two s.m s.one_lt_m
-    exact Nat.mul_le_mul_right p this)).trans d.highCongruence
+  exact d.highCongruence
 
 /-! ## Well-founded descent -/
 

@@ -3372,7 +3372,7 @@ structure WeightedReductionData37 {ζ : K} (hζ : IsPrimitiveRoot ζ 37)
   epsilon₃ : (𝓞 K)ˣ
   rationalBase : ℤ
   highCongruence :
-    ((1 : 𝓞 K) - hζ.unit') ^ ((2 * s.m - 2) * 37) ∣
+    ((1 : 𝓞 K) - hζ.unit') ^ 74 ∣
       (((epsilon₁ / epsilon₂ : (𝓞 K)ˣ) : 𝓞 K) -
         (rationalBase : 𝓞 K) ^ 37)
   weightedEquation :
@@ -3407,7 +3407,7 @@ structure ConjugationPowerReductionData37 {ζ : K}
   epsilon₃ : (𝓞 K)ˣ
   rationalBase : ℤ
   highCongruence :
-    ((1 : 𝓞 K) - hζ.unit') ^ ((2 * s.m - 2) * 37) ∣
+    ((1 : 𝓞 K) - hζ.unit') ^ 74 ∣
       (((epsilon₁ / epsilon₂ : (𝓞 K)ˣ) : 𝓞 K) -
         (rationalBase : 𝓞 K) ^ 37)
   weightedEquation :
