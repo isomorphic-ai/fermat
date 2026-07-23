@@ -74,7 +74,7 @@ theorem add [Fact p.Prime]
   rcases hx with rfl | hx
   · simpa using hy
   rcases hy with rfl | hy
-  · simpa using Or.inr hx
+  · simpa [HasPadicValAtLeast] using Or.inr hx
   by_cases hxy : x + y = 0
   · exact Or.inl hxy
   · exact Or.inr <| (le_min hx hy).trans (padicValRat.min_le_padicValRat_add hxy)
@@ -676,6 +676,8 @@ theorem taylor_powerSum_primePower_hasPadicValAtLeast
     rw [← hn_sq]
     exact hAB
   have hbound := intCast_sub_hasPadicValAtLeast_of_zmod_eq hAB'
+  have hexp : ((2 * t : ℕ) : ℤ) = 2 * (t : ℤ) := by norm_num
+  rw [hexp] at hbound
   simpa only [A, B, n, Int.cast_sub, Int.cast_mul, Int.cast_pow,
     Int.cast_natCast, Int.cast_one, Int.cast_sum, Int.natCast_mul,
     Nat.cast_mul, Int.ofNat_eq_natCast] using hbound

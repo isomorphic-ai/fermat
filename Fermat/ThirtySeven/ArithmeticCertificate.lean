@@ -130,7 +130,12 @@ theorem bernoulli_32_denominator_not_dvd : ¬37 ∣ (510 : ℕ) := by
 factor `37` from its numerator. -/
 theorem bernoulli_32_scaled_residue :
     (-(208360028141 : ℤ) : ZMod 37) / ((32 : ZMod 37) * 510) = 1 := by
-  decide
+  apply (div_eq_iff (by
+    change ((16320 : ℕ) : ZMod 37) ≠ 0
+    decide)).2
+  change ((-208360028141 : ℤ) : ZMod 37) = ((16320 : ℤ) : ZMod 37)
+  rw [ZMod.intCast_eq_intCast_iff']
+  norm_num
 
 /-- The small power used in the package's primary quotient. -/
 theorem two_pow_32_mod_37 : (2 : ZMod 37) ^ 32 = 7 := by
@@ -140,7 +145,8 @@ theorem two_pow_32_mod_37 : (2 : ZMod 37) ^ 32 = 7 := by
 theorem primary_quotient_mod_37 :
     ((2 : ZMod 37) ^ 32 - 1) *
         ((-(208360028141 : ℤ) : ZMod 37) / ((32 : ZMod 37) * 510)) = 6 := by
-  decide
+  rw [two_pow_32_mod_37, bernoulli_32_scaled_residue]
+  norm_num
 
 /-- The independent Wieferich cross-check from the package. -/
 theorem two_pow_36_mod_37_sq : (2 : ZMod (37 ^ 2)) ^ 36 = 38 := by

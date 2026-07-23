@@ -48,7 +48,8 @@ theorem sixteen_dvd_H_of_odd {q r : ℕ} (hq : Odd q) (hr : Odd r) : 16 ∣ H q 
   obtain ⟨a, rfl⟩ := hq
   obtain ⟨b, rfl⟩ := hr
   rw [← ZMod.natCast_eq_zero_iff]
-  simpa only [H, Nat.cast_add, Nat.cast_mul, Nat.cast_pow, Nat.cast_ofNat] using
+  simpa only [H, Nat.cast_add, Nat.cast_mul, Nat.cast_pow, Nat.cast_ofNat,
+    Nat.cast_one] using
     zmod_sixteen_H_odd (a : ZMod 16) (b : ZMod 16)
 
 theorem odd_H_of_odd_even {q r : ℕ} (hq : Odd q) (hr : Even r) : Odd (H q r) := by
