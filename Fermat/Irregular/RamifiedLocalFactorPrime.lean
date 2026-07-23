@@ -150,7 +150,7 @@ theorem characterCoefficient_p_pow
       (Fact.out : Nat.Prime p).ne_zero]
     apply MulChar.map_nonunit
     simpa only [isUnit_iff_ne_zero, not_not] using
-      ZMod.natCast_self p
+      (CharP.ofNat_eq_zero (ZMod p) p)
 
 /-- Convolution by a function supported only at q^0 does not change a
 second function on powers of the prime q. -/

@@ -215,7 +215,8 @@ theorem characterCoefficient_37_pow
   · simp [characterCoefficient, toArithmeticFunction]
   · simp [characterCoefficient, toArithmeticFunction]
     apply MulChar.map_nonunit
-    simpa only [isUnit_iff_ne_zero, not_not] using ZMod.natCast_self 37
+    simpa only [isUnit_iff_ne_zero, not_not] using
+      (CharP.ofNat_eq_zero (ZMod 37) 37)
 
 /-- Convolution by a function supported only at `37 ^ 0` does not change a
 second function on powers of `37`. -/

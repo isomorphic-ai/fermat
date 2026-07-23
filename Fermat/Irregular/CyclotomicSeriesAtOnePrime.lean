@@ -237,7 +237,10 @@ lemma tendsto_tsum_mul_dirichletAbelDifference
         (tendsto_dirichletAbelDifference_zero n).mono_left inf_le_left
       have hdC : Tendsto (fun t : ℝ ↦ (dirichletAbelDifference t n : ℂ))
           (𝓝[>] 0) (𝓝 0) := by
-        simpa using Complex.ofRealCLM.continuous.continuousAt.tendsto.comp hdR
+        change Tendsto
+          (Complex.ofRealCLM ∘ fun t : ℝ ↦ dirichletAbelDifference t n)
+          (𝓝[>] 0) (𝓝 0)
+        exact Complex.ofRealCLM.continuous.continuousAt.tendsto.comp hdR
       simpa using tendsto_const_nhds.mul hdC
     simpa using tendsto_finsetSum (range N) hterm
   have hprefixε : ∀ᶠ t in 𝓝[>] 0,
@@ -255,8 +258,9 @@ lemma tendsto_tsum_mul_dirichletAbelDifference
     (hasSum_dirichletAbelDifference htpos).summable
   have hdC : HasSum
       (fun n ↦ (dirichletAbelDifference t n : ℂ)) 1 := by
-    simpa only [Function.comp_apply, map_one] using
-      Complex.ofRealCLM.hasSum (hasSum_dirichletAbelDifference htpos)
+    change HasSum
+      (Complex.ofRealCLM ∘ dirichletAbelDifference t) (Complex.ofRealCLM 1)
+    exact Complex.ofRealCLM.hasSum (hasSum_dirichletAbelDifference htpos)
   have hl : HasSum
       (fun n ↦ l * (dirichletAbelDifference t n : ℂ)) l := by
     simpa using hdC.mul_left l
@@ -400,7 +404,8 @@ lemma tsum_dirichletAbelWeighted_eq_kernel
   have hApartial (n : ℕ) : A n = ∑ i ∈ range (n + 1), b i := by rfl
   have hB : Tendsto (fun n ↦ ∑ i ∈ range n, b i) atTop (𝓝 l) := by
     apply (Filter.tendsto_add_atTop_iff_nat 1).mp
-    simpa only [hApartial] using hA
+    change Tendsto A atTop (𝓝 l)
+    exact hA
   have hboundary : Tendsto (fun n ↦
       dirichletAbelWeight t (n - 1) • (∑ i ∈ range n, b i)) atTop (𝓝 0) := by
     have hw : Tendsto (fun n ↦ dirichletAbelWeight t (n - 1)) atTop (𝓝 0) :=
@@ -470,7 +475,8 @@ lemma tendsto_dirichletSeriesPartial_LFunction
     have hparam : Tendsto (fun t : ℝ ↦ ((1 + t : ℝ) : ℂ))
         (𝓝[>] 0) (𝓝 (1 : ℂ)) := by
       have hc : ContinuousAt (fun t : ℝ ↦ ((1 + t : ℝ) : ℂ)) 0 := by fun_prop
-      simpa using hc.tendsto.mono_left inf_le_left
+      simpa only [add_zero, Complex.ofReal_one] using hc.tendsto.mono_left
+        (show 𝓝[>] (0 : ℝ) ≤ 𝓝 (0 : ℝ) from nhdsWithin_le_nhds)
     exact (DirichletCharacter.differentiable_LFunction hψ).continuous.continuousAt.tendsto.comp
       hparam
   have hLweighted : Tendsto (fun t : ℝ ↦

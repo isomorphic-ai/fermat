@@ -68,7 +68,8 @@ theorem evenLValueProduct37At_one : evenLValueProduct37At 1 = evenLValueProduct3
 theorem tendsto_ofReal_nhdsGT_one_nhds_one :
     Tendsto (fun s : ℝ ↦ (s : ℂ)) (𝓝[>] 1) (𝓝 1) := by
   have hc : ContinuousAt (fun s : ℝ ↦ (s : ℂ)) 1 := by fun_prop
-  simpa using hc.tendsto.mono_left inf_le_left
+  simpa only [Complex.ofReal_one] using hc.tendsto.mono_left
+    (show 𝓝[>] (1 : ℝ) ≤ 𝓝 (1 : ℝ) from nhdsWithin_le_nhds)
 
 theorem tendsto_ofReal_nhdsGT_one_punctured :
     Tendsto (fun s : ℝ ↦ (s : ℂ)) (𝓝[>] 1) (𝓝[≠] 1) := by
