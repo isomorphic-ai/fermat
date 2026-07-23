@@ -1,76 +1,176 @@
 # Fermat: classical fixed-exponent proofs in Lean
 
-This project formalizes the complete classical exponent-specific proofs of
-Fermat's Last Theorem for:
+This repository formalizes classical proofs of Fermat's Last Theorem one
+exponent at a time.  The common statement is:
 
-- `n = 3`
-- `n = 4`
-- `n = 5`
-- `n = 7`
-- `n = 11`
-- `n = 13`
-- `n = 14`
+```lean
+Fermat.HoldsAt n
+```
 
-The scope follows the historic source archive in `../fermat-data`. It excludes
-Wiles/Taylor–Wiles, modularity, elliptic curves, and broad computational
-verification. Work on the first irregular exponent `n = 37` is tracked
-honestly as infrastructure until its global Case-II bridges are complete.
+This abbreviates Mathlib's `FermatLastTheoremFor n`.  The project deliberately
+studies the historical descent, cyclotomic, finite-certificate, and
+decomposition routes rather than importing the modern modularity proof.
 
-The common theorem statement is `Fermat.HoldsAt n`, an abbreviation for
-mathlib's `FermatLastTheoremFor n`. Mathlib already contains complete descent
-proofs for `n = 3` and `n = 4`; this project reuses those checked proofs and
-focuses its new work on the uploaded historical and cyclotomic fixed-exponent
-proofs.
+The completed public fixed-exponent results are:
 
-The exponent-five result follows Dirichlet's completed 1828 proof, including
-both historical parity branches and the exact denominator-`16` descent. It is
-exposed as `Fermat.holdsAt_five` and
-`Fermat.Five.Dirichlet.holdsAt_five_dirichlet`; see
-`docs/dirichlet-n5.md` for the page-level source ledger and the modern
-maximal-order and Pell-unit repairs.
+| Exponent | Public theorem after `import Fermat` | Main route |
+| ---: | --- | --- |
+| 3 | `Fermat.holdsAt_three` | Mathlib's checked classical descent |
+| 4 | `Fermat.holdsAt_four` | Mathlib's checked classical descent |
+| 5 | `Fermat.holdsAt_five` | Dirichlet's two-branch descent |
+| 7 | `Fermat.holdsAt_seven` | Lebesgue's 1840 proof and Addition |
+| 11 | `Fermat.holdsAt_eleven` | Lamé--Kummer regular-prime descent |
+| 13 | `Fermat.holdsAt_thirteen` | Lamé--Kummer regular-prime descent |
+| 14 | `Fermat.holdsAt_fourteen` | Dirichlet's independent 1832 descent |
+| 37 | `Fermat.holdsAt_thirtySeven` | Vandiver--Takagi--Furtwängler |
+| 59 | `Fermat.holdsAt_fiftyNine` | Vandiver--Takagi--Furtwängler |
+| 67 | `Fermat.holdsAt_sixtySeven` | Vandiver--Takagi--Furtwängler |
+| 157 | `Fermat.holdsAt_oneHundredFiftySeven` | two-probe Vandiver descent |
 
-The exponent-seven result follows Lebesgue's 1840 proof together with his
-published Addition. The Addition repairs the third of the four allocations
-that the original note incorrectly dismissed. The checked result is exposed
-as `Fermat.holdsAt_seven` and
-`Fermat.Seven.Lebesgue.holdsAt_seven_lebesgue`; see
-`docs/lebesgue-n7.md` for the exact descent ledger and the repaired branch.
+The exponent directories for `491`, `587`, `1381`, and `1831` contain
+work-in-progress finite certificates.  Their presence does not by itself
+mean that a public `Fermat.HoldsAt n` theorem has been completed.
 
-The `n = 14` result follows from the `n = 7` result by divisibility of
-exponents. The project also contains a complete formalization of Dirichlet's
-original, independent 1832 descent for `n = 14`, exposed as
-`Fermat.holdsAt_fourteen` and
-`Fermat.Fourteen.Dirichlet.holdsAt_fourteen_dirichlet`; see
-`docs/dirichlet-n14.md` for its proof ledger and the unit-sign correction
-needed by the historical argument.
+## Repository map
 
-The exponent-11 and exponent-13 results use kernel-checked class-number-one
-certificates and the formal Lamé--Kummer descent supplied by `flt-regular`.
-They are exposed as `Fermat.holdsAt_eleven` and `Fermat.holdsAt_thirteen`.
-The alternative seven-fold packages retain the neighbor closures, exact
-quadratic-period and secondary composition identities, and direct finite
-Faulhaber certificates for every low Bernoulli numerator.  These are exposed
-through `Fermat.holdsAt_eleven_sevenFold`,
-`Fermat.holdsAt_thirteen_sevenFold`, and the corresponding
-`Eleven.SevenFold` and `Thirteen.SevenFold` namespaces.  The Faulhaber branch
-does not import Kummer's congruence; the class-number-one branch is the first
-sufficient branch for the final descent.
+### Public entry point
 
-For exponent 37, Case I and every Bernoulli numerator condition in
-Vandiver's criterion are formalized; the latter are now proved directly by
-finite Faulhaber computations, without assuming Kummer's congruence. The
-uploaded circular-unit matrix has also been realized by concrete corrected
-residue homomorphisms, proving that its relative index in the real-unit
-group is prime to `37`. The complete per-character analytic calculation is
-also checked: the natural Dirichlet series at `s = 1` is proved to converge
-to Mathlib's continued `LFunction 1`, closing the chord-log Fourier identity.
-There is deliberately no public
-`Fermat.holdsAt_thirtySeven` yet; see `docs/irregular-n37.md` for the exact
-remaining theorem boundary.
+[`Fermat.lean`](Fermat.lean) is the umbrella import.  It exposes the public
+fixed-exponent theorems and imports the proof-backed ladder datasets.
 
-## Build
+The foundational statement and elementary transport lemmas live in:
+
+- [`Fermat/Basic.lean`](Fermat/Basic.lean): `HoldsAt`, primitive solutions,
+  and transport along divisibility of exponents;
+- [`Fermat/Cases.lean`](Fermat/Cases.lean): first-case/second-case interfaces
+  and their final recombination;
+- [`Fermat/SophieGermain.lean`](Fermat/SophieGermain.lean): the reusable
+  auxiliary-prime criterion.
+
+### Exponent-specific proofs
+
+Each completed exponent has its own directory under `Fermat/`.
+
+- `Fermat/Five/`, `Fermat/Seven/`, and `Fermat/Fourteen/` contain
+  decompressed historical descents.  The modules separate normalization,
+  coprimality, power extraction, allocation, and the final infinite descent.
+- `Fermat/Eleven/` and `Fermat/Thirteen/` contain the class-number-one
+  Lamé--Kummer route and an alternative `SevenFold.lean` route with explicit
+  neighbor folds and Faulhaber certificates.
+- `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`, and
+  `Fermat/OneHundredFiftySeven/` contain the irregular-prime campaigns.
+  Their final public endpoints are the corresponding
+  `VandiverHistoricalAssembly*.lean` modules.
+
+The irregular-prime directories use a deliberately layered layout:
+
+1. `FirstCase.lean` checks the Sophie--Germain auxiliary prime.
+2. `ArithmeticCertificate.lean`, `HighBernoulli.lean`, and
+   `VandiverData.lean` check the finite Bernoulli channels.
+3. `CircularUnit*.lean` checks the concrete real circular-unit data and
+   class-number consequence.
+4. `TakagiHistorical*.lean` and the reusable reflection modules construct
+   the real unramified Kummer extension.
+5. `VandiverLemmaTwo*.lean` formalizes the unit/logarithmic part of
+   Vandiver's argument.
+6. `VandiverHistorical.lean` follows the historical equations (6)--(10).
+7. `VandiverHistoricalAssembly*.lean` joins both cases and exports
+   `Fermat.HoldsAt n`.
+
+For `157`, the finite probe loop is retained as data: the first probe is
+`q = 1571`, and the successful circular-unit probe is `q = 7537`.
+
+### Reusable irregular-prime machinery
+
+[`Fermat/Irregular/`](Fermat/Irregular/) contains the shared number theory
+used by the concrete irregular exponents.  Important families include:
+
+- Bernoulli/Faulhaber and Voronoi--Kummer congruences;
+- circular units, residue homomorphisms, and the Sinnott index formula;
+- cyclotomic characters, Dirichlet `L`-values, and the real class-number
+  calculation;
+- Takagi--Furtwängler ramification and reflection;
+- Vandiver's historical descent, unit lemmas, polynomial remainders, and
+  logarithmic derivatives.
+
+Exponent-specific modules instantiate these generic results with explicit
+finite data.  Large matrices and Bernoulli numbers are checked using compact
+kernel-verifiable certificates rather than trusted external computations.
+
+[`Fermat/Regular/`](Fermat/Regular/) contains reusable regular-prime and
+Faulhaber infrastructure.  [`Fermat/Quadratic/`](Fermat/Quadratic/) contains
+quadratic-ring and unit calculations shared by several elementary descents.
+
+### The seven-fold ladder
+
+[`Fermat/Ladder/`](Fermat/Ladder/) records the campaign's measured
+decomposition independently of the final theorem statement.
+
+- `Basic.lean` defines the seven folds, checked traces, pass/contradiction
+  outcomes, exit schedules, and `ProofBacked`.
+- `One.lean` through `Fourteen.lean` are the original fourteen samples.
+- `Response.lean` exposes their kernel-checked response vector:
+
+  ```text
+  [1, 2, 3, 4, 5, 1, 6, 1, 1, 1, 6, 1, 6, 1]
+  ```
+
+- `ThirtySeven.lean`, `FiftyNine.lean`, `SixtySeven.lean`, and
+  `OneHundredFiftySeven.lean` reuse the completed historical proofs.  Their
+  measured outcome is tied by `ProofBacked.outcome_eq` to the corresponding
+  existing `Fermat.HoldsAt n` theorem; the ladder does not maintain a shadow
+  proof.
+- `HistoricalResponse.lean` exposes the proof-carrying response curve and
+  its finite projection:
+
+  ```lean
+  Fermat.Ladder.HistoricalResponse.responseData
+  -- [(37, 7), (59, 7), (67, 7), (157, 7)]
+  ```
+
+Code that only fits empirical curves can consume `responseData`.  Code that
+needs theorem provenance can consume `responseCurve`, whose points retain
+the dependent `ProofBacked` payload.
+
+### Source ledgers
+
+[`docs/`](docs/) contains source and repair ledgers for the historical
+proofs at `5`, `7`, `11`, `13`, `14`, and `37`.  The source PDFs, generated
+proof packages, and audit material used during development are kept in the
+sibling archive `../fermat-data` in the campaign workspace.
+
+## Building
+
+The project pins Lean `v4.30.0`, Mathlib `v4.30.0`, and a fixed revision of
+[`flt-regular`](https://github.com/leanprover-community/flt-regular).
+
+On a fresh checkout:
 
 ```bash
 lake exe cache get
 lake build
 ```
+
+The default target is the umbrella module `Fermat`.  Useful targeted builds
+include:
+
+```bash
+lake build Fermat.Ladder.Response
+lake build Fermat.Ladder.HistoricalResponse
+lake build Fermat.ThirtySeven.VandiverHistoricalAssembly37
+```
+
+A quick consumer file can simply use:
+
+```lean
+import Fermat
+
+#check Fermat.holdsAt_thirtySeven
+#check Fermat.Ladder.HistoricalResponse.campaignProofs
+#eval Fermat.Ladder.HistoricalResponse.responseData
+```
+
+The final endpoints are routinely checked with `#print axioms`.  They depend
+only on Lean's standard `propext`, `Classical.choice`, and `Quot.sound`; the
+campaign does not use `sorry`, `admit`, custom project axioms, or
+`native_decide`.

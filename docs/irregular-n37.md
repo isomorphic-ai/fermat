@@ -1,5 +1,12 @@
 # Exponent 37: formalization status
 
+> **Completion update (2026-07-23).** Exponent `37` is now complete.
+> `Fermat.ThirtySeven.holdsAt_thirtySeven` and the umbrella theorem
+> `Fermat.holdsAt_thirtySeven` are unconditional and kernel-checked.  The
+> layer-by-layer notes below preserve the development ledger; the final
+> assembly and the bridges that closed its former boundaries are summarized
+> at the end.
+
 The uploaded `flt_37_neighbor_folding` package has two logically distinct
 layers.  The repository keeps them separate:
 
@@ -81,18 +88,28 @@ layers.  The repository keeps them separate:
   `ChordLogLValueFormula37` unconditionally and closes the per-character
   analytic identification of all seventeen Fourier coefficients.
 
-There is not yet a public `Fermat.holdsAt_thirtySeven`.  Case II needs
-Vandiver's irregular-prime criterion: if `37 ∤ h⁺` and none of the relevant
-Bernoulli numerators is divisible by `37³`, then Case II is impossible.  The
-entire Bernoulli condition and the residue-symbol-to-real-unit-index chain are
-now kernel-checked.  Mathlib and `flt-regular` still contain neither
-Vandiver's singular-primary-unit descent nor the Sinnott--Kummer index formula
-that identifies this concrete relative index with the class number `h⁺`.
-These final two global bridges must be formalized rather than assumed.  On
-the circular-unit side, all finite Fourier, cofactor, place-ordering,
-trivial-character, boundary-convergence, and Dirichlet-`L`-value factors are
-now kernel-checked; the remaining circular-unit bridge is the global
-Sinnott--Kummer index/class-number formula.
+The former global boundaries are now closed:
+
+- the generic prime-exponent Sinnott--Kummer bridge identifies the concrete
+  circular-unit index with the real class number and proves `37 ∤ h⁺`;
+- `Fermat/ThirtySeven/VandiverLemmaTwo.lean` proves Vandiver's Lemma II using
+  the actual seventeen diagonal units and the source-faithful depth-`74`
+  congruence;
+- `Fermat/ThirtySeven/TakagiHistorical37.lean` formalizes the exact
+  Takagi--Furtwängler Kummer extension, its tame and wild unramifiedness, its
+  real fixed field, and the Hilbert-94 reflection;
+- `Fermat/ThirtySeven/VandiverHistorical.lean` and its supporting modules
+  follow Vandiver's equations (6)--(10), including the real principal
+  generator and strict ideal-support descent;
+- `Fermat/ThirtySeven/VandiverHistoricalAssembly37.lean` combines that
+  second-case exclusion with the checked auxiliary prime `149` and exports
+  `Fermat.ThirtySeven.holdsAt_thirtySeven : Fermat.HoldsAt 37`;
+- `Fermat/Ladder/ThirtySeven.lean` reuses this theorem in the measured
+  seven-fold trace, and `Fermat/Ladder/HistoricalResponse.lean` exposes the
+  proof-backed data point `(37, 7)`.
+
+The final axiom audit contains only Lean's standard `propext`,
+`Classical.choice`, and `Quot.sound`.
 
 The exact primary source is H. S. Vandiver, *On Fermat's Last Theorem*,
 Transactions of the AMS 31 (1929), 613–642,
