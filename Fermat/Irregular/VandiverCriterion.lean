@@ -715,8 +715,7 @@ private lemma not_exists_int_solution
   refine not_exists_cyclotomic_solution hodd hprincipal hkummer hζ
     ⟨x, y, z, hy, hz, ?_, ?_⟩
   · rwa [ne_eq, Int.cast_eq_zero]
-  · dsimp
-    simp_rw [← Int.cast_pow, ← Int.cast_add, e]
+  · simp_rw [← Int.cast_pow, ← Int.cast_add, e]
 
 private lemma not_exists_primitive_int_solution
     (hodd : p ≠ 2)
