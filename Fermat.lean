@@ -5,6 +5,7 @@ import Fermat.Eleven.Cyclotomic
 import Fermat.Eleven.SevenFold
 import Fermat.Five.Dirichlet
 import Fermat.Fourteen.DescentConstruction
+import Fermat.FourHundredNinetyOne.SecondCase
 import Fermat.Irregular.CircularUnitIndex
 import Fermat.Irregular.CircularUnits
 import Fermat.Irregular.CyclotomicLogCofactor37
@@ -93,6 +94,12 @@ theorem holdsAt_sixtySeven : HoldsAt 67 :=
 two-probe finite loop and historical Vandiver descent reused by the ladder. -/
 theorem holdsAt_oneHundredFiftySeven : HoldsAt 157 :=
   OneHundredFiftySeven.holdsAt_oneHundredFiftySeven
+
+/-- Fermat's theorem for exponent four hundred ninety-one, through the
+three-channel Vandiver--Takagi--Furtwängler assembly reused by the
+seven-fold ladder. -/
+theorem holdsAt_fourHundredNinetyOne : HoldsAt 491 :=
+  FourHundredNinetyOne.holdsAt_fourHundredNinetyOne
 
 /-- Fermat's theorem for exponent five hundred eighty-seven, through the
 two-channel historical Vandiver assembly reused by the seven-fold ladder. -/
