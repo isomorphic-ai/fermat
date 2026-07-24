@@ -15,6 +15,7 @@ set_option maxRecDepth 100000
 
 open Fermat.Irregular.BernoulliData
 open Fermat.Irregular.DirectBernoulli
+open Fermat.Irregular.VandiverData
 open Fermat.OneThousandThreeHundredEightyOne.PowerSumCertificates
 
 local instance : Fact (Nat.Prime 1381) := ⟨by norm_num⟩
@@ -41,5 +42,20 @@ theorem bernoulli_367346_numerator_not_dvd_cube :
   · apply bernoulli_denominatorPrimeTo (p := 1381)
     · decide
     · norm_num
+
+/-- Exact implication-form low-index scan boundary for the single channel
+reported by the paired four-digit proof package. -/
+def CompleteIrregularScan : Prop :=
+  ∀ j ∈ indices 1381, (1381 : ℤ) ∣ (bernoulli j).num →
+    j = 266
+
+/-- Once the low scan restricts irregularity to index `266`, the direct
+Faulhaber certificate discharges the finite Bernoulli cube condition. -/
+theorem bernoulliCubeCondition_of_completeIrregularScan
+    (hscan : CompleteIrregularScan) : BernoulliCubeCondition 1381 := by
+  apply bernoulliCubeCondition_of_irregular (by norm_num)
+  intro j hj hirregular
+  rw [hscan j hj hirregular]
+  simpa using bernoulli_367346_numerator_not_dvd_cube
 
 end Fermat.OneThousandThreeHundredEightyOne.HighBernoulli
