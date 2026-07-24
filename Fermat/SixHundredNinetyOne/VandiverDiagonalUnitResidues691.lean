@@ -254,7 +254,7 @@ theorem extendedConjugateWeight691 (row : Fin 344) (ell : Fin 346) :
   by_cases hlast : ell.val = 345
   · have hell : ell = ⟨345, by norm_num⟩ := Fin.ext hlast
     subst ell
-    have hpow245 :
+    have hpowLast :
         x ^ extendedConjugateExponent691 ⟨345, by norm_num⟩ = x⁻¹ := by
       have hcast :
           (extendedConjugateExponent691 ⟨345, by norm_num⟩ : ZMod 691) =
@@ -273,7 +273,7 @@ theorem extendedConjugateWeight691 (row : Fin 344) (ell : Fin 346) :
     calc
       weight
           (x ^ extendedConjugateExponent691 ⟨345, by norm_num⟩) =
-          weight x⁻¹ := congrArg weight hpow245
+          weight x⁻¹ := congrArg weight hpowLast
       _ = weight x := weight_inv x hx0
       _ = weight
           (classRoot
