@@ -83,7 +83,8 @@ theorem sixteen_dvd_F_of_odd {t s : ℕ} (ht : Odd t) (hs : Odd s) : 16 ∣ F t 
   obtain ⟨a, rfl⟩ := ht
   obtain ⟨b, rfl⟩ := hs
   rw [← ZMod.natCast_eq_zero_iff]
-  simpa only [F, Nat.cast_add, Nat.cast_mul, Nat.cast_pow, Nat.cast_ofNat] using
+  simpa only [F, Nat.cast_add, Nat.cast_mul, Nat.cast_pow, Nat.cast_ofNat,
+    Nat.cast_one] using
     zmod_sixteen_F_odd (a : ZMod 16) (b : ZMod 16)
 
 /-- In the even branch the quartic factor is odd. -/

@@ -177,7 +177,8 @@ theorem pellFundamental_isFundamental : Pell.IsFundamental pellFundamental := by
 
 private theorem pell_norm_one (s : Pell.Solution₁ 5) :
     Zsqrtd.norm (s : Zsqrtd 5) = 1 := by
-  simpa [Zsqrtd.norm, pow_two, mul_assoc] using s.prop
+  simpa only [Zsqrtd.norm_def, Pell.Solution₁.x, Pell.Solution₁.y,
+    pow_two, mul_assoc] using s.prop
 
 /-- A norm-one Pell solution, embedded as a unit of the maximal order. -/
 def pellUnit (s : Pell.Solution₁ 5) : MaximalOrderˣ where

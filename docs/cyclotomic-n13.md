@@ -24,9 +24,16 @@ second-case descent needed for a self-contained formal proof.
 The Lean development supplies that boundary with the kernel-checked
 [`flt-regular`](https://github.com/leanprover-community/flt-regular)
 formalization.  The dependency is pinned to commit
-`ff3daecc6c506b3748b28ff7fbe7ce7e6a23e3e5`, the revision compatible with
-this project's Lean and Mathlib `v4.30.0`.  Its theorem `flt_regular`
+`edd24b3f160b0fd5ce0ee489b69f8247117ff1ed`, the revision compatible with
+this project's Lean `v4.31.0-rc1`.  Its theorem `flt_regular`
 formalizes both Kummer cases; it is not introduced as an axiom.
+
+The independent Bernoulli route uses the kernel-checked
+[`KummerCriterion`](https://github.com/riccardobrasca/KummerCriterion)
+development at commit
+`88e6dd6748a1ba5baac97244aeb27b3e1a5e6286`.  Its main theorem proves the
+class-group/Bernoulli equivalence that joins the direct Faulhaber
+calculation to `IsRegularPrime`.
 
 ## The finite class-number certificate
 
@@ -74,6 +81,22 @@ the relationship with the historical exponents five and seven.  The note
 itself observes that these identities do not close an elementary
 exponent-thirteen descent; they are not logical premises of FLT13.
 
+The alternative module `Fermat.Thirteen.SevenFold` checks both identities
+and arranges the result as the same explicit eight-stage package used for
+exponent eleven.  Its Bernoulli stratum is decompressed independently: for
+each `k = 2, 4, 6, 8, 10`, Lean computes
+
+```text
+sum (m = 1, ..., 12) m^k  (mod 13^2)
+```
+
+and proves it is nonzero.  The generic square-modulus Faulhaber theorem then
+gives `13 ∤ num(B_k)` for every low index without using Kummer's congruence.
+The formal Kummer criterion converts this numerical statement to
+`IsRegularPrime 13`, and `flt_regular` then closes FLT.  Thus the Faulhaber
+certificate is now a load-bearing alternative proof.  The exact
+class-number-one certificate remains the first sufficient branch.
+
 ## Lean theorem map
 
 - `Fermat.Thirteen.Cyclotomic.ringOfIntegers_isPrincipalIdealRing` is the
@@ -82,7 +105,21 @@ exponent-thirteen descent; they are not logical premises of FLT13.
   one into regularity.
 - `Fermat.Thirteen.Cyclotomic.holdsAt_thirteen_cyclotomic` applies the
   formal Lamé–Kummer theorem.
+- `Fermat.Thirteen.SevenFold.bernoulliNumeratorRegular_thirteen` is the
+  direct five-index Faulhaber certificate.
+- `Fermat.Regular.Faulhaber.bernoulliNumeratorRegular_iff_isRegularPrime`
+  is the generic checked Kummer bridge.
+- `Fermat.Thirteen.SevenFold.holdsAt_thirteen_faulhaber` is the complete
+  Faulhaber endpoint.
+- `Fermat.Thirteen.SevenFold.quadratic_fold` and `secondary_composition`
+  check the structural folds from the ZIP.
+- `Fermat.Thirteen.SevenFold.faulhaber_and_flt_thirteen` retains the
+  decompressed Bernoulli layer together with the checked endpoint.
 - `Fermat.holdsAt_thirteen` is the public project theorem.
+- `Fermat.holdsAt_thirteen_faulhaber` and
+  `Fermat.holdsAt_thirteen_sevenFold` expose the alternative package.
+- `Fermat.Ladder.Thirteen.Faulhaber.exitDepth = 7` is the machine-readable
+  depth of its independent full ladder run.
 
 ## Trust audit
 
