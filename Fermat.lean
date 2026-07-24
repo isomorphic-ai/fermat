@@ -18,6 +18,7 @@ import Fermat.Ladder.FaulhaberResponse
 import Fermat.Ladder.HistoricalResponse
 import Fermat.Ladder.Response
 import Fermat.Seven.Lebesgue.TheoremTwo
+import Fermat.SixHundredNinetyOne.SecondCase
 import Fermat.Thirteen.Cyclotomic
 import Fermat.Thirteen.SevenFold
 import Fermat.ThirtySeven.ArithmeticCertificate
@@ -105,5 +106,11 @@ theorem holdsAt_fourHundredNinetyOne : HoldsAt 491 :=
 two-channel historical Vandiver assembly reused by the seven-fold ladder. -/
 theorem holdsAt_fiveHundredEightySeven : HoldsAt 587 :=
   FiveHundredEightySeven.holdsAt_fiveHundredEightySeven
+
+/-- Fermat's theorem for exponent six hundred ninety-one, through the
+two-channel Vandiver--Takagi--Furtwängler assembly reused by the
+seven-fold ladder. -/
+theorem holdsAt_sixHundredNinetyOne : HoldsAt 691 :=
+  SixHundredNinetyOne.holdsAt_sixHundredNinetyOne
 
 end Fermat

@@ -30,6 +30,7 @@ The completed public fixed-exponent results are:
 | 157 | `Fermat.holdsAt_oneHundredFiftySeven` | two-probe Vandiver descent |
 | 491 | `Fermat.holdsAt_fourHundredNinetyOne` | three-channel cyclic-certificate Vandiver descent |
 | 587 | `Fermat.holdsAt_fiveHundredEightySeven` | Vandiver--Sinnott; see provenance below |
+| 691 | `Fermat.holdsAt_sixHundredNinetyOne` | two-channel cyclic-certificate Vandiver descent |
 
 The exponent directories for `1381` and `1831` contain work-in-progress
 finite certificates.  Their presence does not by itself mean that a public
@@ -92,9 +93,10 @@ Each completed exponent has its own directory under `Fermat/`.
   Faulhaber certificate closed by the formal Kummer criterion.  Both then
   reuse the checked Lamé--Kummer descent.
 - `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`,
-  `Fermat/OneHundredFiftySeven/`, `Fermat/FourHundredNinetyOne/`, and
-  `Fermat/FiveHundredEightySeven/` contain the irregular-prime campaigns.
-  Their final public endpoints are the corresponding
+  `Fermat/OneHundredFiftySeven/`, `Fermat/FourHundredNinetyOne/`,
+  `Fermat/FiveHundredEightySeven/`, and `Fermat/SixHundredNinetyOne/`
+  contain the irregular-prime campaigns. Their final public endpoints are
+  the corresponding
   `VandiverHistoricalAssembly*.lean` modules.
 
 The irregular-prime directories use a deliberately layered layout:
@@ -128,6 +130,13 @@ irregular channels are exactly `{90, 92}`.  Its real circular-unit
 certificate compresses the `292 × 292` residue-symbol matrix into two
 length-293 cyclic phase vectors and a kernel-checked correlation identity,
 rather than storing 85,264 unrelated inverse entries.
+
+For `691`, the Sophie--Germain auxiliary prime and circular-unit modulus are
+both `q = 11057 = 16 * 691 + 1`.  The implication-form Bernoulli scan leaves
+only the two candidate channels `{12, 200}`, whose lifts are `8292` and
+`138200`.  The source `344 × 344` circular-unit matrix is reconstructed from
+345 cyclic phase values; its correlation inverse and determinant residue
+`36 mod 691` close the finite side of the two-channel Vandiver descent.
 
 ### Reusable irregular-prime machinery
 
@@ -183,19 +192,20 @@ decomposition independently of the final theorem statement.
   The original response curve still records depth `6` for those exponents,
   because their class-number-one route is the first sufficient branch.
 - `ThirtySeven.lean`, `FiftyNine.lean`, `SixtySeven.lean`,
-  `OneHundredFiftySeven.lean`, `FourHundredNinetyOne.lean`, and
-  `FiveHundredEightySeven.lean` reuse the completed classical-tool
+  `OneHundredFiftySeven.lean`, `FourHundredNinetyOne.lean`,
+  `FiveHundredEightySeven.lean`, and `SixHundredNinetyOne.lean` reuse the
+  completed classical-tool
   irregular-prime proofs.  Their measured outcome is tied by
   `ProofBacked.outcome_eq` to the corresponding existing
   `Fermat.HoldsAt n` theorem; the ladder does not maintain a shadow proof.
-  All six campaigns traverse the complete Vandiver--Takagi--Furtwängler
+  All seven campaigns traverse the complete Vandiver--Takagi--Furtwängler
   battery and record machine-readable exit depth `7`.
 - `HistoricalResponse.lean` exposes the proof-carrying response curve and
-  its six-point finite projection:
+  its seven-point finite projection:
 
   ```lean
   Fermat.Ladder.HistoricalResponse.responseData
-  -- [(37, 7), (59, 7), (67, 7), (157, 7), (491, 7), (587, 7)]
+  -- [(37, 7), (59, 7), (67, 7), (157, 7), (491, 7), (587, 7), (691, 7)]
   ```
 
 Code that only fits empirical curves can consume `responseData`.  Code that
@@ -233,8 +243,10 @@ lake build Fermat.ThirtySeven.VandiverHistoricalAssembly37
 lake build Fermat.FourHundredNinetyOne.VandiverHistoricalAssembly491
 lake build Fermat.FourHundredNinetyOne.SecondCase
 lake build Fermat.FiveHundredEightySeven.VandiverHistoricalAssembly587
+lake build Fermat.SixHundredNinetyOne.VandiverHistoricalAssembly691
 lake build Fermat.Ladder.FourHundredNinetyOne
 lake build Fermat.Ladder.FiveHundredEightySeven
+lake build Fermat.Ladder.SixHundredNinetyOne
 ```
 
 A quick consumer file can simply use:
@@ -245,10 +257,12 @@ import Fermat
 #check Fermat.holdsAt_thirtySeven
 #check Fermat.holdsAt_fourHundredNinetyOne
 #check Fermat.holdsAt_fiveHundredEightySeven
+#check Fermat.holdsAt_sixHundredNinetyOne
 #check Fermat.holdsAt_eleven_faulhaber
 #eval Fermat.Ladder.FaulhaberResponse.responseData
 #check Fermat.Ladder.FourHundredNinetyOne.proofBacked
 #check Fermat.Ladder.FiveHundredEightySeven.proofBacked
+#check Fermat.Ladder.SixHundredNinetyOne.proofBacked
 #check Fermat.Ladder.HistoricalResponse.campaignProofs
 #eval Fermat.Ladder.HistoricalResponse.responseData
 ```
