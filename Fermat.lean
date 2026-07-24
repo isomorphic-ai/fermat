@@ -94,4 +94,9 @@ two-probe finite loop and historical Vandiver descent reused by the ladder. -/
 theorem holdsAt_oneHundredFiftySeven : HoldsAt 157 :=
   OneHundredFiftySeven.holdsAt_oneHundredFiftySeven
 
+/-- Fermat's theorem for exponent five hundred eighty-seven, through the
+two-channel historical Vandiver assembly reused by the seven-fold ladder. -/
+theorem holdsAt_fiveHundredEightySeven : HoldsAt 587 :=
+  FiveHundredEightySeven.holdsAt_fiveHundredEightySeven
+
 end Fermat
