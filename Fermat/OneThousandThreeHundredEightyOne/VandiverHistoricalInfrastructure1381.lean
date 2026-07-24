@@ -1,0 +1,200 @@
+import Fermat.Irregular.VandiverGeneratorSupportPrime
+import Fermat.Irregular.VandiverHistoricalQuadraticPrime
+import Fermat.Irregular.VandiverRealNormalizationPrime
+import Fermat.Irregular.VandiverHistoricalStartPrime
+import Fermat.OneThousandThreeHundredEightyOne.VandiverData
+import Fermat.OneThousandThreeHundredEightyOne.VandiverLinearComparison1381
+
+/-!
+# Historical-descent infrastructure at exponent 1381
+
+This file instantiates the prime-generic parts of Vandiver's historical
+descent at `p = 1381`:
+
+* the initial state has exponent `690`;
+* generators with a root-of-unity conjugation quotient can be made real;
+* roots of real `1381`st-power units can be chosen real;
+* the four equation-(8) generators have the required product
+  coprimalities; and
+* a concrete finite elimination through equation (10a) implies the full
+  well-founded reduction and hence excludes the second case.
+
+Thus the remaining historical boundary at this exponent is exactly
+`RealPrincipalGeneratorElimination1381`: constructing the displayed
+conjugation-power data from each admissible historical state.  Compared
+with the completed `691` assembly, its finite payload consists of:
+
+1. the distinguished equation-(8a) ideal and generator;
+2. prepared conjugate equation-(8) pairs at exponents `±1` and `±2`;
+3. the depth-`(2 * m - 2) * 1381` coefficient comparison and its
+   depth-`2 * 1381 = 2762` truncation;
+4. the integral-ratio and negative-square calculation; and
+5. the remaining realness checks on trace and coefficient units.
+
+The quadratic elimination, generator coprimality, strict support
+bookkeeping, all real normalizations, successor-state construction, and
+well-founded descent are discharged by the imported generic theorems.
+-/
+
+namespace Fermat.OneThousandThreeHundredEightyOne.VandiverHistorical
+
+open scoped NumberField nonZeroDivisors
+
+open Fermat.Irregular.VandiverHistoricalDescent
+open Fermat.Irregular.VandiverHistoricalPrime
+open Fermat.Irregular.VandiverHistoricalSupportPrime
+
+noncomputable section
+
+variable {K : Type} [Field K] [NumberField K]
+  [IsCyclotomicExtension {1381} ℚ K]
+
+local instance : Fact (Nat.Prime 1381) := ⟨by norm_num⟩
+local instance : NumberField.IsCMField K :=
+  IsCyclotomicExtension.IsCMField (p := 1381) K (by norm_num)
+
+/-- The exact finite, source-faithful boundary remaining at exponent
+`1381`. -/
+abbrev RealPrincipalGeneratorElimination1381 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 1381) : Prop :=
+  RealPrincipalGeneratorElimination hζ
+
+/-- The inverse-of-two root-of-unity adjustment at `1381 = 2 * 690 + 1`. -/
+def realGeneratorNormalizer1381 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 1381) :
+    RealGeneratorNormalizer hζ :=
+  Fermat.Irregular.VandiverRealNormalizationPrime.realGeneratorNormalizer
+    (p := 1381) (r := 690) (by norm_num) hζ
+
+/-- Every `1381`st-power presentation of a real unit admits a real root. -/
+theorem realUnitRootNormalization1381 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 1381) :
+    RealUnitRootNormalization hζ :=
+  Fermat.Irregular.VandiverRealNormalizationPrime.realUnitRootNormalization
+    (p := 1381) (by norm_num) hζ
+
+/-- A primitive rational second-case solution starts the historical
+descent with exponent `m = 690`. -/
+theorem secondCaseStartsHistoricalDescent_1381 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 1381) :
+    SecondCaseStartsHistoricalDescent hζ (RealSourceAdmissible hζ) :=
+  Fermat.Irregular.VandiverHistoricalStartPrime.secondCaseStartsHistoricalDescent
+    (p := 1381) (r := 690) (by norm_num) (by norm_num) hζ
+
+omit [IsCyclotomicExtension {1381} ℚ K] in
+/-- The prime-independent support theorem specialized to the square of an
+equation-(8a) generator in the `1381` descent. -/
+theorem square_support_strict1381
+    {ξ ρ : 𝓞 K} {I Q : Ideal (𝓞 K)}
+    (hξ : ξ ≠ 0)
+    (hgenerator : I = Ideal.span {ρ})
+    (hfactor : Ideal.span {ξ} = I * Q)
+    (hQ : Q ≠ ⊤)
+    (hcop : IsCoprime I Q) :
+    primeIdealFactorSupport (ρ ^ 2) ⊂
+      primeIdealFactorSupport ξ :=
+  square_support_strict_of_generator
+    hξ hgenerator hfactor hQ hcop
+
+/-- The four conjugate equation-(8) generators give the three product
+coprimalities needed by the `1381` reduction data. -/
+theorem equationEight_generators_products_coprime1381
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 1381)
+    {ω θ r₁ rminus₁ r₂ rminus₂ r₀ : 𝓞 K}
+    (ε₁ εminus₁ ε₂ εminus₂ : (𝓞 K)ˣ) (d : 𝓞 K)
+    (hr₀ : r₀ ≠ 0)
+    (hωθ : IsCoprime ω θ)
+    (heq₁ :
+      ω + (hζ.unit' : 𝓞 K) * θ =
+        (1 - (hζ.unit' : 𝓞 K)) * ε₁ * r₁ ^ 1381)
+    (heqminus₁ :
+      ω + (hζ.unit'⁻¹ : (𝓞 K)ˣ) * θ =
+        (1 - (hζ.unit'⁻¹ : (𝓞 K)ˣ)) * εminus₁ *
+          rminus₁ ^ 1381)
+    (heq₂ :
+      ω + (hζ.unit' ^ 2 : (𝓞 K)ˣ) * θ =
+        (1 - (hζ.unit' ^ 2 : (𝓞 K)ˣ)) * ε₂ * r₂ ^ 1381)
+    (heqminus₂ :
+      ω + ((hζ.unit' ^ 2)⁻¹ : (𝓞 K)ˣ) * θ =
+        (1 - ((hζ.unit' ^ 2)⁻¹ : (𝓞 K)ˣ)) * εminus₂ *
+          rminus₂ ^ 1381)
+    (hzero : ω + θ = d * r₀ ^ 1381)
+    (hr₁π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ r₁)
+    (hrminus₁π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ rminus₁)
+    (hr₂π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ r₂)
+    (hrminus₂π : ¬ (hζ.unit' : 𝓞 K) - 1 ∣ rminus₂) :
+    r₀ ^ 2 ≠ 0 ∧
+      IsCoprime (r₁ * rminus₁) (r₂ * rminus₂) ∧
+      IsCoprime (r₂ * rminus₂) (r₀ ^ 2) ∧
+      IsCoprime (r₁ * rminus₁) (r₀ ^ 2) :=
+  Fermat.Irregular.VandiverGeneratorSupportPrime.equationEight_generators_products_coprime
+      (p := 1381) (by norm_num) hζ
+      ε₁ εminus₁ ε₂ εminus₂ d hr₀ hωθ
+      heq₁ heqminus₁ heq₂ heqminus₂ hzero
+      hr₁π hrminus₁π hr₂π hrminus₂π
+
+omit [NumberField K] [IsCyclotomicExtension {1381} ℚ K] in
+/-- Squaring the distinguished equation-(8a) factor gives its normalized
+quadratic equation at `1381 = 2 * 690 + 1`. -/
+lemma historicalEquationEightA_quadratic1381
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 1381)
+    (s : HistoricalState hζ)
+    (rhoZero : 𝓞 K) (etaZero : (𝓞 K)ˣ)
+    (hzero :
+      s.omega + s.theta =
+        etaZero * kappa hζ ^ (1381 * s.m - 690) *
+          rhoZero ^ 1381) :
+    s.omega ^ 2 + 2 * (s.omega * s.theta) + s.theta ^ 2 =
+      kappa hζ *
+        ((etaZero ^ 2 : (𝓞 K)ˣ) *
+          (kappa hζ ^ (2 * s.m - 1) * rhoZero ^ 2) ^ 1381) :=
+  Fermat.Irregular.VandiverHistoricalQuadraticPrime.historicalEquationEightA_quadratic
+      (p := 1381) (r := 690) (by norm_num)
+      hζ s.m s.one_lt_m s.omega s.theta rhoZero etaZero hzero
+
+/-- A concrete finite elimination at `1381` supplies the complete
+equations-(7)--(10) reduction relation. -/
+theorem equationsSevenToTenReduction_1381
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 1381)
+    (heliminate : RealPrincipalGeneratorElimination1381 hζ) :
+    EquationsSevenToTenReduction hζ (RealSourceAdmissible hζ) :=
+  equationsSevenToTenReduction hζ
+    (realGeneratorNormalizer1381 hζ)
+    (realUnitRootNormalization1381 hζ)
+    heliminate
+
+/-- The exact historical finite elimination and Kummer's deep unit
+conclusion already suffice to exclude the second case at `1381`. -/
+theorem secondCaseExcluded_1381_of_historical
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 1381)
+    (heliminate : RealPrincipalGeneratorElimination1381 hζ)
+    (hkummer :
+      Fermat.Irregular.VandiverCriterion.KummerUnitPowerConclusion K 1381) :
+    Fermat.SecondCaseExcluded 1381 :=
+  secondCaseExcluded_of_historical_descent
+    (p := 1381) (by norm_num) hζ
+    (RealSourceAdmissible hζ)
+    (secondCaseStartsHistoricalDescent_1381 hζ)
+    (equationsSevenToTenReduction_1381 hζ heliminate)
+    hkummer
+
+/-- Once the exact finite elimination is constructed, the checked
+Bernoulli cube condition and Vandiver's Lemma II exclude the second case
+at exponent `1381`. -/
+theorem secondCaseExcluded_1381_of_vandiverLemmaTwo
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 1381)
+    (heliminate : RealPrincipalGeneratorElimination1381 hζ)
+    (hLemmaTwo :
+      Fermat.Irregular.VandiverUnitLemma.VandiverLemmaTwo K 1381) :
+    Fermat.SecondCaseExcluded 1381 :=
+  secondCaseExcluded_of_vandiverLemmaTwo
+    (p := 1381) (by norm_num) hζ
+    (RealSourceAdmissible hζ)
+    (secondCaseStartsHistoricalDescent_1381 hζ)
+    (equationsSevenToTenReduction_1381 hζ heliminate)
+    hLemmaTwo
+    Fermat.OneThousandThreeHundredEightyOne.VandiverData.bernoulliCubeCondition_oneThousandThreeHundredEightyOne
+
+end
+
+end Fermat.OneThousandThreeHundredEightyOne.VandiverHistorical
