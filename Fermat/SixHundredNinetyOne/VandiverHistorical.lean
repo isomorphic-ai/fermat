@@ -44,13 +44,9 @@ local instance : NumberField.IsCMField K :=
 /-- The concrete source invariant: all three entries and the coefficient
 unit lie in the maximal real subfield. The remaining equation, nonvanishing,
 and pairwise-coprimality conditions are fields of `HistoricalState` itself. -/
-def RealSourceAdmissible {ζ : K} (hζ : IsPrimitiveRoot ζ 691) :
+abbrev RealSourceAdmissible {ζ : K} (hζ : IsPrimitiveRoot ζ 691) :
     HistoricalAdmissibility hζ :=
-  fun s ↦
-    NumberField.IsCMField.ringOfIntegersComplexConj K s.omega = s.omega ∧
-    NumberField.IsCMField.ringOfIntegersComplexConj K s.theta = s.theta ∧
-    NumberField.IsCMField.ringOfIntegersComplexConj K s.xi = s.xi ∧
-    NumberField.IsCMField.unitsComplexConj K s.eta = s.eta
+  Fermat.Irregular.VandiverHistoricalPrime.RealSourceAdmissible hζ
 
 /-- Vandiver's `κ = (1 - ζ)(1 - ζ⁻¹)` is fixed by complex
 conjugation. -/
@@ -2228,6 +2224,19 @@ lemma realAdjustedGenerator691_real
   rw [pow_two, ← mul_assoc]
   simp
 
+/-- The exponent-`691` implementation of the prime-generic real-generator
+normalization interface.  The finite inverse-of-two witness remains the
+explicit constant `346`. -/
+def realGeneratorNormalizer691 {ζ : K} (hζ : IsPrimitiveRoot ζ 691) :
+    RealGeneratorNormalizer hζ where
+  multiplier j := hζ.unit' ^ (realGeneratorHalfExponent691 * j)
+  power_eq := by
+    intro a j
+    exact realAdjustedGenerator691_pow_sixHundredNinetyOne hζ a j
+  real := by
+    intro a j ha
+    exact realAdjustedGenerator691_real hζ a j ha
+
 /-- If complex conjugation changes a principal generator by a power
 ζ ^ j, multiplying the generator by ζ ^ (346 * j) makes it real.
 
@@ -3300,8 +3309,8 @@ theorem equationTenB_commonKappa691
 
 /-- The actual finite support of the distinct prime-ideal factors of the
 principal ideal `(x)`. -/
-def primeIdealFactorSupport691 (x : 𝓞 K) : Finset (Ideal (𝓞 K)) :=
-  (UniqueFactorizationMonoid.normalizedFactors (Ideal.span {x})).toFinset
+abbrev primeIdealFactorSupport691 (x : 𝓞 K) : Finset (Ideal (𝓞 K)) :=
+  primeIdealFactorSupport x
 
 /-- The concrete output of Vandiver's ideal calculation through equation
 (10a), before applying Lemma 2. It records the weighted Fermat equation,
@@ -3311,32 +3320,9 @@ and the strict deletion of a prime-ideal factor from `ξ`.
 The theorem below turns exactly this data into the abstract
 `EquationSevenToTenData`; in particular, neither the Kummer conclusion nor
 the rescaling to equation (10b) is assumed here. -/
-structure WeightedReductionData691 {ζ : K} (hζ : IsPrimitiveRoot ζ 691)
-    (s : HistoricalState hζ) where
-  x : 𝓞 K
-  y : 𝓞 K
-  z : 𝓞 K
-  epsilon₁ : (𝓞 K)ˣ
-  epsilon₂ : (𝓞 K)ˣ
-  epsilon₃ : (𝓞 K)ˣ
-  rationalBase : ℤ
-  highCongruence :
-    ((1 : 𝓞 K) - hζ.unit') ^ 1382 ∣
-      (((epsilon₁ / epsilon₂ : (𝓞 K)ˣ) : 𝓞 K) -
-        (rationalBase : 𝓞 K) ^ 691)
-  weightedEquation :
-    epsilon₁ * x ^ 691 + epsilon₂ * y ^ 691 =
-      epsilon₃ * (kappa hζ ^ (2 * s.m - 1) * z) ^ 691
-  z_ne_zero : z ≠ 0
-  coprime_xy : IsCoprime x y
-  coprime_yz : IsCoprime y z
-  coprime_xz : IsCoprime x z
-  real_x : NumberField.IsCMField.ringOfIntegersComplexConj K x = x
-  real_y : NumberField.IsCMField.ringOfIntegersComplexConj K y = y
-  real_z : NumberField.IsCMField.ringOfIntegersComplexConj K z = z
-  real_eta : NumberField.IsCMField.unitsComplexConj K (epsilon₃ / epsilon₂) =
-    epsilon₃ / epsilon₂
-  factorSupport_strict : primeIdealFactorSupport691 z ⊂ primeIdealFactorSupport691 s.xi
+abbrev WeightedReductionData691 {ζ : K} (hζ : IsPrimitiveRoot ζ 691)
+    (s : HistoricalState hζ) :=
+  WeightedReductionData hζ s
 
 /-- The output of Vandiver's elimination before its three principal
 generators have been made literally real.
@@ -3346,41 +3332,9 @@ cyclotomic conjugation quotients of x, y, and z. The theorem
 weightedReductionData_of_conjugationPowers691 below performs the explicit
 ζ^(346*j) adjustment and proves that it preserves the weighted equation,
 coprimality, nonvanishing, and the strict prime-support descent. -/
-structure ConjugationPowerReductionData691 {ζ : K}
-    (hζ : IsPrimitiveRoot ζ 691) (s : HistoricalState hζ) where
-  x : 𝓞 K
-  y : 𝓞 K
-  z : 𝓞 K
-  epsilon₁ : (𝓞 K)ˣ
-  epsilon₂ : (𝓞 K)ˣ
-  epsilon₃ : (𝓞 K)ˣ
-  rationalBase : ℤ
-  highCongruence :
-    ((1 : 𝓞 K) - hζ.unit') ^ 1382 ∣
-      (((epsilon₁ / epsilon₂ : (𝓞 K)ˣ) : 𝓞 K) -
-        (rationalBase : 𝓞 K) ^ 691)
-  weightedEquation :
-    epsilon₁ * x ^ 691 + epsilon₂ * y ^ 691 =
-      epsilon₃ * (kappa hζ ^ (2 * s.m - 1) * z) ^ 691
-  z_ne_zero : z ≠ 0
-  coprime_xy : IsCoprime x y
-  coprime_yz : IsCoprime y z
-  coprime_xz : IsCoprime x z
-  conjugationExponent_x : ℕ
-  conjugationExponent_y : ℕ
-  conjugationExponent_z : ℕ
-  conjugation_x :
-    NumberField.IsCMField.ringOfIntegersComplexConj K x =
-      (hζ.unit' ^ conjugationExponent_x : (𝓞 K)ˣ) * x
-  conjugation_y :
-    NumberField.IsCMField.ringOfIntegersComplexConj K y =
-      (hζ.unit' ^ conjugationExponent_y : (𝓞 K)ˣ) * y
-  conjugation_z :
-    NumberField.IsCMField.ringOfIntegersComplexConj K z =
-      (hζ.unit' ^ conjugationExponent_z : (𝓞 K)ˣ) * z
-  real_eta : NumberField.IsCMField.unitsComplexConj K (epsilon₃ / epsilon₂) =
-    epsilon₃ / epsilon₂
-  factorSupport_strict : primeIdealFactorSupport691 z ⊂ primeIdealFactorSupport691 s.xi
+abbrev ConjugationPowerReductionData691 {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 691) (s : HistoricalState hζ) :=
+  ConjugationPowerReductionData hζ s
 
 /-- Normalize all three weighted generators by the explicit half powers of
 their conjugation quotients. Since those multipliers are 691st roots of
@@ -3388,126 +3342,9 @@ unity, every 691st power in Vandiver's equation is unchanged. -/
 noncomputable def weightedReductionData_of_conjugationPowers691
     {ζ : K} (hζ : IsPrimitiveRoot ζ 691) {s : HistoricalState hζ}
     (d : ConjugationPowerReductionData691 hζ s) :
-    WeightedReductionData691 hζ s where
-  x := realAdjustedGenerator691 hζ d.x d.conjugationExponent_x
-  y := realAdjustedGenerator691 hζ d.y d.conjugationExponent_y
-  z := realAdjustedGenerator691 hζ d.z d.conjugationExponent_z
-  epsilon₁ := d.epsilon₁
-  epsilon₂ := d.epsilon₂
-  epsilon₃ := d.epsilon₃
-  rationalBase := d.rationalBase
-  highCongruence := d.highCongruence
-  weightedEquation := by
-    simpa only [mul_pow, realAdjustedGenerator691_pow_sixHundredNinetyOne] using
-      d.weightedEquation
-  z_ne_zero := by
-    dsimp [realAdjustedGenerator691]
-    exact mul_ne_zero
-      (hζ.unit' ^ (realGeneratorHalfExponent691 *
-        d.conjugationExponent_z)).isUnit.ne_zero d.z_ne_zero
-  coprime_xy :=
-    (isCoprime_mul_unit_left_left
-      (hζ.unit' ^ (realGeneratorHalfExponent691 * d.conjugationExponent_x)).isUnit
-      d.x
-      (realAdjustedGenerator691 hζ d.y d.conjugationExponent_y)).mpr
-      ((isCoprime_mul_unit_left_right
-        (hζ.unit' ^ (realGeneratorHalfExponent691 * d.conjugationExponent_y)).isUnit
-        d.x d.y).mpr d.coprime_xy)
-  coprime_yz :=
-    (isCoprime_mul_unit_left_left
-      (hζ.unit' ^ (realGeneratorHalfExponent691 * d.conjugationExponent_y)).isUnit
-      d.y
-      (realAdjustedGenerator691 hζ d.z d.conjugationExponent_z)).mpr
-      ((isCoprime_mul_unit_left_right
-        (hζ.unit' ^ (realGeneratorHalfExponent691 * d.conjugationExponent_z)).isUnit
-        d.y d.z).mpr d.coprime_yz)
-  coprime_xz :=
-    (isCoprime_mul_unit_left_left
-      (hζ.unit' ^ (realGeneratorHalfExponent691 * d.conjugationExponent_x)).isUnit
-      d.x
-      (realAdjustedGenerator691 hζ d.z d.conjugationExponent_z)).mpr
-      ((isCoprime_mul_unit_left_right
-        (hζ.unit' ^ (realGeneratorHalfExponent691 * d.conjugationExponent_z)).isUnit
-        d.x d.z).mpr d.coprime_xz)
-  real_x :=
-    realAdjustedGenerator691_real hζ d.x d.conjugationExponent_x d.conjugation_x
-  real_y :=
-    realAdjustedGenerator691_real hζ d.y d.conjugationExponent_y d.conjugation_y
-  real_z :=
-    realAdjustedGenerator691_real hζ d.z d.conjugationExponent_z d.conjugation_z
-  real_eta := d.real_eta
-  factorSupport_strict := by
-    have hsupp :
-        primeIdealFactorSupport691
-            (realAdjustedGenerator691 hζ d.z d.conjugationExponent_z) =
-          primeIdealFactorSupport691 d.z := by
-      unfold primeIdealFactorSupport691
-      rw [Ideal.span_singleton_eq_span_singleton.mpr
-        (realAdjustedGenerator691_associated hζ d.z d.conjugationExponent_z)]
-    rw [hsupp]
-    exact d.factorSupport_strict
-
-private noncomputable def adjustedRoot691 {ζ : K}
-    (hζ : IsPrimitiveRoot ζ 691) (a v : (𝓞 K)ˣ)
-    (hv : a = v ^ 691) : (𝓞 K)ˣ :=
-  (exists_real_unit_root_691 hζ a v hv).choose
-
-private lemma adjustedRoot691_pow {ζ : K}
-    (hζ : IsPrimitiveRoot ζ 691) (a v : (𝓞 K)ˣ)
-    (hv : a = v ^ 691) :
-    a = adjustedRoot691 hζ a v hv ^ 691 :=
-  (exists_real_unit_root_691 hζ a v hv).choose_spec.1
-
-private lemma adjustedRoot691_real {ζ : K}
-    (hζ : IsPrimitiveRoot ζ 691) (a v : (𝓞 K)ˣ)
-    (hv : a = v ^ 691) :
-    NumberField.IsCMField.unitsComplexConj K (adjustedRoot691 hζ a v hv) =
-      adjustedRoot691 hζ a v hv :=
-  (exists_real_unit_root_691 hζ a v hv).choose_spec.2
-
-private noncomputable def weightedNextState691 {ζ : K}
-    (hζ : IsPrimitiveRoot ζ 691) {s : HistoricalState hζ}
-    (d : WeightedReductionData691 hζ s)
-    (v : (𝓞 K)ˣ) (hv : d.epsilon₁ / d.epsilon₂ = v ^ 691) :
-    HistoricalState hζ :=
-  let w := adjustedRoot691 hζ (d.epsilon₁ / d.epsilon₂) v hv
-  { omega := w * d.x
-    theta := d.y
-    xi := d.z
-    eta := d.epsilon₃ / d.epsilon₂
-    m := 2 * s.m - 1
-    one_lt_m := by
-      have hm := s.one_lt_m
-      omega
-    xi_ne_zero := d.z_ne_zero
-    coprime_omega_theta :=
-      (isCoprime_mul_unit_left_left w.isUnit d.x d.y).mpr d.coprime_xy
-    coprime_theta_xi := d.coprime_yz
-    coprime_omega_xi :=
-      (isCoprime_mul_unit_left_left w.isUnit d.x d.z).mpr d.coprime_xz
-    equation := by
-      rw [mul_pow, ← Units.val_pow_eq_pow_val,
-        ← adjustedRoot691_pow hζ (d.epsilon₁ / d.epsilon₂) v hv,
-        ← mul_right_inj' d.epsilon₂.isUnit.ne_zero, mul_add, ← mul_assoc,
-        ← Units.val_mul, mul_div_cancel, ← mul_assoc,
-        ← Units.val_mul, mul_div_cancel]
-      exact d.weightedEquation }
-
-private lemma weightedNextState691_admissible {ζ : K}
-    (hζ : IsPrimitiveRoot ζ 691) {s : HistoricalState hζ}
-    (d : WeightedReductionData691 hζ s)
-    (v : (𝓞 K)ˣ) (hv : d.epsilon₁ / d.epsilon₂ = v ^ 691) :
-    RealSourceAdmissible hζ (weightedNextState691 hζ d v hv) := by
-  let w := adjustedRoot691 hζ (d.epsilon₁ / d.epsilon₂) v hv
-  have hwUnits : NumberField.IsCMField.unitsComplexConj K w = w :=
-    adjustedRoot691_real hζ (d.epsilon₁ / d.epsilon₂) v hv
-  have hw : NumberField.IsCMField.ringOfIntegersComplexConj K (w : 𝓞 K) = w := by
-    have := congrArg ((↑) : (𝓞 K)ˣ → 𝓞 K) hwUnits
-    exact this
-  refine ⟨?_, d.real_y, d.real_z, d.real_eta⟩
-  change NumberField.IsCMField.ringOfIntegersComplexConj K
-      ((w : 𝓞 K) * d.x) = (w : 𝓞 K) * d.x
-  rw [map_mul, hw, d.real_x]
+    WeightedReductionData691 hζ s :=
+  weightedReductionData_of_conjugationPowers hζ
+    (realGeneratorNormalizer691 hζ) d
 
 /-- Equations (10) and (10a) imply the abstract historical reduction data.
 The proof performs the nontrivial source step after Lemma 2: it normalizes a
@@ -3516,16 +3353,9 @@ second coefficient unit, and verifies every invariant of equation (10b). -/
 noncomputable def equationSevenToTenData_of_weighted691 {ζ : K}
     (hζ : IsPrimitiveRoot ζ 691) {s : HistoricalState hζ}
     (d : WeightedReductionData691 hζ s) :
-    EquationSevenToTenData hζ (RealSourceAdmissible hζ) s where
-  quotientUnit := d.epsilon₁ / d.epsilon₂
-  rationalBase := d.rationalBase
-  highCongruence := d.highCongruence
-  nextState := weightedNextState691 hζ d
-  next_admissible := weightedNextState691_admissible hζ d
-  next_exponent := by intros; rfl
-  factorCount_decreases := by
-    intro v hv
-    exact Finset.card_lt_card d.factorSupport_strict
+    EquationSevenToTenData hζ (RealSourceAdmissible hζ) s :=
+  equationSevenToTenData_of_weighted hζ
+    (exists_real_unit_root_691 hζ) d
 
 /-! ## The remaining real-ideal construction seam -/
 
@@ -3551,10 +3381,9 @@ congruence, weighted equation, exact conjugation quotients, coprimality, and
 strict support inclusion are concrete fields.  Making the generators real,
 preserving their equation and supports, the Kummer step, equation (10b),
 and the infinite descent are proved outside this hypothesis. -/
-def RealPrincipalGeneratorElimination691 {ζ : K}
+abbrev RealPrincipalGeneratorElimination691 {ζ : K}
     (hζ : IsPrimitiveRoot ζ 691) : Prop :=
-  ∀ s : HistoricalState hζ, RealSourceAdmissible hζ s →
-    Nonempty (ConjugationPowerReductionData691 hζ s)
+  RealPrincipalGeneratorElimination hζ
 
 /-- The concrete real-generator elimination supplies the full historical
 reduction relation required by the abstract well-founded descent. -/
@@ -3562,10 +3391,10 @@ theorem equationsSevenToTenReduction_691
     {ζ : K} (hζ : IsPrimitiveRoot ζ 691)
     (heliminate : RealPrincipalGeneratorElimination691 hζ) :
     EquationsSevenToTenReduction hζ (RealSourceAdmissible hζ) := by
-  intro s hs
-  exact (heliminate s hs).map fun d ↦
-    equationSevenToTenData_of_weighted691 hζ
-      (weightedReductionData_of_conjugationPowers691 hζ d)
+  exact equationsSevenToTenReduction hζ
+    (realGeneratorNormalizer691 hζ)
+    (exists_real_unit_root_691 hζ)
+    heliminate
 
 /-- The exponent-`691` historical second case, conditional only on the exact
 deep unit conclusion and the remaining source-faithful construction through
