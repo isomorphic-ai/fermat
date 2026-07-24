@@ -1,4 +1,5 @@
 import Fermat.Irregular.VandiverHistoricalDescent
+import Fermat.Irregular.VandiverHistoricalPrime
 import Fermat.Irregular.VandiverLemmaOne
 import Fermat.Irregular.CircularUnitIndex
 import Fermat.Irregular.CyclotomicDiscriminantPrime
@@ -26,6 +27,7 @@ namespace Fermat.SixHundredNinetyOne.VandiverHistorical
 open scoped NumberField nonZeroDivisors
 
 open Fermat.Irregular.VandiverHistoricalDescent
+open Fermat.Irregular.VandiverHistoricalPrime
 open Fermat.Irregular.VandiverCriterion
 open Fermat.Irregular.VandiverLemmaOne
 
@@ -1009,8 +1011,8 @@ theorem realFractionalIdeal_isPrincipal_of_pow691
       ((I ^ 691 : FractionalIdeal (𝓞 K⁺)⁰ K⁺) :
         Submodule (𝓞 K⁺) K⁺)) :
     Submodule.IsPrincipal (I : Submodule (𝓞 K⁺) K⁺) := by
-  exact fractionalIdeal_isPrincipal_of_pow_of_not_dvd_classNumber
-    (by norm_num) (Fermat.SixHundredNinetyOne.SinnottKummer.not_dvd_classNumber hzeta)
+  exact realFractionalIdeal_isPrincipal_of_pow
+    (Fermat.SixHundredNinetyOne.SinnottKummer.not_dvd_classNumber hzeta)
     I hpow
 
 set_option maxRecDepth 50000 in
@@ -1024,9 +1026,9 @@ theorem exists_real_unit_mul_pow_generator691
     (hpow : I ^ 691 = Ideal.span {a}) :
     ∃ (ρ : 𝓞 K⁺) (ε : (𝓞 K⁺)ˣ),
       I = Ideal.span {ρ} ∧ a = ε * ρ ^ 691 := by
-  exact exists_unit_mul_pow_eq_of_ideal_pow_eq_span
-    (F := K⁺) (p := 691) (by norm_num)
-    (Fermat.SixHundredNinetyOne.SinnottKummer.not_dvd_classNumber hzeta) I a hpow
+  exact exists_real_unit_mul_pow_generator
+    (Fermat.SixHundredNinetyOne.SinnottKummer.not_dvd_classNumber hzeta)
+    I a hpow
 
 set_option maxRecDepth 50000 in
 /-- Vandiver's real-ideal step in the relative-norm form naturally
@@ -1048,15 +1050,9 @@ theorem exists_realGenerator_of_relativeNorm691
     ∃ (ρ : 𝓞 K⁺) (ε : (𝓞 K⁺)ˣ),
       Ideal.relNorm (𝓞 K⁺) J = Ideal.span {ρ} ∧
       Algebra.intNorm (𝓞 K⁺) (𝓞 K) a = ε * ρ ^ 691 := by
-  apply exists_real_unit_mul_pow_generator691 hzeta
-    (Ideal.relNorm (𝓞 K⁺) J) (Algebra.intNorm (𝓞 K⁺) (𝓞 K) a)
-  calc
-    Ideal.relNorm (𝓞 K⁺) J ^ 691 =
-        Ideal.relNorm (𝓞 K⁺) (J ^ 691) := by
-      rw [map_pow]
-    _ = Ideal.relNorm (𝓞 K⁺) (Ideal.span {a}) := by rw [hpow]
-    _ = Ideal.span {Algebra.intNorm (𝓞 K⁺) (𝓞 K) a} :=
-      Ideal.relNorm_singleton (𝓞 K⁺) a
+  exact exists_realGenerator_of_relativeNorm
+    (Fermat.SixHundredNinetyOne.SinnottKummer.not_dvd_classNumber hzeta)
+    J a hpow
 
 /-- In the quadratic CM extension, the integral norm of a cyclotomic
 integer is the product of that integer and its complex conjugate.
@@ -1067,25 +1063,7 @@ and `complexConj`. -/
 theorem algebraMap_intNorm_eq_mul_conj691 (a : 𝓞 K) :
     algebraMap (𝓞 K⁺) (𝓞 K) (Algebra.intNorm (𝓞 K⁺) (𝓞 K) a) =
       a * NumberField.IsCMField.ringOfIntegersComplexConj K a := by
-  classical
-  apply NumberField.RingOfIntegers.ext
-  change algebraMap K⁺ K
-      (algebraMap (𝓞 K⁺) K⁺ (Algebra.intNorm (𝓞 K⁺) (𝓞 K) a)) =
-    (a : K) * NumberField.IsCMField.complexConj K (a : K)
-  rw [Algebra.algebraMap_intNorm (A := 𝓞 K⁺) (K := K⁺) (L := K)
-    (B := 𝓞 K)]
-  rw [Algebra.norm_eq_prod_automorphisms]
-  let c : Gal(K/K⁺) := NumberField.IsCMField.complexConj K
-  have hc : (1 : Gal(K/K⁺)) ≠ c :=
-    (NumberField.IsCMField.complexConj_ne_one K).symm
-  have hcard : Fintype.card Gal(K/K⁺) = 2 := by
-    rw [← Nat.card_eq_fintype_card, IsGalois.card_aut_eq_finrank,
-      Algebra.IsQuadraticExtension.finrank_eq_two K⁺ K]
-  have hpair : ({1, c} : Finset (Gal(K/K⁺))) = Finset.univ := by
-    apply Finset.eq_of_subset_of_card_le (Finset.subset_univ _)
-    simp [hcard, hc]
-  rw [← hpair]
-  simp [c, hc]
+  exact algebraMap_intNorm_eq_mul_conj (p := 691) a
 
 set_option maxRecDepth 50000 in
 /-- Vandiver's equation (7d), derived directly from the ideal-power
@@ -1110,13 +1088,9 @@ theorem exists_equationSevenD_of_idealPower691
       a * NumberField.IsCMField.ringOfIntegersComplexConj K a =
         algebraMap (𝓞 K⁺) (𝓞 K) (ε : 𝓞 K⁺) *
           algebraMap (𝓞 K⁺) (𝓞 K) ρ ^ 691 := by
-  obtain ⟨ρ, ε, hI, ha⟩ :=
-    exists_realGenerator_of_relativeNorm691 hzeta J a hpow
-  refine ⟨ρ, ε, hI,
-    (NumberField.IsCMField.ringOfIntegersComplexConj K).commutes ρ, ?_⟩
-  rw [← algebraMap_intNorm_eq_mul_conj691]
-  simpa only [map_mul, map_pow] using
-    congrArg (algebraMap (𝓞 K⁺) (𝓞 K)) ha
+  exact exists_equationSevenD_of_idealPower
+    (Fermat.SixHundredNinetyOne.SinnottKummer.not_dvd_classNumber hzeta)
+    J a hpow
 
 set_option maxRecDepth 50000 in
 omit [IsCyclotomicExtension {691} ℚ K] in
@@ -1135,23 +1109,8 @@ theorem fractionalIdeal_isPrincipal_of_vandiverSeven691
     (hsevenD : Submodule.IsPrincipal
       ((I * J : FractionalIdeal A⁰ L) : Submodule A L)) :
     Submodule.IsPrincipal (I : Submodule A L) := by
-  have hJ689 : Submodule.IsPrincipal
-      ((J ^ 689 : FractionalIdeal A⁰ L) : Submodule A L) := by
-    have hquot := fractionalIdeal_isPrincipal_div hsevenA hsevenD
-    have heq : (I * J ^ 690) / (I * J) = J ^ 689 := by
-      apply (div_eq_iff (mul_ne_zero hI0 hJ0)).mpr
-      rw [show J ^ 690 = J ^ 689 * J by rw [← pow_succ]]
-      ac_rfl
-    rw [← heq]
-    exact hquot
-  have hJ : Submodule.IsPrincipal (J : Submodule A L) :=
-    fractionalIdeal_isPrincipal_of_coprime_powers (by norm_num) J hJ689 hJ691
-  have hquot := fractionalIdeal_isPrincipal_div hsevenD hJ
-  have heq : (I * J) / J = I := by
-    apply (div_eq_iff hJ0).mpr
-    rfl
-  rw [heq] at hquot
-  exact hquot
+  exact fractionalIdeal_isPrincipal_of_vandiverSeven
+    (p := 691) (by norm_num) hI0 hJ0 hJ691 hsevenA hsevenD
 
 set_option maxRecDepth 50000 in
 omit [IsCyclotomicExtension {691} ℚ K] in
@@ -1174,47 +1133,9 @@ theorem exists_equationEight_of_sevenASevenD691
     (hsevenD : I * J = Ideal.span {s}) :
     ∃ (ρ : 𝓞 K) (η : (𝓞 K)ˣ),
       I = Ideal.span {ρ} ∧ a = η * ρ ^ 691 := by
-  let IF : FractionalIdeal (𝓞 K)⁰ K := I
-  let JF : FractionalIdeal (𝓞 K)⁰ K := J
-  have hIF0 : IF ≠ 0 := by
-    dsimp [IF]
-    intro h
-    rw [FractionalIdeal.coeIdeal_eq_zero] at h
-    exact hI0 h
-  have hJF0 : JF ≠ 0 := by
-    dsimp [JF]
-    intro h
-    rw [FractionalIdeal.coeIdeal_eq_zero] at h
-    exact hJ0 h
-  have hJ691 : Submodule.IsPrincipal
-      ((JF ^ 691 : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
-    rw [FractionalIdeal.isPrincipal_iff]
-    refine ⟨(b : K), ?_⟩
-    dsimp [JF]
-    rw [← FractionalIdeal.coeIdeal_span_singleton, ← hJpow,
-      FractionalIdeal.coeIdeal_pow]
-  have h7a : Submodule.IsPrincipal
-      ((IF * JF ^ 690 : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
-    rw [FractionalIdeal.isPrincipal_iff]
-    refine ⟨(r : K), ?_⟩
-    dsimp [IF, JF]
-    rw [← FractionalIdeal.coeIdeal_span_singleton, ← hsevenA,
-      FractionalIdeal.coeIdeal_mul, FractionalIdeal.coeIdeal_pow]
-  have h7d : Submodule.IsPrincipal
-      ((IF * JF : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
-    rw [FractionalIdeal.isPrincipal_iff]
-    refine ⟨(s : K), ?_⟩
-    dsimp [IF, JF]
-    rw [← FractionalIdeal.coeIdeal_span_singleton, ← hsevenD,
-      FractionalIdeal.coeIdeal_mul]
-  have hIF : Submodule.IsPrincipal (IF : Submodule (𝓞 K) K) :=
-    fractionalIdeal_isPrincipal_of_vandiverSeven691 hIF0 hJF0 hJ691 h7a h7d
-  have hIF' : Submodule.IsPrincipal
-      ((I : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) := by
-    simpa only [IF] using hIF
-  have hI : Submodule.IsPrincipal (I : Ideal (𝓞 K)) :=
-    (IsFractionRing.coeSubmodule_isPrincipal (𝓞 K) K).mp hIF'
-  exact exists_unit_mul_pow_eq_of_isPrincipal_ideal I a hI hIpow
+  exact exists_equationEight_of_sevenASevenD
+    (p := 691) (by norm_num) I J a b r s
+    hI0 hJ0 hIpow hJpow hsevenA hsevenD
 
 set_option maxRecDepth 50000 in
 /-- Source-faithful assembly of Vandiver's Lemma 1, equations (7a) and
@@ -1241,11 +1162,9 @@ theorem exists_equationEight_of_lemmaOneSevenD691
     (hsevenD : I * J = Ideal.span {s}) :
     ∃ (ρ : 𝓞 K) (η : (𝓞 K)ˣ),
       I = Ideal.span {ρ} ∧ a = η * ρ ^ 691 := by
-  obtain ⟨r, hsevenA⟩ :=
-    Fermat.Irregular.VandiverLemmaOne.exists_equationSevenA_generator
-      hlemma hζ I J a b hIpow hJpow (by simpa using hprimary)
-  exact exists_equationEight_of_sevenASevenD691
-    I J a b r s hI0 hJ0 hIpow hJpow hsevenA hsevenD
+  exact exists_equationEight_of_lemmaOneSevenD
+    (p := 691) (by norm_num) hlemma hζ I J a b s
+    hI0 hJ0 hIpow hJpow hprimary hsevenD
 
 set_option maxRecDepth 50000 in
 /-- Unit-normalized assembly of Vandiver's equations (7a), (7d), and (8).
@@ -1269,11 +1188,9 @@ theorem exists_equationEight_of_lemmaOneSevenDUnit691
     (hsevenD : I * J = Ideal.span {s}) :
     ∃ (ρ : 𝓞 K) (η : (𝓞 K)ˣ),
       I = Ideal.span {ρ} ∧ a = η * ρ ^ 691 := by
-  obtain ⟨r, hsevenA⟩ :=
-    Fermat.Irregular.VandiverLemmaOne.exists_equationSevenA_generator_of_unit
-      hlemma hζ u I J a b hIpow hJpow (by simpa using hprimary)
-  exact exists_equationEight_of_sevenASevenD691
-    I J a b r s hI0 hJ0 hIpow hJpow hsevenA hsevenD
+  exact exists_equationEight_of_lemmaOneSevenDUnit
+    (p := 691) (by norm_num) hlemma hζ u I J a b s
+    hI0 hJ0 hIpow hJpow hprimary hsevenD
 
 set_option maxRecDepth 50000 in
 /-- Vandiver's equation (7d) for the literal historical factor pair.
@@ -1610,27 +1527,8 @@ lemma equationEight_pair_difference691
       (1 - (t⁻¹ : (𝓞 K)ˣ)) * eta * rhominus ^ 691) :
     (1 - (t : 𝓞 K)) * eta * (rhoa ^ 691 - rhominus ^ 691) =
       (1 + (t : 𝓞 K)) * (omega + theta) := by
-  have htinv : (t : 𝓞 K) * (t⁻¹ : (𝓞 K)ˣ) = 1 := by
-    rw [← Units.val_mul]
-    simp
-  have hcoef : (1 - (t : 𝓞 K)) =
-      -(t : 𝓞 K) * (1 - (t⁻¹ : (𝓞 K)ˣ)) := by
-    linear_combination -htinv
-  have hfirst : (1 - (t : 𝓞 K)) * eta * rhoa ^ 691 =
-      omega + (t : 𝓞 K) * theta := ha.symm
-  have hsecond : (1 - (t : 𝓞 K)) * eta * rhominus ^ 691 =
-      -((t : 𝓞 K) * omega + theta) := by
-    rw [hcoef]
-    calc
-      (-(t : 𝓞 K) * (1 - (t⁻¹ : (𝓞 K)ˣ))) * eta * rhominus ^ 691 =
-          -(t : 𝓞 K) *
-            ((1 - (t⁻¹ : (𝓞 K)ˣ)) * eta * rhominus ^ 691) := by ring
-      _ = -(t : 𝓞 K) *
-            (omega + (t⁻¹ : (𝓞 K)ˣ) * theta) := by rw [hminus]
-      _ = -((t : 𝓞 K) * omega + theta) := by
-        linear_combination -theta * htinv
-  rw [mul_sub, hfirst, hsecond]
-  ring
+  exact equationEight_pair_difference
+    691 t eta omega theta rhoa rhominus ha hminus
 
 omit [IsCyclotomicExtension {691} ℚ K] in
 /-- Equations (8) at `a,-a`, together with (8a), give the exact difference
@@ -3289,8 +3187,8 @@ lemma equationTenA_quadraticElimination691
     (hzero : ω ^ 2 + 2 * (ω * θ) + θ ^ 2 = Uzero * Xzero) :
     (2 - B) * (Ua * Xa ^ 691) - (2 - A) * (Ub * Xb ^ 691) =
       (A - B) * (Uzero * Xzero) := by
-  rw [← ha, ← hb, ← hzero]
-  ring
+  exact equationTenA_quadraticElimination
+    691 ω θ A B Ua Ub Uzero Xa Xb Xzero ha hb hzero
 
 omit [IsCyclotomicExtension {691} ℚ K] in
 /-- Equation (10a) at the concrete indices `a = 1`, `b = 2`, after
@@ -3689,10 +3587,13 @@ theorem secondCaseExcluded_691_of_vandiverLemmaTwo
     (heliminate : RealPrincipalGeneratorElimination691 hζ)
     (hLemmaTwo : Fermat.Irregular.VandiverUnitLemma.VandiverLemmaTwo K 691) :
     Fermat.SecondCaseExcluded 691 :=
-  secondCaseExcluded_691_of_historical hζ heliminate
-    (Fermat.Irregular.VandiverUnitLemma.kummerUnitPowerConclusion_of_lemmaTwo
-      (by norm_num) hLemmaTwo
-      Fermat.SixHundredNinetyOne.VandiverData.bernoulliCubeCondition_sixHundredNinetyOne)
+  secondCaseExcluded_of_vandiverLemmaTwo
+    (p := 691) (by norm_num) hζ
+    (RealSourceAdmissible hζ)
+    (secondCaseStartsHistoricalDescent_691 hζ)
+    (equationsSevenToTenReduction_691 hζ heliminate)
+    hLemmaTwo
+    Fermat.SixHundredNinetyOne.VandiverData.bernoulliCubeCondition_sixHundredNinetyOne
 
 end
 
