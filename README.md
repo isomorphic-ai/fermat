@@ -31,9 +31,10 @@ The completed public fixed-exponent results are:
 | 491 | `Fermat.holdsAt_fourHundredNinetyOne` | three-channel cyclic-certificate Vandiver descent |
 | 587 | `Fermat.holdsAt_fiveHundredEightySeven` | Vandiver--Sinnott; see provenance below |
 | 691 | `Fermat.holdsAt_sixHundredNinetyOne` | two-channel cyclic-certificate Vandiver descent |
+| 1381 | `Fermat.holdsAt_oneThousandThreeHundredEightyOne` | one-channel cyclic-certificate Vandiver descent |
 
-The exponent directories for `1381` and `1831` contain work-in-progress
-finite certificates.  Their presence does not by itself mean that a public
+The exponent directory for `1831` contains work-in-progress finite
+certificates.  Its presence does not by itself mean that a public
 `Fermat.HoldsAt n` theorem has been completed.
 
 ### Provenance and method labels
@@ -94,9 +95,9 @@ Each completed exponent has its own directory under `Fermat/`.
   reuse the checked Lamé--Kummer descent.
 - `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`,
   `Fermat/OneHundredFiftySeven/`, `Fermat/FourHundredNinetyOne/`,
-  `Fermat/FiveHundredEightySeven/`, and `Fermat/SixHundredNinetyOne/`
-  contain the irregular-prime campaigns. Their final public endpoints are
-  the corresponding
+  `Fermat/FiveHundredEightySeven/`, `Fermat/SixHundredNinetyOne/`, and
+  `Fermat/OneThousandThreeHundredEightyOne/` contain the completed
+  irregular-prime campaigns. Their final public endpoints are the corresponding
   `VandiverHistoricalAssembly*.lean` modules.
 
 The irregular-prime directories use a deliberately layered layout:
@@ -137,6 +138,13 @@ only the two candidate channels `{12, 200}`, whose lifts are `8292` and
 `138200`.  The source `344 × 344` circular-unit matrix is reconstructed from
 345 cyclic phase values; its correlation inverse and determinant residue
 `36 mod 691` close the finite side of the two-channel Vandiver descent.
+
+For `1381`, the auxiliary prime and circular-unit modulus are
+`q = 38669 = 28 * 1381 + 1`.  The complete Bernoulli scan leaves the single
+irregular channel `{266}`, with lifted index `367346`.  Its source
+`689 × 689` circular-unit matrix is certified by 690 cyclic correlations.
+Those finite facts feed the reusable diagonal-unit and Lemma-II layers, then
+the prime-generic Takagi--Furtwängler and historical Vandiver assembly.
 
 ### Reusable irregular-prime machinery
 
@@ -244,6 +252,7 @@ lake build Fermat.FourHundredNinetyOne.VandiverHistoricalAssembly491
 lake build Fermat.FourHundredNinetyOne.SecondCase
 lake build Fermat.FiveHundredEightySeven.VandiverHistoricalAssembly587
 lake build Fermat.SixHundredNinetyOne.VandiverHistoricalAssembly691
+lake build Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
 lake build Fermat.Ladder.FourHundredNinetyOne
 lake build Fermat.Ladder.FiveHundredEightySeven
 lake build Fermat.Ladder.SixHundredNinetyOne
@@ -258,6 +267,7 @@ import Fermat
 #check Fermat.holdsAt_fourHundredNinetyOne
 #check Fermat.holdsAt_fiveHundredEightySeven
 #check Fermat.holdsAt_sixHundredNinetyOne
+#check Fermat.holdsAt_oneThousandThreeHundredEightyOne
 #check Fermat.holdsAt_eleven_faulhaber
 #eval Fermat.Ladder.FaulhaberResponse.responseData
 #check Fermat.Ladder.FourHundredNinetyOne.proofBacked
