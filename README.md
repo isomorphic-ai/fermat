@@ -31,6 +31,7 @@ The completed public fixed-exponent results are:
 | 491 | `Fermat.holdsAt_fourHundredNinetyOne` | three-channel cyclic-certificate Vandiver descent |
 | 587 | `Fermat.holdsAt_fiveHundredEightySeven` | Vandiver--Sinnott; see provenance below |
 | 691 | `Fermat.holdsAt_sixHundredNinetyOne` | two-channel cyclic-certificate Vandiver descent |
+| 1051 | `Fermat.holdsAt_oneThousandFiftyOne` | complete Bernoulli regularity scan |
 | 1381 | `Fermat.holdsAt_oneThousandThreeHundredEightyOne` | one-channel cyclic-certificate Vandiver descent |
 
 The exponent directory for `1831` contains work-in-progress finite
@@ -93,6 +94,9 @@ Each completed exponent has its own directory under `Fermat/`.
   routes: the class-number-one certificate and a direct `SevenFold.lean`
   Faulhaber certificate closed by the formal Kummer criterion.  Both then
   reuse the checked Lamé--Kummer descent.
+- `Fermat/OneThousandFiftyOne/` contains a complete 524-index regularity
+  scan.  It is both a public fixed-exponent proof and the regular anchor used
+  by the exponent-12613 campaign.
 - `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`,
   `Fermat/OneHundredFiftySeven/`, `Fermat/FourHundredNinetyOne/`,
   `Fermat/FiveHundredEightySeven/`, `Fermat/SixHundredNinetyOne/`, and
@@ -252,6 +256,7 @@ lake build Fermat.FourHundredNinetyOne.VandiverHistoricalAssembly491
 lake build Fermat.FourHundredNinetyOne.SecondCase
 lake build Fermat.FiveHundredEightySeven.VandiverHistoricalAssembly587
 lake build Fermat.SixHundredNinetyOne.VandiverHistoricalAssembly691
+lake build Fermat.OneThousandFiftyOne.Regularity
 lake build Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
 lake build Fermat.Ladder.FourHundredNinetyOne
 lake build Fermat.Ladder.FiveHundredEightySeven
@@ -267,6 +272,7 @@ import Fermat
 #check Fermat.holdsAt_fourHundredNinetyOne
 #check Fermat.holdsAt_fiveHundredEightySeven
 #check Fermat.holdsAt_sixHundredNinetyOne
+#check Fermat.holdsAt_oneThousandFiftyOne
 #check Fermat.holdsAt_oneThousandThreeHundredEightyOne
 #check Fermat.holdsAt_eleven_faulhaber
 #eval Fermat.Ladder.FaulhaberResponse.responseData
