@@ -3,6 +3,7 @@ import Fermat.Irregular.VandiverEquationEightAGeneratorPrime
 import Fermat.Irregular.VandiverHistoricalQuadraticPrime
 import Fermat.Irregular.VandiverRealNormalizationPrime
 import Fermat.Irregular.VandiverHistoricalStartPrime
+import Fermat.Irregular.VandiverHistoricalStatePrime
 import Fermat.OneThousandThreeHundredEightyOne.VandiverData
 import Fermat.OneThousandThreeHundredEightyOne.VandiverLinearComparison1381
 
@@ -81,6 +82,39 @@ theorem secondCaseStartsHistoricalDescent_1381 {ζ : K}
     SecondCaseStartsHistoricalDescent hζ (RealSourceAdmissible hζ) :=
   Fermat.Irregular.VandiverHistoricalStartPrime.secondCaseStartsHistoricalDescent
     (p := 1381) (r := 690) (by norm_num) (by norm_num) hζ
+
+/-- The real factor `ω + θ` carries the full source depth
+`(2*m - 1)*1381 + 1`; this is the prime-generic distinguished-root
+calculation specialized to exponent `1381`. -/
+theorem historicalState_omega_add_theta_fullHighDivisibility1381
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 1381)
+    (s : HistoricalState hζ) (hs : RealSourceAdmissible hζ s) :
+    ((hζ.unit' : 𝓞 K) - 1) ^
+        ((2 * s.m - 1) * 1381 + 1) ∣
+      s.omega + s.theta :=
+  Fermat.Irregular.VandiverHistoricalStatePrime.historicalState_omega_add_theta_fullHighDivisibility
+    (p := 1381) (by norm_num) hζ s hs
+
+/-- End-to-end historical-state form of the depth-2762 coefficient
+comparison.  Unlike the low-level linear wrapper, this theorem derives its
+high-divisibility premise from real admissibility. -/
+theorem historicalEquationEight_one_two_coefficients_close2762_of_real
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 1381)
+    (s : HistoricalState hζ) (hs : RealSourceAdmissible hζ s)
+    (r₁ r₂ : 𝓞 K) (η₁ η₂ : (𝓞 K)ˣ)
+    (heq₁ :
+      s.omega + (hζ.unit' : 𝓞 K) * s.theta =
+        (1 - (hζ.unit' : 𝓞 K)) * η₁ * r₁ ^ 1381)
+    (heq₂ :
+      s.omega + (hζ.unit' ^ 2 : (𝓞 K)ˣ) * s.theta =
+        (1 - (hζ.unit' ^ 2 : (𝓞 K)ˣ)) * η₂ * r₂ ^ 1381) :
+    ((hζ.unit' : 𝓞 K) - 1) ^ 2762 ∣
+      (η₁ : 𝓞 K) * r₁ ^ 1381 -
+        (η₂ : 𝓞 K) * r₂ ^ 1381 :=
+  historicalEquationEight_one_two_coefficients_close2762
+    hζ s
+    (historicalState_omega_add_theta_fullHighDivisibility1381 hζ s hs)
+    r₁ r₂ η₁ η₂ heq₁ heq₂
 
 omit [IsCyclotomicExtension {1381} ℚ K] in
 /-- The prime-independent support theorem specialized to the square of an
