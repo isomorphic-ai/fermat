@@ -1,7 +1,6 @@
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.ZMod.Basic
-import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 
 /-!
 # Reduced difference matrices on a finite cycle
@@ -22,8 +21,10 @@ correlation
 
 `∑ u, f u * g (u + d) = if d = 0 then 1 else 0`,
 
-then `D_f * D_g = 1`. Consequently `D_f` is nonsingular over every
-nontrivial commutative coefficient ring.
+then `D_f * D_g = 1`. The companion module
+`Fermat.Irregular.CyclicDifferenceMatrixNonsingular` converts this inverse
+identity into a nonzero-determinant theorem without making computational
+certificate files import determinant machinery.
 
 The parameter `n` is the number of nonzero coordinates; the cycle itself
 has length `n + 1`.
@@ -174,20 +175,5 @@ theorem differenceMatrix_mul_eq_one
       exact fun h ↦ hik ((coord_injective n) h.symm)
     rw [if_neg hcoords]
     simp [hik]
-
-/-- A delta cyclic correlation makes the reduced difference matrix
-nonsingular. -/
-theorem differenceMatrix_det_ne_zero
-    {n : ℕ} [NeZero (n + 1)] {R : Type*}
-    [CommRing R] [Nontrivial R]
-    (f g : Cyc n → R)
-    (hcorr : ∀ d : Cyc n,
-      (∑ u : Cyc n, f u * g (u + d)) = if d = 0 then 1 else 0) :
-    (differenceMatrix n f).det ≠ 0 := by
-  intro hzero
-  have hdet := congrArg Matrix.det
-    (differenceMatrix_mul_eq_one f g hcorr)
-  rw [Matrix.det_mul, hzero, zero_mul, Matrix.det_one] at hdet
-  exact zero_ne_one hdet
 
 end Fermat.Irregular.CyclicDifferenceMatrix
