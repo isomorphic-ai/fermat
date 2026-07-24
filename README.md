@@ -1,15 +1,17 @@
-# Fermat: classical fixed-exponent proofs in Lean
+# Fermat: historical and classical-tool fixed-exponent proofs in Lean
 
-This repository formalizes classical proofs of Fermat's Last Theorem one
-exponent at a time.  The common statement is:
+This repository formalizes proofs of Fermat's Last Theorem one exponent at a
+time.  Some modules reconstruct proofs historically published for their
+exponents.  Others formalize newly discovered proofs that deliberately use
+classical, pre-modularity tools.  The common statement is:
 
 ```lean
 Fermat.HoldsAt n
 ```
 
 This abbreviates Mathlib's `FermatLastTheoremFor n`.  The project deliberately
-studies the historical descent, cyclotomic, finite-certificate, and
-decomposition routes rather than importing the modern modularity proof.
+studies descent, cyclotomic, finite-certificate, and decomposition routes
+rather than importing the modern modularity proof.
 
 The completed public fixed-exponent results are:
 
@@ -26,11 +28,40 @@ The completed public fixed-exponent results are:
 | 59 | `Fermat.holdsAt_fiftyNine` | Vandiver--Takagi--Furtwängler |
 | 67 | `Fermat.holdsAt_sixtySeven` | Vandiver--Takagi--Furtwängler |
 | 157 | `Fermat.holdsAt_oneHundredFiftySeven` | two-probe Vandiver descent |
-| 587 | `Fermat.holdsAt_fiveHundredEightySeven` | cyclic-certificate Vandiver descent |
+| 587 | `Fermat.holdsAt_fiveHundredEightySeven` | Vandiver--Sinnott; see provenance below |
 
 The exponent directories for `491`, `1381`, and `1831` contain
 work-in-progress finite certificates.  Their presence does not by itself
 mean that a public `Fermat.HoldsAt n` theorem has been completed.
+
+### Provenance and method labels
+
+In this repository, *historical* describes either an actually published
+proof or a specifically identified historical segment of an argument.  It
+is not a blanket authorship claim for every completed exponent.  Similarly,
+*classical-tool* describes the mathematical toolkit, not the date when a
+particular proof was discovered.
+
+The exponent-`587` proof is a new mathematical proof.  Its provenance is:
+
+- **research direction and guidance:** Fabian;
+- **mathematical proof construction:** GPT-5.6 Pro, under Fabian's guidance
+  in 2026;
+- **Lean implementation:** GPT-5.6 Sol Ultra, working with Fabian;
+- **formal verification:** the Lean kernel.
+
+The proof uses a Vandiver-style cyclotomic descent, Takagi--Furtwängler
+reflection, and the circular-unit index machinery associated with Sinnott,
+while avoiding elliptic curves, modularity, and the all-prime modern proof.
+The latest explicitly named conceptual ingredient in this route is Sinnott's
+1978 work on circular units:
+
+- W. Sinnott, [*On the Stickelberger ideal and the circular units of a
+  cyclotomic field*](https://annals.math.princeton.edu/1978/108-1/p05),
+  *Annals of Mathematics* **108** (1978), 107--134.
+
+The mathematical toolkit can therefore be described as available by 1978;
+the exact computation and formal verification are modern.
 
 ## Repository map
 
@@ -144,10 +175,12 @@ decomposition independently of the final theorem statement.
   because their class-number-one route is the first sufficient branch.
 - `ThirtySeven.lean`, `FiftyNine.lean`, `SixtySeven.lean`,
   `OneHundredFiftySeven.lean`, and `FiveHundredEightySeven.lean` reuse the
-  completed historical proofs.  Their measured outcome is tied by
+  completed classical-tool irregular-prime proofs.  Their measured outcome
+  is tied by
   `ProofBacked.outcome_eq` to the corresponding existing
   `Fermat.HoldsAt n` theorem; the ladder does not maintain a shadow proof.
-  All five campaigns traverse the complete historical battery and record
+  All five campaigns traverse the complete
+  Vandiver--Takagi--Furtwängler battery and record
   machine-readable exit depth `7`.
 - `HistoricalResponse.lean` exposes the proof-carrying response curve and
   its finite projection:
@@ -163,10 +196,10 @@ the dependent `ProofBacked` payload.
 
 ### Source ledgers
 
-[`docs/`](docs/) contains source and repair ledgers for the historical
-proofs at `5`, `7`, `11`, `13`, `14`, and `37`.  The source PDFs, generated
-proof packages, and audit material used during development are kept in the
-sibling archive `../fermat-data` in the campaign workspace.
+[`docs/`](docs/) contains source and repair ledgers for the fixed-exponent
+proof routes at `5`, `7`, `11`, `13`, `14`, and `37`.  The source PDFs,
+generated proof packages, and audit material used during development are
+kept in the sibling archive `../fermat-data` in the campaign workspace.
 
 ## Building
 
