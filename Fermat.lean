@@ -30,6 +30,7 @@ import Fermat.ThirtySeven.HighBernoulli
 import Fermat.ThirtySeven.NeighborFolding
 import Fermat.ThirtySeven.ResidueHomomorphisms
 import Fermat.ThirtySeven.VandiverData
+import Fermat.TwoHundredTwentyNine.Regularity
 
 namespace Fermat
 
@@ -95,6 +96,12 @@ theorem holdsAt_sixtySeven : HoldsAt 67 :=
 two-probe finite loop and historical Vandiver descent reused by the ladder. -/
 theorem holdsAt_oneHundredFiftySeven : HoldsAt 157 :=
   OneHundredFiftySeven.holdsAt_oneHundredFiftySeven
+
+/-- Fermat's theorem for exponent two hundred twenty-nine, from a complete
+depth-one Voronoi scan, Kummer's regular-prime criterion, and the formal
+Lamé--Kummer descent. -/
+theorem holdsAt_twoHundredTwentyNine : HoldsAt 229 :=
+  TwoHundredTwentyNine.holdsAt_twoHundredTwentyNine
 
 /-- Fermat's theorem for exponent four hundred ninety-one, through the
 three-channel Vandiver--Takagi--Furtwängler assembly reused by the
