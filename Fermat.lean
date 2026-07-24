@@ -17,6 +17,7 @@ import Fermat.Irregular.VandiverData
 import Fermat.Ladder.FaulhaberResponse
 import Fermat.Ladder.HistoricalResponse
 import Fermat.Ladder.Response
+import Fermat.OneThousandFiftyOne.Regularity
 import Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
 import Fermat.Seven.Lebesgue.TheoremTwo
 import Fermat.SixHundredNinetyOne.SecondCase
@@ -120,6 +121,11 @@ two-channel Vandiver--Takagi--Furtwängler assembly reused by the
 seven-fold ladder. -/
 theorem holdsAt_sixHundredNinetyOne : HoldsAt 691 :=
   SixHundredNinetyOne.holdsAt_sixHundredNinetyOne
+
+/-- Fermat's theorem for exponent one thousand fifty-one, from a complete
+Bernoulli regularity scan and the formal Lamé--Kummer descent. -/
+theorem holdsAt_oneThousandFiftyOne : HoldsAt 1051 :=
+  OneThousandFiftyOne.holdsAt_oneThousandFiftyOne
 
 /-- Fermat's theorem for exponent one thousand three hundred eighty-one,
 through the checked circular-unit certificate and the prime-generic
