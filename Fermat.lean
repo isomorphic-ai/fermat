@@ -17,6 +17,7 @@ import Fermat.Irregular.VandiverData
 import Fermat.Ladder.FaulhaberResponse
 import Fermat.Ladder.HistoricalResponse
 import Fermat.Ladder.Response
+import Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
 import Fermat.Seven.Lebesgue.TheoremTwo
 import Fermat.SixHundredNinetyOne.SecondCase
 import Fermat.Thirteen.Cyclotomic
@@ -119,5 +120,11 @@ two-channel Vandiver--Takagi--Furtwängler assembly reused by the
 seven-fold ladder. -/
 theorem holdsAt_sixHundredNinetyOne : HoldsAt 691 :=
   SixHundredNinetyOne.holdsAt_sixHundredNinetyOne
+
+/-- Fermat's theorem for exponent one thousand three hundred eighty-one,
+through the checked circular-unit certificate and the prime-generic
+Vandiver--Takagi--Furtwängler historical assembly. -/
+theorem holdsAt_oneThousandThreeHundredEightyOne : HoldsAt 1381 :=
+  OneThousandThreeHundredEightyOne.holdsAt_oneThousandThreeHundredEightyOne
 
 end Fermat
