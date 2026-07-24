@@ -1,15 +1,17 @@
-# Fermat: classical fixed-exponent proofs in Lean
+# Fermat: historical and classical-tool fixed-exponent proofs in Lean
 
-This repository formalizes classical proofs of Fermat's Last Theorem one
-exponent at a time.  The common statement is:
+This repository formalizes proofs of Fermat's Last Theorem one exponent at a
+time.  Some modules reconstruct proofs historically published for their
+exponents.  Others formalize newly discovered proofs that deliberately use
+classical, pre-modularity tools.  The common statement is:
 
 ```lean
 Fermat.HoldsAt n
 ```
 
 This abbreviates Mathlib's `FermatLastTheoremFor n`.  The project deliberately
-studies the historical descent, cyclotomic, finite-certificate, and
-decomposition routes rather than importing the modern modularity proof.
+studies descent, cyclotomic, finite-certificate, and decomposition routes
+rather than importing the modern modularity proof.
 
 The completed public fixed-exponent results are:
 
@@ -26,11 +28,41 @@ The completed public fixed-exponent results are:
 | 59 | `Fermat.holdsAt_fiftyNine` | Vandiver--Takagi--Furtwängler |
 | 67 | `Fermat.holdsAt_sixtySeven` | Vandiver--Takagi--Furtwängler |
 | 157 | `Fermat.holdsAt_oneHundredFiftySeven` | two-probe Vandiver descent |
-| 587 | `Fermat.holdsAt_fiveHundredEightySeven` | cyclic-certificate Vandiver descent |
+| 491 | `Fermat.holdsAt_fourHundredNinetyOne` | three-channel cyclic-certificate Vandiver descent |
+| 587 | `Fermat.holdsAt_fiveHundredEightySeven` | Vandiver--Sinnott; see provenance below |
 
-The exponent directories for `491`, `1381`, and `1831` contain
-work-in-progress finite certificates.  Their presence does not by itself
-mean that a public `Fermat.HoldsAt n` theorem has been completed.
+The exponent directories for `1381` and `1831` contain work-in-progress
+finite certificates.  Their presence does not by itself mean that a public
+`Fermat.HoldsAt n` theorem has been completed.
+
+### Provenance and method labels
+
+In this repository, *historical* describes either an actually published
+proof or a specifically identified historical segment of an argument.  It
+is not a blanket authorship claim for every completed exponent.  Similarly,
+*classical-tool* describes the mathematical toolkit, not the date when a
+particular proof was discovered.
+
+The exponent-`587` proof is a new mathematical proof.  Its provenance is:
+
+- **research direction and guidance:** Fabian;
+- **mathematical proof construction:** GPT-5.6 Pro, under Fabian's guidance
+  in 2026;
+- **Lean implementation:** GPT-5.6 Sol Ultra, working with Fabian;
+- **formal verification:** the Lean kernel.
+
+The proof uses a Vandiver-style cyclotomic descent, Takagi--Furtwängler
+reflection, and the circular-unit index machinery associated with Sinnott,
+while avoiding elliptic curves, modularity, and the all-prime modern proof.
+The latest explicitly named conceptual ingredient in this route is Sinnott's
+1978 work on circular units:
+
+- W. Sinnott, [*On the Stickelberger ideal and the circular units of a
+  cyclotomic field*](https://annals.math.princeton.edu/1978/108-1/p05),
+  *Annals of Mathematics* **108** (1978), 107--134.
+
+The mathematical toolkit can therefore be described as available by 1978;
+the exact computation and formal verification are modern.
 
 ## Repository map
 
@@ -60,9 +92,10 @@ Each completed exponent has its own directory under `Fermat/`.
   Faulhaber certificate closed by the formal Kummer criterion.  Both then
   reuse the checked Lamé--Kummer descent.
 - `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`,
-  `Fermat/OneHundredFiftySeven/`, and `Fermat/FiveHundredEightySeven/`
-  contain the irregular-prime campaigns.  Their final public endpoints are
-  the corresponding `VandiverHistoricalAssembly*.lean` modules.
+  `Fermat/OneHundredFiftySeven/`, `Fermat/FourHundredNinetyOne/`, and
+  `Fermat/FiveHundredEightySeven/` contain the irregular-prime campaigns.
+  Their final public endpoints are the corresponding
+  `VandiverHistoricalAssembly*.lean` modules.
 
 The irregular-prime directories use a deliberately layered layout:
 
@@ -81,6 +114,13 @@ The irregular-prime directories use a deliberately layered layout:
 
 For `157`, the finite probe loop is retained as data: the first probe is
 `q = 1571`, and the successful circular-unit probe is `q = 7537`.
+
+For `491`, the Sophie--Germain auxiliary prime and circular-unit modulus are
+both `q = 983 = 2 * 491 + 1`.  The complete Bernoulli scan leaves only
+the three candidate channels `{292, 336, 338}`.  Its compact circular-unit
+certificate reconstructs the source `244 × 244` matrix from 245 cyclic phase
+values and a kernel-checked correlation inverse; the three lifted Bernoulli
+certificates and Vandiver Lemma II assembly then close the second case.
 
 For `587`, the auxiliary prime and circular-unit probe are both
 `q = 8219 = 14 * 587 + 1`.  The complete Bernoulli scan proves that the
@@ -143,18 +183,19 @@ decomposition independently of the final theorem statement.
   The original response curve still records depth `6` for those exponents,
   because their class-number-one route is the first sufficient branch.
 - `ThirtySeven.lean`, `FiftyNine.lean`, `SixtySeven.lean`,
-  `OneHundredFiftySeven.lean`, and `FiveHundredEightySeven.lean` reuse the
-  completed historical proofs.  Their measured outcome is tied by
+  `OneHundredFiftySeven.lean`, `FourHundredNinetyOne.lean`, and
+  `FiveHundredEightySeven.lean` reuse the completed classical-tool
+  irregular-prime proofs.  Their measured outcome is tied by
   `ProofBacked.outcome_eq` to the corresponding existing
   `Fermat.HoldsAt n` theorem; the ladder does not maintain a shadow proof.
-  All five campaigns traverse the complete historical battery and record
-  machine-readable exit depth `7`.
+  All six campaigns traverse the complete Vandiver--Takagi--Furtwängler
+  battery and record machine-readable exit depth `7`.
 - `HistoricalResponse.lean` exposes the proof-carrying response curve and
-  its finite projection:
+  its six-point finite projection:
 
   ```lean
   Fermat.Ladder.HistoricalResponse.responseData
-  -- [(37, 7), (59, 7), (67, 7), (157, 7), (587, 7)]
+  -- [(37, 7), (59, 7), (67, 7), (157, 7), (491, 7), (587, 7)]
   ```
 
 Code that only fits empirical curves can consume `responseData`.  Code that
@@ -163,10 +204,10 @@ the dependent `ProofBacked` payload.
 
 ### Source ledgers
 
-[`docs/`](docs/) contains source and repair ledgers for the historical
-proofs at `5`, `7`, `11`, `13`, `14`, and `37`.  The source PDFs, generated
-proof packages, and audit material used during development are kept in the
-sibling archive `../fermat-data` in the campaign workspace.
+[`docs/`](docs/) contains source and repair ledgers for the fixed-exponent
+proof routes at `5`, `7`, `11`, `13`, `14`, and `37`.  The source PDFs,
+generated proof packages, and audit material used during development are
+kept in the sibling archive `../fermat-data` in the campaign workspace.
 
 ## Building
 
@@ -189,7 +230,10 @@ lake build Fermat.Ladder.Response
 lake build Fermat.Ladder.FaulhaberResponse
 lake build Fermat.Ladder.HistoricalResponse
 lake build Fermat.ThirtySeven.VandiverHistoricalAssembly37
+lake build Fermat.FourHundredNinetyOne.VandiverHistoricalAssembly491
+lake build Fermat.FourHundredNinetyOne.SecondCase
 lake build Fermat.FiveHundredEightySeven.VandiverHistoricalAssembly587
+lake build Fermat.Ladder.FourHundredNinetyOne
 lake build Fermat.Ladder.FiveHundredEightySeven
 ```
 
@@ -199,9 +243,11 @@ A quick consumer file can simply use:
 import Fermat
 
 #check Fermat.holdsAt_thirtySeven
+#check Fermat.holdsAt_fourHundredNinetyOne
 #check Fermat.holdsAt_fiveHundredEightySeven
 #check Fermat.holdsAt_eleven_faulhaber
 #eval Fermat.Ladder.FaulhaberResponse.responseData
+#check Fermat.Ladder.FourHundredNinetyOne.proofBacked
 #check Fermat.Ladder.FiveHundredEightySeven.proofBacked
 #check Fermat.Ladder.HistoricalResponse.campaignProofs
 #eval Fermat.Ladder.HistoricalResponse.responseData
