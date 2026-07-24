@@ -2,6 +2,7 @@ import Fermat.Ladder.FiftyNine
 import Fermat.Ladder.FiveHundredEightySeven
 import Fermat.Ladder.FourHundredNinetyOne
 import Fermat.Ladder.OneHundredFiftySeven
+import Fermat.Ladder.SixHundredNinetyOne
 import Fermat.Ladder.SixtySeven
 import Fermat.Ladder.ThirtySeven
 
@@ -10,7 +11,7 @@ import Fermat.Ladder.ThirtySeven
 
 This module is the reusable finite-data interface for the completed
 classical-tool irregular-prime campaigns at exponents `37`, `59`, `67`,
-`157`, `491`, and `587`.
+`157`, `491`, `587`, and `691`.
 
 Unlike a detached table, every point carries:
 
@@ -90,10 +91,15 @@ def fiveHundredEightySeven : Point :=
     FiveHundredEightySeven.exitDepth
     FiveHundredEightySeven.exitDepth_eq_measured
 
+def sixHundredNinetyOne : Point :=
+  mkPoint SixHundredNinetyOne.proofBacked
+    SixHundredNinetyOne.exitDepth
+    SixHundredNinetyOne.exitDepth_eq_measured
+
 /-- The proof-carrying historical response curve, in exponent order. -/
 def responseCurve : List Point :=
   [thirtySeven, fiftyNine, sixtySeven, oneHundredFiftySeven,
-    fourHundredNinetyOne, fiveHundredEightySeven]
+    fourHundredNinetyOne, fiveHundredEightySeven, sixHundredNinetyOne]
 
 /-- Forget proof payloads while retaining empirical coordinates. -/
 def coordinates (points : List Point) : List (ℕ × ℕ) :=
@@ -103,26 +109,27 @@ def coordinates (points : List Point) : List (ℕ × ℕ) :=
 def responseData : List (ℕ × ℕ) :=
   coordinates responseCurve
 
-theorem responseCurve_length : responseCurve.length = 6 := rfl
+theorem responseCurve_length : responseCurve.length = 7 := rfl
 
 theorem responseData_eq :
     responseData =
-      [(37, 7), (59, 7), (67, 7), (157, 7), (491, 7), (587, 7)] :=
+      [(37, 7), (59, 7), (67, 7), (157, 7), (491, 7), (587, 7),
+        (691, 7)] :=
   rfl
 
-/-- All six completed irregular-prime campaigns traverse the full battery. -/
+/-- All seven completed irregular-prime campaigns traverse the full battery. -/
 theorem all_exit_at_seven :
-    responseData.map Prod.snd = [7, 7, 7, 7, 7, 7] :=
+    responseData.map Prod.snd = [7, 7, 7, 7, 7, 7, 7] :=
   rfl
 
-/-- Public aggregate of the six fixed-exponent theorems, recovered from
+/-- Public aggregate of the seven fixed-exponent theorems, recovered from
 the proof-backed ladder points rather than reproved inside `Ladder/`. -/
 theorem campaignProofs :
     Fermat.HoldsAt 37 ∧ Fermat.HoldsAt 59 ∧
       Fermat.HoldsAt 67 ∧ Fermat.HoldsAt 157 ∧ Fermat.HoldsAt 491 ∧
-        Fermat.HoldsAt 587 :=
+        Fermat.HoldsAt 587 ∧ Fermat.HoldsAt 691 :=
   ⟨thirtySeven.holds, fiftyNine.holds, sixtySeven.holds,
     oneHundredFiftySeven.holds, fourHundredNinetyOne.holds,
-    fiveHundredEightySeven.holds⟩
+    fiveHundredEightySeven.holds, sixHundredNinetyOne.holds⟩
 
 end Fermat.Ladder.HistoricalResponse
