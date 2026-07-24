@@ -1,6 +1,4 @@
-import Mathlib.FieldTheory.Finite.Basic
-import Mathlib.NumberTheory.Cyclotomic.PrimitiveRoots
-import Mathlib.Tactic
+import Fermat.Irregular.VandiverDiagonalArithmeticPrime
 
 /-!
 # The finite diagonal calculation in Vandiver's Lemma II at 691
@@ -69,80 +67,16 @@ theorem teichmullerRoot691_isPrimitive :
 /-- The complete diagonal character-sum calculation. -/
 theorem characterSum691_eq (k n : Fin 344) :
     characterSum691 k n = if k = n then 345 else 0 := by
-  let d := 691 * sourceIndex k - sourceIndex n
-  let w : ZMod (691 ^ 2) :=
-    (teichmullerRoot691 : ZMod (691 ^ 2)) ^ (2 * d)
-  have hsum :
-      characterSum691 k n = ∑ j ∈ range 345, w ^ j := by
-    apply Finset.sum_congr rfl
-    intro j hj
-    rw [← pow_mul]
-    congr 1
-    simp only [characterExponent691, d]
-    ring
-  by_cases hkn : k = n
-  · subst n
-    rw [if_pos rfl, hsum]
-    have hw : w = 1 := by
-      simp only [w, d]
-      have heq :
-          2 * (691 * sourceIndex k - sourceIndex k) =
-            690 * (2 * sourceIndex k) := by
-        have hk : 0 < sourceIndex k := by simp [sourceIndex]
-        omega
-      rw [heq, pow_mul, teichmullerRoot691_pow_card_sub_one, one_pow]
-    rw [hw]
-    simp
-  · rw [if_neg hkn, hsum]
-    have hw690 : w ^ 690 = 1 := by
-      simp only [w]
-      rw [← pow_mul]
-      rw [show 2 * d * 690 = 690 * (2 * d) by ring]
-      rw [pow_mul, teichmullerRoot691_pow_card_sub_one, one_pow]
-    have hord : orderOf w ∣ 690 :=
-      orderOf_dvd_iff_pow_eq_one.mpr hw690
-    have hcop : (orderOf w).Coprime (691 ^ 2) :=
-      Nat.Coprime.of_dvd_left hord (by norm_num)
-    have hw_ne : w ≠ 1 := by
-      intro hw
-      have hmap := congrArg
-        (ZMod.castHom (by norm_num : 691 ∣ 691 ^ 2) (ZMod 691)) hw
-      simp only [w, map_pow, map_natCast, map_one] at hmap
-      have hdvd : 690 ∣ 2 * d :=
-        (teichmullerRoot691_isPrimitive.pow_eq_one_iff_dvd _).mp hmap
-      have hdvd' : 345 ∣ d := by
-        have : 2 * 345 ∣ 2 * d := by simpa using hdvd
-        exact (Nat.mul_dvd_mul_iff_left (by norm_num : 0 < 2)).mp this
-      obtain ⟨q, hq⟩ := hdvd'
-      have hkpos : 0 < sourceIndex k := by simp [sourceIndex]
-      have hnpos : 0 < sourceIndex n := by simp [sourceIndex]
-      have hkle : sourceIndex k ≤ 344 := by
-        have hk := k.isLt
-        simp [sourceIndex]
-      have hnle : sourceIndex n ≤ 344 := by
-        have hn := n.isLt
-        simp [sourceIndex]
-      have hd :
-          d + sourceIndex n = 691 * sourceIndex k := by
-        simp only [d]
-        omega
-      have hindex : sourceIndex k = sourceIndex n := by
-        omega
-      apply hkn
-      apply Fin.ext
-      simpa [sourceIndex] using hindex
-    obtain hwone | hunit :=
-      ZMod.eq_one_or_isUnit_sub_one
-        (p := 691) (k := 2) rfl w hcop
-    · exact (hw_ne hwone).elim
-    · have hw345 : w ^ 345 = 1 := by
-        simp only [w]
-        rw [← pow_mul]
-        rw [show 2 * d * 345 = 690 * d by ring]
-        rw [pow_mul, teichmullerRoot691_pow_card_sub_one, one_pow]
-      have hgeom := mul_geom_sum w 345
-      rw [hw345, sub_self] at hgeom
-      exact hunit.mul_left_cancel (by simpa using hgeom)
+  simpa only [characterSum691, characterExponent691, sourceIndex,
+    Fermat.Irregular.VandiverDiagonalArithmeticPrime.characterSum,
+    Fermat.Irregular.VandiverDiagonalArithmeticPrime.characterExponent,
+    Fermat.Irregular.VandiverDiagonalArithmeticPrime.sourceIndex,
+    Nat.cast_ite, Nat.cast_ofNat, Nat.cast_zero] using
+      Fermat.Irregular.VandiverDiagonalArithmeticPrime.characterSum_eq
+        (p := 691) (r := 345) (t := teichmullerRoot691)
+        (by norm_num) (by norm_num)
+        teichmullerRoot691_pow_card_sub_one
+        teichmullerRoot691_isPrimitive k n
 
 /-- Off-diagonal character sums vanish modulo `691²`. -/
 theorem characterSum691_eq_zero {k n : Fin 344} (hkn : k ≠ n) :
@@ -171,42 +105,16 @@ theorem positiveCharacterSum691_eq_rho_mul (k n : Fin 344) :
     positiveCharacterSum691 k n =
       (teichmullerRoot691 : ZMod (691 ^ 2)) ^ (691 ^ 2) *
         characterSum691 k n := by
-  rw [positiveCharacterSum691, characterSum691, Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro j hj
-  rw [← pow_add]
-  congr 1
-  simp only [positiveCharacterExponent691, characterExponent691]
-  have hjlt : j < 345 := Finset.mem_range.mp hj
-  have hkpos : 0 < sourceIndex k := by simp [sourceIndex]
-  have hnpos : 0 < sourceIndex n := by simp [sourceIndex]
-  have hkle : sourceIndex k ≤ 344 := by
-    have hk := k.isLt
-    simp [sourceIndex]
-  have hnle : sourceIndex n ≤ 344 := by
-    have hn := n.isLt
-    simp [sourceIndex]
-  have hnPk : sourceIndex n ≤ 691 * sourceIndex k := by
-    omega
-  have hsmall :
-      2 * sourceIndex n * j ≤ 691 ^ 2 := by
-    calc
-      2 * sourceIndex n * j ≤ 2 * 344 * 344 := by
-        exact Nat.mul_le_mul
-          (Nat.mul_le_mul_left 2 hnle)
-          (Nat.le_of_lt_succ hjlt : j ≤ 344)
-      _ ≤ 691 ^ 2 := by norm_num
-  have hsmall' :
-      2 * j * sourceIndex n ≤ 691 ^ 2 := by
-    simpa only [mul_assoc, mul_left_comm, mul_comm] using hsmall
-  rw [show 2 * 691 * sourceIndex k * j =
-      2 * j * (691 * sourceIndex k) by ring]
-  rw [show 2 * sourceIndex n * j =
-      2 * j * sourceIndex n by ring]
-  rw [Nat.mul_sub_left_distrib]
-  have hscaled :=
-    Nat.mul_le_mul_left (2 * j) hnPk
-  omega
+  simpa only [positiveCharacterSum691, positiveCharacterExponent691,
+    characterSum691, characterExponent691, sourceIndex,
+    Fermat.Irregular.VandiverDiagonalArithmeticPrime.positiveCharacterSum,
+    Fermat.Irregular.VandiverDiagonalArithmeticPrime.positiveCharacterExponent,
+    Fermat.Irregular.VandiverDiagonalArithmeticPrime.characterSum,
+    Fermat.Irregular.VandiverDiagonalArithmeticPrime.characterExponent,
+    Fermat.Irregular.VandiverDiagonalArithmeticPrime.sourceIndex] using
+      Fermat.Irregular.VandiverDiagonalArithmeticPrime.positiveCharacterSum_eq_rho_mul
+        (p := 691) (r := 345) (t := teichmullerRoot691)
+        (by norm_num) (by norm_num) k n
 
 /-- Positive-exponent form of the diagonal calculation. -/
 theorem positiveCharacterSum691_eq (k n : Fin 344) :
@@ -221,8 +129,10 @@ theorem positiveCharacterSum691_eq (k n : Fin 344) :
 theorem rho691_eq_root :
     (teichmullerRoot691 : ZMod (691 ^ 2)) ^ (691 ^ 2) =
       teichmullerRoot691 := by
-  rw [show 691 ^ 2 = 690 * 692 + 1 by norm_num, pow_add, pow_mul,
-    teichmullerRoot691_pow_card_sub_one, one_pow, pow_one, one_mul]
+  exact Fermat.Irregular.VandiverDiagonalArithmeticPrime.rho_eq_root
+    (p := 691) (r := 345) (t := teichmullerRoot691)
+    (by norm_num) (by norm_num)
+    teichmullerRoot691_pow_card_sub_one
 
 /-- The exact diagonal residue is `1709475`, equivalently `-200449`, modulo
 `691²`; all off-diagonal residues vanish. -/
