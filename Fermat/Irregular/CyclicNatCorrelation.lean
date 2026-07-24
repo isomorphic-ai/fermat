@@ -38,6 +38,39 @@ def evaluate (modulus cycleLength : ℕ) (left right : Array ℕ) (shift : ℕ) 
     ℕ :=
   loop modulus cycleLength left right shift cycleLength 0
 
+/-- Tail-recursively verify a consecutive range of natural-valued
+certificates. Each comparison is discharged before the recursive call, so
+large ranges need not elaborate as one quantified decision problem. -/
+def verifyRange (actual expected : ℕ → ℕ) (offset : ℕ) : ℕ → Bool
+  | 0 => true
+  | size + 1 =>
+      if actual offset = expected offset then
+        verifyRange actual expected (offset + 1) size
+      else
+        false
+
+/-- Extract any local equality from a successful tail-recursive range
+verification. -/
+theorem verifyRange_get (actual expected : ℕ → ℕ) (offset size : ℕ)
+    (h : verifyRange actual expected offset size = true) (i : Fin size) :
+    actual (offset + i.val) = expected (offset + i.val) := by
+  induction size generalizing offset with
+  | zero =>
+      exact Fin.elim0 i
+  | succ size ih =>
+      by_cases hhead : actual offset = expected offset
+      · simp only [verifyRange, if_pos hhead] at h
+        by_cases hi : i.val = 0
+        · simpa only [hi, add_zero] using hhead
+        · let j : Fin size := ⟨i.val - 1, by omega⟩
+          have hj := ih (offset + 1) h j
+          have hoffset : offset + 1 + j.val = offset + i.val := by
+            simp only [j]
+            omega
+          simpa only [hoffset] using hj
+      · simp only [verifyRange, if_neg hhead] at h
+        contradiction
+
 /-- Casting the tail-recursive loop gives the corresponding partial dot
 product. This is the algebraic seam that keeps later finite checks small. -/
 theorem cast_loop (modulus cycleLength : ℕ) (left right : Array ℕ)
