@@ -23,12 +23,15 @@ local instance : Fact (Nat.Prime 1381) := ⟨by norm_num⟩
 
 /-- Modern Bernoulli index attached to the `k`th source unit. -/
 def derivativeBernoulliIndex1381 (k : SourceIndex 1381) : ℕ :=
-  derivativeBernoulliIndex 1381 k
+  (2 * sourceNumber k) * 1381
 
 /-- The exact diagonal coefficient supplied by the positive character
 calculation. -/
 def diagonalDerivativeFactor1381 (k : SourceIndex 1381) : ℚ :=
-  diagonalDerivativeFactor 1381 653 621786600 k
+  (621786600 : ℚ) *
+    (bernoulli (derivativeBernoulliIndex1381 k) /
+      (derivativeBernoulliIndex1381 k : ℚ)) *
+    ((653 : ℚ) ^ derivativeBernoulliIndex1381 k - 1)
 
 theorem derivativeBernoulliIndex1381_even (k : SourceIndex 1381) :
     Even (derivativeBernoulliIndex1381 k) := by
@@ -76,13 +79,11 @@ theorem padicValRat_intCast_mul_diagonalDerivativeFactor1381
     padicValRat 1381 ((a : ℚ) * diagonalDerivativeFactor1381 k) =
       padicValInt 1381
           (a * (bernoulli (derivativeBernoulliIndex1381 k)).num) - 1 := by
-  simpa only [diagonalDerivativeFactor1381,
-    derivativeBernoulliIndex1381,
-    diagonalDerivativeFactor, derivativeBernoulliIndex] using
+  convert
     padicValRat_intCast_mul_diagonalDerivativeFactor
       (p := 1381) (r := 690) (t := 653)
       (by norm_num) teichmullerRoot1381_isPrimitive
-      621786600 (by norm_num) k a ha hB
+      621786600 (by norm_num) k a ha hB using 1
 
 /-- A diagonal logarithmic derivative divisible by `1381²` forces the
 source cube congruence. -/
@@ -92,10 +93,12 @@ theorem cube_dvd_exponent_mul_bernoulliNumerator_of_derivative
       ((a : ℚ) * diagonalDerivativeFactor1381 k)) :
     (1381 : ℤ) ^ 3 ∣
       a * vandiverBernoulliNumerator 1381 k := by
-  exact
+  apply
     Fermat.Irregular.VandiverDerivativeValuationPrime.cube_dvd_exponent_mul_bernoulliNumerator_of_derivative
       (p := 1381) (r := 690) (t := 653)
       (by norm_num) teichmullerRoot1381_isPrimitive
-      621786600 (by norm_num) k a hderivative
+      621786600 (by norm_num) k a
+  simpa [diagonalDerivativeFactor1381, derivativeBernoulliIndex1381,
+    diagonalDerivativeFactor, derivativeBernoulliIndex] using hderivative
 
 end Fermat.OneThousandThreeHundredEightyOne.VandiverDerivativeValuation
