@@ -1,4 +1,5 @@
 import Fermat.Irregular.VandiverGeneratorSupportPrime
+import Fermat.Irregular.VandiverEquationEightAGeneratorPrime
 import Fermat.Irregular.VandiverHistoricalQuadraticPrime
 import Fermat.Irregular.VandiverRealNormalizationPrime
 import Fermat.Irregular.VandiverHistoricalStartPrime
@@ -95,6 +96,26 @@ theorem square_support_strict1381
       primeIdealFactorSupport ξ :=
   square_support_strict_of_generator
     hξ hgenerator hfactor hQ hcop
+
+set_option maxRecDepth 50000 in
+/-- At exponent `1381`, plus-class nondivisibility turns any nonzero real
+principal `1381`st ideal power into the exact squared-conjugation generator
+required by historical equation (8a). -/
+theorem exists_squaredConjugationGenerator_of_real_pow1381
+    (hplus : PlusClassNondivisibility K 1381)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 1381)
+    (J : Ideal (𝓞 K)) (q : 𝓞 K) (hq0 : q ≠ 0)
+    (hqreal :
+      NumberField.IsCMField.ringOfIntegersComplexConj K q = q)
+    (hpow : J ^ 1381 = Ideal.span {q}) :
+    ∃ (ρ : 𝓞 K) (η : (𝓞 K)ˣ) (j : ℕ),
+      J = Ideal.span {ρ} ∧
+      q = η * ρ ^ 1381 ∧
+      NumberField.IsCMField.ringOfIntegersComplexConj K (ρ ^ 2) =
+        (hζ.unit' ^ j : (𝓞 K)ˣ) * ρ ^ 2 :=
+  Fermat.Irregular.VandiverEquationEightAGeneratorPrime.exists_squaredConjugationGenerator_of_real_pow
+    (p := 1381) hplus (by norm_num) (by norm_num)
+    hζ J q hq0 hqreal hpow
 
 /-- The four conjugate equation-(8) generators give the three product
 coprimalities needed by the `1381` reduction data. -/
