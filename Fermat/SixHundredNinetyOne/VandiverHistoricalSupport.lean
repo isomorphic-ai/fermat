@@ -20,6 +20,7 @@ namespace Fermat.SixHundredNinetyOne.VandiverHistorical
 open scoped NumberField nonZeroDivisors
 
 open Fermat.Irregular.VandiverHistoricalDescent
+open Fermat.Irregular.VandiverHistoricalPrime
 
 noncomputable section
 
@@ -32,7 +33,7 @@ prime-ideal factors of a principal ideal. -/
 lemma primeIdealFactorSupport691_pow (a : 𝓞 K) {n : ℕ} (hn : n ≠ 0) :
     primeIdealFactorSupport691 (a ^ n) =
       primeIdealFactorSupport691 a := by
-  unfold primeIdealFactorSupport691
+  unfold primeIdealFactorSupport691 primeIdealFactorSupport
   rw [← Ideal.span_singleton_pow,
     UniqueFactorizationMonoid.normalizedFactors_pow]
   simp [hn]
@@ -55,7 +56,8 @@ lemma primeIdealFactorSupport691_subset_of_span_factor
   have hP' :
       P ∈ UniqueFactorizationMonoid.normalizedFactors
         (Ideal.span {a}) := by
-    simpa only [primeIdealFactorSupport691, Multiset.mem_toFinset] using hP
+    simpa only [primeIdealFactorSupport691, primeIdealFactorSupport,
+      Multiset.mem_toFinset] using hP
   have hprime :
       P.IsPrime ∧ Ideal.span {a} ≤ P :=
     (Ideal.mem_normalizedFactors_iff haI).mp hP'
@@ -67,7 +69,8 @@ lemma primeIdealFactorSupport691_subset_of_span_factor
         (Ideal.span {b}) :=
     (Ideal.mem_normalizedFactors_iff hbI).mpr
       ⟨hprime.1, hba.trans hprime.2⟩
-  simpa only [primeIdealFactorSupport691, Multiset.mem_toFinset] using hP''
+  simpa only [primeIdealFactorSupport691, primeIdealFactorSupport,
+    Multiset.mem_toFinset] using hP''
 
 /-- Witness form of strictness: a factor of `Q` which is absent from
 `(a)` is a genuinely new prime-ideal factor of `(b)`. -/
@@ -99,7 +102,8 @@ lemma primeIdealFactorSupport691_ssubset_of_span_factor_of_witness
     simp only [Multiset.toFinset_add, Finset.mem_union,
       Multiset.mem_toFinset]
     exact Or.inr hPQ
-  · simpa only [primeIdealFactorSupport691, Multiset.mem_toFinset] using hPa
+  · simpa only [primeIdealFactorSupport691, primeIdealFactorSupport,
+      Multiset.mem_toFinset] using hPa
 
 /-- Coprime-factor form of strictness.  A nonunit ideal `Q` has a
 normalized prime factor, and coprimality makes that factor absent from

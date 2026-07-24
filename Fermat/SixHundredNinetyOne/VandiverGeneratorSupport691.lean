@@ -23,6 +23,8 @@ namespace Fermat.SixHundredNinetyOne.VandiverHistorical
 
 open scoped NumberField nonZeroDivisors
 
+open Fermat.Irregular.VandiverHistoricalPrime
+
 noncomputable section
 
 section ElementaryCoprimality
@@ -501,7 +503,7 @@ variable {K : Type} [Field K] [NumberField K]
 theorem primeIdealFactorSupport691_eq_of_associated
     {x y : 𝓞 K} (hxy : Associated x y) :
     primeIdealFactorSupport691 x = primeIdealFactorSupport691 y := by
-  unfold primeIdealFactorSupport691
+  unfold primeIdealFactorSupport691 primeIdealFactorSupport
   rw [Ideal.span_singleton_eq_span_singleton.mpr hxy]
 
 /-- Multiplication by a unit followed by a nonzero power preserves the
