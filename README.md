@@ -191,11 +191,13 @@ fixed-exponent assembly layer.  Its theorem
 
 It does not store `HoldsAt`, `SecondCaseExcluded`, or Vandiver's Lemma II as
 certificate fields.  The generic directory imports only shared machinery;
-thin concrete adapters live in the exponent directories.  The first
-end-to-end regressions are `37`, `59`, `67`, and `157`, with `157` using one
-`2 × 2` determinant to close both irregular channels `{62, 110}`.  See the
+thin concrete adapters live in the exponent directories.  End-to-end
+regressions are checked at `37`, `59`, `67`, `157`, `491`, `587`, `607`,
+`691`, and `1381`.  They include the two-channel `157`, `587`, and `691`
+cases and the three-channel `491` case, each closed by one weighted-moment
+determinant.  The current generic campaign stops at `1381`.  See the
 [GenericIrregular architecture note](Fermat/GenericIrregular/README.md) for
-the complete dependency flow and certificate boundary.
+the complete dependency flow, channel table, and certificate boundary.
 
 [`Fermat/Regular/`](Fermat/Regular/) contains reusable Faulhaber
 infrastructure and the checked bridge

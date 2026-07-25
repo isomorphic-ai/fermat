@@ -3,9 +3,13 @@ import Fermat.Cases
 import Fermat.Classical
 import Fermat.Eleven.Cyclotomic
 import Fermat.Eleven.SevenFold
+import Fermat.FiftyNine.GenericProof
 import Fermat.Five.Dirichlet
+import Fermat.FiveHundredEightySeven.GenericProof
 import Fermat.Fourteen.DescentConstruction
+import Fermat.FourHundredNinetyOne.GenericProof
 import Fermat.FourHundredNinetyOne.SecondCase
+import Fermat.GenericIrregular
 import Fermat.Irregular.CircularUnitIndex
 import Fermat.Irregular.CircularUnits
 import Fermat.Irregular.CyclotomicLogCofactor37
@@ -17,11 +21,16 @@ import Fermat.Irregular.VandiverData
 import Fermat.Ladder.FaulhaberResponse
 import Fermat.Ladder.HistoricalResponse
 import Fermat.Ladder.Response
+import Fermat.OneHundredFiftySeven.GenericProof
 import Fermat.OneThousandFiftyOne.Regularity
+import Fermat.OneThousandThreeHundredEightyOne.GenericProof
 import Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
 import Fermat.Seven.Lebesgue.TheoremTwo
+import Fermat.SixHundredNinetyOne.GenericProof
 import Fermat.SixHundredSeven.VandiverHistoricalAssembly607
+import Fermat.SixHundredSeven.GenericProof
 import Fermat.SixHundredNinetyOne.SecondCase
+import Fermat.SixtySeven.GenericProof
 import Fermat.Thirteen.Cyclotomic
 import Fermat.Thirteen.SevenFold
 import Fermat.ThirtySeven.ArithmeticCertificate
@@ -33,6 +42,7 @@ import Fermat.ThirtySeven.HighBernoulli
 import Fermat.ThirtySeven.NeighborFolding
 import Fermat.ThirtySeven.ResidueHomomorphisms
 import Fermat.ThirtySeven.VandiverData
+import Fermat.ThirtySeven.GenericProof
 import Fermat.TwoHundredTwentyNine.Regularity
 
 namespace Fermat
@@ -85,20 +95,40 @@ historical Vandiver assembly reused by the seven-fold ladder. -/
 theorem holdsAt_thirtySeven : HoldsAt 37 :=
   ThirtySeven.holdsAt_thirtySeven
 
+/-- The same exponent through the parameterized fixed-irregular
+certificate theorem. -/
+theorem holdsAt_thirtySeven_generic : HoldsAt 37 :=
+  ThirtySeven.GenericProof.holdsAt_thirtySeven_generic
+
 /-- Fermat's theorem for exponent fifty-nine, through the complete
 historical Vandiver assembly reused by the seven-fold ladder. -/
 theorem holdsAt_fiftyNine : HoldsAt 59 :=
   FiftyNine.holdsAt_fiftyNine
+
+/-- The same exponent through the parameterized fixed-irregular
+certificate theorem. -/
+theorem holdsAt_fiftyNine_generic : HoldsAt 59 :=
+  FiftyNine.GenericProof.holdsAt_fiftyNine_generic
 
 /-- Fermat's theorem for exponent sixty-seven, through the complete
 historical Vandiver assembly reused by the seven-fold ladder. -/
 theorem holdsAt_sixtySeven : HoldsAt 67 :=
   SixtySeven.holdsAt_sixtySeven
 
+/-- The same exponent through the parameterized fixed-irregular
+certificate theorem. -/
+theorem holdsAt_sixtySeven_generic : HoldsAt 67 :=
+  SixtySeven.GenericProof.holdsAt_sixtySeven_generic
+
 /-- Fermat's theorem for exponent one hundred fifty-seven, including the
 two-probe finite loop and historical Vandiver descent reused by the ladder. -/
 theorem holdsAt_oneHundredFiftySeven : HoldsAt 157 :=
   OneHundredFiftySeven.holdsAt_oneHundredFiftySeven
+
+/-- The same exponent through the parameterized fixed-irregular
+certificate theorem. -/
+theorem holdsAt_oneHundredFiftySeven_generic : HoldsAt 157 :=
+  OneHundredFiftySeven.GenericProof.holdsAt_oneHundredFiftySeven_generic
 
 /-- Fermat's theorem for exponent two hundred twenty-nine, from a complete
 depth-one Voronoi scan, Kummer's regular-prime criterion, and the formal
@@ -112,10 +142,20 @@ seven-fold ladder. -/
 theorem holdsAt_fourHundredNinetyOne : HoldsAt 491 :=
   FourHundredNinetyOne.holdsAt_fourHundredNinetyOne
 
+/-- The same exponent through the parameterized fixed-irregular
+certificate theorem. -/
+theorem holdsAt_fourHundredNinetyOne_generic : HoldsAt 491 :=
+  FourHundredNinetyOne.GenericProof.holdsAt_fourHundredNinetyOne_generic
+
 /-- Fermat's theorem for exponent five hundred eighty-seven, through the
 two-channel historical Vandiver assembly reused by the seven-fold ladder. -/
 theorem holdsAt_fiveHundredEightySeven : HoldsAt 587 :=
   FiveHundredEightySeven.holdsAt_fiveHundredEightySeven
+
+/-- The same exponent through the parameterized fixed-irregular
+certificate theorem. -/
+theorem holdsAt_fiveHundredEightySeven_generic : HoldsAt 587 :=
+  FiveHundredEightySeven.GenericProof.holdsAt_fiveHundredEightySeven_generic
 
 /-- Fermat's theorem for exponent six hundred seven, through the
 one-channel circular-unit certificate, Vandiver's Lemma II, and the
@@ -123,11 +163,21 @@ historical descent. -/
 theorem holdsAt_sixHundredSeven : HoldsAt 607 :=
   SixHundredSeven.holdsAt_sixHundredSeven
 
+/-- The same exponent through the parameterized fixed-irregular
+certificate theorem. -/
+theorem holdsAt_sixHundredSeven_generic : HoldsAt 607 :=
+  SixHundredSeven.GenericProof.holdsAt_sixHundredSeven_generic
+
 /-- Fermat's theorem for exponent six hundred ninety-one, through the
 two-channel Vandiver--Takagi--Furtwängler assembly reused by the
 seven-fold ladder. -/
 theorem holdsAt_sixHundredNinetyOne : HoldsAt 691 :=
   SixHundredNinetyOne.holdsAt_sixHundredNinetyOne
+
+/-- The same exponent through the parameterized fixed-irregular
+certificate theorem. -/
+theorem holdsAt_sixHundredNinetyOne_generic : HoldsAt 691 :=
+  SixHundredNinetyOne.GenericProof.holdsAt_sixHundredNinetyOne_generic
 
 /-- Fermat's theorem for exponent one thousand fifty-one, from a complete
 Bernoulli regularity scan and the formal Lamé--Kummer descent. -/
@@ -139,5 +189,10 @@ through the checked circular-unit certificate and the prime-generic
 Vandiver--Takagi--Furtwängler historical assembly. -/
 theorem holdsAt_oneThousandThreeHundredEightyOne : HoldsAt 1381 :=
   OneThousandThreeHundredEightyOne.holdsAt_oneThousandThreeHundredEightyOne
+
+/-- The same exponent through the parameterized fixed-irregular
+certificate theorem. -/
+theorem holdsAt_oneThousandThreeHundredEightyOne_generic : HoldsAt 1381 :=
+  OneThousandThreeHundredEightyOne.GenericProof.holdsAt_oneThousandThreeHundredEightyOne_generic
 
 end Fermat

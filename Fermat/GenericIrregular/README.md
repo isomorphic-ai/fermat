@@ -112,8 +112,26 @@ other way around.  Each completed adapter is split into:
 - `GenericSecondCase.lean`;
 - `GenericProof.lean`.
 
-The first checked regressions are `37`, `59`, `67`, and `157`.  Their final
-`GenericProof` theorems have the standard Lean logical dependencies only:
+The checked concrete channel data are:
+
+| Exponent | Channels | Irregular indices | Correction weights | Moment |
+| ---: | ---: | --- | --- | ---: |
+| `37` | `1` | `[32]` | `[2]` | `1 × 1` |
+| `59` | `1` | `[44]` | `[18]` | `1 × 1` |
+| `67` | `1` | `[58]` | `[41]` | `1 × 1` |
+| `157` | `2` | `[62, 110]` | `[3, 16]` | `2 × 2` |
+| `491` | `3` | `[292, 336, 338]` | `[351, 412, 11]` | `3 × 3` |
+| `587` | `2` | `[90, 92]` | `[498, 242]` | `2 × 2` |
+| `607` | `1` | `[592]` | `[511]` | `1 × 1` |
+| `691` | `2` | `[12, 200]` | `[288, 429]` | `2 × 2` |
+| `1381` | `1` | `[266]` | `[561]` | `1 × 1` |
+
+Every row uses the same `FixedIrregularCertificate p N` theorem.  The
+current campaign deliberately stops at `1381`; no exponent above it is part
+of this generic regression set.
+
+Their final `GenericProof` theorems have the standard Lean logical
+dependencies only:
 
 ```text
 [propext, Classical.choice, Quot.sound]
