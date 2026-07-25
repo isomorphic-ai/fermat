@@ -28,11 +28,16 @@ The completed public fixed-exponent results are:
 | 59 | `Fermat.holdsAt_fiftyNine` | Vandiver--Takagi--Furtwängler |
 | 67 | `Fermat.holdsAt_sixtySeven` | Vandiver--Takagi--Furtwängler |
 | 157 | `Fermat.holdsAt_oneHundredFiftySeven` | two-probe Vandiver descent |
+| 491 | `Fermat.holdsAt_fourHundredNinetyOne` | three-channel cyclic-certificate Vandiver descent |
 | 587 | `Fermat.holdsAt_fiveHundredEightySeven` | Vandiver--Sinnott; see provenance below |
+| 607 | `Fermat.holdsAt_sixHundredSeven` | one-channel circular-unit Vandiver descent |
+| 691 | `Fermat.holdsAt_sixHundredNinetyOne` | two-channel cyclic-certificate Vandiver descent |
+| 1051 | `Fermat.holdsAt_oneThousandFiftyOne` | complete Bernoulli regularity scan |
+| 1381 | `Fermat.holdsAt_oneThousandThreeHundredEightyOne` | one-channel cyclic-certificate Vandiver descent |
 
-The exponent directories for `491`, `1381`, and `1831` contain
-work-in-progress finite certificates.  Their presence does not by itself
-mean that a public `Fermat.HoldsAt n` theorem has been completed.
+The exponent directory for `1831` contains work-in-progress finite
+certificates.  Its presence does not by itself mean that a public
+`Fermat.HoldsAt n` theorem has been completed.
 
 ### Provenance and method labels
 
@@ -90,10 +95,16 @@ Each completed exponent has its own directory under `Fermat/`.
   routes: the class-number-one certificate and a direct `SevenFold.lean`
   Faulhaber certificate closed by the formal Kummer criterion.  Both then
   reuse the checked Lamé--Kummer descent.
+- `Fermat/OneThousandFiftyOne/` contains a complete 524-index regularity
+  scan.  It is both a public fixed-exponent proof and the regular anchor used
+  by the exponent-12613 campaign.
 - `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`,
-  `Fermat/OneHundredFiftySeven/`, and `Fermat/FiveHundredEightySeven/`
-  contain the irregular-prime campaigns.  Their final public endpoints are
-  the corresponding `VandiverHistoricalAssembly*.lean` modules.
+  `Fermat/OneHundredFiftySeven/`, `Fermat/FourHundredNinetyOne/`,
+  `Fermat/FiveHundredEightySeven/`, `Fermat/SixHundredSeven/`,
+  `Fermat/SixHundredNinetyOne/`, and
+  `Fermat/OneThousandThreeHundredEightyOne/` contain the completed
+  irregular-prime campaigns. Their final public endpoints are the corresponding
+  `VandiverHistoricalAssembly*.lean` modules.
 
 The irregular-prime directories use a deliberately layered layout:
 
@@ -113,12 +124,42 @@ The irregular-prime directories use a deliberately layered layout:
 For `157`, the finite probe loop is retained as data: the first probe is
 `q = 1571`, and the successful circular-unit probe is `q = 7537`.
 
+For `491`, the Sophie--Germain auxiliary prime and circular-unit modulus are
+both `q = 983 = 2 * 491 + 1`.  The complete Bernoulli scan leaves only
+the three candidate channels `{292, 336, 338}`.  Its compact circular-unit
+certificate reconstructs the source `244 × 244` matrix from 245 cyclic phase
+values and a kernel-checked correlation inverse; the three lifted Bernoulli
+certificates and Vandiver Lemma II assembly then close the second case.
+
 For `587`, the auxiliary prime and circular-unit probe are both
 `q = 8219 = 14 * 587 + 1`.  The complete Bernoulli scan proves that the
 irregular channels are exactly `{90, 92}`.  Its real circular-unit
 certificate compresses the `292 × 292` residue-symbol matrix into two
 length-293 cyclic phase vectors and a kernel-checked correlation identity,
 rather than storing 85,264 unrelated inverse entries.
+
+For `607`, the Sophie--Germain auxiliary prime and circular-unit modulus are
+both `q = 20639 = 34 * 607 + 1`.  The complete Bernoulli scan leaves the
+single irregular channel `{592}`, whose lifted index is `359344`.  Its
+source `302 × 302` circular-unit matrix is reconstructed from 303 cyclic
+phase values and a kernel-checked correlation inverse.  Sinnott's index
+formula, the diagonal-unit calculation, and Vandiver's Lemma II then feed
+the historical second-case descent.  The package prime `q* = 118973` is a
+separate norm/branch selector, not the circular-unit modulus.
+
+For `691`, the Sophie--Germain auxiliary prime and circular-unit modulus are
+both `q = 11057 = 16 * 691 + 1`.  The implication-form Bernoulli scan leaves
+only the two candidate channels `{12, 200}`, whose lifts are `8292` and
+`138200`.  The source `344 × 344` circular-unit matrix is reconstructed from
+345 cyclic phase values; its correlation inverse and determinant residue
+`36 mod 691` close the finite side of the two-channel Vandiver descent.
+
+For `1381`, the auxiliary prime and circular-unit modulus are
+`q = 38669 = 28 * 1381 + 1`.  The complete Bernoulli scan leaves the single
+irregular channel `{266}`, with lifted index `367346`.  Its source
+`689 × 689` circular-unit matrix is certified by 690 cyclic correlations.
+Those finite facts feed the reusable diagonal-unit and Lemma-II layers, then
+the prime-generic Takagi--Furtwängler and historical Vandiver assembly.
 
 ### Reusable irregular-prime machinery
 
@@ -174,20 +215,20 @@ decomposition independently of the final theorem statement.
   The original response curve still records depth `6` for those exponents,
   because their class-number-one route is the first sufficient branch.
 - `ThirtySeven.lean`, `FiftyNine.lean`, `SixtySeven.lean`,
-  `OneHundredFiftySeven.lean`, and `FiveHundredEightySeven.lean` reuse the
-  completed classical-tool irregular-prime proofs.  Their measured outcome
-  is tied by
+  `OneHundredFiftySeven.lean`, `FourHundredNinetyOne.lean`,
+  `FiveHundredEightySeven.lean`, and `SixHundredNinetyOne.lean` reuse the
+  completed classical-tool
+  irregular-prime proofs.  Their measured outcome is tied by
   `ProofBacked.outcome_eq` to the corresponding existing
   `Fermat.HoldsAt n` theorem; the ladder does not maintain a shadow proof.
-  All five campaigns traverse the complete
-  Vandiver--Takagi--Furtwängler battery and record
-  machine-readable exit depth `7`.
+  All seven campaigns traverse the complete Vandiver--Takagi--Furtwängler
+  battery and record machine-readable exit depth `7`.
 - `HistoricalResponse.lean` exposes the proof-carrying response curve and
-  its finite projection:
+  its seven-point finite projection:
 
   ```lean
   Fermat.Ladder.HistoricalResponse.responseData
-  -- [(37, 7), (59, 7), (67, 7), (157, 7), (587, 7)]
+  -- [(37, 7), (59, 7), (67, 7), (157, 7), (491, 7), (587, 7), (691, 7)]
   ```
 
 Code that only fits empirical curves can consume `responseData`.  Code that
@@ -222,8 +263,16 @@ lake build Fermat.Ladder.Response
 lake build Fermat.Ladder.FaulhaberResponse
 lake build Fermat.Ladder.HistoricalResponse
 lake build Fermat.ThirtySeven.VandiverHistoricalAssembly37
+lake build Fermat.FourHundredNinetyOne.VandiverHistoricalAssembly491
+lake build Fermat.FourHundredNinetyOne.SecondCase
 lake build Fermat.FiveHundredEightySeven.VandiverHistoricalAssembly587
+lake build Fermat.SixHundredSeven.VandiverHistoricalAssembly607
+lake build Fermat.SixHundredNinetyOne.VandiverHistoricalAssembly691
+lake build Fermat.OneThousandFiftyOne.Regularity
+lake build Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
+lake build Fermat.Ladder.FourHundredNinetyOne
 lake build Fermat.Ladder.FiveHundredEightySeven
+lake build Fermat.Ladder.SixHundredNinetyOne
 ```
 
 A quick consumer file can simply use:
@@ -232,10 +281,17 @@ A quick consumer file can simply use:
 import Fermat
 
 #check Fermat.holdsAt_thirtySeven
+#check Fermat.holdsAt_fourHundredNinetyOne
 #check Fermat.holdsAt_fiveHundredEightySeven
+#check Fermat.holdsAt_sixHundredSeven
+#check Fermat.holdsAt_sixHundredNinetyOne
+#check Fermat.holdsAt_oneThousandFiftyOne
+#check Fermat.holdsAt_oneThousandThreeHundredEightyOne
 #check Fermat.holdsAt_eleven_faulhaber
 #eval Fermat.Ladder.FaulhaberResponse.responseData
+#check Fermat.Ladder.FourHundredNinetyOne.proofBacked
 #check Fermat.Ladder.FiveHundredEightySeven.proofBacked
+#check Fermat.Ladder.SixHundredNinetyOne.proofBacked
 #check Fermat.Ladder.HistoricalResponse.campaignProofs
 #eval Fermat.Ladder.HistoricalResponse.responseData
 ```
