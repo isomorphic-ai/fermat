@@ -20,6 +20,7 @@ import Fermat.Ladder.Response
 import Fermat.OneThousandFiftyOne.Regularity
 import Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
 import Fermat.Seven.Lebesgue.TheoremTwo
+import Fermat.SixHundredSeven.VandiverHistoricalAssembly607
 import Fermat.SixHundredNinetyOne.SecondCase
 import Fermat.Thirteen.Cyclotomic
 import Fermat.Thirteen.SevenFold
@@ -115,6 +116,12 @@ theorem holdsAt_fourHundredNinetyOne : HoldsAt 491 :=
 two-channel historical Vandiver assembly reused by the seven-fold ladder. -/
 theorem holdsAt_fiveHundredEightySeven : HoldsAt 587 :=
   FiveHundredEightySeven.holdsAt_fiveHundredEightySeven
+
+/-- Fermat's theorem for exponent six hundred seven, through the
+one-channel circular-unit certificate, Vandiver's Lemma II, and the
+historical descent. -/
+theorem holdsAt_sixHundredSeven : HoldsAt 607 :=
+  SixHundredSeven.holdsAt_sixHundredSeven
 
 /-- Fermat's theorem for exponent six hundred ninety-one, through the
 two-channel Vandiver--Takagi--Furtwängler assembly reused by the

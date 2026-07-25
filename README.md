@@ -30,6 +30,7 @@ The completed public fixed-exponent results are:
 | 157 | `Fermat.holdsAt_oneHundredFiftySeven` | two-probe Vandiver descent |
 | 491 | `Fermat.holdsAt_fourHundredNinetyOne` | three-channel cyclic-certificate Vandiver descent |
 | 587 | `Fermat.holdsAt_fiveHundredEightySeven` | Vandiver--Sinnott; see provenance below |
+| 607 | `Fermat.holdsAt_sixHundredSeven` | one-channel circular-unit Vandiver descent |
 | 691 | `Fermat.holdsAt_sixHundredNinetyOne` | two-channel cyclic-certificate Vandiver descent |
 | 1051 | `Fermat.holdsAt_oneThousandFiftyOne` | complete Bernoulli regularity scan |
 | 1381 | `Fermat.holdsAt_oneThousandThreeHundredEightyOne` | one-channel cyclic-certificate Vandiver descent |
@@ -99,7 +100,8 @@ Each completed exponent has its own directory under `Fermat/`.
   by the exponent-12613 campaign.
 - `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`,
   `Fermat/OneHundredFiftySeven/`, `Fermat/FourHundredNinetyOne/`,
-  `Fermat/FiveHundredEightySeven/`, `Fermat/SixHundredNinetyOne/`, and
+  `Fermat/FiveHundredEightySeven/`, `Fermat/SixHundredSeven/`,
+  `Fermat/SixHundredNinetyOne/`, and
   `Fermat/OneThousandThreeHundredEightyOne/` contain the completed
   irregular-prime campaigns. Their final public endpoints are the corresponding
   `VandiverHistoricalAssembly*.lean` modules.
@@ -135,6 +137,15 @@ irregular channels are exactly `{90, 92}`.  Its real circular-unit
 certificate compresses the `292 × 292` residue-symbol matrix into two
 length-293 cyclic phase vectors and a kernel-checked correlation identity,
 rather than storing 85,264 unrelated inverse entries.
+
+For `607`, the Sophie--Germain auxiliary prime and circular-unit modulus are
+both `q = 20639 = 34 * 607 + 1`.  The complete Bernoulli scan leaves the
+single irregular channel `{592}`, whose lifted index is `359344`.  Its
+source `302 × 302` circular-unit matrix is reconstructed from 303 cyclic
+phase values and a kernel-checked correlation inverse.  Sinnott's index
+formula, the diagonal-unit calculation, and Vandiver's Lemma II then feed
+the historical second-case descent.  The package prime `q* = 118973` is a
+separate norm/branch selector, not the circular-unit modulus.
 
 For `691`, the Sophie--Germain auxiliary prime and circular-unit modulus are
 both `q = 11057 = 16 * 691 + 1`.  The implication-form Bernoulli scan leaves
@@ -255,6 +266,7 @@ lake build Fermat.ThirtySeven.VandiverHistoricalAssembly37
 lake build Fermat.FourHundredNinetyOne.VandiverHistoricalAssembly491
 lake build Fermat.FourHundredNinetyOne.SecondCase
 lake build Fermat.FiveHundredEightySeven.VandiverHistoricalAssembly587
+lake build Fermat.SixHundredSeven.VandiverHistoricalAssembly607
 lake build Fermat.SixHundredNinetyOne.VandiverHistoricalAssembly691
 lake build Fermat.OneThousandFiftyOne.Regularity
 lake build Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
@@ -271,6 +283,7 @@ import Fermat
 #check Fermat.holdsAt_thirtySeven
 #check Fermat.holdsAt_fourHundredNinetyOne
 #check Fermat.holdsAt_fiveHundredEightySeven
+#check Fermat.holdsAt_sixHundredSeven
 #check Fermat.holdsAt_sixHundredNinetyOne
 #check Fermat.holdsAt_oneThousandFiftyOne
 #check Fermat.holdsAt_oneThousandThreeHundredEightyOne
