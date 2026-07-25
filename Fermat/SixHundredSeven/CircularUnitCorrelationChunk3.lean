@@ -1,11 +1,11 @@
-import Fermat.SixHundredSeven.CircularUnitCorrelationChunk2
+import Fermat.SixHundredSeven.CircularUnitCorrelationChunk0
 
 /-!
 # Cyclic-correlation data at exponent 607: residues 15--19
 
 This module kernel-checks five or fewer shifts as separate tail-recursive
-natural computations. Keeping each decision in its own declaration lets
-Lean release normalization state before checking the next shift.
+natural computations. The modules are arranged in restartable dependency
+tiers of width ten.
 -/
 
 namespace Fermat.SixHundredSeven.CircularUnitCertificate
@@ -17,28 +17,26 @@ open Fermat.SixHundredSeven.CircularUnitMatrix
 
 set_option maxHeartbeats 0
 set_option maxRecDepth 1000000
-set_option cbv.warning false
-set_option cbv.maxSteps 10000000
 
 private theorem nat_phase_correlation_15 :
     natCorrelation (15 : Cyc) = 0 := by
-  decide_cbv
+  decide
 
 private theorem nat_phase_correlation_16 :
     natCorrelation (16 : Cyc) = 0 := by
-  decide_cbv
+  decide
 
 private theorem nat_phase_correlation_17 :
     natCorrelation (17 : Cyc) = 0 := by
-  decide_cbv
+  decide
 
 private theorem nat_phase_correlation_18 :
     natCorrelation (18 : Cyc) = 0 := by
-  decide_cbv
+  decide
 
 private theorem nat_phase_correlation_19 :
     natCorrelation (19 : Cyc) = 0 := by
-  decide_cbv
+  decide
 
 /-- Abstract field-valued correlations for the local `5`-shift block. -/
 theorem phase_correlation_chunk3 (i : Fin 5) :
