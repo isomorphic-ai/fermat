@@ -178,6 +178,25 @@ Exponent-specific modules instantiate these generic results with explicit
 finite data.  Large matrices and Bernoulli numbers are checked using compact
 kernel-verifiable certificates rather than trusted external computations.
 
+[`Fermat/GenericIrregular/`](Fermat/GenericIrregular/) is the new
+fixed-exponent assembly layer.  Its theorem
+`Fermat.GenericIrregular.FixedExponent.holdsAt_of_certificate` proves
+`Fermat.HoldsAt p` from an honest parameterized certificate containing:
+
+- finite Sophie--Germain residue data;
+- plus-class nondivisibility;
+- a finite-index real cyclotomic-unit/derivative system;
+- a complete family of lifted Bernoulli channels; and
+- one nonzero weighted-moment determinant.
+
+It does not store `HoldsAt`, `SecondCaseExcluded`, or Vandiver's Lemma II as
+certificate fields.  The generic directory imports only shared machinery;
+thin concrete adapters live in the exponent directories.  The first
+end-to-end regressions are `37`, `59`, `67`, and `157`, with `157` using one
+`2 × 2` determinant to close both irregular channels `{62, 110}`.  See the
+[GenericIrregular architecture note](Fermat/GenericIrregular/README.md) for
+the complete dependency flow and certificate boundary.
+
 [`Fermat/Regular/`](Fermat/Regular/) contains reusable Faulhaber
 infrastructure and the checked bridge
 
