@@ -1,4 +1,5 @@
 import Fermat.Cases
+import Fermat.KummerIso.WeightedSolution
 import FltRegular.CaseII.InductionStep
 import FltRegular.CaseII.AuxLemmas
 
@@ -556,10 +557,20 @@ private lemma formula
   ring
 
 include hp e hy hz hprincipal in
-private lemma exists_weighted_solution :
-    ∃ (x' y' z' : 𝓞 K) (ε₁ ε₂ ε₃ : (𝓞 K)ˣ),
-      ¬ π ∣ x' ∧ ¬ π ∣ y' ∧ ¬ π ∣ z' ∧
-        ε₁ * x' ^ p + ε₂ * y' ^ p = ε₃ * (π ^ m * z') ^ p := by
+/-- The exact weighted equation produced by the cyclotomic factor
+allocation.
+
+Unlike the upstream regular-prime theorem, this construction uses only
+`RelevantIdealQuotientsPrincipal`.  The returned structure exposes the
+particular quotient `unitRatio = ε₁ / ε₂` to which a narrow Kummer unit
+theorem may be applied.
+
+This is the ratio chosen inside the regular-style `VandiverCriterion`
+induction.  It is not definitionally identified with the independently
+constructed ratio in `VandiverHistoricalPrime.WeightedReductionData`. -/
+theorem exists_weighted_solution :
+    Nonempty
+      (Fermat.KummerIso.WeightedSolution (𝓞 K) p m π) := by
   have h₁ := mul_mem_nthRootsFinset (η₀ : _).prop
     (hζ.unit'_coe.mem_nthRootsFinset hpri.out.pos)
   rw [one_mul] at h₁
@@ -603,7 +614,17 @@ private lemma exists_weighted_solution :
     mul_assoc π, mul_assoc π, ← mul_add,
     mul_right_inj' (hζ.unit'_coe.sub_one_ne_zero hpri.out.one_lt),
     ← Units.val_mul, ← Units.val_mul] at hformula
-  refine ⟨_, _, _, _, _, _, ?_, ?_, ?_, hformula⟩
+  refine ⟨
+    { x := _
+      y := _
+      z := _
+      ε₁ := _
+      ε₂ := _
+      ε₃ := _
+      not_pi_dvd_x := ?_
+      not_pi_dvd_y := ?_
+      not_pi_dvd_z := ?_
+      equation := hformula }⟩
   · exact hζ.zeta_sub_one_prime'.not_dvd_mul
       (representativeNum_spec hp hζ e hy hz hprincipal η₁ hη₁)
       (representativeDenom_spec hp hζ e hy hz hprincipal η₂ hη₂)
@@ -620,30 +641,34 @@ private lemma exists_solution_step
     ∃ (x' y' z' : 𝓞 K) (ε₃ : (𝓞 K)ˣ),
       ¬ π ∣ y' ∧ ¬ π ∣ z' ∧
         x' ^ p + y' ^ p = ε₃ * (π ^ m * z') ^ p := by
-  obtain ⟨x', y', z', ε₁, ε₂, ε₃, hx', hy', hz', e'⟩ :=
+  obtain ⟨w⟩ :=
     exists_weighted_solution hp hζ e hy hz hprincipal
-  obtain ⟨ε', hε'⟩ : ∃ ε', ε₁ / ε₂ = ε' ^ p := by
+  obtain ⟨ε', hε'⟩ : ∃ ε', w.unitRatio = ε' ^ p := by
     apply hkummer
     have hmp : p - 1 ≤ m * p := (Nat.sub_le _ _).trans
       ((le_of_eq (one_mul _).symm).trans
         (Nat.mul_le_mul_right p (one_le_m hp hζ e hy hz)))
     obtain ⟨u, hu⟩ := (associated_zeta_sub_one_pow_prime hζ).symm
-    rw [mul_pow, ← pow_mul, mul_comm (ε₃ : 𝓞 K), mul_assoc,
+    have e' := w.equation
+    rw [mul_pow, ← pow_mul, mul_comm (w.ε₃ : 𝓞 K), mul_assoc,
       ← Nat.sub_add_cancel hmp, add_comm _ (p - 1), pow_add, mul_assoc] at e'
     apply_fun Ideal.Quotient.mk (Ideal.span <| singleton (p : 𝓞 K)) at e'
     rw [map_mul, (Ideal.Quotient.eq_zero_iff_dvd _ _).mpr
       (associated_zeta_sub_one_pow_prime hζ).symm.dvd, zero_mul,
       Ideal.Quotient.eq_zero_iff_dvd] at e'
-    obtain ⟨a, ha⟩ := exists_solution'_aux hp hζ hx' e'
+    obtain ⟨a, ha⟩ := exists_solution'_aux hp hζ w.not_pi_dvd_x e'
     obtain ⟨b, hb⟩ := exists_dvd_pow_sub_Int_pow hp a
     have hab := dvd_add ha hb
     rw [sub_add_sub_cancel, ← Int.cast_pow] at hab
     exact ⟨b ^ p, hab⟩
-  refine ⟨ε' * x', y', z', ε₃ / ε₂, hy', hz', ?_⟩
-  rwa [mul_pow, ← Units.val_pow_eq_pow_val, ← hε',
-    ← mul_right_inj' ε₂.isUnit.ne_zero, mul_add, ← mul_assoc,
+  change w.ε₁ / w.ε₂ = ε' ^ p at hε'
+  refine ⟨ε' * w.x, w.y, w.z, w.ε₃ / w.ε₂,
+    w.not_pi_dvd_y, w.not_pi_dvd_z, ?_⟩
+  rw [mul_pow, ← Units.val_pow_eq_pow_val, ← hε',
+    ← mul_right_inj' w.ε₂.isUnit.ne_zero, mul_add, ← mul_assoc,
     ← Units.val_mul, mul_div_cancel, ← mul_assoc,
     ← Units.val_mul, mul_div_cancel]
+  exact w.equation
 
 end InductionStep
 
