@@ -114,4 +114,89 @@ theorem exists_nonzero_p_torsion_preserved_by_every_automorphism
   intro e
   exact zmod_automorphism_preserves_nonzero_p_torsion hp e
 
+/-! ## The two conjugate-pair class equations
+
+For the actual historical factors, write `c` for the class of the factor at
+`ζ` and `cbar` for its conjugate class.  The two principal products requested
+before equation (8) have additive classes
+
+* `c + cbar` for equation (7d), the relative-norm or plus part;
+* `c - cbar` for equation (7a), because `p - 1` acts as `-1` on `p`-torsion.
+
+Their simultaneous vanishing does force `c = 0` when doubling is injective.
+The issue is therefore not the final transport: it is proving both source
+zero equations.
+-/
+
+/-- Vanishing of both conjugate recombinations kills the original class
+whenever multiplication by two is injective. -/
+theorem eq_zero_of_conjugate_sum_and_difference_eq_zero
+    {A : Type*} [AddCommGroup A]
+    (hdouble : Function.Injective (fun a : A ↦ a + a))
+    (c cbar : A)
+    (hplus : c + cbar = 0)
+    (hminus : c - cbar = 0) :
+    c = 0 := by
+  have htwice : c + c = 0 := by
+    calc
+      c + c = (c + cbar) + (c - cbar) := by abel
+      _ = 0 := by rw [hplus, hminus, zero_add]
+  apply hdouble
+  simpa using htwice
+
+/-- At an odd prime, two is nonzero modulo `p`. -/
+theorem zmod_two_ne_zero
+    {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
+    (2 : ZMod p) ≠ 0 := by
+  letI : Fact p.Prime := ⟨hp⟩
+  change ((2 : ℕ) : ZMod p) ≠ 0
+  intro hzero
+  have hdiv : p ∣ 2 :=
+    (ZMod.natCast_eq_zero_iff 2 p).mp hzero
+  have hle : p ≤ 2 :=
+    Nat.le_of_dvd (by norm_num : 0 < 2) hdiv
+  have hp_le : 2 ≤ p := hp.two_le
+  exact hp2 (Nat.le_antisymm hle hp_le)
+
+/-- Doubling is injective in `ZMod p` for an odd prime `p`. -/
+theorem zmod_double_injective
+    {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
+    Function.Injective (fun a : ZMod p ↦ a + a) := by
+  letI : Fact p.Prime := ⟨hp⟩
+  intro a b hab
+  apply mul_left_cancel₀ (zmod_two_ne_zero hp hp2)
+  simpa [two_mul] using hab
+
+/-- The plus obstruction can remain nonzero even when the anti-invariant
+recombination already vanishes: take conjugation to fix the class `1`. -/
+theorem zmod_fixed_conjugation_countermodel
+    {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
+    let c : ZMod p := 1
+    let cbar : ZMod p := c
+    c ≠ 0 ∧ c - cbar = 0 ∧ c + cbar ≠ 0 := by
+  letI : Fact p.Prime := ⟨hp⟩
+  dsimp
+  refine ⟨one_ne_zero, sub_self 1, ?_⟩
+  intro hzero
+  apply zmod_two_ne_zero hp hp2
+  calc
+    (2 : ZMod p) = 1 + 1 := by ring
+    _ = 0 := hzero
+
+/-- The anti-invariant obstruction can remain nonzero even when the norm
+recombination already vanishes: take conjugation to negate the class `1`. -/
+theorem zmod_negated_conjugation_countermodel
+    {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
+    let c : ZMod p := 1
+    let cbar : ZMod p := -c
+    c ≠ 0 ∧ c + cbar = 0 ∧ c - cbar ≠ 0 := by
+  letI : Fact p.Prime := ⟨hp⟩
+  dsimp
+  refine ⟨one_ne_zero, add_neg_cancel 1, ?_⟩
+  intro hzero
+  apply zmod_two_ne_zero hp hp2
+  calc
+    (2 : ZMod p) = 1 - -1 := by ring
+    _ = 0 := hzero
+
 end Fermat.KummerIso.IdealAutomorphismBoundary
