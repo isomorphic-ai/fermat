@@ -244,8 +244,9 @@ for the next induction step; it does not claim the missing premise.
 The finite circular-unit residue certificates also replace the
 equation-(7d) seam at all nine completed campaign exponents.  Those closed
 regressions reuse each fixed certificate's checked unit system and axis-8
-channels, so `BernoulliValidationBound` is absent as well. Their only
-project axiom is termination of the generic Sophie--Germain search. See the
+channels, so `BernoulliValidationBound` is absent as well. They reuse the
+explicit finite Sophie--Germain certificates for Case I, and therefore
+contain no project axioms. See the
 [KummerIso architecture note](Fermat/KummerIso/README.md) for the complete
 call graph, theorem boundaries, and both regression families.
 
@@ -377,8 +378,9 @@ import Fermat
 ```
 
 The final endpoints are routinely checked with `#print axioms`. Historical
-explicit-prime endpoints depend only on Lean's standard `propext`,
-`Classical.choice`, and `Quot.sound`. The generic `*_generic` and
+explicit-prime endpoints and the nine finite
+`KummerIso.ResidueRegressions` endpoints depend only on Lean's standard
+`propext`, `Classical.choice`, and `Quot.sound`. The generic `*_generic` and
 `*_kummerIso` endpoint families additionally expose the temporary
 `SophieGermainAuxiliarySearchTermination` axiom. The campaign uses no
 `sorry` or `admit`; executable searches are reflected back into checked

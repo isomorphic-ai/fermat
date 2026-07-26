@@ -267,19 +267,19 @@ theorem holdsAt_of_residueCertificate_canonical
     holdsAt_of_residueCertificate
       (K := CyclotomicField p ℚ) hp5 C hdet hζ
 
-/-- Closed BVB-free FLT from a residue certificate and a field-generic fixed
-second-case certificate provider.
+/-- Closed BVB-free Case II from a residue certificate and a field-generic
+fixed second-case certificate provider.
 
 Only the provider's `unitSystem` and `channels` fields are consumed here. Its
 plus-class field is intentionally ignored because the independent residue
 certificate supplies the historical equation-(7d) reduction. -/
-theorem holdsAt_of_residueCertificate_canonical_of_fixedCertificate
+theorem secondCaseExcluded_of_residueCertificate_canonical_of_fixedCertificate
     {N : ℕ}
     (hp5 : 5 ≤ p)
     (C : Certificate p q)
     (hdet : C.matrix.det ≠ 0)
     (provider : FixedSecondCaseCertificateProvider p N) :
-    Fermat.HoldsAt p := by
+    Fermat.SecondCaseExcluded p := by
   letI : NeZero p :=
     ⟨(Fact.out : p.Prime).ne_zero⟩
   letI : NeZero (p : ℚ) :=
@@ -295,10 +295,30 @@ theorem holdsAt_of_residueCertificate_canonical_of_fixedCertificate
       ℚ (CyclotomicField p ℚ)
       (Set.mem_singleton p) (Fact.out : p.Prime).ne_zero
   let fixed := provider hζ
+  intro a b c ha hb hc hgcd hdiv
   exact
-    holdsAt_of_residueCertificate_of_unitSystem_of_channels
+    (secondCaseExcluded_of_residueCertificate_of_unitSystem_of_channels
       (K := CyclotomicField p ℚ) hp5 C hdet hζ
-      fixed.unitSystem fixed.channels
+      fixed.unitSystem fixed.channels)
+      ha hb hc hgcd hdiv
+
+/-- Closed BVB-free FLT from the same fixed certificates, retaining the
+generic proof-producing Sophie--Germain search as the default Case-I
+adapter. Its only project axiom is successful termination of that search.
+
+Fixed-exponent callers with explicit finite, checked Case-I certificates can
+instead combine the preceding `SecondCaseExcluded` theorem with
+`Fermat.holdsAt_of_auxiliaryPrime_of_secondCaseExcluded`. -/
+theorem holdsAt_of_residueCertificate_canonical_of_fixedCertificate
+    {N : ℕ}
+    (hp5 : 5 ≤ p)
+    (C : Certificate p q)
+    (hdet : C.matrix.det ≠ 0)
+    (provider : FixedSecondCaseCertificateProvider p N) :
+    Fermat.HoldsAt p :=
+  Fermat.holdsAt_of_sophieGermainSearch_of_secondCaseExcluded
+    (secondCaseExcluded_of_residueCertificate_canonical_of_fixedCertificate
+      hp5 C hdet provider)
 
 end
 
