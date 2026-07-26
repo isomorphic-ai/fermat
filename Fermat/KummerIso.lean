@@ -5,6 +5,7 @@ import Fermat.KummerIso.UnitExtraction
 import Fermat.KummerIso.DeepRatio
 import Fermat.KummerIso.Induction
 import Fermat.KummerIso.SecondCase
+import Fermat.KummerIso.ValidatedSecondCase
 import Fermat.KummerIso.FixedExponent
 import Fermat.KummerIso.Regressions
 
@@ -22,6 +23,8 @@ regularity:
   diagonal normalization of the lifted Bernoulli coefficients.
 
 `SecondCase` and `FixedExponent` assemble the complete historical route.
+`ValidatedSecondCase` exposes the prime-generic Case-II endpoint through
+the two deliberately named temporary validation seams.
 `Induction` records the conditional regular-style adapter: once the
 displayed unit-ratio depth premise is supplied, it absorbs the resulting
 `p`-th root and removes the left-hand weights from the equation.
