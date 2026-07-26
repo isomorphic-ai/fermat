@@ -127,6 +127,11 @@ The modules implement this flow as follows:
   for Case I.
 - `Regressions.lean` checks the resulting endpoint at every completed
   fixed irregular exponent in scope.
+- `FermatEquationSevenDBruteForce.lean` replaces equation (7d) with a
+  finite circular-unit residue certificate and provides a canonical
+  cyclotomic-field closure helper.
+- `ResidueRegressions.lean` uses that helper to close all nine completed
+  campaign exponents without the `FermatEquationSevenD` axiom.
 
 The factor allocation and descent algebra are reused from the pinned
 `flt-regular` dependency. The historical primary, reflection, real-unit,
@@ -182,6 +187,20 @@ search.  The standalone concrete Sophie--Germain certificates retained in
 the exponent directories are not inputs to these regressions. Their axiom
 audit therefore includes the explicit
 `SophieGermainAuxiliarySearchTermination` seam.
+
+The parallel theorems in `Fermat.KummerIso.ResidueRegressions` use the
+same exponent names and additionally replay the finite circular-unit
+residue matrices. For example:
+
+```lean
+Fermat.KummerIso.ResidueRegressions.holdsAt_thirtySeven
+Fermat.KummerIso.ResidueRegressions.holdsAt_fiftyNine
+Fermat.KummerIso.ResidueRegressions.holdsAt_oneThousandThreeHundredEightyOne
+```
+
+All nine residue regressions bypass `FermatEquationSevenD`. Their exact
+project-axiom boundary is `BernoulliValidationBound` plus
+`SophieGermainAuxiliarySearchTermination`.
 
 After `import Fermat`, the same endpoints are available with concise
 `_kummerIso` aliases.

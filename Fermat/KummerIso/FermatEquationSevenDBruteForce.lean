@@ -176,6 +176,36 @@ theorem holdsAt_of_residueCertificate
     (secondCaseExcluded_of_residueCertificate
       hp5 C hdet hζ)
 
+/-- Closed end-to-end FLT from a finite residue certificate.
+
+The preceding theorem is useful inside an already chosen cyclotomic field.
+For fixed-exponent regressions, however, the field and primitive root are
+purely canonical infrastructure. This wrapper chooses the standard
+cyclotomic field once and discharges that infrastructure uniformly, leaving
+only the finite certificate and its determinant proof as inputs. -/
+theorem holdsAt_of_residueCertificate_canonical
+    (hp5 : 5 ≤ p)
+    (C : Certificate p q)
+    (hdet : C.matrix.det ≠ 0) :
+    Fermat.HoldsAt p := by
+  letI : NeZero p :=
+    ⟨(Fact.out : p.Prime).ne_zero⟩
+  letI : NeZero (p : ℚ) :=
+    ⟨Nat.cast_ne_zero.mpr (Fact.out : p.Prime).ne_zero⟩
+  letI :
+      IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+    CyclotomicField.isCyclotomicExtension p ℚ
+  letI : NumberField.IsCMField (CyclotomicField p ℚ) :=
+    IsCyclotomicExtension.IsCMField (p := p) (CyclotomicField p ℚ)
+      (by omega)
+  obtain ⟨ζ, hζ⟩ :=
+    IsCyclotomicExtension.exists_isPrimitiveRoot
+      ℚ (CyclotomicField p ℚ)
+      (Set.mem_singleton p) (Fact.out : p.Prime).ne_zero
+  exact
+    holdsAt_of_residueCertificate
+      (K := CyclotomicField p ℚ) hp5 C hdet hζ
+
 end
 
 end Fermat.KummerIso.FermatEquationSevenDBruteForce
