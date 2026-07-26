@@ -19,9 +19,10 @@ the argument; the definitions themselves do not assert that work.
 There is an important historical distinction. Vandiver's 1929 Lemma 2 uses
 the deeper congruence modulo `(1 - ζ) ^ (2 * p)`, not merely congruence
 modulo `(p)`. We record that source-faithful conclusion separately below.
-The modern descent extracted here needs the stronger operational
-`SemiprimaryUnitPowerConclusion`; no implication from Vandiver's deep lemma
-to that premise is asserted.
+The modern descent extracted here asks only for a root of the exact unit
+ratio in its displayed weighted equation.  The older, stronger
+`SemiprimaryUnitPowerConclusion` remains available and implies this narrow
+premise by the congruence calculation already present in Kummer's step.
 -/
 
 namespace Fermat.Irregular.VandiverCriterion
@@ -635,32 +636,93 @@ theorem exists_weighted_solution :
       (representativeDenom_spec hp hζ e hy hz hprincipal η₁ hη₁)
       (representativeDenom_spec hp hζ e hy hz hprincipal η₂ hη₂)
 
+/-- The literal weighted witness selected by the regular-style induction at
+one descent state.
+
+The choice is exposed so that the repaired unit premise can refer to the
+same proof object consumed by the next line of the descent.  It is not an
+arbitrary `WeightedSolution`, and no equality with the independently chosen
+historical weighted witness is asserted. -/
+noncomputable def weightedSolution :
+    Fermat.KummerIso.WeightedSolution (𝓞 K) p m π :=
+  Classical.choice
+    (exists_weighted_solution hp hζ e hy hz hprincipal)
+
+/-- The narrow unit input actually consumed by the `m + 1 ↦ m` Kummer
+descent.
+
+For every genuine descent state, only the ratio of the literal
+`weightedSolution` selected above must have a `p`-th root.  The
+principalization proof is an explicit parameter and is passed unchanged to
+the choice, so this proposition carries the provenance which a bare
+quantification over all algebraically shaped weighted solutions would lose.
+-/
+def RelevantUnitPowerConclusion
+    (hp : p ≠ 2)
+    (hprincipal : RelevantIdealQuotientsPrincipal (K := K) hp) : Prop :=
+  ∀ {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {x y z : 𝓞 K} {ε₀ : (𝓞 K)ˣ} {m : ℕ}
+    (e : x ^ p + y ^ p =
+      ε₀ * ((hζ.unit'.1 - 1) ^ (m + 1) * z) ^ p)
+    (hy : ¬ hζ.unit'.1 - 1 ∣ y)
+    (hz : ¬ hζ.unit'.1 - 1 ∣ z),
+      ∃ v : (𝓞 K)ˣ,
+        (weightedSolution hp hζ e hy hz hprincipal).unitRatio = v ^ p
+
+/-- The regular weighted equation makes its exact unit ratio semiprimary
+modulo `(p)`.
+
+This is the congruence calculation used by the original Kummer unit lemma.
+It is factored out here only to show that the legacy global semiprimary
+premise is an adapter into `RelevantUnitPowerConclusion`; the narrow descent
+below does not otherwise require that global premise. -/
+theorem weightedSolution_unitRatio_isSemiprimary
+    (hp : p ≠ 2)
+    (hm : 1 ≤ m)
+    (w : Fermat.KummerIso.WeightedSolution (𝓞 K) p m π) :
+    ∃ n : ℤ, (p : 𝓞 K) ∣ (w.unitRatio - n : 𝓞 K) := by
+  have hmp : p - 1 ≤ m * p := (Nat.sub_le _ _).trans
+    ((le_of_eq (one_mul _).symm).trans
+      (Nat.mul_le_mul_right p hm))
+  have e' := w.equation
+  rw [mul_pow, ← pow_mul, mul_comm (w.ε₃ : 𝓞 K), mul_assoc,
+    ← Nat.sub_add_cancel hmp, add_comm _ (p - 1), pow_add, mul_assoc] at e'
+  apply_fun Ideal.Quotient.mk (Ideal.span <| singleton (p : 𝓞 K)) at e'
+  rw [map_mul, (Ideal.Quotient.eq_zero_iff_dvd _ _).mpr
+    (associated_zeta_sub_one_pow_prime hζ).symm.dvd, zero_mul,
+    Ideal.Quotient.eq_zero_iff_dvd] at e'
+  obtain ⟨a, ha⟩ :=
+    exists_solution'_aux hp hζ w.not_pi_dvd_x e'
+  obtain ⟨b, hb⟩ := exists_dvd_pow_sub_Int_pow hp a
+  have hab := dvd_add ha hb
+  rw [sub_add_sub_cancel, ← Int.cast_pow] at hab
+  exact ⟨b ^ p, hab⟩
+
+/-- Backward-compatible adapter from Kummer's global semiprimary unit lemma
+to the exact weighted-unit premise used by the refactored descent. -/
+theorem relevantUnitPowerConclusion_of_semiprimary
+    (hp : p ≠ 2)
+    (hprincipal : RelevantIdealQuotientsPrincipal (K := K) hp)
+    (hkummer : SemiprimaryUnitPowerConclusion K p) :
+    RelevantUnitPowerConclusion hp hprincipal := by
+  intro ζ hζ x y z ε₀ m e hy hz
+  let w :=
+    weightedSolution hp hζ e hy hz hprincipal
+  exact hkummer w.unitRatio
+    (weightedSolution_unitRatio_isSemiprimary
+      (K := K) (p := p) (hζ := hζ) hp
+        (one_le_m hp hζ e hy hz) w)
+
 include hp e hy hz hprincipal in
 private lemma exists_solution_step
-    (hkummer : SemiprimaryUnitPowerConclusion K p) :
+    (hkummer : RelevantUnitPowerConclusion hp hprincipal) :
     ∃ (x' y' z' : 𝓞 K) (ε₃ : (𝓞 K)ˣ),
       ¬ π ∣ y' ∧ ¬ π ∣ z' ∧
         x' ^ p + y' ^ p = ε₃ * (π ^ m * z') ^ p := by
-  obtain ⟨w⟩ :=
-    exists_weighted_solution hp hζ e hy hz hprincipal
-  obtain ⟨ε', hε'⟩ : ∃ ε', w.unitRatio = ε' ^ p := by
-    apply hkummer
-    have hmp : p - 1 ≤ m * p := (Nat.sub_le _ _).trans
-      ((le_of_eq (one_mul _).symm).trans
-        (Nat.mul_le_mul_right p (one_le_m hp hζ e hy hz)))
-    obtain ⟨u, hu⟩ := (associated_zeta_sub_one_pow_prime hζ).symm
-    have e' := w.equation
-    rw [mul_pow, ← pow_mul, mul_comm (w.ε₃ : 𝓞 K), mul_assoc,
-      ← Nat.sub_add_cancel hmp, add_comm _ (p - 1), pow_add, mul_assoc] at e'
-    apply_fun Ideal.Quotient.mk (Ideal.span <| singleton (p : 𝓞 K)) at e'
-    rw [map_mul, (Ideal.Quotient.eq_zero_iff_dvd _ _).mpr
-      (associated_zeta_sub_one_pow_prime hζ).symm.dvd, zero_mul,
-      Ideal.Quotient.eq_zero_iff_dvd] at e'
-    obtain ⟨a, ha⟩ := exists_solution'_aux hp hζ w.not_pi_dvd_x e'
-    obtain ⟨b, hb⟩ := exists_dvd_pow_sub_Int_pow hp a
-    have hab := dvd_add ha hb
-    rw [sub_add_sub_cancel, ← Int.cast_pow] at hab
-    exact ⟨b ^ p, hab⟩
+  let w :=
+    weightedSolution hp hζ e hy hz hprincipal
+  obtain ⟨ε', hε'⟩ :=
+    hkummer hζ e hy hz
   change w.ε₁ / w.ε₂ = ε' ^ p at hε'
   refine ⟨ε' * w.x, w.y, w.z, w.ε₃ / w.ε₂,
     w.not_pi_dvd_y, w.not_pi_dvd_z, ?_⟩
@@ -677,7 +739,7 @@ end InductionStep
 private lemma not_exists_solution
     (hodd : p ≠ 2)
     (hprincipal : RelevantIdealQuotientsPrincipal (K := K) hodd)
-    (hkummer : SemiprimaryUnitPowerConclusion K p)
+    (hkummer : RelevantUnitPowerConclusion hodd hprincipal)
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) {m : ℕ} (hm : 1 ≤ m) :
     ¬ ∃ (x' y' z' : 𝓞 K) (ε₃ : (𝓞 K)ˣ),
       ¬ (hζ.unit' : 𝓞 K) - 1 ∣ y' ∧
@@ -694,7 +756,7 @@ private lemma not_exists_solution
 private lemma not_exists_cyclotomic_solution
     (hodd : p ≠ 2)
     (hprincipal : RelevantIdealQuotientsPrincipal (K := K) hodd)
-    (hkummer : SemiprimaryUnitPowerConclusion K p)
+    (hkummer : RelevantUnitPowerConclusion hodd hprincipal)
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
     ¬ ∃ (x y z : 𝓞 K),
       ¬ (hζ.unit' : 𝓞 K) - 1 ∣ y ∧
@@ -728,7 +790,7 @@ private lemma not_exists_cyclotomic_solution
 private lemma not_exists_int_solution
     (hodd : p ≠ 2)
     (hprincipal : RelevantIdealQuotientsPrincipal (K := K) hodd)
-    (hkummer : SemiprimaryUnitPowerConclusion K p) :
+    (hkummer : RelevantUnitPowerConclusion hodd hprincipal) :
     ¬ ∃ (x y z : ℤ),
       ¬ (p : ℤ) ∣ y ∧ (p : ℤ) ∣ z ∧ z ≠ 0 ∧
       x ^ p + y ^ p = z ^ p := by
@@ -745,7 +807,7 @@ private lemma not_exists_int_solution
 private lemma not_exists_primitive_int_solution
     (hodd : p ≠ 2)
     (hprincipal : RelevantIdealQuotientsPrincipal (K := K) hodd)
-    (hkummer : SemiprimaryUnitPowerConclusion K p) :
+    (hkummer : RelevantUnitPowerConclusion hodd hprincipal) :
     ¬ ∃ (x y z : ℤ),
       ({x, y, z} : Finset ℤ).gcd id = 1 ∧ (p : ℤ) ∣ z ∧ z ≠ 0 ∧
       x ^ p + y ^ p = z ^ p := by
@@ -764,19 +826,18 @@ private lemma int_gcd_left_comm (a b c : ℤ) :
     Int.gcd a (Int.gcd b c) = Int.gcd b (Int.gcd a c) := by
   rw [← Int.gcd_assoc, ← Int.gcd_assoc, Int.gcd_comm a b]
 
-/-- Exclude the second case from precisely the two local inputs used by the
-cyclotomic descent.
+/-- Exclude the second case from precisely the two narrow inputs used by the
+cyclotomic descent: principalize its displayed ideal quotients and root the
+literal unit ratio in each displayed weighted solution.
 
 For an irregular prime these hypotheses are not bookkeeping assumptions:
-proving them is exactly the remaining singular-primary work. In particular,
-the semiprimary-unit premise here is stronger than Vandiver's 1929 Lemma 2
-and is not supplied by the current Bernoulli cube data. The theorem only
-packages the unconditional implication from those obligations to the integer
-second-case statement. -/
-theorem secondCaseExcluded_of_local_hypotheses
+proving them is exactly the remaining singular-primary work.  This theorem
+preserves the original `m + 1 ↦ m` Kummer descent and makes no claim that
+the separately constructed historical weighted ratio is this ratio. -/
+theorem secondCaseExcluded_of_relevant_hypotheses
     (hodd : p ≠ 2)
     (hprincipal : RelevantIdealQuotientsPrincipal (K := K) hodd)
-    (hkummer : SemiprimaryUnitPowerConclusion K p) :
+    (hkummer : RelevantUnitPowerConclusion hodd hprincipal) :
     Fermat.SecondCaseExcluded p := by
   intro a b c ha hb hc hgcd hcase e
   have hpodd := hpri.out.odd_of_ne_two hodd
@@ -800,5 +861,21 @@ theorem secondCaseExcluded_of_local_hypotheses
       · simp [hpodd.neg_pow, ← e]
   · exact not_exists_primitive_int_solution hodd hprincipal hkummer
       ⟨a, b, c, hgcd, hpc, hc, e⟩
+
+/-- Backward-compatible second-case endpoint using the stronger global
+semiprimary-unit premise.
+
+The only additional work is the checked congruence calculation
+`weightedSolution_unitRatio_isSemiprimary`; the descent itself is the narrow
+one in `secondCaseExcluded_of_relevant_hypotheses`. -/
+theorem secondCaseExcluded_of_local_hypotheses
+    (hodd : p ≠ 2)
+    (hprincipal : RelevantIdealQuotientsPrincipal (K := K) hodd)
+    (hkummer : SemiprimaryUnitPowerConclusion K p) :
+    Fermat.SecondCaseExcluded p :=
+  secondCaseExcluded_of_relevant_hypotheses
+    hodd hprincipal
+      (relevantUnitPowerConclusion_of_semiprimary
+        (K := K) hodd hprincipal hkummer)
 
 end Fermat.Irregular.VandiverCriterion
