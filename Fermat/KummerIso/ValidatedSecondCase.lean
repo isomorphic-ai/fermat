@@ -1,4 +1,5 @@
 import Fermat.Irregular.VandiverHistoricalStartPrime
+import Fermat.Cases
 import Fermat.KummerIso.BernoulliValidationBound
 import Fermat.KummerIso.FermatEquationSevenD
 
@@ -118,6 +119,19 @@ theorem secondCaseExcluded_of_two_validation_seams
     Fermat.SecondCaseExcluded p :=
   secondCaseExcluded_of_historicalReduction hp5 hζ
     (historicalEquationsSevenToTenReduction hp5 hζ)
+
+/-- End-to-end FLT after combining the two Case-II validation seams with
+the proof-producing Sophie--Germain search for Case I.
+
+The three visible project axioms are `FermatEquationSevenD`,
+`BernoulliValidationBound`, and successful termination of the executable
+Sophie--Germain auxiliary-prime search. -/
+theorem holdsAt_of_validation_seams
+    (hp5 : 5 ≤ p)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    Fermat.HoldsAt p :=
+  Fermat.holdsAt_of_sophieGermainSearch_of_secondCaseExcluded
+    (secondCaseExcluded_of_two_validation_seams hp5 hζ)
 
 end
 

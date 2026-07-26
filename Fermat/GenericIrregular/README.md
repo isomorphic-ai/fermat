@@ -10,9 +10,10 @@ The result has the fixed-exponent shape
 ```
 
 It is not a proof of `∀ p, Fermat.HoldsAt p`: every chosen exponent still
-supplies and kernel-checks its own finite arithmetic, circular-unit, and
-Sophie--Germain data.  This matches the intended “one method for any given
-exponent” reading.
+supplies and kernel-checks its own finite Case-II arithmetic and
+circular-unit data. Case I is handled uniformly by a proof-producing
+Sophie--Germain search, behind one explicit successful-termination axiom.
+This matches the intended “one method for any given exponent” reading.
 
 ## Dependency flow
 
@@ -27,7 +28,7 @@ derivative congruences ┘                         │
                                                 ├─> SecondCaseExcluded
 plus-class nondivisibility ─────────────────────┘
 
-Sophie--Germain residue certificate ────────────┐
+proof-producing Sophie--Germain search ─────────┐
 SecondCaseExcluded ─────────────────────────────┴─> Fermat.HoldsAt p
 ```
 
@@ -52,8 +53,8 @@ The modules implement that flow as follows:
   Lemma II alternative.
 - `SecondCase.lean` joins the generic historical descent, plus-class input,
   Lemma II system, and channel certificate.
-- `FixedExponent.lean` adds the finite Sophie--Germain certificate and
-  exports `holdsAt_of_certificate`.
+- `FixedExponent.lean` invokes the generic Sophie--Germain search for
+  Case I and exports `holdsAt_of_certificate`.
 
 ## Axis 8, not seven case splits
 
@@ -89,17 +90,27 @@ The final certificate does **not** store any of:
 
 Those propositions are derived internally.
 
-Two substantial upstream mathematical interfaces remain visible:
+Despite its historical type name, `FixedIrregularCertificate` is therefore
+a fixed-second-case certificate.  The explicit per-prime
+`SophieGermainCertificate` definitions retained in concrete
+`GenericProof.lean` files are standalone finite regressions, not fields or
+inputs of the generic endpoint.
+
+Three substantial upstream interfaces remain visible:
 
 - `PlusClassNondivisibility K p`, currently obtained in each concrete
   exponent from a circular-unit residue certificate and the generic
   Sinnott--Kummer theorem;
 - `PrimitiveRelationCubeCongruences`, currently obtained from the concrete
   polynomial-remainder and high logarithmic-derivative computation.
+- `SophieGermainAuxiliarySearchTermination`, the temporary assertion that
+  the total proof-producing auxiliary-prime search eventually succeeds.
 
-They are not reformulations of FLT or of Lemma II.  Future work can push the
-certificate boundary further down to raw residue matrices and derivative
-tables without changing the downstream theorem.
+The first two are not reformulations of FLT or of Lemma II; the third states
+only eventual success of an executable checker, not Case I. Future work can
+push the certificate boundary further down to raw residue matrices and
+derivative tables, and can replace the termination seam, without changing
+the downstream theorem.
 
 ## Concrete adapters
 
@@ -126,13 +137,15 @@ The checked concrete channel data are:
 | `691` | `2` | `[12, 200]` | `[288, 429]` | `2 × 2` |
 | `1381` | `1` | `[266]` | `[561]` | `1 × 1` |
 
-Every row uses the same `FixedIrregularCertificate p N` theorem.  The
-current campaign deliberately stops at `1381`; no exponent above it is part
-of this generic regression set.
+Every row supplies the same `FixedIrregularCertificate p N`
+fixed-second-case payload; the theorem combines it with the generic
+proof-producing Case-I search.  The current campaign deliberately stops at
+`1381`; no exponent above it is part of this generic regression set.
 
 Their final `GenericProof` theorems have the standard Lean logical
-dependencies only:
+dependencies plus the explicit search-termination seam:
 
 ```text
-[propext, Classical.choice, Quot.sound]
+[propext, Classical.choice, Quot.sound,
+ SophieGermainAuxiliarySearchTermination]
 ```

@@ -101,7 +101,7 @@ lifted Bernoulli channels ──────> p³ ∤ Bᵢ
                                   v
                     historical descent ─> SecondCaseExcluded
 
-Sophie--Germain certificate + SecondCaseExcluded ─> Fermat.HoldsAt p
+generic Sophie--Germain search + SecondCaseExcluded ─> Fermat.HoldsAt p
 ```
 
 The modules implement this flow as follows:
@@ -123,7 +123,8 @@ The modules implement this flow as follows:
   root into `x`, and produces the unweighted equation for the next
   induction step.
 - `SecondCase.lean` performs the complete historical second-case descent.
-- `FixedExponent.lean` adds the first-case Sophie--Germain certificate.
+- `FixedExponent.lean` invokes the proof-producing Sophie--Germain search
+  for Case I.
 - `Regressions.lean` checks the resulting endpoint at every completed
   fixed irregular exponent in scope.
 
@@ -159,8 +160,8 @@ visible and is not hidden in a certificate.
 
 ## End-to-end regressions
 
-Nine existing honest fixed-exponent certificates are reassembled through
-the normalized correction:
+Nine existing fixed-second-case certificates are reassembled through the
+normalized correction:
 
 | Exponent | Irregular channels | Public regression theorem |
 | ---: | ---: | --- |
@@ -176,7 +177,11 @@ the normalized correction:
 
 These regressions do not call the older `holdsAt_*_generic` endpoints.
 They reuse the same raw certificate types, reconstruct Case II through the
-correction, and then rejoin the first and second cases.
+correction, and then rejoin the first and second cases through the generic
+search.  The standalone concrete Sophie--Germain certificates retained in
+the exponent directories are not inputs to these regressions. Their axiom
+audit therefore includes the explicit
+`SophieGermainAuxiliarySearchTermination` seam.
 
 After `import Fermat`, the same endpoints are available with concise
 `_kummerIso` aliases.

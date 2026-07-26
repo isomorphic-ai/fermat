@@ -5,10 +5,13 @@ import Fermat.FiftyNine.GenericSecondCase
 /-!
 # FLT at exponent 59 through the generic fixed-exponent interface
 
-This file is the end-to-end regression: the concrete Sophie--Germain,
-plus-class, diagonal-unit, derivative, and axis-8 channel data are packaged
-as a `FixedIrregularCertificate`; the prime-generic theorem alone turns that
-certificate into `Fermat.HoldsAt 59`.
+This file is the end-to-end regression: the concrete plus-class,
+diagonal-unit, derivative, and axis-8 channel data are packaged as a
+`FixedIrregularCertificate`, the fixed-second-case input to the
+prime-generic theorem.  That theorem combines it with the generic
+proof-producing Sophie--Germain search to obtain `Fermat.HoldsAt 59`.
+The explicit concrete Sophie--Germain certificate below is an independent
+finite-check regression; the endpoint does not consume it.
 -/
 
 open scoped NumberField
@@ -31,12 +34,13 @@ def sophieGermainCertificate59 : SophieGermainCertificate 59 where
   exponentNotPower :=
     Fermat.FiftyNine.exponentNotPower_59_827
 
-/-- The complete fixed-exponent certificate at `59`.
+/-- The fixed-second-case certificate at `59`.
 
 A primitive root is chosen only to extract the root-independent
 plus-class-number statement from the concrete Sinnott--Kummer theorem.
 Every unit and derivative field remains uniform in the later root chosen
-by the generic assembly. -/
+by the generic assembly.  Case I is supplied separately by the generic
+search. -/
 def fixedIrregularCertificate59 :
     FixedIrregularCertificate 59 1 := by
   letI : NeZero (59 : ℚ) := ⟨by norm_num⟩
@@ -53,7 +57,6 @@ def fixedIrregularCertificate59 :
     Classical.choose_spec hroot
   exact
     { exponent_atLeastFive := by norm_num
-      sophieGermain := sophieGermainCertificate59
       secondCase :=
         Fermat.FiftyNine.GenericSecondCase.fixedSecondCaseCertificate59
           hζ }

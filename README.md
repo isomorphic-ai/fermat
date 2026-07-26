@@ -187,28 +187,33 @@ kernel-verifiable certificates rather than trusted external computations.
 [`Fermat/GenericIrregular/`](Fermat/GenericIrregular/) is the new
 fixed-exponent assembly layer.  Its theorem
 `Fermat.GenericIrregular.FixedExponent.holdsAt_of_certificate` proves
-`Fermat.HoldsAt p` from an honest parameterized certificate containing:
+`Fermat.HoldsAt p` from a parameterized fixed-second-case certificate
+containing:
 
-- finite Sophie--Germain residue data;
 - plus-class nondivisibility;
 - a finite-index real cyclotomic-unit/derivative system;
 - a complete family of lifted Bernoulli channels; and
 - one nonzero weighted-moment determinant.
 
-It does not store `HoldsAt`, `SecondCaseExcluded`, or Vandiver's Lemma II as
-certificate fields.  The generic directory imports only shared machinery;
-thin concrete adapters live in the exponent directories.  End-to-end
-regressions are checked at `37`, `59`, `67`, `157`, `491`, `587`, `607`,
-`691`, and `1381`.  They include the two-channel `157`, `587`, and `691`
-cases and the three-channel `491` case, each closed by one weighted-moment
-determinant.  The current generic campaign stops at `1381`.  See the
+It does not store `HoldsAt`, `SecondCaseExcluded`, Vandiver's Lemma II, or
+first-case data as certificate fields. Case I is supplied by a generic
+proof-producing Sophie--Germain search; its temporary successful-termination
+assumption is explicit and separately auditable. The concrete
+Sophie--Germain certificates retained in exponent directories are
+standalone finite regressions, not inputs to these generic endpoints. The
+generic directory
+imports only shared machinery; thin concrete adapters live in the exponent
+directories. End-to-end regressions are checked at `37`, `59`, `67`, `157`,
+`491`, `587`, `607`, `691`, and `1381`. They include the two-channel `157`,
+`587`, and `691` cases and the three-channel `491` case, each closed by one
+weighted-moment determinant. The current generic campaign stops at `1381`. See the
 [GenericIrregular architecture note](Fermat/GenericIrregular/README.md) for
 the complete dependency flow, channel table, and certificate boundary.
 
 ### The regularized Kummer splice
 
 [`Fermat/KummerIso/`](Fermat/KummerIso/) reassembles those same nine
-fixed-irregular certificates through an explicit repair of Kummer's proof.
+fixed-second-case certificates through an explicit repair of Kummer's proof.
 The two uses of regularity are kept separate:
 
 1. the special Fermat ideal roots are principalized by the historical
@@ -357,7 +362,10 @@ import Fermat
 #eval Fermat.Ladder.HistoricalResponse.responseData
 ```
 
-The final endpoints are routinely checked with `#print axioms`.  They depend
-only on Lean's standard `propext`, `Classical.choice`, and `Quot.sound`; the
-campaign does not use `sorry`, `admit`, custom project axioms, or
-`native_decide`.
+The final endpoints are routinely checked with `#print axioms`. Historical
+explicit-prime endpoints depend only on Lean's standard `propext`,
+`Classical.choice`, and `Quot.sound`. The generic `*_generic` and
+`*_kummerIso` endpoint families additionally expose the temporary
+`SophieGermainAuxiliarySearchTermination` axiom. The campaign uses no
+`sorry` or `admit`; executable searches are reflected back into checked
+propositions.

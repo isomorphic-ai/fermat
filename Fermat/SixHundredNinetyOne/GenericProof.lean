@@ -5,9 +5,12 @@ import Fermat.SixHundredNinetyOne.GenericSecondCase
 /-!
 # FLT at exponent 691 through the generic fixed-exponent interface
 
-The concrete Sophie--Germain, plus-class, diagonal-unit, derivative, and
-two-channel axis-8 data are packaged as a `FixedIrregularCertificate`.
-The prime-generic theorem alone then proves `Fermat.HoldsAt 691`.
+The concrete plus-class, diagonal-unit, derivative, and two-channel axis-8
+data are packaged as a `FixedIrregularCertificate`, the fixed-second-case
+input to the prime-generic theorem.  That theorem combines it with the
+generic proof-producing Sophie--Germain search to prove
+`Fermat.HoldsAt 691`.  The explicit concrete Sophie--Germain certificate
+below is a standalone finite regression; the endpoint does not consume it.
 -/
 
 open scoped NumberField
@@ -32,7 +35,9 @@ def sophieGermainCertificate691 : SophieGermainCertificate 691 where
   exponentNotPower :=
     Fermat.SixHundredNinetyOne.exponentNotPower_691_11057
 
-/-- The complete honest fixed-exponent certificate at `691`. -/
+/-- The fixed-second-case certificate at `691`.
+
+Case I is supplied separately by the generic Sophie--Germain search. -/
 def fixedIrregularCertificate691 :
     FixedIrregularCertificate 691 2 := by
   letI : NeZero (691 : ℚ) := ⟨by norm_num⟩
@@ -49,7 +54,6 @@ def fixedIrregularCertificate691 :
     Classical.choose_spec hroot
   exact
     { exponent_atLeastFive := by norm_num
-      sophieGermain := sophieGermainCertificate691
       secondCase :=
         Fermat.SixHundredNinetyOne.GenericSecondCase.fixedSecondCaseCertificate691
           hζ }

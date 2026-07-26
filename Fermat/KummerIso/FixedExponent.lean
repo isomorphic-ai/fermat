@@ -8,9 +8,9 @@ This is the final assembly for an existing
 `GenericIrregular.FixedExponent.FixedIrregularCertificate`.
 
 The second case is reconstructed by `KummerIso.SecondCase`, so its unit step
-passes through the normalized correction automorphism.  Sophie Germain's
-finite auxiliary-prime certificate then excludes the first case and joins
-the two cases into `Fermat.HoldsAt p`.
+passes through the normalized correction automorphism. The generic
+proof-producing Sophie--Germain search then excludes the first case and
+joins the two cases into `Fermat.HoldsAt p`.
 
 This theorem does not delegate to
 `GenericIrregular.FixedExponent.holdsAt_of_certificate`.
@@ -53,15 +53,8 @@ theorem holdsAt_of_certificate {p N : ℕ} [Fact p.Prime]
   have hsecond : Fermat.SecondCaseExcluded p :=
     Fermat.KummerIso.SecondCase.secondCaseExcluded_of_certificate
       hp5 hζ certificate.secondCase
-  have hp2 : p ≠ 2 := by
-    omega
   exact
-    Fermat.holdsAt_of_auxiliaryPrime_of_secondCaseExcluded
-      (Fact.out : p.Prime)
-      ((Fact.out : p.Prime).odd_of_ne_two hp2)
-      certificate.sophieGermain.auxiliaryPrime_isPrime
-      certificate.sophieGermain.noConsecutivePowers
-      certificate.sophieGermain.exponentNotPower
+    Fermat.holdsAt_of_sophieGermainSearch_of_secondCaseExcluded
       hsecond
 
 end

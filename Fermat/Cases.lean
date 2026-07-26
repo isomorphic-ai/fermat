@@ -1,4 +1,5 @@
 import Fermat.SophieGermain
+import FltRegular.CaseI.Statement
 
 /-!
 # Assembling the first and second cases
@@ -79,5 +80,23 @@ theorem holdsAt_of_auxiliaryPrime_of_secondCaseExcluded {p q : ℕ}
   · exact dvd_mul_of_dvd_left (dvd_mul_of_dvd_right hb' a) c
   · exact dvd_mul_of_dvd_right hc' (a * b)
   exact hfermat
+
+/-- A successful generic Sophie--Germain search, together with an
+independently proved exclusion of the second case, proves FLT at `p`.
+
+The Case-I branch is computed by the proof-producing search in
+`FltRegular.CaseI.SophieGermainSearch`. Its only temporary assumption is
+that the total bounded search eventually returns successfully. -/
+theorem holdsAt_of_sophieGermainSearch_of_secondCaseExcluded
+    {p : ℕ} [Fact p.Prime]
+    (hsecond : SecondCaseExcluded p) :
+    HoldsAt p := by
+  change FermatLastTheoremFor p
+  rw [fermatLastTheoremFor_iff_int]
+  refine fermatLastTheoremWith_of_fermatLastTheoremWith_coprime ?_
+  intro a b c ha hb hc hgcd hfermat
+  by_cases hcase : (p : ℤ) ∣ a * b * c
+  · exact hsecond ha hb hc hgcd hcase hfermat
+  · exact FltRegular.caseI hcase hfermat
 
 end Fermat

@@ -159,6 +159,23 @@ theorem secondCaseExcluded_of_residueCertificate
     (historicalEquationsSevenToTenReduction_of_residueCertificate
       hp5 C hdet hζ)
 
+/-- End-to-end FLT for a fixed prime using executable certificate searches
+for both cases.
+
+The circular-unit residue certificate removes `FermatEquationSevenD` from
+Case II. The generic Sophie--Germain search handles Case I. Consequently,
+the only project axioms are `BernoulliValidationBound` and successful
+termination of the Sophie--Germain search. -/
+theorem holdsAt_of_residueCertificate
+    (hp5 : 5 ≤ p)
+    (C : Certificate p q)
+    (hdet : C.matrix.det ≠ 0)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    Fermat.HoldsAt p :=
+  Fermat.holdsAt_of_sophieGermainSearch_of_secondCaseExcluded
+    (secondCaseExcluded_of_residueCertificate
+      hp5 C hdet hζ)
+
 end
 
 end Fermat.KummerIso.FermatEquationSevenDBruteForce

@@ -12,12 +12,14 @@ import Fermat.OneThousandThreeHundredEightyOne.GenericProof
 /-!
 # Fixed-exponent regressions through the Kummer correction
 
-Each theorem in this file feeds an existing honest
+Each theorem in this file feeds an existing fixed-second-case
 `GenericIrregular.FixedExponent.FixedIrregularCertificate` into the new
 `KummerIso.FixedExponent` assembly.  Thus every regression traverses the
-normalized correction automorphism and `KummerIso.UnitExtraction`.
+normalized correction automorphism and `KummerIso.UnitExtraction`, then
+obtains Case I from the generic proof-producing Sophie--Germain search.
 
-The existing `holdsAt_*_generic` conclusions are deliberately not used.
+The existing `holdsAt_*_generic` conclusions and the standalone concrete
+Sophie--Germain certificates are deliberately not used.
 -/
 
 namespace Fermat.KummerIso.Regressions
