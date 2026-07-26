@@ -77,11 +77,17 @@ theorem kummerUnitPowerConclusion_of_canonicalCubeCongruences
     ((↑) : NumberField.IsCMField.realUnits K → (𝓞 K)ˣ) hv
   simpa only [uReal, deepRealUnit_coe, Subgroup.coe_pow] using hv'
 
-/-- End-to-end historical Case II through exactly the two deliberately named
-temporary validation seams. -/
-theorem secondCaseExcluded_of_two_validation_seams
+/-- End-to-end historical Case II from an explicitly supplied historical
+equations-(7)--(10) reduction.  The only project axiom used internally by
+this theorem is `BernoulliValidationBound`; callers may construct the ideal
+side either through `FermatEquationSevenD` or through finite residue
+certificates. -/
+theorem secondCaseExcluded_of_historicalReduction
     (hp5 : 5 ≤ p)
-    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hreduce :
+      EquationsSevenToTenReduction hζ
+        (RealSourceAdmissible hζ)) :
     Fermat.SecondCaseExcluded p := by
   have hp2 : p ≠ 2 := by
     omega
@@ -92,10 +98,6 @@ theorem secondCaseExcluded_of_two_validation_seams
         (RealSourceAdmissible hζ) :=
     Fermat.Irregular.VandiverHistoricalStartPrime.secondCaseStartsHistoricalDescent
       (K := K) hp5 hr hζ
-  have hreduce :
-      EquationsSevenToTenReduction hζ
-        (RealSourceAdmissible hζ) :=
-    historicalEquationsSevenToTenReduction hp5 hζ
   have hkummer :
       Fermat.Irregular.VandiverCriterion.KummerUnitPowerConclusion
         K p :=
@@ -107,6 +109,15 @@ theorem secondCaseExcluded_of_two_validation_seams
       hp2 hζ (RealSourceAdmissible hζ)
       hstart hreduce hkummer)
       ha hb hc hgcd hdiv
+
+/-- End-to-end historical Case II through exactly the two deliberately named
+temporary validation seams. -/
+theorem secondCaseExcluded_of_two_validation_seams
+    (hp5 : 5 ≤ p)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    Fermat.SecondCaseExcluded p :=
+  secondCaseExcluded_of_historicalReduction hp5 hζ
+    (historicalEquationsSevenToTenReduction hp5 hζ)
 
 end
 
