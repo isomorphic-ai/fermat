@@ -198,9 +198,12 @@ Fermat.KummerIso.ResidueRegressions.holdsAt_fiftyNine
 Fermat.KummerIso.ResidueRegressions.holdsAt_oneThousandThreeHundredEightyOne
 ```
 
-All nine residue regressions bypass `FermatEquationSevenD`. Their exact
-project-axiom boundary is `BernoulliValidationBound` plus
+All nine residue regressions bypass `FermatEquationSevenD` and reuse their
+fixed unit systems and axis-8 channels instead of
+`BernoulliValidationBound`. Their only project axiom is
 `SophieGermainAuxiliarySearchTermination`.
 
-After `import Fermat`, the same endpoints are available with concise
-`_kummerIso` aliases.
+After `import Fermat`, the `KummerIso.Regressions` endpoints are also
+available through concise `_kummerIso` aliases. The residue regressions
+deliberately keep their qualified names so the finite-matrix route and its
+axiom provenance remain visible.

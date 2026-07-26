@@ -2,6 +2,7 @@ import Fermat.Irregular.VandiverHistoricalStartPrime
 import Fermat.Cases
 import Fermat.KummerIso.BernoulliValidationBound
 import Fermat.KummerIso.FermatEquationSevenD
+import Fermat.KummerIso.UnitExtraction
 
 /-!
 # Case II through the two temporary validation seams
@@ -78,6 +79,38 @@ theorem kummerUnitPowerConclusion_of_canonicalCubeCongruences
     ((↑) : NumberField.IsCMField.realUnits K → (𝓞 K)ˣ) hv
   simpa only [uReal, deepRealUnit_coe, Subgroup.coe_pow] using hv'
 
+/-- Checked historical Case II from an explicitly supplied equations-(7)--(10)
+reduction and the exact Kummer unit-power conclusion consumed by the descent.
+
+This is the common assembly boundary. It carries no validation policy:
+callers may obtain `hkummer` from the temporary Bernoulli-validation seam or
+from a finite unit system together with axis-8 channel data. -/
+theorem secondCaseExcluded_of_historicalReduction_of_kummerConclusion
+    (hp5 : 5 ≤ p)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hreduce :
+      EquationsSevenToTenReduction hζ
+        (RealSourceAdmissible hζ))
+    (hkummer :
+      Fermat.Irregular.VandiverCriterion.KummerUnitPowerConclusion
+        K p) :
+    Fermat.SecondCaseExcluded p := by
+  have hp2 : p ≠ 2 := by
+    omega
+  obtain ⟨r, hr⟩ :=
+    (Fact.out : p.Prime).odd_of_ne_two hp2
+  have hstart :
+      SecondCaseStartsHistoricalDescent hζ
+        (RealSourceAdmissible hζ) :=
+    Fermat.Irregular.VandiverHistoricalStartPrime.secondCaseStartsHistoricalDescent
+      (K := K) hp5 hr hζ
+  intro a b c ha hb hc hgcd hdiv
+  exact
+    (secondCaseExcluded_of_historical_descent
+      hp2 hζ (RealSourceAdmissible hζ)
+      hstart hreduce hkummer)
+      ha hb hc hgcd hdiv
+
 /-- End-to-end historical Case II from an explicitly supplied historical
 equations-(7)--(10) reduction.  The only project axiom used internally by
 this theorem is `BernoulliValidationBound`; callers may construct the ideal
@@ -89,27 +122,34 @@ theorem secondCaseExcluded_of_historicalReduction
     (hreduce :
       EquationsSevenToTenReduction hζ
         (RealSourceAdmissible hζ)) :
-    Fermat.SecondCaseExcluded p := by
-  have hp2 : p ≠ 2 := by
-    omega
-  obtain ⟨r, hr⟩ :=
-    (Fact.out : p.Prime).odd_of_ne_two hp2
-  have hstart :
-      SecondCaseStartsHistoricalDescent hζ
-        (RealSourceAdmissible hζ) :=
-    Fermat.Irregular.VandiverHistoricalStartPrime.secondCaseStartsHistoricalDescent
-      (K := K) hp5 hr hζ
-  have hkummer :
-      Fermat.Irregular.VandiverCriterion.KummerUnitPowerConclusion
-        K p :=
-    kummerUnitPowerConclusion_of_canonicalCubeCongruences
-      hp5
-  intro a b c ha hb hc hgcd hdiv
-  exact
-    (secondCaseExcluded_of_historical_descent
-      hp2 hζ (RealSourceAdmissible hζ)
-      hstart hreduce hkummer)
-      ha hb hc hgcd hdiv
+    Fermat.SecondCaseExcluded p :=
+  secondCaseExcluded_of_historicalReduction_of_kummerConclusion
+    hp5 hζ hreduce
+    (kummerUnitPowerConclusion_of_canonicalCubeCongruences hp5)
+
+/-- A finite unit system and its axis-8 channels discharge the Kummer-unit
+side of the historical reduction without using `BernoulliValidationBound`.
+
+The theorem deliberately takes the equations-(7)--(10) reduction separately:
+in fixed-residue regressions that reduction comes from an independently
+checked circular-unit residue certificate. -/
+theorem secondCaseExcluded_of_historicalReduction_of_unitSystem_of_channels
+    {N : ℕ}
+    (hp5 : 5 ≤ p)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hreduce :
+      EquationsSevenToTenReduction hζ
+        (RealSourceAdmissible hζ))
+    (system :
+      Fermat.GenericIrregular.LemmaTwo.LemmaTwoUnitSystem K p)
+    (channels :
+      Fermat.GenericIrregular.ChannelCertificate.FixedChannelCertificate
+        p N) :
+    Fermat.SecondCaseExcluded p :=
+  secondCaseExcluded_of_historicalReduction_of_kummerConclusion
+    hp5 hζ hreduce
+    (Fermat.KummerIso.UnitExtraction.kummerUnitPowerConclusion_of_unitSystem_of_channels
+      hp5 system channels)
 
 /-- End-to-end historical Case II through exactly the two deliberately named
 temporary validation seams. -/

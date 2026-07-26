@@ -243,8 +243,9 @@ for the next induction step; it does not claim the missing premise.
 
 The finite circular-unit residue certificates also replace the
 equation-(7d) seam at all nine completed campaign exponents.  Those closed
-regressions retain only `BernoulliValidationBound` and termination of the
-generic Sophie--Germain search as project axioms.  See the
+regressions reuse each fixed certificate's checked unit system and axis-8
+channels, so `BernoulliValidationBound` is absent as well. Their only
+project axiom is termination of the generic Sophie--Germain search. See the
 [KummerIso architecture note](Fermat/KummerIso/README.md) for the complete
 call graph, theorem boundaries, and both regression families.
 

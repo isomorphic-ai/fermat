@@ -1,6 +1,7 @@
 import Fermat.Irregular.CircularUnitResidues
 import Fermat.Irregular.CyclotomicSinnottBridgePrime
 import Fermat.Irregular.VandiverHistoricalAssemblyPrime
+import Fermat.GenericIrregular.SecondCase
 import Fermat.KummerIso.ValidatedSecondCase
 
 set_option maxRecDepth 50000
@@ -42,6 +43,22 @@ noncomputable section
 variable {K : Type} {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
   [Field K] [NumberField K] [NumberField.IsCMField K]
   [IsCyclotomicExtension {p} ℚ K]
+
+/-- Polymorphic fixed-prime certificate data that can be instantiated in the
+canonical cyclotomic field chosen by the closed FLT wrapper below.
+
+The provider shape lets a fixed-exponent module keep its certificate
+construction field-generic. The wrapper uses only its `unitSystem` and
+`channels` fields; equation (7d) continues to come from the independent
+residue certificate. -/
+abbrev FixedSecondCaseCertificateProvider
+    (p N : ℕ) [Fact p.Prime] :=
+  ∀ {L : Type} [Field L] [NumberField L]
+    [NumberField.IsCMField L]
+    [IsCyclotomicExtension {p} ℚ L]
+    {ζ : L}, IsPrimitiveRoot ζ p →
+      Fermat.GenericIrregular.SecondCase.FixedSecondCaseCertificate
+        L p N
 
 /-- A finite nonsingular circular-unit residue certificate proves the exact
 plus-class nondivisibility used by the historical equation-(7d) route. -/
@@ -142,6 +159,50 @@ theorem historicalEquationsSevenToTenReduction_of_residueCertificate
         conjugationPowerReductionData_of_residueCertificate
           hp5 C hdet hζ s hs)
 
+/-- End-to-end Case II with both historical inputs supplied by finite
+certificates.
+
+The residue certificate gives the equations-(7)--(10) reduction, while the
+unit system and axis-8 channels give the Kummer unit-power conclusion. Thus
+this route uses neither `FermatEquationSevenD` nor
+`BernoulliValidationBound`. -/
+theorem secondCaseExcluded_of_residueCertificate_of_unitSystem_of_channels
+    {N : ℕ}
+    (hp5 : 5 ≤ p)
+    (C : Certificate p q)
+    (hdet : C.matrix.det ≠ 0)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (system :
+      Fermat.GenericIrregular.LemmaTwo.LemmaTwoUnitSystem K p)
+    (channels :
+      Fermat.GenericIrregular.ChannelCertificate.FixedChannelCertificate
+        p N) :
+    Fermat.SecondCaseExcluded p :=
+  Fermat.KummerIso.secondCaseExcluded_of_historicalReduction_of_unitSystem_of_channels
+    hp5 hζ
+    (historicalEquationsSevenToTenReduction_of_residueCertificate
+      hp5 C hdet hζ)
+    system channels
+
+/-- End-to-end FLT from a residue certificate, a finite unit system, and
+axis-8 channels. The only project axiom remaining in this route is successful
+termination of the generic Sophie--Germain search used for Case I. -/
+theorem holdsAt_of_residueCertificate_of_unitSystem_of_channels
+    {N : ℕ}
+    (hp5 : 5 ≤ p)
+    (C : Certificate p q)
+    (hdet : C.matrix.det ≠ 0)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (system :
+      Fermat.GenericIrregular.LemmaTwo.LemmaTwoUnitSystem K p)
+    (channels :
+      Fermat.GenericIrregular.ChannelCertificate.FixedChannelCertificate
+        p N) :
+    Fermat.HoldsAt p :=
+  Fermat.holdsAt_of_sophieGermainSearch_of_secondCaseExcluded
+    (secondCaseExcluded_of_residueCertificate_of_unitSystem_of_channels
+      hp5 C hdet hζ system channels)
+
 /-- End-to-end Case II for any fixed prime carrying an executable
 circular-unit residue certificate.
 
@@ -205,6 +266,39 @@ theorem holdsAt_of_residueCertificate_canonical
   exact
     holdsAt_of_residueCertificate
       (K := CyclotomicField p ℚ) hp5 C hdet hζ
+
+/-- Closed BVB-free FLT from a residue certificate and a field-generic fixed
+second-case certificate provider.
+
+Only the provider's `unitSystem` and `channels` fields are consumed here. Its
+plus-class field is intentionally ignored because the independent residue
+certificate supplies the historical equation-(7d) reduction. -/
+theorem holdsAt_of_residueCertificate_canonical_of_fixedCertificate
+    {N : ℕ}
+    (hp5 : 5 ≤ p)
+    (C : Certificate p q)
+    (hdet : C.matrix.det ≠ 0)
+    (provider : FixedSecondCaseCertificateProvider p N) :
+    Fermat.HoldsAt p := by
+  letI : NeZero p :=
+    ⟨(Fact.out : p.Prime).ne_zero⟩
+  letI : NeZero (p : ℚ) :=
+    ⟨Nat.cast_ne_zero.mpr (Fact.out : p.Prime).ne_zero⟩
+  letI :
+      IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+    CyclotomicField.isCyclotomicExtension p ℚ
+  letI : NumberField.IsCMField (CyclotomicField p ℚ) :=
+    IsCyclotomicExtension.IsCMField (p := p) (CyclotomicField p ℚ)
+      (by omega)
+  obtain ⟨ζ, hζ⟩ :=
+    IsCyclotomicExtension.exists_isPrimitiveRoot
+      ℚ (CyclotomicField p ℚ)
+      (Set.mem_singleton p) (Fact.out : p.Prime).ne_zero
+  let fixed := provider hζ
+  exact
+    holdsAt_of_residueCertificate_of_unitSystem_of_channels
+      (K := CyclotomicField p ℚ) hp5 C hdet hζ
+      fixed.unitSystem fixed.channels
 
 end
 
