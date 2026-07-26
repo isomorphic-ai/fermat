@@ -61,33 +61,35 @@ theorem holdsAt_seven : HoldsAt 7 := Seven.Lebesgue.holdsAt_seven_lebesgue
 theorem holdsAt_fourteen : HoldsAt 14 :=
   Fourteen.Dirichlet.holdsAt_fourteen_dirichlet
 
-/-- Fermat's theorem for exponent thirteen, via the class-number-one
-certificate for `\mathbb{Q}(\zeta_{13})` and the formal Lamé–Kummer descent. -/
+/-- Fermat's theorem for exponent thirteen from the patched generic descent,
+recorded alongside the independent class-number-one certificate for
+`\mathbb{Q}(\zeta_{13})`. -/
 theorem holdsAt_thirteen : HoldsAt 13 :=
   Thirteen.Cyclotomic.holdsAt_thirteen_cyclotomic
 
 /-- The same exponent-thirteen endpoint packaged with its decompressed
-quadratic fold and direct Faulhaber proof through Kummer's criterion. -/
+quadratic fold and independent direct Faulhaber/class-number certificate. -/
 theorem holdsAt_thirteen_sevenFold : HoldsAt 13 :=
   Thirteen.SevenFold.holdsAt_thirteen_sevenFold
 
-/-- Fermat's theorem for exponent thirteen from the five direct Faulhaber
-power-sum certificates, Kummer's criterion, and `flt_regular`. -/
+/-- The generic exponent-thirteen endpoint packaged with the five direct
+Faulhaber power-sum certificates and their historical Kummer criterion. -/
 theorem holdsAt_thirteen_faulhaber : HoldsAt 13 :=
   Thirteen.SevenFold.holdsAt_thirteen_faulhaber
 
-/-- Fermat's theorem for exponent eleven, via the class-number-one
-certificate for `\mathbb{Q}(\zeta_{11})` and the formal Lamé–Kummer descent. -/
+/-- Fermat's theorem for exponent eleven from the patched generic descent,
+recorded alongside the independent class-number-one certificate for
+`\mathbb{Q}(\zeta_{11})`. -/
 theorem holdsAt_eleven : HoldsAt 11 :=
   Eleven.Cyclotomic.holdsAt_eleven_cyclotomic
 
 /-- The same exponent-eleven endpoint packaged with its decompressed
-quadratic fold and direct Faulhaber proof through Kummer's criterion. -/
+quadratic fold and independent direct Faulhaber/class-number certificate. -/
 theorem holdsAt_eleven_sevenFold : HoldsAt 11 :=
   Eleven.SevenFold.holdsAt_eleven_sevenFold
 
-/-- Fermat's theorem for exponent eleven from the four direct Faulhaber
-power-sum certificates, Kummer's criterion, and `flt_regular`. -/
+/-- The generic exponent-eleven endpoint packaged with the four direct
+Faulhaber power-sum certificates and their historical Kummer criterion. -/
 theorem holdsAt_eleven_faulhaber : HoldsAt 11 :=
   Eleven.SevenFold.holdsAt_eleven_faulhaber
 
@@ -131,9 +133,9 @@ certificate theorem. -/
 theorem holdsAt_oneHundredFiftySeven_generic : HoldsAt 157 :=
   OneHundredFiftySeven.GenericProof.holdsAt_oneHundredFiftySeven_generic
 
-/-- Fermat's theorem for exponent two hundred twenty-nine, from a complete
-depth-one Voronoi scan, Kummer's regular-prime criterion, and the formal
-Lamé--Kummer descent. -/
+/-- Fermat's theorem for exponent two hundred twenty-nine from the patched
+generic descent, recorded alongside the complete depth-one Voronoi scan and
+its historical Kummer class-number certificate. -/
 theorem holdsAt_twoHundredTwentyNine : HoldsAt 229 :=
   TwoHundredTwentyNine.holdsAt_twoHundredTwentyNine
 
@@ -180,8 +182,9 @@ certificate theorem. -/
 theorem holdsAt_sixHundredNinetyOne_generic : HoldsAt 691 :=
   SixHundredNinetyOne.GenericProof.holdsAt_sixHundredNinetyOne_generic
 
-/-- Fermat's theorem for exponent one thousand fifty-one, from a complete
-Bernoulli regularity scan and the formal Lamé--Kummer descent. -/
+/-- Fermat's theorem for exponent one thousand fifty-one from the patched
+generic descent, recorded alongside the complete Bernoulli regularity scan
+and its historical Kummer class-number certificate. -/
 theorem holdsAt_oneThousandFiftyOne : HoldsAt 1051 :=
   OneThousandFiftyOne.holdsAt_oneThousandFiftyOne
 

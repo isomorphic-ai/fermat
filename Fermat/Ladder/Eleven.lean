@@ -4,10 +4,14 @@ import Fermat.Ladder.Basic
 /-!
 # Seven-fold ladder trace for exponent eleven
 
-The class-number-one / regular-prime branch first settles the exponent at
-arithmetic fold six.  A second proof-backed run traverses all seven folds
-and closes FLT from the direct finite Faulhaber certificate via Kummer's
-criterion.
+The primary run records both the class-number-one certificate and the
+patched generic FLT endpoint at arithmetic fold six.  A second proof-backed
+run traverses all seven folds and records the direct finite Faulhaber
+certificate before applying the same generic endpoint.
+
+The class-number and Faulhaber certificates remain mathematically
+independent standard-axiom results.  The patched descent no longer consumes
+either certificate as a premise.
 -/
 
 namespace Fermat.Ladder.Eleven
@@ -57,15 +61,14 @@ def alignmentClaim : Prop :=
 theorem alignmentClaim_checked : alignmentClaim :=
   fermatLastTheoremFor_iff_int
 
-/-- Class-number regularity, together with the formal Lamé–Kummer bridge.
-This is the first settling certificate. -/
+/-- The historical class-number condition paired non-causally with the
+patched generic FLT endpoint.  This is the first settling fold. -/
 def agencyClaim : Prop :=
-  IsRegularPrime 11 ∧ (IsRegularPrime 11 → Fermat.HoldsAt 11)
+  CyclotomicClassNumberRegular 11 ∧ Fermat.HoldsAt 11
 
-theorem agencyClaim_checked : agencyClaim := by
-  refine ⟨Fermat.Eleven.SevenFold.classNumber_branch, ?_⟩
-  intro hregular
-  exact @flt_regular 11 ⟨Nat.prime_eleven⟩ hregular (by omega)
+theorem agencyClaim_checked : agencyClaim :=
+  ⟨Fermat.Eleven.SevenFold.classNumber_branch,
+    Fermat.Eleven.Cyclotomic.holdsAt_eleven_cyclotomic⟩
 
 /-- The four low Bernoulli indices are checked directly by finite
 Faulhaber power sums, independently of the class-number branch. -/
@@ -84,8 +87,8 @@ def trace : CaseTrace 11 where
   agency_arithmetic := ⟨agencyClaim, agencyClaim_checked⟩
   flexibility_potential := ⟨flexibilityClaim, flexibilityClaim_checked⟩
   conclude := by
-    intro _ _ _ _ _ hRegular _
-    exact .contradicted (hRegular.2 hRegular.1)
+    intro _ _ _ _ _ hAgency _
+    exact .contradicted hAgency.2
 
 def run : Checked 11 where
   folds := sevenFolds 11
@@ -94,7 +97,7 @@ def run : Checked 11 where
 def measured : Measured 11 :=
   Measured.atFold run ⟨5, by decide⟩
 
-/-- The regular-prime arithmetic branch first settles the ladder. -/
+/-- The arithmetic pair first settles the ladder. -/
 def exitDepth : ℕ := 6
 
 theorem exitDepth_eq_measured : measured.exitDepth = exitDepth := rfl
@@ -110,8 +113,8 @@ theorem exitDepth_first_sufficient :
         measured.schedule.decision i = .continue :=
   ⟨rfl, measured.schedule.at_exit, measured.schedule.before_exit⟩
 
-/-- The primary depth-six run is backed by the independent class-number-one
-endpoint. -/
+/-- The primary depth-six run is backed by the generic endpoint recorded
+beside the independent class-number-one certificate. -/
 def proofBacked : ProofBacked 11 where
   measured := measured
   holds := Fermat.Eleven.Cyclotomic.holdsAt_eleven_cyclotomic
@@ -131,8 +134,8 @@ def agencyClaim : Prop :=
 theorem agencyClaim_checked : agencyClaim :=
   agencyFold 11
 
-/-- A causal trace whose contradiction payload is constructed from the
-fold-seven Bernoulli certificate. -/
+/-- A full-depth trace that checks the fold-seven Bernoulli certificate
+before applying the patched generic endpoint. -/
 def trace : CaseTrace 11 where
   awareness_substrate := ⟨Eleven.awarenessClaim, Eleven.awarenessClaim_checked⟩
   structure_algebra := ⟨Eleven.structureClaim, Eleven.structureClaim_checked⟩

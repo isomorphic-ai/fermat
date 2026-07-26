@@ -13,11 +13,12 @@ divisible by `p^2` proves that `p` does not divide the reduced numerator of
 `B_k`.  This is the decompressed, per-index side of the Bernoulli layer: it
 does not use Kummer's congruence.
 
-The predicate `BernoulliNumeratorRegular` deliberately has a different name
-from `IsRegularPrime`.  The latter is defined by the cyclotomic class number.
-The adjacent module `Fermat.Regular.KummerCriterion` imports the formal proof
-of Kummer's deeper criterion and identifies the two predicates for odd
-primes.
+The predicate `BernoulliNumeratorRegular` is purely numerical.  The adjacent
+module `Fermat.Regular.KummerCriterion` imports the formal proof of Kummer's
+deeper criterion and identifies it, for odd primes, with an explicit local
+predicate saying that the exponent is coprime to the cyclotomic class number.
+That local spelling remains available even though the patched `flt-regular`
+core no longer exports `IsRegularPrime`.
 -/
 
 namespace Fermat.Regular.Faulhaber
@@ -30,8 +31,8 @@ def regularIndices (p : ℕ) : Finset ℕ :=
   (Finset.Icc 2 (p - 3)).filter Even
 
 /-- The numerical Bernoulli condition traditionally used to detect a
-regular prime.  This is only the numerator statement, not the class-group
-predicate `IsRegularPrime`. -/
+regular prime.  This is only the numerator statement, not the cyclotomic
+class-number condition. -/
 def BernoulliNumeratorRegular (p : ℕ) : Prop :=
   ∀ k ∈ regularIndices p, ¬(p : ℤ) ∣ (bernoulli k).num
 

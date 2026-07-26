@@ -97,13 +97,16 @@ Each completed exponent has its own directory under `Fermat/`.
 - `Fermat/Five/`, `Fermat/Seven/`, and `Fermat/Fourteen/` contain
   decompressed historical descents.  The modules separate normalization,
   coprimality, power extraction, allocation, and the final infinite descent.
-- `Fermat/Eleven/` and `Fermat/Thirteen/` contain two independent regularity
-  routes: the class-number-one certificate and a direct `SevenFold.lean`
-  Faulhaber certificate closed by the formal Kummer criterion.  Both then
-  reuse the checked Lamé--Kummer descent.
+- `Fermat/Eleven/` and `Fermat/Thirteen/` contain two independent
+  class-number certificates: a direct class-number-one calculation and a
+  `SevenFold.lean` Faulhaber calculation connected to the same historical
+  condition by the formal Kummer criterion.  The patched generic
+  `flt-regular` endpoint is checked separately; it no longer consumes
+  class-number regularity.
 - `Fermat/OneThousandFiftyOne/` contains a complete 524-index regularity
-  scan.  It is both a public fixed-exponent proof and the regular anchor used
-  by the exponent-12613 campaign.
+  scan and its resulting cyclotomic class-number certificate.  Its public
+  FLT endpoint uses the patched generic descent separately, while the scan
+  remains the regular anchor used by the exponent-12613 campaign.
 - `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`,
   `Fermat/OneHundredFiftySeven/`, `Fermat/FourHundredNinetyOne/`,
   `Fermat/FiveHundredEightySeven/`, `Fermat/SixHundredSeven/`,
@@ -236,20 +239,28 @@ to be semiprimary modulo `(p)`, but direct reuse still requires either
 the historical ratio.  Conditional on that explicit depth premise,
 `KummerIso.Induction.exists_unweightedSolution_of_regularUnitRatioDeep`
 extracts the root, absorbs it into `x`, and returns the unweighted equation
-for the next induction step; it does not claim the missing premise.  See the
+for the next induction step; it does not claim the missing premise.
+
+The finite circular-unit residue certificates also replace the
+equation-(7d) seam at all nine completed campaign exponents.  Those closed
+regressions retain only `BernoulliValidationBound` and termination of the
+generic Sophie--Germain search as project axioms.  See the
 [KummerIso architecture note](Fermat/KummerIso/README.md) for the complete
-call graph, theorem boundary, and nine regression endpoints.
+call graph, theorem boundaries, and both regression families.
 
 [`Fermat/Regular/`](Fermat/Regular/) contains reusable Faulhaber
-infrastructure and the checked bridge
+infrastructure and the checked historical bridge
 
 ```text
-power sums → Bernoulli numerators → Kummer regularity → FLT.
+power sums → Bernoulli numerators → cyclotomic class-number regularity
 ```
 
 The deep Bernoulli/class-group equivalence comes from the pinned
 [`KummerCriterion`](https://github.com/riccardobrasca/KummerCriterion)
-formalization.  [`Fermat/Quadratic/`](Fermat/Quadratic/) contains
+formalization.  Since the locally patched `flt-regular` core no longer
+accepts that condition as a premise, its generic FLT endpoint is deliberately
+reported as a separate result with the core's three temporary seams.
+[`Fermat/Quadratic/`](Fermat/Quadratic/) contains
 quadratic-ring and unit calculations shared by several elementary descents.
 
 ### The seven-fold ladder
@@ -274,8 +285,10 @@ decomposition independently of the final theorem statement.
   -- [(11, 7), (13, 7)]
   ```
 
-  The original response curve still records depth `6` for those exponents,
-  because their class-number-one route is the first sufficient branch.
+  The original response curve still records depth `6` for those exponents.
+  In the migrated trace, that fold honestly pairs the independent
+  class-number-one certificate with the patched generic FLT endpoint; it
+  does not claim that the endpoint consumes the certificate.
 - `ThirtySeven.lean`, `FiftyNine.lean`, `SixtySeven.lean`,
   `OneHundredFiftySeven.lean`, `FourHundredNinetyOne.lean`,
   `FiveHundredEightySeven.lean`, and `SixHundredNinetyOne.lean` reuse the

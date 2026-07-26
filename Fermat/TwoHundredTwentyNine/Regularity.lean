@@ -5,9 +5,14 @@ import Fermat.TwoHundredTwentyNine.RegularityCertificate
 # Regularity and Fermat's Last Theorem at exponent 229
 
 The complete modular Voronoi scan is converted into Bernoulli-numerator
-regularity by the proved depth-one Voronoi theorem.  The existing formal
-Kummer criterion then identifies this numerical condition with cyclotomic
-regularity, and the kernel-checked Lamé--Kummer descent proves FLT at `229`.
+regularity by the proved depth-one Voronoi theorem.  The formal Kummer
+criterion identifies this numerical condition with the explicit historical
+cyclotomic class-number condition.
+
+The patched generic `flt_regular` descent no longer consumes that condition.
+Thus the scan and class-number results remain standard-axiom certificates,
+while the FLT endpoint separately inherits the generic core's temporary
+project seams.
 
 No class-number value or regular-prime conclusion is assumed.
 -/
@@ -52,12 +57,15 @@ theorem bernoulliNumeratorRegular_229 :
   · rw [← hi]
     exact scanResidue_ne_zero i
 
-/-- Kummer regularity of `229`, derived from the complete modular scan. -/
-theorem isRegularPrime_229 : IsRegularPrime 229 :=
-  isRegularPrime_of_bernoulliNumeratorRegular
+/-- The historical cyclotomic class-number condition at `229`, derived from
+the complete modular scan. -/
+theorem cyclotomicClassNumberRegular_229 :
+    CyclotomicClassNumberRegular 229 :=
+  cyclotomicClassNumberRegular_of_bernoulliNumeratorRegular
     (by norm_num) bernoulliNumeratorRegular_229
 
-/-- Fermat's Last Theorem for exponent `229`. -/
+/-- Fermat's Last Theorem for exponent `229` from the patched generic
+descent. -/
 theorem holdsAt_twoHundredTwentyNine : Fermat.HoldsAt 229 :=
   holdsAt_of_bernoulliNumeratorRegular
     (by norm_num) bernoulliNumeratorRegular_229

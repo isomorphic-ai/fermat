@@ -4,10 +4,14 @@ import Fermat.Thirteen.SevenFold
 /-!
 # Seven-fold ladder trace for exponent thirteen
 
-The class-number-one / regular-prime branch first settles the exponent at
-arithmetic fold six.  A second proof-backed run traverses all seven folds
-and closes FLT from the five-index direct Faulhaber computation via
-Kummer's criterion.
+The primary run records both the class-number-one certificate and the
+patched generic FLT endpoint at arithmetic fold six.  A second proof-backed
+run traverses all seven folds and records the five-index direct Faulhaber
+certificate before applying the same generic endpoint.
+
+The class-number and Faulhaber certificates remain mathematically
+independent standard-axiom results.  The patched descent no longer consumes
+either certificate as a premise.
 -/
 
 namespace Fermat.Ladder.Thirteen
@@ -56,15 +60,14 @@ def alignmentClaim : Prop :=
 theorem alignmentClaim_checked : alignmentClaim :=
   fermatLastTheoremFor_iff_int
 
-/-- Class-number regularity, together with the formal Lamé–Kummer bridge.
-This is the first settling certificate. -/
+/-- The historical class-number condition paired non-causally with the
+patched generic FLT endpoint.  This is the first settling fold. -/
 def agencyClaim : Prop :=
-  IsRegularPrime 13 ∧ (IsRegularPrime 13 → Fermat.HoldsAt 13)
+  CyclotomicClassNumberRegular 13 ∧ Fermat.HoldsAt 13
 
-theorem agencyClaim_checked : agencyClaim := by
-  refine ⟨Fermat.Thirteen.SevenFold.classNumber_branch, ?_⟩
-  intro hregular
-  exact @flt_regular 13 ⟨Nat.prime_thirteen⟩ hregular (by omega)
+theorem agencyClaim_checked : agencyClaim :=
+  ⟨Fermat.Thirteen.SevenFold.classNumber_branch,
+    Fermat.Thirteen.Cyclotomic.holdsAt_thirteen_cyclotomic⟩
 
 /-- The five low Bernoulli indices are checked directly by finite
 Faulhaber power sums, independently of the class-number branch. -/
@@ -83,8 +86,8 @@ def trace : CaseTrace 13 where
   agency_arithmetic := ⟨agencyClaim, agencyClaim_checked⟩
   flexibility_potential := ⟨flexibilityClaim, flexibilityClaim_checked⟩
   conclude := by
-    intro _ _ _ _ _ hRegular _
-    exact .contradicted (hRegular.2 hRegular.1)
+    intro _ _ _ _ _ hAgency _
+    exact .contradicted hAgency.2
 
 def run : Checked 13 where
   folds := sevenFolds 13
@@ -108,8 +111,8 @@ theorem exitDepth_first_sufficient :
         measured.schedule.decision i = .continue :=
   ⟨rfl, measured.schedule.at_exit, measured.schedule.before_exit⟩
 
-/-- The primary depth-six run is backed by the independent class-number-one
-endpoint. -/
+/-- The primary depth-six run is backed by the generic endpoint recorded
+beside the independent class-number-one certificate. -/
 def proofBacked : ProofBacked 13 where
   measured := measured
   holds := Fermat.Thirteen.Cyclotomic.holdsAt_thirteen_cyclotomic
@@ -129,8 +132,8 @@ def agencyClaim : Prop :=
 theorem agencyClaim_checked : agencyClaim :=
   agencyFold 13
 
-/-- A causal trace whose contradiction payload is constructed from the
-fold-seven Bernoulli certificate. -/
+/-- A full-depth trace that checks the fold-seven Bernoulli certificate
+before applying the patched generic endpoint. -/
 def trace : CaseTrace 13 where
   awareness_substrate :=
     ⟨Thirteen.awarenessClaim, Thirteen.awarenessClaim_checked⟩

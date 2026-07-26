@@ -11,10 +11,14 @@ package alongside the shorter class-number-one proof.  In particular, its
 Bernoulli layer is proved directly by four finite Faulhaber power sums; it
 does not use Kummer's congruence.
 
-The class-number-one certificate already closes FLT at stage 6.  The
-Faulhaber branch now supplies a second, logically independent endpoint:
-the formal Kummer criterion turns its four Bernoulli numerator certificates
-into `IsRegularPrime 11`, and the checked `flt_regular` descent closes FLT.
+The class-number-one and Faulhaber branches both retain their historical
+class-number content: the formal Kummer criterion turns the four Bernoulli
+numerator certificates into `CyclotomicClassNumberRegular 11`.
+
+The patched generic `flt_regular` descent no longer consumes that condition.
+Accordingly, the class-number and Bernoulli results below remain
+standard-axiom certificates, while each FLT endpoint independently inherits
+the generic core's temporary project seams.
 -/
 
 namespace Fermat.Eleven.SevenFold
@@ -73,10 +77,10 @@ theorem secondary_composition (x y : ℤ) :
 
 /-! ## 6. Global branch selection -/
 
-/-- The exact norm-23/Minkowski certificate supplies the global branch
-selection and, in fact, is already sufficient for the descent. -/
-theorem classNumber_branch : IsRegularPrime 11 :=
-  Fermat.Eleven.Cyclotomic.isRegularPrime_eleven
+/-- The exact norm-23/Minkowski certificate supplies the historical global
+class-number branch. -/
+theorem classNumber_branch : CyclotomicClassNumberRegular 11 :=
+  Fermat.Eleven.Cyclotomic.cyclotomicClassNumberRegular_eleven
 
 /-! ## 7. Decompressed Bernoulli/Faulhaber stratum -/
 
@@ -96,15 +100,15 @@ theorem bernoulliNumeratorRegular_eleven :
   bernoulliNumeratorRegular_of_powerSums (by norm_num)
     (fun _ hk ↦ powerSum_not_dvd_sq hk)
 
-theorem isRegularPrime_eleven_faulhaber :
-    IsRegularPrime 11 :=
-  isRegularPrime_of_bernoulliNumeratorRegular (by norm_num)
+theorem cyclotomicClassNumberRegular_eleven_faulhaber :
+    CyclotomicClassNumberRegular 11 :=
+  cyclotomicClassNumberRegular_of_bernoulliNumeratorRegular (by norm_num)
     bernoulliNumeratorRegular_eleven
 
 /-! ## 8. Checked descent engine -/
 
-/-- The complete alternative endpoint whose regularity premise is supplied
-by the direct four-index Faulhaber computation. -/
+/-- The complete alternative endpoint retaining the direct four-index
+Faulhaber computation alongside the patched generic descent. -/
 theorem holdsAt_eleven_faulhaber : Fermat.HoldsAt 11 :=
   holdsAt_of_bernoulliNumeratorRegular (by norm_num)
     bernoulliNumeratorRegular_eleven
@@ -113,8 +117,8 @@ theorem holdsAt_eleven_faulhaber : Fermat.HoldsAt 11 :=
 theorem holdsAt_eleven_sevenFold : Fermat.HoldsAt 11 :=
   holdsAt_eleven_faulhaber
 
-/-- A compact public package showing that both the decompressed Bernoulli
-layer and the final exponent theorem are joined by Kummer's criterion. -/
+/-- A compact public package retaining both the decompressed Bernoulli layer
+and the patched generic final exponent theorem. -/
 theorem faulhaber_and_flt_eleven :
     BernoulliNumeratorRegular 11 ∧ Fermat.HoldsAt 11 :=
   let hregular := bernoulliNumeratorRegular_eleven
