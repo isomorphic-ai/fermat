@@ -35,6 +35,12 @@ The completed public fixed-exponent results are:
 | 1051 | `Fermat.holdsAt_oneThousandFiftyOne` | complete Bernoulli regularity scan |
 | 1381 | `Fermat.holdsAt_oneThousandThreeHundredEightyOne` | one-channel cyclic-certificate Vandiver descent |
 
+The nine completed irregular-prime endpoints from `37` through `1381` are
+also reassembled through the regularized Kummer correction.  After
+`import Fermat`, their public aliases have the suffix `_kummerIso`, for
+example `Fermat.holdsAt_thirtySeven_kummerIso` and
+`Fermat.holdsAt_oneThousandThreeHundredEightyOne_kummerIso`.
+
 The exponent directory for `1831` contains work-in-progress finite
 certificates.  Its presence does not by itself mean that a public
 `Fermat.HoldsAt n` theorem has been completed.
@@ -199,6 +205,36 @@ determinant.  The current generic campaign stops at `1381`.  See the
 [GenericIrregular architecture note](Fermat/GenericIrregular/README.md) for
 the complete dependency flow, channel table, and certificate boundary.
 
+### The regularized Kummer splice
+
+[`Fermat/KummerIso/`](Fermat/KummerIso/) reassembles those same nine
+fixed-irregular certificates through an explicit repair of Kummer's proof.
+The two uses of regularity are kept separate:
+
+1. the special Fermat ideal roots are principalized by the historical
+   primary/Takagi--Furtwängler route and the checked input `p ∤ h⁺`;
+2. the exact historical unit ratio is rooted through a finite diagonal
+   correction over `ZMod p`.
+
+On a lifted Bernoulli coordinate with coefficient `Bᵢ`, the diagonal entry
+is the actual quotient `(Bᵢ / p²) mod p`; an ordinary coordinate receives
+`1`.  The condition `p³ ∤ Bᵢ` makes every entry nonzero, so the diagonal is
+invertible.  This full-source correction is formalized for an arbitrary
+finite source type.  Separately, the auxiliary channel-weight gauge works
+over `Fin N` for every `N`, including `N = 0`; no equality between the two
+gauges is assumed.
+
+The historical route is end-to-end complete.  The independently exposed
+regular-style `WeightedSolution` is kept honest: its exact ratio is known
+to be semiprimary modulo `(p)`, but direct reuse still requires either
+`KummerIso.DeepRatio.RegularUnitRatioDeep` or a proof identifying it with
+the historical ratio.  Conditional on that explicit depth premise,
+`KummerIso.Induction.exists_unweightedSolution_of_regularUnitRatioDeep`
+extracts the root, absorbs it into `x`, and returns the unweighted equation
+for the next induction step; it does not claim the missing premise.  See the
+[KummerIso architecture note](Fermat/KummerIso/README.md) for the complete
+call graph, theorem boundary, and nine regression endpoints.
+
 [`Fermat/Regular/`](Fermat/Regular/) contains reusable Faulhaber
 infrastructure and the checked bridge
 
@@ -283,6 +319,8 @@ include:
 lake build Fermat.Ladder.Response
 lake build Fermat.Ladder.FaulhaberResponse
 lake build Fermat.Ladder.HistoricalResponse
+lake build Fermat.KummerIso
+lake build Fermat.KummerIso.Regressions
 lake build Fermat.ThirtySeven.VandiverHistoricalAssembly37
 lake build Fermat.FourHundredNinetyOne.VandiverHistoricalAssembly491
 lake build Fermat.FourHundredNinetyOne.SecondCase
@@ -302,12 +340,14 @@ A quick consumer file can simply use:
 import Fermat
 
 #check Fermat.holdsAt_thirtySeven
+#check Fermat.holdsAt_thirtySeven_kummerIso
 #check Fermat.holdsAt_fourHundredNinetyOne
 #check Fermat.holdsAt_fiveHundredEightySeven
 #check Fermat.holdsAt_sixHundredSeven
 #check Fermat.holdsAt_sixHundredNinetyOne
 #check Fermat.holdsAt_oneThousandFiftyOne
 #check Fermat.holdsAt_oneThousandThreeHundredEightyOne
+#check Fermat.holdsAt_oneThousandThreeHundredEightyOne_kummerIso
 #check Fermat.holdsAt_eleven_faulhaber
 #eval Fermat.Ladder.FaulhaberResponse.responseData
 #check Fermat.Ladder.FourHundredNinetyOne.proofBacked

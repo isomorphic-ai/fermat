@@ -10,6 +10,7 @@ import Fermat.Fourteen.DescentConstruction
 import Fermat.FourHundredNinetyOne.GenericProof
 import Fermat.FourHundredNinetyOne.SecondCase
 import Fermat.GenericIrregular
+import Fermat.KummerIso
 import Fermat.Irregular.CircularUnitIndex
 import Fermat.Irregular.CircularUnits
 import Fermat.Irregular.CyclotomicLogCofactor37
@@ -194,5 +195,43 @@ theorem holdsAt_oneThousandThreeHundredEightyOne : HoldsAt 1381 :=
 certificate theorem. -/
 theorem holdsAt_oneThousandThreeHundredEightyOne_generic : HoldsAt 1381 :=
   OneThousandThreeHundredEightyOne.GenericProof.holdsAt_oneThousandThreeHundredEightyOne_generic
+
+/-! ## Fixed-irregular regressions through the normalized Kummer correction -/
+
+/-- Exponent `37`, reassembled through the regularized Kummer splice. -/
+theorem holdsAt_thirtySeven_kummerIso : HoldsAt 37 :=
+  KummerIso.Regressions.holdsAt_thirtySeven
+
+/-- Exponent `59`, reassembled through the regularized Kummer splice. -/
+theorem holdsAt_fiftyNine_kummerIso : HoldsAt 59 :=
+  KummerIso.Regressions.holdsAt_fiftyNine
+
+/-- Exponent `67`, reassembled through the regularized Kummer splice. -/
+theorem holdsAt_sixtySeven_kummerIso : HoldsAt 67 :=
+  KummerIso.Regressions.holdsAt_sixtySeven
+
+/-- Exponent `157`, reassembled through the regularized Kummer splice. -/
+theorem holdsAt_oneHundredFiftySeven_kummerIso : HoldsAt 157 :=
+  KummerIso.Regressions.holdsAt_oneHundredFiftySeven
+
+/-- Exponent `491`, reassembled through the regularized Kummer splice. -/
+theorem holdsAt_fourHundredNinetyOne_kummerIso : HoldsAt 491 :=
+  KummerIso.Regressions.holdsAt_fourHundredNinetyOne
+
+/-- Exponent `587`, reassembled through the regularized Kummer splice. -/
+theorem holdsAt_fiveHundredEightySeven_kummerIso : HoldsAt 587 :=
+  KummerIso.Regressions.holdsAt_fiveHundredEightySeven
+
+/-- Exponent `607`, reassembled through the regularized Kummer splice. -/
+theorem holdsAt_sixHundredSeven_kummerIso : HoldsAt 607 :=
+  KummerIso.Regressions.holdsAt_sixHundredSeven
+
+/-- Exponent `691`, reassembled through the regularized Kummer splice. -/
+theorem holdsAt_sixHundredNinetyOne_kummerIso : HoldsAt 691 :=
+  KummerIso.Regressions.holdsAt_sixHundredNinetyOne
+
+/-- Exponent `1381`, reassembled through the regularized Kummer splice. -/
+theorem holdsAt_oneThousandThreeHundredEightyOne_kummerIso : HoldsAt 1381 :=
+  KummerIso.Regressions.holdsAt_oneThousandThreeHundredEightyOne
 
 end Fermat
