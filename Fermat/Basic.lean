@@ -1,4 +1,4 @@
-import Mathlib
+import Mathlib.NumberTheory.FLT.Basic
 
 /-!
 # Fixed-exponent cases of Fermat's Last Theorem
