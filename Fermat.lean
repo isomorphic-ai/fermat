@@ -44,6 +44,8 @@ import Fermat.ThirtySeven.NeighborFolding
 import Fermat.ThirtySeven.ResidueHomomorphisms
 import Fermat.ThirtySeven.VandiverData
 import Fermat.ThirtySeven.GenericProof
+import Fermat.Three.Conservation
+import Fermat.Two.PythagorasConservation
 import Fermat.TwoHundredTwentyNine.Regularity
 
 namespace Fermat
