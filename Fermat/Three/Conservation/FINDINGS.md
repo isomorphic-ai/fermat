@@ -41,3 +41,16 @@
   user work and are outside this task.
 - All N3 changes will be restricted to explicit paths, and every guarded
   commit will name those paths rather than using a broad pathspec.
+
+## 2026-07-27 — compiler-driven import repair
+
+- Replacing `Fermat.Basic`'s umbrella import globally made the conservation
+  boundary clean, but the first full build revealed that many unrelated
+  legacy modules rely on that umbrella for undeclared Mathlib APIs.
+- The narrow, non-disruptive boundary is therefore a new
+  `Fermat.Statement` module. It owns `Fermat.HoldsAt` and
+  `HoldsAt.mono_of_dvd` while importing only
+  `Mathlib.NumberTheory.FLT.Basic`.
+- `Fermat.Basic` now reexports `Fermat.Statement` while retaining its legacy
+  umbrella import. Conservation imports `Fermat.Statement` directly and
+  therefore never enters the contaminated legacy cone.

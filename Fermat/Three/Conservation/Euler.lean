@@ -14,7 +14,7 @@ its endpoint.
 
 The bounded import roles are:
 
-* `Fermat.Basic` supplies only the project statement `Fermat.HoldsAt`;
+* `Fermat.Statement` supplies only the project statement `Fermat.HoldsAt`;
 * `Conservation.Spine` supplies the norm charge, drain quantum, and floor;
 * `Cyclotomic.PID` supplies principality of the third cyclotomic ring;
 * `Cyclotomic.Three` supplies its unit classification and local
@@ -27,7 +27,7 @@ Eisenstein charge `N((1 - ζ₃)^m) = 3^m`, so every Euler step strictly drains
 charge. The final contradiction is obtained from the named well-founded
 conservation floor, rather than by citing a pre-existing FLT theorem.
 -/
-import Fermat.Basic
+import Fermat.Statement
 import Fermat.Three.Conservation.Spine
 import Mathlib.NumberTheory.NumberField.Cyclotomic.PID
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Three
