@@ -54,3 +54,48 @@
 - `Fermat.Basic` now reexports `Fermat.Statement` while retaining its legacy
   umbrella import. Conservation imports `Fermat.Statement` directly and
   therefore never enters the contaminated legacy cone.
+
+## 2026-07-27 — realized charge and descent
+
+- `QuadraticAlgebra ℤ (-1) (-1)` is the provenance-clean coordinate model of
+  `ℤ[ζ₃]` in the pinned Mathlib. Its built-in `QuadraticAlgebra.norm` is a
+  monoid hom and specializes definitionally to `x² - xy + y²`.
+- The conservation spine compiles with the actual algebraic norm:
+  multiplicativity, the cubic ledger, `N(1 - ζ₃) = 3`, the charge formula
+  `N((1 - ζ₃)^m) = 3^m`, strict drain, and the named no-infinite-drain floor
+  are all proved.
+- The complete Euler transformer was reconstructed locally from the clean
+  cyclotomic `PID`, `Three`, and generic divisibility modules. Its native
+  one-step theorem lowers the multiplicity `m` of `ζ₃ - 1`; the public
+  conservation theorem maps this to a strict decrease of the literal norm
+  charge `N((1 - ζ₃)^m)`.
+- The whole cubic term's norm is not claimed to decrease. The conserved
+  quantity that the classical Euler transformer controls is exactly the
+  norm of its `λ`-primary component. This is enough to run an infinite
+  charge drain and invoke the conservation floor.
+- The final endpoint
+  `Fermat.Three.holdsAt_three_conservation : Fermat.HoldsAt 3` compiles and
+  reaches contradiction only through that charged descent.
+
+## 2026-07-27 — audits and full-build status
+
+- An isolated import test of `Fermat.Three.Conservation` leaves
+  `fermatLastTheoremThree` unknown. This checks the transitive import cone,
+  not merely the source text.
+- `#print axioms` was run for every public theorem in `Fermat.Statement` and
+  the conservation modules. Every result uses a subset of the standard
+  `[propext, Classical.choice, Quot.sound]` baseline.
+- The forbidden-name/import scan, the `sorry`/`admit`/`axiom` scan, and
+  `git diff --check` are clean for the delivered modules.
+- A bare full `lake build` was run. It built the complete N3 conservation
+  cone and more than 9,300 project jobs. Its remaining non-N3 failures expose
+  a pre-existing dependency mismatch: `lake-manifest.json` pins
+  `flt-regular` at `edd24b3`, while existing project modules use APIs and
+  `KummerFullValuation.lean` from the local, unpublished
+  `remove-isregularprime` branch at `131f93e`. Lake correctly restores the
+  manifest revision, where that source file is absent and the APIs still
+  require the old regular-prime premise.
+- One additional certificate was killed by the parallel pass with exit 137;
+  rebuilding `Fermat.SixtySeven.VandiverDiagonalUnits67` alone succeeded.
+  Thus the only terminal full-build blockers are the manifest/dependency
+  mismatch, not this task's proof or a remaining resource failure.
