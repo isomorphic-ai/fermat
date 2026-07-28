@@ -6,9 +6,10 @@ Authors: Fabian Franz, Fable
 # FLT(3), strictly through conservation
 
 This is the public exponent-three conservation rung. `Spine` supplies the
-multiplicative Eisenstein charge, cubic ledger, norm-three drain quantum, and
-well-founded floor. `Euler` supplies the provenance-clean strict charge
-descent and the final theorem.
+multiplicative Eisenstein charge, cubic ledger, and norm-three drain quantum.
+The shared `Fermat.Conservation.Floor` supplies impossible debt. `Euler`
+supplies the provenance-clean strict charge descent and the final theorem.
 -/
+import Fermat.Conservation.Floor
 import Fermat.Three.Conservation.Spine
 import Fermat.Three.Conservation.Euler

@@ -15,7 +15,8 @@ its endpoint.
 The bounded import roles are:
 
 * `Fermat.Statement` supplies only the project statement `Fermat.HoldsAt`;
-* `Conservation.Spine` supplies the norm charge, drain quantum, and floor;
+* `Conservation.Spine` supplies the norm charge and drain quantum;
+* `Fermat.Conservation.Floor` supplies the shared impossible-debt closure;
 * `Cyclotomic.PID` supplies principality of the third cyclotomic ring;
 * `Cyclotomic.Three` supplies its unit classification and local
   `λ`-congruence lemmas;
@@ -28,6 +29,7 @@ charge. The final contradiction is obtained from the named well-founded
 conservation floor, rather than by citing a pre-existing FLT theorem.
 -/
 import Fermat.Statement
+import Fermat.Conservation.Floor
 import Fermat.Three.Conservation.Spine
 import Mathlib.NumberTheory.NumberField.Cyclotomic.PID
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Three
@@ -992,32 +994,6 @@ end CaseTwo
 
 end Euler
 
-/-- A reusable impossible-debt closure: if every state has positive natural
-charge and admits a strictly lower-charge successor, the conservation floor
-rules out the initial state. -/
-theorem impossible_of_strict_charge_drain
-    {α : Type*} (start : α) (stateCharge : α → ℕ)
-    (hpositive : ∀ state, 0 < stateCharge state)
-    (hstep : ∀ state, ∃ next,
-      stateCharge next < stateCharge state) :
-    False := by
-  classical
-  let next : α → α := fun state => (hstep state).choose
-  let sequence : ℕ → α :=
-    fun n => Nat.rec start (fun _ state => next state) n
-  apply noInfinitePositiveChargeDrain
-  refine ⟨stateCharge ∘ sequence, ?_, ?_⟩
-  · intro n
-    exact hpositive (sequence n)
-  · intro n
-    change
-      stateCharge (sequence (n + 1)) <
-        stateCharge (sequence n)
-    change
-      stateCharge (next (sequence n)) <
-        stateCharge (sequence n)
-    exact (hstep (sequence n)).choose_spec
-
 end Fermat.Three.Conservation
 
 namespace Fermat.Three
@@ -1053,7 +1029,7 @@ theorem holdsAt_three_conservation : Fermat.HoldsAt 3 := by
     Conservation.Euler.GeneralizedStatement.exists_Solution_of_Solution'
       initial
   exact
-    Conservation.impossible_of_strict_charge_drain
+    Fermat.Conservation.impossible_of_strict_charge_drain
       oriented
       (fun state =>
         Conservation.drainCharge state.multiplicity)

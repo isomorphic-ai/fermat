@@ -10,16 +10,17 @@ conservation proof.
 
 The bounded Mathlib roles are:
 
+* `Fermat.Conservation.Floor` supplies the shared well-founded floor for
+  positive natural charges;
 * `Algebra.QuadraticAlgebra.Basic` supplies the coordinate ring
   `ℤ[ζ₃] = ℤ[ω]`, its multiplication, and its algebraic norm;
-* `Order.WellFounded` supplies the well-founded floor for natural charges;
 * `Tactic.NormNum` and `Tactic.Ring` discharge explicit integer polynomial
   identities only.
 
 No fixed-exponent FLT theorem is imported.
 -/
+import Fermat.Conservation.Floor
 import Mathlib.Algebra.QuadraticAlgebra.Basic
-import Mathlib.Order.WellFounded
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 
@@ -85,14 +86,5 @@ theorem drainCharge_pred_lt {m n : ℕ} (h : m < n) :
     drainCharge m < drainCharge n := by
   rw [drainCharge_eq, drainCharge_eq]
   exact Nat.pow_lt_pow_right (by norm_num) h
-
-/-- **The conservation floor.** There is no infinite sequence of positive
-natural charges that drops strictly at every successor. -/
-theorem noInfinitePositiveChargeDrain :
-    ¬ ∃ q : ℕ → ℕ, (∀ n, 0 < q n) ∧ ∀ n, q (n + 1) < q n := by
-  rintro ⟨q, -, hdrop⟩
-  obtain ⟨n, hn⟩ :=
-    WellFounded.not_rel_apply_succ (r := (· < ·)) q
-  exact hn (hdrop n)
 
 end Fermat.Three.Conservation
