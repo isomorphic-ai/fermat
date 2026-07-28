@@ -5,6 +5,7 @@ import Fermat.Eleven.Cyclotomic
 import Fermat.Eleven.SevenFold
 import Fermat.FiftyNine.GenericProof
 import Fermat.Five.Dirichlet
+import Fermat.Five.Conservation
 import Fermat.FiveHundredEightySeven.GenericProof
 import Fermat.Four.Conservation
 import Fermat.Fourteen.DescentConstruction
