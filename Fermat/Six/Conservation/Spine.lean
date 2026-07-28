@@ -44,6 +44,20 @@ abbrev SixthCyclotomicInt := QuadraticAlgebra ℤ (-1) 1
 /-- The distinguished primitive sixth root, represented by `X`. -/
 def zetaSix : SixthCyclotomicInt := QuadraticAlgebra.omega
 
+/-- The same ring's third-root coordinate.  Under
+`ℚ(ζ₆) = ℚ(ζ₃)`, the element `-ζ₆` is a cube root of unity. -/
+def embeddedCubeRoot : SixthCyclotomicInt := -zetaSix
+
+/-- The shared-ring coordinate `-ζ₆` has cube one. -/
+theorem embeddedCubeRoot_cube :
+    embeddedCubeRoot ^ 3 = 1 := by
+  change
+    (-QuadraticAlgebra.omega) ^ 3 =
+      (⟨1, 0⟩ : SixthCyclotomicInt)
+  ext <;>
+    norm_num [embeddedCubeRoot, zetaSix, pow_succ,
+      QuadraticAlgebra.omega_mul_omega_eq_mk]
+
 /-- The sixth-cyclotomic integer `x + yζ₆`. -/
 def ofCoeffs (x y : ℤ) : SixthCyclotomicInt := ⟨x, y⟩
 
@@ -94,6 +108,13 @@ theorem pythagorean_cube_balance {a b c : ℤ}
 /-- The ramified drain quantum in sixth-root coordinates. -/
 def drainUnit : SixthCyclotomicInt :=
   1 + zetaSix
+
+/-- The arithmetic prime `ζ₃ - 1`, expressed inside the native sixth-root
+ring, differs from the chosen drain quantum only by the unit `-1`. -/
+theorem embeddedCubeRoot_sub_one :
+    embeddedCubeRoot - 1 = -drainUnit := by
+  simp [embeddedCubeRoot, drainUnit]
+  ring
 
 /-- The ramified quantum has norm charge three. -/
 theorem drainUnit_charge :
