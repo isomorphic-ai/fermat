@@ -1,18 +1,15 @@
-import Mathlib.NumberTheory.FLT.Basic
+import Fermat.Statement.Basic
 
 /-!
 # Fixed-exponent Fermat statements
 
-This minimal module owns the project's common fixed-exponent statement. It
-imports only Mathlib's definition-and-reduction module, so proofs that must
-not see any already-completed fixed-exponent case can depend on this boundary
-directly.
+This facade owns the project's common fixed-exponent statement together with
+the standard divisibility transport.  Conservation proofs whose import cone
+must not expose that transport should import `Fermat.Statement.Basic`
+instead.
 -/
 
 namespace Fermat
-
-/-- The project's short name for Mathlib's fixed-exponent FLT statement. -/
-abbrev HoldsAt (n : ℕ) : Prop := FermatLastTheoremFor n
 
 /-- A proved exponent transports to every multiple of that exponent. -/
 theorem HoldsAt.mono_of_dvd {m n : ℕ}
