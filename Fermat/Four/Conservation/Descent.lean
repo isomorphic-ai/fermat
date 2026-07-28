@@ -1,7 +1,8 @@
 /-
+Copyright (c) 2020 Paul van Wamelen. All rights reserved.
 Copyright (c) 2026 Fabian Franz. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Fabian Franz, Fable
+Authors: Paul van Wamelen, Fabian Franz, Fable
 
 # Fermat's coprime double descent, as a strict charge drain
 
