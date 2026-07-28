@@ -28,7 +28,7 @@ import Fermat.OneHundredFiftySeven.GenericProof
 import Fermat.OneThousandFiftyOne.Regularity
 import Fermat.OneThousandThreeHundredEightyOne.GenericProof
 import Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
-import Fermat.Seven.Lebesgue.TheoremTwo
+import Fermat.Seven.Conservation
 import Fermat.Six.Conservation
 import Fermat.SixHundredNinetyOne.GenericProof
 import Fermat.SixHundredSeven.VandiverHistoricalAssembly607
@@ -57,9 +57,9 @@ namespace Fermat
 two-branch descent. -/
 theorem holdsAt_five : HoldsAt 5 := Five.Dirichlet.holdsAt_five_dirichlet
 
-/-- Fermat's theorem for exponent seven, through Lebesgue's corrected 1840
-proof (the main note together with its published Addition). -/
-theorem holdsAt_seven : HoldsAt 7 := Seven.Lebesgue.holdsAt_seven_lebesgue
+/-- Fermat's theorem for exponent seven through the strict cyclotomic
+conservation cone and Lebesgue's reconstructed charged descent. -/
+theorem holdsAt_seven : HoldsAt 7 := Seven.holdsAt_seven_conservation
 
 /-- Fermat's theorem for exponent fourteen, through Dirichlet's independent
 1832 descent rather than the short consequence of exponent seven. -/
