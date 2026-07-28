@@ -49,17 +49,15 @@ hypotenuse `|z|`. -/
 def charge (z : ℤ) : ℕ :=
   z.natAbs
 
-/-- A stronger solution normalized for the classical coprime double
-descent. Positivity fixes the sign of the hypotenuse and oddness fixes the
-orientation of the two legs. -/
+/-- A primitive stronger solution: its two nonzero legs are coprime.
+Orientation and hypotenuse sign are deliberately absent; the charged
+transformer normalizes them internally without changing charge. -/
 structure PrimitiveSolution where
   x : ℤ
   y : ℤ
   z : ℤ
   solution : StrongerSolution x y z
   coprime : IsCoprime x y
-  x_odd : x % 2 = 1
-  z_pos : 0 < z
 
 /-- The charge carried by a normalized descent state. -/
 def PrimitiveSolution.stateCharge (S : PrimitiveSolution) : ℕ :=
@@ -74,5 +72,25 @@ theorem pythagorean_balance_engine {x y z : ℤ}
     PythagoreanTriple (x ^ 2) (y ^ 2) z := by
   delta PythagoreanTriple
   linear_combination h.2.2
+
+/-- A nontrivial stronger solution has nonzero hypotenuse, so its natural
+charge lies strictly above the conservation floor. -/
+theorem StrongerSolution.charge_pos {x y z : ℤ}
+    (h : StrongerSolution x y z) :
+    0 < charge z := by
+  apply Int.natAbs_pos.mpr
+  apply ne_zero_pow two_ne_zero
+  apply ne_of_gt
+  rw [← h.2.2,
+    (by ring : x ^ 4 + y ^ 4 = (x ^ 2) ^ 2 + (y ^ 2) ^ 2)]
+  exact
+    add_pos
+      (sq_pos_of_ne_zero (pow_ne_zero 2 h.1))
+      (sq_pos_of_ne_zero (pow_ne_zero 2 h.2.1))
+
+/-- Every primitive descent state carries positive charge. -/
+theorem PrimitiveSolution.stateCharge_pos (S : PrimitiveSolution) :
+    0 < S.stateCharge :=
+  S.solution.charge_pos
 
 end Fermat.Four.Conservation

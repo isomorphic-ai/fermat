@@ -6,6 +6,7 @@ import Fermat.Eleven.SevenFold
 import Fermat.FiftyNine.GenericProof
 import Fermat.Five.Dirichlet
 import Fermat.FiveHundredEightySeven.GenericProof
+import Fermat.Four.Conservation
 import Fermat.Fourteen.DescentConstruction
 import Fermat.FourHundredNinetyOne.GenericProof
 import Fermat.FourHundredNinetyOne.SecondCase
