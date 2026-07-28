@@ -29,6 +29,7 @@ import Fermat.OneThousandFiftyOne.Regularity
 import Fermat.OneThousandThreeHundredEightyOne.GenericProof
 import Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
 import Fermat.Seven.Lebesgue.TheoremTwo
+import Fermat.Six.Conservation
 import Fermat.SixHundredNinetyOne.GenericProof
 import Fermat.SixHundredSeven.VandiverHistoricalAssembly607
 import Fermat.SixHundredSeven.GenericProof
