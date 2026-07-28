@@ -82,3 +82,73 @@
 - The branch contains many unrelated untracked user files.  N7 work and
   guarded commits name only explicit N7 conservation paths and the public
   facade; none of that unrelated work will be staged or modified.
+
+## 2026-07-28 — realized charged descent
+
+- The compiler-driven repair kept the corrected private Lebesgue
+  transformer intact and removed the public strong-induction closure at its
+  source.  A `ChargedState` now carries precisely its positive index, odd
+  pairwise-coprime entries, and `DescentEquation`.
+- Its charge element in a seventh cyclotomic field is literally
+  `(1 - ζ₇) ^ index`; hence its absolute integral norm charge is `7 ^ index`.
+  The corrected transformer lowers the index, so the charge drops strictly.
+  At index one, the existing modulo-eight contradiction supplies the floor
+  case.  The shared `impossible_of_strict_charge_drain` theorem is now the
+  only public closure.
+- The transformer's four first-stage allocations all enter that one step:
+  the first allocation constructs the lower-index state, while the other
+  three are eliminated by the original, corrected arithmetic.  Thus every
+  surviving state has a strict charged successor.
+- State-level gauge invariance is stated with concrete `ℤ × ℤ`
+  coordinates obtained from the complete Dirichlet fundamental system.
+  This is where rank two bites in the executable descent API: either
+  fundamental-unit exponent may change the representative without changing
+  the norm charge used by the floor.
+
+## 2026-07-28 — exact outer branches and ledger flow
+
+- The outer proof now performs an explicit split on `7 ∣ t x y z`.
+  The exceptional branch stores the exact symmetric definition, product
+  equation, coprimalities, congruence, sign, and divisibility data in
+  `SevenDvdTBranchState`.  Its local allocation contradiction supplies the
+  impossible strict-successor obligation for a literal `λ¹` charge, and its
+  named closure invokes the same shared conservation floor.
+- The ordinary branch consumes `7 ∤ t` at the power-allocation seam rather
+  than silently re-proving it.  It constructs a `ChargedState` through the
+  full substitution and sends that state to the iterable strict drain.
+- The ternary equation is first rewritten as
+  `(x + y) * psiSeven x (-y) + z ^ 7 = 0`; both branch lemmas accept this
+  exact signed septic ledger and recover the seventh-power equation from
+  the proved ledger identity.  The campaign fold is therefore on the
+  downstream proof path rather than a detached polynomial lemma.
+
+## 2026-07-28 — integration and external drift
+
+- The isolated target `Fermat.Seven.Conservation` builds successfully from
+  the strict cone.  The repository's main `Fermat.holdsAt_seven` alias now
+  points to `Fermat.Seven.holdsAt_seven_conservation`, and its direct import
+  of the earlier Lebesgue implementation has been removed.
+- A full `lake build Fermat` still reaches the pre-existing external
+  `flt-regular` drift: its pinned checkout lacks
+  `FltRegular/NumberTheory/KummerFullValuation.lean`, and existing
+  `Fermat.Cases` / `Fermat.Regular.KummerCriterion` calls no longer match
+  the dependency API.  The N7 cone imports none of those modules and builds
+  independently of those failures.  The diagnostic run was stopped after
+  those errors and an unrelated large Vandiver module was killed with exit
+  code 137; continuing it could not validate N7 any further.
+
+## 2026-07-28 — executable audit
+
+- `Verification.lean` contains 70 exact `#print axioms` guards: every one
+  of the 68 public N7 theorems plus the two shared conservation-floor
+  theorems.  Sixty-two use the full standard trio, four use
+  `[propext, Quot.sound]`, and four use `[propext]`; no theorem exposes any
+  additional axiom.
+- Forty-eight guarded forbidden-name checks cover the earlier Lebesgue and
+  Lamé implementations, the old root endpoint, `HoldsAt.mono_of_dvd`, all
+  seven Ladder folds and representative transports, the external
+  class-number shortcut, and fixed-exponent FLT sentinels.  All remain
+  unknown under the isolated public N7 import.
+- The executable verification leaf passes both direct Lean compilation and
+  its Lake target (`3497/3497` jobs).  The public cone itself passes
+  `lake build Fermat.Seven.Conservation` (`3496/3496` jobs).
