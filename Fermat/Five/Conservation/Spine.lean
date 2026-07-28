@@ -11,23 +11,55 @@ FLT(5).  It deliberately imports no earlier repository module under
 ledger, and the ramified drain quantum are rebuilt at the minimal statement
 boundary.
 
-Write `φ` for a root of `φ² = φ + 1`.  The quadratic algebra
-`QuadraticAlgebra ℤ 1 1` is the integral golden ring `ℤ[φ]`, and the norm of
-`x + yφ` is `x² + xy - y²`.
+Write `φ` for a root of `φ² = φ + 1`.  The maximal golden order from
+`Fermat.Quadratic.GoldenUnits` is the integral ring `ℤ[φ]`; its Pell
+classification proves that every unit is, up to sign, a power of `φ`.
+The norm of `x + yφ` is `x² + xy - y²`.
 -/
 import Fermat.Statement
 import Fermat.Conservation.Floor
-import Mathlib.Algebra.Group.Int.Units
-import Mathlib.Algebra.QuadraticAlgebra.Basic
+import Fermat.Quadratic.GoldenUnits
 import Mathlib.Tactic.Ring
 
 namespace Fermat.Five.Conservation
 
+open Fermat.Quadratic.Golden
+
 /-- The integral golden ring `ℤ[φ]`, presented by `φ² = φ + 1`. -/
-abbrev GoldenInt := QuadraticAlgebra ℤ 1 1
+abbrev GoldenInt := MaximalOrder
+
+/-- The golden generator `φ`, with `φ² = φ + 1`. -/
+abbrev goldenPhi : GoldenInt := MaximalOrder.phi
+
+/-- The golden generator as a unit; its inverse is `φ - 1`. -/
+abbrev goldenPhiUnit : GoldenIntˣ := MaximalOrder.phiUnit
+
+@[simp] theorem coe_goldenPhiUnit :
+    (goldenPhiUnit : GoldenInt) = goldenPhi :=
+  rfl
+
+/-- Distinct natural powers of `φ` are distinct units. -/
+theorem goldenPhiUnit_pow_injective :
+    Function.Injective (fun n : ℕ => goldenPhiUnit ^ n) := by
+  intro m n h
+  have hreal :=
+    congrArg
+      (fun u : GoldenIntˣ => MaximalOrder.toReal (u : GoldenInt))
+      h
+  simp only [Units.val_pow_eq_pow_val, coe_goldenPhiUnit, map_pow,
+    MaximalOrder.toReal_phi] at hreal
+  exact
+    (pow_right_strictMono₀ Real.one_lt_goldenRatio).injective hreal
+
+/-- The golden-ring unit group is infinite, witnessed by the powers of
+`φ`.  These are the Pell/Dirichlet gauge transformations at exponent five. -/
+theorem infinite_goldenUnitGroup : Infinite GoldenIntˣ :=
+  Infinite.of_injective
+    (fun n : ℕ => goldenPhiUnit ^ n)
+    goldenPhiUnit_pow_injective
 
 /-- The signed golden-ring norm `N(x + yφ) = x² + xy - y²`. -/
-abbrev goldenNorm : GoldenInt →* ℤ := QuadraticAlgebra.norm
+abbrev goldenNorm : GoldenInt →* ℤ := MaximalOrder.normMonoidHom
 
 /-- The nonnegative ledger charge: the absolute golden-ring norm. -/
 def goldenCharge (z : GoldenInt) : ℕ :=
@@ -48,13 +80,12 @@ theorem goldenNorm_unit_eq_one_or_neg_one (u : GoldenIntˣ) :
     goldenNorm (u : GoldenInt) = 1 ∨
       goldenNorm (u : GoldenInt) = -1 := by
   apply Int.isUnit_eq_one_or
-  exact QuadraticAlgebra.isUnit_iff_norm_isUnit.mp u.isUnit
+  exact u.isUnit.map goldenNorm
 
 /-- A golden-ring unit carries exactly one unit of absolute norm charge. -/
 theorem goldenCharge_unit (u : GoldenIntˣ) :
     goldenCharge (u : GoldenInt) = 1 := by
-  apply Int.natAbs_of_isUnit
-  exact QuadraticAlgebra.isUnit_iff_norm_isUnit.mp u.isUnit
+  exact MaximalOrder.natAbs_norm_eq_one_iff_isUnit.mpr u.isUnit
 
 /-- **Gauge invariance at exponent five.** Multiplication by any unit of the
 infinite golden-ring unit group leaves the observable charge unchanged. -/
@@ -74,8 +105,12 @@ def quinticCofactorElement (a b : ℤ) : GoldenInt :=
 theorem quinticCofactor_eq_goldenNorm (a b : ℤ) :
     quinticCofactor a b =
       goldenNorm (quinticCofactorElement a b) := by
-  simp only [quinticCofactor, goldenNorm, quinticCofactorElement,
-    QuadraticAlgebra.norm_def]
+  change
+    quinticCofactor a b =
+      (a ^ 2 + b ^ 2) ^ 2 +
+        (a ^ 2 + b ^ 2) * (-(a * b)) -
+          (-(a * b)) ^ 2
+  simp only [quinticCofactor]
   ring
 
 /-- The exponent-five ledger identity, with the cofactor displayed as a
@@ -102,14 +137,13 @@ def sqrtFiveDrainQuantum : GoldenInt :=
 /-- The drain quantum really squares to the rational integer `5`. -/
 theorem sqrtFiveDrainQuantum_sq :
     sqrtFiveDrainQuantum * sqrtFiveDrainQuantum = (5 : GoldenInt) := by
-  ext <;>
-    norm_num [sqrtFiveDrainQuantum, QuadraticAlgebra.re_ofNat,
-      QuadraticAlgebra.im_ofNat]
+  ext <;> norm_num [sqrtFiveDrainQuantum]
 
 /-- The signed norm of the ramified drain quantum is `-5`. -/
 theorem sqrtFiveDrainQuantum_norm :
     goldenNorm sqrtFiveDrainQuantum = -5 := by
-  norm_num [goldenNorm, sqrtFiveDrainQuantum, QuadraticAlgebra.norm_def]
+  change (-1 : ℤ) ^ 2 + (-1) * 2 - 2 ^ 2 = -5
+  norm_num
 
 /-- The gauge-invariant charge removed by one `√5` drain is exactly `5`. -/
 theorem sqrtFiveDrainQuantum_charge :
