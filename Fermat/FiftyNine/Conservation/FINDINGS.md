@@ -1,5 +1,17 @@
 # N59 conservation findings
 
+## 2026-07-29 — N5 carried an unused forbidden statement facade
+
+- `Fermat.Five.Conservation.Spine` imported the wider `Fermat.Statement`
+  even though no declaration in the file uses the fixed-exponent statement.
+  That facade defines `Fermat.HoldsAt.mono_of_dvd`, so importing the N5
+  gauge primitive made a forbidden name visible in the N59 cone.
+- The source-level repair is to remove that unused import from the actual N5
+  spine.  Its remaining imports supply the shared floor, golden-unit
+  arithmetic, and ring normalization directly.  This preserves the N5 API
+  while making the rank-one gauge primitive composable under the N59
+  non-circularity boundary.
+
 ## 2026-07-29 — every listed certificate facade is transitively contaminated
 
 - `Fermat.FiftyNine.ArithmeticCertificate` imports the exponent-37 scanner

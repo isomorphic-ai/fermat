@@ -16,7 +16,6 @@ Write `φ` for a root of `φ² = φ + 1`.  The maximal golden order from
 classification proves that every unit is, up to sign, a power of `φ`.
 The norm of `x + yφ` is `x² + xy - y²`.
 -/
-import Fermat.Statement
 import Fermat.Conservation.Floor
 import Fermat.Quadratic.GoldenUnits
 import Mathlib.Tactic.Ring
