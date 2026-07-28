@@ -176,6 +176,45 @@ elab "#guard_no_decl_prefix " p:ident : command => do
 #guard_no_decl_prefix Fermat.Irregular
 #guard_no_decl_prefix Fermat.Ladder
 
+/-! Representative declaration guards cover module boundaries whose source
+file does not declare into a same-named namespace (notably `FirstCase`). -/
+
+/--
+error: Unknown identifier `Fermat.FiftyNine.GenericProof.holdsAt_fiftyNine_generic`
+-/
+#guard_msgs in
+#check Fermat.FiftyNine.GenericProof.holdsAt_fiftyNine_generic
+
+/--
+error: Unknown identifier `Fermat.FiftyNine.firstCase_of_pairwise_coprime`
+-/
+#guard_msgs in
+#check Fermat.FiftyNine.firstCase_of_pairwise_coprime
+
+/--
+error: Unknown identifier `Fermat.FiftyNine.GenericSecondCase.secondCaseExcluded_fiftyNine_generic`
+-/
+#guard_msgs in
+#check Fermat.FiftyNine.GenericSecondCase.secondCaseExcluded_fiftyNine_generic
+
+/--
+error: Unknown identifier `Fermat.FiftyNine.Folding.safePrimeLadder`
+-/
+#guard_msgs in
+#check Fermat.FiftyNine.Folding.safePrimeLadder
+
+/--
+error: Unknown identifier `Fermat.FiftyNine.GenericChannels.bernoulliCubeCondition_fiftyNine_generic`
+-/
+#guard_msgs in
+#check Fermat.FiftyNine.GenericChannels.bernoulliCubeCondition_fiftyNine_generic
+
+/--
+error: Unknown identifier `Fermat.FiftyNine.GenericLemmaTwo.vandiverLemmaTwo_fiftyNine_generic`
+-/
+#guard_msgs in
+#check Fermat.FiftyNine.GenericLemmaTwo.vandiverLemmaTwo_fiftyNine_generic
+
 /-! The forbidden repository transport is a declaration rather than a
 namespace, so it receives a direct unknown-constant guard. -/
 
