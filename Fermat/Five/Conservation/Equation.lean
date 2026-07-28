@@ -50,17 +50,40 @@ theorem FifthEquation.exists_positive_right {x y z : ℤ} (h : FifthEquation x y
       omega
     exact ⟨-x, -y, -z, h.neg, by omega⟩
 
-/-- A primitive Fermat equation yields Dirichlet's generalized equation,
-regardless of which of its three entries is divisible by `5`. -/
-theorem exists_fifthEquation_of_pairwise
+/-- If the right-hand base of a primitive Fermat equation is divisible by
+`5`, division by that visible factor gives the generalized equation without
+permuting the other two bases. -/
+theorem exists_fifthEquation_of_pairwise_of_five_dvd_right
     {a b c : ℤ} (hnonzero : a * b * c ≠ 0)
-    (hab : IsCoprime a b) (hac : IsCoprime a c) (hbc : IsCoprime b c)
-    (heq : a ^ 5 + b ^ 5 = c ^ 5) :
+    (hab : IsCoprime a b)
+    (heq : a ^ 5 + b ^ 5 = c ^ 5)
+    (hc : (5 : ℤ) ∣ c) :
+    ∃ z : ℤ, FifthEquation a b z := by
+  have ha0 : a ≠ 0 := fun ha ↦ hnonzero (by simp [ha])
+  have hb0 : b ≠ 0 := fun hb ↦ hnonzero (by simp [hb])
+  obtain ⟨z, rfl⟩ := hc
+  have hz0 : z ≠ 0 := by
+    intro hz
+    apply hnonzero
+    simp [hz]
+  refine ⟨z, mul_ne_zero (mul_ne_zero ha0 hb0) hz0, hab, ?_⟩
+  calc
+    a ^ 5 + b ^ 5 = (5 * z) ^ 5 := heq
+    _ = 5 ^ 5 * z ^ 5 := by ring
+
+/-- If the right-hand base is not divisible by `5`, the modulo-`25` entry
+forces one of the two left-hand bases to contain the drain quantum.  Moving
+the other left term across produces the generalized equation. -/
+theorem exists_fifthEquation_of_pairwise_of_not_five_dvd_right
+    {a b c : ℤ} (hnonzero : a * b * c ≠ 0)
+    (hac : IsCoprime a c) (hbc : IsCoprime b c)
+    (heq : a ^ 5 + b ^ 5 = c ^ 5)
+    (hc : ¬(5 : ℤ) ∣ c) :
     ∃ x y z : ℤ, FifthEquation x y z := by
   have ha0 : a ≠ 0 := fun ha ↦ hnonzero (by simp [ha])
   have hb0 : b ≠ 0 := fun hb ↦ hnonzero (by simp [hb])
-  have hc0 : c ≠ 0 := fun hc ↦ hnonzero (by simp [hc])
-  rcases Reconstruction.five_dvd_one_of_fifth_add_fifth heq with ha | hb | hc
+  have hc0 : c ≠ 0 := fun hczero ↦ hnonzero (by simp [hczero])
+  rcases Reconstruction.five_dvd_one_of_fifth_add_fifth heq with ha | hb | hc'
   · obtain ⟨z, rfl⟩ := ha
     have hz0 : z ≠ 0 := by
       intro hz
@@ -83,15 +106,21 @@ theorem exists_fifthEquation_of_pairwise
       calc
         c ^ 5 - a ^ 5 = (5 * z) ^ 5 := by omega
         _ = 5 ^ 5 * z ^ 5 := by ring
-  · obtain ⟨z, rfl⟩ := hc
-    have hz0 : z ≠ 0 := by
-      intro hz
-      apply hc0
-      simp [hz]
-    refine ⟨a, b, z, ?_, hab, ?_⟩
-    · exact mul_ne_zero (mul_ne_zero ha0 hb0) hz0
-    · calc
-        a ^ 5 + b ^ 5 = (5 * z) ^ 5 := heq
-        _ = 5 ^ 5 * z ^ 5 := by ring
+  · exact (hc hc').elim
+
+/-- A primitive Fermat equation yields Dirichlet's generalized equation,
+regardless of which of its three entries is divisible by `5`. -/
+theorem exists_fifthEquation_of_pairwise
+    {a b c : ℤ} (hnonzero : a * b * c ≠ 0)
+    (hab : IsCoprime a b) (hac : IsCoprime a c) (hbc : IsCoprime b c)
+    (heq : a ^ 5 + b ^ 5 = c ^ 5) :
+    ∃ x y z : ℤ, FifthEquation x y z := by
+  by_cases hc : (5 : ℤ) ∣ c
+  · obtain ⟨z, hz⟩ :=
+      exists_fifthEquation_of_pairwise_of_five_dvd_right
+        hnonzero hab heq hc
+    exact ⟨a, b, z, hz⟩
+  · exact exists_fifthEquation_of_pairwise_of_not_five_dvd_right
+      hnonzero hac hbc heq hc
 
 end Fermat.Five.Conservation.Reconstruction.Dirichlet

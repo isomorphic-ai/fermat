@@ -22,7 +22,7 @@ def FifthEquationImpossible : Prop :=
   ∀ {x y z : ℤ}, ¬ FifthEquation x y z
 
 /-- Pairwise coprimality follows from primitivity and the Fermat equation. -/
-private theorem pairwise_isCoprime_of_gcd_eq_one {a b c : ℤ}
+theorem pairwise_isCoprime_of_gcd_eq_one {a b c : ℤ}
     (hgcd : Finset.gcd {a, b, c} id = 1)
     (heq : a ^ 5 + b ^ 5 = c ^ 5) :
     IsCoprime a b ∧ IsCoprime a c ∧ IsCoprime b c := by
