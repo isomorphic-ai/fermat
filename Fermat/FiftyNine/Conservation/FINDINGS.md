@@ -1,5 +1,25 @@
 # N59 conservation findings
 
+## 2026-07-29 — the clean structural spine compiles, and isolates the bite point
+
+- `Conservation.Spine` now imports all seven primitives through their narrow
+  boundaries.  It defines the explicit equation
+  `stock + credit + converted = total`, the N1 vacuum ledger, and generic
+  repayment as an internal transfer from credit to converted.  The transfer
+  preserves the audited total by commutative-monoid bookkeeping.
+- The generic N7 norm/gauge API specializes cleanly: a 59th cyclotomic field
+  has free unit rank 28, its full gauge has positive regulator, multiplication
+  by any gauge unit preserves charge, `λ = 1 - ζ₅₉` has charge 59, and the
+  ramified scale is exactly `59 ^ n` and strictly monotone.
+- The isolated Lake target builds warning-free.  This confirms that vacuum,
+  ledger transfer, gauge, ramified drain, and the shared floor are not the
+  obstruction.
+- The compiled `Ledger.repay` is intentionally only the accounting law: it
+  transfers an amount already known to be available.  It neither identifies
+  class-group capacity nor proves that a Fermat-produced unit admits a
+  59th-power repayment.  Treating it as the requested arithmetic repayment
+  would hide the precise missing theorem recorded below.
+
 ## 2026-07-29 — no independent Case-II or endpoint escape hatch exists
 
 - Exhaustive declaration and import-graph searches found exponent-59
