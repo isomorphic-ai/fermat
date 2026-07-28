@@ -123,6 +123,15 @@ theorem drainUnit_charge :
   rw [hunit, charge_formula]
   norm_num
 
+/-- The arithmetic prime used by the cubic state transformer carries the
+same native norm-three charge in the shared sixth-root ring. -/
+theorem embeddedCubeRoot_sub_one_charge :
+    charge (embeddedCubeRoot - 1) = 3 := by
+  have hprime :
+      embeddedCubeRoot - 1 = ofCoeffs (-1) (-1) := rfl
+  rw [hprime, charge_formula]
+  norm_num
+
 /-- Conservation iterated through powers. -/
 theorem charge_pow (u : SixthCyclotomicInt) (n : ℕ) :
     charge (u ^ n) = charge u ^ n := by
