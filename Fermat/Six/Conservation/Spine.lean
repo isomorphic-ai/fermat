@@ -26,8 +26,8 @@ The bounded import roles are:
 * `PythagoreanTriples` supplies only the right-triangle predicate;
 * `NormNum` and `Ring` verify explicit integer polynomial identities.
 
-No fixed-exponent theorem, exponent transport, Ladder module, or
-`Fermat.Three` module is imported.
+No fixed-exponent theorem, exponent transport, Ladder module, or repository
+exponent-three module is imported.
 -/
 import Fermat.Conservation.Floor
 import Mathlib.Algebra.QuadraticAlgebra.Basic
