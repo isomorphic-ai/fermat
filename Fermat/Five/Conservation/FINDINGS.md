@@ -101,3 +101,24 @@
   coprimality, records the Fermat equation in ledger form, performs an
   actual `by_cases (5 : ℤ) ∣ c`, and dispatches to those two independently
   floor-closed branches.  The complete endpoint builds successfully.
+
+## 2026-07-28 — executable verification
+
+- The independent build of the shared floor, every reconstructed N5 layer,
+  the public assembly, and `Fermat.Five.Conservation.Verification` completed
+  successfully with 8,524 jobs.
+- The verification leaf contains 115 exact guarded `#print axioms` checks:
+  all 112 public N5 theorems, `Fermat.HoldsAt.mono_of_dvd`, and the two
+  shared-floor theorems.  Every result uses a subset of
+  `[propext, Classical.choice, Quot.sound]`.
+- Thirteen executable unknown-identifier guards cover a sentinel from every
+  module in the earlier Five route, both Reduction/Dirichlet endpoints, and
+  the root `Fermat.holdsAt_five` facade.  All thirteen pass after importing
+  only `Fermat.Five.Conservation`.
+- The forbidden-import scan, placeholder/added-axiom scan, and whitespace
+  check are clean.  No `Nat.find` closure remains in the N5 cone, and the
+  only two calls to `impossible_of_strict_charge_drain` are the required
+  `5 ∤ c` and `5 ∣ c` branch closures.
+- `Fermat.lean` now exposes the new conservation rung, but the acceptance
+  build imports the rung directly.  It therefore remains independent of the
+  already documented root-target `flt-regular` manifest drift.
