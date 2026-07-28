@@ -3,6 +3,7 @@ Reconstruction provenance: adapted with credit from the repository's earlier
 corrected Lebesgue descent in `Fermat/Seven/Lebesgue/Descent.lean`.  This module
 does not import or call any declaration from that earlier exponent-seven route.
 -/
+import Fermat.Seven.Conservation.Spine
 import Mathlib.Data.Nat.Factorization.Basic
 import Mathlib.Data.ZMod.Basic
 import Mathlib.NumberTheory.Multiplicity
@@ -30,6 +31,23 @@ namespace Fermat.Seven.Conservation.Reconstruction.Lebesgue
 def DescentEquation (a p q r : ℕ) : Prop :=
   p ^ 2 + 2 ^ (2 * a) * 3 * 7 ^ 4 * q ^ 2 * r ^ 2 =
     q ^ 4 + 2 ^ (4 * a + 4) * 7 ^ 7 * r ^ 4
+
+/-- A state in Lebesgue's repaired descent, retaining exactly the arithmetic
+data needed by the private transformer.  Its positive index is the exponent
+of the ramified cyclotomic charge. -/
+structure ChargedState where
+  index : ℕ
+  p : ℕ
+  q : ℕ
+  r : ℕ
+  index_pos : 0 < index
+  p_odd : Odd p
+  q_odd : Odd q
+  r_odd : Odd r
+  pq_coprime : p.Coprime q
+  pr_coprime : p.Coprime r
+  qr_coprime : q.Coprime r
+  equation : DescentEquation index p q r
 
 private theorem descentEquation_succ_iff (a p q r : ℕ) :
     DescentEquation (a + 1) p q r ↔
@@ -963,24 +981,144 @@ private theorem descend {a p q r : ℕ} (ha : 0 < a)
   · exact (initial_fourth_allocation_impossible (s := s) ha hq ht (by
       simpa only [hrst] using h₄)).elim
 
+namespace ChargedState
+
+noncomputable section
+
+open scoped NumberField
+
+variable {K : Type*} [Field K] [NumberField K]
+variable [IsCyclotomicExtension {7} ℚ K]
+variable {ζ : K}
+
+/-- The literal cyclotomic element carrying a descent state's charge:
+`(1 - ζ₇) ^ index`. -/
+def chargeElement (hζ : IsPrimitiveRoot ζ 7) (state : ChargedState) :
+    𝓞 K :=
+  (Fermat.Seven.Conservation.lambda hζ) ^ state.index
+
+/-- The absolute integral norm charge of a Lebesgue descent state. -/
+def stateCharge (hζ : IsPrimitiveRoot ζ 7) (state : ChargedState) : ℕ :=
+  Fermat.Seven.Conservation.charge (chargeElement hζ state)
+
+/-- A state's cyclotomic norm charge is exactly `7 ^ index`. -/
+theorem stateCharge_eq (hζ : IsPrimitiveRoot ζ 7) (state : ChargedState) :
+    stateCharge hζ state = 7 ^ state.index := by
+  simpa only [stateCharge, chargeElement,
+    Fermat.Seven.Conservation.drainCharge] using
+      Fermat.Seven.Conservation.drainCharge_eq hζ state.index
+
+/-- Every Lebesgue descent state carries positive norm charge. -/
+theorem stateCharge_pos (hζ : IsPrimitiveRoot ζ 7) (state : ChargedState) :
+    0 < stateCharge hζ state := by
+  rw [stateCharge_eq]
+  positivity
+
+/-- **Rank-two gauge invariance.** Multiplying the state's charge element by
+the unit selected by either integer coordinate in the complete seventh
+cyclotomic fundamental system does not change its norm charge. -/
+theorem stateCharge_rankTwoGauge_invariant
+    (hζ : IsPrimitiveRoot ζ 7) (coordinates : ℤ × ℤ)
+    (state : ChargedState) :
+    Fermat.Seven.Conservation.charge
+        (((Fermat.Seven.Conservation.gaugeUnit K
+            ((Fermat.Seven.Conservation.gaugeCoordinatesEquiv (K := K)).symm
+              coordinates) : (𝓞 K)ˣ) : 𝓞 K) *
+          chargeElement hζ state) =
+      stateCharge hζ state := by
+  simpa only [stateCharge] using
+    Fermat.Seven.Conservation.charge_gauge_invariant
+      ((Fermat.Seven.Conservation.gaugeCoordinatesEquiv (K := K)).symm
+        coordinates)
+      (chargeElement hζ state)
+
+/-- One application of Lebesgue's corrected transformer strictly lowers the
+literal cyclotomic norm charge.  At index one the private modulo-eight floor
+already gives a contradiction; every higher index produces the next state
+through `descend`. -/
+theorem exists_stateCharge_lt (hζ : IsPrimitiveRoot ζ 7)
+    (state : ChargedState) :
+    ∃ next : ChargedState,
+      stateCharge hζ next < stateCharge hζ state := by
+  cases hindex : state.index with
+  | zero =>
+      have hpositive : 0 < 0 := by
+        simpa only [hindex] using state.index_pos
+      exact (Nat.not_lt_zero 0 hpositive).elim
+  | succ a =>
+      by_cases haZero : a = 0
+      · subst a
+        have heqOne : DescentEquation 1 state.p state.q state.r := by
+          simpa only [hindex] using state.equation
+        exact
+          (base_case_impossible state.p_odd state.q_odd state.r_odd
+            heqOne).elim
+      · have haPos : 0 < a := Nat.pos_of_ne_zero haZero
+        have heqSucc :
+            DescentEquation (a + 1) state.p state.q state.r := by
+          simpa only [hindex, Nat.succ_eq_add_one] using state.equation
+        obtain ⟨p', q', r', hp', hq', hr', hpq', hpr', hqr', heq'⟩ :=
+          descend haPos state.p_odd state.q_odd state.r_odd
+            state.pq_coprime state.pr_coprime state.qr_coprime heqSucc
+        let next : ChargedState :=
+          { index := a
+            p := p'
+            q := q'
+            r := r'
+            index_pos := haPos
+            p_odd := hp'
+            q_odd := hq'
+            r_odd := hr'
+            pq_coprime := hpq'
+            pr_coprime := hpr'
+            qr_coprime := hqr'
+            equation := heq' }
+        refine ⟨next, ?_⟩
+        rw [stateCharge_eq, stateCharge_eq]
+        simpa only [next, hindex] using
+          Nat.pow_lt_pow_right (by norm_num : 1 < 7) (Nat.lt_succ_self a)
+
+set_option backward.isDefEq.respectTransparency false in
+/-- Every charged Lebesgue state is ruled out by the shared conservation
+floor: positive natural norm charge cannot drain strictly forever. -/
+theorem impossible_conservation (state : ChargedState) : False := by
+  classical
+  let K := CyclotomicField 7 ℚ
+  let hζ := IsCyclotomicExtension.zeta_spec 7 ℚ K
+  have : NumberField K :=
+    IsCyclotomicExtension.numberField {7} ℚ _
+  exact
+    Fermat.Conservation.impossible_of_strict_charge_drain
+      state
+      (stateCharge hζ)
+      (stateCharge_pos hζ)
+      (exists_stateCharge_lt hζ)
+
+end
+
+end ChargedState
+
 /-- Lebesgue's Théorème I, in contradiction form: the quartic family has no
-solution with positive index and odd pairwise-coprime entries.  The proof is
-the repaired infinite descent, terminating at the modulo-eight base case. -/
+solution with positive index and odd pairwise-coprime entries.  The private
+repaired transformer now closes through the literal seventh-cyclotomic norm
+charge and the shared conservation floor. -/
 theorem descentEquation_impossible {a p q r : ℕ}
     (ha : 0 < a) (hp : Odd p) (hq : Odd q) (hr : Odd r)
     (hpq : p.Coprime q) (hpr : p.Coprime r) (hqr : q.Coprime r)
     (heq : DescentEquation a p q r) : False := by
-  induction a using Nat.strong_induction_on generalizing p q r with
-  | h a ih =>
-      rcases a with _ | a
-      · omega
-      · by_cases haZero : a = 0
-        · subst a
-          exact base_case_impossible hp hq hr (by simpa using heq)
-        · have haPos : 0 < a := Nat.pos_of_ne_zero haZero
-          obtain ⟨p', q', r', hp', hq', hr', hpq', hpr', hqr', heq'⟩ :=
-            descend haPos hp hq hr hpq hpr hqr (by simpa only [Nat.succ_eq_add_one] using heq)
-          exact ih a (Nat.lt_succ_self a) haPos hp' hq' hr' hpq' hpr' hqr' heq'
+  exact ChargedState.impossible_conservation
+    { index := a
+      p := p
+      q := q
+      r := r
+      index_pos := ha
+      p_odd := hp
+      q_odd := hq
+      r_odd := hr
+      pq_coprime := hpq
+      pr_coprime := hpr
+      qr_coprime := hqr
+      equation := heq }
 
 /-- The traditional conclusion of Théorème I.  Under the oddness assumptions
 the stronger contradiction theorem applies, hence in particular `r = 0`. -/
