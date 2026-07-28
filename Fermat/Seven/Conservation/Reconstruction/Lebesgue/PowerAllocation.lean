@@ -170,9 +170,10 @@ theorem not_seven_dvd_of_lebesgue_power_data
   simp only [Int.cast_pow, Int.cast_mul, Int.cast_ofNat, hcastT, mul_one] at hqCast
   exact hqCast
 
-/-- Rigorous power allocation for the nonexceptional branch of Lebesgue's
-argument. -/
-theorem exists_power_data_of_lebesgue
+/-- Rigorous power allocation for the explicitly nonexceptional branch of
+Lebesgue's argument.  The branch hypothesis is an input, so a caller's
+`7 ∤ T` case split is consumed at the exact allocation seam. -/
+theorem exists_power_data_of_lebesgue_of_not_seven_dvd
     {S U V T W : ℤ}
     (hdef : T = U ^ 2 + W * S)
     (hpow : S ^ 7 = 7 * V * T)
@@ -180,13 +181,12 @@ theorem exists_power_data_of_lebesgue
     (hTV : IsCoprime T V)
     (hmod : T ≡ 1 [ZMOD 4])
     (hTnonneg : 0 ≤ T)
+    (hnotseven : ¬(7 : ℤ) ∣ T)
     (hVeven : Even V) :
     ∃ p q r : ℤ,
       T = q ^ 14 ∧ U = q * r ∧ V = 7 ^ 6 * p ^ 7 ∧
         S = 7 * p * q ^ 2 ∧ Even p ∧
         IsCoprime p q ∧ IsCoprime q r := by
-  have hnotseven :=
-    not_seven_dvd_of_lebesgue_power_data hdef hpow hTW hTV hmod hTnonneg
   have hsevenCop : IsCoprime T (7 : ℤ) := by
     exact ((show Prime (7 : ℤ) by norm_num).coprime_iff_not_dvd.mpr hnotseven).symm
   have hcop : IsCoprime T ((7 : ℤ) * V) := hsevenCop.mul_right hTV
@@ -265,6 +265,28 @@ theorem exists_power_data_of_lebesgue
     rw [hFr, hAq] at h
     exact (IsCoprime.pow_iff (by norm_num : 0 < 2) (by norm_num : 0 < 2)).mp h
   exact ⟨p, q, r, hTq, hUr, hVp, hSpq, hpEven, hpq, hqr⟩
+
+/-- Compatibility form of the nonexceptional allocation.  Its hypotheses
+already force `7 ∤ T`; the branch-explicit theorem above is the API used
+after an actual case split. -/
+theorem exists_power_data_of_lebesgue
+    {S U V T W : ℤ}
+    (hdef : T = U ^ 2 + W * S)
+    (hpow : S ^ 7 = 7 * V * T)
+    (hTW : IsCoprime T W)
+    (hTV : IsCoprime T V)
+    (hmod : T ≡ 1 [ZMOD 4])
+    (hTnonneg : 0 ≤ T)
+    (hVeven : Even V) :
+    ∃ p q r : ℤ,
+      T = q ^ 14 ∧ U = q * r ∧ V = 7 ^ 6 * p ^ 7 ∧
+        S = 7 * p * q ^ 2 ∧ Even p ∧
+        IsCoprime p q ∧ IsCoprime q r := by
+  exact exists_power_data_of_lebesgue_of_not_seven_dvd
+    hdef hpow hTW hTV hmod hTnonneg
+    (not_seven_dvd_of_lebesgue_power_data
+      hdef hpow hTW hTV hmod hTnonneg)
+    hVeven
 
 /-- The remaining coprimality in Lebesgue's extracted triple follows from
 primitivity of `x,y,z`.  A prime dividing both `p` and `r` would divide
@@ -368,8 +390,32 @@ theorem exists_power_data_of_symmetric
   · exact t_nonneg x y z
   · exact hveven
 
-/-- Lebesgue's full extracted triple, including the pairwise coprimalities
-used in the substitution into Theorem I. -/
+/-- Lebesgue's full extracted triple in the explicit `7 ∤ t` branch,
+including the pairwise coprimalities used in the substitution into
+Theorem I. -/
+theorem exists_pairwise_power_data_of_symmetric_of_not_seven_dvd
+    {x y z : ℤ}
+    (hxy : IsCoprime x y) (hxz : IsCoprime x z)
+    (hpow : s x y z ^ 7 = 7 * v x y z * t x y z)
+    (htxyz : IsCoprime (t x y z) (x * y * z))
+    (htv : IsCoprime (t x y z) (v x y z))
+    (htmod : t x y z ≡ 1 [ZMOD 4])
+    (hnotseven : ¬(7 : ℤ) ∣ t x y z)
+    (hveven : Even (v x y z)) :
+    ∃ p q r : ℤ,
+      t x y z = q ^ 14 ∧ u x y z = q * r ∧
+        v x y z = 7 ^ 6 * p ^ 7 ∧
+        s x y z = 7 * p * q ^ 2 ∧ Even p ∧
+        IsCoprime p q ∧ IsCoprime p r ∧ IsCoprime q r := by
+  obtain ⟨p, q, r, htq, hur, hvp, hspq, hpEven, hpq, hqr⟩ :=
+    exists_power_data_of_lebesgue_of_not_seven_dvd
+      (S := s x y z) (U := u x y z) (V := v x y z)
+      (T := t x y z) (W := x * y * z)
+      rfl hpow htxyz htv htmod (t_nonneg x y z) hnotseven hveven
+  have hpr := isCoprime_p_r_of_symmetric_data hxy hxz hur hvp hspq htmod
+  exact ⟨p, q, r, htq, hur, hvp, hspq, hpEven, hpq, hpr, hqr⟩
+
+/-- Compatibility form of Lebesgue's full extracted triple. -/
 theorem exists_pairwise_power_data_of_symmetric
     {x y z : ℤ}
     (hxy : IsCoprime x y) (hxz : IsCoprime x z)
@@ -383,9 +429,13 @@ theorem exists_pairwise_power_data_of_symmetric
         v x y z = 7 ^ 6 * p ^ 7 ∧
         s x y z = 7 * p * q ^ 2 ∧ Even p ∧
         IsCoprime p q ∧ IsCoprime p r ∧ IsCoprime q r := by
-  obtain ⟨p, q, r, htq, hur, hvp, hspq, hpEven, hpq, hqr⟩ :=
-    exists_power_data_of_symmetric hpow htxyz htv htmod hveven
-  have hpr := isCoprime_p_r_of_symmetric_data hxy hxz hur hvp hspq htmod
-  exact ⟨p, q, r, htq, hur, hvp, hspq, hpEven, hpq, hpr, hqr⟩
+  have hnotseven :
+      ¬(7 : ℤ) ∣ t x y z :=
+    not_seven_dvd_of_lebesgue_power_data
+      (S := s x y z) (U := u x y z) (V := v x y z)
+      (T := t x y z) (W := x * y * z)
+      rfl hpow htxyz htv htmod (t_nonneg x y z)
+  exact exists_pairwise_power_data_of_symmetric_of_not_seven_dvd
+    hxy hxz hpow htxyz htv htmod hnotseven hveven
 
 end Fermat.Seven.Conservation.Reconstruction.Lebesgue
