@@ -1,4 +1,5 @@
 import Fermat.Five.Conservation.Equation
+import Fermat.Statement.Basic
 
 /-!
 # Reduction of FLT for exponent 5 to Dirichlet's fifth-power equation

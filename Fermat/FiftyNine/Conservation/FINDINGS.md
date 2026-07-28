@@ -1,5 +1,50 @@
 # N59 conservation findings
 
+## 2026-07-29 — the numerical certificates do not certify credit capacity by themselves
+
+- A kernel-checked inverse for the `28 × 28` residue matrix proves only that
+  the displayed matrix is nonsingular.  Turning that fact into
+  `¬ 59 ∣ realUnitRelIndex ...` requires the residue-functional realization
+  and determinant/index transfer found only in
+  `Fermat.Irregular.CircularUnitResidues` and
+  `Fermat.Irregular.CircularUnitIndex`.
+- Turning that relative-index conclusion into a plus-class-number statement
+  then requires the forbidden prime-generic Sinnott bridge.  Mathlib and the
+  conservation spines contain no replacement for either structural map.
+- Likewise, `B₄₄` having exactly one factor of 59 identifies one Bernoulli
+  valuation; no permitted theorem identifies that valuation with the
+  cardinality or exponent of the 59-primary class-group credit.  Calling its
+  value the credit capacity would therefore overstate what the certificate
+  proves.
+- The local residues `38` and `473` are unused numerical shadows in the
+  existing repository proof.  Without a newly proved bridge, they cannot
+  truthfully serve as repayment evidence.
+
+## 2026-07-29 — compiler surgery reaches a genuine repayment theorem
+
+- The shared floor has one decisive input:
+  `hstep : ∀ state, ∃ next, charge next < charge state`.  None of the seven
+  permitted spines contains a declaration that constructs such a successor
+  from an exponent-59 counterexample; they contribute the charge,
+  balance/gauge laws, and the floor only.
+- The first N59-specific theorem needed to fund that successor is the
+  following mathematical repayment statement in substance: for a primitive
+  59th root `ζ` and a unit `u`, a depth-118 congruence
+  `(1 - ζ) ^ 118 ∣ u - c ^ 59` must force `u` to be a 59th power.  This is
+  the `KummerUnitPowerConclusion` seam used by the repository's historical
+  state transformer.
+- The existing proof of that seam is exactly Vandiver's Lemma II.  Its
+  finite unit-system adapter is the forbidden
+  `Fermat.FiftyNine.GenericLemmaTwo`; the specialized alternative imports
+  `Fermat.Irregular.VandiverLemmaTwoBridge` and
+  `Fermat.Irregular.VandiverRealUnits`.  The state-to-state reduction itself
+  is likewise exposed only by the forbidden historical machinery.
+- Consequently a ledger theorem parameterized by repayment would compile,
+  but it would not prove `Fermat.HoldsAt 59` and is expressly ruled out by
+  the pre-registered audit risk.  The work queue is therefore the
+  unconditional repayment/strict-successor theorem itself, not another
+  provider structure or harness.
+
 ## 2026-07-29 — N5 carried an unused forbidden statement facade
 
 - `Fermat.Five.Conservation.Spine` imported the wider `Fermat.Statement`
@@ -11,6 +56,11 @@
   arithmetic, and ring normalization directly.  This preserves the N5 API
   while making the rank-one gauge primitive composable under the N59
   non-circularity boundary.
+- Rebuilding the real N5 public cone after that surgery exposed the one
+  legitimate downstream dependency: `Conservation.Reduction` states a
+  theorem returning `Fermat.HoldsAt 5`.  It now imports
+  `Fermat.Statement.Basic` explicitly.  Thus the proposition remains
+  available exactly where used without restoring the forbidden transport.
 
 ## 2026-07-29 — every listed certificate facade is transitively contaminated
 
