@@ -1,5 +1,22 @@
 # N59 conservation findings
 
+## 2026-07-29 — the executable structural audit is green
+
+- `Verification.lean` checks all 19 public theorems in the N59 structural
+  spine plus both shared-floor theorems.  Ledger transfers use
+  `[propext, Quot.sound]`; every gauge/rank/drain and floor theorem uses the
+  standard trio `[propext, Classical.choice, Quot.sound]`.
+- An environment-level command rejects every declaration beneath each of
+  the six forbidden N59 module prefixes and beneath
+  `Fermat.GenericIrregular`, `Fermat.Irregular`, and `Fermat.Ladder`.
+  Direct guards also prove the forbidden divisibility transport and the
+  historical/KummerIso N59 endpoints unknown.
+- The standalone target
+  `lake build Fermat.FiftyNine.Conservation.Verification` is green
+  (`8520/8520`).  The audit deliberately does not claim the requested final
+  endpoint: that theorem cannot be added until the repayment/strict-successor
+  obligation below is discharged.
+
 ## 2026-07-29 — the clean structural spine compiles, and isolates the bite point
 
 - `Conservation.Spine` now imports all seven primitives through their narrow
