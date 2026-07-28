@@ -1,5 +1,28 @@
 # N59 conservation findings
 
+## 2026-07-29 — no independent Case-II or endpoint escape hatch exists
+
+- Exhaustive declaration and import-graph searches found exponent-59
+  endpoints only in the forbidden generic proof, the historical Vandiver
+  chain, the KummerIso regressions (which import the same forbidden
+  machinery), and the Ladder facade.
+- Mathlib's FLT development proves exponents three and four and supplies
+  only statement/polynomial infrastructure beyond them.  Its exponent
+  monotonicity theorem gives no reduction for the prime exponent 59.
+- The nearest external Kummer unit theorem assumes that 59 is coprime to
+  the full cyclotomic class-group cardinality.  That is the regular-prime
+  hypothesis and is precisely unavailable at the irregular prime 59; it
+  cannot implement the credit repair.
+- Sophie--Germain's auxiliary-prime theorem forces a primitive solution
+  into Case II but does not exclude Case II.  There is no multi-auxiliary
+  aggregation theorem in the repository or dependencies, and finitely many
+  auxiliary divisibilities alone do not contradict three unbounded integer
+  entries.
+- Thus the unconditional repayment and strict successor cannot be obtained
+  by selecting another existing safe theorem.  They require genuinely new
+  class-group/unit mathematics or a relaxation of the stated import
+  boundary.
+
 ## 2026-07-29 — the numerical certificates do not certify credit capacity by themselves
 
 - A kernel-checked inverse for the `28 × 28` residue matrix proves only that
