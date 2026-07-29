@@ -21,6 +21,7 @@ import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Group.Subgroup.Finsupp
 import Mathlib.Data.Int.GCD
 import Mathlib.GroupTheory.OrderOfElement
+import Mathlib.NumberTheory.NumberField.CMField
 import Mathlib.RingTheory.Int.Basic
 
 namespace Fermat.Conservation.Credit
@@ -28,6 +29,8 @@ namespace Fermat.Conservation.Credit
 open scoped BigOperators
 
 namespace Repayment
+
+open scoped NumberField
 
 /-- The exact local depth in Vandiver's Lemma II. -/
 def IsVandiverDeep {R : Type*} [CommRing R]
@@ -38,6 +41,50 @@ def IsVandiverDeep {R : Type*} [CommRing R]
 /-- A debt is repaid when the checked unit is an actual `p`-th power. -/
 def IsRepaid {G : Type*} [Group G] (p : ℕ) (u : G) : Prop :=
   ∃ v : G, u = v ^ p
+
+/-- The `p`-power map is injective on real units when `p` is odd.
+
+This is the torsion observation in Vandiver's Lemma II: a real torsion unit
+is both fixed and inverted by complex conjugation, hence has square one; an
+odd power can then be one only for the identity. -/
+theorem realUnits_odd_pow_injective
+    {K : Type*} [Field K] [NumberField K] [NumberField.IsCMField K]
+    (p : ℕ) (hp : Odd p) :
+    Function.Injective
+      (fun u : NumberField.IsCMField.realUnits K ↦ u ^ p) := by
+  intro x y hxy
+  apply Subtype.ext
+  have hxy' : (x.1 : (𝓞 K)ˣ) ^ p = y.1 ^ p :=
+    congrArg Subtype.val hxy
+  let z : (𝓞 K)ˣ := x.1 * y.1⁻¹
+  have hzpow : z ^ p = 1 := by
+    dsimp only [z]
+    rw [mul_pow, hxy']
+    simp
+  have hzmem : z ∈ NumberField.Units.torsion K := by
+    rw [NumberField.Units.torsion, CommGroup.mem_torsion,
+      isOfFinOrder_iff_pow_eq_one]
+    exact ⟨p, hp.pos, hzpow⟩
+  have hzreal : z ∈ NumberField.IsCMField.realUnits K :=
+    (NumberField.IsCMField.realUnits K).mul_mem x.2
+      ((NumberField.IsCMField.realUnits K).inv_mem y.2)
+  have hconjSelf : NumberField.IsCMField.unitsComplexConj K z = z :=
+    (NumberField.IsCMField.unitsComplexConj_eq_self_iff K z).2 hzreal
+  have hconjInv : NumberField.IsCMField.unitsComplexConj K z = z⁻¹ := by
+    simpa using NumberField.IsCMField.unitsComplexConj_torsion
+      (K := K) (⟨z, hzmem⟩ : NumberField.Units.torsion K)
+  have hzinv : z = z⁻¹ := hconjSelf.symm.trans hconjInv
+  have hzsq : z ^ 2 = 1 := by
+    calc
+      z ^ 2 = z * z := pow_two z
+      _ = z⁻¹ * z := congrArg (fun w ↦ w * z) hzinv
+      _ = 1 := inv_mul_cancel z
+  obtain ⟨k, rfl⟩ := hp
+  have hzodd : z ^ (2 * k + 1) = z := by
+    rw [pow_add, pow_mul, hzsq]
+    simp
+  have hz : z = 1 := hzodd.symm.trans hzpow
+  exact eq_of_mul_inv_eq_one hz
 
 private theorem exists_index_relation
     {G ι : Type*} [CommGroup G] [Fintype ι]
@@ -163,10 +210,10 @@ deep congruence forces coefficient-cube divisibility for every primitive
 relation in the cycle's edge family.  This predicate assumes no root and no
 repayment conclusion. -/
 def DeepCoefficientForcing
-    {R α : Type*} [CommRing R]
-    (cycle : Cycle α) (realize : α → Rˣ)
-    (p : ℕ) (ramified : R) (B : Fin cycle.rank → ℤ) : Prop :=
-  ∀ (u : Rˣ), IsVandiverDeep p ramified u →
+    {G α : Type*} [CommGroup G]
+    (cycle : Cycle α) (realize : α → G)
+    (p : ℕ) (B : Fin cycle.rank → ℤ) (deep : G → Prop) : Prop :=
+  ∀ (u : G), deep u →
     ∀ (t : ℕ) (a : Fin cycle.rank → ℤ),
       0 < t →
       u ^ t = ∏ i, cycle.edge realize i ^ a i →
@@ -177,16 +224,16 @@ def DeepCoefficientForcing
 family, together with Vandiver's exact coefficient calculation, constructs
 the repayment root. -/
 theorem repay_of_deep_generated_cycle
-    {R α : Type*} [CommRing R]
-    {cycle : Cycle α} {realize : α → Rˣ}
+    {G α : Type*} [CommGroup G]
+    {cycle : Cycle α} {realize : α → G}
     {p : ℕ} (hp : p.Prime)
     (data : Cycle.CapacityData cycle realize)
     (hambient : data.ambient = ⊤)
-    (hpow : Function.Injective (fun x : Rˣ ↦ x ^ p))
-    (ramified : R) (B : Fin cycle.rank → ℤ)
-    (hforcing : DeepCoefficientForcing cycle realize p ramified B)
+    (hpow : Function.Injective (fun x : G ↦ x ^ p))
+    (B : Fin cycle.rank → ℤ) (deep : G → Prop)
+    (hforcing : DeepCoefficientForcing cycle realize p B deep)
     (hno : ∀ i, ¬(p : ℤ) ^ 3 ∣ B i)
-    {u : Rˣ} (hdeep : IsVandiverDeep p ramified u) :
+    {u : G} (hdeep : deep u) :
     IsRepaid p u := by
   letI hfiniteGenerated :
       (cycle.generatedSubledger realize).FiniteIndex := by

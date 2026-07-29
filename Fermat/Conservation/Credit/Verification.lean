@@ -192,6 +192,14 @@ info: 'Fermat.Conservation.Credit.Cycle.ofMul_point' depends on axioms: [propext
 /-! ## C3: Vandiver repayment on the generated edge family -/
 
 /--
+info: 'Fermat.Conservation.Credit.Repayment.realUnits_odd_pow_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Repayment.realUnits_odd_pow_injective
+
+/--
 info: 'Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
