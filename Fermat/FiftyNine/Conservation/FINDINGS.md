@@ -1,5 +1,29 @@
 # N59 conservation findings
 
+## 2026-07-29 — C3 must expose Vandiver's generated Fourier transform
+
+- The current `DeepCoefficientForcing59` asks for
+  `59 ^ 3 ∣ a i * B i` coefficientwise in the raw edge coordinates
+  `generatedUnit hζ i`.  Vandiver's Lemma II calculation is coefficientwise
+  only after the character/diagonal transform; it does not directly produce
+  that stronger raw-coordinate statement.
+- In generated form, the calculation produces congruences of the shape
+  `59 ^ 3 ∣ (∑ i, a i * M k i) * B k` for every character row `k`, where
+  `M` is the generated Vandermonde/DFT change-of-coordinates matrix (up to
+  the invertible factor `2` introduced by the real projection).  Its entries
+  are generated from powers of `4`, rather than supplied as 784 unrelated
+  facts.
+- The exact repayment consumer only needs `∀ i, (59 : ℤ) ∣ a i`.
+  Non-divisibility of every `B k` modulo `59 ^ 3` first gives divisibility
+  of every transformed coefficient; nonsingularity of `M` modulo `59` then
+  gives divisibility of every raw coefficient.  The C3 interface should
+  therefore split into a generated Fourier--Bernoulli forcing theorem and a
+  transform-inversion theorem returning raw coefficient divisibility, and
+  the shared repayment core should consume that latter statement directly.
+- Fable's incoming `NoBernoulliCubeObstruction59` can retain its current
+  shape.  No explicit mod-`59 ^ 3` Bernoulli residue table is required by
+  this corrected interface.
+
 ## 2026-07-29 — the patched cone stops at four exact rung/seam obligations
 
 - The real implementation now contains the generated `7 → 29 → 59` tower,
