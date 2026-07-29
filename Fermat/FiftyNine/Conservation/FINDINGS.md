@@ -1,5 +1,26 @@
 # N59 conservation findings
 
+## 2026-07-29 — the generated 827 capacity certificate closes C2
+
+- The 28 generated edge units are now evaluated by genuine residue
+  functionals at the 28 nontrivial half-orbit roots modulo 827.  Each
+  functional is constructed from reduction of cyclotomic integers, the
+  fourteenth-power residue symbol, and a CM norm correction that kills full
+  cyclotomic torsion while preserving real-unit symbols.
+- The resulting matrix is generated from the `7 → 29 → 59` orbit rather
+  than postulated entrywise.  Kernel evaluation verifies both its actual
+  edge symbols and an explicit inverse over `ZMod 59`; no `native_decide`,
+  `Lean.ofReduceBool`, forbidden irregular import, or extra axiom is used.
+- Nonsingularity makes the 28 generated unit classes a full-rank lattice
+  with quotient cardinal prime to 59.  The final transfer does not identify
+  that quotient directly with the real-unit index: it factors through full
+  torsion and separately proves that the real-torsion kernel is exactly
+  `{1,-1}`, hence contributes only a divisor of 2.
+- The exported `capacityCertificate` therefore proves
+  `CapacityCertificateGoal hζ` for every primitive 59th root.  Its proper
+  Lake setup build is green and its transitive axiom set is exactly
+  `[propext, Classical.choice, Quot.sound]`.
+
 ## 2026-07-29 — the conductor-59 bounded Sinnott bridge closes
 
 - The narrow pinned dependency
