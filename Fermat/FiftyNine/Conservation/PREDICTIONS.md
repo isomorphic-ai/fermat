@@ -3,6 +3,33 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-07-29 — credit-seam patch prediction
+
+- Seam 1 should fall first.  The expected tractable core is a generated
+  `28 × 28` map over `ZMod 59`: once the 827 residue evaluations are exposed
+  as homomorphisms on the actual generated subgroup, nonsingularity should
+  force full mod-59 span and hence rule out a factor 59 in the subgroup
+  index.  The likely resistance is not the finite matrix calculation but the
+  realization boundary from abstract real-field units to residue values at a
+  prime above 827, together with the passage from mod-59 span to finite
+  integral index.
+- Seam 2 is predicted to resist most sharply.  The consumed direction is
+  `59 ∣ h⁺ → 59 ∣ [E:C]` (used contrapositively), specialized to conductor
+  59.  Mathlib is unlikely to expose the analytic circular-unit index formula
+  at the required number-field API boundary, so this seam may end in a
+  precise obstruction map unless the prime-conductor equality can be
+  reconstructed without copying forbidden implementation.
+- Seam 3 is predicted to fall after Seam 1 if the generated relation already
+  retains enough coefficient data.  Vandiver's Lemma II calculation should
+  turn the depth-118 congruence into the requested coefficient-wise
+  `59 ^ 3` divisibilities.  Its likely resistance is normalization:
+  translating a congruence of cyclotomic integers into all 28 generated
+  coefficient statements without importing the forbidden generic adapter.
+  The incoming Bernoulli hypothesis is expected to be usable in its current
+  non-obstruction form; if the calculation instead consumes explicit
+  mod-`59 ^ 3` residues, that interface mismatch will be recorded
+  immediately in `FINDINGS.md`.
+
 ## Expected composition
 
 - The N1 vacuum should supply the zero/empty ledger identity without creating
