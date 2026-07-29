@@ -1,5 +1,25 @@
 # N59 conservation findings
 
+## 2026-07-29 — the pinned KummerCriterion package exposes the bounded C4 direction
+
+- The earlier scan was correct about Mathlib and the repository-safe
+  namespaces, but incomplete about the pinned independent dependency.
+  `KummerCriterion.CyclotomicUnits.NormalizedIndex` proves the unconditional
+  odd-primary prime-conductor equivalence
+  `p ∣ [E⁺ : C⁺] ↔ p ∣ h⁺`.  It imports no `Fermat.Irregular` or forbidden
+  exponent-59 namespace.
+- At `p = 59`, the endpoint consumes only the reverse implication,
+  `59 ∣ h⁺ → 59 ∣ capacityIndex`, by contraposition.  The remaining local
+  adapter is bounded: transport the dependency's plus-side subgroup across
+  `(𝓞 K⁺)ˣ ≃ realUnits K`, prove the generated squared edge units lie in
+  that subgroup, and use the subgroup index tower to show its index divides
+  the generated capacity.
+- This route consumes the independently formalized Kummer--Sinnott theorem;
+  it does not reconstruct the repository's forbidden analytic
+  `Fermat.Irregular` chain.  The import will remain the narrow
+  `NormalizedIndex` leaf and the final executable environment guard will
+  check that every forbidden repository prefix is still absent.
+
 ## 2026-07-29 — C3 must expose Vandiver's generated Fourier transform
 
 - The current `DeepCoefficientForcing59` asks for
