@@ -2,6 +2,20 @@
 
 Newest findings are recorded first.
 
+## 2026-07-29 — the route-neutral C1--C3 audit is green
+
+- `Vacuum.lean`, `Capacity.lean`, and `Repayment.lean` build together from
+  Mathlib-only foundations.  C1 exposes a node-pair matrix with union merge
+  and transpose two-sidedness; C2 exposes the generated cycle, edge subgroup,
+  collateral-aware index, and check-only certificate boundary; C3 consumes
+  that generated edge family in the credited Vandiver extraction.
+- `Verification.lean` runs `#print axioms` on all 29 public theorems.  Every
+  result uses a subset of `[propext, Classical.choice, Quot.sound]`, and each
+  exact output is guarded.
+- Environment-level guards reject all six forbidden N59 prefixes plus
+  `Fermat.GenericIrregular`, `Fermat.Irregular`, and `Fermat.Ladder`; the
+  forbidden exponent-transport declaration is unknown as well.
+
 ## 2026-07-29 — C3 has a clean generated algebraic core and one arithmetic input
 
 - Vandiver's final unit-power argument is independent of cyclotomic
