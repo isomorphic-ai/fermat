@@ -10,13 +10,9 @@ conservation rung.  It imports the proposition-only FLT statement and the
 seven preceding conservation primitives, but no classical exponent-59 proof
 and no generic irregular-prime machinery.
 
-The new primitive is a three-column ledger
-
-`stock + credit + converted = total`.
-
-Repayment is an internal transfer from `credit` to `converted`, so it cannot
-change the total.  This statement is deliberately generic: it says nothing
-about whether a particular arithmetic credit draw can be repaid.
+The credit column is not represented by an additive scalar here.  It is the
+generated node-pair matrix in `Fermat.FiftyNine.Conservation.Credit`, whose
+law is semilattice merge and whose opposite side is matrix transpose.
 
 The conductor-specific portion specializes the generic N7 norm/gauge
 primitive to a 59th cyclotomic field.  Its free unit rank is 28, and the
@@ -30,100 +26,54 @@ import Fermat.Four.Conservation.Spine
 import Fermat.Five.Conservation.Spine
 import Fermat.Six.Conservation.Spine
 import Fermat.Seven.Conservation.Spine
+import Fermat.FiftyNine.Conservation.Credit
 
 open scoped BigOperators NumberField
 
 namespace Fermat.FiftyNine.Conservation
 
-/-! ## The three-column conservation ledger -/
+/-! ## The seven stock laws at the composition boundary -/
 
-/-- A conservation ledger with explicit stock, credit, and converted
-columns.  The equation is data: every ledger state carries its own audit. -/
-structure Ledger (α : Type*) [AddCommMonoid α] where
-  stock : α
-  credit : α
-  converted : α
-  total : α
-  conservation : stock + credit + converted = total
+/-- An audit receipt that every completed stock spine contributes its native
+structural law.  This contains no exponent-59 solution state, credit
+capacity, arithmetic repayment, or strict-successor constructor. -/
+structure StockSpineReceipt : Prop where
+  n1_vacuum : ∀ u v : ℕ, Fermat.One.coupling u v = 0
+  n2_balance : ∀ {V : Type*} [NormedAddCommGroup V]
+      [InnerProductSpace ℝ V] (u v : V),
+    Fermat.Two.charge (u + v) =
+      Fermat.Two.charge u + Fermat.Two.charge v +
+        2 * Fermat.Two.coupling u v
+  n3_drain : ∀ {m n : ℕ}, m < n →
+    Fermat.Three.Conservation.drainCharge m <
+      Fermat.Three.Conservation.drainCharge n
+  n4_positive : ∀ S : Fermat.Four.Conservation.PrimitiveSolution,
+    0 < S.stateCharge
+  n5_gauge : ∀ (u : Fermat.Five.Conservation.GoldenIntˣ)
+      (z : Fermat.Five.Conservation.GoldenInt),
+    Fermat.Five.Conservation.goldenCharge ((u : _) * z) =
+      Fermat.Five.Conservation.goldenCharge z
+  n6_fold : ∀ a b : ℤ,
+    a ^ 6 + b ^ 6 = (a ^ 2 + b ^ 2) *
+      Fermat.Six.Conservation.charge
+        (Fermat.Six.Conservation.cofactorElement a b)
+  n7_lattice : ∀ {K : Type*} [Field K] [NumberField K]
+      (u : (𝓞 K)ˣ),
+    ∃! coordinates : Fermat.Seven.Conservation.FullGaugeCoordinates K,
+      u = Fermat.Seven.Conservation.fullGaugeUnit K coordinates
 
-namespace Ledger
-
-variable {α : Type*} [AddCommMonoid α]
-
-/-- The empty ledger is the additive identity, mirroring the N1 vacuum. -/
-def vacuum : Ledger α where
-  stock := 0
-  credit := 0
-  converted := 0
-  total := 0
-  conservation := by simp
-
-/-- Repay an explicitly decomposed credit amount by transferring it into the
-converted column.  Requiring `credit = remaining + amount` makes the
-operation valid without cancellation or subtraction assumptions. -/
-def repay (ledger : Ledger α) (amount remaining : α)
-    (hcredit : ledger.credit = remaining + amount) : Ledger α where
-  stock := ledger.stock
-  credit := remaining
-  converted := ledger.converted + amount
-  total := ledger.total
-  conservation := by
-    calc
-      ledger.stock + remaining + (ledger.converted + amount) =
-          ledger.stock + (remaining + amount) + ledger.converted := by
-            ac_rfl
-      _ = ledger.stock + ledger.credit + ledger.converted := by
-            rw [← hcredit]
-      _ = ledger.total := ledger.conservation
-
-@[simp] theorem repay_stock (ledger : Ledger α) (amount remaining : α)
-    (hcredit : ledger.credit = remaining + amount) :
-    (ledger.repay amount remaining hcredit).stock = ledger.stock :=
-  rfl
-
-@[simp] theorem repay_credit (ledger : Ledger α) (amount remaining : α)
-    (hcredit : ledger.credit = remaining + amount) :
-    (ledger.repay amount remaining hcredit).credit = remaining :=
-  rfl
-
-@[simp] theorem repay_converted (ledger : Ledger α) (amount remaining : α)
-    (hcredit : ledger.credit = remaining + amount) :
-    (ledger.repay amount remaining hcredit).converted =
-      ledger.converted + amount :=
-  rfl
-
-/-- Repayment is a transfer internal to the ledger and therefore preserves
-the audited total definitionally. -/
-@[simp] theorem repay_total (ledger : Ledger α) (amount remaining : α)
-    (hcredit : ledger.credit = remaining + amount) :
-    (ledger.repay amount remaining hcredit).total = ledger.total :=
-  rfl
-
-/-- Natural-number repayment transfers any amount bounded by the available
-credit. -/
-def repayNat (ledger : Ledger ℕ) (amount : ℕ)
-    (hamount : amount ≤ ledger.credit) : Ledger ℕ :=
-  ledger.repay amount (ledger.credit - amount)
-    (Nat.sub_add_cancel hamount).symm
-
-@[simp] theorem repayNat_credit (ledger : Ledger ℕ) (amount : ℕ)
-    (hamount : amount ≤ ledger.credit) :
-    (ledger.repayNat amount hamount).credit = ledger.credit - amount :=
-  rfl
-
-@[simp] theorem repayNat_converted (ledger : Ledger ℕ) (amount : ℕ)
-    (hamount : amount ≤ ledger.credit) :
-    (ledger.repayNat amount hamount).converted =
-      ledger.converted + amount :=
-  rfl
-
-/-- Bounded natural-number repayment preserves the total quantity. -/
-@[simp] theorem repayNat_total (ledger : Ledger ℕ) (amount : ℕ)
-    (hamount : amount ≤ ledger.credit) :
-    (ledger.repayNat amount hamount).total = ledger.total :=
-  rfl
-
-end Ledger
+/-- The seven stock laws are simultaneously available at the N59 boundary.
+This is a receipt, not the missing transformer from an FLT solution to a
+strictly smaller solution state. -/
+theorem stockSpineReceipt : StockSpineReceipt where
+  n1_vacuum := Fermat.One.coupling_empty
+  n2_balance := Fermat.Two.charge_ledger
+  n3_drain := Fermat.Three.Conservation.drainCharge_pred_lt
+  n4_positive :=
+    Fermat.Four.Conservation.PrimitiveSolution.stateCharge_pos
+  n5_gauge := Fermat.Five.Conservation.charge_gauge_invariant
+  n6_fold := Fermat.Six.Conservation.sixth_ledger
+  n7_lattice := Fermat.Seven.Conservation.gauge_decomposition
 
 /-! ## N59 adapters for the generic N7 charge and gauge -/
 
