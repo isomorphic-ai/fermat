@@ -11,11 +11,13 @@ complete forbidden namespace prefixes, rather than relying only on
 representative unused-name tests.
 
 The final `Fermat.HoldsAt 59` theorem is not present here: `FINDINGS.md`
-records the exact C2 certificate, bounded C4 bridge, C3 coefficient forcing,
-and stock-to-successor seams which must close before that endpoint can be
-added honestly.
+records the completed C2 certificate and bounded C4 bridge, together with
+the exact remaining C3 character-forcing and stock-to-successor seams which
+must close before that endpoint can be added honestly.
 -/
 import Fermat.FiftyNine.Conservation.Spine
+import Fermat.FiftyNine.Conservation.CapacityCertificate
+import Fermat.FiftyNine.Conservation.BoundedSinnott
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 
@@ -184,6 +186,22 @@ info: 'Fermat.FiftyNine.Conservation.Credit.repayment_of_capacity_and_coefficien
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.Credit.repayment_of_capacity_and_coefficient_forcing
+
+/-! ## Filled C2 and bounded C4 seams -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CapacityCertificate.capacityCertificate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CapacityCertificate.capacityCertificate
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.boundedSinnottBridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.boundedSinnottBridge
 
 /-! ## Seven-stock receipt -/
 

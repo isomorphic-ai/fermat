@@ -1,5 +1,18 @@
 # N59 conservation findings
 
+## 2026-07-29 — the filled-seam audit remains inside the clean cone
+
+- `Verification.lean` now imports the capacity and bounded Sinnott leaves
+  and guards their only two public theorems.  Both transitive axiom sets are
+  exactly `[propext, Classical.choice, Quot.sound]`.
+- The exhaustive forbidden-prefix checks still pass after importing the
+  pinned KummerCriterion theorem and the 827 residue realization.  The
+  forbidden transport, the classical exponent-59 endpoints, and
+  `Fermat.FiftyNine.holdsAt_fiftyNine_conservation` all remain unknown.
+- The standalone capacity, bounded Sinnott, and full N59 verification
+  targets build successfully.  Since the deep character-forcing seam is
+  still open, no endpoint assembly was attempted.
+
 ## 2026-07-29 — the generated 827 capacity certificate closes C2
 
 - The 28 generated edge units are now evaluated by genuine residue
