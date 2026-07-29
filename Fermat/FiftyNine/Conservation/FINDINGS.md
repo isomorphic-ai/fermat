@@ -1,5 +1,55 @@
 # N59 conservation findings
 
+## 2026-07-29 — the doctrine invalidates the scalar-credit ledger
+
+- The earlier `Ledger` placed `stock`, `credit`, and `converted` in one
+  additive commutative monoid and implemented repayment by subtraction from
+  the scalar credit column.  The accepted obstruction map now makes that a
+  type error: stock is additive node data, while credit is a semilattice
+  matrix on node pairs.
+- The real source must therefore be patched, not wrapped.  The scalar-credit
+  structure and its seven transfer theorems will be removed from the N59
+  spine.  The stock balance and generated credit matrix will remain
+  orthogonal fields, with an explicit seam where an arithmetic repayment
+  witness permits a stock conversion.
+
+## 2026-07-29 — the generated N59 cycle explains 28, 4×7, +1, and ×2
+
+- Multiplication by `4` modulo `59` has exact order `29`.  Starting from the
+  seed `1` therefore produces a 29-cycle; its 28 non-closing successive
+  edges generate the unit-rank-28 sub-ledger.
+- `Fin 28` is reindexed by the structural equivalence
+  `Fin 4 × Fin 7 ≃ Fin (4 * 7)`.  No list of 28 units or 784 matrix positions
+  is needed to define the ledger.
+- Negation of an exponent is complex conjugation.  The debit and receivable
+  sides are therefore the two orientations of the same generated matrix,
+  accounting for the outer factor `2` in `59 = 2 * 29 + 1`.
+- The auxiliary prime has the required generation story
+  `827 = 2 * 59 * 7 + 1`.  If its residue certificate is consumed, its root
+  must likewise be derived as `2 ^ (2 * 7)`, not introduced as an opaque
+  literal `671`.
+
+## 2026-07-29 — endpoint surgery now has five exact seams
+
+- The elementary endpoint assembly can be made import-clean by narrowing
+  `Fermat.SophieGermain` from the legacy `Fermat.Basic` facade to
+  `Mathlib` plus `Fermat.Statement.Basic`.  That exposes
+  `holdsAt_of_auxiliaryPrime_of_secondCaseExcluded` without exposing the
+  forbidden divisibility transport.
+- The remaining work queue is, in order: generated Sophie--Germain facts at
+  827; generated circular-unit certificate to finite index (C2); the bounded
+  Sinnott index-to-plus-class bridge (C4); Vandiver deep-congruence
+  coefficient forcing and repayment (C3); and the state transformer that
+  turns principal generators into a strict successor.
+- Existing implementations of those seams transitively load, respectively,
+  the forbidden `FirstCase`, `Fermat.Irregular.*`, generic Lemma-II, and
+  historical descent machinery.  The current ramified-scale theorem proves
+  only `59^n < 59^(n+1)`; it does not construct a successor from a Fermat
+  counterexample.
+- Thus the floor remains clean and sufficient once a successor exists, but
+  neither a capacity number nor an abstract repayment record can manufacture
+  that successor.
+
 ## 2026-07-29 — the executable structural audit is green
 
 - `Verification.lean` checks all 19 public theorems in the N59 structural
