@@ -329,3 +329,114 @@ irregular — the underwriter of 59's credit is a credit-needing prime
 (banks borrow from banks). 59, irregular, serves regular 29. 691's
 server 6911 is regular; 37's server 149 is irregular. No pattern — and
 the absence of pattern is the finding.
+
+## The recursive table: first 100 primes, one level up each
+
+Each prime appears once; its supporter is written as the full prime
+factorization of q-1. Every right-hand symbol is 2 or a prime with its
+own row - unrolling any entry walks down to the seed (Pratt). The
+multiplier alphabet across these rows is {2,5,7,11,13,17,19,23,31}:
+no factor 3 can ever appear (sixfold law).
+
+```
+   5 reg     -> 11     = 2*5 + 1   reg
+   7 reg     -> 29     = 2^2*7 + 1   reg
+  11 reg     -> 23     = 2*11 + 1   reg
+  13 reg     -> 53     = 2^2*13 + 1   reg
+  17 reg     -> 137    = 2^3*17 + 1   reg
+  19 reg     -> 191    = 2*5*19 + 1   reg
+  23 reg     -> 47     = 2*23 + 1   reg
+  29 reg     -> 59     = 2*29 + 1   IRR(1)
+  31 reg     -> 311    = 2*5*31 + 1   IRR(1)
+  37 IRR(1)  -> 149    = 2^2*37 + 1   IRR(1)
+  41 reg     -> 83     = 2*41 + 1   reg
+  43 reg     -> 173    = 2^2*43 + 1   reg
+  47 reg     -> 659    = 2*7*47 + 1   IRR(1)
+  53 reg     -> 107    = 2*53 + 1   reg
+  59 IRR(1)  -> 827    = 2*7*59 + 1   IRR(1)
+  61 reg     -> 977    = 2^4*61 + 1   reg
+  67 IRR(1)  -> 269    = 2^2*67 + 1   reg
+  71 reg     -> 569    = 2^3*71 + 1   reg
+  73 reg     -> 293    = 2^2*73 + 1   IRR(1)
+  79 reg     -> 317    = 2^2*79 + 1   reg
+  83 reg     -> 167    = 2*83 + 1   reg
+  89 reg     -> 179    = 2*89 + 1   reg
+  97 reg     -> 389    = 2^2*97 + 1   IRR(1)
+ 101 IRR(1)  -> 809    = 2^3*101 + 1   IRR(2)
+ 103 IRR(1)  -> 1031   = 2*5*103 + 1   reg
+ 107 reg     -> 857    = 2^3*107 + 1   reg
+ 109 reg     -> 1091   = 2*5*109 + 1   IRR(1)
+ 113 reg     -> 227    = 2*113 + 1   reg
+ 127 reg     -> 509    = 2^2*127 + 1   reg
+ 131 IRR(1)  -> 263    = 2*131 + 1   IRR(1)
+ 137 reg     -> 1097   = 2^3*137 + 1   reg
+ 139 reg     -> 557    = 2^2*139 + 1   IRR(1)
+ 149 IRR(1)  -> 1193   = 2^3*149 + 1   IRR(1)
+ 151 reg     -> 1511   = 2*5*151 + 1   reg
+ 157 IRR(2)  -> 1571   = 2*5*157 + 1   reg
+ 163 reg     -> 653    = 2^2*163 + 1   IRR(1)
+ 167 reg     -> 2339   = 2*7*167 + 1   reg
+ 173 reg     -> 347    = 2*173 + 1   IRR(1)
+ 179 reg     -> 359    = 2*179 + 1   reg
+ 181 reg     -> 1811   = 2*5*181 + 1   IRR(3)
+ 191 reg     -> 383    = 2*191 + 1   reg
+ 193 reg     -> 773    = 2^2*193 + 1   IRR(1)
+ 197 reg     -> 7487   = 2*19*197 + 1   IRR(1)
+ 199 reg     -> 797    = 2^2*199 + 1   IRR(1)
+ 211 reg     -> 2111   = 2*5*211 + 1   IRR(1)
+ 223 reg     -> 7583   = 2*17*223 + 1   reg
+ 227 reg     -> 5903   = 2*13*227 + 1   IRR(2)
+ 229 reg     -> 5039   = 2*11*229 + 1   IRR(1)
+ 233 IRR(1)  -> 467    = 2*233 + 1   IRR(2)
+ 239 reg     -> 479    = 2*239 + 1   reg
+ 241 reg     -> 2411   = 2*5*241 + 1   IRR(1)
+ 251 reg     -> 503    = 2*251 + 1   reg
+ 257 IRR(1)  -> 9767   = 2*19*257 + 1   IRR(2)
+ 263 IRR(1)  -> 5261   = 2^2*5*263 + 1   reg
+ 269 reg     -> 2153   = 2^3*269 + 1   IRR(1)
+ 271 IRR(1)  -> 2711   = 2*5*271 + 1   reg
+ 277 reg     -> 1109   = 2^2*277 + 1   reg
+ 281 reg     -> 563    = 2*281 + 1   reg
+ 283 IRR(1)  -> 9623   = 2*17*283 + 1   reg
+ 293 IRR(1)  -> 587    = 2*293 + 1   IRR(2)
+ 307 IRR(1)  -> 1229   = 2^2*307 + 1   IRR(1)
+ 311 IRR(1)  -> 6221   = 2^2*5*311 + 1   reg
+ 313 reg     -> 5009   = 2^4*313 + 1   IRR(2)
+ 317 reg     -> 8243   = 2*13*317 + 1   reg
+ 331 reg     -> 5297   = 2^4*331 + 1   IRR(1)
+ 337 reg     -> 3371   = 2*5*337 + 1   reg
+ 347 IRR(1)  -> 2777   = 2^3*347 + 1   IRR(1)
+ 349 reg     -> 3491   = 2*5*349 + 1   IRR(1)
+ 353 IRR(2)  -> 4943   = 2*7*353 + 1   IRR(1)
+ 359 reg     -> 719    = 2*359 + 1   reg
+ 367 reg     -> 3671   = 2*5*367 + 1   IRR(1)
+ 373 reg     -> 1493   = 2^2*373 + 1   reg
+ 379 IRR(2)  -> 10613  = 2^2*7*379 + 1   reg
+ 383 reg     -> 23747  = 2*31*383 + 1   reg
+ 389 IRR(1)  -> 14783  = 2*19*389 + 1   IRR(1)
+ 397 reg     -> 6353   = 2^4*397 + 1   reg
+ 401 IRR(1)  -> 3209   = 2^3*401 + 1   reg
+ 409 IRR(1)  -> 1637   = 2^2*409 + 1   IRR(1)
+ 419 reg     -> 839    = 2*419 + 1   IRR(1)
+ 421 IRR(1)  -> 4211   = 2*5*421 + 1   reg
+ 431 reg     -> 863    = 2*431 + 1   reg
+ 433 IRR(1)  -> 1733   = 2^2*433 + 1   IRR(2)
+ 439 reg     -> 4391   = 2*5*439 + 1   reg
+ 443 reg     -> 887    = 2*443 + 1   IRR(1)
+ 449 reg     -> 3593   = 2^3*449 + 1   IRR(2)
+ 457 reg     -> 21023  = 2*23*457 + 1   IRR(2)
+ 461 IRR(1)  -> 9221   = 2^2*5*461 + 1   IRR(2)
+ 463 IRR(1)  -> 18521  = 2^3*5*463 + 1   reg
+ 467 IRR(2)  -> 9341   = 2^2*5*467 + 1   reg
+ 479 reg     -> 3833   = 2^3*479 + 1   IRR(3)
+ 487 reg     -> 1949   = 2^2*487 + 1   reg
+ 491 IRR(3)  -> 983    = 2*491 + 1   reg
+ 499 reg     -> 1997   = 2^2*499 + 1   IRR(2)
+ 503 reg     -> 7043   = 2*7*503 + 1   reg
+ 509 reg     -> 1019   = 2*509 + 1   reg
+ 521 reg     -> 16673  = 2^5*521 + 1   reg
+ 523 IRR(1)  -> 5231   = 2*5*523 + 1   IRR(1)
+ 541 IRR(1)  -> 11903  = 2*11*541 + 1   reg
+ 547 IRR(2)  -> 5471   = 2*5*547 + 1   reg
+ 557 IRR(1)  -> 4457   = 2^3*557 + 1   IRR(1)
+```
