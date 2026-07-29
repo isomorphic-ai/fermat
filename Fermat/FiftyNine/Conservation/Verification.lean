@@ -11,54 +11,187 @@ complete forbidden namespace prefixes, rather than relying only on
 representative unused-name tests.
 
 The final `Fermat.HoldsAt 59` theorem is not present here: `FINDINGS.md`
-records the unconditional Kummer repayment and strict-successor theorem
-which must be proved before that endpoint can be added honestly.
+records the exact C2 certificate, bounded C4 bridge, C3 coefficient forcing,
+and stock-to-successor seams which must close before that endpoint can be
+added honestly.
 -/
 import Fermat.FiftyNine.Conservation.Spine
 
-/-! ## Three-column ledger -/
+/-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 
 /--
-info: 'Fermat.FiftyNine.Conservation.Ledger.repay_stock' depends on axioms: [propext, Quot.sound]
+info: 'Fermat.FiftyNine.Conservation.Credit.stockRank_eq_twentyEight' depends on axioms: [propext]
 -/
 #guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.Ledger.repay_stock
+#print axioms Fermat.FiftyNine.Conservation.Credit.stockRank_eq_twentyEight
 
 /--
-info: 'Fermat.FiftyNine.Conservation.Ledger.repay_credit' depends on axioms: [propext, Quot.sound]
+info: 'Fermat.FiftyNine.Conservation.Credit.realCycleOrder_eq_twentyNine' depends on axioms: [propext]
 -/
 #guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.Ledger.repay_credit
+#print axioms Fermat.FiftyNine.Conservation.Credit.realCycleOrder_eq_twentyNine
 
 /--
-info: 'Fermat.FiftyNine.Conservation.Ledger.repay_converted' depends on axioms: [propext, Quot.sound]
+info: 'Fermat.FiftyNine.Conservation.Credit.conductor_eq_fiftyNine' depends on axioms: [propext]
 -/
 #guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.Ledger.repay_converted
+#print axioms Fermat.FiftyNine.Conservation.Credit.conductor_eq_fiftyNine
 
 /--
-info: 'Fermat.FiftyNine.Conservation.Ledger.repay_total' depends on axioms: [propext, Quot.sound]
+info: 'Fermat.FiftyNine.Conservation.Credit.generationTower' depends on axioms: [propext]
 -/
 #guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.Ledger.repay_total
+#print axioms Fermat.FiftyNine.Conservation.Credit.generationTower
 
 /--
-info: 'Fermat.FiftyNine.Conservation.Ledger.repayNat_credit' depends on axioms: [propext, Quot.sound]
+info: 'Fermat.FiftyNine.Conservation.Credit.attestationPrime_eq_eightHundredTwentySeven' depends on axioms: [propext]
 -/
 #guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.Ledger.repayNat_credit
+#print axioms Fermat.FiftyNine.Conservation.Credit.attestationPrime_eq_eightHundredTwentySeven
 
 /--
-info: 'Fermat.FiftyNine.Conservation.Ledger.repayNat_converted' depends on axioms: [propext, Quot.sound]
+info: 'Fermat.FiftyNine.Conservation.Credit.attestationPrime_isPrime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
 -/
 #guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.Ledger.repayNat_converted
+#print axioms Fermat.FiftyNine.Conservation.Credit.attestationPrime_isPrime
 
 /--
-info: 'Fermat.FiftyNine.Conservation.Ledger.repayNat_total' depends on axioms: [propext, Quot.sound]
+info: 'Fermat.FiftyNine.Conservation.Credit.attestationRoot_eq_sixHundredSeventyOne' depends on axioms: [propext, Quot.sound]
 -/
 #guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.Ledger.repayNat_total
+#print axioms Fermat.FiftyNine.Conservation.Credit.attestationRoot_eq_sixHundredSeventyOne
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.attestationRoot_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.attestationRoot_order
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.exponentGenerator_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.exponentGenerator_val
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.exponentGenerator_order' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.exponentGenerator_order
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.exponentGenerator_pow_order' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.exponentGenerator_pow_order
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.exponentCycle_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.exponentCycle_rank
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.exponentCycle_exactPeriod' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.exponentCycle_exactPeriod
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.exponentCycle_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.exponentCycle_point
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.generatedUnit_eq_orbit_ratio' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.generatedUnit_eq_orbit_ratio
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.generatedUnit_mem_subledger' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.generatedUnit_mem_subledger
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.fundingTransfer_opposite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.fundingTransfer_opposite
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.everyTransfer_isFunded' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.everyTransfer_isFunded
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.fundedGenerators_eq_univ' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.fundedGenerators_eq_univ
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.receivableLedger_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.receivableLedger_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.receivableLedger_opposite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.receivableLedger_opposite
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.ledger_cardinality' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.ledger_cardinality
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.capacityIndex_eq_relIndex' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.capacityIndex_eq_relIndex
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Credit.repayment_of_capacity_and_coefficient_forcing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Credit.repayment_of_capacity_and_coefficient_forcing
+
+/-! ## Seven-stock receipt -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.stockSpineReceipt' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.stockSpineReceipt
 
 /-! ## Rank-28 gauge and ramified drain -/
 
@@ -225,6 +358,12 @@ error: Unknown constant `Fermat.HoldsAt.mono_of_dvd`
 #check Fermat.HoldsAt.mono_of_dvd
 
 /-! Additional classical endpoints remain outside the cone as well. -/
+
+/--
+error: Unknown identifier `Fermat.FiftyNine.holdsAt_fiftyNine_conservation`
+-/
+#guard_msgs in
+#check Fermat.FiftyNine.holdsAt_fiftyNine_conservation
 
 /--
 error: Unknown identifier `Fermat.FiftyNine.holdsAt_fiftyNine`

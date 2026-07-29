@@ -26,7 +26,6 @@ cone does not currently prove them.
 -/
 import Fermat.Conservation.Credit.Vacuum
 import Fermat.Conservation.Credit.Repayment
-import FltRegular.NumberTheory.Cyclotomic.UnitLemmas
 import Mathlib.Logic.Equiv.Fin.Basic
 import Mathlib.NumberTheory.Bernoulli
 import Mathlib.NumberTheory.NumberField.ClassNumber
@@ -156,7 +155,8 @@ variable {K : Type*} [Field K] [NumberField K]
   [IsCyclotomicExtension {59} ℚ K]
 
 local instance : NumberField.IsCMField K :=
-  IsCyclotomicExtension.IsCMField (p := 59) K (by norm_num)
+  IsCyclotomicExtension.Rat.isCMField
+    (S := {59}) K ⟨59, rfl, by norm_num⟩
 
 /-- The geometric cyclotomic unit at a generated exponent node. -/
 def orbitNodeUnit {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
