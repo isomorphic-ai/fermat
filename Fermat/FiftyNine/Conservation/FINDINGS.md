@@ -1,5 +1,25 @@
 # N59 conservation findings
 
+## 2026-07-29 — the conductor-59 bounded Sinnott bridge closes
+
+- The narrow pinned dependency
+  `KummerCriterion.CyclotomicUnits.NormalizedIndex` supplies exactly the
+  required 59-primary statement for its squared prime-conductor subgroup:
+  `59 ∣ [E⁺ : C⁺] ↔ 59 ∣ h⁺`.  Its dependency tree imports no `Fermat`
+  file, and the final theorem has only the standard axiom trio.
+- The local adapter is now complete for an arbitrary primitive root `ζ`.
+  If `ζ = ζ₀ ^ τ`, its geometric node is the quotient of the canonical
+  nodes at `τ * a` and `τ`; folding with complex conjugation preserves that
+  quotient and kills the torsion ambiguity.  Canonical folded nodes reduce
+  without a case table to the standard indices `1,...,29`, using equality
+  of the `a` and `-a` folds.
+- Consequently `generatedSubledger hζ ≤ C⁺`, so
+  `[E⁺ : C⁺] ∣ capacityIndex hζ`.  The proved direction
+  `59 ∣ h⁺ → 59 ∣ capacityIndex hζ` gives the requested
+  `BoundedSinnottBridge hζ` by contraposition.  The exported theorem is
+  universe-zero because the pinned KummerCriterion index API is
+  universe-zero; this covers the concrete conservation endpoint.
+
 ## 2026-07-29 — C3 reaches the forbidden deep-derivative calculation
 
 - Compiler-guided inspection confirms that the present
