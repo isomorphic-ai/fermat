@@ -60,24 +60,37 @@ This is the tower of the credit ladder: 7 → 29 → 59 → 827 → … (59 = (4
 (chain leaves the 12M table at 158124581)
 ```
 
-Parents of 691 in the forest (primes whose minimal step lands on 691): none below 12M — 691 is an orphan: no prime generates it by a minimal step
+Primes for whom 691 is the minimal strict-SG certificate: none in-sweep. 691 − 1 = 2·3·5·23, so 691 stands as auxiliary host (q ≡ 1 mod p) for p ∈ {3, 5, 23} — all three regular.
 
-## The orphan law (found while answering the 691 question)
+## The service direction (Fabian's correction, 2026-07-29)
 
-691 is an orphan *by law*, not by accident. A parent p′ of p satisfies
-p − 1 = 2·k·p′. If 3 | (p−1)/2 and p′ ≠ 3, the factor 3 must land in k —
-and the sixfold law certifies that no k ≡ 0 (mod 3) ever passes condition
-(a). Hence:
+The relation q = 2kp+1 is not genealogy but SERVICE: q ≡ 1 (mod p)
+means the group mod q contains p-th roots of unity, so q can host
+p-th power residue tests — **q certifies p; the bigger prime serves the
+smaller.** (This is exactly why the N59 attestation prime works:
+827 ≡ 1 (mod 59) is what lets the residue matrix see 59th powers.)
+Read UP, a chain is certification; read DOWN, it is service.
 
-- **Primes p ≡ 1 (mod 3) are orphans** in the sweep forest: no prime ≥ 5
-  generates them. They can hang only directly off the seed 3
-  (691 = 2·(5·23)·3 + 1) — roots of their own towers.
-- **Primes p ≡ 2 (mod 3)** are the generable ones (59 ≡ 2: parent 29).
+Two consequences:
 
-The forest is two-colored by p mod 3: one class is generated, the other
-class *only generates*. Ramanujan's 691 hangs directly off the trinity
-seed. (7 ≡ 1 (mod 3) likewise: its only parent is 3, as the seed-tower
-section shows.)
+- **Only irregular primes need the service.** A regular prime's credit
+  ledger is the C1 vacuum: 23 is certified by 691 (691 = 2·15·23 + 1,
+  691 ≡ 1 mod 23), but 23 is regular and never draws on it. The credit
+  matrix entry exists as a receivable that is never called.
+- **691's full downward service set is {3, 5, 23} — all regular.** The
+  irregular prime that most famously NEEDS credit (691 | B₁₂) serves
+  only primes that need none. Its own need is served from above, by
+  6911.
+
+The sixfold law (no certifying k with 3 | k) constrains only the strict
+SG condition-(a) sub-network used by the first-case sweep — it does not
+constrain the underlying underwriting relation q ≡ 1 (mod p), which
+holds for every odd prime divisor of q−1. Within the strict sub-network
+the mod-3 two-coloring stands: primes p ≡ 1 (mod 3) receive their
+strict certificates only from auxiliaries whose k avoids the factor 3
+landing (their minimal certified auxiliary exists — k_first is on file
+for all 788,058) and can hang off the seed 3 directly; primes
+p ≡ 2 (mod 3) can also be strictly certified by in-sweep primes.
 
 ## Chains for the repository's proven irregular endpoints
 
@@ -91,7 +104,7 @@ section shows.)
 58794641 = 2·(2·2·2·5)·734933 + 1     (58794641−1 = 2·2·2·2·5·734933)  [skipped k: 38 composite, 1 cond-(a)]
 (chain leaves the 12M table at 58794641)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 37−1 = 2·2·3·3
 
 ### 59
 
@@ -103,7 +116,7 @@ Parents: none (orphan below 12M)
 12042707 = 2·13·463181 + 1     (12042707−1 = 2·13·463181)  [skipped k: 12 composite]
 (chain leaves the 12M table at 12042707)
 ```
-Parents: 29
+Underwrites (minimal strict-SG certificate for): 29; serves (q ≡ 1 mod p) every odd prime factor of 59−1 = 2·29
 
 ### 67
 
@@ -116,7 +129,7 @@ Parents: 29
 15432953 = 2·(2·2)·1929119 + 1     (15432953−1 = 2·2·2·1929119)  [skipped k: 3 composite]
 (chain leaves the 12M table at 15432953)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 67−1 = 2·3·11
 
 ### 157
 
@@ -128,7 +141,7 @@ Parents: none (orphan below 12M)
 13373447 = 2·1·6686723 + 1     (13373447−1 = 2·6686723)  [k_first immediate]
 (chain leaves the 12M table at 13373447)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 157−1 = 2·2·3·13
 
 ### 229
 
@@ -140,7 +153,7 @@ Parents: none (orphan below 12M)
 335834831 = 2·(5·17)·1975499 + 1     (335834831−1 = 2·5·17·1975499)  [skipped k: 76 composite, 8 cond-(a)]
 (chain leaves the 12M table at 335834831)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 229−1 = 2·2·3·19
 
 ### 491
 
@@ -153,7 +166,7 @@ Parents: none (orphan below 12M)
 154151951 = 2·(5·5)·3083039 + 1     (154151951−1 = 2·5·5·3083039)  [skipped k: 22 composite, 2 cond-(a)]
 (chain leaves the 12M table at 154151951)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 491−1 = 2·5·7·7
 
 ### 587
 
@@ -164,7 +177,7 @@ Parents: none (orphan below 12M)
 311141273 = 2·(2·2·13)·2991743 + 1     (311141273−1 = 2·2·2·13·2991743)  [skipped k: 48 composite, 3 cond-(a)]
 (chain leaves the 12M table at 311141273)
 ```
-Parents: 293
+Underwrites (minimal strict-SG certificate for): 293; serves (q ≡ 1 mod p) every odd prime factor of 587−1 = 2·293
 
 ### 607
 
@@ -174,7 +187,7 @@ Parents: 293
 14447351 = 2·(5·5)·288947 + 1     (14447351−1 = 2·5·5·288947)  [skipped k: 24 composite]
 (chain leaves the 12M table at 14447351)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 607−1 = 2·3·101
 
 ### 691
 
@@ -185,7 +198,7 @@ Parents: none (orphan below 12M)
 158124581 = 2·(2·5)·7906229 + 1     (158124581−1 = 2·2·5·7906229)  [skipped k: 8 composite, 1 cond-(a)]
 (chain leaves the 12M table at 158124581)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 691−1 = 2·3·5·23
 
 ### 1051
 
@@ -195,7 +208,7 @@ Parents: none (orphan below 12M)
 23072393 = 2·(2·2·7)·412007 + 1     (23072393−1 = 2·2·2·7·412007)  [skipped k: 27 composite]
 (chain leaves the 12M table at 23072393)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 1051−1 = 2·3·5·5·7
 
 ### 1381
 
@@ -206,7 +219,7 @@ Parents: none (orphan below 12M)
 86619737 = 2·(2·2·7)·1546781 + 1     (86619737−1 = 2·2·2·7·1546781)  [skipped k: 26 composite, 1 cond-(a)]
 (chain leaves the 12M table at 86619737)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 1381−1 = 2·2·3·5·23
 
 ### 1831
 
@@ -216,7 +229,7 @@ Parents: none (orphan below 12M)
 33692333 = 2·(2·23)·366221 + 1     (33692333−1 = 2·2·23·366221)  [skipped k: 41 composite, 4 cond-(a)]
 (chain leaves the 12M table at 33692333)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 1831−1 = 2·3·5·61
 
 ### 12613
 
@@ -226,7 +239,7 @@ Parents: none (orphan below 12M)
 14126687 = 2·7·1009049 + 1     (14126687−1 = 2·7·1009049)  [skipped k: 6 composite]
 (chain leaves the 12M table at 14126687)
 ```
-Parents: none (orphan below 12M)
+Underwrites (minimal strict-SG certificate for): no in-sweep prime; serves (q ≡ 1 mod p) every odd prime factor of 12613−1 = 2·2·3·1051
 
 ## First-step formulas for all irregular primes < 700
 
