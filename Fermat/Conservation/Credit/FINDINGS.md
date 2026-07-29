@@ -11,7 +11,8 @@ Newest findings are recorded first.
   that generated edge family in the credited Vandiver extraction.
 - `Verification.lean` runs `#print axioms` on all 29 public theorems.  Every
   result uses a subset of `[propext, Classical.choice, Quot.sound]`, and each
-  exact output is guarded.
+  exact output is guarded.  After exposing the odd-power injection on real
+  CM units, the audited public-theorem count is 30.
 - Environment-level guards reject all six forbidden N59 prefixes plus
   `Fermat.GenericIrregular`, `Fermat.Irregular`, and `Fermat.Ladder`; the
   forbidden exponent-transport declaration is unknown as well.

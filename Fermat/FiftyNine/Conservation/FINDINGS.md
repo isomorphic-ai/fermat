@@ -1,5 +1,70 @@
 # N59 conservation findings
 
+## 2026-07-29 — the patched cone stops at four exact rung/seam obligations
+
+- The real implementation now contains the generated `7 → 29 → 59` tower,
+  the order-29 exponent recursion, its 28 edge units, the generated real-unit
+  subgroup, and one `28 × 28` node-pair ledger.  Debit and receivable views
+  are the same matrix under transpose.  The former scalar `Ledger.credit`
+  implementation has been removed from `Spine.lean`.
+- C2 first stops at
+  `Credit.CapacityCertificateGoal hζ`: the generated edge closure must have
+  finite index in the full real-unit group and that index must be prime to
+  59.  The checked facts `827 = 2 * 59 * 7 + 1`,
+  `2 ^ (2 * 7) = 671`, and `orderOf 671 = 59` do not themselves construct
+  the residue-functional realization or prove this subgroup-index theorem.
+- The bounded C4 obligation is exactly
+  `Credit.BoundedSinnottBridge hζ`:
+  `¬59 ∣ capacityIndex hζ` must imply
+  `¬59 ∣ classNumber (maximalRealSubfield K)`.  Mathlib has no Sinnott
+  circular-unit index formula, and the repository proof lies below the
+  forbidden irregular namespaces.  C4 was therefore pulled forward to this
+  precise implication and no farther.
+- C3 then stops at `Credit.DeepCoefficientForcing59 hζ`, together with the
+  finite `Credit.NoBernoulliCubeObstruction59`: the depth-118 congruence must
+  yield Vandiver's coefficient-wise cube divisibilities for every primitive
+  relation in the generated edge family.  Once those facts and finite C2
+  capacity are supplied, the compiled theorem
+  `repayment_of_capacity_and_coefficient_forcing` constructs an actual
+  59th root; it does not assume a repayment function.
+- The stock/credit seam remains after repayment: none of the seven stock
+  spines maps a primitive exponent-59 solution to a successor state with
+  strictly smaller charge.  `stockSpineReceipt` now consumes one native law
+  from each stock spine and makes that absence explicit.  Consequently no
+  parameterized or unconditional
+  `Fermat.FiftyNine.holdsAt_fiftyNine_conservation` was added.
+
+## 2026-07-29 — the generated N59 audit is green under the forbidden boundary
+
+- The N59 credit and spine files expose 37 public theorems.  The executable
+  audit checks all 37, plus the two shared-floor theorems; every exact
+  `#print axioms` result is guarded and is a subset of
+  `[propext, Classical.choice, Quot.sound]`.
+- The concrete credit file now obtains the cyclotomic CM-field instance from
+  Mathlib directly.  It does not depend on the drifting `flt-regular` Case-I
+  facade or any forbidden `Fermat.Irregular` implementation.
+- Environment-wide prefix guards keep every forbidden N59, generic
+  irregular, irregular, and ladder declaration absent.  Direct guards keep
+  `Fermat.HoldsAt.mono_of_dvd` and the requested-but-unproved conservation
+  endpoint unknown.
+- The standalone targets
+  `Fermat.Conservation.Credit.Verification`,
+  `Fermat.FiftyNine.Conservation.Credit`,
+  `Fermat.FiftyNine.Conservation.Spine`, and
+  `Fermat.FiftyNine.Conservation.Verification` are green.
+
+## 2026-07-29 — C5--C7 knock only beyond the localized obstruction
+
+- C5 would identify the 59-primary debt in the Galois eigenspace selected by
+  the irregular Bernoulli index 44.  That decomposition is not present in
+  the seven stock spines and was not built.
+- C6 would identify the plus/minus class components as the two structural
+  views of the same credit matrix.  The implemented transpose law supplies
+  the representation, but not Leopoldt's Spiegelung theorem.
+- C7's Iwasawa characteristic-ideal statement is still farther downstream;
+  the finite C2/C4 and C3 seams are reached first.  None of C5--C7 was
+  imported, reconstructed, or used as an endpoint shortcut.
+
 ## 2026-07-29 — Sophie--Germain is clean; the shared case assembler has API drift
 
 - `Fermat.SophieGermain` used the legacy `Fermat.Basic` umbrella only for
@@ -237,5 +302,15 @@
 
 ## Consumed reconstructed certificate data
 
-No certificate number is consumed yet.  Entries will be added here at the
-same time as the corresponding executable reconstruction.
+No enumerated residue row, inverse matrix, determinant, or claimed index is
+consumed.  The only finite attestation values in the clean cone are generated
+and checked in place:
+
+- `attestationPrime = 2 * 59 * 7 + 1 = 827`;
+- `attestationRoot = 2 ^ (2 * 7) = 671` in `ZMod 827`;
+- `orderOf attestationRoot = 59`;
+- `exponentGenerator = 4` from the `4 * 7` tower step, with exact order 29
+  in `(ZMod 59)ˣ`.
+
+These facts attest the generated recursion but are not reported as a C2
+capacity certificate.
