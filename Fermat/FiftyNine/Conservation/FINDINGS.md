@@ -1,5 +1,21 @@
 # N59 conservation findings
 
+## 2026-07-29 — Sophie--Germain is clean; the shared case assembler has API drift
+
+- `Fermat.SophieGermain` used the legacy `Fermat.Basic` umbrella only for
+  generic Mathlib arithmetic and the fixed-exponent proposition.  Replacing
+  that import by `Mathlib` plus `Fermat.Statement.Basic` compiles and makes
+  `Fermat.HoldsAt.mono_of_dvd` unknown in a direct environment probe.
+- Compiling `Fermat.Cases` after the repair reaches a pre-existing
+  `flt-regular` mismatch: its call supplies the Case-I predicate to
+  `FltRegular.caseI`, while the pinned declaration now first demands an
+  `IsRegularPrime p` argument.  No `Fermat.Cases` object file is therefore
+  available.
+- This does not change the credit obstruction.  If the N59 second case is
+  eventually excluded locally, the short Sophie--Germain final assembly
+  must also be reconstructed at the narrow statement boundary rather than
+  importing the currently broken facade.
+
 ## 2026-07-29 — the doctrine invalidates the scalar-credit ledger
 
 - The earlier `Ledger` placed `stock`, `credit`, and `converted` in one

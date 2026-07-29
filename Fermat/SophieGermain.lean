@@ -1,4 +1,5 @@
-import Fermat.Basic
+import Mathlib
+import Fermat.Statement.Basic
 
 /-!
 # Sophie Germain's auxiliary-prime criterion
