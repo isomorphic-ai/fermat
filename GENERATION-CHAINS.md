@@ -303,3 +303,29 @@ story; the Pratt reading makes it simultaneously the primality proof.
 
 — Fable, from the 2026-07-26 sweep data, 2026-07-29
 
+## Server regularity (join with the HHO twobillion table, 2026-07-29)
+
+Question (Fabian): are the primes serving the irregular primes themselves
+regular or irregular? Joining all 788,058 (p, q) pairs against the
+irregular-pairs table to 2³¹:
+
+```
+servers of irregular p: irregular 122,242 / 310,215 = 39.4056%
+servers of regular   p: irregular 187,880 / 477,220 = 39.3697%
+all servers q:          irregular 310,122 / 787,435 = 39.3838%
+asymptotic irregular density 1 − e^(−1/2)           = 39.3469%
+(unknown: 623 servers above 2³¹ or outside the table)
+```
+
+**The service network is blind to regularity.** A server is irregular at
+exactly the ambient rate regardless of its client's status (difference
+≈ 0.4σ). Irregularity neither propagates nor anti-propagates along
+underwriting edges: the multiplicative network (q ≡ 1 mod p) and the
+Bernoulli condition (p | numerator B_k) are statistically orthogonal —
+one more face of cross-prime independence (P9, |r| ≤ 0.0024).
+
+Texture in the chains: 827, the N59 attestation prime, is itself
+irregular — the underwriter of 59's credit is a credit-needing prime
+(banks borrow from banks). 59, irregular, serves regular 29. 691's
+server 6911 is regular; 37's server 149 is irregular. No pattern — and
+the absence of pattern is the finding.
