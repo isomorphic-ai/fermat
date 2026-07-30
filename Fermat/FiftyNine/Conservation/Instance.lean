@@ -17,6 +17,7 @@ classical Vandiver module is imported here.
 import Fermat.Conservation.Credit.HighFlowClosure
 import Fermat.Conservation.Credit.Bernoulli
 import Fermat.FiftyNine.Conservation.Credit
+import Fermat.FiftyNine.Conservation.CapacityCertificate
 
 open scoped BigOperators NumberField
 
@@ -364,6 +365,21 @@ def IsDeeplyRepayable {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
   Fermat.Conservation.Credit.Repayment.IsVandiverDeep 59
     ((1 : 𝓞 K) - hζ.toInteger) (u : (𝓞 K)ˣ)
 
+/-- The checked C2 result, packaged as the generic capacity record consumed
+by W3.  The ambient ledger is the full real-unit group. -/
+noncomputable def capacityData {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 59) :
+    Fermat.Conservation.Credit.Cycle.CapacityData
+      Fermat.FiftyNine.Conservation.Credit.exponentCycle
+      (Fermat.FiftyNine.Conservation.Credit.realOrbitNode hζ) where
+  ambient := ⊤
+  generated_le := le_top
+  finite := by
+    rw [Subgroup.isFiniteRelIndex_top_iff]
+    exact
+      (Fermat.FiftyNine.Conservation.CapacityCertificate.capacityCertificate
+        hζ).1
+
 /-- Selected-prime spelling of the generic W1 depth law. -/
 def DeepFlowLaw59 {ζ : K} (hζ : IsPrimitiveRoot ζ 59) : Prop :=
   Fermat.Conservation.Credit.RealFlow.DeepFlowLaw creditData
@@ -431,15 +447,11 @@ inversion, and high-eigenvalue arithmetic are all discharged by the generic
 core. -/
 theorem repayment_of_capacity_and_flow
     {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
-    (data : Fermat.Conservation.Credit.Cycle.CapacityData
-      Fermat.FiftyNine.Conservation.Credit.exponentCycle
-      (Fermat.FiftyNine.Conservation.Credit.realOrbitNode hζ))
-    (hambient : data.ambient = ⊤)
     {u : NumberField.IsCMField.realUnits K}
     (hdeep : IsDeeplyRepayable hζ u) :
     Fermat.Conservation.Credit.Repayment.IsRepaid 59 u := by
   exact Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle
-    (by norm_num) data hambient
+    (by norm_num) (capacityData hζ) rfl
     (Fermat.Conservation.Credit.Repayment.realUnits_odd_pow_injective
       59 (by norm_num))
     (IsDeeplyRepayable hζ)

@@ -1,5 +1,34 @@
 # N59 conservation findings
 
+## 2026-07-30 — repayment is not the stock transformer
+
+- A clean compiler probe reaches the post-W3 boundary exactly:
+  `repayment_of_capacity_and_flow hζ hdeep` has type
+  `Repayment.IsRepaid 59 u`, while the shared floor needs a strict
+  successor `∃ next, next.charge < state.charge`.
+- The clean cone has neither the source reduction attaching a primitive
+  second-case solution to its nontrivial deep real unit nor the constructor
+  that absorbs the repaid root into a new solution with a strict stock
+  decrease.  Supplying an arbitrary deep unit would be vacuous because the
+  identity unit is already deep.
+- Those missing producers are the equation-(6)-through-equation-(10)
+  construction and descent step of the classical route.  Importing that
+  route is rejected by the guards, and copying it would violate the
+  no-hoisting boundary.  The optional transformer therefore stops at this
+  concrete source-side obligation, so endpoint assembly was not attempted.
+
+## 2026-07-30 — W3 now consumes the checked capacity directly
+
+- The finite-index theorem from the generated 827 realization packages
+  directly as `Cycle.CapacityData` with ambient ledger `⊤`.
+- Combining that record with the generator-derived deep-flow law removes
+  the final abstract capacity argument from selected repayment: every deep
+  real unit is now proved to be an actual 59th power.
+- The optional transformer starts strictly after this theorem.  Its input
+  obligation is no longer repayment or capacity, but construction of the
+  deep real unit and a lower-charge successor from a primitive second-case
+  Fermat state.
+
 ## 2026-07-29 — the filled-seam audit remains inside the clean cone
 
 - `Verification.lean` now imports the capacity and bounded Sinnott leaves
