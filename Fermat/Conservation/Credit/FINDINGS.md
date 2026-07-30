@@ -2,6 +2,67 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the high flow must retain its exact integral lift
+
+- The generated derivative carries the exact integer edge coefficient
+  `Σ i, raw i * (node(i+1)^N - node(i)^N)`.  The C5 matrix is its reduction
+  modulo `p`, but choosing the least natural representative of each matrix
+  entry does not recover that exact integer.
+- The two lifts differ by a multiple of `p`, not generally by `p^3`.
+  Consequently prime-cube divisibility of the exact coefficient times the
+  Bernoulli numerator cannot be transferred to the former
+  `integralCharacterCoordinate` without an unavailable extra valuation of
+  that numerator.
+- W1 must therefore retain the exact generator-derived coefficient through
+  the prime-cube congruence.  W2 is used only after reducing that exact
+  coefficient modulo `p`; this is sufficient because cube-freeness first
+  forces the exact coefficient to be divisible by `p`.  Treating an
+  arbitrary residue lift as the integral flow would silently strengthen the
+  missing depth law.
+- This is a real counterexample to the old interface, not merely a missing
+  lemma.  At the selected prime and first high row, two edge coefficients can
+  be combined so their exact integral sum is zero while the same combination
+  of least residue lifts has valuation one.  The certified first Bernoulli
+  numerator also has valuation one, so their residue-lift product has
+  valuation two rather than the demanded three.
+
+## 2026-07-30 — ramification lifts the extractor beyond mod p
+
+- Although the pinned public coordinate map reduces immediately to
+  `ZMod p`, its Dwork power basis and ramification identity are strong
+  enough to build the missing arbitrary-precision extractor generically.
+  Membership in `varpi ^ (q * (p - 1))` forces every unreduced power-basis
+  coefficient into the `q`th power of the rational prime ideal.
+- In particular, a completed logarithm at depth `2 * p` has every Dwork
+  coefficient divisible by the rational prime square.  This is the exact
+  valuation layer which the packaged low-row map discarded, and it now
+  compiles without any per-prime data.
+- The irreducible W1 gap is consequently narrower than the previous
+  dependency audit suggested: construct the high character projector and
+  prove that its unreduced completed-log coefficient is the normalized
+  generator derivative carrying `B_(2 * j * p) / (2 * j * p)`.  Depth and
+  prime-square extraction themselves are no longer missing APIs.
+
+## 2026-07-30 — the high gauge sees the square of the C2 generator
+
+- Auditing the claimed C5 matrix against the generated edge derivative
+  exposed a real mismatch.  If the C2 node scale is `g ^ i` and the selected
+  degree is `2 * (row + 1) * p`, Frobenius reduces the edge difference to
+  `(g ^ (2 * i)) ^ (row + 1) * (g ^ (2 * (row + 1)) - 1)`.
+  The previous reverse-node matrix was invertible at the selected prime but
+  was not this generated high-flow matrix.
+- The correct C5 transform is therefore a row diagonal times the transpose
+  Vandermonde on the nodes `(g ^ 2) ^ i`.  Its nonsingularity needs the
+  named law `orderOf (g ^ 2) = rank + 1`; this holds for the selected
+  order-`29` orbit and makes the W2 instance check mechanical.
+- This law is not automatic for every odd prime.  When `(p - 1) / 2` is
+  even, squaring an element of that order loses a factor of two.  The
+  present generated-cycle model can remain generic in `p` by stating the
+  exact square-order law in `GaugeData`, but an eventual all-primes API will
+  need to model the real orbit as the full unit group modulo sign rather
+  than as the square subgroup.  Hiding this condition would make the
+  ANY-to-ALL claim false.
+
 ## 2026-07-30 — completed depth is available, but its high coordinate is not
 
 - The pinned completed-log API does prove the actual local half of W1

@@ -67,26 +67,47 @@ def highEigenvalue {p : ℕ} {data : GaugeData p}
     (k : Fin data.rank) : ℤ :=
   (bernoulli (highIndex k)).num
 
-/-- An integral lift of the generator-derived character coordinate.
-Reducing this expression modulo `p` is exactly the C5 gauge transform. -/
-def integralCharacterCoordinate {p : ℕ} (data : GaugeData p)
-    (raw : Fin data.rank → ℤ) (row : Fin data.rank) : ℤ :=
-  ∑ i, (data.characterMatrix row i).val * raw i
+/-- The canonical integer representative of a node in the generated
+orbit.  Keeping these representatives before taking the high power retains
+the exact integral coefficient produced by W1. -/
+def canonicalNodeValue {p : ℕ} (data : GaugeData p) (i : ℕ) : ℤ :=
+  (((data.cycle.point i : (ZMod p)ˣ) : ZMod p).val : ℤ)
 
-/-- The integral coordinate above really lifts the generator-derived
-finite-field gauge coordinate. -/
-theorem intCast_integralCharacterCoordinate {p : ℕ}
+/-- The exact generator-derived high edge coefficient.  This is deliberately
+not formed by choosing representatives of the already reduced C5 matrix:
+those representatives agree only modulo `p`, whereas W1 supplies a
+prime-cube congruence for this exact integer. -/
+def exactHighEdgeCoefficient {p : ℕ} (data : GaugeData p)
+    (raw : Fin data.rank → ℤ) (row : Fin data.rank) : ℤ :=
+  ∑ i, raw i *
+    (canonicalNodeValue data (i.val + 1) ^
+        highIndex (data := data) row -
+      canonicalNodeValue data i.val ^
+        highIndex (data := data) row)
+
+/-- Reducing a canonical node representative recovers the generated node. -/
+theorem intCast_canonicalNodeValue {p : ℕ}
+    (data : GaugeData p) (i : ℕ) :
+    ((canonicalNodeValue data i : ℤ) : ZMod p) =
+      ((data.cycle.point i : (ZMod p)ˣ) : ZMod p) := by
+  letI : NeZero p := ⟨data.prime.ne_zero⟩
+  simp only [canonicalNodeValue, Int.cast_natCast, ZMod.natCast_zmod_val]
+
+/-- The exact integral high edge coefficient reduces to the
+generator-derived finite-field gauge coordinate. -/
+theorem intCast_exactHighEdgeCoefficient {p : ℕ}
     (data : GaugeData p) (raw : Fin data.rank → ℤ)
     (row : Fin data.rank) :
-    ((integralCharacterCoordinate data raw row : ℤ) : ZMod p) =
+    ((exactHighEdgeCoefficient data raw row : ℤ) : ZMod p) =
       data.characterCoordinates (fun i ↦ (raw i : ZMod p)) row := by
   letI : NeZero p := ⟨data.prime.ne_zero⟩
-  simp only [integralCharacterCoordinate, Int.cast_sum, Int.cast_mul,
-    Int.cast_natCast, GaugeData.characterCoordinates, Matrix.mulVec,
-    dotProduct]
+  simp only [exactHighEdgeCoefficient, Int.cast_sum, Int.cast_mul,
+    Int.cast_sub, Int.cast_pow, intCast_canonicalNodeValue,
+    GaugeData.characterCoordinates, Matrix.mulVec, dotProduct]
   apply Finset.sum_congr rfl
   intro i _
-  rw [ZMod.natCast_zmod_val]
+  rw [data.characterMatrix_eq_high_edge_difference]
+  simp [highIndex, mul_comm]
 
 /-- The exact integral output of W1's depth law for one exponent vector:
 every character coordinate times its generated high eigenvalue vanishes
@@ -94,7 +115,7 @@ modulo the prime cube. -/
 def HighFlowVanishes {p : ℕ} (data : GaugeData p)
     (raw : Fin data.rank → ℤ) : Prop :=
   ∀ row, (p : ℤ) ^ 3 ∣
-    integralCharacterCoordinate data raw row *
+    exactHighEdgeCoefficient data raw row *
       highEigenvalue (data := data) row
 
 /-- The per-prime certificate boundary.  The vector of eigenvalues is
@@ -127,17 +148,17 @@ theorem exponent_dvd_of_highFlowVanishes {p : ℕ}
     (raw : Fin data.rank → ℤ) (hflow : HighFlowVanishes data raw) :
     ∀ i, (p : ℤ) ∣ raw i := by
   have hcharacterDvd :
-      ∀ row, (p : ℤ) ∣ integralCharacterCoordinate data raw row :=
+      ∀ row, (p : ℤ) ∣ exactHighEdgeCoefficient data raw row :=
     fun row ↦
       prime_dvd_left_of_cube_dvd_mul_of_cube_free data.prime
         (hflow row) (certificate.eigenvalue_cubeFree row)
   have hcharacter :
       data.characterCoordinates (fun i ↦ (raw i : ZMod p)) = 0 := by
     funext row
-    rw [← intCast_integralCharacterCoordinate]
+    rw [← intCast_exactHighEdgeCoefficient]
     exact
       (ZMod.intCast_zmod_eq_zero_iff_dvd
-        (integralCharacterCoordinate data raw row) p).2
+        (exactHighEdgeCoefficient data raw row) p).2
         (hcharacterDvd row)
   have hraw :
       (fun i ↦ (raw i : ZMod p)) = 0 :=
