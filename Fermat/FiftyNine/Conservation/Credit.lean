@@ -27,7 +27,6 @@ cone does not currently prove them.
 import Fermat.Conservation.Credit.Vacuum
 import Fermat.Conservation.Credit.Repayment
 import Mathlib.Logic.Equiv.Fin.Basic
-import Mathlib.NumberTheory.Bernoulli
 import Mathlib.NumberTheory.NumberField.ClassNumber
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 import Mathlib.RingTheory.RootsOfUnity.CyclotomicUnits
@@ -306,54 +305,10 @@ def BoundedSinnottBridge {ζ : K}
     ¬59 ∣ NumberField.classNumber
       (NumberField.maximalRealSubfield K)
 
-/-! ## C3 deep repayment at 59 -/
-
-/-- Vandiver's Bernoulli coefficient at generated source index `i + 1`.
-The formula generates all 28 coefficients; there is no list. -/
-def vandiverBernoulliNumerator
-    (i : Fin exponentCycle.rank) : ℤ :=
-  (bernoulli ((2 * (i.val + 1)) * 59)).num
-
-/-- The exact deep congruence on a real unit, viewed in the ambient ring of
-integers. -/
-def IsDeeplyRepayable {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
-    (u : NumberField.IsCMField.realUnits K) : Prop :=
-  Fermat.Conservation.Credit.Repayment.IsVandiverDeep 59
-    ((1 : 𝓞 K) - hζ.toInteger) (u : (𝓞 K)ˣ)
-
-/-- The remaining Vandiver calculation: deep congruence forces the
-coefficient-cube divisibilities in every primitive generated relation. -/
-def DeepCoefficientForcing59 {ζ : K}
-    (hζ : IsPrimitiveRoot ζ 59) : Prop :=
-  Fermat.Conservation.Credit.Repayment.DeepCoefficientForcing
-    exponentCycle (realOrbitNode hζ) 59
-    vandiverBernoulliNumerator (IsDeeplyRepayable hζ)
-
-/-- Absence of Vandiver's exceptional high-Bernoulli alternative, generated
-over all 28 source indices. -/
-def NoBernoulliCubeObstruction59 : Prop :=
-  ∀ i : Fin exponentCycle.rank,
-    ¬(59 : ℤ) ^ 3 ∣ vandiverBernoulliNumerator i
-
-/-- C3 specialized to the N59 generator.  It assumes the exact C2
-finite-index proof and the exact coefficient calculation, not a repayment
-map or power conclusion. -/
-theorem repayment_of_capacity_and_coefficient_forcing
-    {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
-    (data : Fermat.Conservation.Credit.Cycle.CapacityData
-      exponentCycle (realOrbitNode hζ))
-    (hambient : data.ambient = ⊤)
-    (hforcing : DeepCoefficientForcing59 hζ)
-    (hno : NoBernoulliCubeObstruction59)
-    {u : NumberField.IsCMField.realUnits K}
-    (hdeep : IsDeeplyRepayable hζ u) :
-    Fermat.Conservation.Credit.Repayment.IsRepaid 59 u := by
-  exact Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle
-    (by norm_num) data hambient
-    (Fermat.Conservation.Credit.Repayment.realUnits_odd_pow_injective
-      59 (by norm_num))
-    vandiverBernoulliNumerator (IsDeeplyRepayable hζ)
-    hforcing hno hdeep
+/-! The C3 flow reading is assembled in `Conservation.Instance`.  Keeping
+that specialization in the one instance layer prevents its selected-prime
+depth and eigenvalue facts from leaking back into this generated C2 stock
+object. -/
 
 end
 
