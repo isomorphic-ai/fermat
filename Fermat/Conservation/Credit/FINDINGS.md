@@ -2,6 +2,21 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the two flow layers survive the nonlinear quotient
+
+- Euler-jet Leibniz recurrences over `ZMod (p^2)` now carry both layers
+  through division by any denominator with unit constant term.  Lucas's
+  theorem supplies the extra prime in exactly the cross terms whose top
+  index is a multiple of `p`.
+- Applying the same recurrence to `D(log F)` shows that prime divisibility
+  of every positive jet, together with prime-square vanishing of the
+  selected `p M` jet, forces the selected logarithmic jet to vanish modulo
+  `p^2`.  The production wrapper obtains these hypotheses directly from
+  the exact cyclotomic correction and its value at one.
+- The formal orbit now stores `nodeScale : ℕ → ℚ`.  This is the necessary
+  interface cut: quotient points drive the real C2 cycle, while their
+  indexed lifts drive the sign-sensitive integral flow.
+
 ## 2026-07-30 — C5 diagonalizes on the real quotient for every odd prime
 
 - The correct C2 carrier is now implemented as

@@ -210,12 +210,16 @@ theorem formalDerivativeAtZero_regularizedLogDerivative_high
 /-! ## The generated orbit flow -/
 
 /-- An odd-prime flow orbit reuses C2's one generated cycle.  Its only
-arithmetic choices are the rational scale at each generated node and the
+arithmetic choices are the rational scale of each *indexed lift* and the
 coefficient degree assigned to each of the `rank` output coordinates.
-There is deliberately no weight matrix or flow map field. -/
+
+The scale is indexed rather than a function on the cycle carrier: for the
+real residue quotient, opposite lifts represent the same point but have
+different integral Teichmüller lifts.  There is deliberately no weight
+matrix or flow map field. -/
 structure GeneratorOrbit (p : ℕ) (α : Type*) where
   cycle : Cycle α
-  scale : α → ℚ
+  nodeScale : ℕ → ℚ
   prime : p.Prime
   odd : Odd p
   coordinateDegree : Fin cycle.rank → ℕ
@@ -223,10 +227,6 @@ structure GeneratorOrbit (p : ℕ) (α : Type*) where
 namespace GeneratorOrbit
 
 variable {p : ℕ} {α : Type*}
-
-/-- The rational scale of the `n`th node, produced from C2's recursion. -/
-def nodeScale (orbit : GeneratorOrbit p α) (n : ℕ) : ℚ :=
-  orbit.scale (orbit.cycle.point n)
 
 /-- The formal rate carried by one generated orbit edge.  It is obtained
 by subtracting the two node rescalings of the one generator and taking

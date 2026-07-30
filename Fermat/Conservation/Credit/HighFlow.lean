@@ -95,7 +95,7 @@ theorem intCast_exactHighEdgeCoefficient {p : ℕ}
 noncomputable abbrev gaugeGeneratorOrbit {p : ℕ} (data : GaugeData p) :
     GeneratorOrbit p ((ZMod p)ˣ) where
   cycle := data.cycle
-  scale := fun a ↦ ((((a : ZMod p).val : ℤ) ^ p : ℤ) : ℚ)
+  nodeScale := fun i ↦ (teichNodeValue data i : ℚ)
   prime := data.prime
   odd := data.odd
   coordinateDegree := fun row ↦ highIndex (data := data) row - 1
@@ -127,8 +127,7 @@ theorem gaugeGeneratorOrbit_weight_eq_exactHighEdge {p : ℕ}
   have heven : Even (highIndex (data := data) row) := by
     simp [highIndex]
   rw [bernoulli'_eq_bernoulli, heven.neg_one_pow, one_mul]
-  simp only [gaugeGeneratorOrbit, GeneratorOrbit.nodeScale,
-    teichNodeValue, canonicalNodeValue]
+  simp only [gaugeGeneratorOrbit, teichNodeValue, canonicalNodeValue]
   have hpos : 1 ≤ highIndex (data := data) row := by
     unfold highIndex
     exact Nat.one_le_iff_ne_zero.mpr
