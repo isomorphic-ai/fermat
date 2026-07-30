@@ -2,6 +2,25 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the fold is generic but the Fermat class ledger is absent
+
+- `Fold.lean` implements conjugation-compatible class ledgers, transpose as
+  the opposite view, the relative-norm fold, and the odd-torsion netting of
+  Vandiver's relations (7a) and (7d) over an arbitrary additive commutative
+  group.  No conductor datum or class-number premise is needed by this
+  algebraic core.
+- `KummerDrain.AllocatedFactorLedger` currently stores only `factor`,
+  `rootIdeal`, and the identity `rootIdeal i ^ p = (factor i)`.  It has no
+  nonzero law, conjugation/opposite pairing, relative-norm equation, or
+  constructor from a Fermat solution.  In particular, its root quotient can
+  be zero, while the class-group map is defined only for unit fractional
+  ideals.
+- The C3 repayment theorem lives in the generated real-unit group and says
+  that a deep unit is a `p`th power.  It supplies neither a map to allocated
+  factor-ideal classes nor Vandiver's relation (7a).  Thus deriving (7a)
+  from the current repayment output would require a new state-linked
+  realization theorem, not a group-theoretic rewrite.
+
 ## 2026-07-30 — the three W1 permits now meet at the gauge quotient
 
 - The exact depth-two reading is now a typed generic certificate: the

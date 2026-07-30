@@ -10,12 +10,13 @@ compose after repayment.  A primitive second-case exponent-59 solution is
 given its literal hypotenuse charge.  A genuine transformer must return
 another primitive second-case solution with strictly smaller charge.
 
-The generic floor consumes exactly that transformer.  The guarded examples
-record the two current typed stopping points: stock factor bookkeeping
-principalizes only the prime-th power of a root quotient, and selected
-repayment is an equality in the real-unit group rather than a successor
-solution.  The strict drain likewise compares only ramified norm charges,
-not the hypotenuse charges of two integral solutions.
+The generic floor consumes exactly that transformer.  The generic fold now
+principalizes a root quotient once the state supplies Vandiver's relations
+(7a) and (7d).  The guarded examples record the three remaining producers:
+stock torsion does not itself derive (7a), selected repayment is an equality
+in the real-unit group rather than a successor solution, and the strict
+drain compares ramified norm charges rather than the hypotenuse charges of
+two integral solutions.
 -/
 import Fermat.Conservation.KummerDrain
 import Fermat.FiftyNine.Conservation.GaugeQuotient
@@ -67,31 +68,45 @@ theorem false_of_stockCreditTransformer
     start PrimitiveSecondCaseSolution.charge
       PrimitiveSecondCaseSolution.charge_pos htransform
 
-section GenericPrincipalizationProbe
+section GenericPrincipalization
 
 variable {p : ℕ} [Fact p.Prime]
 variable {K : Type*} [Field K] [NumberField K]
   [IsCyclotomicExtension {p} ℚ K]
 
+/-- The generic typed hole closes as soon as the state supplies Vandiver's
+two relations for every relevant pair. -/
+example {ι : Type*}
+    (ledger :
+      Fermat.Conservation.KummerDrain.AllocatedFactorLedger
+        (p := p) (K := K) ι)
+    (hodd : Odd p)
+    (sevenA : ∀ i j, ledger.VandiverSevenA i j)
+    (sevenD : ∀ i j, ledger.VandiverSevenD i j) :
+    Fermat.Conservation.KummerDrain.FactorPrincipalizationPermit
+      ledger := by
+  exact
+    Fermat.Conservation.KummerDrain.factorPrincipalizationPermit_of_vandiver_relations
+      ledger hodd sevenA sevenD
+
 /--
 error: Type mismatch
-  Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_pow_isPrincipal ledger i j
+  Conservation.KummerDrain.AllocatedFactorLedger.rootClass_torsion ledger j
 has type
-  (↑(ledger.rootQuotient i j ^ p)).IsPrincipal
+  p • ledger.rootClass j = 0
 but is expected to have type
-  (↑(ledger.rootQuotient i j)).IsPrincipal
+  ledger.VandiverSevenA i j
 -/
 #guard_msgs in
 example {ι : Type*}
     (ledger :
       Fermat.Conservation.KummerDrain.AllocatedFactorLedger
-        (p := p) (K := K) ι) :
-    Fermat.Conservation.KummerDrain.FactorPrincipalizationPermit
-      ledger := by
-  intro i j
-  exact ledger.rootQuotient_pow_isPrincipal i j
+        (p := p) (K := K) ι)
+    (i j : ι) :
+    ledger.VandiverSevenA i j := by
+  exact ledger.rootClass_torsion j
 
-end GenericPrincipalizationProbe
+end GenericPrincipalization
 
 variable {K : Type*} [Field K] [NumberField K]
   [IsCyclotomicExtension {59} ℚ K]

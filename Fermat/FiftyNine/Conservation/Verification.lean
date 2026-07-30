@@ -12,7 +12,7 @@ graph, rather than relying only on representative unused-name tests.
 
 The final `Fermat.HoldsAt 59` theorem is not present here.  The selected
 gauge quotient is complete, while the guarded transformer probe records the
-factor-principalization and pullback obligations that stop W2 and W3.
+statewise relation-production and pullback obligations that stop W2 and W3.
 -/
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
@@ -329,7 +329,7 @@ info: 'Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq
 
-/-! ## Transformer obstruction receipts -/
+/-! ## Fold/transformer obstruction receipts -/
 
 /--
 info: 'Fermat.FiftyNine.Conservation.TransformerProbe.PrimitiveSecondCaseSolution.charge_pos' depends on axioms: [propext]

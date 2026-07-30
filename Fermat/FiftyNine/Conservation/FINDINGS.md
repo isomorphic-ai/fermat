@@ -1,5 +1,24 @@
 # N59 conservation findings
 
+## 2026-07-30 — no selected state currently produces the two ideal relations
+
+- The clean N59 cone never constructs an
+  `AllocatedFactorLedger` from `PrimitiveSecondCaseSolution`; the two types
+  occur only in `KummerDrain.lean` and `TransformerProbe.lean` and have no
+  connecting definition or theorem.  Consequently there is no selected
+  debit/receivable ideal pair on which statewise (7a) or (7d) can yet be
+  stated.
+- The existing selected repayment theorem proves that a deep real unit is a
+  59th power.  Vandiver's (7a), however, principalizes the weighted product
+  of two allocated factor ideals; no theorem in the permitted import cone
+  transports the unit repayment equality to that ideal-class relation.
+- The historical (7d) implementation uses a relative ideal norm followed by
+  the plus-class-number calculation.  The bounded Sinnott theorem is present
+  in the clean cone, but the state-specific factor ideals, their conjugation
+  identity, and the relative-norm comparison are not.  Those producers must
+  be reconstructed before the generic odd-torsion fold can discharge
+  `FactorPrincipalizationPermit`.
+
 ## 2026-07-30 — the selected W1 quotient is complete on the stock carrier
 
 - `GaugeQuotient.primeData` assembles all three checked permits at the
