@@ -2,6 +2,23 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the cube certificate records rational residues
+
+- The values in `BERNOULLI-CUBE-CERTIFICATE.md` are the residues of the
+  Bernoulli rationals in the local ring modulo the prime cube.  They are not
+  residues of the integer numerators.  At the first high index, multiplying
+  the listed residue by the von Staudt denominator recovers the numerator
+  residue.
+- Consequently the thin-instance checker must carry denominator
+  invertibility explicitly before turning a nonzero rational residue into
+  numerator cube-freeness.  Equating the listed vector directly with
+  `bernoulli n |>.num` would certify the wrong statement.
+- Kernel reduction of the exact rational at even the first campaign-scale
+  high index did not finish within two minutes.  The scalable certificate
+  boundary is therefore a checked modular/Faulhaber computation plus a
+  denominator-prime proof, not reduction of Mathlib's exact Bernoulli
+  recurrence.
+
 ## 2026-07-30 — CREDIT-FLOW starts at one genuinely high coefficient
 
 - The pinned `KummerCriterion` dependency contains a genuine generic
