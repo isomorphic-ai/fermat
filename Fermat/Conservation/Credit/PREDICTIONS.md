@@ -94,3 +94,27 @@ can be proved, and finally
 `Fermat.FiftyNine.holdsAt_fiftyNine_conservation : Fermat.HoldsAt 59`.
 If that endpoint cannot be proved, its place must remain empty and the
 findings must identify the first unproved rung and the exact stock/credit seam.
+
+## CREDIT-FLOW prediction — 2026-07-30
+
+Recorded before inspecting or editing the CREDIT-FLOW implementation.
+
+- W1's L4 law is the most likely point of resistance.  The current C2
+  generator may expose a finite orbit and its generated ledger without
+  exposing the λ-adic depth predicate needed to connect a deep congruence to
+  zero flow.  The repair should be a generic law of the generator-derived
+  flow object, not a premise attached directly to the forcing theorem.
+- The generic/instance cut is most likely to fight at W2's certified
+  eigenvalues.  The generic core should name the gauge action, character
+  coordinates, row-scaled Vandermonde basis change, Bernoulli coefficient,
+  and the exact implication furnished by a usable eigenvalue.  The thin
+  instance should contain every numerical witness and certify those fields,
+  without making the generic theorem mention the selected prime.
+- Once W1 and W2 expose those laws at the right level, W3 should be short:
+  deepness kills flow, diagonalization kills the generated coordinates, and
+  C2 injectivity recognizes a p-th power.  If W3 remains arithmetically long,
+  that will be evidence that a flow or capacity interface is still missing.
+- The mechanical literal gate is expected to catch existing N59 leakage in
+  the generic credit cone before it catches new flow code.  Any load-bearing
+  occurrence should move behind named fields of the single instance record;
+  campaign citations in prose may remain.
