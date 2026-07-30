@@ -32,6 +32,7 @@ import Fermat.Conservation.Credit.RelationEvaluationFlow
 import Fermat.Conservation.Credit.RealForcing
 import Fermat.Conservation.Credit.DepthCertificate
 import Fermat.Conservation.Credit.GaugeQuotient
+import Fermat.Conservation.Credit.Fold
 import Fermat.Conservation.CyclotomicDrain
 import Fermat.Conservation.KummerDrain
 
@@ -229,6 +230,54 @@ info: 'Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle' depen
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle
 
+/-! ## C6: class-ledger transpose, relative norm, and statewise netting -/
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.conjugateTranspose_apply' depends on axioms: [Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.conjugateTranspose_apply
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.conjugateTranspose_conjugateTranspose' depends on axioms: [propext, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.conjugateTranspose_conjugateTranspose
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.relativeNormFold_apply' depends on axioms: [Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.relativeNormFold_apply
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation' depends on axioms: [Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.fractionalIdealClass_eq_zero_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.fractionalIdealClass_eq_zero_iff
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.nsmul_fractionalIdealClass_eq_zero_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.nsmul_fractionalIdealClass_eq_zero_iff
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.odd_torsion_netting' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.odd_torsion_netting
+
 /-! ## W1--W2: generated flow and gauge diagonalization -/
 
 open Lean Elab Command
@@ -265,6 +314,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 -- `RealForcing`.
 #guard_standard_axioms_prefix Fermat.Conservation.Credit.RealFlow
 #guard_standard_axioms_prefix Fermat.Conservation.Credit.GaugeQuotient
+#guard_standard_axioms_prefix Fermat.Conservation.Credit.Fold
 #guard_standard_axioms_prefix Fermat.Conservation.CyclotomicDrain
 #guard_standard_axioms_prefix Fermat.Conservation.KummerDrain
 
@@ -651,12 +701,52 @@ info: 'Fermat.Conservation.KummerDrain.factorNode_charge_gauge_invariant' depend
 #print axioms Fermat.Conservation.KummerDrain.factorNode_charge_gauge_invariant
 
 /--
+info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootFractionalIdeal_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootFractionalIdeal_ne_zero
+
+/--
+info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootClass_torsion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootClass_torsion
+
+/--
+info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_ne_zero
+
+/--
 info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_pow_isPrincipal' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_pow_isPrincipal
+
+/--
+info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_isPrincipal_of_vandiver_relations' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_isPrincipal_of_vandiver_relations
+
+/--
+info: 'Fermat.Conservation.KummerDrain.factorPrincipalizationPermit_of_vandiver_relations' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.factorPrincipalizationPermit_of_vandiver_relations
 
 /-! ## Exhaustive forbidden-prefix guards -/
 

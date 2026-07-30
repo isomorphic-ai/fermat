@@ -17,6 +17,7 @@ the root quotient itself.  That is intentionally named as a proposition,
 not assumed here: removing the exponent from an ideal-class equation is
 exactly the first non-stock obligation exposed by the compiler.
 -/
+import Fermat.Conservation.Credit.Fold
 import Fermat.Conservation.CyclotomicDrain
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Ideal
 import Mathlib.RingTheory.DedekindDomain.Ideal.Lemmas
@@ -104,6 +105,7 @@ principalization of the chosen root is included. -/
 structure AllocatedFactorLedger (ι : Type*) where
   factor : ι → 𝓞 K
   rootIdeal : ι → Ideal (𝓞 K)
+  root_ne_zero : ∀ i, rootIdeal i ≠ 0
   root_pow : ∀ i, rootIdeal i ^ p = Ideal.span {factor i}
 
 /-- The fractional-ideal quotient of two allocated roots. -/
@@ -113,6 +115,52 @@ def AllocatedFactorLedger.rootQuotient {ι : Type*}
     FractionalIdeal (𝓞 K)⁰ K :=
   (ledger.rootIdeal i : FractionalIdeal (𝓞 K)⁰ K) /
     (ledger.rootIdeal j : FractionalIdeal (𝓞 K)⁰ K)
+
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- Every allocated ideal has a nonzero image in the fractional-ideal
+ledger, so it has a well-defined ideal class. -/
+theorem AllocatedFactorLedger.rootFractionalIdeal_ne_zero
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (i : ι) :
+    (ledger.rootIdeal i : FractionalIdeal (𝓞 K)⁰ K) ≠ 0 := by
+  intro hzero
+  rw [FractionalIdeal.coeIdeal_eq_zero] at hzero
+  exact ledger.root_ne_zero i hzero
+
+/-- The additive ideal class carried by one allocated factor root. -/
+noncomputable def AllocatedFactorLedger.rootClass
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (i : ι) :
+    Additive (ClassGroup (𝓞 K)) :=
+  Fermat.Conservation.Credit.Fold.fractionalIdealClass
+    (ledger.rootIdeal i : FractionalIdeal (𝓞 K)⁰ K)
+    (ledger.rootFractionalIdeal_ne_zero i)
+
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- Stock allocation makes every selected root class `p`-torsion. -/
+theorem AllocatedFactorLedger.rootClass_torsion
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (i : ι) :
+    p • ledger.rootClass i = 0 := by
+  unfold AllocatedFactorLedger.rootClass
+  rw [Fermat.Conservation.Credit.Fold.nsmul_fractionalIdealClass_eq_zero_iff]
+  rw [← FractionalIdeal.coeIdeal_pow, ledger.root_pow i,
+    FractionalIdeal.coeIdeal_span_singleton,
+    FractionalIdeal.coe_spanSingleton]
+  exact ⟨⟨_, rfl⟩⟩
+
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- The quotient of two allocated roots is nonzero. -/
+theorem AllocatedFactorLedger.rootQuotient_ne_zero
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (i j : ι) :
+    ledger.rootQuotient i j ≠ 0 :=
+  div_ne_zero (ledger.rootFractionalIdeal_ne_zero i)
+    (ledger.rootFractionalIdeal_ne_zero j)
 
 omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
 /-- Stock bookkeeping proves that the `p`th power of every allocated root
@@ -134,6 +182,21 @@ theorem AllocatedFactorLedger.rootQuotient_pow_isPrincipal
     FractionalIdeal.coe_spanSingleton]
   exact ⟨⟨_, rfl⟩⟩
 
+/-- Vandiver's relation (7a), stated on the actual classes selected by an
+allocated factor ledger.  This is a proposition to be derived from the
+state's arithmetic equations, not a field of the ledger. -/
+def AllocatedFactorLedger.VandiverSevenA {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (i j : ι) : Prop :=
+  ledger.rootClass i + (p - 1) • ledger.rootClass j = 0
+
+/-- Vandiver's relation (7d): the relative-norm fold of each selected
+debit/receivable pair is zero. -/
+def AllocatedFactorLedger.VandiverSevenD {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (i j : ι) : Prop :=
+  ledger.rootClass i + ledger.rootClass j = 0
+
 /-- The first post-allocation permit required by Kummer's weighted
 second-case step. -/
 def FactorPrincipalizationPermit {ι : Type*}
@@ -141,6 +204,58 @@ def FactorPrincipalizationPermit {ι : Type*}
   ∀ i j,
     Submodule.IsPrincipal
       (ledger.rootQuotient i j : Submodule (𝓞 K) K)
+
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- Once one Fermat-produced debit/receivable pair supplies Vandiver's
+statewise (7a) and the relative-norm fold (7d), the generic odd-torsion net
+principalizes its draw.  No assertion about the rest of the class group is
+used. -/
+theorem AllocatedFactorLedger.rootQuotient_isPrincipal_of_vandiver_relations
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (hodd : Odd p) (i j : ι)
+    (sevenA : ledger.VandiverSevenA i j)
+    (sevenD : ledger.VandiverSevenD i j) :
+    Submodule.IsPrincipal
+      (ledger.rootQuotient i j : Submodule (𝓞 K) K) := by
+  have hnet :=
+    Fermat.Conservation.Credit.Fold.odd_torsion_netting
+      hodd (ledger.rootClass i) (ledger.rootClass j)
+      (ledger.rootClass_torsion j) sevenA sevenD
+  have hI :
+      Submodule.IsPrincipal
+        ((ledger.rootIdeal i : FractionalIdeal (𝓞 K)⁰ K) :
+          Submodule (𝓞 K) K) :=
+    (Fermat.Conservation.Credit.Fold.fractionalIdealClass_eq_zero_iff
+      (ledger.rootIdeal i : FractionalIdeal (𝓞 K)⁰ K)
+      (ledger.rootFractionalIdeal_ne_zero i)).mp hnet.1
+  have hJ :
+      Submodule.IsPrincipal
+        ((ledger.rootIdeal j : FractionalIdeal (𝓞 K)⁰ K) :
+          Submodule (𝓞 K) K) :=
+    (Fermat.Conservation.Credit.Fold.fractionalIdealClass_eq_zero_iff
+      (ledger.rootIdeal j : FractionalIdeal (𝓞 K)⁰ K)
+      (ledger.rootFractionalIdeal_ne_zero j)).mp hnet.2
+  rw [FractionalIdeal.isPrincipal_iff] at hI hJ ⊢
+  obtain ⟨a, ha⟩ := hI
+  obtain ⟨b, hb⟩ := hJ
+  refine ⟨a / b, ?_⟩
+  rw [AllocatedFactorLedger.rootQuotient, ha, hb,
+    FractionalIdeal.spanSingleton_div_spanSingleton]
+
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- Pairwise statewise relations discharge the complete factor-ledger
+principalization permit. -/
+theorem factorPrincipalizationPermit_of_vandiver_relations
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (hodd : Odd p)
+    (sevenA : ∀ i j, ledger.VandiverSevenA i j)
+    (sevenD : ∀ i j, ledger.VandiverSevenD i j) :
+    FactorPrincipalizationPermit ledger := by
+  intro i j
+  exact ledger.rootQuotient_isPrincipal_of_vandiver_relations
+    hodd i j (sevenA i j) (sevenD i j)
 
 end
 
