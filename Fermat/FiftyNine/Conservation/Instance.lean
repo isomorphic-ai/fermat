@@ -72,18 +72,12 @@ theorem gauge_cycle_eq_exponentCycle :
 
 /-! ## W1 and the high-eigenvalue certificate boundary -/
 
-/-- The formal flow orbit uses the same cycle and reads every node through
-its canonical finite-field value.  Its selected degrees are precisely the
-high Bernoulli degrees; no rate map is supplied. -/
+/-- The formal flow orbit uses the same cycle and the generic
+generator-derived integer lift of every node.  Its selected degrees are
+precisely the high Bernoulli degrees; no rate map is supplied. -/
 noncomputable def generatorOrbit :
-    Fermat.Conservation.Credit.Flow.GeneratorOrbit 59 ((ZMod 59)ˣ) where
-  cycle := gaugeData.cycle
-  scale := fun a ↦ (((a : ZMod 59).val : ℕ) : ℚ)
-  prime := gaugeData.prime
-  odd := gaugeData.odd
-  coordinateDegree := fun row ↦
-    Fermat.Conservation.Credit.Flow.highIndex
-      (data := gaugeData) row - 1
+    Fermat.Conservation.Credit.Flow.GeneratorOrbit 59 ((ZMod 59)ˣ) :=
+  Fermat.Conservation.Credit.Flow.gaugeGeneratorOrbit gaugeData
 
 /-- The old generated numerator formula is now the eigenvalue derived by
 the generic flow. -/

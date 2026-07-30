@@ -2,6 +2,23 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the generator supplies its own prime-square lift
+
+- The polynomial form of L4 needs node values whose `(p - 1)`st powers are
+  one modulo `p^2`; bare least residues do not have that property uniformly.
+  No per-prime Teichmüller table is necessary: for a nonzero residue `a`,
+  the integer `a.val ^ p` represents the same exponent modulo `p` and
+  Euler's theorem gives
+  `(a.val ^ p) ^ (p - 1) = 1 (mod p^2)`.
+- Replacing a geometric-sum length by this lift does not change its value at
+  a primitive `p`th root, but it makes the value at `X = 1` prime-square
+  normalized after the harmless outer power `p - 1`.  Thus the normalization
+  is derived from the orbit generator rather than supplied by a selected
+  constant.
+- The formal high-flow orbit and its exact integral coefficient must use
+  this same lift.  Reduction modulo `p` is unchanged by Frobenius, so the C5
+  gauge theorem remains the downstream reduction of that exact flow.
+
 ## 2026-07-30 — the high flow must retain its exact integral lift
 
 - The generated derivative carries the exact integer edge coefficient
