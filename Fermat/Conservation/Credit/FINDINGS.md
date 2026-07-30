@@ -2,6 +2,26 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the generator mints a flow, but depth has not reached it
+
+- The Bernoulli generating series now constructs each orbit-edge rate and
+  an additive flow on finitely supported integral exponent vectors.  Product
+  conservation, exact high coefficients, and post-gauge/reindex
+  functoriality are formal consequences of that construction; no flow map
+  or matrix is supplied as data.
+- This formal flow is not yet a homomorphism on actual cyclotomic units
+  modulo prime powers.  In particular, a descending filtration can be named
+  without circularity, but the decisive L4 inclusion
+  `filtration (2 * p) ≤ exponentFlow.ker` is not supplied by Mathlib or the
+  pinned dependency.
+- The pinned completed logarithm proves product additivity on actual local
+  principal units, while the new formal flow proves the required high
+  Bernoulli coefficient formula.  The missing theorem is their comparison
+  at depth `2 * p`: descent of a deep generated-unit relation to the formal
+  exponent flow, at prime-cube precision.  This is now the first concrete
+  unproved compiler obligation; representing it as a field would merely
+  rename the superseded seam.
+
 ## 2026-07-30 — the cube certificate records rational residues
 
 - The values in `BERNOULLI-CUBE-CERTIFICATE.md` are the residues of the
