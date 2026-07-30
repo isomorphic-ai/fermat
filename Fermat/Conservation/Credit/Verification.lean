@@ -18,6 +18,14 @@ import Fermat.Conservation.Credit.Bernoulli
 import Fermat.Conservation.Credit.Gauge
 import Fermat.Conservation.Credit.HighFlow
 import Fermat.Conservation.Credit.Forcing
+import Fermat.Conservation.Credit.DepthFlow
+import Fermat.Conservation.Credit.CyclotomicFlow
+import Fermat.Conservation.Credit.MomentFlow
+import Fermat.Conservation.Credit.NonlinearFlow
+import Fermat.Conservation.Credit.RealGauge
+import Fermat.Conservation.Credit.RealHighFlow
+import Fermat.Conservation.Credit.RelationDepthFlow
+import Fermat.Conservation.Credit.RealForcing
 
 /-! ## C1: generated vacuum and two-sided semilattice -/
 
@@ -238,9 +246,16 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
       throwError
         "{declaration} depends on nonstandard axioms: {unexpected}"
 
+-- This prefix exhaustively covers `Flow`, `DepthFlow`, `CyclotomicFlow`,
+-- `MomentFlow`, and `NonlinearFlow`.
 #guard_standard_axioms_prefix Fermat.Conservation.Credit.Flow
 #guard_standard_axioms_prefix Fermat.Conservation.Credit.Gauge
 #guard_standard_axioms_prefix Fermat.Conservation.Credit.Bernoulli
+-- `RealGauge` has its own namespace.
+#guard_standard_axioms_prefix Fermat.Conservation.Credit.RealGauge
+-- This prefix exhaustively covers `RealHighFlow`, `RelationDepthFlow`, and
+-- `RealForcing`.
+#guard_standard_axioms_prefix Fermat.Conservation.Credit.RealFlow
 
 /--
 info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_pow_rank_add_one' depends on axioms: [propext,
@@ -471,23 +486,97 @@ elab "#guard_no_module " p:ident : command => do
 
 /-! ## Mechanical selected-prime source-literal gate -/
 
+/-- An identifier character on either side makes the two selected digits part
+of a larger token rather than the load-bearing numeral under audit. -/
+private def isLeanIdentifierChar (character : Char) : Bool :=
+  character.isAlphanum || character == '_'
+
+/-- Source lines containing a standalone selected-prime numeral outside Lean
+comments and string literals.  Block-comment depth is tracked across lines,
+including nested `/- ... -/` comments. -/
+private partial def selectedPrimeTokenLines
+    (characters : List Char) (line : Nat := 1)
+    (blockCommentDepth : Nat := 0) (inLineComment : Bool := false)
+    (inString : Bool := false) (stringEscape : Bool := false)
+    (previousIsIdentifier : Bool := false)
+    (offenders : Array Nat := #[]) : Array Nat :=
+  match characters with
+  | [] => offenders
+  | '\n' :: rest =>
+      selectedPrimeTokenLines rest (line + 1) blockCommentDepth false
+        inString false false offenders
+  | character :: rest =>
+      if inLineComment then
+        selectedPrimeTokenLines rest line blockCommentDepth true
+          inString false false offenders
+      else if blockCommentDepth > 0 then
+        match character, rest with
+        | '/', '-' :: tail =>
+            selectedPrimeTokenLines tail line (blockCommentDepth + 1) false
+              false false false offenders
+        | '-', '/' :: tail =>
+            selectedPrimeTokenLines tail line (blockCommentDepth - 1) false
+              false false false offenders
+        | _, _ =>
+            selectedPrimeTokenLines rest line blockCommentDepth false
+              false false false offenders
+      else if inString then
+        if stringEscape then
+          selectedPrimeTokenLines rest line 0 false true false false offenders
+        else if character == '\\' then
+          selectedPrimeTokenLines rest line 0 false true true false offenders
+        else if character == '"' then
+          selectedPrimeTokenLines rest line 0 false false false false offenders
+        else
+          selectedPrimeTokenLines rest line 0 false true false false offenders
+      else
+        match character, rest with
+        | '\'', '\\' :: _ :: '\'' :: tail =>
+            selectedPrimeTokenLines tail line 0 false false false false offenders
+        | '\'', _ :: '\'' :: tail =>
+            selectedPrimeTokenLines tail line 0 false false false false offenders
+        | '-', '-' :: tail =>
+            selectedPrimeTokenLines tail line 0 true false false false offenders
+        | '/', '-' :: tail =>
+            selectedPrimeTokenLines tail line 1 false false false false offenders
+        | '5', '9' :: tail =>
+            let nextIsIdentifier :=
+              match tail with
+              | next :: _ => isLeanIdentifierChar next
+              | [] => false
+            let offenders :=
+              if previousIsIdentifier || nextIsIdentifier then
+                offenders
+              else
+                offenders.push line
+            selectedPrimeTokenLines tail line 0 false false false true offenders
+        | _, _ =>
+            if character == '"' then
+              selectedPrimeTokenLines rest line 0 false true false false offenders
+            else
+              selectedPrimeTokenLines rest line 0 false false false
+                (isLeanIdentifierChar character) offenders
+
+#guard selectedPrimeTokenLines "59".toList == #[1]
+#guard selectedPrimeTokenLines "\n59".toList == #[2]
+#guard selectedPrimeTokenLines "x59 590 159 59x".toList == #[]
+#guard selectedPrimeTokenLines
+  "/- outer /- 59 -/ -/\n-- 59\n\"59\"".toList == #[]
+
 /-- Scan every generic credit Lean source and reject the campaign's selected
-prime literal.  Its two digits are assembled as characters so the guard
-does not create the occurrence it is designed to reject. -/
+prime numeral `59` when it occurs as a standalone code token.  Campaign prose
+in comments and strings is deliberately ignored. -/
 elab "#guard_no_selected_prime_literal" : command => do
   let currentPath := System.FilePath.mk (← getFileName)
   let some sourceDirectory := currentPath.parent
     | throwError "cannot locate the generic credit source directory"
   let entries ← liftIO <| System.FilePath.readDir sourceDirectory
-  let selectedPrimeLiteral := String.ofList ['5', '9']
   let mut offenders : Array String := #[]
   for entry in entries do
     if entry.path.extension == some "lean" then
       let source ← liftIO <| IO.FS.readFile entry.path
-      for (line, index) in source.splitOn "\n" |>.zipIdx do
-        if (line.splitOn selectedPrimeLiteral).length > 1 then
-          offenders := offenders.push
-            s!"{entry.path}:{index + 1}"
+      for line in selectedPrimeTokenLines source.toList do
+        offenders := offenders.push s!"{entry.path}:{line}"
   unless offenders.isEmpty do
     throwError
       "selected-prime source literal occurs at {offenders}"
