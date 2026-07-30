@@ -2,6 +2,18 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the selected assembly now consumes the real quotient
+
+- The campaign certificate now constructs `RealFlow.CreditData` and a
+  `RealFlow.FlowCertificate` over the intrinsic real-residue gauge.
+  Its Bernoulli table checks the generic high-index definition directly.
+- Evaluating the quotient cycle through the descended cyclotomic node gives
+  the existing C2 edge exactly.  A proved compatibility wrapper therefore
+  reuses the certified capacity without adding another unit family.
+- The W3 instantiation is consequently conductor arithmetic plus one still
+  visible generic L4 obligation.  No matrix, inverse, eigenvalue vector, or
+  depth law has entered the selected record.
+
 ## 2026-07-30 — folded cyclotomic nodes descend to the real quotient
 
 - The geometric units at opposite residues differ by a root-of-unity

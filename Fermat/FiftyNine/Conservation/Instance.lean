@@ -15,7 +15,7 @@ The final local-depth comparison is intentionally still visible as
 is the zero-arithmetic W3 instantiation; no classical Vandiver module is
 imported here.
 -/
-import Fermat.Conservation.Credit.Forcing
+import Fermat.Conservation.Credit.RealForcing
 import Fermat.Conservation.Credit.Bernoulli
 import Fermat.FiftyNine.Conservation.Credit
 
@@ -39,14 +39,23 @@ def gaugeData : Fermat.Conservation.Credit.Gauge.GaugeData 59 where
       Fermat.FiftyNine.Conservation.Credit.exponentGenerator_order]
     norm_num
 
+/-- The intrinsic real-residue gauge derived from the same orbit lift. -/
+noncomputable def realGaugeData :
+    Fermat.Conservation.Credit.RealGauge.RealGaugeData 59 :=
+  Fermat.Conservation.Credit.RealGauge.RealGaugeData.ofGaugeData gaugeData
+
 /-- Every campaign-specific datum supplied to the generic credit core. -/
-def creditData : Fermat.Conservation.Credit.Flow.CreditData 59 where
-  gauge := gaugeData
+noncomputable def creditData :
+    Fermat.Conservation.Credit.RealFlow.CreditData 59 where
+  gauge := realGaugeData
   generationSeed := 7
   generationMiddle := 29
   innerStep := 4
   outerStep := 2
-  rank_generated := by norm_num [gaugeData]
+  rank_generated := by
+    norm_num [realGaugeData,
+      Fermat.Conservation.Credit.RealGauge.RealGaugeData.ofGaugeData,
+      gaugeData]
   middle_generated := by norm_num
   conductor_generated := by norm_num
   attestationPrime :=
@@ -61,7 +70,10 @@ def creditData : Fermat.Conservation.Credit.Flow.CreditData 59 where
   attestationRoot_order :=
     Fermat.FiftyNine.Conservation.Credit.attestationRoot_order
   irregularIndex := 44
-  irregularRow := ⟨21, by norm_num [gaugeData]⟩
+  irregularRow := ⟨21, by
+    norm_num [realGaugeData,
+      Fermat.Conservation.Credit.RealGauge.RealGaugeData.ofGaugeData,
+      gaugeData]⟩
   irregularIndex_eq_row := by norm_num
 
 /-- The C5 cycle and the original C2 cycle are the same generated object. -/
@@ -76,20 +88,21 @@ theorem gauge_cycle_eq_exponentCycle :
 generator-derived integer lift of every node.  Its selected degrees are
 precisely the high Bernoulli degrees; no rate map is supplied. -/
 noncomputable def generatorOrbit :
-    Fermat.Conservation.Credit.Flow.GeneratorOrbit 59 ((ZMod 59)ˣ) :=
-  Fermat.Conservation.Credit.Flow.gaugeGeneratorOrbit gaugeData
+    Fermat.Conservation.Credit.Flow.GeneratorOrbit 59
+      (Fermat.Conservation.Credit.RealGauge.RealResidueGroup 59) :=
+  Fermat.Conservation.Credit.RealFlow.generatorOrbit realGaugeData
 
 /-- The old generated numerator formula is now the eigenvalue derived by
 the generic flow. -/
-def vandiverBernoulliNumerator
-    (row : Fin gaugeData.rank) : ℤ :=
-  Fermat.Conservation.Credit.Flow.highEigenvalue
-    (data := gaugeData) row
+noncomputable def vandiverBernoulliNumerator
+    (row : Fin realGaugeData.rank) : ℤ :=
+  Fermat.Conservation.Credit.RealFlow.highEigenvalue
+    (data := realGaugeData) row
 
 /-- Absence of the exceptional high-Bernoulli alternative.  This keeps the
 existing interface shape while referring to generated eigenvalues. -/
 def NoBernoulliCubeObstruction59 : Prop :=
-  ∀ row : Fin gaugeData.rank,
+  ∀ row : Fin realGaugeData.rank,
     ¬(59 : ℤ) ^ 3 ∣ vandiverBernoulliNumerator row
 
 /-! ### Kernel-checked Bernoulli cube certificate
@@ -160,16 +173,16 @@ def correctedResidue :
 /-- The binomial coefficient in the pole-safe Faulhaber decomposition has
 exactly the advertised campaign-prime factor. -/
 theorem choose_factor (row : Fin gaugeData.rank) :
-    (Flow.highIndex (data := gaugeData) row + 1).choose
-        (Flow.highIndex (data := gaugeData) row - 2) =
+    (RealFlow.highIndex (data := realGaugeData) row + 1).choose
+        (RealFlow.highIndex (data := realGaugeData) row - 2) =
       59 * chooseQuotient row := by
   rw [← Nat.choose_symm (by
-    dsimp [Flow.highIndex, gaugeData]
+    dsimp [RealFlow.highIndex]
     omega)]
   have hdiff :
-      Flow.highIndex (data := gaugeData) row + 1 -
-          (Flow.highIndex (data := gaugeData) row - 2) = 3 := by
-    dsimp [Flow.highIndex, gaugeData]
+      RealFlow.highIndex (data := realGaugeData) row + 1 -
+          (RealFlow.highIndex (data := realGaugeData) row - 2) = 3 := by
+    dsimp [RealFlow.highIndex]
     omega
   rw [hdiff]
   apply Nat.mul_right_cancel (by norm_num : 0 < 3)
@@ -181,7 +194,7 @@ theorem choose_factor (row : Fin gaugeData.rank) :
 theorem raw_power_sum (row : Fin gaugeData.rank) :
     (∑ a ∈ Finset.range 59,
       (a : ZMod (59 ^ 4)) ^
-        Flow.highIndex (data := gaugeData) row) =
+        RealFlow.highIndex (data := realGaugeData) row) =
       59 * rawPowerResidue row := by
   decide +kernel +revert
 
@@ -189,14 +202,16 @@ theorem raw_power_sum (row : Fin gaugeData.rank) :
 every selected row. -/
 theorem target_denominator (row : Fin gaugeData.rank) :
     Bernoulli.DenominatorPrimeTo 59
-      (bernoulli (Flow.highIndex (data := gaugeData) row)) := by
+      (bernoulli (RealFlow.highIndex (data := realGaugeData) row)) := by
   apply Bernoulli.bernoulli_denominatorPrimeTo
   · exact
       (even_two.mul_right (row.val + 1)).mul_right 59
   · intro hdvd
     obtain ⟨k, hk⟩ := hdvd
     have hrow := row.isLt
-    dsimp [Flow.highIndex, gaugeData] at hk hrow
+    dsimp [RealFlow.highIndex, realGaugeData,
+      Fermat.Conservation.Credit.RealGauge.RealGaugeData.ofGaugeData,
+      gaugeData] at hk hrow
     omega
 
 /-- Away from the exceptional first row, the predecessor Bernoulli
@@ -204,15 +219,17 @@ denominator is also prime to the campaign prime. -/
 theorem predecessor_denominator
     (row : Fin gaugeData.rank) (hrow : row.val ≠ 0) :
     Bernoulli.DenominatorPrimeTo 59
-      (bernoulli (Flow.highIndex (data := gaugeData) row - 2)) := by
+      (bernoulli (RealFlow.highIndex (data := realGaugeData) row - 2)) := by
   apply Bernoulli.bernoulli_denominatorPrimeTo
   · refine ⟨(row.val + 1) * 59 - 1, ?_⟩
-    dsimp [Flow.highIndex, gaugeData]
+    dsimp [RealFlow.highIndex]
     omega
   · intro hdvd
     obtain ⟨k, hk⟩ := hdvd
     have hrowLt := row.isLt
-    dsimp [Flow.highIndex, gaugeData] at hk hrowLt
+    dsimp [RealFlow.highIndex, realGaugeData,
+      Fermat.Conservation.Credit.RealGauge.RealGaugeData.ofGaugeData,
+      gaugeData] at hk hrowLt
     omega
 
 /-- The predecessor correction is `-1` at the unique pole and zero on
@@ -220,7 +237,8 @@ all other rows. -/
 theorem predecessor_representation (row : Fin gaugeData.rank) :
     ∃ v : ℚ, Bernoulli.PIntegral 59 v ∧
       (59 : ℚ) *
-          bernoulli (Flow.highIndex (data := gaugeData) row - 2) =
+          bernoulli
+            (RealFlow.highIndex (data := realGaugeData) row - 2) =
         (predecessorResidue row : ℚ) + 59 * v := by
   by_cases hrow : row.val = 0
   · have hrowEq :
@@ -228,11 +246,12 @@ theorem predecessor_representation (row : Fin gaugeData.rank) :
           Fin gaugeData.rank) :=
       Fin.ext hrow
     subst row
-    simpa [Flow.highIndex, gaugeData, predecessorResidue] using
+    simpa [RealFlow.highIndex, predecessorResidue] using
       (Bernoulli.prime_mul_exceptional_predecessor_representation
         (p := 59))
   · refine
-      ⟨bernoulli (Flow.highIndex (data := gaugeData) row - 2),
+      ⟨bernoulli
+          (RealFlow.highIndex (data := realGaugeData) row - 2),
         Bernoulli.pIntegral_of_denominatorPrimeTo
           (predecessor_denominator row hrow), ?_⟩
     simp [predecessorResidue, hrow]
@@ -242,7 +261,7 @@ theorem correction_weight_representation
     (row : Fin gaugeData.rank) :
     ∃ z : ℚ, Bernoulli.PIntegral 59 z ∧
       (chooseQuotient row : ℚ) /
-          (Flow.highIndex (data := gaugeData) row + 1) =
+          (RealFlow.highIndex (data := realGaugeData) row + 1) =
         (correctionWeight row : ℚ) + 59 * z := by
   refine
     ⟨(weightLiftNumerator row : ℚ) / 3, ?_, ?_⟩
@@ -275,11 +294,12 @@ endpoint. -/
 theorem highBernoulliNumerator_cubeFree
     (row : Fin gaugeData.rank) :
     ¬(59 : ℤ) ^ 3 ∣
-      (bernoulli (Flow.highIndex (data := gaugeData) row)).num := by
+      (bernoulli
+        (RealFlow.highIndex (data := realGaugeData) row)).num := by
   apply
     Bernoulli.exceptional_bernoulli_numerator_not_dvd_cube_of_faulhaber
       (p := 59)
-      (n := Flow.highIndex (data := gaugeData) row)
+      (n := RealFlow.highIndex (data := realGaugeData) row)
       (c := chooseQuotient row)
       (raw := rawPowerResidue row)
       (residue := correctedResidue row)
@@ -287,13 +307,13 @@ theorem highBernoulliNumerator_cubeFree
       (w := correctionWeight row)
       (correctionLift := 0)
   · norm_num
-  · dsimp [Flow.highIndex, gaugeData]
+  · dsimp [RealFlow.highIndex]
     omega
   · exact
       (even_two.mul_right (row.val + 1)).mul_right 59
   · intro hdvd
     obtain ⟨k, hk⟩ := hdvd
-    dsimp [Flow.highIndex, gaugeData] at hk
+    dsimp [RealFlow.highIndex] at hk
     omega
   · exact choose_factor row
   · exact raw_power_sum row
@@ -316,13 +336,13 @@ theorem noBernoulliCubeObstruction59 :
 matrix, an inverse, or an eigenvalue vector. -/
 def flowCertificate_of_cubeFree
     (hno : NoBernoulliCubeObstruction59) :
-    Fermat.Conservation.Credit.Flow.FlowCertificate gaugeData where
+    Fermat.Conservation.Credit.RealFlow.FlowCertificate realGaugeData where
   eigenvalue_cubeFree := hno
 
 /-- The parameter-free certificate consumed by the generic forcing
 theorem. -/
 def flowCertificate :
-    Fermat.Conservation.Credit.Flow.FlowCertificate gaugeData :=
+    Fermat.Conservation.Credit.RealFlow.FlowCertificate realGaugeData :=
   flowCertificate_of_cubeFree noBernoulliCubeObstruction59
 
 /-! ## The exact remaining L4 comparison and generic W3 -/
@@ -336,6 +356,8 @@ local instance : NumberField.IsCMField K :=
   IsCyclotomicExtension.Rat.isCMField
     (S := {59}) K ⟨59, rfl, by norm_num⟩
 
+local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
+
 /-- The actual local depth predicate attached to the selected primitive
 root. -/
 def IsDeeplyRepayable {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
@@ -346,9 +368,26 @@ def IsDeeplyRepayable {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
 /-- The one remaining W1 theorem, stated at its exact non-circular
 boundary: actual local depth makes the generated high flow vanish. -/
 def DeepFlowLaw59 {ζ : K} (hζ : IsPrimitiveRoot ζ 59) : Prop :=
-  Fermat.Conservation.Credit.Flow.DeepFlowLaw gaugeData
-    (Fermat.FiftyNine.Conservation.Credit.realOrbitNode hζ)
+  Fermat.Conservation.Credit.RealFlow.DeepFlowLaw creditData
+    (Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNodeQuotient hζ)
     (IsDeeplyRepayable hζ)
+
+/-- Evaluation on the intrinsic quotient cycle recovers the existing C2
+edge exactly; no selected unit family is duplicated. -/
+theorem realGauge_cycle_edge_eq_exponentCycle_edge
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
+    (i : Fin realGaugeData.cycle.rank) :
+    realGaugeData.cycle.edge
+        (Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNodeQuotient
+          hζ) i =
+      Fermat.FiftyNine.Conservation.Credit.exponentCycle.edge
+        (Fermat.FiftyNine.Conservation.Credit.realOrbitNode hζ) i := by
+  simp only [Fermat.Conservation.Credit.Cycle.edge]
+  rw [← realGaugeData.mk_nodeLift (i.val + 1),
+    ← realGaugeData.mk_nodeLift i.val]
+  simp only [realGaugeData,
+    Fermat.Conservation.Credit.RealGauge.RealGaugeData.ofGaugeData_nodeLift_eq_cycle_point]
+  rfl
 
 /-- W3 itself is now pure instantiation: the generic flow/gauge theorem
 turns L4 plus the cube-free certificate into exactly the exponent forcing
@@ -357,14 +396,29 @@ theorem deepExponentForcing_of_flow {ζ : K}
     (hζ : IsPrimitiveRoot ζ 59)
     (hL4 : DeepFlowLaw59 hζ) :
     Fermat.Conservation.Credit.Repayment.DeepExponentForcing
+      realGaugeData.cycle
+      (Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNodeQuotient hζ)
+      59 (IsDeeplyRepayable hζ) := by
+  exact Fermat.Conservation.Credit.RealFlow.deepExponentForcing creditData
+    (Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNodeQuotient hζ)
+    (IsDeeplyRepayable hζ)
+    flowCertificate hL4
+
+/-- Compatibility form consumed by the already-certified C2 capacity. -/
+theorem deepExponentForcing_on_exponentCycle_of_flow {ζ : K}
+    (hζ : IsPrimitiveRoot ζ 59)
+    (hL4 : DeepFlowLaw59 hζ) :
+    Fermat.Conservation.Credit.Repayment.DeepExponentForcing
       Fermat.FiftyNine.Conservation.Credit.exponentCycle
       (Fermat.FiftyNine.Conservation.Credit.realOrbitNode hζ)
       59 (IsDeeplyRepayable hζ) := by
-  rw [← gauge_cycle_eq_exponentCycle]
-  exact Fermat.Conservation.Credit.Flow.deepExponentForcing gaugeData
-    (Fermat.FiftyNine.Conservation.Credit.realOrbitNode hζ)
-    (IsDeeplyRepayable hζ)
-    flowCertificate hL4
+  intro u hdeep t raw ht hrelation hprimitive
+  apply deepExponentForcing_of_flow hζ hL4 u hdeep t raw ht
+  · rw [hrelation]
+    apply Finset.prod_congr rfl
+    intro i _
+    rw [realGauge_cycle_edge_eq_exponentCycle_edge]
+  · exact hprimitive
 
 /-- C3 repayment after the still-visible L4 comparison.  The group-theory,
 gauge inversion, and high-eigenvalue arithmetic are all discharged by the
@@ -384,7 +438,7 @@ theorem repayment_of_capacity_and_flow
     (Fermat.Conservation.Credit.Repayment.realUnits_odd_pow_injective
       59 (by norm_num))
     (IsDeeplyRepayable hζ)
-    (deepExponentForcing_of_flow hζ hL4) hdeep
+    (deepExponentForcing_on_exponentCycle_of_flow hζ hL4) hdeep
 
 end
 
