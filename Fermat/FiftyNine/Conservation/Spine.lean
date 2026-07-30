@@ -26,6 +26,7 @@ import Fermat.Four.Conservation.Spine
 import Fermat.Five.Conservation.Spine
 import Fermat.Six.Conservation.Spine
 import Fermat.Seven.Conservation.Spine
+import Fermat.Conservation.CyclotomicDrain
 import Fermat.FiftyNine.Conservation.Credit
 
 open scoped BigOperators NumberField
@@ -171,58 +172,46 @@ local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
 
 /-- The ramified quantum `λ = 1 - ζ₅₉`. -/
 def lambda (hζ : IsPrimitiveRoot ζ 59) : 𝓞 K :=
-  1 - hζ.toInteger
+  Fermat.Conservation.CyclotomicDrain.lambda hζ
 
 omit [NumberField K] [IsCyclotomicExtension {59} ℚ K] in
 /-- The requested orientation differs from `ζ₅₉ - 1` only by the unit
 `-1`. -/
 theorem lambda_eq_neg_zeta_sub_one (hζ : IsPrimitiveRoot ζ 59) :
     lambda hζ = -(hζ.toInteger - 1) := by
-  simp only [lambda]
-  ring
+  exact
+    Fermat.Conservation.CyclotomicDrain.lambda_eq_neg_zeta_sub_one hζ
 
 /-- One ramified quantum has absolute norm charge exactly 59. -/
 theorem lambda_charge (hζ : IsPrimitiveRoot ζ 59) :
     charge (lambda hζ) = 59 := by
-  rw [lambda_eq_neg_zeta_sub_one]
-  rw [show -(hζ.toInteger - 1) =
-      (-1 : 𝓞 K) * (hζ.toInteger - 1) by ring, charge_mul]
-  have hneg : charge (-1 : 𝓞 K) = 1 := by
-    simpa using
-      Fermat.Seven.Conservation.charge_unit (K := K)
-        (-1 : (𝓞 K)ˣ)
-  rw [hneg, one_mul]
-  simp only [charge, Fermat.Seven.Conservation.charge]
-  rw [hζ.norm_toInteger_sub_one_of_prime_ne_two' (by norm_num)]
-  norm_num
+  exact Fermat.Conservation.CyclotomicDrain.lambda_charge hζ
 
 omit [NumberField K] [IsCyclotomicExtension {59} ℚ K] in
 /-- Absolute norm charge is multiplicative on powers. -/
 theorem charge_pow (z : 𝓞 K) (n : ℕ) :
     charge (z ^ n) = charge z ^ n :=
-  Fermat.Seven.Conservation.charge_pow z n
+  Fermat.Conservation.CyclotomicDrain.charge_pow z n
 
 /-- The charge stored in `n` ramified quanta. -/
 def drainCharge (hζ : IsPrimitiveRoot ζ 59) (n : ℕ) : ℕ :=
-  charge ((lambda hζ) ^ n)
+  Fermat.Conservation.CyclotomicDrain.drainCharge hζ n
 
 /-- `n` ramified quanta carry literal charge `59 ^ n`. -/
 theorem drainCharge_eq (hζ : IsPrimitiveRoot ζ 59) (n : ℕ) :
     drainCharge hζ n = 59 ^ n := by
-  rw [drainCharge, charge_pow, lambda_charge]
+  exact Fermat.Conservation.CyclotomicDrain.drainCharge_eq hζ n
 
 /-- Ramified charge is strictly increasing with multiplicity; lowering
 multiplicity is therefore a strict drain. -/
 theorem drainCharge_strictMono (hζ : IsPrimitiveRoot ζ 59) :
     StrictMono (drainCharge hζ) := by
-  intro m n hmn
-  rw [drainCharge_eq, drainCharge_eq]
-  exact Nat.pow_lt_pow_right (by norm_num) hmn
+  exact Fermat.Conservation.CyclotomicDrain.drainCharge_strictMono hζ
 
 /-- Removing one ramified factor strictly lowers the associated charge. -/
 theorem drainCharge_step (hζ : IsPrimitiveRoot ζ 59) (n : ℕ) :
     drainCharge hζ n < drainCharge hζ (n + 1) :=
-  drainCharge_strictMono hζ (Nat.lt_succ_self n)
+  Fermat.Conservation.CyclotomicDrain.drainCharge_step hζ n
 
 end CyclotomicFiftyNine
 
