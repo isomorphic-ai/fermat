@@ -11,9 +11,9 @@ credit-flow instance.  It also checks declarations and the transitive module
 graph, rather than relying only on representative unused-name tests.
 
 The final `Fermat.HoldsAt 59` theorem is not present here: `FINDINGS.md`
-records the completed C2 certificate and bounded C4 bridge.  W3 remains
-conditional on `DeepFlowLaw59`; the transformer and endpoint therefore
-remain outside this cone.
+records the completed C2 certificate and bounded C4 bridge.  W3 is now
+closed by the generator-derived flow; the transformer and endpoint remain
+separate downstream work.
 -/
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
@@ -196,7 +196,7 @@ info: 'Fermat.FiftyNine.Conservation.Credit.boundedSinnottBridge' depends on axi
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.Credit.boundedSinnottBridge
 
-/-! ## Selected C5 gauge, cube certificate, and conditional W3 -/
+/-! ## Selected C5 gauge, cube certificate, and closed W3 -/
 
 open Lean Elab Command
 
@@ -260,9 +260,11 @@ info: 'Fermat.FiftyNine.Conservation.Instance.flowCertificate' depends on axioms
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.Instance.flowCertificate
 
-/-! The following two theorems are deliberately conditional: both consume
-`hL4 : DeepFlowLaw59 hζ`.  These guards audit their proof boundary; they do
-not claim that W1's remaining local comparison has been proved. -/
+/--
+info: 'Fermat.FiftyNine.Conservation.Instance.deepFlowLaw59' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Instance.deepFlowLaw59
 
 /--
 info: 'Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow' depends on axioms: [propext,

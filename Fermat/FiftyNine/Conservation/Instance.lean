@@ -10,12 +10,11 @@ The tower, orbit generator, lamp, irregular row, and high-eigenvalue
 certificate boundary enter through named structure fields.  The generic
 flow, gauge, and forcing files contain none of these literals.
 
-The final local-depth comparison is intentionally still visible as
-`DeepFlowLaw59`.  Once that theorem is proved, `deepExponentForcing_of_flow`
-is the zero-arithmetic W3 instantiation; no classical Vandiver module is
-imported here.
+The local-depth comparison is the generic generator-derived `DeepFlowLaw`.
+This file instantiates it and the cube-free eigenvalue boundary; no
+classical Vandiver module is imported here.
 -/
-import Fermat.Conservation.Credit.RealForcing
+import Fermat.Conservation.Credit.HighFlowClosure
 import Fermat.Conservation.Credit.Bernoulli
 import Fermat.FiftyNine.Conservation.Credit
 
@@ -345,7 +344,7 @@ def flowCertificate :
     Fermat.Conservation.Credit.RealFlow.FlowCertificate realGaugeData :=
   flowCertificate_of_cubeFree noBernoulliCubeObstruction59
 
-/-! ## The exact remaining L4 comparison and generic W3 -/
+/-! ## Generic L4 and W3 instantiation -/
 
 noncomputable section
 
@@ -365,12 +364,21 @@ def IsDeeplyRepayable {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
   Fermat.Conservation.Credit.Repayment.IsVandiverDeep 59
     ((1 : 𝓞 K) - hζ.toInteger) (u : (𝓞 K)ˣ)
 
-/-- The one remaining W1 theorem, stated at its exact non-circular
-boundary: actual local depth makes the generated high flow vanish. -/
+/-- Selected-prime spelling of the generic W1 depth law. -/
 def DeepFlowLaw59 {ζ : K} (hζ : IsPrimitiveRoot ζ 59) : Prop :=
   Fermat.Conservation.Credit.RealFlow.DeepFlowLaw creditData
     (Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNodeQuotient hζ)
     (IsDeeplyRepayable hζ)
+
+/-- W1's generator-derived flow law instantiated at the campaign prime. -/
+theorem deepFlowLaw59 {ζ : K} (hζ : IsPrimitiveRoot ζ 59) :
+    DeepFlowLaw59 hζ := by
+  unfold DeepFlowLaw59
+  intro u hdeep t raw ht hrelation hprimitive
+  exact
+    (Fermat.Conservation.Credit.RealFlow.deepFlowLaw_realCyclotomicOrbitNodeQuotient
+      hζ creditData)
+      u hdeep t raw ht hrelation hprimitive
 
 /-- Evaluation on the intrinsic quotient cycle recovers the existing C2
 edge exactly; no selected unit family is duplicated. -/
@@ -389,12 +397,11 @@ theorem realGauge_cycle_edge_eq_exponentCycle_edge
     Fermat.Conservation.Credit.RealGauge.RealGaugeData.ofGaugeData_nodeLift_eq_cycle_point]
   rfl
 
-/-- W3 itself is now pure instantiation: the generic flow/gauge theorem
-turns L4 plus the cube-free certificate into exactly the exponent forcing
-consumed by repayment. -/
+/-- W3 itself is pure instantiation: the generic flow/gauge theorem turns
+the derived L4 law plus the cube-free certificate into exactly the exponent
+forcing consumed by repayment. -/
 theorem deepExponentForcing_of_flow {ζ : K}
-    (hζ : IsPrimitiveRoot ζ 59)
-    (hL4 : DeepFlowLaw59 hζ) :
+    (hζ : IsPrimitiveRoot ζ 59) :
     Fermat.Conservation.Credit.Repayment.DeepExponentForcing
       realGaugeData.cycle
       (Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNodeQuotient hζ)
@@ -402,34 +409,32 @@ theorem deepExponentForcing_of_flow {ζ : K}
   exact Fermat.Conservation.Credit.RealFlow.deepExponentForcing creditData
     (Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNodeQuotient hζ)
     (IsDeeplyRepayable hζ)
-    flowCertificate hL4
+    flowCertificate (deepFlowLaw59 hζ)
 
 /-- Compatibility form consumed by the already-certified C2 capacity. -/
 theorem deepExponentForcing_on_exponentCycle_of_flow {ζ : K}
-    (hζ : IsPrimitiveRoot ζ 59)
-    (hL4 : DeepFlowLaw59 hζ) :
+    (hζ : IsPrimitiveRoot ζ 59) :
     Fermat.Conservation.Credit.Repayment.DeepExponentForcing
       Fermat.FiftyNine.Conservation.Credit.exponentCycle
       (Fermat.FiftyNine.Conservation.Credit.realOrbitNode hζ)
       59 (IsDeeplyRepayable hζ) := by
   intro u hdeep t raw ht hrelation hprimitive
-  apply deepExponentForcing_of_flow hζ hL4 u hdeep t raw ht
+  apply deepExponentForcing_of_flow hζ u hdeep t raw ht
   · rw [hrelation]
     apply Finset.prod_congr rfl
     intro i _
     rw [realGauge_cycle_edge_eq_exponentCycle_edge]
   · exact hprimitive
 
-/-- C3 repayment after the still-visible L4 comparison.  The group-theory,
-gauge inversion, and high-eigenvalue arithmetic are all discharged by the
-generic core. -/
+/-- C3 repayment after the generic L4 comparison.  The group theory, gauge
+inversion, and high-eigenvalue arithmetic are all discharged by the generic
+core. -/
 theorem repayment_of_capacity_and_flow
     {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
     (data : Fermat.Conservation.Credit.Cycle.CapacityData
       Fermat.FiftyNine.Conservation.Credit.exponentCycle
       (Fermat.FiftyNine.Conservation.Credit.realOrbitNode hζ))
     (hambient : data.ambient = ⊤)
-    (hL4 : DeepFlowLaw59 hζ)
     {u : NumberField.IsCMField.realUnits K}
     (hdeep : IsDeeplyRepayable hζ u) :
     Fermat.Conservation.Credit.Repayment.IsRepaid 59 u := by
@@ -438,7 +443,7 @@ theorem repayment_of_capacity_and_flow
     (Fermat.Conservation.Credit.Repayment.realUnits_odd_pow_injective
       59 (by norm_num))
     (IsDeeplyRepayable hζ)
-    (deepExponentForcing_on_exponentCycle_of_flow hζ hL4) hdeep
+    (deepExponentForcing_on_exponentCycle_of_flow hζ) hdeep
 
 end
 
