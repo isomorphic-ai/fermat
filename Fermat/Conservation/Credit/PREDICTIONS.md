@@ -154,3 +154,29 @@ Recorded before creating or editing any transformer Lean implementation.
   expect every selected numerical fact—including the maximum depth two
   reading—to enter through the one prime-data instance, with the literal
   grep gate extended over every new route-neutral module.
+
+## FOLD prediction — 2026-07-30
+
+Recorded before inspecting or editing the FOLD implementation.
+
+- Relation 7d is expected to resist at the realization boundary between the
+  Fermat-produced factor ledger and ideal classes.  The stock ledger records
+  normalized factors and their conjugate/opposite nodes, but may not yet
+  retain an explicit theorem identifying the principal ideal of the real
+  relative norm with the sum of those two class views.  The repair should
+  expose that equality statewise from the actual generator and factorization,
+  rather than assume a global minus-part vanishing statement.
+- The fold itself should remain completely generic: conjugation supplies the
+  ledger transpose, relative norm adds a class to its transpose, and an
+  odd-torsion element equal both to another class and to its negative nets to
+  zero in an arbitrary additive commutative group.  Any conductor literal or
+  cyclotomic certificate belongs only in the state-producing instance layer.
+- Relation 7a is expected to reuse the existing repayment/flow output more
+  directly than 7d.  Its likely interface patch is a theorem translating the
+  repaid state generator into the two relevant quotient classes with
+  coefficients `1` and `p - 1`, credited to Vandiver's Lemma I equations.
+- If both statewise relations are present at the right abstraction level,
+  `FactorPrincipalizationPermit` and the typed `TransformerProbe` hole should
+  close by short compositions.  Continued resistance there would indicate
+  that the permit is quantified over a broader factor family than the
+  Fermat-produced ledger actually controls.
