@@ -2,6 +2,21 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the retained deep scalar is invisible to the flow
+
+- The scalar produced by the actual deep relation cannot be replaced by
+  one in the exact integral factorization.  It is, however, congruent to
+  one modulo `p²`, so multiplying the denominator by it changes none of
+  the reduced exponential moments.
+- The visible `p² H` correction is likewise invisible to every reduced
+  moment.  Consequently the corrected scalar-bearing relation and its
+  denominator have exactly the same modular jet recurrences as the
+  uncorrected generated numerator-minus-denominator and denominator.
+- W1 may therefore use the original generator-derived rational quotient
+  and logarithmic rate without introducing a scalar-normalized source.
+  The scalar remains where it belongs—in the exact depth witness—while
+  the flow remains a function of the generator alone.
+
 ## 2026-07-30 — rational Euler jets have a canonical prime-square reading
 
 - A rational whose reduced denominator is prime to `p` reduces canonically

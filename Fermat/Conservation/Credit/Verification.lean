@@ -13,6 +13,7 @@ import Fermat.Conservation.Credit.Vacuum
 import Fermat.Conservation.Credit.Capacity
 import Fermat.Conservation.Credit.Repayment
 import Fermat.Conservation.Credit.Flow
+import Fermat.Conservation.Credit.LogRateFlow
 import Fermat.Conservation.Credit.CompletedFlow
 import Fermat.Conservation.Credit.Bernoulli
 import Fermat.Conservation.Credit.Gauge
@@ -470,6 +471,22 @@ info: 'Fermat.Conservation.Credit.RationalFlow.denominatorPrimeTo_logDerivative_
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.RationalFlow.denominatorPrimeTo_logDerivative_of_recurrence
+
+/--
+info: 'Fermat.Conservation.Credit.LogRate.Relation.formalDerivativeAtZero_generatedRelationRate_high' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.LogRate.Relation.formalDerivativeAtZero_generatedRelationRate_high
+
+/--
+info: 'Fermat.Conservation.Credit.LogRate.Arithmetic.prime_cube_dvd_exact_of_rate_numerator_sq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.LogRate.Arithmetic.prime_cube_dvd_exact_of_rate_numerator_sq
 
 /-! ## Exhaustive forbidden-prefix guards -/
 
