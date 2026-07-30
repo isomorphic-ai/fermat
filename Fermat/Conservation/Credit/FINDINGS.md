@@ -2,6 +2,23 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the correction polynomial has two exact flow layers
+
+- If the depth correction `A` is a multiple of the prime cyclotomic
+  polynomial and `p^2 ∣ A(1)`, factor theorem gives the integral
+  decomposition
+  `A = p d Φ_p + (X^p - 1) Q`.  This is the polynomial form of the first
+  two flow layers; it does not use a conductor-specific coefficient table.
+- Every positive exponential moment of this decomposition is divisible by
+  `p`.  When the index is itself divisible by `p` but not by `p - 1`, the
+  translation `i ↦ i + p` and the finite-field power sum add the second
+  factor, so that moment is divisible by `p^2`.
+- The actual multiplicative nodes are also now generic: a geometric
+  cyclotomic unit is generated from the primitive root and residue lift,
+  and folding it with complex conjugation is a bundled monoid homomorphism
+  into real units.  Product conservation is therefore a theorem of the
+  generated fold, not a relation-level assumption.
+
 ## 2026-07-30 — global ramification produces the correction polynomial
 
 - Mathlib's integral cyclotomic ideal theorem gives
