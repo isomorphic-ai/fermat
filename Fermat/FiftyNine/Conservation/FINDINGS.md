@@ -1,5 +1,43 @@
 # N59 conservation findings
 
+## 2026-07-30 — the selected W1 quotient is complete on the stock carrier
+
+- `GaugeQuotient.primeData` assembles all three checked permits at the
+  actual real-unit cycle: capacity is finite and prime to 59, every deep
+  draw is repaid, and the generated high-flow family has exact depth two.
+- The generic quotient morphism applied to `Credit.debitLedger hζ` is
+  literally bottom.  On integral stock states, the quotient charge is
+  definitionally the N7 absolute norm and is unchanged by the generated
+  real-unit action.
+- This closes W1 for the implemented generated-unit gauge.  It does not
+  manufacture a class-group principalization theorem: the debit ledger
+  records real-unit transfers, whereas W2's first new carrier is a
+  fractional-ideal quotient.
+
+## 2026-07-30 — vacuum credit does not yet principalize the factor ledger
+
+- Compiler-guided comparison with the clean Mathlib factor APIs localizes
+  W2's first missing theorem.  After the normalized ideals attached to
+  `x + ζ^i y` are proved to be pairwise coprime `p`th powers, the descent
+  needs, for two factor nodes, a proof that their root-ideal ratio is
+  principal:
+  `Submodule.IsPrincipal ((A i / A j : FractionalIdeal _ _) : Submodule _ _)`.
+- The current vacuum ledger is a matrix of funded-generator sets, and C2/C3
+  live in the real-unit group.  There is no map from either object to the
+  class group or to the factor ideals, so vacuum credit does not presently
+  imply this principalization theorem.  This is the first regularity use in
+  the classical induction, before the later deep real-unit repayment.
+- Even a clean λ-multiplicity step would lower only the charge `p^m` of the
+  ramified factor.  Its output contains a new unrestricted cyclotomic
+  cofactor; no existing theorem bounds its full norm, pulls it back to an
+  integral Fermat triple, or compares that triple's `z.natAbs` with the
+  input.  Thus W3's exact charge comparison cannot be obtained by rewriting
+  `drainCharge_strictMono`.
+- `TransformerProbe` now guards both mismatches exactly.  `IsRepaid 59 u`
+  is not a `StrictSuccessor S`, and
+  `drainCharge hζ n < drainCharge hζ (n + 1)` is not
+  `next.charge < S.charge`.  W4 was therefore not entered.
+
 ## 2026-07-30 — the stock cone has charge laws but no Kummer successor state
 
 - The shared floor is fully generic, and the N7 norm/gauge laws specialize

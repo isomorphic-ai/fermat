@@ -30,6 +30,10 @@ import Fermat.Conservation.Credit.RealHighFlow
 import Fermat.Conservation.Credit.RelationDepthFlow
 import Fermat.Conservation.Credit.RelationEvaluationFlow
 import Fermat.Conservation.Credit.RealForcing
+import Fermat.Conservation.Credit.DepthCertificate
+import Fermat.Conservation.Credit.GaugeQuotient
+import Fermat.Conservation.CyclotomicDrain
+import Fermat.Conservation.KummerDrain
 
 /-! ## C1: generated vacuum and two-sided semilattice -/
 
@@ -260,6 +264,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 -- This prefix exhaustively covers `RealHighFlow`, `RelationDepthFlow`, and
 -- `RealForcing`.
 #guard_standard_axioms_prefix Fermat.Conservation.Credit.RealFlow
+#guard_standard_axioms_prefix Fermat.Conservation.Credit.GaugeQuotient
+#guard_standard_axioms_prefix Fermat.Conservation.CyclotomicDrain
+#guard_standard_axioms_prefix Fermat.Conservation.KummerDrain
 
 /--
 info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_pow_rank_add_one' depends on axioms: [propext,
@@ -521,6 +528,136 @@ info: 'Fermat.Conservation.Credit.RealFlow.deepFlowLaw_realCyclotomicOrbitNodeQu
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.RealFlow.deepFlowLaw_realCyclotomicOrbitNodeQuotient
 
+/-! ## Transformer quotient, drain, and factor-ledger receipts -/
+
+/--
+info: 'Fermat.Conservation.Credit.RealFlow.FlowCertificate.depthAtMostTwo' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.RealFlow.FlowCertificate.depthAtMostTwo
+
+/--
+info: 'Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientTransfer_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientTransfer_eq_one
+
+/--
+info: 'Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_morphism' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_morphism
+
+/--
+info: 'Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot
+
+/--
+info: 'Fermat.Conservation.Credit.GaugeQuotient.PrimeData.debt_eq_repaymentRoot_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.GaugeQuotient.PrimeData.debt_eq_repaymentRoot_pow
+
+/--
+info: 'Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientCharge_quotientState' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientCharge_quotientState
+
+/--
+info: 'Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq
+
+/--
+info: 'Fermat.Conservation.CyclotomicDrain.lambda_eq_neg_zeta_sub_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.CyclotomicDrain.lambda_eq_neg_zeta_sub_one
+
+/--
+info: 'Fermat.Conservation.CyclotomicDrain.charge_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.CyclotomicDrain.charge_pow
+
+/--
+info: 'Fermat.Conservation.CyclotomicDrain.lambda_charge' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.CyclotomicDrain.lambda_charge
+
+/--
+info: 'Fermat.Conservation.CyclotomicDrain.drainCharge_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.CyclotomicDrain.drainCharge_eq
+
+/--
+info: 'Fermat.Conservation.CyclotomicDrain.drainCharge_strictMono' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.CyclotomicDrain.drainCharge_strictMono
+
+/--
+info: 'Fermat.Conservation.CyclotomicDrain.drainCharge_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.CyclotomicDrain.drainCharge_step
+
+/--
+info: 'Fermat.Conservation.KummerDrain.factorNode_product' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.factorNode_product
+
+/--
+info: 'Fermat.Conservation.KummerDrain.factorIdeal_product' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.factorIdeal_product
+
+/--
+info: 'Fermat.Conservation.KummerDrain.factorNode_charge_product' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.factorNode_charge_product
+
+/--
+info: 'Fermat.Conservation.KummerDrain.factorNode_charge_gauge_invariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.factorNode_charge_gauge_invariant
+
+/--
+info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_pow_isPrincipal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_pow_isPrincipal
+
 /-! ## Exhaustive forbidden-prefix guards -/
 
 /-- Fail if the imported environment contains any declaration below a
@@ -564,12 +701,14 @@ elab "#guard_no_module " p:ident : command => do
 #guard_no_decl_prefix Fermat.FiftyNine.GenericLemmaTwo
 #guard_no_decl_prefix Fermat.GenericIrregular
 #guard_no_decl_prefix Fermat.Irregular
+#guard_no_decl_prefix Fermat.Regular
 #guard_no_decl_prefix Fermat.KummerIso
 #guard_no_decl_prefix Fermat.Ladder
 
 #guard_no_module_prefix Fermat.FiftyNine
 #guard_no_module_prefix Fermat.GenericIrregular
 #guard_no_module_prefix Fermat.Irregular
+#guard_no_module_prefix Fermat.Regular
 #guard_no_module_prefix Fermat.KummerIso
 #guard_no_module_prefix Fermat.Ladder
 #guard_no_module Fermat.Statement
@@ -653,13 +792,16 @@ private partial def selectedPrimeTokenLines
 #guard selectedPrimeTokenLines
   "/- outer /- 59 -/ -/\n-- 59\n\"59\"".toList == #[]
 
-/-- Scan every generic credit Lean source and reject the campaign's selected
-prime numeral `59` when it occurs as a standalone code token.  Campaign prose
-in comments and strings is deliberately ignored. -/
+/-- Scan every generic credit Lean source together with the route-neutral
+drain and Kummer factor-ledger modules, rejecting the campaign's selected
+prime numeral `59` when it occurs as a standalone code token.  Campaign
+prose in comments and strings is deliberately ignored. -/
 elab "#guard_no_selected_prime_literal" : command => do
   let currentPath := System.FilePath.mk (← getFileName)
   let some sourceDirectory := currentPath.parent
     | throwError "cannot locate the generic credit source directory"
+  let some conservationDirectory := sourceDirectory.parent
+    | throwError "cannot locate the generic conservation source directory"
   let entries ← liftIO <| System.FilePath.readDir sourceDirectory
   let mut offenders : Array String := #[]
   for entry in entries do
@@ -667,6 +809,11 @@ elab "#guard_no_selected_prime_literal" : command => do
       let source ← liftIO <| IO.FS.readFile entry.path
       for line in selectedPrimeTokenLines source.toList do
         offenders := offenders.push s!"{entry.path}:{line}"
+  for filename in #["CyclotomicDrain.lean", "KummerDrain.lean"] do
+    let path := conservationDirectory / System.FilePath.mk filename
+    let source ← liftIO <| IO.FS.readFile path
+    for line in selectedPrimeTokenLines source.toList do
+      offenders := offenders.push s!"{path}:{line}"
   unless offenders.isEmpty do
     throwError
       "selected-prime source literal occurs at {offenders}"

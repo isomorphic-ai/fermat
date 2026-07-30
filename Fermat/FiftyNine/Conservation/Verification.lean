@@ -10,15 +10,17 @@ exposed by the clean exponent-59 structural spine and the selected
 credit-flow instance.  It also checks declarations and the transitive module
 graph, rather than relying only on representative unused-name tests.
 
-The final `Fermat.HoldsAt 59` theorem is not present here: `FINDINGS.md`
-records the completed C2 certificate and bounded C4 bridge.  W3 is now
-closed by the generator-derived flow; the transformer and endpoint remain
-separate downstream work.
+The final `Fermat.HoldsAt 59` theorem is not present here.  The selected
+gauge quotient is complete, while the guarded transformer probe records the
+factor-principalization and pullback obligations that stop W2 and W3.
 -/
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 import Fermat.FiftyNine.Conservation.BoundedSinnott
 import Fermat.FiftyNine.Conservation.Instance
+import Fermat.FiftyNine.Conservation.DepthCertificate
+import Fermat.FiftyNine.Conservation.GaugeQuotient
+import Fermat.FiftyNine.Conservation.TransformerProbe
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 
@@ -221,6 +223,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
         "{declaration} depends on nonstandard axioms: {unexpected}"
 
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.Instance
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DepthCertificate
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeQuotient
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
 /--
 info: 'Fermat.FiftyNine.Conservation.Instance.gauge_cycle_eq_exponentCycle' depends on axioms: [propext,
@@ -281,6 +286,64 @@ info: 'Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow' de
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow
+
+/-! ## Selected exact-depth and gauge-quotient receipts -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DepthCertificate.highEigenvalue_square_attained' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DepthCertificate.highEigenvalue_square_attained
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DepthCertificate.depthTwoCertificate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DepthCertificate.depthTwoCertificate
+
+/--
+info: 'Fermat.FiftyNine.Conservation.GaugeQuotient.generatedGauge_chargeInvariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.GaugeQuotient.generatedGauge_chargeInvariant
+
+/--
+info: 'Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot
+
+/--
+info: 'Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq
+
+/-! ## Transformer obstruction receipts -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TransformerProbe.PrimitiveSecondCaseSolution.charge_pos' depends on axioms: [propext]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TransformerProbe.PrimitiveSecondCaseSolution.charge_pos
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TransformerProbe.false_of_stockCreditTransformer' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TransformerProbe.false_of_stockCreditTransformer
 
 /-! ## Seven-stock receipt -/
 
@@ -423,6 +486,7 @@ elab "#guard_no_module " p:ident : command => do
 #guard_no_decl_prefix Fermat.FiftyNine.GenericLemmaTwo
 #guard_no_decl_prefix Fermat.GenericIrregular
 #guard_no_decl_prefix Fermat.Irregular
+#guard_no_decl_prefix Fermat.Regular
 #guard_no_decl_prefix Fermat.KummerIso
 #guard_no_decl_prefix Fermat.Ladder
 
@@ -448,6 +512,7 @@ transitively, not merely checked for representative declarations. -/
 
 #guard_no_module_prefix Fermat.GenericIrregular
 #guard_no_module_prefix Fermat.Irregular
+#guard_no_module_prefix Fermat.Regular
 #guard_no_module_prefix Fermat.KummerIso
 #guard_no_module_prefix Fermat.Ladder
 #guard_no_module Fermat.Statement

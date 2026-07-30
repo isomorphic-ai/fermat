@@ -2,6 +2,45 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the three W1 permits now meet at the gauge quotient
+
+- The exact depth-two reading is now a typed generic certificate: the
+  existing cube-free flow certificate supplies depth at most two, and the
+  checked irregular row supplies square attainment in the selected layer.
+- `GaugeQuotient.PrimeData` packages faithful capacity, deep repayment, and
+  that depth certificate over one real-unit carrier.  The selected
+  `primeData` consumes `capacityCertificate`,
+  `repayment_of_capacity_and_flow`, and `depthTwoCertificate` directly.
+- The quotient on ledgers is a `SupBotHom`, not a replacement matrix.  It
+  filters the actual generated debit ledger by transfers surviving the
+  value quotient; every generated transfer maps to one, so its image is
+  bottom.  The orbit quotient of integral stock states carries the same
+  absolute-norm charge.
+- Charge invariance is stronger than the depth premise on this carrier:
+  every element of the generated subgroup is already an integral unit, and
+  N7 proves multiplication by any integral unit has charge one.  The depth
+  permit is therefore consumed by the generic bridge but is not itself a
+  theorem about Bernoulli correction factors.  Any intended quotient by
+  additional nonunit correction factors would require a separate typed map
+  into this action.
+
+## 2026-07-30 — stock factorization stops at ideal-class p-torsion
+
+- The generic Kummer factor ledger now proves the linear-factor product,
+  its ideal product, the corresponding multiplicative norm-charge product,
+  and full N7 gauge invariance without importing either forbidden proof
+  tree.
+- Once normalized factor ideals are allocated as `p`th powers, stock
+  bookkeeping proves that the `p`th power of each root-ideal quotient is
+  principal.  Kummer's weighted step needs the quotient itself principal.
+  Lean reports these as different types:
+  `(↑(Q ^ p)).IsPrincipal` versus `(↑Q).IsPrincipal`.
+- Removing that exponent is exactly elimination of `p`-torsion in the
+  ideal class group.  The W1 capacity and repayment theorems live in the
+  real-unit group and expose no map from fractional ideals or the class
+  group, so none of the floor, drain, gauge, composition, or fold spines
+  supplies the missing implication.
+
 ## 2026-07-30 — the transformer permits do not yet share a typed carrier
 
 - The checked C2 theorem returns both finite capacity and
