@@ -2,6 +2,24 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the transformer permits do not yet share a typed carrier
+
+- The checked C2 theorem returns both finite capacity and
+  `¬p ∣ capacity`, but the selected `capacityData` currently consumes only
+  finiteness.  Its faithful-at-`p` half is therefore not yet present at the
+  transformer boundary.
+- `repayment_of_capacity_and_flow` concludes only that a deep real unit is a
+  `p`th power.  Neither `IsRepaid` nor the generated subgroup currently
+  refers to a charged stock state, a quotient state, or a ledger morphism.
+- The certificate's maximum-depth-two reading in commit `28d4f77` is
+  documentary.  The checked `FlowCertificate` stores cube-freeness of the
+  generated eigenvalues, but there is no typed maximum-depth permit or
+  theorem turning it into charge preservation.
+- Consequently W1 requires a new route-neutral carrier joining these three
+  already proved facts.  Its charge equality must be derived from the
+  generic unit/gauge invariance of the quotient operation, not installed as
+  an equality field.
+
 ## 2026-07-30 — the generator-derived flow closes the deep law
 
 - The corrected integral relation reduces to the same quotient jets as the
