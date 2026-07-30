@@ -22,6 +22,7 @@ norm charges rather than the hypotenuse charges of two integral solutions.
 import Fermat.Conservation.KummerDrain
 import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.GaugeQuotient
+import Fermat.FiftyNine.Conservation.StateFactorPair
 
 open scoped NumberField
 
@@ -29,46 +30,7 @@ namespace Fermat.FiftyNine.Conservation.TransformerProbe
 
 noncomputable section
 
-/-- A primitive nonzero integral second-case solution at the campaign
-exponent. -/
-structure PrimitiveSecondCaseSolution where
-  x : ℤ
-  y : ℤ
-  z : ℤ
-  x_ne_zero : x ≠ 0
-  y_ne_zero : y ≠ 0
-  z_ne_zero : z ≠ 0
-  primitive : ({x, y, z} : Finset ℤ).gcd id = 1
-  equation : x ^ 59 + y ^ 59 = z ^ 59
-  secondCase : (59 : ℤ) ∣ x * y * z
-
-/-- The smallest stock charge available directly on an integral solution. -/
-def PrimitiveSecondCaseSolution.charge
-    (S : PrimitiveSecondCaseSolution) : ℕ :=
-  S.z.natAbs
-
-theorem PrimitiveSecondCaseSolution.charge_pos
-    (S : PrimitiveSecondCaseSolution) :
-    0 < S.charge :=
-  Int.natAbs_pos.mpr S.z_ne_zero
-
-/-- The exact strict-successor output required by the shared floor. -/
-def StrictSuccessor (S : PrimitiveSecondCaseSolution) : Prop :=
-  ∃ next : PrimitiveSecondCaseSolution, next.charge < S.charge
-
-/-- Seam 4, stated without hiding its conclusion in a provider record. -/
-def StockCreditTransformer : Prop :=
-  ∀ S : PrimitiveSecondCaseSolution, StrictSuccessor S
-
-/-- Once the transformer exists, the shared floor excludes every primitive
-solution.  No further credit theorem is needed by the floor. -/
-theorem false_of_stockCreditTransformer
-    (htransform : StockCreditTransformer)
-    (start : PrimitiveSecondCaseSolution) :
-    False :=
-  Fermat.Conservation.impossible_of_strict_charge_drain
-    start PrimitiveSecondCaseSolution.charge
-      PrimitiveSecondCaseSolution.charge_pos htransform
+open Fermat.FiftyNine.Conservation.FermatState
 
 section GenericPrincipalization
 
@@ -125,20 +87,24 @@ the two-node state supplies Vandiver's remaining (7a) relation and its
 conjugation-transpose identity.
 -/
 example
-    (ledger :
-      Fermat.Conservation.KummerDrain.AllocatedFactorLedger
-        (p := 59) (K := K) (Fin 2))
-    (sevenA : ledger.VandiverSevenA 0 1)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution)
+    (hz : (59 : ℤ) ∣ S.z)
+    (pair :
+      Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair
+        hζ S hz)
+    (sevenA : pair.ledger.VandiverSevenA 0 1)
     (htranspose :
-      ledger.rootIdeal 1 =
+      pair.minusIdeal =
         Ideal.map
           (NumberField.IsCMField.ringOfIntegersComplexConj K)
-          (ledger.rootIdeal 0)) :
+          pair.plusIdeal) :
     Fermat.Conservation.KummerDrain.FactorPrincipalizationPermit
-      ledger := by
-  exact
+      pair.ledger := by
+  apply
     Fermat.FiftyNine.Conservation.Fold.factorPrincipalizationPermit_of_sevenA_and_conjugationTranspose
-      ledger sevenA htranspose
+      pair.ledger sevenA
+  simpa using htranspose
 
 variable {ζ : K}
 variable (hζ : IsPrimitiveRoot ζ 59)

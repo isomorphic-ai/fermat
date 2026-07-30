@@ -1,5 +1,35 @@
 # N59 conservation findings
 
+## 2026-07-30 — the state producer now stops at normalized ideal allocation
+
+- The selected cone now has a production `PrimitiveSecondCaseSolution` and
+  an orientation theorem placing the factor `59` in the third coordinate.
+  The theorem is intentionally existential: rotating `(x,y,z)` preserves
+  the Fermat equation and primitivity, but does not identify the new
+  `z.natAbs` with the old stock charge.
+- For an oriented state, the clean construction proves the raw cyclotomic
+  ideal product, selects the factors at `ζ` and `ζ⁻¹`, divides both by the
+  common ramified denominator `ζ - 1`, and proves both normalized factors
+  nonzero.
+- The first remaining compiler-localized producer is exactly
+  `Nonempty (StateLinkedIdealPair hζ S hz)`: extracting the two ideal roots
+  requires the normalized factor ideals to be pairwise coprime and the
+  total normalized product to be a 59th power.  The existing raw product
+  equality alone has the wrong type.  The allocation structure itself
+  stores only the two root-power equations; it assumes neither (7a), (7d),
+  nor principalization.
+- Once that allocation exists, the remaining W2 inputs are the selected
+  conjugation-transpose equation and Vandiver's Lemma-I relation (7a).
+  The fold now derives (7d), and the `Fin 2` netting theorem then discharges
+  the full `FactorPrincipalizationPermit`.  Thus the permit consumer is
+  filled, but its actual state producer remains blocked before allocation
+  and (7a).
+- W3 remains independently blocked at the charge bridge: orientation does
+  not preserve the literal hypotenuse charge, and no constructed
+  lambda-drain successor is yet related to `z.natAbs`.  The successor,
+  Sophie-Germain Case I, endpoint assembly, and crown audit were therefore
+  not entered.
+
 ## 2026-07-30 — no selected state currently produces the two ideal relations
 
 - The clean N59 cone never constructs an

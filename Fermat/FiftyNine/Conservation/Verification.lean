@@ -21,6 +21,7 @@ import Fermat.FiftyNine.Conservation.Instance
 import Fermat.FiftyNine.Conservation.DepthCertificate
 import Fermat.FiftyNine.Conservation.GaugeQuotient
 import Fermat.FiftyNine.Conservation.Fold
+import Fermat.FiftyNine.Conservation.StateFactorPair
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
@@ -257,6 +258,8 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DepthCertificate
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeQuotient
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.Fold
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.FermatState
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.StateFactorPair
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
 /--
@@ -361,21 +364,139 @@ info: 'Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq
 
-/-! ## Fold/transformer obstruction receipts -/
+/-! ## Fermat-state and normalized factor-pair receipts -/
 
 /--
-info: 'Fermat.FiftyNine.Conservation.TransformerProbe.PrimitiveSecondCaseSolution.charge_pos' depends on axioms: [propext]
--/
-#guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.TransformerProbe.PrimitiveSecondCaseSolution.charge_pos
-
-/--
-info: 'Fermat.FiftyNine.Conservation.TransformerProbe.false_of_stockCreditTransformer' depends on axioms: [propext,
+info: 'Fermat.FiftyNine.Conservation.FermatState.PrimitiveSecondCaseSolution.charge_pos' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 -/
 #guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.TransformerProbe.false_of_stockCreditTransformer
+#print axioms Fermat.FiftyNine.Conservation.FermatState.PrimitiveSecondCaseSolution.charge_pos
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatState.false_of_stockCreditTransformer' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatState.false_of_stockCreditTransformer
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatState.PrimitiveSecondCaseSolution.exists_oriented' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatState.PrimitiveSecondCaseSolution.exists_oriented
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.stateEquation' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.stateEquation
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.prime_dvd_x_add_y' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.prime_dvd_x_add_y
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.zetaUnit_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.zetaUnit_val
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.zetaUnit_isPrimitiveRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.zetaUnit_isPrimitiveRoot
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.rawFactorIdeal_product' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.rawFactorIdeal_product
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.stateFactor_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.stateFactor_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.normalizedPlusFactor_spec' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.normalizedPlusFactor_spec
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.normalizedMinusFactor_spec' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.normalizedMinusFactor_spec
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.normalizedPlusFactor_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.normalizedPlusFactor_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.normalizedMinusFactor_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.normalizedMinusFactor_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.plusIdeal_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.plusIdeal_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.minusIdeal_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.minusIdeal_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.ledger_rootIdeal_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.ledger_rootIdeal_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.ledger_rootIdeal_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.ledger_rootIdeal_one
 
 /-! ## Seven-stock receipt -/
 
