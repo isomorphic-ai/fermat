@@ -103,6 +103,30 @@ theorem coeff_regularizedLogDerivative (scale : ℚ) (n : ℕ) :
     PowerSeries.coeff_mk, Algebra.algebraMap_self_apply]
   ring
 
+/-! ## Normalized formal derivatives -/
+
+/-- The `n`th formal derivative evaluated at zero.  Power-series
+coefficients use exponential normalization, so evaluation multiplies the
+`n`th coefficient by `n!`. -/
+noncomputable def formalDerivativeAtZero
+    (n : ℕ) (series : PowerSeries ℚ) : ℚ :=
+  (Nat.factorial n : ℚ) * PowerSeries.coeff n series
+
+/-- Normalized derivatives of the generated rate have denominator `n + 1`,
+not `(n + 1)!`.  This is the integral/valuation normalization consumed by
+the high flow. -/
+theorem formalDerivativeAtZero_regularizedLogDerivative
+    (scale : ℚ) (n : ℕ) :
+    formalDerivativeAtZero n (regularizedLogDerivative scale) =
+      (scale ^ (n + 1) - 1) *
+        (bernoulli' (n + 1) / (n + 1 : ℚ)) := by
+  rw [formalDerivativeAtZero, coeff_regularizedLogDerivative]
+  rw [Nat.factorial_succ]
+  push_cast
+  have hfactorial : (Nat.factorial n : ℚ) ≠ 0 := by
+    exact_mod_cast Nat.factorial_ne_zero n
+  field_simp
+
 /-! ## Formal differentiation at zero -/
 
 /-- Formal evaluation of the derivative at zero. -/
@@ -156,6 +180,32 @@ theorem coeff_regularizedLogDerivative_high
     (even_two.mul_right (k + 1)).mul_right p
   rw [hindex, bernoulli'_eq_bernoulli]
   rw [heven.neg_one_pow, one_mul]
+
+/-- The normalized high derivative exposes exactly the Bernoulli quotient
+used by the prime-cube forcing calculation. -/
+theorem formalDerivativeAtZero_regularizedLogDerivative_high
+    {p : ℕ} (hp : p.Prime) (scale : ℚ) (k : ℕ) :
+    formalDerivativeAtZero (2 * (k + 1) * p - 1)
+        (regularizedLogDerivative scale) =
+      (scale ^ (2 * (k + 1) * p) - 1) *
+        (bernoulli (2 * (k + 1) * p) /
+          (2 * (k + 1) * p : ℚ)) := by
+  rw [formalDerivativeAtZero_regularizedLogDerivative]
+  have hpos : 0 < 2 * (k + 1) * p :=
+    Nat.mul_pos (Nat.mul_pos (by decide) (Nat.succ_pos k)) hp.pos
+  have hindex :
+      (2 * (k + 1) * p - 1) + 1 = 2 * (k + 1) * p :=
+    Nat.sub_add_cancel hpos
+  have heven : Even (2 * (k + 1) * p) :=
+    (even_two.mul_right (k + 1)).mul_right p
+  rw [hindex, bernoulli'_eq_bernoulli, heven.neg_one_pow, one_mul]
+  have hindexQ :
+      ((2 * (k + 1) * p - 1 : ℕ) : ℚ) + 1 =
+        (2 * (k + 1) * p : ℕ) := by
+    exact_mod_cast hindex
+  rw [hindexQ]
+  push_cast
+  rfl
 
 /-! ## The generated orbit flow -/
 
@@ -216,7 +266,7 @@ coordinate `k`.  This is a definition derived from `edgeSeries`, not a
 field of the orbit datum. -/
 noncomputable def weight (orbit : GeneratorOrbit p α)
     (i k : Fin orbit.cycle.rank) : ℚ :=
-  PowerSeries.coeff (orbit.coordinateDegree k) (orbit.edgeSeries i)
+  formalDerivativeAtZero (orbit.coordinateDegree k) (orbit.edgeSeries i)
 
 /-- The derived orbit weight in closed Bernoulli form. -/
 theorem weight_eq_bernoulli (orbit : GeneratorOrbit p α)
@@ -227,8 +277,14 @@ theorem weight_eq_bernoulli (orbit : GeneratorOrbit p α)
           orbit.nodeScale i.val ^
             (orbit.coordinateDegree k + 1)) *
         (bernoulli' (orbit.coordinateDegree k + 1) /
-          Nat.factorial (orbit.coordinateDegree k + 1)) :=
-  orbit.coeff_edgeSeries i (orbit.coordinateDegree k)
+          (orbit.coordinateDegree k + 1 : ℚ)) := by
+  rw [weight, formalDerivativeAtZero, orbit.coeff_edgeSeries]
+  rw [Nat.factorial_succ]
+  push_cast
+  have hfactorial :
+      (Nat.factorial (orbit.coordinateDegree k) : ℚ) ≠ 0 := by
+    exact_mod_cast Nat.factorial_ne_zero (orbit.coordinateDegree k)
+  field_simp
 
 /-- Integral exponent vectors for the generated C2 edge family. -/
 abbrev ExponentVector (orbit : GeneratorOrbit p α) :=
