@@ -12,6 +12,9 @@ credit cone.
 import Fermat.Conservation.Credit.Vacuum
 import Fermat.Conservation.Credit.Capacity
 import Fermat.Conservation.Credit.Repayment
+import Fermat.Conservation.Credit.Flow
+import Fermat.Conservation.Credit.Gauge
+import Fermat.Conservation.Credit.Forcing
 
 /-! ## C1: generated vacuum and two-sided semilattice -/
 
@@ -207,12 +210,112 @@ info: 'Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle' depen
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle
 
-/-! ## Exhaustive forbidden-prefix guards -/
+/-! ## W1--W2: generated flow and gauge diagonalization -/
 
 open Lean Elab Command
 
+/-- Fail if any declaration below a prefix uses an axiom beyond Lean's
+standard extensionality, choice, and quotient-soundness boundary.  The
+prefix form keeps this audit exhaustive when a generated API gains another
+public theorem. -/
+elab "#guard_standard_axioms_prefix " p:ident : command => do
+  let env ← getEnv
+  let auditedPrefix := p.getId
+  let allowed : Array Name :=
+    #[``propext, ``Classical.choice, ``Quot.sound]
+  let declarations :=
+    env.constants.toList
+      |>.map Prod.fst
+      |>.filter auditedPrefix.isPrefixOf
+  for declaration in declarations do
+    let axioms ← Lean.collectAxioms declaration
+    let unexpected := axioms.filter fun ax =>
+      !allowed.contains ax
+    unless unexpected.isEmpty do
+      throwError
+        "{declaration} depends on nonstandard axioms: {unexpected}"
+
+#guard_standard_axioms_prefix Fermat.Conservation.Credit.Flow
+#guard_standard_axioms_prefix Fermat.Conservation.Credit.Gauge
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_pow_rank_add_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_pow_rank_add_one
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.cycle_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.cycle_rank
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.cycle_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.cycle_point
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitNode_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.orbitNode_injective
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_pow_succ_ne_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_pow_succ_ne_one
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.rowScale_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.rowScale_ne_zero
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.characterMatrix_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.characterMatrix_apply
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.characterMatrix_det_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.characterMatrix_det_ne_zero
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.raw_eq_zero_of_character_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.raw_eq_zero_of_character_eq_zero
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.characterCoordinates_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.characterCoordinates_injective
+
+/-! ## Exhaustive forbidden-prefix guards -/
+
 /-- Fail if the imported environment contains any declaration below a
-forbidden namespace or module prefix. -/
+forbidden namespace prefix. -/
 elab "#guard_no_decl_prefix " p:ident : command => do
   let env ← getEnv
   let forbiddenPrefix := p.getId
@@ -223,6 +326,19 @@ elab "#guard_no_decl_prefix " p:ident : command => do
     throwError
       "declarations with forbidden prefix {forbiddenPrefix}: {offenders.map Prod.fst}"
 
+/-- Fail if the transitive import graph contains a module below a forbidden
+prefix.  Declaration checks alone cannot detect modules which declare into
+a shorter namespace. -/
+elab "#guard_no_module_prefix " p:ident : command => do
+  let env ← getEnv
+  let forbiddenPrefix := p.getId
+  let offenders :=
+    env.header.moduleNames.filter forbiddenPrefix.isPrefixOf
+  unless offenders.isEmpty do
+    throwError
+      "modules with forbidden prefix {forbiddenPrefix}: {offenders}"
+
+#guard_no_decl_prefix Fermat.FiftyNine
 #guard_no_decl_prefix Fermat.FiftyNine.GenericProof
 #guard_no_decl_prefix Fermat.FiftyNine.FirstCase
 #guard_no_decl_prefix Fermat.FiftyNine.GenericSecondCase
@@ -231,7 +347,39 @@ elab "#guard_no_decl_prefix " p:ident : command => do
 #guard_no_decl_prefix Fermat.FiftyNine.GenericLemmaTwo
 #guard_no_decl_prefix Fermat.GenericIrregular
 #guard_no_decl_prefix Fermat.Irregular
+#guard_no_decl_prefix Fermat.KummerIso
 #guard_no_decl_prefix Fermat.Ladder
+
+#guard_no_module_prefix Fermat.FiftyNine
+#guard_no_module_prefix Fermat.GenericIrregular
+#guard_no_module_prefix Fermat.Irregular
+#guard_no_module_prefix Fermat.KummerIso
+#guard_no_module_prefix Fermat.Ladder
+
+/-! ## Mechanical selected-prime source-literal gate -/
+
+/-- Scan every generic credit Lean source and reject the campaign's selected
+prime literal.  Its two digits are assembled as characters so the guard
+does not create the occurrence it is designed to reject. -/
+elab "#guard_no_selected_prime_literal" : command => do
+  let currentPath := System.FilePath.mk (← getFileName)
+  let some sourceDirectory := currentPath.parent
+    | throwError "cannot locate the generic credit source directory"
+  let entries ← liftIO <| System.FilePath.readDir sourceDirectory
+  let selectedPrimeLiteral := String.ofList ['5', '9']
+  let mut offenders : Array String := #[]
+  for entry in entries do
+    if entry.path.extension == some "lean" then
+      let source ← liftIO <| IO.FS.readFile entry.path
+      for (line, index) in source.splitOn "\n" |>.zipIdx do
+        if (line.splitOn selectedPrimeLiteral).length > 1 then
+          offenders := offenders.push
+            s!"{entry.path}:{index + 1}"
+  unless offenders.isEmpty do
+    throwError
+      "selected-prime source literal occurs at {offenders}"
+
+#guard_no_selected_prime_literal
 
 /-! The forbidden repository transport is a declaration, not a namespace. -/
 
