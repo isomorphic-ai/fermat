@@ -2,6 +2,22 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — raw real edges now have a moment-ready integral relation
+
+- Each indexed quotient lift generates a folded geometric-sum polynomial.
+  Replacing its length by the canonical `p`th-power lift preserves its
+  value at a primitive root, while raising the folded node to `p - 1`
+  makes its value at one equal to one modulo `p^2`.
+- Splitting arbitrary integral edge exponents into positive and negative
+  parts constructs honest numerator and denominator polynomials.  Both
+  evaluate to one modulo `p^2`; the denominator therefore has a unit
+  constant jet in `ZMod (p^2)` with no selected certificate.
+- Lambda-depth of the resulting numerator difference now produces an
+  explicit `p^2` correction whose difference is exactly divisible by
+  `Φ_p` and still has the required value-at-one layer.  The remaining
+  relation-side obligation is to prove that an actual deep folded-unit
+  equality supplies precisely this polynomial depth hypothesis.
+
 ## 2026-07-30 — exact high flow now factors on the quotient-ready orbit
 
 - The arbitrary-odd-prime real gauge now drives a formal generator orbit

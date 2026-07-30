@@ -14,7 +14,7 @@ prime cyclotomic polynomial divides the corrected relation exactly.
 This is the ramification primitive used by the generator-derived flow.  It
 is generic over every prime and imports no classical Vandiver assembly.
 -/
-import Fermat.Conservation.Credit.HighFlow
+import Fermat.Conservation.Credit.Flow
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Ideal
 
 open scoped NumberField
