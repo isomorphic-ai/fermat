@@ -197,6 +197,70 @@ def AllocatedFactorLedger.VandiverSevenD {ι : Type*}
     (i j : ι) : Prop :=
   ledger.rootClass i + ledger.rootClass j = 0
 
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- Vandiver's relation (7d) from the literal relative-norm fold of one
+allocated debit/receivable pair.  The base class-group coprimality kills
+the selected real norm class; no global assertion about the class group of
+`K` is made. -/
+theorem AllocatedFactorLedger.vandiverSevenD_of_relativeNormFold
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    [Algebra R (𝓞 K)] [Module.Finite R (𝓞 K)]
+    [Module.IsTorsionFree R (𝓞 K)]
+    [Fintype (ClassGroup R)]
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (hp : p.Coprime (Fintype.card (ClassGroup R)))
+    (i j : ι)
+    (hfold :
+      Ideal.map (algebraMap R (𝓞 K))
+          (Ideal.relNorm R (ledger.rootIdeal i)) =
+        ledger.rootIdeal i * ledger.rootIdeal j) :
+    ledger.VandiverSevenD i j := by
+  unfold AllocatedFactorLedger.VandiverSevenD
+  exact
+    Fermat.Conservation.Credit.Fold.relativeNormFold_class_eq_zero_of_coprime_card
+      (R := R) (S := 𝓞 K) (L := K) hp
+      (ledger.rootIdeal i) (ledger.rootIdeal j)
+      (ledger.root_ne_zero i) (ledger.root_ne_zero j)
+      (ledger.factor i) (ledger.root_pow i) hfold
+
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- Conjugation acting as the ledger transpose supplies the concrete
+relative-norm identity, hence Vandiver's relation (7d). -/
+theorem AllocatedFactorLedger.vandiverSevenD_of_conjugationTranspose
+    [NumberField.IsCMField K]
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (hp :
+      p.Coprime
+        (Fintype.card
+          (ClassGroup
+            (𝓞 (NumberField.maximalRealSubfield K)))))
+    (i j : ι)
+    (htranspose :
+      ledger.rootIdeal j =
+        Ideal.map
+          (NumberField.IsCMField.ringOfIntegersComplexConj K)
+          (ledger.rootIdeal i)) :
+    ledger.VandiverSevenD i j := by
+  apply ledger.vandiverSevenD_of_relativeNormFold
+    (R := 𝓞 (NumberField.maximalRealSubfield K)) hp i j
+  calc
+    Ideal.map
+        (algebraMap
+          (𝓞 (NumberField.maximalRealSubfield K)) (𝓞 K))
+        (Ideal.relNorm
+          (𝓞 (NumberField.maximalRealSubfield K))
+          (ledger.rootIdeal i)) =
+        ledger.rootIdeal i *
+          Ideal.map
+            (NumberField.IsCMField.ringOfIntegersComplexConj K)
+            (ledger.rootIdeal i) :=
+      Fermat.Conservation.Credit.Fold.map_relativeNorm_eq_mul_conjugate
+        (ledger.rootIdeal i) (ledger.root_ne_zero i)
+    _ = ledger.rootIdeal i * ledger.rootIdeal j := by
+      rw [htranspose]
+
 /-- The first post-allocation permit required by Kummer's weighted
 second-case step. -/
 def FactorPrincipalizationPermit {ι : Type*}
@@ -256,6 +320,30 @@ theorem factorPrincipalizationPermit_of_vandiver_relations
   intro i j
   exact ledger.rootQuotient_isPrincipal_of_vandiver_relations
     hodd i j (sevenA i j) (sevenD i j)
+
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- On the two-node state ledger, Vandiver's relations are needed only for
+the selected conjugate pair.  Netting that pair kills both classes; finite
+case analysis then discharges the universal quotient permit without
+pretending that the historical equations were separately produced for
+every ordered pair. -/
+theorem factorPrincipalizationPermit_finTwo_of_vandiver_relations
+    (ledger : AllocatedFactorLedger (p := p) (K := K) (Fin 2))
+    (hodd : Odd p)
+    (sevenA : ledger.VandiverSevenA 0 1)
+    (sevenD : ledger.VandiverSevenD 0 1) :
+    FactorPrincipalizationPermit ledger := by
+  have hnet :=
+    Fermat.Conservation.Credit.Fold.odd_torsion_netting
+      hodd (ledger.rootClass 0) (ledger.rootClass 1)
+      (ledger.rootClass_torsion 1) sevenA sevenD
+  apply factorPrincipalizationPermit_of_vandiver_relations ledger hodd
+  · intro i j
+    fin_cases i <;> fin_cases j <;>
+      simp [AllocatedFactorLedger.VandiverSevenA, hnet.1, hnet.2]
+  · intro i j
+    fin_cases i <;> fin_cases j <;>
+      simp [AllocatedFactorLedger.VandiverSevenD, hnet.1, hnet.2]
 
 end
 

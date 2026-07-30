@@ -273,6 +273,44 @@ info: 'Fermat.Conservation.Credit.Fold.nsmul_fractionalIdealClass_eq_zero_iff' d
 #print axioms Fermat.Conservation.Credit.Fold.nsmul_fractionalIdealClass_eq_zero_iff
 
 /--
+info: 'Fermat.Conservation.Credit.Fold.fractionalIdealClass_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.fractionalIdealClass_mul
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.relativeNorm_isPrincipal_of_coprime_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.relativeNorm_isPrincipal_of_coprime_card
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.relativeNormFold_class_eq_zero_of_coprime_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.relativeNormFold_class_eq_zero_of_coprime_card
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.map_relativeNorm_eq_mul_conjugate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.map_relativeNorm_eq_mul_conjugate
+
+/--
+info: 'Fermat.Conservation.Credit.Fold.conjugate_class_fold_eq_zero_of_coprime_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Fold.conjugate_class_fold_eq_zero_of_coprime_card
+
+/--
 info: 'Fermat.Conservation.Credit.Fold.odd_torsion_netting' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs in
@@ -733,6 +771,22 @@ info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_pow_is
 #print axioms Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_pow_isPrincipal
 
 /--
+info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenD_of_relativeNormFold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenD_of_relativeNormFold
+
+/--
+info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenD_of_conjugationTranspose' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenD_of_conjugationTranspose
+
+/--
 info: 'Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootQuotient_isPrincipal_of_vandiver_relations' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
@@ -747,6 +801,14 @@ info: 'Fermat.Conservation.KummerDrain.factorPrincipalizationPermit_of_vandiver_
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.KummerDrain.factorPrincipalizationPermit_of_vandiver_relations
+
+/--
+info: 'Fermat.Conservation.KummerDrain.factorPrincipalizationPermit_finTwo_of_vandiver_relations' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.KummerDrain.factorPrincipalizationPermit_finTwo_of_vandiver_relations
 
 /-! ## Exhaustive forbidden-prefix guards -/
 

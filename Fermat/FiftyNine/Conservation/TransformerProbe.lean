@@ -10,15 +10,17 @@ compose after repayment.  A primitive second-case exponent-59 solution is
 given its literal hypotenuse charge.  A genuine transformer must return
 another primitive second-case solution with strictly smaller charge.
 
-The generic floor consumes exactly that transformer.  The generic fold now
-principalizes a root quotient once the state supplies Vandiver's relations
-(7a) and (7d).  The guarded examples record the three remaining producers:
-stock torsion does not itself derive (7a), selected repayment is an equality
-in the real-unit group rather than a successor solution, and the strict
-drain compares ramified norm charges rather than the hypotenuse charges of
-two integral solutions.
+The generic floor consumes exactly that transformer.  The selected fold now
+derives Vandiver's (7d) from conjugation acting as ledger transpose (the
+literal relative-norm product is proved generically) and principalizes the
+allocated ledger once the state also supplies (7a).
+The guarded examples record the remaining producers: stock torsion does not
+itself derive (7a), selected repayment is an equality in the real-unit group
+rather than a successor solution, and the strict drain compares ramified
+norm charges rather than the hypotenuse charges of two integral solutions.
 -/
 import Fermat.Conservation.KummerDrain
+import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.GaugeQuotient
 
 open scoped NumberField
@@ -108,14 +110,35 @@ example {ι : Type*}
 
 end GenericPrincipalization
 
-variable {K : Type*} [Field K] [NumberField K]
+variable {K : Type} [Field K] [NumberField K]
   [IsCyclotomicExtension {59} ℚ K]
+
+local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
 
 local instance : NumberField.IsCMField K :=
   IsCyclotomicExtension.Rat.isCMField
     (S := {59}) K ⟨59, rfl, by norm_num⟩
 
-local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
+/-
+The original principalization hole is now an actual composition once
+the two-node state supplies Vandiver's remaining (7a) relation and its
+conjugation-transpose identity.
+-/
+example
+    (ledger :
+      Fermat.Conservation.KummerDrain.AllocatedFactorLedger
+        (p := 59) (K := K) (Fin 2))
+    (sevenA : ledger.VandiverSevenA 0 1)
+    (htranspose :
+      ledger.rootIdeal 1 =
+        Ideal.map
+          (NumberField.IsCMField.ringOfIntegersComplexConj K)
+          (ledger.rootIdeal 0)) :
+    Fermat.Conservation.KummerDrain.FactorPrincipalizationPermit
+      ledger := by
+  exact
+    Fermat.FiftyNine.Conservation.Fold.factorPrincipalizationPermit_of_sevenA_and_conjugationTranspose
+      ledger sevenA htranspose
 
 variable {ζ : K}
 variable (hζ : IsPrimitiveRoot ζ 59)

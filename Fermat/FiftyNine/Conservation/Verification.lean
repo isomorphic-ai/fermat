@@ -20,6 +20,7 @@ import Fermat.FiftyNine.Conservation.BoundedSinnott
 import Fermat.FiftyNine.Conservation.Instance
 import Fermat.FiftyNine.Conservation.DepthCertificate
 import Fermat.FiftyNine.Conservation.GaugeQuotient
+import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
@@ -198,6 +199,36 @@ info: 'Fermat.FiftyNine.Conservation.Credit.boundedSinnottBridge' depends on axi
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.Credit.boundedSinnottBridge
 
+/--
+info: 'Fermat.FiftyNine.Conservation.Fold.not_dvd_plusClassNumber' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Fold.not_dvd_plusClassNumber
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Fold.vandiverSevenD_of_relativeNormFold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Fold.vandiverSevenD_of_relativeNormFold
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Fold.vandiverSevenD_of_conjugationTranspose' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Fold.vandiverSevenD_of_conjugationTranspose
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Fold.factorPrincipalizationPermit_of_sevenA_and_conjugationTranspose' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Fold.factorPrincipalizationPermit_of_sevenA_and_conjugationTranspose
+
 /-! ## Selected C5 gauge, cube certificate, and closed W3 -/
 
 open Lean Elab Command
@@ -225,6 +256,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.Instance
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DepthCertificate
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeQuotient
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.Fold
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
 /--

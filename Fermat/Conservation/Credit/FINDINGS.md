@@ -9,12 +9,25 @@ Newest findings are recorded first.
   Vandiver's relations (7a) and (7d) over an arbitrary additive commutative
   group.  No conductor datum or class-number premise is needed by this
   algebraic core.
-- `KummerDrain.AllocatedFactorLedger` currently stores only `factor`,
-  `rootIdeal`, and the identity `rootIdeal i ^ p = (factor i)`.  It has no
-  nonzero law, conjugation/opposite pairing, relative-norm equation, or
-  constructor from a Fermat solution.  In particular, its root quotient can
-  be zero, while the class-group map is defined only for unit fractional
-  ideals.
+- The ideal realization of the fold is now complete generically.  For every
+  nonzero ideal `I` in a CM field, extending its relative ideal norm from the
+  maximal real subfield is exactly `I * conjugate(I)`.  If `I^p` is
+  principal and `p` is coprime to the real class-group order, this product
+  has zero additive class.  Thus (7d) no longer needs to be supplied as a
+  class relation; a state ledger need only identify its second root ideal
+  with the conjugate transpose of the first.
+- A two-node ledger needs Vandiver's equations only at its selected `(0,1)`
+  pair.  Generic odd-torsion netting first kills both selected classes, and
+  finite case analysis then discharges the existing universally quantified
+  quotient permit.  Requiring separate equations for every ordered pair
+  would overstate the historical state input.
+- `KummerDrain.AllocatedFactorLedger` currently stores `factor`,
+  `rootIdeal`, their nonzeroness, and the identity
+  `rootIdeal i ^ p = (factor i)`.  It has no
+  conjugation/opposite pairing or constructor from a Fermat solution.
+  Nonzeroness has now been added because the class-group map is defined only
+  for unit fractional ideals, but the clean cone still produces no such
+  allocated state ledger.
 - The C3 repayment theorem lives in the generated real-unit group and says
   that a deep unit is a `p`th power.  It supplies neither a map to allocated
   factor-ideal classes nor Vandiver's relation (7a).  Thus deriving (7a)

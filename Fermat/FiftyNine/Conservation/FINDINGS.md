@@ -8,16 +8,31 @@
   connecting definition or theorem.  Consequently there is no selected
   debit/receivable ideal pair on which statewise (7a) or (7d) can yet be
   stated.
+- The relative-norm mathematics itself is now closed.  The C2 certificate
+  and bounded Sinnott bridge prove that 59 is prime to the maximal-real
+  class-group order; the generic CM theorem identifies extension of
+  `relNorm I` with `I * conjugate(I)`.  Hence the selected theorem derives
+  (7d) from only the honest transpose equation
+  `J = map complexConj I`.  It no longer accepts (7d), or even a norm-product
+  equality, as state data.
+- For an allocated `Fin 2` ledger, the original
+  `FactorPrincipalizationPermit` hole is now a compiled composition from
+  the single `(0,1)` instance of (7a) and that conjugation-transpose law.
+  The remaining state producer must therefore construct the two allocated
+  normalized factor roots and prove their transpose relation; asking for
+  pairwise relations over every node would be both stronger and false in
+  the relative-norm formulation.
 - The existing selected repayment theorem proves that a deep real unit is a
   59th power.  Vandiver's (7a), however, principalizes the weighted product
   of two allocated factor ideals; no theorem in the permitted import cone
   transports the unit repayment equality to that ideal-class relation.
-- The historical (7d) implementation uses a relative ideal norm followed by
-  the plus-class-number calculation.  The bounded Sinnott theorem is present
-  in the clean cone, but the state-specific factor ideals, their conjugation
-  identity, and the relative-norm comparison are not.  Those producers must
-  be reconstructed before the generic odd-torsion fold can discharge
-  `FactorPrincipalizationPermit`.
+- The historical (7a) step is Takagi--Furtwängler reflection: from a primary
+  generator and a principal 59th power of a weighted ideal, it removes the
+  exponent from that weighted ideal class.  C3 repayment concerns powers in
+  the real-unit group and supplies no unit-to-ideal-class transport.
+  Rewriting the weighted generator as a repaid unit times a 59th power would
+  already assume the weighted ideal is principal, so using repayment there
+  would be circular rather than a derivation of (7a).
 
 ## 2026-07-30 — the selected W1 quotient is complete on the stock carrier
 
