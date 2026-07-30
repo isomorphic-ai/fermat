@@ -44,3 +44,26 @@ Cross-checks: A=B at n=236 (residue 90388 both); B=C at (59,44).
 
 Computed 2026-07-29 by Fable, pure Python, 0.075 s; script:
 /tmp/bernoulli_cube.py on claude@i9 (to be archived in RH/harness).
+
+## Addendum (Fabian, 2026-07-30): the certificate's second reading
+
+The v-profile [1,...,1,2,1,...,1] certifies TWO hypotheses with one
+measurement — the L4 pattern (one quantity, two readings):
+
+1. **Non-divisibility reading (stock):** no 59^3 anywhere — the cube
+   obstruction is absent; in the flow interface
+   `59^3 | (sum_i a_i * M_{ki}) * B_k`, one factor of 59 survives the
+   division by B_k at every character, so the forcing bites everywhere.
+2. **Maximum reading (flow):** max depth = 2, attained only at the
+   irregular position — the deep-congruence level 118 = 2*59 in
+   `DeepFlowLaw59` is SUFFICIENT: the pump reaches depth 2p and no
+   eigenvalue can absorb more than depth 2. The "2" in Vandiver's
+   (1-zeta)^(2p) is this measured fact, not a convention. Were any
+   v = 3, the level-2p congruence would say nothing at that character
+   and the law would need level 3p.
+
+Same inequality (v <= 2), two obstructions dissolved: the forcing
+cannot be blocked, and the pump cannot be out-run. This is also the
+phase-1 sweep's condition-4 "never-worse contract" (v_p(B_rp) = 2
+exactly, 0 DEEP flags below 12M) meeting the FLT side: the RH-side
+sweep and this certificate are the same measurement in two programs.
