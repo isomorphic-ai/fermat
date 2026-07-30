@@ -25,6 +25,37 @@ namespace Fermat.Conservation.Credit.Flow
 
 open Gauge
 
+/-- The reusable per-prime assembly boundary.
+
+The forcing theorem uses only `gauge`, but a campaign instance records the
+generation tower, the independently checked lamp, and its irregular row in
+the same object.  Thus a later prime supplies one record instead of adding
+numeric facts to the generic core. -/
+structure CreditData (p : ℕ) where
+  gauge : GaugeData p
+  generationSeed : ℕ
+  generationMiddle : ℕ
+  innerStep : ℕ
+  outerStep : ℕ
+  rank_generated :
+    gauge.rank = innerStep * generationSeed
+  middle_generated :
+    generationMiddle = innerStep * generationSeed + 1
+  conductor_generated :
+    p = outerStep * generationMiddle + 1
+  attestationPrime : ℕ
+  attestationPrime_prime : attestationPrime.Prime
+  attestationRoot : ZMod attestationPrime
+  attestationRootValue : ℕ
+  attestationRoot_value :
+    attestationRoot = attestationRootValue
+  attestationRoot_order :
+    orderOf attestationRoot = p
+  irregularIndex : ℕ
+  irregularRow : Fin gauge.rank
+  irregularIndex_eq_row :
+    irregularIndex = 2 * (irregularRow.val + 1)
+
 /-- The high Bernoulli index selected by row `k` of the credit flow. -/
 def highIndex {p : ℕ} {data : GaugeData p}
     (k : Fin data.rank) : ℕ :=
