@@ -289,8 +289,17 @@ private theorem reductionHom_realOrbitNode (j : LedgerNode) (a : (ZMod 59)ˣ) :
       (∑ k ∈ Finset.range (ZMod.val (a : ZMod 59)), rowRoot j ^ k) *
       ∑ k ∈ Finset.range (ZMod.val (a : ZMod 59)),
         (rowRoot j)⁻¹ ^ k := by
-  rw [realOrbitNode, realProjection]
+  rw [realOrbitNode,
+    Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNode_val]
   simp only [Units.val_mul, map_mul]
+  change
+    reductionHom hζ j (orbitNodeUnit hζ a : 𝓞 K) *
+        reductionHom hζ j
+          (NumberField.IsCMField.unitsComplexConj K
+            (orbitNodeUnit hζ a) : 𝓞 K) =
+      (∑ k ∈ Finset.range (ZMod.val (a : ZMod 59)), rowRoot j ^ k) *
+        ∑ k ∈ Finset.range (ZMod.val (a : ZMod 59)),
+          (rowRoot j)⁻¹ ^ k
   rw [reductionHom_orbitNodeUnit hζ,
     reductionHom_conjugate_orbitNodeUnit hζ]
 

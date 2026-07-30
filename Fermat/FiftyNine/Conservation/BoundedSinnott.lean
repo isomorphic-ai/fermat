@@ -78,9 +78,8 @@ private theorem dvd_mappedCPlus_index_iff_dvd_classNumber :
 /-- Folding with complex conjugation is multiplicative. -/
 private theorem realProjection_mul (u v : (𝓞 K)ˣ) :
     realProjection (u * v) = realProjection u * realProjection v := by
-  apply Subtype.ext
-  simp only [realProjection, map_mul, Subgroup.coe_mul]
-  ac_rfl
+  simpa only [realProjection] using
+    Fermat.Conservation.Credit.Flow.realProjection_mul u v
 
 /-- Folding with complex conjugation commutes with inversion. -/
 private theorem realProjection_inv (u : (𝓞 K)ˣ) :
@@ -153,47 +152,9 @@ private theorem plusUnitsEquivRealUnits_canonicalPlusNode
 private theorem realOrbitNode_canonical_neg (a : (ZMod 59)ˣ) :
     realOrbitNode (IsCyclotomicExtension.zeta_spec 59 ℚ K) (-a) =
       realOrbitNode (IsCyclotomicExtension.zeta_spec 59 ℚ K) a := by
-  let root : (𝓞 K)ˣ :=
-    (IsCyclotomicExtension.zeta_spec 59 ℚ K).unit'
-  let d : ℕ := (a : ZMod 59).val
-  have ha0 : (a : ZMod 59) ≠ 0 := Units.ne_zero a
-  have hnegval : ((-a : (ZMod 59)ˣ) : ZMod 59).val = 59 - d := by
-    simp only [Units.val_neg, d]
-    rw [ZMod.neg_val, if_neg ha0]
-  have hpair :
-      orbitNodeUnit (IsCyclotomicExtension.zeta_spec 59 ℚ K) a =
-        (-root ^ d) *
-          orbitNodeUnit (IsCyclotomicExtension.zeta_spec 59 ℚ K) (-a) := by
-    rw [orbitNodeUnit_canonical (K := K) a,
-      orbitNodeUnit_canonical (K := K) (-a)]
-    apply Units.ext
-    simp only [KummerCriterion.LehmerVandiver.cyclotomicUnitUnit_val,
-      Units.val_mul, Units.val_neg, Units.val_pow_eq_pow_val]
-    change
-      KummerCriterion.LehmerVandiver.cyclotomicUnit 59 K d =
-        -((IsCyclotomicExtension.zeta_spec 59 ℚ K).unit' : 𝓞 K) ^ d *
-          KummerCriterion.LehmerVandiver.cyclotomicUnit 59 K
-            ((-a : (ZMod 59)ˣ) : ZMod 59).val
-    rw [hnegval]
-    exact
-      KummerCriterion.LehmerVandiver.cyclotomicUnit_eq_neg_zeta_pow_mul_cyclotomicUnit_p_sub
-        (p := 59) (K := K) d (by
-          dsimp only [d]
-          exact ZMod.val_le _)
-  have hrootT : root ∈ NumberField.Units.torsion K := by
-    rw [NumberField.Units.torsion, CommGroup.mem_torsion,
-      isOfFinOrder_iff_pow_eq_one]
-    exact ⟨59, by norm_num, by
-      dsimp only [root]
-      exact (IsCyclotomicExtension.zeta_spec 59 ℚ K).unit'_pow⟩
-  have ht : -root ^ d ∈ NumberField.Units.torsion K := by
-    rw [neg_eq_neg_one_mul]
-    exact Subgroup.mul_mem _
-      neg_one_mem_torsion
-      (Subgroup.pow_mem _ hrootT d)
-  rw [realOrbitNode, realOrbitNode, hpair,
-    realProjection_torsion_mul (K := K)
-      (⟨-root ^ d, ht⟩ : NumberField.Units.torsion K)]
+  simpa only [realOrbitNode] using
+    Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNode_neg
+      (p := 59) (IsCyclotomicExtension.zeta_spec 59 ℚ K) a
 
 private theorem canonicalPlusNode_neg (a : (ZMod 59)ˣ) :
     canonicalPlusNode (K := K) (-a) = canonicalPlusNode (K := K) a := by
@@ -215,7 +176,7 @@ private theorem canonicalPlusNode_mem_CPlus_of_val_le
       apply Subtype.ext
       rw [realOrbitNode]
       apply Units.ext
-      simp [orbitNodeUnit, hone, realProjection]
+      simp [hone]
     rw [hunit]
     exact Subgroup.one_mem _
   · let i : Fin 28 := ⟨(a : ZMod 59).val - 2, by omega⟩
@@ -267,7 +228,9 @@ private theorem orbitNodeUnit_coe {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
       (1 - ζ ^ (a : ZMod 59).val) / (1 - ζ) := by
   have hne : 1 - ζ ≠ 0 :=
     sub_ne_zero.mpr (Ne.symm (hζ.ne_one (by norm_num)))
-  simp only [orbitNodeUnit, IsUnit.unit_spec, map_sum, map_pow,
+  simp only [orbitNodeUnit,
+    Fermat.Conservation.Credit.Flow.cyclotomicOrbitNodeUnit_val,
+    map_sum, map_pow,
     ← NumberField.RingOfIntegers.coe_eq_algebraMap]
   rw [eq_div_iff hne]
   calc
@@ -337,7 +300,8 @@ private theorem realOrbitNode_mem_mappedCPlus {ζ : K}
     realOrbitNode hζ a ∈ mappedCPlus (K := K) := by
   obtain ⟨τ, hτ⟩ :=
     orbitNodeUnit_eq_canonical_quotient (K := K) hζ a
-  rw [realOrbitNode, hτ, realProjection_mul, realProjection_inv]
+  change realProjection (orbitNodeUnit hζ a) ∈ mappedCPlus (K := K)
+  rw [hτ, realProjection_mul, realProjection_inv]
   exact Subgroup.mul_mem _
     (realOrbitNode_canonical_mem_mappedCPlus (K := K) (τ * a))
     (Subgroup.inv_mem _
