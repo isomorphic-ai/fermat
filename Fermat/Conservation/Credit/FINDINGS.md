@@ -2,6 +2,45 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — CREDIT-FLOW starts at one genuinely high coefficient
+
+- The pinned `KummerCriterion` dependency contains a genuine generic
+  generator-to-log construction: its completed same-prime logarithm is
+  additive on products and sends `p`-th powers to `p`-multiples.  Its
+  concrete Kummer matrix is proved to be a Bernoulli row diagonal times a
+  Vandermonde matrix.  This is a fair external boundary and confirms the
+  proposed stock/flow architecture.
+- That packaged matrix is nevertheless only the low, mod-`p` reading.  Its
+  fixed Dwork coordinates have exponents below `p`, and its eigenvalue in
+  row `j` is the reduction of `B_(2j)/(2j)`.  At an irregular prime this
+  loses exactly the row needed here.  Repository-wide inspection found no
+  external theorem extracting the high `2*j*p - 1` logarithmic derivative
+  or identifying it, at `p^3` precision, with `B_(2*j*p)`.
+- W1 and W2 must therefore keep two levels distinct.  The high flow produces
+  integral character congruences
+  `p^3 ∣ transformedCoefficient * highBernoulliNumerator`; cube-freeness
+  gives divisibility of each transformed coefficient by `p`; only then may
+  the row-scaled Vandermonde be reduced modulo `p` and inverted.  A flow
+  valued only in `Fin rank → ZMod p` is too weak.
+- The current Markdown certificate gives all high Bernoulli residues modulo
+  `p^3`, but there is no clean-cone Lean theorem checking them.  The existing
+  proofs transitively import forbidden irregular/Vandiver modules.  The thin
+  instance therefore needs a new kernel-checked residue vector with a
+  specification theorem; the exceptional human row 22 is Lean index 21.
+
+## 2026-07-30 — the old declaration guard is not an import guard
+
+- `Verification.lean` says that it rejects a forbidden “namespace or module
+  prefix”, but its command inspects only `env.constants`.  In particular,
+  importing `Fermat.FiftyNine.FirstCase` would not necessarily create a
+  declaration below the module's full name because that file declares in
+  `Fermat.FiftyNine`.
+- CREDIT-FLOW verification must inspect `env.header.moduleNames` as well as
+  declarations, explicitly reject the five superseded seam-chain modules,
+  and run the selected-prime source-literal gate.  The generic credit
+  sources currently contain no selected-prime literal, so the new gate has
+  a clean baseline.
+
 ## 2026-07-29 — the route-neutral C1--C3 audit is green
 
 - `Vacuum.lean`, `Capacity.lean`, and `Repayment.lean` build together from
