@@ -118,3 +118,39 @@ Recorded before inspecting or editing the CREDIT-FLOW implementation.
   the generic credit cone before it catches new flow code.  Any load-bearing
   occurrence should move behind named fields of the single instance record;
   campaign citations in prose may remain.
+
+## TRANSFORMER prediction — 2026-07-30
+
+Recorded before creating or editing any transformer Lean implementation.
+
+- W1 is expected to fight first at the carrier seam, not at C2 or C3.
+  `CapacityData` and `IsRepaid` live in the generated real-unit subgroup,
+  while the stock spines currently measure charge on exponent-specific
+  integral states.  The Bernoulli certificate's maximum-depth reading is
+  documented, but the transformer will need its generic, typed
+  charge-preservation consequence.  I expect to mint one route-neutral
+  quotient-state/ledger-morphism interface whose fields consume the three
+  permits and whose theorem returns both vacuum credit and literal charge
+  equality; the instance layer should only populate those fields.
+- W2 is likely to need a new generic state construction, but not a new
+  floor or charge law.  The existing floor, multiplicative charge, strict
+  drain, gauge invariance, balance composition, and fold vocabulary are
+  reusable theorems, whereas their charged states are specialized to the
+  small exponents.  I expect the genuinely new mint to be the
+  Kummer-shaped factor ledger for `x + ζ^i y`, with normalization and
+  repaid-root absorption stated over an arbitrary odd prime.  Its terminal
+  strictness should be assembled from the existing drain law rather than
+  asserted as a provider field.
+- The expected `TransformerProbe.lean` repair is to replace the guarded type
+  mismatch with an actual composition: construct the state-linked deep
+  real unit, obtain `IsRepaid` from
+  `repayment_of_capacity_and_flow`, pass that proof through the generic
+  quotient/descent/pullback theorem, and return exactly
+  `∃ next, next.charge < S.charge`.  An arbitrary repaid unit cannot be
+  sufficient by itself; the unit used by the theorem must be the one
+  generated from `S`, so that the pullback conclusion is genuinely about
+  the input state.
+- The generic transformer cone should contain no conductor literal.  I
+  expect every selected numerical fact—including the maximum depth two
+  reading—to enter through the one prime-data instance, with the literal
+  grep gate extended over every new route-neutral module.
