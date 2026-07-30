@@ -26,6 +26,7 @@ cone does not currently prove them.
 -/
 import Fermat.Conservation.Credit.Vacuum
 import Fermat.Conservation.Credit.Repayment
+import Fermat.Conservation.Credit.CyclotomicFlow
 import Mathlib.Logic.Equiv.Fin.Basic
 import Mathlib.NumberTheory.NumberField.ClassNumber
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
@@ -160,26 +161,20 @@ local instance : NumberField.IsCMField K :=
 /-- The geometric cyclotomic unit at a generated exponent node. -/
 def orbitNodeUnit {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
     (a : (ZMod 59)ˣ) : (𝓞 K)ˣ :=
-  (hζ.toInteger_isPrimitiveRoot.geom_sum_isUnit
-    (by norm_num) (ZMod.val_coe_unit_coprime a)).unit
+  Fermat.Conservation.Credit.Flow.cyclotomicOrbitNodeUnit hζ a
 
 /-- Fold a unit with its conjugate.  This is the real, two-sided projection
 of one unit, not an independently chosen second family. -/
 def realProjection (u : (𝓞 K)ˣ) :
     NumberField.IsCMField.realUnits K :=
-  ⟨u * NumberField.IsCMField.unitsComplexConj K u, by
-    rw [← NumberField.IsCMField.unitsComplexConj_eq_self_iff]
-    simp only [map_mul]
-    apply Units.ext
-    apply NumberField.RingOfIntegers.ext
-    simp [mul_comm]⟩
+  Fermat.Conservation.Credit.Flow.realProjection u
 
 /-- Every realized node is generated from the exponent recursion and folded
 with its conjugate to make the two-sided structure real. -/
 def realOrbitNode {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
     (a : (ZMod 59)ˣ) :
     NumberField.IsCMField.realUnits K :=
-  realProjection (orbitNodeUnit hζ a)
+  Fermat.Conservation.Credit.Flow.realCyclotomicOrbitNode hζ a
 
 /-- The 28 generated edge units. -/
 def generatedUnit {ζ : K} (hζ : IsPrimitiveRoot ζ 59)

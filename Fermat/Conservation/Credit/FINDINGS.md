@@ -2,6 +2,20 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — folded cyclotomic nodes descend to the real quotient
+
+- The geometric units at opposite residues differ by a root-of-unity
+  monomial.  Folding with complex conjugation kills that torsion factor,
+  so the generated real node is invariant under `a ↦ -a`.
+- Consequently the actual multiplicative generator descends generically
+  to `(ZMod p)ˣ / ⟨-1⟩`.  Its value on the class of each indexed
+  `nodeLift i` reduces definitionally to the same folded cyclotomic node
+  used by the integral relation polynomial.
+- The selected real-node definitions are now aliases of this generic
+  construction rather than a second conductor-specific implementation.
+  This removes the carrier mismatch between C2 repayment and the
+  all-odd-prime C5 gauge.
+
 ## 2026-07-30 — raw real edges now have a moment-ready integral relation
 
 - Each indexed quotient lift generates a folded geometric-sum polynomial.

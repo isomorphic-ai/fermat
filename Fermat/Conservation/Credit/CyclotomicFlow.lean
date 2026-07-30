@@ -14,6 +14,7 @@ This file contains no conductor-specific data.  A per-prime instance only
 chooses an indexed residue orbit.
 -/
 import Fermat.Conservation.Credit.DepthFlow
+import Fermat.Conservation.Credit.RealGauge
 import Mathlib.NumberTheory.NumberField.CMField
 import Mathlib.RingTheory.RootsOfUnity.CyclotomicUnits
 
@@ -39,6 +40,47 @@ omit [NumberField K] [IsCyclotomicExtension {p} ℚ K] in
     (cyclotomicOrbitNodeUnit hζ a : 𝓞 K) =
       ∑ i ∈ Finset.range (a : ZMod p).val, hζ.toInteger ^ i :=
   rfl
+
+omit [NumberField K] [IsCyclotomicExtension {p} ℚ K] in
+/-- The two oriented geometric units differ by a root-of-unity monomial. -/
+private theorem cyclotomicOrbitNodeUnit_eq_torsion_mul_neg
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (a : (ZMod p)ˣ) :
+    let root : (𝓞 K)ˣ :=
+      (hζ.toInteger_isPrimitiveRoot.isUnit
+        (Fact.out : p.Prime).ne_zero).unit
+    let d := (a : ZMod p).val
+    cyclotomicOrbitNodeUnit hζ a =
+      (-root ^ d) * cyclotomicOrbitNodeUnit hζ (-a) := by
+  let root : (𝓞 K)ˣ :=
+    (hζ.toInteger_isPrimitiveRoot.isUnit
+      (Fact.out : p.Prime).ne_zero).unit
+  let d : ℕ := (a : ZMod p).val
+  have hrootval : (root : 𝓞 K) = hζ.toInteger := by
+    dsimp only [root]
+    exact
+      (hζ.toInteger_isPrimitiveRoot.isUnit
+        (Fact.out : p.Prime).ne_zero).unit_spec
+  have ha0 : (a : ZMod p) ≠ 0 := Units.ne_zero a
+  have hnegval : (-(a : ZMod p)).val = p - d := by
+    dsimp only [d]
+    rw [ZMod.neg_val, if_neg ha0]
+  have hdle : d ≤ p := by
+    dsimp only [d]
+    exact ZMod.val_le _
+  have hrootpow : hζ.toInteger ^ p = 1 :=
+    hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  apply Units.ext
+  simp only [cyclotomicOrbitNodeUnit_val, Units.val_mul, Units.val_neg,
+    Units.val_pow_eq_pow_val]
+  rw [show (a : ZMod p).val = d from rfl, hnegval, hrootval]
+  apply mul_right_cancel₀
+      (sub_ne_zero.mpr
+        (hζ.toInteger_isPrimitiveRoot.ne_one
+          (Fact.out : p.Prime).one_lt))
+  rw [geom_sum_mul, mul_assoc, geom_sum_mul]
+  simp only [mul_sub, neg_mul, mul_one]
+  rw [← pow_add, Nat.add_sub_of_le hdle, hrootpow]
+  abel
 
 section Real
 
@@ -83,6 +125,26 @@ theorem realProjection_mul (u v : (𝓞 K)ˣ) :
   rw [map_mul]
   ac_rfl
 
+/-- A torsion factor disappears after folding with complex conjugation. -/
+theorem realProjection_torsion_mul
+    (t : NumberField.Units.torsion K) (u : (𝓞 K)ˣ) :
+    realProjection ((t : (𝓞 K)ˣ) * u) = realProjection u := by
+  apply Subtype.ext
+  change ((t : (𝓞 K)ˣ) * u) *
+      NumberField.IsCMField.unitsComplexConj K ((t : (𝓞 K)ˣ) * u) =
+    u * NumberField.IsCMField.unitsComplexConj K u
+  rw [map_mul]
+  have ht := NumberField.IsCMField.unitsComplexConj_torsion (K := K) t
+  change NumberField.IsCMField.unitsComplexConj K (t : (𝓞 K)ˣ) =
+    (t : (𝓞 K)ˣ)⁻¹ at ht
+  rw [ht]
+  calc
+    _ =
+      ((t : (𝓞 K)ˣ) * (t : (𝓞 K)ˣ)⁻¹) *
+        (u * NumberField.IsCMField.unitsComplexConj K u) := by
+          ac_rfl
+    _ = u * NumberField.IsCMField.unitsComplexConj K u := by simp
+
 @[simp]
 theorem realProjection_one :
     realProjection (1 : (𝓞 K)ˣ) = 1 := by
@@ -99,6 +161,78 @@ noncomputable def realProjectionHom :
   toFun := realProjection
   map_one' := realProjection_one
   map_mul' := realProjection_mul
+
+omit [IsCyclotomicExtension {p} ℚ K] in
+/-- Real projection identifies the two signs of every residue node. -/
+theorem realCyclotomicOrbitNode_neg
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (a : (ZMod p)ˣ) :
+    realCyclotomicOrbitNode hζ (-a) =
+      realCyclotomicOrbitNode hζ a := by
+  let root : (𝓞 K)ˣ :=
+    (hζ.toInteger_isPrimitiveRoot.isUnit
+      (Fact.out : p.Prime).ne_zero).unit
+  let d : ℕ := (a : ZMod p).val
+  have hpair :
+      cyclotomicOrbitNodeUnit hζ a =
+        (-root ^ d) * cyclotomicOrbitNodeUnit hζ (-a) :=
+    cyclotomicOrbitNodeUnit_eq_torsion_mul_neg hζ a
+  have hrootT : root ∈ NumberField.Units.torsion K := by
+    rw [NumberField.Units.torsion, CommGroup.mem_torsion,
+      isOfFinOrder_iff_pow_eq_one]
+    exact
+      ⟨p, (Fact.out : p.Prime).pos,
+        (hζ.toInteger_isPrimitiveRoot.isUnit_unit
+          (Fact.out : p.Prime).ne_zero).pow_eq_one⟩
+  have ht : -root ^ d ∈ NumberField.Units.torsion K := by
+    rw [neg_eq_neg_one_mul]
+    exact Subgroup.mul_mem _
+      neg_one_mem_torsion
+      (Subgroup.pow_mem _ hrootT d)
+  change
+    realProjection (cyclotomicOrbitNodeUnit hζ (-a)) =
+      realProjection (cyclotomicOrbitNodeUnit hζ a)
+  rw [hpair, realProjection_torsion_mul (K := K)
+    (⟨-root ^ d, ht⟩ : NumberField.Units.torsion K)]
+
+/-- The generated real node, regarded as a function on the intrinsic real
+residue quotient. -/
+noncomputable def realCyclotomicOrbitNodeQuotient
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    RealGauge.RealResidueGroup p →
+      NumberField.IsCMField.realUnits K :=
+  Quotient.lift (realCyclotomicOrbitNode hζ) (by
+    intro a b hab
+    have hm : a⁻¹ * b ∈ RealGauge.signSubgroup p :=
+      QuotientGroup.leftRel_apply.mp hab
+    rw [RealGauge.signSubgroup_mem_iff] at hm
+    rcases hm with hone | hneg
+    · have hab' : a = b := eq_of_inv_mul_eq_one hone
+      subst b
+      rfl
+    · have hb : b = -a := by
+        rw [inv_mul_eq_iff_eq_mul] at hneg
+        simpa using hneg
+      subst b
+      exact (realCyclotomicOrbitNode_neg hζ a).symm)
+
+/-- The generated node at the indexed lift selected by real gauge data. -/
+noncomputable def indexedRealCyclotomicOrbitNode
+    (data : RealGauge.RealGaugeData p)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (i : ℕ) :
+    NumberField.IsCMField.realUnits K :=
+  realCyclotomicOrbitNode hζ (data.nodeLift i)
+
+omit [IsCyclotomicExtension {p} ℚ K] in
+/-- The quotient lift sends each indexed representative to its generated
+real cyclotomic node. -/
+@[simp]
+theorem realCyclotomicOrbitNodeQuotient_mk_nodeLift
+    (data : RealGauge.RealGaugeData p)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (i : ℕ) :
+    realCyclotomicOrbitNodeQuotient hζ
+        (QuotientGroup.mk (data.nodeLift i)) =
+      indexedRealCyclotomicOrbitNode data hζ i :=
+  rfl
 
 end Real
 
