@@ -25,6 +25,7 @@ import Fermat.Conservation.Credit.NonlinearFlow
 import Fermat.Conservation.Credit.RealGauge
 import Fermat.Conservation.Credit.RealHighFlow
 import Fermat.Conservation.Credit.RelationDepthFlow
+import Fermat.Conservation.Credit.RelationEvaluationFlow
 import Fermat.Conservation.Credit.RealForcing
 
 /-! ## C1: generated vacuum and two-sided semilattice -/
@@ -430,6 +431,22 @@ info: 'Fermat.Conservation.Credit.Flow.deepExponentForcing' depends on axioms: [
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.Flow.deepExponentForcing
+
+/--
+info: 'Fermat.Conservation.Credit.RealFlow.relation_polynomial_depth_of_deep_witness' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.RealFlow.relation_polynomial_depth_of_deep_witness
+
+/--
+info: 'Fermat.Conservation.Credit.RealFlow.exists_moment_ready_relation_of_vandiverDeep' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.RealFlow.exists_moment_ready_relation_of_vandiverDeep
 
 /-! ## Exhaustive forbidden-prefix guards -/
 

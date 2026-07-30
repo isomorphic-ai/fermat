@@ -2,6 +2,20 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the actual real-edge relation reaches the nonlinear flow
+
+- Evaluating the generated numerator and denominator polynomials at a
+  primitive root recovers the raw real-quotient edge product, after the
+  single generic normalization power `p - 1`.  Thus an actual deep unit
+  relation, rather than a polynomial premise, now creates the depth input.
+- The original scalar witness survives this conversion.  Its depth proves
+  that it is prime to `p`, Euler normalization makes its raised scalar one
+  modulo `p²`, and the same witness supplies the value-at-one layer.
+- The resulting theorem returns an exact cyclotomic factorization after a
+  `p²` polynomial correction.  The remaining W1 obligation is no longer
+  cyclotomic evaluation: it is the compatibility between this corrected
+  integral jet and the generator-derived rational logarithmic rate.
+
 ## 2026-07-30 — depth itself makes the scalar normalization legal
 
 - If a global unit is congruent to `c^p` at depth `2p`, then `p ∤ c`.

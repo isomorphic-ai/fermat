@@ -348,6 +348,25 @@ theorem prime_sq_dvd_relation_difference_eval_one
   convert hnum.sub hden using 1
   ring
 
+/-- A scalar which is one modulo `p²` may be retained in the generated
+relation without changing its value-at-one layer. -/
+theorem prime_sq_dvd_relation_scaled_difference_eval_one
+    {p : ℕ} (data : RealGauge.RealGaugeData p)
+    (raw : Fin data.rank → ℤ) (c : ℤ)
+    (hc : ((p : ℤ) ^ 2) ∣ c - 1) :
+    ((p : ℤ) ^ 2) ∣
+      (relationNumerator data raw -
+        Polynomial.C c * relationDenominator data raw).eval 1 := by
+  rw [Polynomial.eval_sub, Polynomial.eval_mul, Polynomial.eval_C]
+  have hnum :=
+    prime_sq_dvd_relationNumerator_eval_one_sub_one data raw
+  have hden :=
+    prime_sq_dvd_relationDenominator_eval_one_sub_one data raw
+  have hscaled :=
+    dvd_mul_sub_one_of_dvd_sub_one hc hden
+  convert hnum.sub hscaled using 1
+  ring
+
 /-- The normalized denominator has unit constant jet modulo `p²`. -/
 theorem relationDenominator_moment_zero_isUnit
     {p : ℕ} (data : RealGauge.RealGaugeData p)
