@@ -6,9 +6,10 @@ Authors: Fabian Franz, Fable
 # Probe: the post-repayment stock/credit seam
 
 This scratch file asks only what the current clean conservation cone can
-compose after repayment.  A primitive second-case exponent-59 solution is
-given its literal hypotenuse charge.  A genuine transformer must return
-another primitive second-case solution with strictly smaller charge.
+compose after repayment.  A primitive second-case exponent-59 solution now
+produces its selected ideal pair directly.  A genuine transformer must
+principalize that pair and then return another primitive second-case
+solution with strictly smaller charge.
 
 The generic floor consumes exactly that transformer.  The selected fold now
 derives Vandiver's (7d) from conjugation acting as ledger transpose (the
@@ -32,6 +33,7 @@ namespace Fermat.FiftyNine.Conservation.TransformerProbe
 noncomputable section
 
 open Fermat.FiftyNine.Conservation.FermatState
+open Fermat.FiftyNine.Conservation.StateFactorPair
 
 section GenericPrincipalization
 
@@ -83,24 +85,22 @@ local instance : NumberField.IsCMField K :=
     (S := {59}) K ⟨59, rfl, by norm_num⟩
 
 /-
-The original principalization hole is now an actual composition once
-the two-node state supplies Vandiver's remaining (7a) relation.
-The factor construction itself now supplies its conjugation transpose
-and hence derives (7d).
+The allocation and conjugation sides of the original principalization hole
+are now actual state-produced terms.  The only remaining input is
+Vandiver's Lemma-I relation (7a) for that canonical pair; its relative-norm
+fold (7d) is derived internally.
 -/
 example
     {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
     (S : PrimitiveSecondCaseSolution)
     (hz : (59 : ℤ) ∣ S.z)
-    (pair :
-      Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair
-        hζ S hz)
-    (sevenA : pair.ledger.VandiverSevenA 0 1) :
+    (sevenA :
+      (allocatedPair hζ S hz).ledger.VandiverSevenA 0 1) :
     Fermat.Conservation.KummerDrain.FactorPrincipalizationPermit
-      pair.ledger := by
+      (allocatedPair hζ S hz).ledger := by
   exact
     Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA
-      pair sevenA
+      (allocatedPair hζ S hz) sevenA
 
 variable {ζ : K}
 variable (hζ : IsPrimitiveRoot ζ 59)

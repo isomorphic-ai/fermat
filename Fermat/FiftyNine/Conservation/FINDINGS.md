@@ -1,23 +1,22 @@
 # N59 conservation findings
 
-## 2026-07-30 — the state producer now stops at normalized ideal allocation
+## 2026-07-30 — the Fermat state now reaches the allocated conjugate pair
 
 - The selected cone now has a production `PrimitiveSecondCaseSolution` and
   an orientation theorem placing the factor `59` in the third coordinate.
   The theorem is intentionally existential: rotating `(x,y,z)` preserves
   the Fermat equation and primitivity, but does not identify the new
   `z.natAbs` with the old stock charge.
-- For an oriented state, the clean construction proves the raw cyclotomic
-  ideal product, selects the factors at `ζ` and `ζ⁻¹`, divides both by the
-  common ramified denominator `ζ - 1`, and proves both normalized factors
-  nonzero.
-- The first remaining compiler-localized producer is exactly
-  `Nonempty (StateLinkedIdealPair hζ S hz)`: extracting the two ideal roots
-  requires the normalized factor ideals to be pairwise coprime and the
-  total normalized product to be a 59th power.  The existing raw product
-  equality alone has the wrong type.  The allocation structure itself
-  stores only the two root-power equations; it assumes neither (7a), (7d),
-  nor principalization.
+- For an oriented state, every root factor is divided by the common
+  ramified denominator `ζ - 1`.  The complete normalized product is proved
+  to be a 59th power, while primitivity of the Fermat state makes distinct
+  normalized factors pairwise coprime.  Mathlib's coprime-product
+  extraction therefore supplies a 59th ideal root at every node.
+- In particular, `stateLinkedIdealPair_exists` and its canonical selection
+  `allocatedPair` now construct the selected `ζ`/`ζ⁻¹` ledger directly from
+  the actual state.  The allocation structure stores only its two
+  root-power equations; it assumes neither Vandiver relation nor
+  principalization.
 - Conjugation is no longer an input.  The normalized inverse-root factor is
   `-ζ⁻¹` times the complex conjugate of the normalized root factor, so their
   spans are literal conjugates.  Injectivity of nonzero powers in the
@@ -27,9 +26,9 @@
 - Once allocation exists, the only remaining class relation is Vandiver's
   Lemma-I relation (7a).  The `Fin 2` netting theorem now consumes that one
   relation, with the state-produced (7d), to discharge the complete
-  `FactorPrincipalizationPermit`.  Thus the permit consumer and its
-  conjugation side are filled, but the actual producer remains blocked
-  before allocation and (7a).
+  `FactorPrincipalizationPermit`.  Thus allocation, the conjugation fold,
+  (7d), and the permit consumer are filled; the exact W2 boundary is now
+  only the statewise producer of (7a).
 - W3 remains independently blocked at the charge bridge: orientation does
   not preserve the literal hypotenuse charge, and no constructed
   lambda-drain successor is yet related to `z.natAbs`.  The successor,

@@ -407,6 +407,14 @@ info: 'Fermat.FiftyNine.Conservation.StateFactorPair.prime_dvd_x_add_y' depends 
 #print axioms Fermat.FiftyNine.Conservation.StateFactorPair.prime_dvd_x_add_y
 
 /--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.state_isCoprime_x_y' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.state_isCoprime_x_y
+
+/--
 info: 'Fermat.FiftyNine.Conservation.StateFactorPair.zetaUnit_val' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs in
@@ -435,6 +443,30 @@ info: 'Fermat.FiftyNine.Conservation.StateFactorPair.stateFactor_ne_zero' depend
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.StateFactorPair.stateFactor_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.normalizedFactor_spec' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.normalizedFactor_spec
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.normalizedFactor_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.normalizedFactor_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.fixedDenominator_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.fixedDenominator_ne_zero
 
 /--
 info: 'Fermat.FiftyNine.Conservation.StateFactorPair.normalizedPlusFactor_spec' depends on axioms: [propext,
@@ -467,6 +499,20 @@ info: 'Fermat.FiftyNine.Conservation.StateFactorPair.normalizedMinusFactor_ne_ze
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.StateFactorPair.normalizedMinusFactor_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.stateLinkedIdealPair_exists' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.stateLinkedIdealPair_exists
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorPair.allocatedPair' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorPair.allocatedPair
 
 /--
 info: 'Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.plusIdeal_ne_zero' depends on axioms: [propext,

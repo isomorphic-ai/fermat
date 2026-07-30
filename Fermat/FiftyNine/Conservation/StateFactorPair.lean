@@ -7,15 +7,16 @@ Authors: Fabian Franz, Fable
 
 An oriented integral state supplies the raw cyclotomic factorization.  The
 two factors at `ζ` and `ζ⁻¹` are then divided by their common ramified
-factor `ζ - 1`.  This file carries that construction through nonvanishing
-and exposes the first missing allocation theorem: choosing ideal roots of
-the two normalized principal ideals.
+factor `ζ - 1`.  Pairwise coprimality of the complete normalized
+factorization extracts ideal roots for every node and hence supplies the
+selected allocated pair.
 
 The allocation package contains neither Vandiver relation and does not
 assume principalization of either selected root.
 -/
 import Fermat.Conservation.KummerDrain
 import Fermat.FiftyNine.Conservation.FermatState
+import Mathlib.NumberTheory.FLT.Basic
 import Mathlib.Tactic
 
 open scoped BigOperators NumberField
@@ -59,6 +60,17 @@ theorem prime_dvd_x_add_y
   rw [ZMod.pow_card, ZMod.pow_card, ZMod.pow_card, hzmod] at heqmod
   apply (ZMod.intCast_zmod_eq_zero_iff_dvd (S.x + S.y) 59).1
   simpa using heqmod
+
+/-- Primitivity and the Fermat equation make the two legs coprime. -/
+theorem state_isCoprime_x_y (S : PrimitiveSecondCaseSolution) :
+    IsCoprime S.x S.y := by
+  apply isCoprime_of_gcd_eq_one_of_FLT
+    (n := 59) (c := -S.z) ?_ ?_
+  · simpa only [Finset.gcd_insert, id_eq, ← Int.coe_gcd,
+      Int.neg_gcd, ← LawfulSingleton.insert_empty_eq,
+      Finset.gcd_empty] using S.primitive
+  · rw [(by norm_num : Odd 59).neg_pow]
+    linear_combination S.equation
 
 variable {ζ : K}
 
@@ -133,12 +145,27 @@ theorem stateFactor_ne_zero
   apply S.z_ne_zero
   exact_mod_cast hzcast
 
-private theorem fixedDenominator_dvd_plusFactor
+omit [NumberField K] [IsCyclotomicExtension {59} ℚ K] in
+private theorem fixedDenominator_dvd_node_sub_one
     (hζ : IsPrimitiveRoot ζ 59)
-    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
+    (η : Fermat.Conservation.KummerDrain.RootNode
+      (p := 59) (K := K)) :
+    fixedDenominator hζ ∣ (η : 𝓞 K) - 1 := by
+  have hηpow : (η : 𝓞 K) ^ 59 = 1 :=
+    (Polynomial.mem_nthRootsFinset (by norm_num : 0 < 59) 1).1 η.property
+  obtain ⟨i, -, hi⟩ :=
+    hζ.toInteger_isPrimitiveRoot.eq_pow_of_pow_eq_one hηpow
+  rw [← hi]
+  exact sub_one_dvd_pow_sub_one hζ.toInteger i
+
+private theorem fixedDenominator_dvd_stateFactor
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z)
+    (η : Fermat.Conservation.KummerDrain.RootNode
+      (p := 59) (K := K)) :
     fixedDenominator hζ ∣
       Fermat.Conservation.KummerDrain.factorNode
-        (S.x : 𝓞 K) (S.y : 𝓞 K) hζ.toInteger := by
+        (S.x : 𝓞 K) (S.y : 𝓞 K) η := by
   have h59sum : (59 : 𝓞 K) ∣
       (S.x : 𝓞 K) + (S.y : 𝓞 K) := by
     simpa using
@@ -146,69 +173,193 @@ private theorem fixedDenominator_dvd_plusFactor
   have hπsum : fixedDenominator hζ ∣
       (S.x : 𝓞 K) + (S.y : 𝓞 K) :=
     hζ.toInteger_sub_one_dvd_prime'.trans h59sum
-  have hπtail :
-      fixedDenominator hζ ∣
-        (hζ.toInteger - 1) * (S.y : 𝓞 K) :=
-    dvd_mul_right _ _
+  have hπtail : fixedDenominator hζ ∣
+      ((η : 𝓞 K) - 1) * (S.y : 𝓞 K) :=
+    dvd_mul_of_dvd_left (fixedDenominator_dvd_node_sub_one hζ η) _
   rw [show Fermat.Conservation.KummerDrain.factorNode
-      (S.x : 𝓞 K) (S.y : 𝓞 K) hζ.toInteger =
+      (S.x : 𝓞 K) (S.y : 𝓞 K) η =
         ((S.x : 𝓞 K) + (S.y : 𝓞 K)) +
-          (hζ.toInteger - 1) * (S.y : 𝓞 K) by
+          ((η : 𝓞 K) - 1) * (S.y : 𝓞 K) by
     simp only [Fermat.Conservation.KummerDrain.factorNode]
     ring]
   exact dvd_add hπsum hπtail
+
+/-- The normalized factor at an arbitrary root node. -/
+noncomputable def normalizedFactor
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z)
+    (η : Fermat.Conservation.KummerDrain.RootNode
+      (p := 59) (K := K)) :
+    𝓞 K :=
+  (fixedDenominator_dvd_stateFactor hζ S hz η).choose
+
+theorem normalizedFactor_spec
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z)
+    (η : Fermat.Conservation.KummerDrain.RootNode
+      (p := 59) (K := K)) :
+    normalizedFactor hζ S hz η * fixedDenominator hζ =
+      Fermat.Conservation.KummerDrain.factorNode
+        (S.x : 𝓞 K) (S.y : 𝓞 K) η := by
+  rw [mul_comm]
+  exact (fixedDenominator_dvd_stateFactor hζ S hz η).choose_spec.symm
+
+theorem normalizedFactor_ne_zero
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z)
+    (η : Fermat.Conservation.KummerDrain.RootNode
+      (p := 59) (K := K)) :
+    normalizedFactor hζ S hz η ≠ 0 := by
+  intro hzero
+  apply stateFactor_ne_zero (K := K) S η
+  rw [← normalizedFactor_spec hζ S hz η, hzero, zero_mul]
 
 omit [NumberField K] [IsCyclotomicExtension {59} ℚ K] in
-private theorem fixedDenominator_dvd_inverse_sub_one
+theorem fixedDenominator_ne_zero
     (hζ : IsPrimitiveRoot ζ 59) :
-    fixedDenominator hζ ∣
-      (↑((zetaUnit hζ)⁻¹) : 𝓞 K) - 1 := by
-  let u : (𝓞 K)ˣ := zetaUnit hζ
-  have huval : (u : 𝓞 K) = hζ.toInteger := zetaUnit_val hζ
-  refine ⟨(↑(-(u⁻¹)) : 𝓞 K), ?_⟩
-  change (↑(u⁻¹) : 𝓞 K) - 1 =
-    fixedDenominator hζ * (↑(-(u⁻¹)) : 𝓞 K)
-  rw [show (1 : 𝓞 K) = (↑(u⁻¹) : 𝓞 K) * (u : 𝓞 K) by
-    rw [← Units.val_mul]
-    simp]
-  simp only [fixedDenominator, ← huval]
-  rw [Units.val_neg]
-  ring
+    fixedDenominator hζ ≠ 0 :=
+  hζ.toInteger_isPrimitiveRoot.sub_one_ne_zero (by norm_num)
 
-private theorem fixedDenominator_dvd_minusFactor
+private theorem fixedDenominator_dvd_z
     (hζ : IsPrimitiveRoot ζ 59)
     (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
-    fixedDenominator hζ ∣
-      Fermat.Conservation.KummerDrain.factorNode
-        (S.x : 𝓞 K) (S.y : 𝓞 K)
-        (↑((zetaUnit hζ)⁻¹) : 𝓞 K) := by
-  have h59sum : (59 : 𝓞 K) ∣
-      (S.x : 𝓞 K) + (S.y : 𝓞 K) := by
-    simpa using
-      map_dvd (Int.castRingHom (𝓞 K)) (prime_dvd_x_add_y S hz)
-  have hπsum : fixedDenominator hζ ∣
-      (S.x : 𝓞 K) + (S.y : 𝓞 K) :=
-    hζ.toInteger_sub_one_dvd_prime'.trans h59sum
-  have hπtail :
-      fixedDenominator hζ ∣
-        ((↑((zetaUnit hζ)⁻¹) : 𝓞 K) - 1) * (S.y : 𝓞 K) :=
-    dvd_mul_of_dvd_left (fixedDenominator_dvd_inverse_sub_one hζ) _
-  rw [show Fermat.Conservation.KummerDrain.factorNode
-      (S.x : 𝓞 K) (S.y : 𝓞 K)
-          (↑((zetaUnit hζ)⁻¹) : 𝓞 K) =
-        ((S.x : 𝓞 K) + (S.y : 𝓞 K)) +
-          ((↑((zetaUnit hζ)⁻¹) : 𝓞 K) - 1) *
-            (S.y : 𝓞 K) by
+    fixedDenominator hζ ∣ (S.z : 𝓞 K) := by
+  have h59z : (59 : 𝓞 K) ∣ (S.z : 𝓞 K) := by
+    simpa using map_dvd (Int.castRingHom (𝓞 K)) hz
+  exact hζ.toInteger_sub_one_dvd_prime'.trans h59z
+
+private noncomputable def normalizedZ
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
+    𝓞 K :=
+  (fixedDenominator_dvd_z hζ S hz).choose
+
+private theorem normalizedZ_spec
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
+    normalizedZ hζ S hz * fixedDenominator hζ = (S.z : 𝓞 K) := by
+  rw [mul_comm]
+  exact (fixedDenominator_dvd_z hζ S hz).choose_spec.symm
+
+private theorem normalizedFactor_product_eq_pow
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
+    (∏ η ∈
+        (Polynomial.nthRootsFinset 59 (1 : 𝓞 K)).attach,
+        normalizedFactor hζ S hz η) =
+      normalizedZ hζ S hz ^ 59 := by
+  have hprod :=
+    Fermat.Conservation.KummerDrain.factorNode_product
+      hζ (by norm_num : Odd 59) (S.x : 𝓞 K) (S.y : 𝓞 K)
+  rw [← Finset.prod_attach] at hprod
+  have hzprod :
+      (S.z : 𝓞 K) ^ 59 =
+        ∏ η ∈ (Polynomial.nthRootsFinset 59 (1 : 𝓞 K)).attach,
+          Fermat.Conservation.KummerDrain.factorNode
+            (S.x : 𝓞 K) (S.y : 𝓞 K) η := by
+    rw [← stateEquation (K := K) S]
+    exact hprod
+  simp_rw [← normalizedFactor_spec hζ S hz] at hzprod
+  rw [Finset.prod_mul_distrib, Finset.prod_const,
+    Finset.card_attach,
+    hζ.toInteger_isPrimitiveRoot.card_nthRootsFinset] at hzprod
+  apply mul_right_cancel₀
+    (pow_ne_zero 59 (fixedDenominator_ne_zero hζ))
+  calc
+    (∏ η ∈ (Polynomial.nthRootsFinset 59 (1 : 𝓞 K)).attach,
+          normalizedFactor hζ S hz η) *
+        fixedDenominator hζ ^ 59 =
+      (S.z : 𝓞 K) ^ 59 := hzprod.symm
+    _ = (normalizedZ hζ S hz * fixedDenominator hζ) ^ 59 := by
+      rw [normalizedZ_spec]
+    _ = normalizedZ hζ S hz ^ 59 *
+        fixedDenominator hζ ^ 59 := by rw [mul_pow]
+
+private theorem normalizedFactorIdeal_product_eq_pow
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
+    (∏ η ∈
+        (Polynomial.nthRootsFinset 59 (1 : 𝓞 K)).attach,
+        Ideal.span ({normalizedFactor hζ S hz η} : Set (𝓞 K))) =
+      (Ideal.span ({normalizedZ hζ S hz} : Set (𝓞 K))) ^ 59 := by
+  rw [Ideal.prod_span_singleton, normalizedFactor_product_eq_pow]
+  rw [← Ideal.span_singleton_pow]
+
+private theorem normalizedFactor_sub_associated
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z)
+    (η₁ η₂ : Fermat.Conservation.KummerDrain.RootNode
+      (p := 59) (K := K)) (hη : η₁ ≠ η₂) :
+    Associated (S.y : 𝓞 K)
+      (normalizedFactor hζ S hz η₁ -
+        normalizedFactor hζ S hz η₂) := by
+  symm
+  refine Associated.of_mul_right
+    (a := normalizedFactor hζ S hz η₁ -
+      normalizedFactor hζ S hz η₂)
+    (b := fixedDenominator hζ)
+    (c := (S.y : 𝓞 K))
+    (d := (η₁ : 𝓞 K) - (η₂ : 𝓞 K)) ?_ ?_
+    (fixedDenominator_ne_zero hζ)
+  · apply Associated.of_eq
+    rw [sub_mul, normalizedFactor_spec, normalizedFactor_spec]
     simp only [Fermat.Conservation.KummerDrain.factorNode]
-    ring]
-  exact dvd_add hπsum hπtail
+    ring
+  · exact
+      IsPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+        hζ.toInteger_isPrimitiveRoot (by norm_num : Nat.Prime 59)
+        η₁.property η₂.property (Subtype.coe_ne_coe.mpr hη)
+
+private theorem normalizedFactors_isCoprime
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z)
+    (η₁ η₂ : Fermat.Conservation.KummerDrain.RootNode
+      (p := 59) (K := K)) (hη : η₁ ≠ η₂) :
+    IsCoprime (normalizedFactor hζ S hz η₁)
+      (normalizedFactor hζ S hz η₂) := by
+  have hxy :=
+    (state_isCoprime_x_y S).map (Int.castRingHom (𝓞 K))
+  change IsCoprime (S.x : 𝓞 K) (S.y : 𝓞 K) at hxy
+  have hqπy :
+      IsCoprime
+        (normalizedFactor hζ S hz η₁ * fixedDenominator hζ)
+        (S.y : 𝓞 K) := by
+    rw [normalizedFactor_spec]
+    simpa only [Fermat.Conservation.KummerDrain.factorNode] using
+      hxy.add_mul_right_left (η₁ : 𝓞 K)
+  have hqy :
+      IsCoprime (normalizedFactor hζ S hz η₁) (S.y : 𝓞 K) :=
+    hqπy.of_mul_left_left
+  have hqdiff :
+      IsCoprime (normalizedFactor hζ S hz η₁)
+        (normalizedFactor hζ S hz η₁ -
+          normalizedFactor hζ S hz η₂) :=
+    hqy.of_isCoprime_of_dvd_right
+      (normalizedFactor_sub_associated hζ S hz η₁ η₂ hη).dvd'
+  have hqneg :
+      IsCoprime (normalizedFactor hζ S hz η₁)
+        (-normalizedFactor hζ S hz η₂) := by
+    convert hqdiff.add_mul_left_right (-1) using 1
+    all_goals ring
+  simpa only [neg_neg] using hqneg.neg_right
+
+private theorem normalizedFactorIdeals_isCoprime
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z)
+    (η₁ η₂ : Fermat.Conservation.KummerDrain.RootNode
+      (p := 59) (K := K)) (hη : η₁ ≠ η₂) :
+    IsCoprime
+      (Ideal.span ({normalizedFactor hζ S hz η₁} : Set (𝓞 K)))
+      (Ideal.span ({normalizedFactor hζ S hz η₂} : Set (𝓞 K))) := by
+  rw [Ideal.isCoprime_span_singleton_iff]
+  exact normalizedFactors_isCoprime hζ S hz η₁ η₂ hη
 
 /-- The normalized factor at the selected `ζ` node. -/
 noncomputable def normalizedPlusFactor
     (hζ : IsPrimitiveRoot ζ 59)
     (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
     𝓞 K :=
-  (fixedDenominator_dvd_plusFactor hζ S hz).choose
+  normalizedFactor hζ S hz (plusNode hζ)
 
 theorem normalizedPlusFactor_spec
     (hζ : IsPrimitiveRoot ζ 59)
@@ -216,15 +367,15 @@ theorem normalizedPlusFactor_spec
     normalizedPlusFactor hζ S hz * fixedDenominator hζ =
       Fermat.Conservation.KummerDrain.factorNode
         (S.x : 𝓞 K) (S.y : 𝓞 K) hζ.toInteger := by
-  rw [mul_comm]
-  exact (fixedDenominator_dvd_plusFactor hζ S hz).choose_spec.symm
+  simpa only [normalizedPlusFactor, plusNode] using
+    normalizedFactor_spec hζ S hz (plusNode hζ)
 
 /-- The normalized factor at the selected `ζ⁻¹` node. -/
 noncomputable def normalizedMinusFactor
     (hζ : IsPrimitiveRoot ζ 59)
     (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
     𝓞 K :=
-  (fixedDenominator_dvd_minusFactor hζ S hz).choose
+  normalizedFactor hζ S hz (minusNode hζ)
 
 theorem normalizedMinusFactor_spec
     (hζ : IsPrimitiveRoot ζ 59)
@@ -233,8 +384,11 @@ theorem normalizedMinusFactor_spec
       Fermat.Conservation.KummerDrain.factorNode
         (S.x : 𝓞 K) (S.y : 𝓞 K)
           (↑((zetaUnit hζ)⁻¹) : 𝓞 K) := by
-  rw [mul_comm]
-  exact (fixedDenominator_dvd_minusFactor hζ S hz).choose_spec.symm
+  change normalizedFactor hζ S hz (minusNode hζ) *
+      fixedDenominator hζ =
+    Fermat.Conservation.KummerDrain.factorNode
+      (S.x : 𝓞 K) (S.y : 𝓞 K) (minusNode hζ)
+  exact normalizedFactor_spec hζ S hz (minusNode hζ)
 
 theorem normalizedPlusFactor_ne_zero
     (hζ : IsPrimitiveRoot ζ 59)
@@ -269,6 +423,47 @@ structure StateLinkedIdealPair
     plusIdeal ^ 59 = Ideal.span {normalizedPlusFactor hζ S hz}
   minus_pow :
     minusIdeal ^ 59 = Ideal.span {normalizedMinusFactor hζ S hz}
+
+/-- The oriented Fermat state supplies the selected normalized pair by
+extracting 59th roots from the pairwise-coprime full factor product. -/
+theorem stateLinkedIdealPair_exists
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
+    Nonempty (StateLinkedIdealPair hζ S hz) := by
+  let roots :=
+    (Polynomial.nthRootsFinset 59 (1 : 𝓞 K)).attach
+  have hextract :
+      ∀ η ∈ roots,
+        ∃ I : Ideal (𝓞 K),
+          Ideal.span ({normalizedFactor hζ S hz η} : Set (𝓞 K)) =
+            I ^ 59 := by
+    apply Finset.exists_eq_pow_of_mul_eq_pow_of_coprime
+      (c := Ideal.span ({normalizedZ hζ S hz} : Set (𝓞 K)))
+    · intro η₁ _ η₂ _ hη
+      exact normalizedFactorIdeals_isCoprime hζ S hz η₁ η₂ hη
+    · simpa only [roots] using
+        normalizedFactorIdeal_product_eq_pow hζ S hz
+  obtain ⟨Iplus, hIplus⟩ :=
+    hextract (plusNode hζ)
+      (Finset.mem_attach _ (plusNode hζ))
+  obtain ⟨Iminus, hIminus⟩ :=
+    hextract (minusNode hζ)
+      (Finset.mem_attach _ (minusNode hζ))
+  refine ⟨{
+    plusIdeal := Iplus
+    minusIdeal := Iminus
+    plus_pow := ?_
+    minus_pow := ?_ }⟩
+  · simpa only [normalizedPlusFactor] using hIplus.symm
+  · simpa only [normalizedMinusFactor] using hIminus.symm
+
+/-- A canonical allocated pair selected from the statewise existence
+theorem.  It carries no Vandiver relation or principalization premise. -/
+noncomputable def allocatedPair
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
+    StateLinkedIdealPair hζ S hz :=
+  (stateLinkedIdealPair_exists hζ S hz).some
 
 omit [NumberField K] [IsCyclotomicExtension {59} ℚ K] in
 private theorem ideal_ne_zero_of_pow_eq_span
@@ -339,20 +534,6 @@ theorem StateLinkedIdealPair.ledger_rootIdeal_one
     (pair : StateLinkedIdealPair hζ S hz) :
     pair.ledger.rootIdeal 1 = pair.minusIdeal := by
   rfl
-
-/--
-error: Type mismatch
-  rawFactorIdeal_product hζ S
-has type
-  Ideal.span {↑S.z ^ 59} = ∏ η ∈ Polynomial.nthRootsFinset 59 1, Conservation.KummerDrain.factorIdeal (↑S.x) (↑S.y) η
-but is expected to have type
-  Nonempty (StateLinkedIdealPair hζ S hz)
--/
-#guard_msgs in
-example (hζ : IsPrimitiveRoot ζ 59)
-    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :
-    Nonempty (StateLinkedIdealPair hζ S hz) := by
-  exact rawFactorIdeal_product hζ S
 
 end
 
