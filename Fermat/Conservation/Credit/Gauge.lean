@@ -33,6 +33,8 @@ structure GaugeData (p : ℕ) where
   rank : ℕ
   prime : Nat.Prime p
   odd : Odd p
+  rank_spec :
+    p = 2 * (rank + 1) + 1
   orbitGenerator : (ZMod p)ˣ
   orbitGenerator_order :
     orderOf orbitGenerator = rank + 1
