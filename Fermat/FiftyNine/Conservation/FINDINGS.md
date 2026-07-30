@@ -29,15 +29,35 @@
   `FactorPrincipalizationPermit`.  Thus allocation, the conjugation fold,
   (7d), and the permit consumer are filled; the exact W2 boundary is now
   only the statewise producer of (7a).
+- A direct typed probe at the canonical state pair confirms that
+  `repayment_of_capacity_and_flow` has conclusion `IsRepaid 59 u`, while
+  the ledger requires `VandiverSevenA 0 1`.  The former concerns an
+  independently supplied real unit; the latter concerns the class of a
+  fractional-ideal quotient.  No permitted theorem constructs a
+  state-dependent real unit, proves its Vandiver depth, and transports its
+  repayment back to that ideal class.
+- This is not missing group algebra.  In `ZMod 59`, the classes `1` and
+  `-1` satisfy both the available 59-torsion relation and (7d), but fail
+  (7a).  Assuming a decomposition of the weighted factor generator as a
+  unit times a 59th power would imply (7a), but obtaining that
+  decomposition is equivalent to principalizing the weighted ideal root
+  and is therefore circular.  Historically, the real unit consumed by
+  repayment is produced only after (7a) and (7d) give equation (8), so
+  using its repayment to establish (7a) reverses Vandiver's dependency.
+- The irreducible missing producer is the statewise
+  Takagi--Furtwängler reflection step credited by Vandiver as Lemma I.
+  The repository's implementation of precisely that step is under the
+  forbidden `Fermat.Irregular` cone, so it cannot be imported or copied
+  into this clean ledger cone.
 - W3 remains independently blocked at the charge bridge: orientation does
   not preserve the literal hypotenuse charge, and no constructed
   lambda-drain successor is yet related to `z.natAbs`.  The successor,
   Sophie-Germain Case I, endpoint assembly, and crown audit were therefore
   not entered.
 
-## 2026-07-30 — no selected state currently produces the two ideal relations
+## 2026-07-30 — earlier boundary before state allocation was implemented
 
-- The clean N59 cone never constructs an
+- At this earlier point, the clean N59 cone did not construct an
   `AllocatedFactorLedger` from `PrimitiveSecondCaseSolution`; the two types
   occur only in `KummerDrain.lean` and `TransformerProbe.lean` and have no
   connecting definition or theorem.  Consequently there is no selected

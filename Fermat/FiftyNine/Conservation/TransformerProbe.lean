@@ -109,6 +109,36 @@ variable (hζ : IsPrimitiveRoot ζ 59)
 
 /--
 error: Type mismatch
+  (allocatedPair hζ S hz).ledger.rootQuotient 0 1
+has type
+  FractionalIdeal (nonZeroDivisors (𝓞 K)) K
+but is expected to have type
+  ↥(NumberField.IsCMField.realUnits K)
+-/
+#guard_msgs in
+example (hz : (59 : ℤ) ∣ S.z) :
+    NumberField.IsCMField.realUnits K := by
+  exact (allocatedPair hζ S hz).ledger.rootQuotient 0 1
+
+/--
+error: Type mismatch
+  Instance.repayment_of_capacity_and_flow hζ hdeep
+has type
+  Conservation.Credit.Repayment.IsRepaid 59 u
+but is expected to have type
+  (allocatedPair hζ S hz).ledger.VandiverSevenA 0 1
+-/
+#guard_msgs in
+example (hz : (59 : ℤ) ∣ S.z)
+    (hdeep :
+      Fermat.FiftyNine.Conservation.Instance.IsDeeplyRepayable hζ u) :
+    (allocatedPair hζ S hz).ledger.VandiverSevenA 0 1 := by
+  exact
+    Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow
+      hζ hdeep
+
+/--
+error: Type mismatch
   hrepaid
 has type
   Conservation.Credit.Repayment.IsRepaid 59 u
