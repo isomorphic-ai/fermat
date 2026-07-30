@@ -2,6 +2,22 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — exact high flow now factors on the quotient-ready orbit
+
+- The arbitrary-odd-prime real gauge now drives a formal generator orbit
+  directly.  Its rational node scales and its retained integral edge
+  coefficients are both derived from the same indexed `nodeLift`; neither
+  path chooses a representative of a quotient class.
+- Each formal character row factors exactly as
+  `exactHighEdgeCoefficient * B_N / N`, and reduction of the retained
+  integer coefficient is definitionally the C5 character coordinate.
+  Thus the Bernoulli generator and the Vandermonde gauge have one common
+  source of truth.
+- A cube-free generated eigenvalue converts prime-cube high-flow
+  vanishing into prime divisibility of every raw exponent using the
+  generic zero-kernel theorem.  The remaining W3 work is upstream:
+  derive those prime-cube congruences from an actual deep unit relation.
+
 ## 2026-07-30 — the two flow layers survive the nonlinear quotient
 
 - Euler-jet Leibniz recurrences over `ZMod (p^2)` now carry both layers
