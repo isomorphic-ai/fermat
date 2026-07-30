@@ -5,15 +5,18 @@ Authors: Fabian Franz, Fable
 
 # Executable audit for the route-neutral credit ladder
 
-This non-imported leaf audits every public C1--C3 theorem and checks that no
-forbidden endpoint, generic-irregular, or ladder declaration enters the
-credit cone.
+This non-imported leaf audits the public C1--C3 and W1--W3 surfaces and
+checks that no forbidden endpoint, generic-irregular, or ladder declaration
+or module enters the credit cone.
 -/
 import Fermat.Conservation.Credit.Vacuum
 import Fermat.Conservation.Credit.Capacity
 import Fermat.Conservation.Credit.Repayment
 import Fermat.Conservation.Credit.Flow
+import Fermat.Conservation.Credit.CompletedFlow
+import Fermat.Conservation.Credit.Bernoulli
 import Fermat.Conservation.Credit.Gauge
+import Fermat.Conservation.Credit.HighFlow
 import Fermat.Conservation.Credit.Forcing
 
 /-! ## C1: generated vacuum and two-sided semilattice -/
@@ -237,6 +240,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 
 #guard_standard_axioms_prefix Fermat.Conservation.Credit.Flow
 #guard_standard_axioms_prefix Fermat.Conservation.Credit.Gauge
+#guard_standard_axioms_prefix Fermat.Conservation.Credit.Bernoulli
 
 /--
 info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_pow_rank_add_one' depends on axioms: [propext,
@@ -259,6 +263,22 @@ info: 'Fermat.Conservation.Credit.Gauge.GaugeData.cycle_point' depends on axioms
 #print axioms Fermat.Conservation.Credit.Gauge.GaugeData.cycle_point
 
 /--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.realCycleOrder_odd' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.realCycleOrder_odd
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.prime_mod_four_eq_three' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.prime_mod_four_eq_three
+
+/--
 info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitNode_injective' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
@@ -267,12 +287,12 @@ info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitNode_injective' depends o
 #print axioms Fermat.Conservation.Credit.Gauge.GaugeData.orbitNode_injective
 
 /--
-info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_pow_succ_ne_one' depends on axioms: [propext,
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_square_pow_succ_ne_one' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 -/
 #guard_msgs in
-#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_pow_succ_ne_one
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.orbitGenerator_square_pow_succ_ne_one
 
 /--
 info: 'Fermat.Conservation.Credit.Gauge.GaugeData.rowScale_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -281,12 +301,28 @@ info: 'Fermat.Conservation.Credit.Gauge.GaugeData.rowScale_ne_zero' depends on a
 #print axioms Fermat.Conservation.Credit.Gauge.GaugeData.rowScale_ne_zero
 
 /--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.columnScale_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.columnScale_ne_zero
+
+/--
 info: 'Fermat.Conservation.Credit.Gauge.GaugeData.characterMatrix_apply' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.Gauge.GaugeData.characterMatrix_apply
+
+/--
+info: 'Fermat.Conservation.Credit.Gauge.GaugeData.characterMatrix_eq_high_edge_difference' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Gauge.GaugeData.characterMatrix_eq_high_edge_difference
 
 /--
 info: 'Fermat.Conservation.Credit.Gauge.GaugeData.characterMatrix_det_ne_zero' depends on axioms: [propext,
@@ -311,6 +347,74 @@ info: 'Fermat.Conservation.Credit.Gauge.GaugeData.characterCoordinates_injective
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.Gauge.GaugeData.characterCoordinates_injective
+
+/-! ## W1 completed flow, exact lift, and generic W3 forcing -/
+
+/--
+info: 'Fermat.Conservation.Credit.Flow.completedLogFlow_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Flow.completedLogFlow_mul
+
+/--
+info: 'Fermat.Conservation.Credit.Flow.dworkParameterPowerBasis_coeff_sub_mem_primeIdeal_sq_of_mem_parameterIdeal_two_mul_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Flow.dworkParameterPowerBasis_coeff_sub_mem_primeIdeal_sq_of_mem_parameterIdeal_two_mul_prime
+
+/--
+info: 'Fermat.Conservation.Credit.Flow.dworkCompleteCyclotomicEquiv_completedLog' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Flow.dworkCompleteCyclotomicEquiv_completedLog
+
+/--
+info: 'Fermat.Conservation.Credit.Bernoulli.exceptional_bernoulli_numerator_not_dvd_cube_of_faulhaber' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Bernoulli.exceptional_bernoulli_numerator_not_dvd_cube_of_faulhaber
+
+/--
+info: 'Fermat.Conservation.Credit.Flow.intCast_teichNodeValue' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Flow.intCast_teichNodeValue
+
+/--
+info: 'Fermat.Conservation.Credit.Flow.gaugeGeneratorOrbit_exponentFlow_eq_exactHighEdgeCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Flow.gaugeGeneratorOrbit_exponentFlow_eq_exactHighEdgeCoefficient
+
+/--
+info: 'Fermat.Conservation.Credit.Flow.intCast_exactHighEdgeCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Flow.intCast_exactHighEdgeCoefficient
+
+/--
+info: 'Fermat.Conservation.Credit.Flow.exponent_dvd_of_highFlowVanishes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Flow.exponent_dvd_of_highFlowVanishes
+
+/--
+info: 'Fermat.Conservation.Credit.Flow.deepExponentForcing' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.Flow.deepExponentForcing
 
 /-! ## Exhaustive forbidden-prefix guards -/
 
@@ -338,6 +442,14 @@ elab "#guard_no_module_prefix " p:ident : command => do
     throwError
       "modules with forbidden prefix {forbiddenPrefix}: {offenders}"
 
+/-- Fail if one exact module occurs in the transitive import graph.  This is
+used when a permitted sibling module shares its name prefix. -/
+elab "#guard_no_module " p:ident : command => do
+  let env ← getEnv
+  let forbiddenModule := p.getId
+  if env.header.moduleNames.contains forbiddenModule then
+    throwError "forbidden module {forbiddenModule} is imported"
+
 #guard_no_decl_prefix Fermat.FiftyNine
 #guard_no_decl_prefix Fermat.FiftyNine.GenericProof
 #guard_no_decl_prefix Fermat.FiftyNine.FirstCase
@@ -355,6 +467,7 @@ elab "#guard_no_module_prefix " p:ident : command => do
 #guard_no_module_prefix Fermat.Irregular
 #guard_no_module_prefix Fermat.KummerIso
 #guard_no_module_prefix Fermat.Ladder
+#guard_no_module Fermat.Statement
 
 /-! ## Mechanical selected-prime source-literal gate -/
 

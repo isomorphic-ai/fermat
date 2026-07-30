@@ -6,18 +6,19 @@ Authors: Fabian Franz, Fable
 # N59 conservation structural verification
 
 This non-imported executable audit leaf checks every theorem currently
-exposed by the clean exponent-59 structural spine.  It also checks the
-complete forbidden namespace prefixes, rather than relying only on
-representative unused-name tests.
+exposed by the clean exponent-59 structural spine and the selected
+credit-flow instance.  It also checks declarations and the transitive module
+graph, rather than relying only on representative unused-name tests.
 
 The final `Fermat.HoldsAt 59` theorem is not present here: `FINDINGS.md`
-records the completed C2 certificate and bounded C4 bridge, together with
-the exact remaining C3 character-forcing and stock-to-successor seams which
-must close before that endpoint can be added honestly.
+records the completed C2 certificate and bounded C4 bridge.  W3 remains
+conditional on `DeepFlowLaw59`; the transformer and endpoint therefore
+remain outside this cone.
 -/
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 import Fermat.FiftyNine.Conservation.BoundedSinnott
+import Fermat.FiftyNine.Conservation.Instance
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 
@@ -179,14 +180,6 @@ info: 'Fermat.FiftyNine.Conservation.Credit.capacityIndex_eq_relIndex' depends o
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.Credit.capacityIndex_eq_relIndex
 
-/--
-info: 'Fermat.FiftyNine.Conservation.Credit.repayment_of_capacity_and_coefficient_forcing' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
--/
-#guard_msgs in
-#print axioms Fermat.FiftyNine.Conservation.Credit.repayment_of_capacity_and_coefficient_forcing
-
 /-! ## Filled C2 and bounded C4 seams -/
 
 /--
@@ -202,6 +195,90 @@ info: 'Fermat.FiftyNine.Conservation.Credit.boundedSinnottBridge' depends on axi
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.Credit.boundedSinnottBridge
+
+/-! ## Selected C5 gauge, cube certificate, and conditional W3 -/
+
+open Lean Elab Command
+
+/-- Exhaustively audit every declaration in a selected implementation
+namespace against Lean's standard extensionality, choice, and quotient
+boundary. -/
+elab "#guard_standard_axioms_prefix " p:ident : command => do
+  let env ← getEnv
+  let auditedPrefix := p.getId
+  let allowed : Array Name :=
+    #[``propext, ``Classical.choice, ``Quot.sound]
+  let declarations :=
+    env.constants.toList
+      |>.map Prod.fst
+      |>.filter auditedPrefix.isPrefixOf
+  for declaration in declarations do
+    let axioms ← Lean.collectAxioms declaration
+    let unexpected := axioms.filter fun ax =>
+      !allowed.contains ax
+    unless unexpected.isEmpty do
+      throwError
+        "{declaration} depends on nonstandard axioms: {unexpected}"
+
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.Instance
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Instance.gauge_cycle_eq_exponentCycle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Instance.gauge_cycle_eq_exponentCycle
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.raw_power_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.raw_power_sum
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Instance.flowCertificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Instance.flowCertificate
+
+/-! The following two theorems are deliberately conditional: both consume
+`hL4 : DeepFlowLaw59 hζ`.  These guards audit their proof boundary; they do
+not claim that W1's remaining local comparison has been proved. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow
+
+/--
+info: 'Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow
 
 /-! ## Seven-stock receipt -/
 
@@ -301,9 +378,7 @@ info: 'Fermat.Conservation.impossible_of_strict_charge_drain' depends on axioms:
 #guard_msgs in
 #print axioms Fermat.Conservation.impossible_of_strict_charge_drain
 
-/-! ## Exhaustive forbidden-prefix guards -/
-
-open Lean Elab Command
+/-! ## Exhaustive forbidden declaration and transitive-module guards -/
 
 /-- Fail if the imported environment contains any declaration below a
 forbidden namespace or module prefix. -/
@@ -317,6 +392,27 @@ elab "#guard_no_decl_prefix " p:ident : command => do
     throwError
       "declarations with forbidden prefix {forbiddenPrefix}: {offenders.map Prod.fst}"
 
+/-- Fail if the transitive import graph contains a module below a forbidden
+prefix.  This catches files such as `FirstCase` whose declarations live in a
+shorter namespace. -/
+elab "#guard_no_module_prefix " p:ident : command => do
+  let env ← getEnv
+  let forbiddenPrefix := p.getId
+  let offenders :=
+    env.header.moduleNames.filter forbiddenPrefix.isPrefixOf
+  unless offenders.isEmpty do
+    throwError
+      "modules with forbidden prefix {forbiddenPrefix}: {offenders}"
+
+/-- Fail if one exact module occurs in the transitive import graph.  This is
+needed for the forbidden `Fermat.Statement` transport while still permitting
+the narrow `Fermat.Statement.Basic` definitions. -/
+elab "#guard_no_module " p:ident : command => do
+  let env ← getEnv
+  let forbiddenModule := p.getId
+  if env.header.moduleNames.contains forbiddenModule then
+    throwError "forbidden module {forbiddenModule} is imported"
+
 #guard_no_decl_prefix Fermat.FiftyNine.GenericProof
 #guard_no_decl_prefix Fermat.FiftyNine.FirstCase
 #guard_no_decl_prefix Fermat.FiftyNine.GenericSecondCase
@@ -325,7 +421,34 @@ elab "#guard_no_decl_prefix " p:ident : command => do
 #guard_no_decl_prefix Fermat.FiftyNine.GenericLemmaTwo
 #guard_no_decl_prefix Fermat.GenericIrregular
 #guard_no_decl_prefix Fermat.Irregular
+#guard_no_decl_prefix Fermat.KummerIso
 #guard_no_decl_prefix Fermat.Ladder
+
+/-! The six classical exponent-specific routes remain absent as modules,
+including routes which declare into the shorter `Fermat.FiftyNine`
+namespace. -/
+
+#guard_no_module_prefix Fermat.FiftyNine.GenericProof
+#guard_no_module_prefix Fermat.FiftyNine.FirstCase
+#guard_no_module_prefix Fermat.FiftyNine.GenericSecondCase
+#guard_no_module_prefix Fermat.FiftyNine.Folding
+#guard_no_module_prefix Fermat.FiftyNine.GenericChannels
+#guard_no_module_prefix Fermat.FiftyNine.GenericLemmaTwo
+
+/-! The exact five-file Vandiver seam superseded by CREDIT-FLOW is forbidden
+transitively, not merely checked for representative declarations. -/
+
+#guard_no_module Fermat.FiftyNine.VandiverPolynomialUnits
+#guard_no_module Fermat.FiftyNine.VandiverDeepPolynomial
+#guard_no_module Fermat.FiftyNine.VandiverPositiveRelationDerivative
+#guard_no_module Fermat.FiftyNine.VandiverRelationNormalization
+#guard_no_module Fermat.FiftyNine.VandiverNormalizedRelationDerivative
+
+#guard_no_module_prefix Fermat.GenericIrregular
+#guard_no_module_prefix Fermat.Irregular
+#guard_no_module_prefix Fermat.KummerIso
+#guard_no_module_prefix Fermat.Ladder
+#guard_no_module Fermat.Statement
 
 /-! Representative declaration guards cover module boundaries whose source
 file does not declare into a same-named namespace (notably `FirstCase`). -/
