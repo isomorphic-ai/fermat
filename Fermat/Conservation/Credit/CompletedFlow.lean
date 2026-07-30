@@ -18,6 +18,7 @@ action, providing the arithmetic gauge functoriality needed downstream.
 -/
 import Fermat.Conservation.Credit.Flow
 import KummerCriterion.CyclotomicUnits.LogDomain
+import KummerCriterion.CyclotomicUnits.KummerLogCoefficient.Coordinates
 
 open NumberField
 open scoped NumberField
@@ -138,6 +139,72 @@ theorem completedLog_sub_mem_completeLambda_two_mul_prime_of_sub_mem
         completedLog (p := p) (K := K) v ∈
       (dworkCompleteLambdaIdeal p K) ^ (2 * p) :=
   completedLog_sub_mem_completeLambda_pow_of_sub_mem u v (2 * p) huv
+
+/-! ## Prime-power Dwork coefficients -/
+
+/-- Parameter-adic depth by `q * (p - 1)` forces every Dwork power-basis
+coefficient into the `q`th power of the rational prime ideal.
+
+This is the arbitrary-precision extractor missing from the packaged
+mod-`p` coordinate.  It stops before reducing the coefficient, so the
+prime-square information required by the high flow is retained. -/
+theorem
+    dworkParameterPowerBasis_coeff_sub_mem_primeIdeal_pow_of_mem_parameterIdeal_pow_mul_pred
+    {x y : DworkCompleteIntegerRing p K} (q : ℕ)
+    (hxy : x - y ∈ (dworkParameterIdeal p K) ^ (q * (p - 1)))
+    (i : Fin (p - 1)) :
+    (dworkParameterPowerBasis p K).repr x i -
+        (dworkParameterPowerBasis p K).repr y i ∈
+      (rationalPadicPrimeIdeal p) ^ q := by
+  let R₀ : Type := RationalPadicIntegerRing p
+  let S : Type _ := DworkCompleteIntegerRing p K
+  rcases
+      exists_natCast_prime_pow_mul_eq_of_mem_dworkParameterIdeal_pow_mul_pred_add
+        (p := p) (K := K) q 0 (by simpa using hxy) with
+    ⟨z, _hz, hz⟩
+  have hz' :
+      (p : R₀) ^ q • z = x - y := by
+    change algebraMap R₀ S ((p : R₀) ^ q) * z = x - y
+    simpa [R₀, S, map_pow] using hz
+  have hrepr :
+      (dworkParameterPowerBasis p K).repr (x - y) i =
+        (p : R₀) ^ q * (dworkParameterPowerBasis p K).repr z i := by
+    calc
+      (dworkParameterPowerBasis p K).repr (x - y) i =
+          (dworkParameterPowerBasis p K).repr ((p : R₀) ^ q • z) i := by
+        rw [hz']
+      _ = (((p : R₀) ^ q) •
+          (dworkParameterPowerBasis p K).repr z) i := by
+        rw [(dworkParameterPowerBasis p K).repr.map_smul]
+      _ = (p : R₀) ^ q *
+          (dworkParameterPowerBasis p K).repr z i := by
+        simp [Pi.smul_apply, smul_eq_mul]
+  have hp :
+      (p : R₀) ^ q ∈ (rationalPadicPrimeIdeal p) ^ q := by
+    simp [rationalPadicPrimeIdeal, Ideal.span_singleton_pow]
+  have hsub :
+      (dworkParameterPowerBasis p K).repr (x - y) i =
+        (dworkParameterPowerBasis p K).repr x i -
+          (dworkParameterPowerBasis p K).repr y i := by
+    exact congrArg (fun f => f i)
+      ((dworkParameterPowerBasis p K).repr.map_sub x y)
+  rw [← hsub, hrepr]
+  exact ((rationalPadicPrimeIdeal p) ^ q).mul_mem_right _ hp
+
+/-- Exact depth `2 * p` retains two rational prime-adic layers in every
+Dwork power-basis coefficient. -/
+theorem
+    dworkParameterPowerBasis_coeff_sub_mem_primeIdeal_sq_of_mem_parameterIdeal_two_mul_prime
+    {x y : DworkCompleteIntegerRing p K}
+    (hxy : x - y ∈ (dworkParameterIdeal p K) ^ (2 * p))
+    (i : Fin (p - 1)) :
+    (dworkParameterPowerBasis p K).repr x i -
+        (dworkParameterPowerBasis p K).repr y i ∈
+      (rationalPadicPrimeIdeal p) ^ 2 := by
+  apply
+    dworkParameterPowerBasis_coeff_sub_mem_primeIdeal_pow_of_mem_parameterIdeal_pow_mul_pred
+      (p := p) (K := K) 2
+  exact Ideal.pow_le_pow_right (by omega) hxy
 
 /-! ## Cyclotomic gauge functoriality -/
 
