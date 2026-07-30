@@ -14,6 +14,7 @@ import Fermat.Conservation.Credit.Capacity
 import Fermat.Conservation.Credit.Repayment
 import Fermat.Conservation.Credit.Flow
 import Fermat.Conservation.Credit.LogRateFlow
+import Fermat.Conservation.Credit.HighFlowClosure
 import Fermat.Conservation.Credit.CompletedFlow
 import Fermat.Conservation.Credit.Bernoulli
 import Fermat.Conservation.Credit.Gauge
@@ -487,6 +488,38 @@ info: 'Fermat.Conservation.Credit.LogRate.Arithmetic.prime_cube_dvd_exact_of_rat
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.LogRate.Arithmetic.prime_cube_dvd_exact_of_rate_numerator_sq
+
+/--
+info: 'Fermat.Conservation.Credit.RateFlow.Composition.rateJet_selected_prime_integral_and_num_sq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.RateFlow.Composition.rateJet_selected_prime_integral_and_num_sq
+
+/--
+info: 'Fermat.Conservation.Credit.HighFlowClosure.GeneratedRelation.highFlowVanishes_of_moment_ready_generated_relation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.HighFlowClosure.GeneratedRelation.highFlowVanishes_of_moment_ready_generated_relation
+
+/--
+info: 'Fermat.Conservation.Credit.RealFlow.highFlowVanishes_of_deepRelation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.RealFlow.highFlowVanishes_of_deepRelation
+
+/--
+info: 'Fermat.Conservation.Credit.RealFlow.deepFlowLaw_realCyclotomicOrbitNodeQuotient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.RealFlow.deepFlowLaw_realCyclotomicOrbitNodeQuotient
 
 /-! ## Exhaustive forbidden-prefix guards -/
 

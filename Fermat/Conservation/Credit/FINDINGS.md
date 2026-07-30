@@ -2,6 +2,20 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the generator-derived flow closes the deep law
+
+- The corrected integral relation reduces to the same quotient jets as the
+  original generated numerator and denominator.  Rational recurrence
+  uniqueness therefore reads the selected nonlinear zero directly as a
+  prime-square-zero jet of the generator-derived logarithmic rate.
+- At each high index, the rate is the exact generated edge coefficient
+  times `B_N / N`.  The selected index contributes one factor of `p`;
+  clearing only prime-to-`p` denominators upgrades the rate numerator's
+  `p²` divisibility to the prime-cube high-flow congruence.
+- The actual deep real-unit relation now constructs this moment-ready
+  polynomial relation and hence satisfies `DeepFlowLaw` for every odd
+  prime.  W3 no longer consumes a local-depth premise from an instance.
+
 ## 2026-07-30 — the retained deep scalar is invisible to the flow
 
 - The scalar produced by the actual deep relation cannot be replaced by
