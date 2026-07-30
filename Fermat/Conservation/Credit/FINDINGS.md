@@ -2,6 +2,21 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — C5 diagonalizes on the real quotient for every odd prime
+
+- The correct C2 carrier is now implemented as
+  `(ZMod p)ˣ / ⟨-1⟩`.  Exact order of the squared indexed lift proves that
+  its quotient class has order `(p - 1) / 2`, without forcing a congruence
+  class modulo four.
+- C5 is the row-scaled transpose Vandermonde on the squared indexed lifts.
+  Distinctness, nonzero row and column scales, determinant nonvanishing,
+  and zero-kernel gauge inversion are all derived from the one exact-order
+  field; no matrix or inverse is supplied by an instance.
+- The high-edge formula deliberately evaluates the indexed lifts rather
+  than representatives chosen from quotient classes.  Thus the same API
+  both respects the real cycle and retains the sign-sensitive integer
+  lifts needed by W1.
+
 ## 2026-07-30 — the correction polynomial has two exact flow layers
 
 - If the depth correction `A` is a multiple of the prime cyclotomic
