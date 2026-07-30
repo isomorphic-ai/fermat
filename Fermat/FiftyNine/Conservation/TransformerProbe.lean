@@ -22,6 +22,7 @@ norm charges rather than the hypotenuse charges of two integral solutions.
 import Fermat.Conservation.KummerDrain
 import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.GaugeQuotient
+import Fermat.FiftyNine.Conservation.StateFactorConjugation
 import Fermat.FiftyNine.Conservation.StateFactorPair
 
 open scoped NumberField
@@ -83,8 +84,9 @@ local instance : NumberField.IsCMField K :=
 
 /-
 The original principalization hole is now an actual composition once
-the two-node state supplies Vandiver's remaining (7a) relation and its
-conjugation-transpose identity.
+the two-node state supplies Vandiver's remaining (7a) relation.
+The factor construction itself now supplies its conjugation transpose
+and hence derives (7d).
 -/
 example
     {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
@@ -93,18 +95,12 @@ example
     (pair :
       Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair
         hζ S hz)
-    (sevenA : pair.ledger.VandiverSevenA 0 1)
-    (htranspose :
-      pair.minusIdeal =
-        Ideal.map
-          (NumberField.IsCMField.ringOfIntegersComplexConj K)
-          pair.plusIdeal) :
+    (sevenA : pair.ledger.VandiverSevenA 0 1) :
     Fermat.Conservation.KummerDrain.FactorPrincipalizationPermit
       pair.ledger := by
-  apply
-    Fermat.FiftyNine.Conservation.Fold.factorPrincipalizationPermit_of_sevenA_and_conjugationTranspose
-      pair.ledger sevenA
-  simpa using htranspose
+  exact
+    Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA
+      pair sevenA
 
 variable {ζ : K}
 variable (hζ : IsPrimitiveRoot ζ 59)

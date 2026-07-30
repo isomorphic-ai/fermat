@@ -22,6 +22,7 @@ import Fermat.FiftyNine.Conservation.DepthCertificate
 import Fermat.FiftyNine.Conservation.GaugeQuotient
 import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.StateFactorPair
+import Fermat.FiftyNine.Conservation.StateFactorConjugation
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
@@ -260,6 +261,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.Fold
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.FermatState
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.StateFactorPair
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.StateFactorConjugation
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
 /--
@@ -497,6 +499,56 @@ info: 'Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.ledger
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.StateFactorPair.StateLinkedIdealPair.ledger_rootIdeal_one
+
+/-! ## Conjugate state-fold receipts -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorConjugation.normalizedMinusFactor_eq_unit_mul_conj' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorConjugation.normalizedMinusFactor_eq_unit_mul_conj
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorConjugation.span_normalizedMinusFactor_eq_map_conj' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorConjugation.span_normalizedMinusFactor_eq_map_conj
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.minusIdeal_eq_map_conj_plusIdeal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.minusIdeal_eq_map_conj_plusIdeal
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.ledger_conjugationTranspose' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.ledger_conjugationTranspose
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA
 
 /-! ## Seven-stock receipt -/
 

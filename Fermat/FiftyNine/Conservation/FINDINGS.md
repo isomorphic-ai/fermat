@@ -18,12 +18,18 @@
   equality alone has the wrong type.  The allocation structure itself
   stores only the two root-power equations; it assumes neither (7a), (7d),
   nor principalization.
-- Once that allocation exists, the remaining W2 inputs are the selected
-  conjugation-transpose equation and Vandiver's Lemma-I relation (7a).
-  The fold now derives (7d), and the `Fin 2` netting theorem then discharges
-  the full `FactorPrincipalizationPermit`.  Thus the permit consumer is
-  filled, but its actual state producer remains blocked before allocation
-  and (7a).
+- Conjugation is no longer an input.  The normalized inverse-root factor is
+  `-ζ⁻¹` times the complex conjugate of the normalized root factor, so their
+  spans are literal conjugates.  Injectivity of nonzero powers in the
+  Dedekind ideal monoid then forces every allocated minus root to be the
+  conjugate of its plus root.  The selected fold consequently derives
+  Vandiver's (7d) statewise from every `StateLinkedIdealPair`.
+- Once allocation exists, the only remaining class relation is Vandiver's
+  Lemma-I relation (7a).  The `Fin 2` netting theorem now consumes that one
+  relation, with the state-produced (7d), to discharge the complete
+  `FactorPrincipalizationPermit`.  Thus the permit consumer and its
+  conjugation side are filled, but the actual producer remains blocked
+  before allocation and (7a).
 - W3 remains independently blocked at the charge bridge: orientation does
   not preserve the literal hypotenuse charge, and no constructed
   lambda-drain successor is yet related to `z.natAbs`.  The successor,
