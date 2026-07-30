@@ -2,6 +2,29 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — completed depth is available, but its high coordinate is not
+
+- The pinned completed-log API does prove the actual local half of W1
+  generically.  Congruent principal units have equal completed logarithms in
+  every lambda-adic quotient, so a congruence at depth `2 * p` gives a
+  completed-log difference in the corresponding completed ideal power.
+  The same API also proves cyclotomic equivariance of the completed
+  logarithm.  Both statements compile using only the permitted external
+  boundary.
+- Its public Dwork-coordinate extractor stops at the quotient by
+  `lambda ^ (p - 1)` and lands in `ZMod p`.  The packaged formal evaluator
+  consequently identifies only the low coefficient
+  `B_(2 * j) / (2 * j)`.  It has no coordinate retaining the next two
+  prime-adic layers and no theorem identifying an actual completed-log
+  coordinate with the generated high derivative
+  `B_(2 * j * p) / (2 * j * p)`.
+- This precision loss is the concrete remaining W1 obstruction.  Every high
+  index used by the credit flow is divisible by `p`, so reducing the
+  completed logarithm modulo `p` erases exactly the valuation distinction
+  that the cube-free certificate checks.  Closing L4 requires a generic
+  high Dwork extractor at prime-cube precision plus its formal-to-completed
+  comparison; a low-row Kummer congruence cannot substitute for it.
+
 ## 2026-07-30 — the rate coordinate is a normalized derivative
 
 - A raw coefficient of the Bernoulli exponential series carries the
