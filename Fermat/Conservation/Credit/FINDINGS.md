@@ -2,6 +2,22 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — the rate coordinate is a normalized derivative
+
+- A raw coefficient of the Bernoulli exponential series carries the
+  denominator `N!`; it is not the integral flow coordinate used by the
+  depth argument.  Evaluating the `N - 1`st formal derivative at zero
+  multiplies by `(N - 1)!` and leaves exactly `B_N / N`.
+- W1 now uses that normalized derivative for every orbit-edge weight.  At
+  `N = 2 * (k + 1) * p`, the displayed denominator contains exactly the
+  selected prime factor whose valuation converts depth two into the
+  prime-cube numerator congruence.  The high Bernoulli numerator is
+  therefore derived from the generator with the correct normalization.
+- This repair also sharpens the remaining L4 comparison: it must identify
+  the actual completed local logarithm with these normalized formal
+  derivatives.  Comparing it with the unnormalized coefficient flow would
+  have proved the wrong valuation statement.
+
 ## 2026-07-30 — the generator mints a flow, but depth has not reached it
 
 - The Bernoulli generating series now constructs each orbit-edge rate and
