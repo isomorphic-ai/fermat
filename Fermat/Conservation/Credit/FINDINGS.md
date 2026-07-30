@@ -2,6 +2,22 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — rational Euler jets have a canonical prime-square reading
+
+- A rational whose reduced denominator is prime to `p` reduces canonically
+  to `ZMod (p²)` by multiplying its numerator by the inverse denominator.
+  The construction respects addition, multiplication, subtraction, and
+  finite sums, and zero reduction is exactly `p²` divisibility of the
+  reduced numerator.
+- Prime-to-`p` denominators propagate through quotient and logarithmic
+  Euler-jet recurrences by strong induction whenever the constant divisor
+  has a prime-to-`p` inverse.  Thus the generated rational rate does not
+  need an independently asserted integrality certificate.
+- Recurrence uniqueness identifies these reductions with the integral
+  polynomial moments used by the nonlinear bridge.  The remaining work is
+  now composition: supply the concrete generated sources and read the
+  selected zero reduction as numerator-square divisibility.
+
 ## 2026-07-30 — the actual real-edge relation reaches the nonlinear flow
 
 - Evaluating the generated numerator and denominator polynomials at a

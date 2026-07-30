@@ -22,6 +22,7 @@ import Fermat.Conservation.Credit.DepthFlow
 import Fermat.Conservation.Credit.CyclotomicFlow
 import Fermat.Conservation.Credit.MomentFlow
 import Fermat.Conservation.Credit.NonlinearFlow
+import Fermat.Conservation.Credit.RationalReduction
 import Fermat.Conservation.Credit.RealGauge
 import Fermat.Conservation.Credit.RealHighFlow
 import Fermat.Conservation.Credit.RelationDepthFlow
@@ -447,6 +448,28 @@ info: 'Fermat.Conservation.Credit.RealFlow.exists_moment_ready_relation_of_vandi
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.RealFlow.exists_moment_ready_relation_of_vandiverDeep
+
+/--
+info: 'Fermat.Conservation.Credit.RationalFlow.reduce_eq_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.RationalFlow.reduce_eq_zero_iff
+
+/--
+info: 'Fermat.Conservation.Credit.RationalFlow.denominatorPrimeTo_quotient_of_recurrence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.RationalFlow.denominatorPrimeTo_quotient_of_recurrence
+
+/--
+info: 'Fermat.Conservation.Credit.RationalFlow.denominatorPrimeTo_logDerivative_of_recurrence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.Credit.RationalFlow.denominatorPrimeTo_logDerivative_of_recurrence
 
 /-! ## Exhaustive forbidden-prefix guards -/
 

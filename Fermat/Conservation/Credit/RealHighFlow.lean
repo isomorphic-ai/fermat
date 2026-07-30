@@ -25,6 +25,29 @@ def highIndex {p : ℕ} {data : RealGaugeData p}
     (k : Fin data.rank) : ℕ :=
   2 * (k.val + 1) * p
 
+/-- The selected high index is the prime times its positive row
+multiplier.  This is the shape consumed by the nonlinear jet bridge. -/
+theorem highIndex_eq_prime_mul_rowMultiplier {p : ℕ}
+    {data : RealGaugeData p} (row : Fin data.rank) :
+    highIndex (data := data) row =
+      p * (2 * (row.val + 1)) := by
+  simp [highIndex, Nat.mul_comm]
+
+/-- Every selected row multiplier is positive. -/
+theorem rowMultiplier_pos {p : ℕ}
+    {data : RealGaugeData p} (row : Fin data.rank) :
+    0 < 2 * (row.val + 1) := by
+  omega
+
+/-- Every selected row multiplier lies below `p - 1`, uniformly for the
+real cyclotomic rank. -/
+theorem rowMultiplier_lt_prime_pred {p : ℕ}
+    {data : RealGaugeData p} (row : Fin data.rank) :
+    2 * (row.val + 1) < p - 1 := by
+  have hrow := row.isLt
+  have hrank := data.rank_spec
+  omega
+
 /-- The integral eigenvalue generated in row `k`. -/
 def highEigenvalue {p : ℕ} {data : RealGaugeData p}
     (k : Fin data.rank) : ℤ :=
