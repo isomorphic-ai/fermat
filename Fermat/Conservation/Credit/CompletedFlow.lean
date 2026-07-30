@@ -33,6 +33,47 @@ variable {p : ℕ} [Fact p.Prime]
 variable {K : Type*} [Field K] [NumberField K]
   [IsCyclotomicExtension {p} ℚ K]
 
+/-! ## Actual-unit conservation -/
+
+/-- Kummer's completed logarithm bundled as the multiplicative-to-additive
+flow on actual principal units.
+
+The multiplicative wrapper is only a change of notation on the additive
+completed local ring.  Thus this map is constructed from `completedLog`,
+whose multiplication law is already proved by the pinned same-prime
+logarithm, rather than supplied as an independent flow. -/
+noncomputable def completedLogFlow :
+    completedLogDomain (p := p) (K := K) →*
+      Multiplicative (DworkCompleteIntegerRing p K) where
+  toFun u := Multiplicative.ofAdd
+    (completedLog (p := p) (K := K) u)
+  map_one' := by
+    apply Multiplicative.toAdd.injective
+    simp [completedLog_one]
+  map_mul' u v := by
+    apply Multiplicative.toAdd.injective
+    simp [completedLog_mul]
+
+@[simp]
+theorem completedLogFlow_apply
+    (u : completedLogDomain (p := p) (K := K)) :
+    Multiplicative.toAdd (completedLogFlow (p := p) (K := K) u) =
+      completedLog (p := p) (K := K) u :=
+  rfl
+
+/-- Product conservation for actual principal units, exposed through the
+generated flow object. -/
+theorem completedLogFlow_mul
+    (u v : completedLogDomain (p := p) (K := K)) :
+    completedLogFlow (p := p) (K := K) (u * v) =
+      completedLogFlow (p := p) (K := K) u *
+        completedLogFlow (p := p) (K := K) v :=
+  (completedLogFlow (p := p) (K := K)).map_mul u v
+
+/-! The further projection from this completed value to the finite
+high-character coefficient space is precisely the missing prime-cube
+comparison recorded in `FINDINGS.md`; it is not postulated here. -/
+
 /-! ## Depth comparison -/
 
 /-- Kummer's completed same-prime logarithm respects congruence in every
