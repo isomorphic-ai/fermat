@@ -2,6 +2,16 @@
 
 Newest findings are recorded first.
 
+## 2026-07-30 — depth itself makes the scalar normalization legal
+
+- If a global unit is congruent to `c^p` at depth `2p`, then `p ∤ c`.
+  Indeed `1 - ζ` divides `p`; otherwise the deep congruence would make the
+  nonunit uniformizer divide a unit.
+- Euler normalization modulo `p²` then gives
+  `c^(p*t*(p-1)) ≡ 1`.  Thus the scalar created by raising the actual
+  relation through the normalized polynomial contributes no value-at-one
+  defect and needs no per-prime hypothesis.
+
 ## 2026-07-30 — the selected assembly now consumes the real quotient
 
 - The campaign certificate now constructs `RealFlow.CreditData` and a
