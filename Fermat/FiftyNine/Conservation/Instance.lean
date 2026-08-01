@@ -170,6 +170,22 @@ def correctedResidue :
     151335, 174168, 114342, 131452, 122838, 118708, 55578,
     62658, 118413, 8732, 130331, 148798, 7670, 137588]
 
+/-- Coupling depth after removing the one structural prime factor in every
+selected Bernoulli index.  The unique nonzero row is the irregular pair
+`(59, 44)`, represented by Lean row `21`. -/
+def couplingChannel :
+    Fin gaugeData.rank → ℕ :=
+  ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+
+/-- Total certified Bernoulli depth: the structural lift plus coupling. -/
+def depth (row : Fin gaugeData.rank) : ℕ :=
+  1 + couplingChannel row
+
+/-- Every layer beyond the two-layer forcing budget remains explicit. -/
+def surplus (row : Fin gaugeData.rank) : ℕ :=
+  couplingChannel row - 1
+
 /-- The binomial coefficient in the pole-safe Faulhaber decomposition has
 exactly the advertised campaign-prime factor. -/
 theorem choose_factor (row : Fin gaugeData.rank) :
@@ -288,29 +304,43 @@ theorem correctedResidue_cubeFree (row : Fin gaugeData.rank) :
     ¬(59 : ℤ) ^ 3 ∣ (correctedResidue row : ℤ) := by
   decide +kernel +revert
 
-/-- Every generated high Bernoulli numerator is cube-free at the campaign
-prime.  The proof is one instantiation of the generic corrected Faulhaber
-endpoint. -/
-theorem highBernoulliNumerator_cubeFree
+/-- The existing corrected-residue table, read without projection, gives
+the exact total depth at every one of the 28 generated rows. -/
+theorem correctedResidue_padicVal (row : Fin gaugeData.rank) :
+    padicValNat 59 (correctedResidue row) = depth row := by
+  decide +kernel +revert
+
+theorem couplingChannel_le_one (row : Fin gaugeData.rank) :
+    couplingChannel row ≤ 1 := by
+  decide +kernel +revert
+
+theorem surplus_eq_zero (row : Fin gaugeData.rank) :
+    surplus row = 0 := by
+  decide +kernel +revert
+
+/-- The pole-safe table represents each target Bernoulli number modulo the
+prime cube.  Keeping this theorem beside the table lets both the exact-depth
+certificate and its legacy Boolean corollary flow downward without an
+instance/depth-module import cycle. -/
+theorem bernoulli_representation
     (row : Fin gaugeData.rank) :
-    ¬(59 : ℤ) ^ 3 ∣
-      (bernoulli
-        (RealFlow.highIndex (data := realGaugeData) row)).num := by
+    ∃ u : ℚ, Bernoulli.PIntegral 59 u ∧
+      bernoulli (RealFlow.highIndex (data := realGaugeData) row) =
+        (correctedResidue row : ℚ) + (59 : ℚ) ^ 3 * u := by
   apply
-    Bernoulli.exceptional_bernoulli_numerator_not_dvd_cube_of_faulhaber
+    Bernoulli.exceptional_bernoulli_representation_of_faulhaber
       (p := 59)
       (n := RealFlow.highIndex (data := realGaugeData) row)
       (c := chooseQuotient row)
       (raw := rawPowerResidue row)
-      (residue := correctedResidue row)
+      (s := correctedResidue row)
       (q := predecessorResidue row)
       (w := correctionWeight row)
       (correctionLift := 0)
   · norm_num
   · dsimp [RealFlow.highIndex]
     omega
-  · exact
-      (even_two.mul_right (row.val + 1)).mul_right 59
+  · exact (even_two.mul_right (row.val + 1)).mul_right 59
   · intro hdvd
     obtain ⟨k, hk⟩ := hdvd
     dsimp [RealFlow.highIndex] at hk
@@ -320,9 +350,84 @@ theorem highBernoulliNumerator_cubeFree
   · exact predecessor_representation row
   · exact correction_weight_representation row
   · exact corrected_residue_normalization row
-  · exact correctedResidue_ne_zero row
-  · exact correctedResidue_cubeFree row
-  · exact target_denominator row
+
+/-- Exact numerator valuation of every generated high Bernoulli row.  This
+is the full 28-row profile from the existing corrected-residue table. -/
+theorem highBernoulliNumerator_padicVal
+    (row : Fin gaugeData.rank) :
+    padicValInt 59
+        (bernoulli
+          (RealFlow.highIndex (data := realGaugeData) row)).num =
+      depth row := by
+  obtain ⟨u, hu, hB⟩ := bernoulli_representation row
+  have hresidue0 : correctedResidue row ≠ 0 :=
+    correctedResidue_ne_zero row
+  have hresidueLt :
+      padicValRat 59 (correctedResidue row : ℚ) < 3 := by
+    rw [padicValRat.of_nat, correctedResidue_padicVal]
+    have hcoupling := couplingChannel_le_one row
+    dsimp [depth]
+    omega
+  obtain ⟨_hB0, hval⟩ :=
+    Bernoulli.representation_ne_zero_and_padicValRat_eq
+      hresidue0 hu hB hresidueLt
+  have htargetVal :
+      (padicValInt 59
+          (bernoulli
+            (RealFlow.highIndex (data := realGaugeData) row)).num : ℤ) =
+        (depth row : ℤ) := by
+    calc
+      (padicValInt 59
+          (bernoulli
+            (RealFlow.highIndex (data := realGaugeData) row)).num : ℤ) =
+          padicValRat 59
+            (bernoulli
+              (RealFlow.highIndex (data := realGaugeData) row)) :=
+        (Bernoulli.padicValRat_eq_numeratorVal
+          (target_denominator row)).symm
+      _ = padicValRat 59 (correctedResidue row : ℚ) := hval
+      _ = (padicValNat 59 (correctedResidue row) : ℤ) := by
+        rw [padicValRat.of_nat]
+      _ = (depth row : ℤ) := by
+        exact_mod_cast correctedResidue_padicVal row
+  exact_mod_cast htargetVal
+
+/-- The selected-prime non-lossy certificate.  Its only per-row numerical
+input beyond the existing residues is the documented coupling profile. -/
+def channelCertificate :
+    RealFlow.BernoulliChannelCertificate realGaugeData where
+  depth := depth
+  liftChannel := fun _row ↦ 1
+  couplingChannel := couplingChannel
+  surplus := surplus
+  depth_eq_value_padicVal := fun row ↦
+    (highBernoulliNumerator_padicVal row).symm
+  liftChannel_eq_index_padicVal := fun row ↦
+    (RealFlow.highIndex_padicVal_eq_one realGaugeData row).symm
+  liftChannel_eq_one := fun _row ↦ rfl
+  depth_decomposition := by
+    intro row
+    simp [depth]
+  surplus_eq_coupling_sub_one := fun _row ↦ rfl
+
+/-- The explicit surplus channel happens to vanish in all 28 selected rows;
+it remains a field of `channelCertificate` rather than disappearing. -/
+theorem channelCertificate_surplus_eq_zero
+    (row : Fin gaugeData.rank) :
+    channelCertificate.surplus row = 0 :=
+  surplus_eq_zero row
+
+/-- Every generated high Bernoulli numerator is cube-free at the campaign
+prime.  This is now a corollary of the full channel profile and its named
+conservation identity. -/
+theorem highBernoulliNumerator_cubeFree
+    (row : Fin gaugeData.rank) :
+    ¬(59 : ℤ) ^ 3 ∣
+      (bernoulli
+        (RealFlow.highIndex (data := realGaugeData) row)).num := by
+  exact
+    (channelCertificate.cubeFree_of_surplus_eq_zero
+      channelCertificate_surplus_eq_zero) row
 
 end BernoulliCertificate
 
@@ -332,18 +437,12 @@ theorem noBernoulliCubeObstruction59 :
   intro row
   exact BernoulliCertificate.highBernoulliNumerator_cubeFree row
 
-/-- The generic certificate record is assembled without accepting a
-matrix, an inverse, or an eigenvalue vector. -/
-def flowCertificate_of_cubeFree
-    (hno : NoBernoulliCubeObstruction59) :
-    Fermat.Conservation.Credit.RealFlow.FlowCertificate realGaugeData where
-  eigenvalue_cubeFree := hno
-
-/-- The parameter-free certificate consumed by the generic forcing
-theorem. -/
+/-- The parameter-free non-lossy certificate consumed by generic forcing. -/
 def flowCertificate :
     Fermat.Conservation.Credit.RealFlow.FlowCertificate realGaugeData :=
-  flowCertificate_of_cubeFree noBernoulliCubeObstruction59
+  { channels := BernoulliCertificate.channelCertificate
+    surplus_eq_zero :=
+      BernoulliCertificate.channelCertificate_surplus_eq_zero }
 
 /-! ## Generic L4 and W3 instantiation -/
 

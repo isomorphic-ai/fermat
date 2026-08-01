@@ -687,4 +687,95 @@ theorem exceptional_bernoulli_numerator_not_dvd_cube_of_faulhaber
   exact numerator_not_dvd_cube_of_representation
     hresidue0 hresidueCube htarget hu hB
 
+/-! ## Non-lossy Bernoulli depth channels -/
+
+/-- The exact prime depth of a generated Bernoulli value, split into the
+structural lift supplied by its index and the remaining coupling depth.
+
+The `surplus` field is deliberately data rather than a bound: it records the
+positive part `(couplingChannel - 1)+`, including when that value is zero.
+Consequently a caller can retain depth beyond the cube-free cutoff instead
+of projecting it to a proposition. -/
+structure ChannelCertificate {ι : Type*} (p : ℕ)
+    (index : ι → ℕ) (value : ι → ℤ) where
+  depth : ι → ℕ
+  liftChannel : ι → ℕ
+  couplingChannel : ι → ℕ
+  surplus : ι → ℕ
+  depth_eq_value_padicVal :
+    ∀ i, depth i = padicValInt p (value i)
+  liftChannel_eq_index_padicVal :
+    ∀ i, liftChannel i = padicValNat p (index i)
+  liftChannel_eq_one :
+    ∀ i, liftChannel i = 1
+  depth_decomposition :
+    ∀ i, depth i = liftChannel i + couplingChannel i
+  surplus_eq_coupling_sub_one :
+    ∀ i, surplus i = couplingChannel i - 1
+
+namespace ChannelCertificate
+
+variable {ι : Type*} {p : ℕ} {index : ι → ℕ} {value : ι → ℤ}
+    (certificate : ChannelCertificate p index value)
+
+/-- The explicit surplus is equivalently the positive part `(depth - 2)+`.
+This is derived from the two named channels, not independently asserted. -/
+theorem surplus_eq_depth_sub_two (i : ι) :
+    certificate.surplus i = certificate.depth i - 2 := by
+  rw [certificate.surplus_eq_coupling_sub_one,
+    certificate.depth_decomposition, certificate.liftChannel_eq_one]
+  omega
+
+/-- **Channel conservation.** No depth disappears at the cube-free cutoff:
+the visible depth is capped at two and every excess layer remains in the
+explicit surplus channel. -/
+theorem depth_conservation (i : ι) :
+    certificate.depth i =
+      min (certificate.depth i) 2 + certificate.surplus i := by
+  rw [certificate.surplus_eq_depth_sub_two]
+  by_cases hdepth : certificate.depth i ≤ 2
+  · rw [Nat.min_eq_left hdepth]
+    omega
+  · have htwo : 2 ≤ certificate.depth i := by omega
+    rw [Nat.min_eq_right htwo]
+    omega
+
+/-- Formula-only spelling of channel conservation:
+`e = min(e, 2) + (e - 2)+`. -/
+theorem depth_eq_min_two_add_depth_sub_two (i : ι) :
+    certificate.depth i =
+      min (certificate.depth i) 2 + (certificate.depth i - 2) := by
+  calc
+    certificate.depth i =
+        min (certificate.depth i) 2 + certificate.surplus i :=
+      certificate.depth_conservation i
+    _ = min (certificate.depth i) 2 + (certificate.depth i - 2) := by
+      rw [certificate.surplus_eq_depth_sub_two]
+
+/-- Vanishing surplus recovers the old cube-free verdict.  The proof routes
+through `depth_conservation`, so the non-lossy identity remains load-bearing
+in every legacy forcing theorem that consumes this corollary. -/
+theorem cubeFree_of_surplus_eq_zero [Fact p.Prime]
+    (hsurplus : ∀ i, certificate.surplus i = 0) :
+    ∀ i, ¬(p : ℤ) ^ 3 ∣ value i := by
+  intro i hcube
+  have hdepthLe : certificate.depth i ≤ 2 := by
+    have hconserve := certificate.depth_conservation i
+    rw [hsurplus i, add_zero] at hconserve
+    rw [hconserve]
+    exact Nat.min_le_right _ _
+  have hvalue0 : value i ≠ 0 := by
+    intro hzero
+    have hdepth := certificate.depth_eq_value_padicVal i
+    rw [hzero, padicValInt.zero] at hdepth
+    have hsplit := certificate.depth_decomposition i
+    have hlift := certificate.liftChannel_eq_one i
+    omega
+  have hvaluation : 3 ≤ padicValInt p (value i) :=
+    ((padicValInt_dvd_iff 3 (value i)).mp hcube).resolve_left hvalue0
+  rw [← certificate.depth_eq_value_padicVal i] at hvaluation
+  omega
+
+end ChannelCertificate
+
 end Fermat.Conservation.Credit.Bernoulli

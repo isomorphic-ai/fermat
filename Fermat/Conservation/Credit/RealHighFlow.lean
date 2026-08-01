@@ -9,6 +9,7 @@ This layer provides the integral W1/W3 interface over `RealGaugeData`.
 Every integer node is derived from the indexed representative
 `data.nodeLift i`; no representative of a quotient class is chosen.
 -/
+import Fermat.Conservation.Credit.Bernoulli
 import Fermat.Conservation.Credit.Flow
 import Fermat.Conservation.Credit.RealGauge
 import Mathlib.Data.Int.GCD
@@ -206,12 +207,52 @@ def HighFlowVanishes {p : ℕ} (data : RealGaugeData p)
     exactHighEdgeCoefficient data raw row *
       highEigenvalue (data := data) row
 
-/-- The per-prime certificate contains only cube-freeness of the generated
-eigenvalues. -/
+/-- The selected high index contains exactly one structural factor of the
+prime.  This is the lift channel; it is derived from the generated row range
+rather than supplied by an arithmetic instance. -/
+theorem highIndex_padicVal_eq_one {p : ℕ}
+    (data : RealGaugeData p) (row : Fin data.rank) :
+    padicValNat p (highIndex (data := data) row) = 1 := by
+  letI : Fact p.Prime := ⟨data.prime⟩
+  let multiplier := 2 * (row.val + 1)
+  have hmultiplierPos : 0 < multiplier := by
+    exact rowMultiplier_pos row
+  have hmultiplierLt : multiplier < p := by
+    have hpred := rowMultiplier_lt_prime_pred row
+    dsimp [multiplier]
+    omega
+  have hmultiplierNotDvd : ¬p ∣ multiplier :=
+    Nat.not_dvd_of_pos_of_lt hmultiplierPos hmultiplierLt
+  have hp0 : p ≠ 0 := data.prime.ne_zero
+  have hm0 : multiplier ≠ 0 := hmultiplierPos.ne'
+  rw [show highIndex (data := data) row = p * multiplier by
+    simp [highIndex, multiplier, Nat.mul_comm],
+    padicValNat.mul hp0 hm0, padicValNat_self,
+    padicValNat.eq_zero_of_not_dvd hmultiplierNotDvd]
+
+/-- The structure-preserving Bernoulli depth certificate attached to the
+generated real high-flow family. -/
+abbrev BernoulliChannelCertificate {p : ℕ}
+    (data : RealGaugeData p) :=
+  Bernoulli.ChannelCertificate p
+    (highIndex (data := data)) (highEigenvalue (data := data))
+
+/-- The flow permit retains every depth channel.  `surplus_eq_zero` is the
+checked no-obstruction boundary, while the possibly nonzero surplus itself
+remains available in `channels`. -/
 structure FlowCertificate {p : ℕ}
-    (data : RealGaugeData p) : Prop where
-  eigenvalue_cubeFree :
-    ∀ row, ¬(p : ℤ) ^ 3 ∣ highEigenvalue (data := data) row
+    (data : RealGaugeData p) where
+  channels : BernoulliChannelCertificate data
+  surplus_eq_zero : ∀ row, channels.surplus row = 0
+
+/-- Compatibility reading of the non-lossy flow permit.  This theorem is
+the old Boolean interface, now derived through channel conservation. -/
+theorem FlowCertificate.eigenvalue_cubeFree {p : ℕ}
+    {data : RealGaugeData p} (certificate : FlowCertificate data) :
+    ∀ row, ¬(p : ℤ) ^ 3 ∣ highEigenvalue (data := data) row := by
+  letI : Fact p.Prime := ⟨data.prime⟩
+  exact certificate.channels.cubeFree_of_surplus_eq_zero
+    certificate.surplus_eq_zero
 
 private theorem prime_dvd_left_of_cube_dvd_mul_of_cube_free
     {p : ℕ} (hp : p.Prime) {a b : ℤ}
