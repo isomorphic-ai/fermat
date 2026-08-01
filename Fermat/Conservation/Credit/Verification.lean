@@ -60,6 +60,9 @@ interface must remain present in the generic conservation environment. -/
 #check Fermat.Conservation.Credit.accountMatrix
 #check Fermat.Conservation.Credit.accountLedger
 #check Fermat.Conservation.Credit.kummer_credit_accounted_vacuum
+#check Fermat.Conservation.Credit.Cycle.CapacityData.Account
+#check Fermat.Conservation.Credit.Cycle.CapacityData.Account.spendingTransfer
+#check Fermat.Conservation.Credit.Cycle.CapacityData.Account.spendOneTransfer
 
 /-! Global three-column accounting is load-bearing in each claimed literal
 ledger transfer. -/
@@ -206,10 +209,62 @@ the legacy native equality is projected from that accounted theorem. -/
 #guard_depends_on Fermat.Conservation.Credit.kummer_credit_vacuum,
   Fermat.Conservation.Credit.kummer_credit_accounted_vacuum
 #guard_depends_on Fermat.Conservation.Credit.kummer_credit_vacuum,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Conservation.Credit.kummer_credit_vacuum,
   Fermat.Conservation.Credit.accountLedger_eq_vacuum_iff
 
 #guard_depends_on Fermat.Conservation.Credit.kummer_credit_vacuum,
   Fermat.Conservation.Credit.generated_eq_bot_of_no_generator
+
+/-! C2's native relative index is now the fixed total of a credit account.
+Finite capacity funds a positive one-unit Transfer, and all legacy capacity
+equalities are projections of the corresponding global ledgers. -/
+
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.capacityIndex_eq_relIndex,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.capacityIndex_eq_relIndex,
+  Fermat.Conservation.Credit.Cycle.capacityIndexLedger
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.Account.spendingTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.Account.spending_credit_decomposition,
+  Fermat.Conservation.Transfer.credit_decomposition_of_stock_eq
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.Account.spending_converted_decomposition,
+  Fermat.Conservation.Transfer.converted_decomposition
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.Account.spending_total_preserved,
+  Fermat.Conservation.Transfer.total_preserved
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.Account.spendOne_credit_lt,
+  Fermat.Conservation.Transfer.credit_lt_of_stock_eq
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.Account.full_credit_eq_relIndex,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.capacity_eq_relIndex,
+  Fermat.Conservation.Credit.Cycle.CapacityData.Account.full_credit_eq_relIndex
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.capacity_eq_relIndex,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.capacity_pos,
+  Fermat.Conservation.Credit.Cycle.CapacityData.Account.spendOneTransfer
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.capacity_pos,
+  Fermat.Conservation.Transfer.credit_lt_of_stock_eq
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityData.capacity_pos,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.CapacityCertificate.sound,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Cycle.IndexCertificate.sound,
+  Fermat.Conservation.Ledger.conservation_identity
 
 /-! Gauge quotient and class fold retain their native local identities.
 These are deliberately separate from the absent common-carrier adapter. -/
@@ -221,11 +276,17 @@ These are deliberately separate from the absent common-carrier adapter. -/
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot,
   Fermat.Conservation.Credit.generated_eq_bot_of_no_generator
 #guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq,
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot
 #guard_depends_on
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq,
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientCharge_quotientState
+#guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq,
+  Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on
   Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation,
   Fermat.Conservation.Credit.Fold.relativeNormFold_apply

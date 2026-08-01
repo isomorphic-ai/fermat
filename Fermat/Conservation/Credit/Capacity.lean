@@ -14,6 +14,7 @@ This is route-neutral group theory.  Numerical certificates may prove an
 equality about `capacity`; neither a certificate nor its matrix occurs in the
 definition.
 -/
+import Fermat.Conservation.Transfer
 import Mathlib.GroupTheory.Index
 import Mathlib.Logic.Function.Iterate
 
@@ -88,11 +89,27 @@ noncomputable def capacityIndex (cycle : Cycle α) (realize : α → G)
     (collateral ambient : Subgroup G) : ℕ :=
   (cycle.generatedSubledgerWith realize collateral).relIndex ambient
 
+/-- The raw relative index viewed as the credit column of a global ledger.
+The adapter does not assert finiteness: the sentinel value zero is still a
+legitimate raw index until a `CapacityData` proof supplies finiteness. -/
+noncomputable def capacityIndexLedger (cycle : Cycle α) (realize : α → G)
+    (collateral ambient : Subgroup G) : Fermat.Conservation.Ledger ℕ where
+  stock := 0
+  credit := cycle.capacityIndex realize collateral ambient
+  converted := 0
+  total :=
+    (cycle.generatedSubledgerWith realize collateral).relIndex ambient
+  conservation := by
+    simp [capacityIndex]
+
 theorem capacityIndex_eq_relIndex (cycle : Cycle α)
     (realize : α → G) (collateral ambient : Subgroup G) :
     cycle.capacityIndex realize collateral ambient =
       (cycle.generatedSubledgerWith realize collateral).relIndex ambient :=
-  rfl
+  by
+    have hconservation := Fermat.Conservation.Ledger.conservation_identity
+      (capacityIndexLedger cycle realize collateral ambient)
+    simpa only [capacityIndexLedger, zero_add, add_zero] using hconservation
 
 /-- A node-pair transfer.  Reversing the pair gives the inverse entry, so
 debit and receivable are the two orientations of one generated object. -/
@@ -131,18 +148,201 @@ noncomputable def capacity
     (data : CapacityData cycle realize) : ℕ :=
   (cycle.generatedSubledger realize).relIndex data.ambient
 
+/-- The credit-length map from the native C2 generated sub-ledger to the
+global natural-number accounting carrier.  It is intentionally the same
+relative index as `capacity`, now named for its role as a ledger column. -/
+noncomputable def accountCredit
+    (data : CapacityData cycle realize) : ℕ :=
+  (cycle.generatedSubledger realize).relIndex data.ambient
+
+@[simp]
+theorem accountCredit_eq_capacity
+    (data : CapacityData cycle realize) :
+    data.accountCredit = data.capacity :=
+  rfl
+
+/-- One state of the finite C2 capacity account.  The fixed total is the
+relative index of the generated sub-ledger; `credit` is its unspent part and
+`converted` is exactly the part already spent. -/
+structure Account (data : CapacityData cycle realize) where
+  credit : ℕ
+  converted : ℕ
+  accounted : credit + converted = data.accountCredit
+
+namespace Account
+
+variable {data : CapacityData cycle realize}
+
+/-- The initial capacity account: the entire generated-subledger index is
+available as credit and none has yet been converted. -/
+noncomputable def full (data : CapacityData cycle realize) : Account data where
+  credit := data.accountCredit
+  converted := 0
+  accounted := by simp
+
+/-- A C2 account state as the common global three-column ledger. -/
+noncomputable def ledger (state : Account data) :
+    Fermat.Conservation.Ledger ℕ where
+  stock := 0
+  credit := state.credit
+  converted := state.converted
+  total := data.accountCredit
+  conservation := by
+    simpa only [zero_add] using state.accounted
+
+@[simp]
+theorem ledger_stock (state : Account data) :
+    state.ledger.stock = 0 :=
+  rfl
+
+@[simp]
+theorem ledger_credit (state : Account data) :
+    state.ledger.credit = state.credit :=
+  rfl
+
+@[simp]
+theorem ledger_converted (state : Account data) :
+    state.ledger.converted = state.converted :=
+  rfl
+
+@[simp]
+theorem ledger_total (state : Account data) :
+    state.ledger.total = data.accountCredit :=
+  rfl
+
+@[simp]
+theorem full_credit (data : CapacityData cycle realize) :
+    (full data).credit = data.accountCredit :=
+  rfl
+
+@[simp]
+theorem full_converted (data : CapacityData cycle realize) :
+    (full data).converted = 0 :=
+  rfl
+
+/-- Spend a bounded amount of the same generated capacity.  No new scalar is
+introduced: the post-state remains indexed by the original `CapacityData`
+and its accounted total is unchanged. -/
+def spend (state : Account data) (amount : ℕ)
+    (hamount : amount ≤ state.credit) : Account data where
+  credit := state.credit - amount
+  converted := state.converted + amount
+  accounted := by
+    have haccounted := state.accounted
+    omega
+
+@[simp]
+theorem spend_credit (state : Account data) (amount : ℕ)
+    (hamount : amount ≤ state.credit) :
+    (state.spend amount hamount).credit = state.credit - amount :=
+  rfl
+
+@[simp]
+theorem spend_converted (state : Account data) (amount : ℕ)
+    (hamount : amount ≤ state.credit) :
+    (state.spend amount hamount).converted = state.converted + amount :=
+  rfl
+
+/-- The C2 spending law as an actual accounted transfer.  Credit falls by
+`amount`, converted rises by the same amount, stock stays zero, and the
+generated-subledger relative index remains the common total. -/
+noncomputable def spendingTransfer (state : Account data) (amount : ℕ)
+    (hamount : amount ≤ state.credit) : Fermat.Conservation.Transfer ℕ where
+  before := state.ledger
+  after := (state.spend amount hamount).ledger
+  spent := amount
+  before_conserved := Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved := Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := by
+    simp only [ledger_total]
+  available_decomposition := by
+    simp only [ledger_stock, ledger_credit, spend_credit, zero_add]
+    exact (Nat.sub_add_cancel hamount).symm
+  converted_decomposition := by
+    simp only [ledger_converted, spend_converted]
+
+/-- Capacity spending does not use the stock route. -/
+theorem spendingTransfer_stock_preserved (state : Account data)
+    (amount : ℕ) (hamount : amount ≤ state.credit) :
+    (state.spendingTransfer amount hamount).before.stock =
+      (state.spendingTransfer amount hamount).after.stock :=
+  rfl
+
+/-- The legacy exact capacity-spending equation is the fixed-stock
+projection of the global transfer. -/
+theorem spending_credit_decomposition (state : Account data)
+    (amount : ℕ) (hamount : amount ≤ state.credit) :
+    state.credit = (state.spend amount hamount).credit + amount := by
+  simpa only [spendingTransfer, ledger_credit] using
+    (state.spendingTransfer amount hamount).credit_decomposition_of_stock_eq
+      (state.spendingTransfer_stock_preserved amount hamount)
+
+/-- The converted column receives exactly the spent capacity. -/
+theorem spending_converted_decomposition (state : Account data)
+    (amount : ℕ) (hamount : amount ≤ state.credit) :
+    (state.spend amount hamount).converted = state.converted + amount := by
+  simpa only [spendingTransfer, ledger_converted] using
+    (state.spendingTransfer amount hamount).converted_decomposition
+
+/-- Spending preserves the relative-index total. -/
+theorem spending_total_preserved (state : Account data)
+    (amount : ℕ) (hamount : amount ≤ state.credit) :
+    (state.spendingTransfer amount hamount).before.total =
+      (state.spendingTransfer amount hamount).after.total :=
+  (state.spendingTransfer amount hamount).total_preserved
+
+/-- The full account's credit column is literally the native relative
+index, so the native and global ends of the C2 adapter coincide. -/
+theorem full_credit_eq_relIndex (data : CapacityData cycle realize) :
+    (full data).ledger.credit =
+      (cycle.generatedSubledger realize).relIndex data.ambient := by
+  calc
+    (full data).ledger.credit = (full data).ledger.total := by
+      have hconservation := Fermat.Conservation.Ledger.conservation_identity
+        (full data).ledger
+      simpa only [ledger_stock, ledger_converted, full_converted, zero_add,
+        add_zero] using hconservation
+    _ = (cycle.generatedSubledger realize).relIndex data.ambient := rfl
+
+private theorem capacity_ne_zero_raw
+    (data : CapacityData cycle realize) : data.capacity ≠ 0 := by
+  simpa only [CapacityData.capacity] using data.finite.relIndex_ne_zero
+
+/-- Finite relative index funds a concrete positive one-unit transfer from
+the full C2 capacity account. -/
+noncomputable def spendOneTransfer
+    (data : CapacityData cycle realize) : Fermat.Conservation.Transfer ℕ :=
+  (full data).spendingTransfer 1 (by
+    simpa only [full_credit, accountCredit_eq_capacity,
+      Nat.one_le_iff_ne_zero] using capacity_ne_zero_raw data)
+
+/-- The one-unit transaction projects to a strict credit decrease. -/
+theorem spendOne_credit_lt (data : CapacityData cycle realize) :
+    (spendOneTransfer data).after.credit <
+      (spendOneTransfer data).before.credit := by
+  exact (spendOneTransfer data).credit_lt_of_stock_eq (by rfl)
+    (by change 0 < (1 : ℕ); omega)
+
+end Account
+
 theorem capacity_eq_relIndex
     (data : CapacityData cycle realize) :
     data.capacity =
       (cycle.generatedSubledger realize).relIndex data.ambient :=
-  rfl
+  by
+    simpa only [Account.ledger_credit, Account.full_credit,
+      accountCredit_eq_capacity] using Account.full_credit_eq_relIndex data
 
 /-- A finite capacity cannot be the sentinel value zero used by `relIndex`
 for an infinite quotient. -/
 theorem capacity_pos (data : CapacityData cycle realize) :
     0 < data.capacity := by
-  apply Nat.pos_of_ne_zero
-  exact data.finite.relIndex_ne_zero
+  have hdrop := Account.spendOne_credit_lt data
+  have hpositive : 0 < (Account.spendOneTransfer data).before.credit :=
+    lt_of_le_of_lt (Nat.zero_le _) hdrop
+  simpa only [Account.spendOneTransfer, Account.spendingTransfer,
+    Account.ledger_credit, Account.full_credit,
+    accountCredit_eq_capacity] using hpositive
 
 end CapacityData
 
@@ -153,12 +353,32 @@ structure CapacityCertificate
     (data : CapacityData cycle realize) (claimed : ℕ) : Prop where
   checks : data.capacity = claimed
 
-theorem CapacityCertificate.sound
+namespace CapacityCertificate
+
+/-- A checked capacity equality as a global one-state ledger: native
+capacity occupies credit and the checked numeral is the total. -/
+noncomputable def accountLedger
     {cycle : Cycle α} {realize : α → G}
     {data : CapacityData cycle realize} {claimed : ℕ}
     (certificate : CapacityCertificate data claimed) :
-    data.capacity = claimed :=
-  certificate.checks
+    Fermat.Conservation.Ledger ℕ where
+  stock := 0
+  credit := data.capacity
+  converted := 0
+  total := claimed
+  conservation := by
+    simpa only [zero_add, add_zero] using certificate.checks
+
+theorem sound
+    {cycle : Cycle α} {realize : α → G}
+    {data : CapacityData cycle realize} {claimed : ℕ}
+    (certificate : CapacityCertificate data claimed) :
+    data.capacity = claimed := by
+  have hconservation := Fermat.Conservation.Ledger.conservation_identity
+    certificate.accountLedger
+  simpa only [accountLedger, zero_add, add_zero] using hconservation
+
+end CapacityCertificate
 
 /-- A raw-index certificate likewise checks an index already defined from
 the generator, collateral, and ambient ledger. -/
@@ -168,13 +388,33 @@ structure IndexCertificate
   checks :
     cycle.capacityIndex realize collateral ambient = claimed
 
-theorem IndexCertificate.sound
+namespace IndexCertificate
+
+/-- A checked raw-index equality as a global one-state ledger. -/
+noncomputable def accountLedger
     {cycle : Cycle α} {realize : α → G}
     {collateral ambient : Subgroup G} {claimed : ℕ}
     (certificate :
       IndexCertificate cycle realize collateral ambient claimed) :
-    cycle.capacityIndex realize collateral ambient = claimed :=
-  certificate.checks
+    Fermat.Conservation.Ledger ℕ where
+  stock := 0
+  credit := cycle.capacityIndex realize collateral ambient
+  converted := 0
+  total := claimed
+  conservation := by
+    simpa only [zero_add, add_zero] using certificate.checks
+
+theorem sound
+    {cycle : Cycle α} {realize : α → G}
+    {collateral ambient : Subgroup G} {claimed : ℕ}
+    (certificate :
+      IndexCertificate cycle realize collateral ambient claimed) :
+    cycle.capacityIndex realize collateral ambient = claimed := by
+  have hconservation := Fermat.Conservation.Ledger.conservation_identity
+    certificate.accountLedger
+  simpa only [accountLedger, zero_add, add_zero] using hconservation
+
+end IndexCertificate
 
 end Group
 

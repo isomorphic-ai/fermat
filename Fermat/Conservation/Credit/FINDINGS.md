@@ -1,5 +1,18 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER discovery: finite capacity funds a real first spend
+
+- The honest C2 scalar account is the already-defined relative index of the
+  generated sub-ledger inside its ambient ledger.  An account state can fix
+  that index as total and split it between unspent credit and converted
+  capacity; bounded spending then gives an exact `Transfer ℕ` without
+  inventing a second capacity value.
+- `FiniteRelIndex` rules out the relative-index sentinel zero, so the full
+  account funds a concrete positive one-unit transfer.  Capacity positivity
+  is now its credit-column projection, while raw-index and certificate
+  equalities are projections of one-state ledgers tied to their native
+  definitions/checks.
+
 ## 2026-08-02 — TRANSFER discovery: C1 has a faithful additive carrier
 
 - A set-valued credit matrix need not be collapsed to a questionable
