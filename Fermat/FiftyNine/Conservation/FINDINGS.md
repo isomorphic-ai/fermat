@@ -1,5 +1,30 @@
 # N59 conservation findings
 
+## 2026-08-01 — LEDGER-LITERAL discovery: the selected instance projects twice
+
+- `NoBernoulliCubeObstruction59` quantifies only the non-divisibility of the
+  generated numerator by `59 ^ 3`; `flowCertificate_of_cubeFree` copies that
+  proposition directly into the generic flow certificate.  The existing
+  table is rich enough to recertify channel values, but the current instance
+  interface discards both their lift/coupling decomposition and all excess
+  coupling depth.
+- `repayment_of_capacity_and_flow` composes the checked capacity and flow
+  forcing into `IsRepaid 59 u`, an existential root verdict.  Its proof is
+  mathematically useful, but no residual layer is returned.  The d=1 graded
+  adapter can therefore be equivalent to this theorem only when its output
+  state is the explicit vacuum layer; deeper states require the separately
+  named layer-transport input and must remain open.
+- The present `StockSpineReceipt` is an audit of seven heterogeneous facts,
+  not a proof of one ledger equation.  N2 carries its balance formula;
+  N1 exports only the empty coupling channel; N3 exports strict charge; N4
+  positivity; N5 gauge invariance; N6 a factor fold; and N7 a coordinate
+  decomposition.  This gives the first theorem-level DECORATIVE/ABSENT work
+  list for the boundary map.
+- The old scalar three-column ledger is absent from the current source: it
+  was removed when generated matrix credit replaced scalar credit.  Any new
+  ledger identity must be an audit/counting layer compatible with the
+  generated matrix, not a reversal of that representation repair.
+
 ## 2026-07-30 — the Fermat state now reaches the allocated conjugate pair
 
 - The selected cone now has a production `PrimitiveSecondCaseSolution` and

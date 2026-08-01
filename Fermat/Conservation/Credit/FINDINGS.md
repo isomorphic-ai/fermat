@@ -1,5 +1,41 @@
 # Credit-ladder findings
 
+## 2026-08-01 — LEDGER-LITERAL discovery: the three identities are presently disconnected
+
+- The generic flow certificate exposes only the Boolean field
+  `FlowCertificate.eigenvalue_cubeFree`.  Its second reading,
+  `FlowCertificate.depthAtMostTwo`, is definitionally the same Boolean, and
+  the N59 `NoBernoulliCubeObstruction59` is again the pointwise cube-free
+  proposition.  No declaration in that route retains a named lift channel,
+  coupling channel, or the excess `(coupling - 1)+`; W1 is therefore a real
+  interface repair, not a renaming.
+- `Repayment.IsRepaid p u` is only `∃ v, u = v ^ p`, and the selected theorem
+  `Instance.repayment_of_capacity_and_flow` returns exactly that verdict.
+  `GaugeQuotient.PrimeData` stores the same conclusion as a function field.
+  The exact-sequence residual `pM` has no type, index, or conserved layer
+  count anywhere on this path, so the current repayment route cannot state
+  where an unspent layer went.
+- The former generic three-column structure carrying
+  `stock + credit + converted = total` was deliberately deleted when scalar
+  N59 credit was replaced by the generated matrix (commit `120f097`).  The
+  current tree consequently contains no declaration of that equation at all.
+  Reintroducing the accounting identity must keep it generic and must not
+  collapse the generated credit matrix back into a scalar; the graded layer
+  ledger is the honest place where an additive count exists.
+- The N59 `StockSpineReceipt` makes the expected bypasses concrete.  It
+  selects `coupling_empty`, `charge_ledger`, `drainCharge_pred_lt`,
+  `stateCharge_pos`, `charge_gauge_invariant`, `sixth_ledger`, and
+  `gauge_decomposition`.  Of these, only N2 literally states the named
+  stock/coupling balance formula.  The others preserve useful stock facts
+  while omitting at least one column or the total, so they must not be made
+  LITERAL by a cosmetic proof reference.
+- The existing environment guards are duplicated inside the two
+  non-imported `Verification.lean` leaves and inspect declarations or module
+  names only.  There is no reusable proof-term dependency command.  The new
+  command must traverse declaration values transitively (not merely inspect
+  source text or direct constants) and fail when the named identity is not
+  reached.
+
 Newest findings are recorded first.
 
 ## 2026-07-30 — the fold is generic but the Fermat class ledger is absent
