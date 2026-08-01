@@ -11,6 +11,7 @@ arbitrary odd prime: when the adjacent Bernoulli number has a von
 Staudt--Clausen pole, it normalizes `p * B_(n-2)` before applying
 Faulhaber's formula.
 -/
+import Fermat.Conservation.Transfer
 import Mathlib
 
 open scoped BigOperators
@@ -726,10 +727,7 @@ theorem surplus_eq_depth_sub_two (i : ι) :
     certificate.depth_decomposition, certificate.liftChannel_eq_one]
   omega
 
-/-- **Channel conservation.** No depth disappears at the cube-free cutoff:
-the visible depth is capped at two and every excess layer remains in the
-explicit surplus channel. -/
-theorem depth_conservation (i : ι) :
+private theorem depth_split_raw (i : ι) :
     certificate.depth i =
       min (certificate.depth i) 2 + certificate.surplus i := by
   rw [certificate.surplus_eq_depth_sub_two]
@@ -739,6 +737,79 @@ theorem depth_conservation (i : ι) :
   · have htwo : 2 ≤ certificate.depth i := by omega
     rw [Nat.min_eq_right htwo]
     omega
+
+/-- The unviewed Bernoulli depth as a global credit account. -/
+def depthBeforeLedger (i : ι) : Fermat.Conservation.Ledger ℕ where
+  stock := 0
+  credit := certificate.depth i
+  converted := 0
+  total := certificate.depth i
+  conservation := by simp
+
+/-- The non-lossy cutoff view: surplus depth remains spendable credit, while
+the visible capped part has moved to the converted column. -/
+def depthAfterLedger (i : ι) : Fermat.Conservation.Ledger ℕ where
+  stock := 0
+  credit := certificate.surplus i
+  converted := min (certificate.depth i) 2
+  total := certificate.depth i
+  conservation := by
+    simpa only [zero_add, add_comm] using (certificate.depth_split_raw i).symm
+
+/-- Viewing a Bernoulli channel at the cube-free cutoff is an accounted
+transfer, not a lossy bound: exactly the capped part is spent, and every
+surplus layer remains in credit. -/
+def depthTransfer (i : ι) : Fermat.Conservation.Transfer ℕ where
+  before := certificate.depthBeforeLedger i
+  after := certificate.depthAfterLedger i
+  spent := min (certificate.depth i) 2
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    simpa only [depthBeforeLedger, depthAfterLedger, zero_add, add_comm]
+      using certificate.depth_split_raw i
+  converted_decomposition := by
+    simp only [depthBeforeLedger, depthAfterLedger, zero_add]
+
+/-- The Bernoulli cutoff keeps stock fixed. -/
+theorem depthTransfer_stock_preserved (i : ι) :
+    (certificate.depthTransfer i).before.stock =
+      (certificate.depthTransfer i).after.stock :=
+  rfl
+
+/-- The transfer's aggregate equation is the exact credit split. -/
+theorem depthTransfer_credit_decomposition (i : ι) :
+    (certificate.depthTransfer i).before.credit =
+      (certificate.depthTransfer i).after.credit +
+        (certificate.depthTransfer i).spent :=
+  (certificate.depthTransfer i).credit_decomposition_of_stock_eq
+    (certificate.depthTransfer_stock_preserved i)
+
+/-- The capped depth is exactly the converted increment. -/
+theorem depthTransfer_converted_decomposition (i : ι) :
+    (certificate.depthTransfer i).after.converted =
+      (certificate.depthTransfer i).before.converted +
+        (certificate.depthTransfer i).spent :=
+  (certificate.depthTransfer i).converted_decomposition
+
+/-- The cutoff view preserves the globally accounted total depth. -/
+theorem depthTransfer_total_preserved (i : ι) :
+    (certificate.depthTransfer i).before.total =
+      (certificate.depthTransfer i).after.total :=
+  (certificate.depthTransfer i).total_preserved
+
+/-- **Channel conservation.** No depth disappears at the cube-free cutoff:
+the visible depth is capped at two and every excess layer remains in the
+explicit surplus channel. -/
+theorem depth_conservation (i : ι) :
+    certificate.depth i =
+      min (certificate.depth i) 2 + certificate.surplus i := by
+  have hcredit := certificate.depthTransfer_credit_decomposition i
+  simpa only [depthTransfer, depthBeforeLedger, depthAfterLedger, add_comm]
+    using hcredit
 
 /-- Formula-only spelling of channel conservation:
 `e = min(e, 2) + (e - 2)+`. -/

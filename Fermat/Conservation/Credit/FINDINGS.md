@@ -1,5 +1,47 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER discovery: N5 closes; N6 and N7 lose their origins
+
+- N5's charged state retains its current golden element and an exact strict
+  coordinate recurrence.  A caller-fixed natural budget therefore turns
+  both case transitions into positive transfers, while unit multiplication
+  becomes a zero-spent transfer preserving every column.  The legacy gauge
+  and strict-charge theorems can both be honest projections.  The branch
+  wrappers retain their origin tags but expose no equation between the
+  origin quintic ledger and the current golden charge, so no such cross-link
+  is claimed.
+- N6's oriented successor retains only the reconstructed descent data, not
+  the originating `PrimitiveSolution` or its native sixth-factor ledger.
+  N7's Lebesgue `ChargedState` likewise retains only `index`, `p`, `q`, `r`,
+  and its descent equation, not the original septic `(x,y,z)` factor state.
+  Norm-only budget transfers would be easy but would leave each requested
+  factor-ledger link decorative; both rows therefore remain open rather than
+  receiving partial retrofits.
+
+## 2026-08-02 — TRANSFER discovery: the ledger core needed a bounded import
+
+- Importing the route-neutral `Ledger` into N4 initially made Mathlib's
+  fixed-exponent FLT(4) declarations visible and correctly tripped all three
+  existing forbidden-cone sentinels.  The cause was `Ledger.lean` importing
+  the umbrella `Mathlib` module although its implementation needs only basic
+  commutative-monoid and natural-number instances.
+- Narrowing that core import restored the original unknown-declaration
+  sentinels while leaving the N4 transfer and all five new dependency guards
+  green.  No verification rule was weakened.
+
+## 2026-08-02 — TRANSFER discovery: Bernoulli depth is already an exact debit
+
+- The non-lossy channel equation has precisely the orientation needed by the
+  global carrier: before credit is `depth`, after credit is `surplus`, the
+  spent/converted amount is `min depth 2`, and stock stays zero.  Both ledger
+  states therefore have total `depth`; no numerical certificate or selected
+  prime fact is needed for this adapter.
+- Consequently the generic real/non-real and selected conductor-59
+  cube-freeness consumers can reach a global `Transfer` transitively through
+  their existing dependence on `depth_conservation`.  This closes the
+  Bernoulli channel-to-column row without pretending that it also constructs
+  the still-missing funded higher-layer transport.
+
 ## 2026-08-02 — TRANSFER discovery: priority adapters need three different routes
 
 - N3's elementary factor identity lives over integer Eisenstein coordinates,

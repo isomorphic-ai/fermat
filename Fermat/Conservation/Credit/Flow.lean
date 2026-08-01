@@ -18,6 +18,7 @@ of an exponent vector are then derived from that series; no matrix or
 independent flow map is supplied as data.
 -/
 import Fermat.Conservation.Credit.Capacity
+import Fermat.Conservation.Transfer
 import Mathlib.Algebra.Group.TypeTags.Hom
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.NumberTheory.Bernoulli
@@ -337,20 +338,132 @@ theorem exponentFlow_zero (orbit : GeneratorOrbit p α) :
     orbit.exponentFlow 0 = 0 :=
   orbit.exponentFlow.map_zero
 
-/-- Product conservation in exponent coordinates: multiplying generated
-products adds exponents, and therefore adds their flows. -/
+/-! ## Global accounting for additive flow -/
+
+/-- Generated coefficient vectors already form a common additive carrier,
+so their canonical global account is the identity additive homomorphism.
+This is an actual coefficient-to-carrier adapter, not independently supplied
+flow data. -/
+def accountFlow (orbit : GeneratorOrbit p α) :
+    orbit.CoefficientSpace →+ orbit.CoefficientSpace :=
+  AddMonoidHom.id orbit.CoefficientSpace
+
+@[simp]
+theorem accountFlow_apply (orbit : GeneratorOrbit p α)
+    (coefficients : orbit.CoefficientSpace) :
+    orbit.accountFlow coefficients = coefficients :=
+  rfl
+
+/-- Before a binary product is assembled, the left flow is stock and the
+right flow is an explicit credit column.  Their generated sum is the common
+audited total. -/
+noncomputable def productSourceLedger (orbit : GeneratorOrbit p α)
+    (left right : orbit.ExponentVector) :
+    Fermat.Conservation.Ledger orbit.CoefficientSpace where
+  stock := orbit.accountFlow (orbit.exponentFlow left)
+  credit := orbit.accountFlow (orbit.exponentFlow right)
+  converted := 0
+  total := orbit.accountFlow (orbit.exponentFlow (left + right))
+  conservation := by
+    simpa only [accountFlow_apply, add_zero] using
+      (orbit.exponentFlow.map_add left right).symm
+
+/-- After binary assembly, both credited inputs occupy one combined stock
+column.  No coefficient flow has been spent or converted. -/
+noncomputable def productCombinedLedger (orbit : GeneratorOrbit p α)
+    (left right : orbit.ExponentVector) :
+    Fermat.Conservation.Ledger orbit.CoefficientSpace where
+  stock := orbit.accountFlow (orbit.exponentFlow (left + right))
+  credit := 0
+  converted := 0
+  total := orbit.accountFlow (orbit.exponentFlow (left + right))
+  conservation := by simp
+
+/-- Binary generated-product assembly is a zero-spent, route-neutral
+transfer from two credited columns to their combined flow. -/
+noncomputable def productTransfer (orbit : GeneratorOrbit p α)
+    (left right : orbit.ExponentVector) :
+    Fermat.Conservation.Transfer orbit.CoefficientSpace where
+  before := orbit.productSourceLedger left right
+  after := orbit.productCombinedLedger left right
+  spent := 0
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    simpa only [productSourceLedger, productCombinedLedger,
+      accountFlow_apply, add_zero] using
+        (orbit.exponentFlow.map_add left right).symm
+  converted_decomposition := by
+    simp only [productSourceLedger, productCombinedLedger, add_zero]
+
+/-- Product conservation in exponent coordinates is the available-column
+projection of the accounted binary assembly. -/
 theorem product_conservation (orbit : GeneratorOrbit p α)
     (left right : orbit.ExponentVector) :
     orbit.exponentFlow (left + right) =
-      orbit.exponentFlow left + orbit.exponentFlow right :=
-  orbit.exponentFlow.map_add left right
+      orbit.exponentFlow left + orbit.exponentFlow right := by
+  have havailable := (orbit.productTransfer left right).available_eq
+  simpa only [Fermat.Conservation.Transfer.available, productTransfer,
+    productSourceLedger, productCombinedLedger, accountFlow_apply,
+    add_zero] using havailable.symm
 
-/-- Finite-sum conservation for generated exponent vectors. -/
+/-- Before finite assembly, every summand is retained in the credit column
+and the flow of the exponent sum is the common audited total. -/
+noncomputable def sumSourceLedger (orbit : GeneratorOrbit p α)
+    {ι : Type*} (s : Finset ι) (exponents : ι → orbit.ExponentVector) :
+    Fermat.Conservation.Ledger orbit.CoefficientSpace where
+  stock := 0
+  credit := ∑ i ∈ s, orbit.accountFlow (orbit.exponentFlow (exponents i))
+  converted := 0
+  total := orbit.accountFlow (orbit.exponentFlow (∑ i ∈ s, exponents i))
+  conservation := by
+    simpa only [accountFlow_apply, zero_add, add_zero] using
+      (map_sum orbit.exponentFlow (fun i : ι => exponents i) s).symm
+
+/-- After finite assembly, the credited summands occupy one combined stock
+column and the converted column remains empty. -/
+noncomputable def sumCombinedLedger (orbit : GeneratorOrbit p α)
+    {ι : Type*} (s : Finset ι) (exponents : ι → orbit.ExponentVector) :
+    Fermat.Conservation.Ledger orbit.CoefficientSpace where
+  stock := orbit.accountFlow (orbit.exponentFlow (∑ i ∈ s, exponents i))
+  credit := 0
+  converted := 0
+  total := orbit.accountFlow (orbit.exponentFlow (∑ i ∈ s, exponents i))
+  conservation := by simp
+
+/-- Finite generated-product assembly is the zero-spent transfer from the
+credited family to its combined coefficient flow. -/
+noncomputable def sumTransfer (orbit : GeneratorOrbit p α)
+    {ι : Type*} (s : Finset ι) (exponents : ι → orbit.ExponentVector) :
+    Fermat.Conservation.Transfer orbit.CoefficientSpace where
+  before := orbit.sumSourceLedger s exponents
+  after := orbit.sumCombinedLedger s exponents
+  spent := 0
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    simpa only [sumSourceLedger, sumCombinedLedger, accountFlow_apply,
+      zero_add, add_zero] using
+        (map_sum orbit.exponentFlow (fun i : ι => exponents i) s).symm
+  converted_decomposition := by
+    simp only [sumSourceLedger, sumCombinedLedger, add_zero]
+
+/-- Finite-sum conservation is the available-column projection of the
+accounted finite assembly. -/
 theorem sum_conservation (orbit : GeneratorOrbit p α)
     {ι : Type*} (s : Finset ι) (exponents : ι → orbit.ExponentVector) :
     orbit.exponentFlow (∑ i ∈ s, exponents i) =
       ∑ i ∈ s, orbit.exponentFlow (exponents i) := by
-  exact map_sum orbit.exponentFlow (fun i : ι => exponents i) s
+  have havailable := (orbit.sumTransfer s exponents).available_eq
+  simpa only [Fermat.Conservation.Transfer.available, sumTransfer,
+    sumSourceLedger, sumCombinedLedger, accountFlow_apply, zero_add,
+    add_zero] using havailable.symm
 
 /-- The same conservation law packaged multiplicatively: multiplication
 of exponent products maps to multiplication in the multiplicative wrapper

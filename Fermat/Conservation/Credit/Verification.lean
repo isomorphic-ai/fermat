@@ -46,11 +46,16 @@ interface must remain present in the generic conservation environment. -/
 
 #check Fermat.Conservation.Ledger.conservation_identity
 #check Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#check Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depthTransfer
+#check Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depthTransfer_credit_decomposition
 #check Fermat.Conservation.Credit.Repayment.repay_layer_conservation
 #check Fermat.Conservation.Credit.Repayment.C.accountCredit
 #check Fermat.Conservation.Credit.Repayment.C.accountLedger
 #check Fermat.Conservation.Credit.Repayment.repay_layer_transfer
 #check Fermat.Conservation.Credit.Repayment.LayerTransport
+#check Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+#check Fermat.Conservation.Credit.Flow.GeneratorOrbit.productTransfer
+#check Fermat.Conservation.Credit.Flow.GeneratorOrbit.sumTransfer
 
 /-! Global three-column accounting is load-bearing in each claimed literal
 ledger transfer. -/
@@ -66,23 +71,54 @@ ledger transfer. -/
 identity through their elaborated proof values. -/
 
 #guard_depends_on
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depthTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depthTransfer_credit_decomposition,
+  Fermat.Conservation.Transfer.credit_decomposition_of_stock_eq
+#guard_depends_on
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depthTransfer
+#guard_depends_on
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation,
+  Fermat.Conservation.Ledger.conservation_identity
+
+#guard_depends_on
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_eq_min_two_add_depth_sub_two,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #guard_depends_on
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.cubeFree_of_surplus_eq_zero,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #guard_depends_on
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_eq_min_two_add_depth_sub_two,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.cubeFree_of_surplus_eq_zero,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
   Fermat.Conservation.Credit.Flow.FlowCertificate.eigenvalue_cubeFree,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.FlowCertificate.eigenvalue_cubeFree,
+  Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on
   Fermat.Conservation.Credit.RealFlow.FlowCertificate.eigenvalue_cubeFree,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.FlowCertificate.eigenvalue_cubeFree,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
   Fermat.Conservation.Credit.RealFlow.FlowCertificate.depthAtMostTwo,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.FlowCertificate.depthAtMostTwo,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
   Fermat.Conservation.Credit.RealFlow.DepthTwoCertificate.atMostTwo,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.DepthTwoCertificate.atMostTwo,
+  Fermat.Conservation.Ledger.conservation_identity
 
 /-! A repayment spends exactly one typed layer.  The final guard checks only
 the shape of the named open interface: it does not assert that layer
@@ -117,6 +153,40 @@ transport is inhabited. -/
   Fermat.Conservation.Credit.Repayment.LayerTransport
 #guard_depends_on Fermat.Conservation.Credit.Repayment.Repay.ofLayerTransport,
   Fermat.Conservation.Credit.Repayment.LayerConservation
+
+/-! Generated products and finite sums are now zero-spent global transfers.
+The legacy additive equalities are projections of their available columns. -/
+
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.productTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.productTransfer,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.sumTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.sumTransfer,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.product_conservation,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.productTransfer
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.product_conservation,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.product_conservation,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.sum_conservation,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.sumTransfer
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.sum_conservation,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.sum_conservation,
+  Fermat.Conservation.Ledger.conservation_identity
 
 /-! C1's public vacuum theorem still routes through its generated-ledger
 identity. -/

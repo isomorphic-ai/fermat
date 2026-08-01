@@ -54,14 +54,26 @@ the way through the legacy cube-free compatibility theorem. -/
   Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59,
+  Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_on_exponentCycle_of_flow,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_on_exponentCycle_of_flow,
+  Fermat.Conservation.Ledger.conservation_identity
 
 /-! The selected `d = 1` equivalence and its legacy repayment corollary
 retain the named one-layer conservation identity transitively. -/
