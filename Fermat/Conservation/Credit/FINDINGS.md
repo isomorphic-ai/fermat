@@ -1,5 +1,30 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER discovery: the tunnel must be vendored and L1 is not L4
+
+- Fermat uses `leanprover/lean4:v4.31.0-rc1`; the scheduler checkout uses
+  `leanprover/lean4:v4.30.0`.  The task's explicit mismatch rule therefore
+  forbids a Lake path dependency.  The bridge must vendor the minimal
+  scheduler statement shape with the scheduler commit, source paths, and
+  SHA-256 digests in its provenance header.
+- Scheduler L1 says that the aggregate `accounted` value is preserved by a
+  balanced route-plan step.  Scheduler L4 is a separate per-column equation
+  identifying stock plus credit with a net-flow integral.  The Fermat ledger
+  identity meets L1 directly; a truthful tunnel must retain the L4 column law
+  as additional shape instead of calling total preservation itself L4.
+- The generic transfer equations should avoid subtraction and use the exact
+  aggregate decomposition `available_before = available_after + spent`.
+  Requiring separate nonnegative stock and credit debits would incorrectly
+  reject the scheduler's zero-spent `principalize` route, which moves one unit
+  from class stock to the unit kernel.  Concrete adapters instead expose
+  stock-fixed or credit-fixed projection laws when their route has one.
+- The scheduler's positive `evidence` arm is the exact other direction of the
+  tunnel: one unit leaves the unit-kernel credit column and enters evidence
+  rank.  `KummerNoetherLedger.accounted_asSys` and
+  `scheduler_charge_conserved` confirm that this three-column interpretation
+  is the scheduler-side endpoint, while an ordinary balanced `RoutePlan` is a
+  zero-spent redistribution.
+
 ## 2026-08-01 — LEDGER-LITERAL discovery: the three identities are presently disconnected
 
 - The generic flow certificate exposes only the Boolean field
