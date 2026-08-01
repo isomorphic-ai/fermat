@@ -239,3 +239,31 @@ bodies, declaration dependencies, or the Bernoulli table implementation.
   lack the funding law sending a depth-`(k+1)p` congruence to one spendable
   coupling layer while retaining depth `k`.  These are boundaries to name,
   guard, and leave open.
+
+## TRANSFER prediction — 2026-08-02
+
+Recorded after reading `TRANSFER-TASK.md` and the existing boundary map, before
+inspecting the implementation bodies or either project's toolchain.
+
+- **Core and tunnel.**  I expect the route-neutral `Transfer` algebra to be
+  short once its carrier is chosen, but composition will force the column laws
+  to be stated as exact additive decompositions rather than subtraction.  I
+  predict the scheduler checkout uses a different Lean toolchain, so the
+  compiled tunnel will vendor only the minimal L1/L4 step shape, with source
+  commit and SHA-256 provenance, instead of coupling the two Lake graphs.
+- **Priority retrofits.**  N3 is expected to resist most: its current
+  multiplicity drop and cubic factor identity were proved on different-looking
+  state data, and the retrofit must show they are projections of one transfer.
+  N2 should be comparatively direct once the real-valued ledger adapter is
+  made functorial column by column.  Graded C3 should also close cleanly because
+  `totalLayers` already supplies the discrete amount spent.
+- **Further rows.**  N4 and N6 look likelier to accept a transfer adapter than
+  N5 or N7, whose gauge-normalized states may not retain enough data to account
+  for an exact positive amount.  Flow, C1, C2, and the Bernoulli bridge each
+  require a genuinely new accounting morphism and are expected to resist a
+  quick retrofit more than the already graded repayment cone.
+- **Expected map movement.**  I expect five completed classification flips:
+  the required N3, N2, and graded C3 rows, plus two of N4/N6/Bernoulli if their
+  existing state equations line up.  The three prohibited seams should become
+  sharper `Transfer`-inhabitation statements, not theorem claims: no Lemma I,
+  transformer successor, or endpoint will be manufactured.
