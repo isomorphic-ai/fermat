@@ -1,5 +1,31 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER discovery: priority adapters need three different routes
+
+- N3's elementary factor identity lives over integer Eisenstein coordinates,
+  while the actual Euler state stores `a`, `b`, and `c` in the ring of
+  integers of a generalized cyclotomic field.  The honest common carrier is
+  therefore `ℕ × 𝓞 K`: its natural coordinate carries ramified stock and
+  cumulative conversion against one fixed budget; its cyclotomic coordinate
+  balances each state's own cubic factor against `-(u * c^3)`.  Resetting the
+  budget at every successor would make adjacent transfer endpoints fail to
+  compose, so the adapter threads the caller's budget explicitly.
+- N2 needs no positive spend.  A linear isometry preserves the stock,
+  coupling-credit, converted, and total columns separately, giving a
+  zero-spent transfer.  The old scalar `charge_conserved` is now its total
+  projection rather than a second norm proof.
+- Graded C3 closes globally for an actual `Repay`: `accountCredit` is
+  `totalLayers`, and the ledger threads an accumulated converted count so one
+  layer moves from credit to converted with fixed stock and total.  The
+  neighboring `nonempty_repay_one_iff` remains a verdict-shaped equivalence;
+  promoting it globally would be decorative because it has no reason to
+  inspect the column adapter.
+- The scheduler's exact `KummerNoether.Step` is `Prop`-valued.  Lean therefore
+  forbids eliminating an arbitrary proof into a data-valued `Transfer`; the
+  faithful compiled converse is existential, with concrete data constructors
+  for the `principalize` and `evidence` cases.  This preserves the source
+  statement rather than changing `Step` merely to ease extraction.
+
 ## 2026-08-02 — TRANSFER discovery: the tunnel must be vendored and L1 is not L4
 
 - Fermat uses `leanprover/lean4:v4.31.0-rc1`; the scheduler checkout uses

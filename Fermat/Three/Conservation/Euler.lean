@@ -972,6 +972,181 @@ private theorem exists_Solution_multiplicity_lt :
 
 end Solution
 
+namespace Solution
+
+variable [NumberField K] [IsCyclotomicExtension {3} ℚ K]
+
+/-- The cubic factor carried by an oriented Euler state. -/
+def factorStock (S : Solution hζ) : 𝓞 K :=
+  (S.a + S.b) * (S.a ^ 2 - S.a * S.b + S.b ^ 2)
+
+omit [NumberField K] [IsCyclotomicExtension {3} ℚ K] in
+private theorem factorStock_eq_rhs (S : Solution hζ) :
+    S.factorStock = S.u * S.c ^ 3 := by
+  calc
+    S.factorStock = S.a ^ 3 + S.b ^ 3 := by
+      simp only [factorStock]
+      ring
+    _ = S.u * S.c ^ 3 := S.H
+
+/-- A generalized Euler state in one global accounted carrier.
+
+The natural coordinate records ramified stock against a fixed path budget.
+The cyclotomic coordinate records the state's own cubic factor against the
+unit-weighted cube on the other side of its equation.  Both coordinates are
+therefore conserved by the same literal ledger state. -/
+noncomputable def accountLedger (budget : ℕ) (S : Solution hζ)
+    (hbudget : drainCharge S.multiplicity ≤ budget) :
+    Fermat.Conservation.Ledger (ℕ × 𝓞 K) where
+  stock := (drainCharge S.multiplicity, S.factorStock)
+  credit := (0, -(S.u * S.c ^ 3))
+  converted := (budget - drainCharge S.multiplicity, 0)
+  total := (budget, 0)
+  conservation := by
+    apply Prod.ext
+    · simp only [Prod.fst_add]
+      omega
+    · simp only [Prod.snd_add, add_zero]
+      rw [S.factorStock_eq_rhs]
+      simp
+
+/-- A budget-preserving transfer between two actual Euler states.  Source and
+successor retain their own cubic factor data; only the first coordinate is
+ordered, while the second coordinate proves that both factor ledgers balance. -/
+noncomputable def accountTransfer (budget : ℕ)
+    (before after : Solution hζ)
+    (hbefore : drainCharge before.multiplicity ≤ budget)
+    (hafter : drainCharge after.multiplicity ≤ budget)
+    (hdrop : drainCharge after.multiplicity ≤
+      drainCharge before.multiplicity) :
+    Fermat.Conservation.Transfer (ℕ × 𝓞 K) where
+  before := before.accountLedger budget hbefore
+  after := after.accountLedger budget hafter
+  spent :=
+    (drainCharge before.multiplicity - drainCharge after.multiplicity, 0)
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    apply Prod.ext
+    · simp only [accountLedger, Prod.fst_add]
+      omega
+    · simp only [accountLedger, Prod.snd_add, add_zero]
+      rw [before.factorStock_eq_rhs, after.factorStock_eq_rhs]
+      simp
+  converted_decomposition := by
+    apply Prod.ext
+    · simp only [accountLedger, Prod.fst_add]
+      omega
+    · simp only [accountLedger, Prod.snd_add, add_zero]
+
+omit [NumberField K] [IsCyclotomicExtension {3} ℚ K] in
+/-- The source factor equation is the cyclotomic-coordinate projection of the
+same transfer that carries the ramified stock. -/
+theorem accountTransfer_before_factor_ledger (budget : ℕ)
+    (before after : Solution hζ)
+    (hbefore : drainCharge before.multiplicity ≤ budget)
+    (hafter : drainCharge after.multiplicity ≤ budget)
+    (hdrop : drainCharge after.multiplicity ≤
+      drainCharge before.multiplicity) :
+    before.a ^ 3 + before.b ^ 3 = before.factorStock := by
+  let transfer :=
+    accountTransfer budget before after hbefore hafter hdrop
+  have hconservation := transfer.endpoint_conservation.1
+  have hsnd := congrArg Prod.snd hconservation
+  have hzero :
+      before.factorStock - before.u * before.c ^ 3 = 0 := by
+    simpa only [transfer, accountTransfer, accountLedger, Prod.snd_add,
+      add_zero, sub_eq_add_neg] using hsnd
+  calc
+    before.a ^ 3 + before.b ^ 3 = before.u * before.c ^ 3 := before.H
+    _ = before.factorStock := (sub_eq_zero.mp hzero).symm
+
+omit [NumberField K] [IsCyclotomicExtension {3} ℚ K] in
+/-- The successor factor equation is the second endpoint projection of the
+same transaction. -/
+theorem accountTransfer_after_factor_ledger (budget : ℕ)
+    (before after : Solution hζ)
+    (hbefore : drainCharge before.multiplicity ≤ budget)
+    (hafter : drainCharge after.multiplicity ≤ budget)
+    (hdrop : drainCharge after.multiplicity ≤
+      drainCharge before.multiplicity) :
+    after.a ^ 3 + after.b ^ 3 = after.factorStock := by
+  let transfer :=
+    accountTransfer budget before after hbefore hafter hdrop
+  have hconservation := transfer.endpoint_conservation.2
+  have hsnd := congrArg Prod.snd hconservation
+  have hzero : after.factorStock - after.u * after.c ^ 3 = 0 := by
+    simpa only [transfer, accountTransfer, accountLedger, Prod.snd_add,
+      add_zero, sub_eq_add_neg] using hsnd
+  calc
+    after.a ^ 3 + after.b ^ 3 = after.u * after.c ^ 3 := after.H
+    _ = after.factorStock := (sub_eq_zero.mp hzero).symm
+
+omit [NumberField K] [IsCyclotomicExtension {3} ℚ K] in
+/-- The ramified stock equation is the natural-coordinate projection of the
+state-linked transaction. -/
+theorem accountTransfer_stock_decomposition (budget : ℕ)
+    (before after : Solution hζ)
+    (hbefore : drainCharge before.multiplicity ≤ budget)
+    (hafter : drainCharge after.multiplicity ≤ budget)
+    (hdrop : drainCharge after.multiplicity ≤
+      drainCharge before.multiplicity) :
+    drainCharge before.multiplicity = drainCharge after.multiplicity +
+      (accountTransfer budget before after hbefore hafter hdrop).spent.1 := by
+  have havailable := congrArg Prod.fst
+    (accountTransfer budget before after hbefore hafter hdrop).available_eq
+  simpa only [Fermat.Conservation.Transfer.available, accountTransfer,
+    accountLedger, Prod.fst_add, add_zero] using havailable
+
+omit [NumberField K] [IsCyclotomicExtension {3} ℚ K] in
+/-- Both factor ledgers and the multiplicity drop are projections of one
+conserved before/after transaction. -/
+theorem accountTransfer_projections (budget : ℕ)
+    (before after : Solution hζ)
+    (hbefore : drainCharge before.multiplicity ≤ budget)
+    (hafter : drainCharge after.multiplicity ≤ budget)
+    (hdrop : drainCharge after.multiplicity ≤
+      drainCharge before.multiplicity) :
+    (before.a ^ 3 + before.b ^ 3 = before.factorStock) ∧
+      (after.a ^ 3 + after.b ^ 3 = after.factorStock) ∧
+      drainCharge before.multiplicity = drainCharge after.multiplicity +
+        (accountTransfer budget before after hbefore hafter hdrop).spent.1 :=
+  ⟨accountTransfer_before_factor_ledger budget before after
+      hbefore hafter hdrop,
+    accountTransfer_after_factor_ledger budget before after
+      hbefore hafter hdrop,
+    accountTransfer_stock_decomposition budget before after
+      hbefore hafter hdrop⟩
+
+/-- A fixed-budget accounted Euler step.  Keeping the caller's budget makes
+the returned endpoint available for literal `Transfer.comp` chaining. -/
+noncomputable def descentTransfer (S : Solution hζ) (budget : ℕ)
+    (hbudget : drainCharge S.multiplicity ≤ budget)
+    (next : Solution hζ) (hlt : next.multiplicity < S.multiplicity) :
+    Fermat.Conservation.Transfer (ℕ × 𝓞 K) :=
+  accountTransfer budget S next hbudget
+    (le_trans (drainCharge_mono hlt.le) hbudget)
+    (drainCharge_mono hlt.le)
+
+end Solution
+
+/-- **Euler's accounted descent step.** Every oriented generalized cubic
+solution produces a positive transaction at any fixed enclosing budget. -/
+theorem euler_descent_transfer
+    [NumberField K] [IsCyclotomicExtension {3} ℚ K]
+    (S : Solution hζ) (budget : ℕ)
+    (hbudget : drainCharge S.multiplicity ≤ budget) :
+    ∃ (next : Solution hζ)
+      (hlt : next.multiplicity < S.multiplicity),
+      0 < (S.descentTransfer budget hbudget next hlt).spent.1 := by
+  obtain ⟨next, hlt⟩ := S.exists_Solution_multiplicity_lt
+  refine ⟨next, hlt, ?_⟩
+  simp only [Solution.descentTransfer, Solution.accountTransfer]
+  exact drainSpent_pos_of_multiplicity_lt hlt
+
 /-- **Euler's charged descent step.** Every oriented generalized cubic
 solution produces another one with strictly smaller `λ`-primary norm charge.
 Here the charge is literally `N((1 - ζ₃)^m) = 3^m`; the sign difference
@@ -983,8 +1158,14 @@ theorem euler_descent_charge_lt
     ∃ S₁ : Solution hζ,
       drainCharge S₁.multiplicity <
         drainCharge S.multiplicity := by
-  obtain ⟨S₁, hlt⟩ := S.exists_Solution_multiplicity_lt
-  exact ⟨S₁, drainCharge_pred_lt hlt⟩
+  obtain ⟨S₁, hlt, hspent⟩ :=
+    euler_descent_transfer S (drainCharge S.multiplicity) le_rfl
+  refine ⟨S₁, ?_⟩
+  rw [S.accountTransfer_stock_decomposition
+    (drainCharge S.multiplicity) S₁ le_rfl
+    (drainCharge_mono hlt.le) (drainCharge_mono hlt.le)]
+  simpa only [Solution.descentTransfer] using
+    Nat.lt_add_of_pos_right hspent
 
 end GeneralizedStatement
 

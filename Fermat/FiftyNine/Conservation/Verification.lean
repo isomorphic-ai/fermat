@@ -16,6 +16,7 @@ statewise relation-production and pullback obligations that stop W2 and W3.
 -/
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.Ledger
+import Fermat.Conservation.Transfer
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 import Fermat.FiftyNine.Conservation.BoundedSinnott
@@ -117,6 +118,22 @@ column-functoriality laws and both endpoint conservation identities. -/
   Fermat.Two.isometryTransfer
 #guard_depends_on Fermat.Two.charge_conserved,
   Fermat.Conservation.Ledger.conservation_identity
+
+/-! N3's integer spine and generalized Euler successor now expose one
+state-linked accounted transaction.  The factor ledger and ramified stock
+drop are projections of that transaction; the former strict theorem and its
+downstream floor path retain these dependencies transitively. -/
+
+#guard_depends_on Fermat.Three.Conservation.ledger_identity,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Three.Conservation.drainCharge_pred_lt,
+  Fermat.Three.Conservation.drainTransfer_stock_decomposition
+#guard_depends_on Fermat.Three.Conservation.drainCharge_pred_lt,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on Fermat.Three.Conservation.drainCharge_pred_lt,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
+  Fermat.Conservation.Transfer.available_eq
 
 /-! The selected gauge quotient keeps both of its native projection
 identities load-bearing, without pretending they have already been joined

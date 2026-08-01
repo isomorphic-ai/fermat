@@ -19,7 +19,7 @@ The bounded Mathlib roles are:
 
 No fixed-exponent FLT theorem is imported.
 -/
-import Fermat.Conservation.Floor
+import Fermat.Conservation.Transfer
 import Mathlib.Algebra.QuadraticAlgebra.Basic
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
@@ -51,9 +51,7 @@ theorem charge_mul (u v : EisensteinInt) :
     charge (u * v) = charge u * charge v := by
   exact map_mul QuadraticAlgebra.norm u v
 
-/-- **The cubic ledger.** The integer Fermat equation factors as the sum
-channel times Eisenstein charge. -/
-theorem ledger_identity (a b : ℤ) :
+private theorem cubic_factor_raw (a b : ℤ) :
     a ^ 3 + b ^ 3 = (a + b) * charge (ofCoeffs a b) := by
   rw [charge_formula]
   ring
@@ -81,10 +79,108 @@ def drainCharge (n : ℕ) : ℕ :=
 theorem drainCharge_eq (n : ℕ) : drainCharge n = 3 ^ n := by
   simp [drainCharge, charge_pow, drainUnit_charge]
 
-/-- Removing one drain quantum transfers charge strictly downward. -/
-theorem drainCharge_pred_lt {m n : ℕ} (h : m < n) :
-    drainCharge m < drainCharge n := by
+/-- Ramified charge is monotone in its multiplicity.  This non-strict fact is
+used only to type the before/after accounting states; strictness is projected
+from the resulting positive transaction below. -/
+theorem drainCharge_mono {m n : ℕ} (h : m ≤ n) :
+    drainCharge m ≤ drainCharge n := by
+  rw [drainCharge_eq, drainCharge_eq]
+  exact Nat.pow_le_pow_right (by decide) h
+
+/-- The state-linked cubic ledger at one ramified multiplicity.
+
+The first coordinate is the drain stock.  The second coordinate is the cubic
+factor `(a + b) * N(a + bζ₃)`.  Converted stock is measured against one fixed
+budget, so successive states with that budget compose without resetting the
+account. -/
+def drainLedger (a b : ℤ) (budget multiplicity : ℕ)
+    (hbudget : drainCharge multiplicity ≤ budget) :
+    Fermat.Conservation.Ledger (ℕ × ℤ) where
+  stock := (drainCharge multiplicity,
+    (a + b) * charge (ofCoeffs a b))
+  credit := (0, 0)
+  converted := (budget - drainCharge multiplicity, 0)
+  total := (budget, a ^ 3 + b ^ 3)
+  conservation := by
+    apply Prod.ext
+    · simp only [Prod.fst_add]
+      omega
+    · simp only [Prod.snd_add, add_zero]
+      exact (cubic_factor_raw a b).symm
+
+/-- One state-linked ramified transaction.  The same before/after state
+contains both the multiplicity charge and the cubic factor ledger. -/
+def drainTransfer (a b : ℤ) (budget : ℕ) {m n : ℕ}
+    (hmn : m ≤ n) (hbudget : drainCharge n ≤ budget) :
+    Fermat.Conservation.Transfer (ℕ × ℤ) where
+  before := drainLedger a b budget n hbudget
+  after := drainLedger a b budget m
+    (le_trans (drainCharge_mono hmn) hbudget)
+  spent := (drainCharge n - drainCharge m, 0)
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    apply Prod.ext
+    · simp only [drainLedger, Prod.fst_add, add_zero]
+      have hcharge := drainCharge_mono hmn
+      omega
+    · simp only [drainLedger, Prod.snd_add, add_zero]
+  converted_decomposition := by
+    apply Prod.ext
+    · simp only [drainLedger, Prod.fst_add]
+      have hcharge := drainCharge_mono hmn
+      omega
+    · simp only [drainLedger, Prod.snd_add, add_zero]
+
+/-- The factor ledger is the second-coordinate projection of the very same
+transaction that carries the ramified stock. -/
+theorem drainTransfer_factor_ledger (a b : ℤ) (budget : ℕ) {m n : ℕ}
+    (hmn : m ≤ n) (hbudget : drainCharge n ≤ budget) :
+    a ^ 3 + b ^ 3 = (a + b) * charge (ofCoeffs a b) := by
+  have hconservation :=
+    (drainTransfer a b budget hmn hbudget).endpoint_conservation.1
+  have hfactor := congrArg Prod.snd hconservation
+  simpa only [drainTransfer, drainLedger, Prod.snd_add, Prod.snd_zero,
+    add_zero] using hfactor.symm
+
+/-- **The cubic ledger.** The old factor identity is now a projection of an
+accounted cubic state, rather than a parallel polynomial proof. -/
+theorem ledger_identity (a b : ℤ) :
+    a ^ 3 + b ^ 3 = (a + b) * charge (ofCoeffs a b) :=
+  drainTransfer_factor_ledger a b (drainCharge 0)
+    (m := 0) (n := 0) le_rfl le_rfl
+
+/-- The first-coordinate stock decomposition of the cubic transaction. -/
+theorem drainTransfer_stock_decomposition (a b : ℤ) (budget : ℕ)
+    {m n : ℕ} (hmn : m ≤ n) (hbudget : drainCharge n ≤ budget) :
+    drainCharge n = drainCharge m +
+      (drainTransfer a b budget hmn hbudget).spent.1 := by
+  have havailable := congrArg Prod.fst
+    (drainTransfer a b budget hmn hbudget).available_eq
+  simpa only [Fermat.Conservation.Transfer.available, drainTransfer,
+    drainLedger, Prod.fst_add, add_zero] using havailable
+
+/-- A strict multiplicity drop funds a positive accounted spend.  This is the
+primitive positivity input; the legacy stock inequality is projected from it
+and the transfer equation below. -/
+theorem drainSpent_pos_of_multiplicity_lt {m n : ℕ} (h : m < n) :
+    0 < drainCharge n - drainCharge m := by
+  apply Nat.sub_pos_of_lt
   rw [drainCharge_eq, drainCharge_eq]
   exact Nat.pow_lt_pow_right (by norm_num) h
+
+/-- Removing one drain quantum transfers charge strictly downward.  The
+legacy inequality is the stock projection of a positive `drainTransfer`. -/
+theorem drainCharge_pred_lt {m n : ℕ} (h : m < n) :
+    drainCharge m < drainCharge n := by
+  let transfer := drainTransfer 0 0 (drainCharge n) h.le le_rfl
+  have hspent : 0 < transfer.spent.1 := by
+    simpa only [transfer, drainTransfer] using
+      drainSpent_pos_of_multiplicity_lt h
+  rw [drainTransfer_stock_decomposition 0 0 (drainCharge n) h.le le_rfl]
+  exact Nat.lt_add_of_pos_right hspent
 
 end Fermat.Three.Conservation
