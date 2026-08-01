@@ -11,6 +11,7 @@ or module enters the credit cone.
 -/
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.Ledger
+import Fermat.Conservation.Transfer
 import Fermat.Conservation.Credit.Vacuum
 import Fermat.Conservation.Credit.Capacity
 import Fermat.Conservation.Credit.Repayment
@@ -46,6 +47,9 @@ interface must remain present in the generic conservation environment. -/
 #check Fermat.Conservation.Ledger.conservation_identity
 #check Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #check Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#check Fermat.Conservation.Credit.Repayment.C.accountCredit
+#check Fermat.Conservation.Credit.Repayment.C.accountLedger
+#check Fermat.Conservation.Credit.Repayment.repay_layer_transfer
 #check Fermat.Conservation.Credit.Repayment.LayerTransport
 
 /-! Global three-column accounting is load-bearing in each claimed literal
@@ -86,6 +90,25 @@ transport is inhabited. -/
 
 #guard_depends_on Fermat.Conservation.Credit.Repayment.repay_totalLayers,
   Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#guard_depends_on
+  Fermat.Conservation.Credit.Repayment.repay_layer_transfer,
+  Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#guard_depends_on
+  Fermat.Conservation.Credit.Repayment.repay_layer_transfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Repayment.repay_layer_credit_decomposition,
+  Fermat.Conservation.Transfer.credit_decomposition_of_stock_eq
+#guard_depends_on
+  Fermat.Conservation.Credit.Repayment.repay_layer_converted_decomposition,
+  Fermat.Conservation.Transfer.converted_decomposition
+#guard_depends_on
+  Fermat.Conservation.Credit.Repayment.repay_layer_total_preserved,
+  Fermat.Conservation.Transfer.total_preserved
+#guard_depends_on Fermat.Conservation.Credit.Repayment.repay_totalLayers,
+  Fermat.Conservation.Credit.Repayment.repay_layer_transfer
+#guard_depends_on Fermat.Conservation.Credit.Repayment.repay_totalLayers,
+  Fermat.Conservation.Transfer.credit_decomposition_of_stock_eq
 #guard_depends_on Fermat.Conservation.Credit.Repayment.nonempty_repay_one_iff,
   Fermat.Conservation.Credit.Repayment.repay_layer_conservation
 #guard_depends_on Fermat.Conservation.Credit.Repayment.LayerTransport,
@@ -1045,7 +1068,8 @@ elab "#guard_no_selected_prime_literal" : command => do
       let source ← liftIO <| IO.FS.readFile entry.path
       for line in selectedPrimeTokenLines source.toList do
         offenders := offenders.push s!"{entry.path}:{line}"
-  for filename in #["CyclotomicDrain.lean", "KummerDrain.lean"] do
+  for filename in
+      #["CyclotomicDrain.lean", "KummerDrain.lean", "Transfer.lean"] do
     let path := conservationDirectory / System.FilePath.mk filename
     let source ← liftIO <| IO.FS.readFile path
     for line in selectedPrimeTokenLines source.toList do

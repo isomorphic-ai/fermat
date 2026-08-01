@@ -18,7 +18,7 @@ inversion belong upstream in the flow calculus, not in this repayment
 consumer.  No repayment function or power conclusion is assumed.
 -/
 import Fermat.Conservation.Credit.Capacity
-import Fermat.Conservation.Ledger
+import Fermat.Conservation.Transfer
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Group.Subgroup.Finsupp
 import Mathlib.Data.Int.GCD
@@ -97,6 +97,49 @@ def totalLayers (_state : C G closed funded d) : ℕ := d
     state.totalLayers = d :=
   rfl
 
+/-- The global credit account of a graded obstruction is exactly its number
+of unspent layers. -/
+def accountCredit (state : C G closed funded d) : ℕ :=
+  state.totalLayers
+
+@[simp] theorem accountCredit_eq_totalLayers
+    (state : C G closed funded d) :
+    state.accountCredit = state.totalLayers :=
+  rfl
+
+/-- A graded obstruction as a global three-column ledger.  The extra
+`converted` parameter is the accumulated number of already-repaid layers;
+threading it through successive steps makes their ledger endpoints agree
+definitionally. -/
+def accountLedger (state : C G closed funded d) (converted : ℕ) :
+    Fermat.Conservation.Ledger ℕ where
+  stock := 0
+  credit := state.accountCredit
+  converted := converted
+  total := state.accountCredit + converted
+  conservation := by simp
+
+@[simp] theorem accountLedger_stock
+    (state : C G closed funded d) (converted : ℕ) :
+    (state.accountLedger converted).stock = 0 :=
+  rfl
+
+@[simp] theorem accountLedger_credit
+    (state : C G closed funded d) (converted : ℕ) :
+    (state.accountLedger converted).credit = state.totalLayers :=
+  rfl
+
+@[simp] theorem accountLedger_converted
+    (state : C G closed funded d) (converted : ℕ) :
+    (state.accountLedger converted).converted = converted :=
+  rfl
+
+@[simp] theorem accountLedger_total
+    (state : C G closed funded d) (converted : ℕ) :
+    (state.accountLedger converted).total =
+      state.totalLayers + converted :=
+  rfl
+
 end C
 
 
@@ -137,6 +180,76 @@ theorem repay_layer_conservation
       (repay state).totalLayers + 1 = state.totalLayers :=
   repay.layer_conservation state
 
+/-- One typed repayment layer as a global accounted transfer.  Stock is the
+fixed zero route, credit is the residual grade, one unit is moved to
+`converted`, and the accumulated conversion counter makes consecutive
+repayments compose without resetting their ledger state. -/
+def repay_layer_transfer
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} {d : ℕ}
+    (repay : Repay p G closed funded d)
+    (state : C G closed funded d) (converted : ℕ) :
+    Fermat.Conservation.Transfer ℕ where
+  before := state.accountLedger converted
+  after := (repay state).accountLedger (converted + 1)
+  spent := 1
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := by
+    simp only [C.accountLedger_total]
+    have hlayers := (repay_layer_conservation repay state).2
+    omega
+  available_decomposition := by
+    simpa only [C.accountLedger_stock, C.accountLedger_credit, zero_add]
+      using (repay_layer_conservation repay state).2.symm
+  converted_decomposition := by
+    simp only [C.accountLedger_converted]
+
+/-- The stock column is fixed during a graded repayment. -/
+theorem repay_layer_stock_preserved
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} {d : ℕ}
+    (repay : Repay p G closed funded d)
+    (state : C G closed funded d) (converted : ℕ) :
+    (repay_layer_transfer repay state converted).before.stock =
+      (repay_layer_transfer repay state converted).after.stock := by
+  rfl
+
+/-- The aggregate transfer equation projects to an exact one-unit credit
+decrease because the graded adapter keeps stock fixed. -/
+theorem repay_layer_credit_decomposition
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} {d : ℕ}
+    (repay : Repay p G closed funded d)
+    (state : C G closed funded d) (converted : ℕ) :
+    (repay_layer_transfer repay state converted).before.credit =
+      (repay_layer_transfer repay state converted).after.credit + 1 := by
+  exact
+    (repay_layer_transfer repay state converted).credit_decomposition_of_stock_eq
+      (repay_layer_stock_preserved repay state converted)
+
+/-- One repaid layer is added to the converted column. -/
+theorem repay_layer_converted_decomposition
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} {d : ℕ}
+    (repay : Repay p G closed funded d)
+    (state : C G closed funded d) (converted : ℕ) :
+    (repay_layer_transfer repay state converted).after.converted =
+      (repay_layer_transfer repay state converted).before.converted + 1 :=
+  (repay_layer_transfer repay state converted).converted_decomposition
+
+/-- Repayment changes columns but not their globally accounted total. -/
+theorem repay_layer_total_preserved
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} {d : ℕ}
+    (repay : Repay p G closed funded d)
+    (state : C G closed funded d) (converted : ℕ) :
+    (repay_layer_transfer repay state converted).before.total =
+      (repay_layer_transfer repay state converted).after.total :=
+  (repay_layer_transfer repay state converted).total_preserved
+
 /-- In particular, total residual depth decreases by exactly one. -/
 theorem repay_totalLayers
     {p : ℕ} {G : Type*} [Group G] {closed : Prop}
@@ -144,7 +257,7 @@ theorem repay_totalLayers
     (repay : Repay p G closed funded d)
     (state : C G closed funded d) :
     (repay state).totalLayers + 1 = state.totalLayers :=
-  (repay_layer_conservation repay state).2
+  (repay_layer_credit_decomposition repay state 0).symm
 
 /-- The old one-layer output, isolated as a verdict type. -/
 def OneLayerVerdict {G : Type*} [Group G]
