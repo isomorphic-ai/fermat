@@ -1,0 +1,204 @@
+/-
+Copyright (c) 2026 Fabian Franz. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Fabian Franz, Fable
+
+# Vendored IsoConserve statement surface
+
+This is the minimal statement-level surface needed to connect Fermat's
+route-neutral `Transfer` to the scheduler conservation formalization.  It is
+vendored rather than linked as a Lake dependency because the source checkout
+and this repository pin different Lean toolchains.
+
+Source repository checkout:
+
+* git root: `/home/goblin/scheduler`
+* package root: `/home/goblin/scheduler/iso-conserve-lean`
+* remote: `https://github.com/isomorphic-ai/scheduler.git`
+* commit: `424fd7d216e63ab65a42711635e16db93edcf9c0`
+
+Source files and SHA-256 values at that clean commit:
+
+* `iso-conserve-lean/lean-toolchain`
+  `54727eec5cba149c18842e6deb5c41b369d66455c93ce135d7d5347c782b2325`
+* `iso-conserve-lean/lakefile.lean`
+  `8b5b4ef88169c496248997a450a8c52cf297826c144ee46239cef0f55ff2f2c5`
+* `iso-conserve-lean/IsoConserve/Basic.lean`
+  `6cdfb5c4d6097d8e150cf2218ef5a80d2720a15021e58586579b00c801ec9b22`
+* `iso-conserve-lean/IsoConserve/L1Conservation.lean`
+  `a7080721f0eebcb0803d0aeeee2ecef293d5c3fb1507a366577244d827a77a08`
+* `iso-conserve-lean/IsoConserve/L4Integral.lean`
+  `2c7e8ee032e52d4bf626615077e752fc65c01530e5c6d582ff8f9fa528499ec1`
+* `iso-conserve-lean/IsoConserve/Noether.lean`
+  `a04db6f7e04a997320af07370cefde506d8e908a2b276ef2c3d14556e564a2e8`
+* `iso-conserve-lean/IsoConserve/KummerNoetherLedger.lean`
+  `06e43469503d535085b4058679b7b1a532d2412a0f5ee1bdb7707c2a9b825327`
+* `iso-conserve-lean/IsoConserve/CoreTrace.lean`
+  `5ac8c03692b948f2472fed39b654f9c625beed75a3970592c78784790a3d5be7`
+
+The source package pins `leanprover/lean4:v4.30.0`; Fermat pins
+`leanprover/lean4:v4.31.0-rc1`.  The source package has no external Lake
+packages and imports `Std`, but the task's mismatch rule deliberately forbids
+trying to couple the two toolchain graphs.
+
+The declarations below preserve four distinct scheduler shapes:
+
+1. Noether's `ConservedBy` relation;
+2. L1's direction `accounted after = accounted before` for a balanced step;
+3. L4's separate local equation `stock + credit = netFlowIntegral`;
+4. the arithmetic `KummerNoether.Ledger`, `Step`, and conserved `charge`.
+
+`BalancedStep` is the minimal aggregate statement of the balance data needed
+for a converse to `Transfer`; it is not claimed to be a verbatim copy of the
+scheduler's operational `FlowPlan` or `CoreTrace.RoutePlan`.  A bare L1
+equality forgets the amount spent and therefore cannot by itself reconstruct a
+`Transfer`.
+-/
+import Mathlib
+
+namespace Fermat.Conservation.IsoConserveStatements
+
+/- The scheduler's Noether-shaped statement: every related step preserves a
+chosen charge, with the post-state on the left of the equality. -/
+namespace Noether
+
+def ConservedBy {State : Sort u} {Charge : Type v}
+    (R : State → State → Prop) (charge : State → Charge) : Prop :=
+  ∀ {before after}, R before after → charge after = charge before
+
+end Noether
+
+/-- The aggregate columns read by the vendored L1 statement. -/
+structure Columns (α : Type*) [AddCommMonoid α] where
+  stock : α
+  credit : α
+  converted : α
+
+namespace Columns
+
+variable {α : Type*} [AddCommMonoid α]
+
+/-- Stock and credit are the scheduler's currently spendable columns. -/
+def available (state : Columns α) : α :=
+  state.stock + state.credit
+
+/-- The aggregate scheduler charge represented by the three columns. -/
+def accounted (state : Columns α) : α :=
+  state.stock + state.credit + state.converted
+
+end Columns
+
+/-- A balanced aggregate scheduler step.
+
+The two displayed decompositions retain exactly the information that L1
+forgets: the amount leaving the combined available columns is the amount
+entering the converted column. -/
+structure BalancedStep (α : Type*) [AddCommMonoid α] where
+  before : Columns α
+  after : Columns α
+  spent : α
+  available_decomposition :
+    before.stock + before.credit = after.stock + after.credit + spent
+  converted_decomposition : after.converted = before.converted + spent
+
+namespace BalancedStep
+
+variable {α : Type*} [AddCommMonoid α]
+
+/-- Vendored aggregate form of scheduler L1: a balanced step preserves the
+accounted charge. -/
+theorem L1_conservation (step : BalancedStep α) :
+    Columns.accounted step.after = Columns.accounted step.before := by
+  calc
+    Columns.accounted step.after =
+        (step.after.stock + step.after.credit) +
+          (step.before.converted + step.spent) := by
+      rw [Columns.accounted, step.converted_decomposition]
+    _ = (step.after.stock + step.after.credit + step.spent) +
+          step.before.converted := by
+      ac_rfl
+    _ = (step.before.stock + step.before.credit) +
+          step.before.converted := by
+      rw [← step.available_decomposition]
+    _ = Columns.accounted step.before := rfl
+
+/-- The binary relation generated by balanced aggregate steps. -/
+def Rel (before after : Columns α) : Prop :=
+  ∃ step : BalancedStep α, step.before = before ∧ step.after = after
+
+/-- L1 in the scheduler's generic Noether relation shape. -/
+theorem rel_conserved :
+    Noether.ConservedBy (@Rel α _) Columns.accounted := by
+  intro before after hstep
+  obtain ⟨step, rfl, rfl⟩ := hstep
+  exact step.L1_conservation
+
+end BalancedStep
+
+/-- The separate column surface read by scheduler L4. -/
+structure IntegralColumns (α : Type*) [AddCommMonoid α] extends Columns α where
+  netFlowIntegral : α
+
+/-- Vendored aggregate form of scheduler L4.  This is intentionally distinct
+from L1 conservation. -/
+def L4Invariant {α : Type*} [AddCommMonoid α]
+    (state : IntegralColumns α) : Prop :=
+  state.stock + state.credit = state.netFlowIntegral
+
+/-- The scheduler's named L4 projection. -/
+theorem L4_stock_is_integral {α : Type*} [AddCommMonoid α]
+    (state : IntegralColumns α) (h : L4Invariant state) :
+    state.stock + state.credit = state.netFlowIntegral :=
+  h
+
+/- The scheduler-side arithmetic tunnel endpoint. -/
+namespace KummerNoether
+
+/-- Finite-dimensional accounting state for one Fermat-generated subspace. -/
+structure Ledger where
+  classStock : ℕ
+  unitKernel : ℕ
+  evidenceRank : ℕ
+deriving DecidableEq, Repr
+
+/-- The conserved arithmetic charge. -/
+def charge (state : Ledger) : ℕ :=
+  state.classStock + state.unitKernel + state.evidenceRank
+
+/-- The scheduler source's two lawful arithmetic conversions. -/
+inductive Step : Ledger → Ledger → Prop
+  | principalize (c k r : ℕ) :
+      Step ⟨c + 1, k, r⟩ ⟨c, k + 1, r⟩
+  | evidence (c k r : ℕ) :
+      Step ⟨c, k + 1, r⟩ ⟨c, k, r + 1⟩
+
+/-- Both Kummer routing and evidence conversion conserve scheduler charge. -/
+theorem step_conserves : Noether.ConservedBy Step charge := by
+  intro before after hstep
+  cases hstep <;> simp [charge] <;> omega
+
+/-- The exact column orientation used by the source's one-process `asSys`:
+`unitKernel` is scheduler stock and `classStock` is scheduler credit. -/
+def columns (state : Ledger) : Columns ℕ where
+  stock := state.unitKernel
+  credit := state.classStock
+  converted := state.evidenceRank
+
+/-- The aggregate accounted columns equal the Kummer charge. -/
+@[simp] theorem accounted_columns (state : Ledger) :
+    Columns.accounted (columns state) = charge state := by
+  simp [Columns.accounted, columns, charge, Nat.add_comm, Nat.add_left_comm]
+
+/-- The per-state L4 surface used by the source's `asSys` embedding. -/
+def integralColumns (state : Ledger) : IntegralColumns ℕ where
+  toColumns := columns state
+  netFlowIntegral := state.unitKernel + state.classStock
+
+/-- Kummer's one-process embedding satisfies the distinct L4 column law. -/
+theorem l4_integral (state : Ledger) :
+    L4Invariant (integralColumns state) :=
+  rfl
+
+end KummerNoether
+
+end Fermat.Conservation.IsoConserveStatements
