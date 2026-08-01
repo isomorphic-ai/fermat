@@ -1,5 +1,16 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER discovery: C1 has a faithful additive carrier
+
+- A set-valued credit matrix need not be collapsed to a questionable
+  cardinality.  Its full set of routed entries is itself an additive
+  commutative monoid under union, and native matrix merge maps exactly to
+  that addition.  This account is injective and reflects zero.
+- Embedding this account as the credit and total columns gives a global
+  ledger whose vacuum is equivalent to the native bottom matrix.  The legacy
+  Kummer credit-vacuum theorem can therefore be projected from a globally
+  accounted vacuum while retaining the original no-funded-generator proof.
+
 ## 2026-08-02 — TRANSFER discovery: N5 closes; N6 and N7 lose their origins
 
 - N5's charged state retains its current golden element and an exact strict

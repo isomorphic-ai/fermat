@@ -56,6 +56,10 @@ interface must remain present in the generic conservation environment. -/
 #check Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
 #check Fermat.Conservation.Credit.Flow.GeneratorOrbit.productTransfer
 #check Fermat.Conservation.Credit.Flow.GeneratorOrbit.sumTransfer
+#check Fermat.Conservation.Credit.MatrixAccount
+#check Fermat.Conservation.Credit.accountMatrix
+#check Fermat.Conservation.Credit.accountLedger
+#check Fermat.Conservation.Credit.kummer_credit_accounted_vacuum
 
 /-! Global three-column accounting is load-bearing in each claimed literal
 ledger transfer. -/
@@ -188,8 +192,21 @@ The legacy additive equalities are projections of their available columns. -/
   Fermat.Conservation.Credit.Flow.GeneratorOrbit.sum_conservation,
   Fermat.Conservation.Ledger.conservation_identity
 
-/-! C1's public vacuum theorem still routes through its generated-ledger
-identity. -/
+/-! C1 now has a faithful union-additive matrix account and a global vacuum;
+the legacy native equality is projected from that accounted theorem. -/
+
+#guard_depends_on Fermat.Conservation.Credit.accountMatrix_merge,
+  Fermat.Conservation.Credit.merge
+#guard_depends_on Fermat.Conservation.Credit.accountLedger_conservation,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Conservation.Credit.kummer_credit_accounted_vacuum,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Conservation.Credit.kummer_credit_accounted_vacuum,
+  Fermat.Conservation.Credit.generated_eq_bot_of_no_generator
+#guard_depends_on Fermat.Conservation.Credit.kummer_credit_vacuum,
+  Fermat.Conservation.Credit.kummer_credit_accounted_vacuum
+#guard_depends_on Fermat.Conservation.Credit.kummer_credit_vacuum,
+  Fermat.Conservation.Credit.accountLedger_eq_vacuum_iff
 
 #guard_depends_on Fermat.Conservation.Credit.kummer_credit_vacuum,
   Fermat.Conservation.Credit.generated_eq_bot_of_no_generator

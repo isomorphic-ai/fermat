@@ -19,6 +19,7 @@ This is only the route-neutral C1 accounting principle.  An arithmetic
 instantiation must prove that its relevant set of funded generators is
 empty; that premise is not hidden here as data or a postulate.
 -/
+import Fermat.Conservation.Ledger
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Set.Lattice
 
@@ -34,6 +35,63 @@ abbrev Route (Node : Type u) (Generator : Type v) :=
 fund that entry. -/
 abbrev Ledger (Node : Type u) (Generator : Type v) :=
   Matrix Node Node (Set Generator)
+
+/-- The common additive carrier for a set-valued credit matrix.  It remembers
+every routed entry, rather than collapsing the matrix to a cardinality.  Its
+addition is union, exactly matching the native ledger's merge law. -/
+structure MatrixAccount (Node : Type u) (Generator : Type v) where
+  entries : Set ((Node × Node) × Generator)
+
+namespace MatrixAccount
+
+@[ext]
+theorem ext {Node : Type u} {Generator : Type v}
+    {left right : MatrixAccount Node Generator}
+    (hentries : left.entries = right.entries) : left = right := by
+  cases left
+  cases right
+  cases hentries
+  rfl
+
+/-- Union turns the full matrix support into an idempotent additive
+commutative monoid. -/
+instance {Node : Type u} {Generator : Type v} :
+    AddCommMonoid (MatrixAccount Node Generator) where
+  zero := ⟨∅⟩
+  add left right := ⟨left.entries ∪ right.entries⟩
+  add_assoc := by
+    intro left middle right
+    apply ext
+    exact Set.union_assoc _ _ _
+  zero_add := by
+    intro account
+    apply ext
+    exact Set.empty_union _
+  add_zero := by
+    intro account
+    apply ext
+    exact Set.union_empty _
+  nsmul := fun n account =>
+    n.rec ⟨∅⟩ (fun _ sum => ⟨sum.entries ∪ account.entries⟩)
+  nsmul_zero := by intros; rfl
+  nsmul_succ := by intros; rfl
+  add_comm := by
+    intro left right
+    apply ext
+    exact Set.union_comm _ _
+
+@[simp]
+theorem zero_entries {Node : Type u} {Generator : Type v} :
+    (0 : MatrixAccount Node Generator).entries = ∅ :=
+  rfl
+
+@[simp]
+theorem add_entries {Node : Type u} {Generator : Type v}
+    (left right : MatrixAccount Node Generator) :
+    (left + right).entries = left.entries ∪ right.entries :=
+  rfl
+
+end MatrixAccount
 
 /-- The pointwise set lattice on a ledger.  In particular, its supremum is
 entrywise union and its bottom has no generator in any entry. -/
@@ -56,6 +114,13 @@ def generated {Node : Type u} {Generator : Type v}
 def merge {Node : Type u} {Generator : Type v}
     (left right : Ledger Node Generator) : Ledger Node Generator :=
   left ⊔ right
+
+/-- Faithfully account a native matrix by the set of all its routed entries.
+This is the promised map to one additive carrier: stock, credit, conversion,
+and total can now all live in `MatrixAccount Node Generator`. -/
+def accountMatrix {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) : MatrixAccount Node Generator :=
+  ⟨{entry | entry.2 ∈ ledger entry.1.1 entry.1.2}⟩
 
 /-- The same ledger viewed from the opposite side. -/
 def opposite {Node : Type u} {Generator : Type v}
@@ -89,6 +154,117 @@ theorem mem_merge {Node : Type u} {Generator : Type v}
       generator ∈ left debtor creditor ∨
         generator ∈ right debtor creditor := by
   rfl
+
+@[simp]
+theorem mem_accountMatrix {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) (debtor creditor : Node)
+    (generator : Generator) :
+    ((debtor, creditor), generator) ∈ (accountMatrix ledger).entries ↔
+      generator ∈ ledger debtor creditor :=
+  Iff.rfl
+
+/-- Bottom in the native matrix is zero in the common additive carrier. -/
+@[simp]
+theorem accountMatrix_bot {Node : Type u} {Generator : Type v} :
+    accountMatrix (⊥ : Ledger Node Generator) = 0 := by
+  apply MatrixAccount.ext
+  apply Set.eq_empty_iff_forall_notMem.mpr
+  intro entry
+  change entry.2 ∉ (⊥ : Set Generator)
+  simp
+
+/-- Native semilattice merge is literal addition after accounting. -/
+@[simp]
+theorem accountMatrix_merge {Node : Type u} {Generator : Type v}
+    (left right : Ledger Node Generator) :
+    accountMatrix (merge left right) =
+      accountMatrix left + accountMatrix right := by
+  apply MatrixAccount.ext
+  ext entry
+  simp only [accountMatrix, MatrixAccount.add_entries, Set.mem_setOf_eq,
+    Set.mem_union, mem_merge]
+
+/-- The entry account loses no native matrix information. -/
+theorem accountMatrix_injective {Node : Type u} {Generator : Type v} :
+    Function.Injective
+      (@accountMatrix Node Generator) := by
+  intro left right heq
+  ext debtor creditor generator
+  have hentries := congrArg MatrixAccount.entries heq
+  exact Set.ext_iff.mp hentries ((debtor, creditor), generator)
+
+/-- The native matrix is bottom exactly when its faithful additive account is
+zero. -/
+theorem accountMatrix_eq_zero_iff {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) :
+    accountMatrix ledger = 0 ↔ ledger = ⊥ := by
+  constructor
+  · intro hzero
+    apply accountMatrix_injective
+    simpa only [accountMatrix_bot] using hzero
+  · rintro rfl
+    exact accountMatrix_bot
+
+/-- Embed a native matrix as the credit column of the global conservation
+ledger.  The other two columns are zero, and total is the same faithful
+matrix account. -/
+def accountLedger {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) :
+    Fermat.Conservation.Ledger (MatrixAccount Node Generator) where
+  stock := 0
+  credit := accountMatrix ledger
+  converted := 0
+  total := accountMatrix ledger
+  conservation := by simp
+
+@[simp]
+theorem accountLedger_stock {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) :
+    (accountLedger ledger).stock = 0 :=
+  rfl
+
+@[simp]
+theorem accountLedger_credit {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) :
+    (accountLedger ledger).credit = accountMatrix ledger :=
+  rfl
+
+@[simp]
+theorem accountLedger_converted {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) :
+    (accountLedger ledger).converted = 0 :=
+  rfl
+
+@[simp]
+theorem accountLedger_total {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) :
+    (accountLedger ledger).total = accountMatrix ledger :=
+  rfl
+
+/-- The global C1 adapter exposes the named three-column conservation law. -/
+theorem accountLedger_conservation {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) :
+    (accountLedger ledger).stock + (accountLedger ledger).credit +
+        (accountLedger ledger).converted = (accountLedger ledger).total :=
+  Fermat.Conservation.Ledger.conservation_identity (accountLedger ledger)
+
+/-- Faithfulness makes global ledger vacuum exactly native matrix vacuum. -/
+theorem accountLedger_eq_vacuum_iff {Node : Type u} {Generator : Type v}
+    (ledger : Ledger Node Generator) :
+    accountLedger ledger =
+        (Fermat.Conservation.Ledger.vacuum :
+          Fermat.Conservation.Ledger (MatrixAccount Node Generator)) ↔
+      ledger = ⊥ := by
+  constructor
+  · intro hvacuum
+    apply (accountMatrix_eq_zero_iff ledger).mp
+    have hcredit := congrArg Fermat.Conservation.Ledger.credit hvacuum
+    simpa only [accountLedger_credit,
+      Fermat.Conservation.Ledger.vacuum] using hcredit
+  · intro hbot
+    subst ledger
+    simp only [accountLedger, accountMatrix_bot,
+      Fermat.Conservation.Ledger.vacuum]
 
 @[simp]
 theorem merge_self {Node : Type u} {Generator : Type v}
@@ -183,13 +359,35 @@ theorem generated_eq_bot_of_no_generator
   · intro hgenerator
     exact hgenerator.elim
 
-/-- Kummer's regular-case credit vacuum, stated in generated form:
-absence of a funded generator makes the entire credit matrix empty. -/
+/-- Kummer's regular-case vacuum in the global three-column account.  The
+first projection says the generated credit matrix accounts as the global
+vacuum; the second is its named conservation identity. -/
+theorem kummer_credit_accounted_vacuum
+    {Node : Type u} {Generator : Type v}
+    (route : Route Node Generator) (funded : Set Generator)
+    (kummerNoGenerator : ¬ HasFundedGenerator funded) :
+    accountLedger (generated route funded) =
+          (Fermat.Conservation.Ledger.vacuum :
+            Fermat.Conservation.Ledger (MatrixAccount Node Generator)) ∧
+      (accountLedger (generated route funded)).stock +
+          (accountLedger (generated route funded)).credit +
+          (accountLedger (generated route funded)).converted =
+        (accountLedger (generated route funded)).total := by
+  have hnative :=
+    generated_eq_bot_of_no_generator route funded kummerNoGenerator
+  constructor
+  · exact (accountLedger_eq_vacuum_iff (generated route funded)).2 hnative
+  · exact accountLedger_conservation (generated route funded)
+
+/-- Kummer's legacy native-matrix vacuum is the faithful matrix projection
+of the globally accounted vacuum, rather than a parallel proof. -/
 theorem kummer_credit_vacuum
     {Node : Type u} {Generator : Type v}
     (route : Route Node Generator) (funded : Set Generator)
     (kummerNoGenerator : ¬ HasFundedGenerator funded) :
-    generated route funded = ⊥ :=
-  generated_eq_bot_of_no_generator route funded kummerNoGenerator
+    generated route funded = ⊥ := by
+  apply (accountLedger_eq_vacuum_iff (generated route funded)).1
+  exact (kummer_credit_accounted_vacuum route funded
+    kummerNoGenerator).1
 
 end Fermat.Conservation.Credit
