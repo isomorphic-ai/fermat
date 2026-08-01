@@ -14,6 +14,8 @@ The final `Fermat.HoldsAt 59` theorem is not present here.  The selected
 gauge quotient is complete, while the guarded transformer probe records the
 statewise relation-production and pullback obligations that stop W2 and W3.
 -/
+import Fermat.Conservation.GuardDependsOn
+import Fermat.Conservation.Ledger
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 import Fermat.FiftyNine.Conservation.BoundedSinnott
@@ -24,6 +26,94 @@ import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.StateFactorPair
 import Fermat.FiftyNine.Conservation.StateFactorConjugation
 import Fermat.FiftyNine.Conservation.TransformerProbe
+
+/-! ## Ledger-literal gate -/
+
+#check Fermat.Conservation.Ledger.conservation_identity
+#check Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#check Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#check Fermat.Conservation.Credit.Repayment.LayerTransport
+
+/-! The seven selected native stock laws remain named.  Presence here is
+not a claim that any of them has already been mapped into the global
+three-column carrier. -/
+
+#check Fermat.One.charge_ledger
+#check Fermat.Two.charge_ledger
+#check Fermat.Three.Conservation.ledger_identity
+#check Fermat.Four.Conservation.pythagorean_balance_engine
+#check Fermat.Five.Conservation.quintic_ledger
+#check Fermat.Six.Conservation.sixth_ledger
+#check Fermat.Seven.Conservation.septic_ledger
+
+/-! The selected Bernoulli table retains the non-lossy depth identity all
+the way through the legacy cube-free compatibility theorem. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_on_exponentCycle_of_flow,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+
+/-! The selected `d = 1` equivalence and its legacy repayment corollary
+retain the named one-layer conservation identity transitively. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.nonempty_repayOne_iff_deep_repayment59,
+  Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow,
+  Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+
+/-! The selected grade-zero state is literally funded by both halves named
+in its definition: the stock receipt and a generated C1 vacuum. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.regularClosure59,
+  Fermat.FiftyNine.Conservation.stockSpineReceipt
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.regularClosure59,
+  Fermat.Conservation.Credit.kummer_credit_vacuum
+
+/-! The mixed stock receipt truthfully contains exactly the imported N2 and
+N6 ledger identities; this makes no claim that the other stock rungs route
+through their nearby equations. -/
+
+#guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
+  Fermat.Two.charge_ledger
+#guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
+  Fermat.Six.Conservation.sixth_ledger
+
+/-! N2's own downstream balance theorems are locally literal.  These guards
+do not promote them to the still-absent global three-column identity. -/
+
+#guard_depends_on Fermat.Two.pythagoras,
+  Fermat.Two.charge_ledger
+#guard_depends_on Fermat.Two.emptyCoupling_of_additive,
+  Fermat.Two.charge_ledger
+#guard_depends_on Fermat.Two.pythagoras_conserved,
+  Fermat.Two.charge_ledger
+
+/-! The selected gauge quotient keeps both of its native projection
+identities load-bearing, without pretending they have already been joined
+by a global accounting morphism. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot,
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq,
+  Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq,
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientCharge_quotientState
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 

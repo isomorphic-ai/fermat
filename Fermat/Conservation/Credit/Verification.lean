@@ -9,6 +9,8 @@ This non-imported leaf audits the public C1--C3 and W1--W3 surfaces and
 checks that no forbidden endpoint, generic-irregular, or ladder declaration
 or module enters the credit cone.
 -/
+import Fermat.Conservation.GuardDependsOn
+import Fermat.Conservation.Ledger
 import Fermat.Conservation.Credit.Vacuum
 import Fermat.Conservation.Credit.Capacity
 import Fermat.Conservation.Credit.Repayment
@@ -35,6 +37,88 @@ import Fermat.Conservation.Credit.GaugeQuotient
 import Fermat.Conservation.Credit.Fold
 import Fermat.Conservation.CyclotomicDrain
 import Fermat.Conservation.KummerDrain
+
+/-! ## Ledger-literal gate -/
+
+/-! The three named identities and the deliberately open layer-transport
+interface must remain present in the generic conservation environment. -/
+
+#check Fermat.Conservation.Ledger.conservation_identity
+#check Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#check Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#check Fermat.Conservation.Credit.Repayment.LayerTransport
+
+/-! Global three-column accounting is load-bearing in each claimed literal
+ledger transfer. -/
+
+#guard_depends_on Fermat.Conservation.Ledger.vacuum_conservation,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Conservation.Ledger.repay_conservation,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Conservation.Ledger.repayNat_conservation,
+  Fermat.Conservation.Ledger.conservation_identity
+
+/-! The compatibility readings retain the non-lossy Bernoulli channel
+identity through their elaborated proof values. -/
+
+#guard_depends_on
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_eq_min_two_add_depth_sub_two,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.cubeFree_of_surplus_eq_zero,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.Conservation.Credit.Flow.FlowCertificate.eigenvalue_cubeFree,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.FlowCertificate.eigenvalue_cubeFree,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.FlowCertificate.depthAtMostTwo,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+#guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.DepthTwoCertificate.atMostTwo,
+  Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
+
+/-! A repayment spends exactly one typed layer.  The final guard checks only
+the shape of the named open interface: it does not assert that layer
+transport is inhabited. -/
+
+#guard_depends_on Fermat.Conservation.Credit.Repayment.repay_totalLayers,
+  Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#guard_depends_on Fermat.Conservation.Credit.Repayment.nonempty_repay_one_iff,
+  Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#guard_depends_on Fermat.Conservation.Credit.Repayment.LayerTransport,
+  Fermat.Conservation.Credit.Repayment.LayerConservation
+#guard_depends_on Fermat.Conservation.Credit.Repayment.Repay.ofLayerTransport,
+  Fermat.Conservation.Credit.Repayment.LayerTransport
+#guard_depends_on Fermat.Conservation.Credit.Repayment.Repay.ofLayerTransport,
+  Fermat.Conservation.Credit.Repayment.LayerConservation
+
+/-! C1's public vacuum theorem still routes through its generated-ledger
+identity. -/
+
+#guard_depends_on Fermat.Conservation.Credit.kummer_credit_vacuum,
+  Fermat.Conservation.Credit.generated_eq_bot_of_no_generator
+
+/-! Gauge quotient and class fold retain their native local identities.
+These are deliberately separate from the absent common-carrier adapter. -/
+
+#guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot,
+  Fermat.Conservation.Credit.kummer_credit_vacuum
+#guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot,
+  Fermat.Conservation.Credit.generated_eq_bot_of_no_generator
+#guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq,
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot
+#guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq,
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientCharge_quotientState
+#guard_depends_on
+  Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation,
+  Fermat.Conservation.Credit.Fold.relativeNormFold_apply
 
 /-! ## C1: generated vacuum and two-sided semilattice -/
 

@@ -11,7 +11,17 @@ fixed exponent-three and exponent-four theorems, the proposition-level
 divisibility fold, and every Ladder fold or transport sentinel remain
 unknown after importing only the public N6 rung.
 -/
+import Fermat.Conservation.GuardDependsOn
 import Fermat.Six.Conservation
+
+/-! ## Ledger-literal gate -/
+
+/-! The native solution ledger is the exact N6 boundary at which the
+sixth-cyclotomic identity is load-bearing.  The later charged endpoint does
+not claim this dependency. -/
+
+#guard_depends_on Fermat.Six.Conservation.PrimitiveSolution.native_ledger,
+  Fermat.Six.Conservation.sixth_ledger
 
 /--
 info: 'Fermat.Conservation.noInfinitePositiveChargeDrain' depends on axioms: [propext, Classical.choice, Quot.sound]

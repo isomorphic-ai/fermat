@@ -10,13 +10,35 @@ the complete golden-ring conservation cone and verifies that declarations
 from every layer of the repository's earlier exponent-five route remain
 unknown after importing only the public N5 conservation rung.
 -/
+import Fermat.Conservation.GuardDependsOn
 import Fermat.Five.Conservation
 
+/-! ## Ledger-literal gate -/
+
+/-! Every entry and terminal branch in the complete N5 cone retains the
+native golden-norm ledger through its elaborated proof value. -/
+
+#guard_depends_on
+  Fermat.Five.Conservation.PrimitiveFifthSolution.equation,
+  Fermat.Five.Conservation.quintic_ledger
+#guard_depends_on Fermat.Five.Conservation.fermatEquation_five_ledger,
+  Fermat.Five.Conservation.quintic_ledger
+#guard_depends_on Fermat.Five.Conservation.not_five_dvd_c_seed,
+  Fermat.Five.Conservation.quintic_ledger
+#guard_depends_on Fermat.Five.Conservation.five_dvd_c_seed,
+  Fermat.Five.Conservation.quintic_ledger
+#guard_depends_on Fermat.Five.Conservation.not_five_dvd_c_impossible,
+  Fermat.Five.Conservation.quintic_ledger
+#guard_depends_on Fermat.Five.Conservation.five_dvd_c_impossible,
+  Fermat.Five.Conservation.quintic_ledger
+#guard_depends_on Fermat.Five.holdsAt_five_conservation,
+  Fermat.Five.Conservation.quintic_ledger
+
 /--
-info: 'Fermat.HoldsAt.mono_of_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+error: Unknown constant `Fermat.HoldsAt.mono_of_dvd`
 -/
 #guard_msgs in
-#print axioms Fermat.HoldsAt.mono_of_dvd
+#check Fermat.HoldsAt.mono_of_dvd
 
 /--
 info: 'Fermat.Conservation.noInfinitePositiveChargeDrain' depends on axioms: [propext, Classical.choice, Quot.sound]

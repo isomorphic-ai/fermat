@@ -11,7 +11,28 @@ Lebesgue and Lamé routes, the root endpoint, the divisibility shortcut,
 every Ladder fold and transport, and fixed-exponent FLT results from Mathlib
 or flt-regular remain unknown after importing only the public N7 rung.
 -/
+import Fermat.Conservation.GuardDependsOn
 import Fermat.Seven.Conservation
+
+/-! ## Ledger-literal gate -/
+
+/-! Both terminal case closures and every downstream N7 public assembly
+retain the septic ledger through their elaborated proof values. -/
+
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.seven_dvd_t_branch_impossible,
+  Fermat.Seven.Conservation.septic_ledger
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.not_seven_dvd_t_branch_impossible,
+  Fermat.Seven.Conservation.septic_ledger
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.ternaryOnlyTrivial_lebesgue,
+  Fermat.Seven.Conservation.septic_ledger
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.holdsAt_seven_lebesgue,
+  Fermat.Seven.Conservation.septic_ledger
+#guard_depends_on Fermat.Seven.holdsAt_seven_conservation,
+  Fermat.Seven.Conservation.septic_ledger
 
 /-! ## Shared conservation floor -/
 
