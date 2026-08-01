@@ -101,6 +101,23 @@ do not promote them to the still-absent global three-column identity. -/
 #guard_depends_on Fermat.Two.pythagoras_conserved,
   Fermat.Two.charge_ledger
 
+/-! The scalar Noether invariant is now the total-column projection of a
+zero-spent global transfer.  The transfer itself consumes all four named
+column-functoriality laws and both endpoint conservation identities. -/
+
+#guard_depends_on Fermat.Two.isometryTransfer,
+  Fermat.Two.chargeLedger_stock_isometry
+#guard_depends_on Fermat.Two.isometryTransfer,
+  Fermat.Two.chargeLedger_credit_isometry
+#guard_depends_on Fermat.Two.isometryTransfer,
+  Fermat.Two.chargeLedger_converted_isometry
+#guard_depends_on Fermat.Two.isometryTransfer,
+  Fermat.Two.chargeLedger_total_isometry
+#guard_depends_on Fermat.Two.charge_conserved,
+  Fermat.Two.isometryTransfer
+#guard_depends_on Fermat.Two.charge_conserved,
+  Fermat.Conservation.Ledger.conservation_identity
+
 /-! The selected gauge quotient keeps both of its native projection
 identities load-bearing, without pretending they have already been joined
 by a global accounting morphism. -/
