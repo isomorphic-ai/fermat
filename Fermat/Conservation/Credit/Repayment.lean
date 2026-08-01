@@ -196,6 +196,20 @@ def LayerTransport {G : Type*} [Group G]
     ∃ residual : C G closed funded (d - 1),
       LayerConservation p state residual
 
+/-- A supplied Taylor--Wiles layer-transport law constructs the total
+higher-grade repayment operator.  This is an adapter from the named seam,
+not an inhabitant of that seam: the campaign must still prove
+`LayerTransport` for its concrete funded states. -/
+noncomputable def Repay.ofLayerTransport
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} {d : ℕ}
+    (transport : LayerTransport p closed funded) (hdepth : 1 < d) :
+    Repay p G closed funded d where
+  positive := by omega
+  toFun := fun state ↦ (transport d hdepth state).choose
+  layer_conservation := fun state ↦
+    (transport d hdepth state).choose_spec
+
 /-- The `p`-power map is injective on real units when `p` is odd.
 
 This is the torsion observation in Vandiver's Lemma II: a real torsion unit

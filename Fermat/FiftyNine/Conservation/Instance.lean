@@ -18,6 +18,7 @@ import Fermat.Conservation.Credit.HighFlowClosure
 import Fermat.Conservation.Credit.Bernoulli
 import Fermat.FiftyNine.Conservation.Credit
 import Fermat.FiftyNine.Conservation.CapacityCertificate
+import Fermat.FiftyNine.Conservation.Spine
 
 open scoped BigOperators NumberField
 
@@ -464,6 +465,42 @@ def IsDeeplyRepayable {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
   Fermat.Conservation.Credit.Repayment.IsVandiverDeep 59
     ((1 : 𝓞 K) - hζ.toInteger) (u : (𝓞 K)ˣ)
 
+/-! ## W2: selected graded repayment -/
+
+/-- The conductor-59 obstruction grade. Grade `d` retains the full
+depth-`(d+1) * 59` congruence rather than projecting it to a verdict. -/
+def RepaymentFunded59 {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
+    (d : ℕ) (u : NumberField.IsCMField.realUnits K) : Prop :=
+  Fermat.Conservation.Credit.Repayment.IsLayerDeep 59
+    ((1 : 𝓞 K) - hζ.toInteger) d (u : (𝓞 K)ˣ)
+
+omit [NumberField K] [IsCyclotomicExtension {59} ℚ K] in
+/-- Grade one is exactly the local predicate consumed by the existing
+selected repayment proof. -/
+theorem repaymentFunded59_one_iff_isDeeplyRepayable
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
+    (u : NumberField.IsCMField.realUnits K) :
+    RepaymentFunded59 hζ 1 u ↔ IsDeeplyRepayable hζ u :=
+  Fermat.Conservation.Credit.Repayment.isLayerDeep_one_iff_isVandiverDeep
+    59 ((1 : 𝓞 K) - hζ.toInteger) (u : (𝓞 K)ˣ)
+
+/-- A representative C1 vacuum together with the complete stock receipt.
+This is a proposition proved from the two existing cones; it supplies no
+repayment or higher-layer transport field. -/
+def RegularClosure59 : Prop :=
+  Fermat.FiftyNine.Conservation.StockSpineReceipt.{0, 0} ∧
+    Fermat.Conservation.Credit.generated id
+        (∅ : Set (Unit × Unit)) =
+      (⊥ : Fermat.Conservation.Credit.Ledger Unit (Unit × Unit))
+
+/-- The grade-zero closure is produced by the stock spine and C1's generated
+vacuum theorem, with no provider structure or arithmetic repayment assumed. -/
+theorem regularClosure59 : RegularClosure59 := by
+  refine ⟨Fermat.FiftyNine.Conservation.stockSpineReceipt, ?_⟩
+  exact Fermat.Conservation.Credit.kummer_credit_vacuum id
+    (∅ : Set (Unit × Unit))
+    (by simp [Fermat.Conservation.Credit.HasFundedGenerator])
+
 /-- The checked C2 result, packaged as the generic capacity record consumed
 by W3.  The ambient ledger is the full real-unit group. -/
 noncomputable def capacityData {ζ : K}
@@ -541,10 +578,7 @@ theorem deepExponentForcing_on_exponentCycle_of_flow {ζ : K}
     rw [realGauge_cycle_edge_eq_exponentCycle_edge]
   · exact hprimitive
 
-/-- C3 repayment after the generic L4 comparison.  The group theory, gauge
-inversion, and high-eigenvalue arithmetic are all discharged by the generic
-core. -/
-theorem repayment_of_capacity_and_flow
+private theorem repayment_of_capacity_and_flow_direct
     {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
     {u : NumberField.IsCMField.realUnits K}
     (hdeep : IsDeeplyRepayable hζ u) :
@@ -555,6 +589,56 @@ theorem repayment_of_capacity_and_flow
       59 (by norm_num))
     (IsDeeplyRepayable hζ)
     (deepExponentForcing_on_exponentCycle_of_flow hζ) hdeep
+
+/-- The total selected one-layer operator. Its output is the explicit
+grade-zero residual, and its construction uses only the already-proved
+capacity-and-flow repayment. -/
+noncomputable def repayOne_of_capacity_and_flow
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 59) :
+    Fermat.Conservation.Credit.Repayment.Repay 59
+      (NumberField.IsCMField.realUnits K) RegularClosure59
+      (RepaymentFunded59 hζ) 1 :=
+  Fermat.Conservation.Credit.Repayment.Repay.oneOfVerdict
+    regularClosure59 (by
+      intro u hfunded
+      exact repayment_of_capacity_and_flow_direct hζ
+        ((repaymentFunded59_one_iff_isDeeplyRepayable hζ u).mp
+          hfunded))
+
+omit [NumberField K] [IsCyclotomicExtension {59} ℚ K] in
+/-- At conductor 59, existence of the total `C₁ → C₀` operator is
+equivalent to the existing universal deep-unit repayment statement. -/
+theorem nonempty_repayOne_iff_deep_repayment59
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 59) :
+    Nonempty
+        (Fermat.Conservation.Credit.Repayment.Repay 59
+          (NumberField.IsCMField.realUnits K) RegularClosure59
+          (RepaymentFunded59 hζ) 1) ↔
+      ∀ {u : NumberField.IsCMField.realUnits K},
+        IsDeeplyRepayable hζ u →
+          Fermat.Conservation.Credit.Repayment.IsRepaid 59 u := by
+  rw [Fermat.Conservation.Credit.Repayment.nonempty_repay_one_iff
+    regularClosure59]
+  constructor
+  · intro verdict u hdeep
+    exact verdict
+      ((repaymentFunded59_one_iff_isDeeplyRepayable hζ u).mpr hdeep)
+  · intro hrepayment u hfunded
+    exact hrepayment
+      ((repaymentFunded59_one_iff_isDeeplyRepayable hζ u).mp hfunded)
+
+/-- C3 repayment after the generic L4 comparison. The public legacy shape
+is now the `d = 1` corollary of the total graded operator, so the named layer
+conservation identity is load-bearing while downstream callers remain
+unchanged. -/
+theorem repayment_of_capacity_and_flow
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
+    {u : NumberField.IsCMField.realUnits K}
+    (hdeep : IsDeeplyRepayable hζ u) :
+    Fermat.Conservation.Credit.Repayment.IsRepaid 59 u := by
+  exact
+    (nonempty_repayOne_iff_deep_repayment59 hζ).mp
+      ⟨repayOne_of_capacity_and_flow hζ⟩ hdeep
 
 end
 
