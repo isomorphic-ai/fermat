@@ -1,5 +1,19 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER audit: the requested guard cone is green
+
+- One Lake invocation of all eight conservation verification leaves builds
+  successfully (8,691 jobs), including the Transfer/IsoConserve tunnel, N3,
+  N4, N5, N6, N7, generic credit, and selected N59 audits.  Thus every old
+  sentinel and every new dependency/source-literal guard is green together.
+- The broader default `lake build Fermat` is not a clean baseline: outside
+  this cone it encounters a missing vendored `flt-regular` source
+  `FltRegular/NumberTheory/KummerFullValuation.lean`, existing API mismatches
+  in `Fermat/Cases.lean` and `Fermat/Regular/KummerCriterion.lean`, and one
+  unrelated high-memory module killed with exit 137.  The run was stopped
+  after those independent failures were established; none occurs in a
+  touched module or requested verification target.
+
 ## 2026-08-02 — TRANSFER discovery: finite capacity funds a real first spend
 
 - The honest C2 scalar account is the already-defined relative index of the

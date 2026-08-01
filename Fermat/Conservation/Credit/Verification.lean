@@ -266,8 +266,9 @@ equalities are projections of the corresponding global ledgers. -/
   Fermat.Conservation.Credit.Cycle.IndexCertificate.sound,
   Fermat.Conservation.Ledger.conservation_identity
 
-/-! Gauge quotient and class fold retain their native local identities.
-These are deliberately separate from the absent common-carrier adapter. -/
+/-! Gauge quotient and class fold retain their native local identities.  C1
+now accounts the quotient vacuum globally; the source-to-quotient Transfer
+and the class-fold accounting adapter remain deliberately separate. -/
 
 #guard_depends_on
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot,

@@ -29,6 +29,15 @@ import Fermat.Four.Conservation
 #guard_depends_on
   Fermat.Four.Conservation.PrimitiveSolution.charged_descent,
   Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Four.Conservation.not_stronger_solution_conservation,
+  Fermat.Four.Conservation.PrimitiveSolution.charged_descent_transfer
+#guard_depends_on
+  Fermat.Four.Conservation.not_stronger_solution_conservation,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Four.holdsAt_four_conservation,
+  Fermat.Four.Conservation.PrimitiveSolution.charged_descent_transfer
 
 /--
 info: 'Fermat.HoldsAt.mono_of_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]

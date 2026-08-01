@@ -82,6 +82,10 @@ projections of full accounted transactions. -/
   Fermat.Five.Conservation.not_five_dvd_c_charged_transfer
 #guard_depends_on Fermat.Five.Conservation.five_dvd_c_impossible,
   Fermat.Five.Conservation.five_dvd_c_charged_transfer
+#guard_depends_on Fermat.Five.holdsAt_five_conservation,
+  Fermat.Five.Conservation.not_five_dvd_c_charged_transfer
+#guard_depends_on Fermat.Five.holdsAt_five_conservation,
+  Fermat.Five.Conservation.five_dvd_c_charged_transfer
 
 /--
 error: Unknown constant `Fermat.HoldsAt.mono_of_dvd`

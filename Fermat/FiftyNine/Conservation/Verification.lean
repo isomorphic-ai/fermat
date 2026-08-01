@@ -35,9 +35,9 @@ import Fermat.FiftyNine.Conservation.TransformerProbe
 #check Fermat.Conservation.Credit.Repayment.repay_layer_conservation
 #check Fermat.Conservation.Credit.Repayment.LayerTransport
 
-/-! The seven selected native stock laws remain named.  Presence here is
-not a claim that any of them has already been mapped into the global
-three-column carrier. -/
+/-! The seven selected native stock laws remain named.  N3 and N5 are now
+globally accounted on their selected paths; the checks alone make no such
+claim for the other five fields. -/
 
 #check Fermat.One.charge_ledger
 #check Fermat.Two.charge_ledger
@@ -95,17 +95,17 @@ in its definition: the stock receipt and a generated C1 vacuum. -/
   Fermat.FiftyNine.Conservation.Instance.regularClosure59,
   Fermat.Conservation.Credit.kummer_credit_vacuum
 
-/-! The mixed stock receipt truthfully contains exactly the imported N2 and
-N6 ledger identities; this makes no claim that the other stock rungs route
-through their nearby equations. -/
+/-! The mixed stock receipt retains its native N2 and N6 identities.  The
+separate guards below record its newly accounted N3 and N5 fields without
+pretending that all seven fields form one common-carrier ledger. -/
 
 #guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
   Fermat.Two.charge_ledger
 #guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
   Fermat.Six.Conservation.sixth_ledger
 
-/-! N2's own downstream balance theorems are locally literal.  These guards
-do not promote them to the still-absent global three-column identity. -/
+/-! N2's Pythagorean balance theorems remain locally literal.  These guards
+do not conflate them with the separately repaired isometry/Noether path. -/
 
 #guard_depends_on Fermat.Two.pythagoras,
   Fermat.Two.charge_ledger
@@ -146,6 +146,8 @@ downstream floor path retain these dependencies transitively. -/
   Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
   Fermat.Conservation.Transfer.available_eq
+#guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
+  Fermat.Five.Conservation.gaugeTransfer
 
 /-! The selected gauge quotient keeps both of its native projection
 identities load-bearing, without pretending they have already been joined
@@ -155,11 +157,17 @@ by a global accounting morphism. -/
   Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot,
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
   Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq,
   Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot
 #guard_depends_on
   Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq,
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientCharge_quotientState
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq,
+  Fermat.Conservation.Ledger.conservation_identity
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 

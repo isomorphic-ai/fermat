@@ -1,10 +1,12 @@
-# LEDGER-LITERAL boundary map
+# TRANSFER boundary map
 
-This map is the deliverable for `LEDGER-LITERAL-TASK.md`.  It maps the
-current proof boundary; it does not attempt Lemma I / relation (7a), a
-stock-credit transformer, or an exponent-59 endpoint.  Existing obstruction
-probes are evidence for the boundary and are not replacements for the
-missing constructions.
+This map began as the deliverable for `LEDGER-LITERAL-TASK.md` and is updated
+in place by `TRANSFER-TASK.md`.  Each retrofitted row keeps its former
+classification visible as `before → after`.  This session mints the common
+accounted transaction and repairs real proof cones, but still does not attempt
+Lemma I / relation (7a), a stock-credit transformer inhabitant, or an
+exponent-59 endpoint.  Existing obstruction probes remain evidence for those
+boundaries and are not replacements for the missing constructions.
 
 ## Mechanical rule
 
@@ -32,10 +34,14 @@ classification below is controlling.  Native/local dependency is reported
 separately because it identifies useful implementation that can feed a
 future adapter, but it does not upgrade an **ABSENT** global result.
 
-The three campaign anchors are:
+The four campaign anchors are:
 
 - global accounting: `Fermat.Conservation.Ledger.conservation_identity`,
   namely `stock + credit + converted = total`;
+- route-neutral transactions: `Fermat.Conservation.Transfer.available_eq`
+  and `converted_decomposition`, namely
+  `available before = available after + spent` and
+  `after.converted = before.converted + spent`, with total preserved;
 - Bernoulli channels:
   `Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation`,
   namely `depth = min depth 2 + surplus` together with the stored
@@ -45,75 +51,109 @@ The three campaign anchors are:
   `source.residual = residual.residual ^ p` and
   `residual.totalLayers + 1 = source.totalLayers`.
 
-The generic carrier itself is genuinely literal:
+The generic carrier and transfer algebra are genuinely literal:
 `Fermat.Conservation.Ledger.vacuum_conservation`,
 `Fermat.Conservation.Ledger.repay_conservation`, and
 `Fermat.Conservation.Ledger.repayNat_conservation` all depend on
-`Fermat.Conservation.Ledger.conservation_identity`.  What is absent below is
-not the formula; it is the map from each native cone into this carrier.
+`Fermat.Conservation.Ledger.conservation_identity`;
+`Fermat.Conservation.Transfer.comp` chains transactions, and the older
+strict/floor vocabulary is derived by
+`available_lt_of_spent_pos`, `floor_hstep_of_positiveSteps`, and
+`impossible_of_positive_transfer_drain`.  What remains absent below is not
+the formula; it is the state-linked map from a native cone into this carrier.
+
+### IsoConserve tunnel
+
+The scheduler checkout used Lean `v4.30.0`, while this repository uses
+`v4.31.0-rc1`; the mandated mismatch branch therefore vendors the minimal
+L1/L4/Noether/KummerNoetherLedger statement shapes in
+`Fermat.Conservation.IsoConserveStatements`, with scheduler commit, source
+paths, and SHA-256 digests in the header.  The compiled correspondence is
+bidirectional:
+
+- `IsoConserveBridge.transfer_L1_conservation` maps every `Transfer` to the
+  scheduler's balanced L1 step and conserved accounted total;
+- `IsoConserveBridge.ofBalancedStep` maps the general balanced-step shape
+  back to `Transfer`, with a proved round trip;
+- `IsoConserveBridge.KummerNoether.schedulerStep_instantiates_transfer`
+  supplies the concrete converse for both scheduler steps, existentially
+  because the source `Step` is `Prop`-valued.
+
+L4 remains its distinct per-column integral equation rather than being
+conflated with L1 total preservation.  The Fermat and scheduler
+Kummer/Noether tunnel ends therefore meet in a compiled module pair.
+
+The W3 campaign completes nine map rows: N3, N2, graded C3, N5, N4,
+additive flow, Bernoulli depth, C1, and C2.  N6 and N7 were compiler/type
+audited and stopped at their lost-origin state boundaries; no partial row is
+counted as a retrofit.
 
 ## Stock receipt N1--N7
 
 `Fermat.FiftyNine.Conservation.stockSpineReceipt` is one proof with seven
 fields, so the local column audits the declaration selected for each field.
-Only its N2 and N6 paths depend on a native theorem named as a ledger.  The
-receipt never constructs `Fermat.Conservation.Ledger`, so every rung remains
-globally **ABSENT**.
+Originally only its N2 and N6 paths depended on a native theorem named as a
+ledger and every field was globally **ABSENT**.  The N3 and N5 selected
+declarations now project actual transfers; N2 and N4 gained global adapters
+on their main paths, but their selected receipt declarations were not changed.
 
-| Rung / receipt field | Selected declaration | Global status | Native/local dependency | Exact missing global invariant |
+| Rung / receipt field | Selected declaration | Global status, before → after | Native/local dependency | Exact remaining invariant |
 | --- | --- | --- | --- | --- |
-| N1 `n1_vacuum` | `Fermat.One.coupling_empty` | **ABSENT** | **DECORATIVE** with respect to `Fermat.One.charge_ledger`; the selected proof uses the independently simplified coupling | An adapter `Ledger ℕ` with `stock = charge u + charge v`, `credit = coupling u v`, `converted = 0`, and `total = charge (u + v)`, plus a theorem deriving the empty credit channel from `Ledger.conservation_identity`. |
-| N2 `n2_balance` | `Fermat.Two.charge_ledger` | **ABSENT** | The `stockSpineReceipt` consumer is **LITERAL** with respect to the selected anchor `Fermat.Two.charge_ledger`. | An additive accounting adapter into one carrier with stock `charge u + charge v`, credit `2 * coupling u v`, converted zero, and total `charge (u + v)`.  The native real equality is present, but no `Ledger ℝ` state exposes it through the global identity. |
-| N3 `n3_drain` | `Fermat.Three.Conservation.drainCharge_pred_lt` | **ABSENT** | **DECORATIVE** with respect to `Fermat.Three.Conservation.ledger_identity`; the drain route uses norm multiplicativity and powers instead | A state-level accounting map connecting the cubic factor `(a + b) * charge (ofCoeffs a b)` to a positive ramified amount moved from stock/credit into converted, with unchanged total.  In particular the multiplicity drop must be the stock projection of that transfer, not an unrelated `3 ^ m < 3 ^ n`. |
-| N4 `n4_positive` | `Fermat.Four.Conservation.PrimitiveSolution.stateCharge_pos` | **ABSENT** | **DECORATIVE** with respect to `Fermat.Two.charge_ledger`; positivity bypasses the balance equation | A ledger-valued primitive state and a descent equality `S.stateCharge = next.stateCharge + spent` with `0 < spent`, together with before/after credit and converted columns whose changes account for exactly `spent`.  The current proof has positivity and a strict comparison but no conserved transfer. |
-| N5 `n5_gauge` | `Fermat.Five.Conservation.charge_gauge_invariant` | **ABSENT** | **DECORATIVE** with respect to `Fermat.Five.Conservation.quintic_ledger`; the gauge proof uses norm multiplicativity and unit norm | A gauge-equivariant adapter from the golden factor state to `Ledger α`: unit multiplication must preserve all four columns, and each descent must give an explicit credit-to-converted amount while total stays fixed. |
-| N6 `n6_fold` | `Fermat.Six.Conservation.sixth_ledger` | **ABSENT** | The `stockSpineReceipt` consumer is **LITERAL** with respect to the selected anchor `Fermat.Six.Conservation.sixth_ledger`. | An adapter carrying the factor `(a ^ 2 + b ^ 2) * charge (cofactorElement a b)` as accounted stock/credit and `a ^ 6 + b ^ 6` as total, followed by a successor law that transports this same ledger and records the positive converted drain. |
-| N7 `n7_lattice` | `Fermat.Seven.Conservation.gauge_decomposition` | **ABSENT** | **DECORATIVE** with respect to `Fermat.Seven.Conservation.septic_ledger`; coordinate decomposition does not use the septic factor equation | A full-gauge ledger morphism and a ramified-drain equation: gauge coordinates must preserve stock, credit, converted, and total, while one drain step moves a quantified amount into converted and leaves total unchanged. |
+| N1 `n1_vacuum` | `Fermat.One.coupling_empty` | **ABSENT → ABSENT** | **DECORATIVE** with respect to `Fermat.One.charge_ledger`; the selected proof uses the independently simplified coupling | An adapter `Ledger ℕ` with `stock = charge u + charge v`, `credit = coupling u v`, `converted = 0`, and `total = charge (u + v)`, plus a theorem deriving the empty credit channel from `Ledger.conservation_identity`. |
+| N2 `n2_balance` | `Fermat.Two.charge_ledger` | **ABSENT → ABSENT** for this selected field | The receipt remains **LITERAL** only with respect to the native equality.  The new `chargeLedger` and `isometryTransfer` repair the separate Noether path, not this proof value. | Route this selected balance equality through `chargeLedger` if receipt-level global literalness is wanted. |
+| N3 `n3_drain` | `Fermat.Three.Conservation.drainCharge_pred_lt` | **ABSENT → LITERAL (Transfer)** | The selected strict drop now depends on `drainTransfer_stock_decomposition`, `Transfer.available_eq`, and the same transaction's cubic ledger endpoint. | Closed: `drainLedger` over `ℕ × ℤ` links ramified stock and the cubic factor at one fixed budget. |
+| N4 `n4_positive` | `Fermat.Four.Conservation.PrimitiveSolution.stateCharge_pos` | **ABSENT → ABSENT** for this selected positivity field | Positivity still bypasses accounting; the separate `charged_descent` main path is now a positive Transfer projection. | No transfer is needed to prove positivity alone; route the receipt through the accounted descent if a global transaction claim is intended. |
+| N5 `n5_gauge` | `Fermat.Five.Conservation.charge_gauge_invariant` | **ABSENT → LITERAL (Transfer)** | The scalar equality is now the stock projection of zero-spent `gaugeTransfer`, whose four columns are preserved. | Closed for gauge invariance.  The receipt still makes no stronger claim connecting the seed quintic ledger to every later charged state. |
+| N6 `n6_fold` | `Fermat.Six.Conservation.sixth_ledger` | **ABSENT → ABSENT** | The receipt remains **LITERAL** only with respect to the selected native factor identity. | The oriented successor discards the originating primitive solution/native ledger; it must retain that state before a factor-linked Transfer can be built. |
+| N7 `n7_lattice` | `Fermat.Seven.Conservation.gauge_decomposition` | **ABSENT → ABSENT** | **DECORATIVE** with respect to `Fermat.Seven.Conservation.septic_ledger`; coordinate decomposition does not use the septic factor equation. | The Lebesgue charged successor lacks the original `(x,y,z)` septic factor state; retaining it is prerequisite to the requested gauge/drain Transfer. |
 
 ### Main stock theorem paths
 
 The receipt is deliberately not used as a proxy for the complete cones.
 The following are the main downstream paths checked against each cone's
-native ledger anchor.  Their global status is still **ABSENT** for the
-adapter reason in the preceding table.
+native ledger and Transfer anchors.  Split rows are intentional: a repaired
+transition does not retroactively make an unrelated formula or seed
+constructor transaction-literal.
 
-| Cone | Native status and exact declarations | Boundary for every non-literal path |
+| Cone | Status, before → after, and exact declarations | Remaining boundary |
 | --- | --- | --- |
-| N1 | `Fermat.One.solvable`, `Fermat.One.always_balances`, and `Fermat.One.not_holdsAt_one` are **DECORATIVE** with respect to `Fermat.One.charge_ledger`. | The solvability/endpoint proof must consume the N1 `Ledger ℕ` adapter described above and project balance from `conservation_identity`, rather than normalize the power equation independently. |
-| N2 | `Fermat.Two.pythagoras`, `Fermat.Two.emptyCoupling_of_additive`, and `Fermat.Two.pythagoras_conserved` are locally **LITERAL** through `Fermat.Two.charge_ledger`.  `Fermat.Two.charge_conserved` is **DECORATIVE** with respect to that ledger. | For `charge_conserved`, the missing invariant is functoriality of the N2 accounting adapter under a linear isometry, column by column; equality of the scalar charge alone does not conserve credit or converted. |
-| N3 | `Fermat.Three.Conservation.drainCharge_eq`, `Fermat.Three.Conservation.drainCharge_pred_lt`, `Fermat.Three.Conservation.Euler.GeneralizedStatement.euler_descent_charge_lt`, and `Fermat.Three.holdsAt_three_conservation` are **DECORATIVE** with respect to `Fermat.Three.Conservation.ledger_identity`. | The missing invariant is the state-linked cubic ledger transfer described above: the successor's lower multiplicity and the factor ledger must be two projections of one conserved before/after state. |
-| N4 | `Fermat.Four.Conservation.pythagorean_balance_engine` is a useful native balance theorem and is load-bearing in `Fermat.Four.Conservation.PrimitiveSolution.charged_descent`, but both are **DECORATIVE** with respect to `Fermat.Two.charge_ledger`; `Fermat.Four.Conservation.not_stronger_solution_conservation` is likewise decorative. | A typed map from the integer Pythagorean state into the N2 balance ledger, followed by the exact positive debit/conversion equation for the smaller hypotenuse, is missing.  Merely calling the independently proved balance engine does not identify the conserved columns. |
-| N5 | `Fermat.Five.Conservation.fermatEquation_five_ledger`, `Fermat.Five.Conservation.PrimitiveFifthSolution.equation`, `Fermat.Five.Conservation.not_five_dvd_c_seed`, `Fermat.Five.Conservation.five_dvd_c_seed`, `Fermat.Five.Conservation.not_five_dvd_c_impossible`, `Fermat.Five.Conservation.five_dvd_c_impossible`, and `Fermat.Five.holdsAt_five_conservation` are locally **LITERAL** through `Fermat.Five.Conservation.quintic_ledger`.  `Fermat.Five.Conservation.not_five_dvd_c_charged_descent`, `Fermat.Five.Conservation.five_dvd_c_charged_descent`, and the `ChargedState`, `NotFiveDvdCState`, and `FiveDvdCState` gauge laws are **DECORATIVE** with respect to it. | Each decorative state transition needs a gauge-equivariant before/after ledger with an exact positive converted increment and conserved total.  The outer endpoint happens to retain the seed ledger, but the iterative transition itself currently carries only a strict scalar charge inequality. |
-| N6 | `Fermat.Six.Conservation.PrimitiveSolution.native_ledger` is locally **LITERAL** through `Fermat.Six.Conservation.sixth_ledger`.  `Fermat.Six.Conservation.pythagorean_cube_balance`, `Fermat.Six.Conservation.PrimitiveSolution.cube_balance`, `Fermat.Six.Conservation.exists_orientedStateCharge_lt`, and `Fermat.Six.Conservation.PrimitiveSolution.impossible_conservation` are **DECORATIVE** with respect to the sixth ledger. | The oriented successor must retain the native factor decomposition and exhibit an amount converted during the multiplicity drop.  The current transition reconstructs only a strict power-of-three comparison. |
-| N7 | `Fermat.Seven.Conservation.Reconstruction.Lebesgue.seven_dvd_t_branch_impossible`, `Fermat.Seven.Conservation.Reconstruction.Lebesgue.not_seven_dvd_t_branch_impossible`, `Fermat.Seven.Conservation.Reconstruction.Lebesgue.ternaryOnlyTrivial_lebesgue`, `Fermat.Seven.Conservation.Reconstruction.Lebesgue.holdsAt_seven_lebesgue`, and `Fermat.Seven.holdsAt_seven_conservation` are locally **LITERAL** through `Fermat.Seven.Conservation.septic_ledger`.  The gauge laws, `Fermat.Seven.Conservation.drainCharge_eq`, `Fermat.Seven.Conservation.drainCharge_step`, `Fermat.Seven.Conservation.Reconstruction.Lebesgue.ChargedState.impossible_conservation`, and `Fermat.Seven.Conservation.Reconstruction.Lebesgue.SevenDvdTBranchState.impossible_conservation` are **DECORATIVE** with respect to it. | The decorative inner drains need a septic-ledger-valued successor with a full-gauge column-preservation law and an exact ramified amount transferred into converted.  The outer branch wrappers rewrite through the septic identity, but the generic charged-state floor does not. |
+| N1 | Global **ABSENT → ABSENT** and native **DECORATIVE → DECORATIVE**: `Fermat.One.solvable`, `always_balances`, and `not_holdsAt_one` still bypass `charge_ledger`. | The solvability path must consume an N1 global ledger adapter and project balance from it. |
+| N2 | `pythagoras`, `emptyCoupling_of_additive`, and `pythagoras_conserved` remain locally **LITERAL** through `charge_ledger`.  `charge_conserved` is (global **ABSENT**, native **DECORATIVE**) → **LITERAL (Transfer)**: `chargeLedger` exposes stock, coupling-credit, converted, and total, `isometryTransfer` preserves each column with `spent = 0`, and the legacy theorem is its total projection. | Closed for Noether/isometry conservation.  The independent Pythagoras statements retain their older native classification. |
+| N3 | `drainCharge_pred_lt`, Euler's `euler_descent_charge_lt`, and `holdsAt_three_conservation` are (global **ABSENT**, native **DECORATIVE**) → **LITERAL (Transfer)**.  `drainTransfer`/Euler `accountTransfer` use product carriers and fixed budgets so factor endpoints and the multiplicity debit are projections of one composable transaction.  The formula-only `drainCharge_eq` remains native, not a transaction claim. | Closed for the requested state-linked cubic drain. |
+| N4 | `PrimitiveSolution.charged_descent`, `not_stronger_solution_conservation`, and `holdsAt_four_conservation` are (global **ABSENT**, native **DECORATIVE**) → **LITERAL (Transfer)** through fixed-budget `accountLedger`, positive `charged_descent_transfer`, and the exact stock decomposition.  `pythagorean_balance_engine` remains a native arithmetic input rather than a transaction consumer. | Closed for the charged descent.  No claim is made that the receipt's standalone positivity proof is a transfer. |
+| N5 | Both branch transitions, `not_five_dvd_c_charged_descent` and `five_dvd_c_charged_descent`, their impossible consumers, `holdsAt_five_conservation`, and all three charged-state gauge laws are (global **ABSENT**, native **DECORATIVE**) → **LITERAL (Transfer)**.  The gauge step spends zero and preserves all four columns; each descent has positive exact spend under a fixed budget.  The seed/equation constructors remain locally **LITERAL** through `quintic_ledger`. | The branch state retains its origin tag but no equation identifying the origin quintic ledger with the current golden charge; this unclaimed cross-link remains outside the completed transition row. |
+| N6 | Global **ABSENT → ABSENT** and native **DECORATIVE → DECORATIVE** for `pythagorean_cube_balance`, `cube_balance`, `exists_orientedStateCharge_lt`, and `impossible_conservation`; `native_ledger` remains locally **LITERAL**. | `OrientedState` must retain the originating `PrimitiveSolution`/native sixth ledger.  A norm-only fixed-budget transfer would not close this factor-linked row. |
+| N7 | Global **ABSENT → ABSENT** and native **DECORATIVE → DECORATIVE** for the gauge/drain and inner charged-state floor; outer branch wrappers remain locally **LITERAL** through `septic_ledger`. | `Lebesgue.ChargedState` must retain the original septic `(x,y,z)` state.  Its current five fields cannot state the requested endpoint correspondence. |
 
 ## Credit rungs C1--C3
 
-| Rung / declarations | Global status | Native/channel/layer status | Exact missing invariant |
+| Rung / declarations | Global status, before → after | Native/channel/layer status | Exact remaining invariant |
 | --- | --- | --- | --- |
-| C1: `Fermat.Conservation.Credit.kummer_credit_vacuum` | **ABSENT** | Locally **LITERAL** through `Fermat.Conservation.Credit.generated_eq_bot_of_no_generator`. | An additive accounting map from the set-valued matrix `Fermat.Conservation.Credit.Ledger Node Generator` to a common `α`, with `account ⊥ = 0` and `account (merge L R) = account L + account R`.  Only then can C1 construct `Fermat.Conservation.Ledger.vacuum` or another zero-credit global state. |
-| C2: `Fermat.Conservation.Credit.Cycle.capacityIndex_eq_relIndex`, `Fermat.Conservation.Credit.Cycle.CapacityData.capacity_eq_relIndex`, `Fermat.Conservation.Credit.Cycle.CapacityData.capacity_pos`, `Fermat.Conservation.Credit.Cycle.CapacityCertificate.sound`, and `Fermat.Conservation.Credit.Cycle.IndexCertificate.sound` | **ABSENT** | **ABSENT** as conservation: these are finite-index/capacity facts, not an accounted transfer. | A credit-length morphism from `Fermat.Conservation.Credit.Cycle.generatedSubledger`/relative index to the global carrier, and a spending law `credit_before = credit_after + spent`.  Finiteness and coprimality do not say which conserved column contains the capacity. |
-| Legacy C3: `Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle` | **ABSENT** | **DECORATIVE** with respect to `repay_layer_conservation`; it returns only `IsRepaid p u`. | A constructor of `C G closed funded 1`, an explicit `C ... 0` residual, and the equality `u = residual ^ p` paired with `0 + 1 = 1`.  The generic d=1 adapter now supplies this route, but the old generic theorem itself remains a verdict theorem. |
-| Graded C3: `Fermat.Conservation.Credit.Repayment.repay_totalLayers` and `nonempty_repay_one_iff` | **ABSENT** | **LITERAL** through `repay_layer_conservation`. | To become globally literal, grades need an accounting map with `accountCredit state = state.totalLayers` (or an explicitly justified weighted version) and a theorem that one layer decreases credit by one and increases converted by one while stock and total are fixed. |
-| Higher graded C3: `Fermat.Conservation.Credit.Repayment.LayerTransport` and `Fermat.Conservation.Credit.Repayment.Repay.ofLayerTransport` | **ABSENT** globally | The interface shape is **LITERAL** through `Fermat.Conservation.Credit.Repayment.LayerConservation`; the adapter is literal through both the interface and layer equation.  A concrete inhabitant is **ABSENT**. | For every `d > 1` and funded source, produce `residual : C ... (d - 1)` with exactly `source.residual = residual.residual ^ p` and `residual.totalLayers + 1 = source.totalLayers`.  No conductor-specific theorem currently supplies the depth-`(d+1)p` congruence funding that chosen residual. |
+| C1: `kummer_credit_accounted_vacuum` and legacy `kummer_credit_vacuum` | **ABSENT → LITERAL (Ledger)** | `MatrixAccount` faithfully records every routed entry; `accountMatrix_merge` turns native union-merge into addition, reflects zero, and `accountLedger` identifies generated bottom with the global vacuum.  The legacy theorem now projects from the accounted theorem. | Closed for C1. |
+| C2: `capacityIndex_eq_relIndex`, `CapacityData.capacity_eq_relIndex`, `capacity_pos`, `CapacityCertificate.sound`, and `IndexCertificate.sound` | **ABSENT → LITERAL (Transfer/Ledger)** | `CapacityData.accountCredit` is the generated sub-ledger's relative index; an `Account` fixes that as total and splits it between remaining credit and converted.  `spendingTransfer` is the exact bounded debit, while finite index funds a positive one-unit transfer.  Every listed legacy equality/positivity theorem is now a ledger or Transfer projection. | Closed for capacity accounting and spending. |
+| Legacy C3: `repay_of_deep_generated_cycle` | **ABSENT → ABSENT** globally | Still verdict-shaped and **DECORATIVE** with respect to `repay_layer_transfer`; it returns only `IsRepaid p u`. | Construct a typed `C ... 1` source and `C ... 0` residual before the global adapter can apply. |
+| Graded C3: `repay_totalLayers` | **ABSENT → LITERAL (Transfer)** | `C.accountCredit = totalLayers`; `C.accountLedger` threads accumulated conversion; `repay_layer_transfer` spends exactly one with stock/total fixed, and the legacy layer equality is its credit projection. | Closed for every actual `Repay`. |
+| Verdict view: `nonempty_repay_one_iff` | **ABSENT → ABSENT** globally | Remains layer-**LITERAL** through `repay_layer_conservation`, but an existence equivalence has no reason to inspect the global columns. | Use the witnessed `Repay` with `repay_layer_transfer`; do not relabel the verdict itself as a transaction. |
+| Higher graded C3: `LayerTransport` and `Repay.ofLayerTransport` | Concrete inhabitant **ABSENT → ABSENT** | The interface remains mechanically **LITERAL** through `LayerConservation`.  Once it yields a `Repay`, the now-global `repay_layer_transfer` supplies a spent-one transaction automatically. | Only the concrete funded residual producer remains; the column adapter is no longer missing. |
 
 The d=1 statement is no longer a boundary at 59:
 `Fermat.FiftyNine.Conservation.Instance.nonempty_repayOne_iff_deep_repayment59`
 and the legacy-shaped
 `Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow`
 are **LITERAL** through `repay_layer_conservation`.  They remain globally
-**ABSENT** only in the separate sense that no layer-to-three-column
-accounting adapter has yet been supplied.
+**ABSENT** as verdict-shaped declarations.  Their witnessed `Repay` objects,
+when used through `repay_layer_transfer`, now have globally accounted
+credit-to-converted steps; no second layer adapter is missing.
 
 ## Flow and Bernoulli channels
 
-| Path | Global status | Channel/local status | Exact missing invariant for non-global rows |
+| Path | Global status, before → after | Channel/local status | Exact remaining invariant for non-global rows |
 | --- | --- | --- | --- |
-| Additive exponent flow: `Fermat.Conservation.Credit.Flow.GeneratorOrbit.product_conservation` and `sum_conservation` | **ABSENT** | These are native identity anchors.  The high-flow forcing chain is **DECORATIVE** with respect to them: it does not route through either theorem. | An additive `accountFlow` from coefficient vectors to the common carrier, with product/sum flow identified as credit and the vanished/spent component identified as converted.  Its conservation theorem must connect these Finsupp equalities to the global total. |
-| Non-lossy Bernoulli compatibility: `Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_eq_min_two_add_depth_sub_two` and `Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.cubeFree_of_surplus_eq_zero` | **ABSENT** globally | **LITERAL** through `Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation`. | A bridge assigning retained depth to the global credit column and the capped/used part to converted, proving the same total depth before and after the view.  The channel itself is already non-lossy. |
-| Generic real/non-real forcing: `Fermat.Conservation.Credit.Flow.FlowCertificate.eigenvalue_cubeFree`, `Fermat.Conservation.Credit.RealFlow.FlowCertificate.eigenvalue_cubeFree`, `Fermat.Conservation.Credit.RealFlow.FlowCertificate.depthAtMostTwo`, and `Fermat.Conservation.Credit.RealFlow.DepthTwoCertificate.atMostTwo` | **ABSENT** globally | **LITERAL** through channel conservation. | The same flow accounting bridge is missing; cube-freeness is now correctly a projection of retained channels, but it has not been identified with stock/credit conversion. |
-| Selected forcing: `Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree`, `Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59`, `Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow`, and `Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_on_exponentCycle_of_flow` | **ABSENT** globally | **LITERAL** through channel conservation. | A conductor-59 specialization of `accountFlow` must identify the table's `depth`, `couplingChannel`, and `surplus` with the credit and converted amounts consumed by repayment. |
-| Selected exact-depth data: `Fermat.FiftyNine.Conservation.DepthCertificate.depthTwoCertificate` | **ABSENT** globally | Structurally non-lossy but mechanically **DECORATIVE** with respect to `Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation`: the definition stores the channels and square-attained witness without calling the identity.  Its consumer `Fermat.Conservation.Credit.RealFlow.DepthTwoCertificate.atMostTwo` is **LITERAL**. | The square-attained row must be mapped to one funded repayment layer in the global carrier; currently it certifies arithmetic depth but not an accounted transfer. |
+| Additive exponent flow: `GeneratorOrbit.product_conservation` and `sum_conservation` | **ABSENT → LITERAL (Transfer)** | `accountFlow` is the canonical additive map into coefficient space.  Binary and finite assembly are zero-spent transfers from credited inputs to combined stock; both legacy equalities are `available_eq` projections. | Closed for product/sum conservation.  The separate high-flow forcing chain still does not consume these assembly theorems, so this row alone does not reclassify that chain. |
+| Non-lossy Bernoulli compatibility: `ChannelCertificate.depth_eq_min_two_add_depth_sub_two` and `cubeFree_of_surplus_eq_zero` | **ABSENT → LITERAL (Transfer)** | `depthTransfer` has before credit `depth`, after credit `surplus`, spent/converted `min depth 2`, zero stock, and unchanged total `depth`; `depth_conservation` is its credit projection. | Closed. |
+| Generic real/non-real forcing: `FlowCertificate.eigenvalue_cubeFree`, real `eigenvalue_cubeFree`, `depthAtMostTwo`, and `DepthTwoCertificate.atMostTwo` | **ABSENT → LITERAL (Transfer)** | Their existing dependency on `depth_conservation` now reaches `depthTransfer` and the global ledger identity; direct guards certify each claim. | Closed for channel-to-column accounting. |
+| Selected forcing: `highBernoulliNumerator_cubeFree`, `noBernoulliCubeObstruction59`, `deepExponentForcing_of_flow`, and `deepExponentForcing_on_exponentCycle_of_flow` | **ABSENT → LITERAL (Transfer)** | The selected channel certificate instantiates the same generic `depthTransfer`; direct N59 guards reach the global ledger identity. | Closed for depth accounting, but this does not itself fund a higher repayment layer. |
+| Selected exact-depth data: `DepthCertificate.depthTwoCertificate` | **ABSENT → ABSENT** for the definition | It still stores channel data and square attainment without calling `depth_conservation`; its consumer `RealFlow.DepthTwoCertificate.atMostTwo` is now globally **LITERAL**. | Connecting square attainment to the concrete funded repayment residual remains part of the higher-layer seam. |
 
 The 59 table itself is non-lossy:
 `Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.channelCertificate`
@@ -124,14 +164,14 @@ boundary.
 
 ## Gauge quotient
 
-| Declarations | Global status | Local status | Exact missing invariant |
+| Declarations | Global status, before → after | Local status | Exact missing invariant |
 | --- | --- | --- | --- |
-| Generic `PrimeData.quotientLedger_eq_bot`, `quotientCharge_quotientState`, and `quotient_vacuum_and_charge_eq` in `Fermat.Conservation.Credit.GaugeQuotient` | **ABSENT** | Locally **LITERAL** through the C1 vacuum identity and the named quotient charge equality. | An accounting morphism for the source and quotient set-valued ledgers, and an equality `accountCredit source = accountCredit quotient + convertedAmount`, in the same carrier as stock charge.  Bottom residual credit plus unchanged scalar stock charge does not record where the repaid credit went. |
-| Selected `Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot` and `quotient_vacuum_and_charge_eq` | **ABSENT** | Locally **LITERAL** through the generic quotient vacuum and charge facts. | The conductor-59 debit ledger needs the same morphism, with the selected repayment root's amount explicitly placed in converted and the N7 norm charge mapped to stock. |
+| Generic `PrimeData.quotientLedger_eq_bot`, `quotientCharge_quotientState`, and `quotient_vacuum_and_charge_eq` | **ABSENT → Ledger-LITERAL, Transfer-ABSENT** | The quotient-vacuum declarations now reach C1's faithful global ledger; the stock charge equality remains separately load-bearing. | A source-to-quotient Transfer in one carrier, with the lost credit equal to the converted increment. |
+| Selected `debitLedger_quotient_eq_bot` and `quotient_vacuum_and_charge_eq` | **ABSENT → Ledger-LITERAL, Transfer-ABSENT** | Direct guards reach the generic accounted C1 vacuum and the selected stock-charge projection. | The same joint transaction specialized to the selected repayment root and N7 stock account. |
 
-Thus the quotient proves two true projections—vacuum residual credit and
-equal stock charge—but no theorem yet proves their joint
-`stock + credit + converted = total` balance.
+Thus the quotient's residual credit is now a globally accounted vacuum, and
+its equal stock charge remains true, but no theorem makes them endpoints of
+one `Transfer` or identifies the converted increment.
 
 ## Fold and allocated class ledger
 
@@ -146,10 +186,10 @@ equal stock charge—but no theorem yet proves their joint
 
 | Instance surface | Controlling status | Reason / exact remaining invariant |
 | --- | --- | --- |
-| `Fermat.FiftyNine.Conservation.stockSpineReceipt` and `Fermat.FiftyNine.Conservation.Instance.regularClosure59` | Global **ABSENT**; mixed native receipt, locally literal only through N2 and N6 ledger anchors (C1 vacuum is also locally literal). | Construct one common-carrier adapter for all selected stock and matrix-credit objects.  `Fermat.FiftyNine.Conservation.Instance.RegularClosure59` is presently a conjunction, not a `Ledger` whose zero credit and stock columns share a total. |
-| `Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree`, `Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59`, and the selected deep-flow forcing | Channel **LITERAL**, global **ABSENT**. | Supply the depth-to-credit/converted accounting bridge; no new numerical certificate is missing. |
-| `Fermat.FiftyNine.Conservation.Instance.nonempty_repayOne_iff_deep_repayment59` and `Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow` | Layer **LITERAL**, global **ABSENT**. | Supply the layer-to-credit/converted accounting bridge.  The one-layer operator and its explicit grade-zero residual now exist. |
-| `Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq` | Global **ABSENT**, locally literal. | Prove the source-credit decomposition and converted increment in the same carrier as the preserved stock charge. |
+| `stockSpineReceipt` and `Instance.regularClosure59` | Global assembly **ABSENT → ABSENT**, but the receipt now mechanically reaches `Ledger.conservation_identity` through its repaired N3 field and reaches a global C1 vacuum. | This is still a heterogeneous conjunction, not one common-carrier `Ledger`; N1, the selected N2 balance field, N4 positivity, N6, and N7 are not silently upgraded by N3/N5. |
+| Selected Bernoulli cube-freeness and deep-flow forcing | Channel **LITERAL**, global **ABSENT → LITERAL (Transfer)** for depth accounting. | The generic `depthTransfer` supplies credit/converted columns.  Concrete higher-layer funding remains separate. |
+| `nonempty_repayOne_iff_deep_repayment59` and `repayment_of_capacity_and_flow` | Layer **LITERAL**, verdict-global **ABSENT → ABSENT**. | The generic one-layer `Repay` has a global spent-one transfer, but these selected declarations return existence/verdict forms rather than the typed transition. |
+| `Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq` | **ABSENT → Ledger-LITERAL, Transfer-ABSENT**. | C1 now accounts the vacuum projection; prove the joint source-to-quotient credit decomposition and converted increment in the stock carrier. |
 | `Fermat.FiftyNine.Conservation.Fold.factorPrincipalizationPermit_of_sevenA_and_conjugationTranspose` | Global **ABSENT**. | Produce statewise (7a), then account the class fold/netting as conversion. |
 | `Fermat.FiftyNine.Conservation.FermatState.StockCreditTransformer` | **ABSENT**. | Construct the state-linked global ledger morphism and the strict stock-drain equality described below. |
 
@@ -174,51 +214,40 @@ and
 `Fermat.FiftyNine.Conservation.Fold.factorPrincipalizationPermit_of_sevenA_and_conjugationTranspose`
 are present, while the producer is **ABSENT**.
 
-The missing invariant is not generic group algebra.  It is an allocation
-law from the actual Fermat factor state to the debit and weighted
-receivable class channels, proving their conserved total is zero and
-mapping the resulting principalized amount into the converted column.
-Neither root-class `59`-torsion nor the already-derived conjugation fold
-(7d) forces this weighted equation.  This is precisely the statewise
-Takagi--Furtwängler reflection step traditionally called Lemma I, and it is
-outside this session.
+In Transfer vocabulary, the missing inhabitant is a state-linked allocated
+class transaction.  Its before available columns must be the accounted
+images of `rootClass 0` and `58 • rootClass 1`; its after/converted columns
+must record the net principal class with unchanged total.  The displayed
+`VandiverSevenA 0 1` equality must then be a projection of that transaction,
+not an input field or a parallel group calculation.  Root-class
+`59`-torsion and the already-derived conjugation fold (7d) do not inhabit
+this Transfer.  No such producer is attempted here.
 
 ### 2. Stock-credit transformer successor
 
-The exact demanded interface is
-`Fermat.FiftyNine.Conservation.FermatState.StockCreditTransformer`, whose
-pointwise output is
-`Fermat.FiftyNine.Conservation.FermatState.StrictSuccessor S`.
-`Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow hζ hdeep`
-returns `Fermat.Conservation.Credit.Repayment.IsRepaid 59 u`, not a successor
-solution, and
-`Fermat.FiftyNine.Conservation.CyclotomicFiftyNine.drainCharge_step hζ n`
-compares ramified norm charges,
-not `next.charge < S.charge`.
-
-The missing invariant is a state-linked before/after `Ledger ℕ` morphism.
-It must construct an actual `next : PrimitiveSecondCaseSolution`, a positive
-`spentStock`, and equations
+The existing demanded interface is
+`Fermat.FiftyNine.Conservation.FermatState.StockCreditTransformer`, but its
+missing implementation should now be stated first as
 
 ```text
-S.charge = next.charge + spentStock
-before.stock + before.credit + before.converted = before.total
-after.stock  + after.credit  + after.converted  = after.total
-before.total = after.total
+∀ S, ∃ next (τ : Transfer ℕ),
+  τ.before = account S ∧
+  τ.after = account next ∧
+  0 < τ.spent
 ```
 
-with `before.stock = S.charge`, `after.stock = next.charge`, and the exact
-credit decrease plus `spentStock` accounted in the increase of converted.
-Without these equations, repayment and ramified drain are unrelated scalar
-facts and cannot produce the strict successor.
+with `Transfer.available (account S) = S.charge` (and likewise for `next`).
+`Transfer.available_lt_of_spent_pos` then derives `StrictSuccessor S`, and
+the function assigning these witnesses derives `StockCreditTransformer`.
+The existing repayment verdict and ramified norm comparison inhabit neither
+endpoint equality, so they remain unrelated projections until this Transfer
+producer exists.  It is not attempted here.
 
 ### 3. Higher layer transport
 
-`Fermat.Conservation.Credit.Repayment.LayerTransport` is a named,
-mechanically guarded interface, but there is no concrete inhabitant for
-`Fermat.FiftyNine.Conservation.Instance.RepaymentFunded59`.  The missing
-producer must return, for every
-`d > 1` and every source state, a funded residual with the full equation
+The exact missing object is a concrete
+`LayerTransport 59 RegularClosure59 (RepaymentFunded59 hζ)`.  It must return,
+for every `d > 1` and every source state, a funded residual with
 
 ```text
 source.residual = residual.residual ^ 59
@@ -227,10 +256,11 @@ residual.totalLayers + 1 = source.totalLayers
 
 and must derive the residual's depth-`d` funding from the source's
 depth-`(d+1)` congruence.
-`Fermat.Conservation.Credit.Repayment.Repay.ofLayerTransport` only packages
-such a producer; it does not inhabit the seam.  A global completion additionally
-needs the layer-count accounting map that changes credit by `-1`, converted
-by `+1`, and leaves stock and total fixed.
+Once that producer exists, `Repay.ofLayerTransport` and the already-compiled
+`repay_layer_transfer` automatically give a `Transfer ℕ` with `spent = 1`,
+credit decreased by one, converted increased by one, and stock/total fixed.
+Thus the only remaining seam is the residual/root/depth funding theorem; the
+global column adapter is complete.  No inhabitant is attempted here.
 
 ## Literal gate inventory
 
@@ -238,74 +268,64 @@ These are the downstream declarations claimed **LITERAL** above, grouped by
 the identity against which a matching `#guard_depends_on` belongs.  Identity
 anchors themselves are omitted.
 
-- Against `Fermat.Conservation.Ledger.conservation_identity`:
-  `Fermat.Conservation.Ledger.vacuum_conservation`,
-  `Fermat.Conservation.Ledger.repay_conservation`, and
-  `Fermat.Conservation.Ledger.repayNat_conservation`.
-- Against `Fermat.Two.charge_ledger`:
-  `Fermat.Two.pythagoras`, `Fermat.Two.emptyCoupling_of_additive`,
-  `Fermat.Two.pythagoras_conserved`, and
-  `Fermat.FiftyNine.Conservation.stockSpineReceipt`.
-- Against `Fermat.Five.Conservation.quintic_ledger`:
-  `Fermat.Five.Conservation.fermatEquation_five_ledger`,
-  `Fermat.Five.Conservation.PrimitiveFifthSolution.equation`,
-  `Fermat.Five.Conservation.not_five_dvd_c_seed`,
-  `Fermat.Five.Conservation.five_dvd_c_seed`,
-  `Fermat.Five.Conservation.not_five_dvd_c_impossible`,
-  `Fermat.Five.Conservation.five_dvd_c_impossible`, and
-  `Fermat.Five.holdsAt_five_conservation`.
-- Against `Fermat.Six.Conservation.sixth_ledger`:
-  `Fermat.Six.Conservation.PrimitiveSolution.native_ledger` and
-  `Fermat.FiftyNine.Conservation.stockSpineReceipt`.
-- Against `Fermat.Seven.Conservation.septic_ledger`:
-  `Fermat.Seven.Conservation.Reconstruction.Lebesgue.seven_dvd_t_branch_impossible`,
-  `Fermat.Seven.Conservation.Reconstruction.Lebesgue.not_seven_dvd_t_branch_impossible`,
-  `Fermat.Seven.Conservation.Reconstruction.Lebesgue.ternaryOnlyTrivial_lebesgue`,
-  `Fermat.Seven.Conservation.Reconstruction.Lebesgue.holdsAt_seven_lebesgue`,
-  and `Fermat.Seven.holdsAt_seven_conservation`.
-- Against `Fermat.Conservation.Credit.generated_eq_bot_of_no_generator`:
-  `Fermat.Conservation.Credit.kummer_credit_vacuum` and, transitively,
-  `Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot`.
-- Against
-  `Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation`:
-  `Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_eq_min_two_add_depth_sub_two`,
-  `Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.cubeFree_of_surplus_eq_zero`,
-  `Fermat.Conservation.Credit.Flow.FlowCertificate.eigenvalue_cubeFree`,
-  `Fermat.Conservation.Credit.RealFlow.FlowCertificate.eigenvalue_cubeFree`,
-  `Fermat.Conservation.Credit.RealFlow.FlowCertificate.depthAtMostTwo`,
-  `Fermat.Conservation.Credit.RealFlow.DepthTwoCertificate.atMostTwo`,
-  `Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree`,
-  `Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59`,
-  `Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow`,
-  and
-  `Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_on_exponentCycle_of_flow`.
-- Against
-  `Fermat.Conservation.Credit.Repayment.repay_layer_conservation`:
-  `Fermat.Conservation.Credit.Repayment.repay_totalLayers`,
-  `Fermat.Conservation.Credit.Repayment.nonempty_repay_one_iff`,
-  `Fermat.FiftyNine.Conservation.Instance.nonempty_repayOne_iff_deep_repayment59`,
-  and
-  `Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow`.
-- Against the named higher-layer interface:
-  `Fermat.Conservation.Credit.Repayment.LayerTransport` depends on
-  `Fermat.Conservation.Credit.Repayment.LayerConservation`, and
-  `Fermat.Conservation.Credit.Repayment.Repay.ofLayerTransport` depends on
-  both.  These
-  guards certify the interface's shape, not a concrete inhabitant.
-- Against the local gauge/fold identities:
-  `Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq`,
-  `Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot`,
-  `Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq`,
-  and
-  `Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation`.
-- Against its two native grade-zero inputs:
-  `Fermat.FiftyNine.Conservation.Instance.regularClosure59` depends on both
-  `Fermat.FiftyNine.Conservation.stockSpineReceipt` and
-  `Fermat.Conservation.Credit.kummer_credit_vacuum`.
+- Core Transfer guards cover `Transfer.refl`, `comp`, and `ofRepay` against
+  `Ledger.conservation_identity`; `available_lt_of_spent_pos` against
+  `Transfer.available_eq`; and the positive-path floor and impossibility
+  projections against that strict projection.
+- Tunnel guards cover `IsoConserveBridge.transfer_L1_conservation`,
+  `ofBalancedStep` and its round trip, both concrete Kummer scheduler-step
+  constructors, and the existential scheduler-step conservation theorem.
+- N2 guards cover `isometryTransfer` against all four column laws and
+  `charge_conserved` against both that Transfer and the global ledger
+  identity.
+- N3 guards cover `ledger_identity`, `drainCharge_pred_lt`, Euler
+  `Solution.accountTransfer_projections`, `euler_descent_transfer`,
+  `euler_descent_charge_lt`, and `holdsAt_three_conservation`.  The selected
+  `stockSpineReceipt` is also guarded against `Transfer.available_eq` through
+  its N3 field.
+- N4 guards cover `PrimitiveSolution.accountTransfer`, its stock projection,
+  `charged_descent_transfer`, legacy `charged_descent`,
+  `not_stronger_solution_conservation`, and `holdsAt_four_conservation`.
+- N5 guards cover the global and state-level `gaugeTransfer` projections,
+  `ChargedState.charged_descent_transfer`, both case-specific positive
+  transfers and strict descents, both impossible consumers, and
+  `holdsAt_five_conservation`.  The selected receipt is separately guarded
+  against the N5 gauge Transfer.
+- C1 guards cover `accountMatrix_merge`, `accountLedger_conservation`,
+  `kummer_credit_accounted_vacuum`, and legacy `kummer_credit_vacuum` against
+  its accounted source and `Ledger.conservation_identity`.
+- C2 guards cover `capacityIndex_eq_relIndex`,
+  `CapacityData.Account.spendingTransfer` and its credit/converted/total
+  projections, `full_credit_eq_relIndex`, `CapacityData.capacity_eq_relIndex`,
+  positive `CapacityData.capacity_pos`, `CapacityCertificate.sound`, and
+  `IndexCertificate.sound`.
+- Graded C3 guards cover `repay_layer_transfer` against both layer and global
+  conservation; its credit, converted, and total projections; and legacy
+  `repay_totalLayers` against the spent-one Transfer.  Guards on
+  `nonempty_repay_one_iff` and the selected verdicts certify only their layer
+  status, not a global-transaction claim.
+- Flow guards cover `productTransfer` and `sumTransfer` against `accountFlow`
+  and the global identity, and both legacy conservation equalities against
+  their Transfer, `available_eq`, and the global identity.
+- Bernoulli guards cover `depthTransfer`, its exact credit projection,
+  `depth_conservation`, both generic compatibility readings, all four
+  generic/real consumers, and all four selected conductor-59 consumers
+  against the global ledger identity.
+- The generic and selected gauge-quotient vacuum declarations are guarded
+  against `Ledger.conservation_identity` through C1.  They are deliberately
+  not guarded against a source-to-quotient Transfer, which remains absent.
+- The older native/local guards remain: N2 Pythagoras against `charge_ledger`;
+  N5 seed/equation paths against `quintic_ledger`; N6 `native_ledger` and the
+  selected receipt against `sixth_ledger`; the five outer N7 declarations
+  against `septic_ledger`; and the fold declarations against their native
+  matrix identities.
+- `LayerTransport` and `Repay.ofLayerTransport` remain guarded against
+  `LayerConservation`; these certify the interface shape, not the missing
+  concrete conductor-59 inhabitant.
 
-The inventory intentionally contains no claim that a legacy stock theorem,
-C1/C2 object, quotient, fold, or N59 assembly depends on the global
-three-column identity.  That absence is the mapped boundary.
+`stockSpineReceipt` and `regularClosure59` now reach global identities
+transitively, but no guard or classification asserts that either is a single
+common-carrier N59 ledger.  That assembly distinction remains explicit.
 
 ## Scope and probe status
 
@@ -318,4 +338,7 @@ assembly.  In particular, the guarded type mismatches in
 `Fermat/FiftyNine/Conservation/TransformerProbe.lean` remain the intended
 evidence for the (7a), repayment-to-successor, and ramified-charge-to-stock
 seams.  The layer-transport interface is guarded in Verification, but is
-not asserted to be inhabited.
+not asserted to be inhabited.  The generic selected-prime source-literal
+gate now scans `Transfer.lean` alongside the other route-neutral cores, and
+the dedicated Transfer, N3, N4, N5, generic-credit, and N59 verification
+leaves compile with every old and new dependency guard intact.
