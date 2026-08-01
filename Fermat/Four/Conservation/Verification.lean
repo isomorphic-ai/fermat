@@ -9,7 +9,26 @@ This non-imported audit leaf checks the public axiom surface of the complete
 balance-inside-drain cone and checks that declarations from the forbidden
 fixed-exponent FLT(4) cone remain unknown after importing the public N4 rung.
 -/
+import Fermat.Conservation.GuardDependsOn
 import Fermat.Four.Conservation
+
+/-! ## Accounted-transfer dependency gates -/
+
+#guard_depends_on
+  Fermat.Four.Conservation.PrimitiveSolution.accountTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Four.Conservation.PrimitiveSolution.accountTransfer_stock_decomposition,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Four.Conservation.PrimitiveSolution.charged_descent_transfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Four.Conservation.PrimitiveSolution.charged_descent,
+  Fermat.Four.Conservation.PrimitiveSolution.charged_descent_transfer
+#guard_depends_on
+  Fermat.Four.Conservation.PrimitiveSolution.charged_descent,
+  Fermat.Conservation.Transfer.available_eq
 
 /--
 info: 'Fermat.HoldsAt.mono_of_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -324,15 +324,7 @@ private theorem charged_descent_oriented
       coprime := hjk_coprime
     }, hcharge_lt⟩
 
-/-- **The charged double-descent step.** Every primitive nontrivial solution
-of `x⁴ + y⁴ = z²` produces another primitive solution with strictly smaller
-charge `|z|`.
-
-The construction is the requested composition of modes: the
-coupling-free n=2 balance parametrization is applied twice, splitting the
-right-triangle ledger until a smaller square hypotenuse is exposed; that
-closed balance transformation powers the n=4 drain. -/
-theorem charged_descent (S : PrimitiveSolution) :
+private theorem exists_stateCharge_lt_raw (S : PrimitiveSolution) :
     ∃ next : PrimitiveSolution,
       next.stateCharge < S.stateCharge := by
   obtain ⟨oriented, hx_odd, hz_pos, hcharge⟩ :=
@@ -340,6 +332,83 @@ theorem charged_descent (S : PrimitiveSolution) :
   obtain ⟨next, hlt⟩ :=
     oriented.charged_descent_oriented hx_odd hz_pos
   exact ⟨next, hcharge ▸ hlt⟩
+
+/-! ## The accounted double-descent transaction -/
+
+/-- A primitive exponent-four state in the global three-column ledger.
+
+The hypotenuse charge is live stock.  `budget` is fixed along a descent path,
+so the difference between it and the current charge is literal converted
+stock and successive endpoints can compose without resetting the account. -/
+def accountLedger (budget : ℕ) (S : PrimitiveSolution)
+    (hbudget : S.stateCharge ≤ budget) :
+    Fermat.Conservation.Ledger ℕ where
+  stock := S.stateCharge
+  credit := 0
+  converted := budget - S.stateCharge
+  total := budget
+  conservation := by omega
+
+/-- The fixed-budget accounted transaction between two primitive states.
+The exact debit is retained as `spent`; no strict comparison is stored in the
+ledger or transfer. -/
+def accountTransfer (budget : ℕ) (before after : PrimitiveSolution)
+    (hbudget : before.stateCharge ≤ budget)
+    (hdrop : after.stateCharge ≤ before.stateCharge) :
+    Fermat.Conservation.Transfer ℕ where
+  before := accountLedger budget before hbudget
+  after := accountLedger budget after (hdrop.trans hbudget)
+  spent := before.stateCharge - after.stateCharge
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    simp only [accountLedger, add_zero]
+    omega
+  converted_decomposition := by
+    simp only [accountLedger]
+    omega
+
+/-- The exact descent equality is the stock-column projection of the
+transaction. -/
+theorem accountTransfer_stock_decomposition (budget : ℕ)
+    (before after : PrimitiveSolution)
+    (hbudget : before.stateCharge ≤ budget)
+    (hdrop : after.stateCharge ≤ before.stateCharge) :
+    before.stateCharge = after.stateCharge +
+      (accountTransfer budget before after hbudget hdrop).spent := by
+  have havailable :=
+    (accountTransfer budget before after hbudget hdrop).available_eq
+  simpa only [Fermat.Conservation.Transfer.available, accountTransfer,
+    accountLedger, add_zero] using havailable
+
+/-- **The accounted double-descent step.** Every primitive nontrivial
+solution produces a successor and a positive transaction at any fixed
+enclosing budget.  The construction still uses the coupling-free n=2 balance
+parametrization twice; its strict arithmetic result is retained only long
+enough to prove positivity of the exact debit. -/
+theorem charged_descent_transfer (S : PrimitiveSolution) (budget : ℕ)
+    (hbudget : S.stateCharge ≤ budget) :
+    ∃ (next : PrimitiveSolution)
+      (hdrop : next.stateCharge ≤ S.stateCharge),
+      0 < (accountTransfer budget S next hbudget hdrop).spent := by
+  obtain ⟨next, hlt⟩ := S.exists_stateCharge_lt_raw
+  refine ⟨next, hlt.le, ?_⟩
+  simpa only [accountTransfer] using Nat.sub_pos_of_lt hlt
+
+/-- **The legacy charged double-descent step.** Strict decrease is now only a
+projection of the positive accounted transaction and its exact stock
+decomposition. -/
+theorem charged_descent (S : PrimitiveSolution) :
+    ∃ next : PrimitiveSolution,
+      next.stateCharge < S.stateCharge := by
+  obtain ⟨next, hdrop, hspent⟩ :=
+    S.charged_descent_transfer S.stateCharge le_rfl
+  refine ⟨next, ?_⟩
+  rw [accountTransfer_stock_decomposition S.stateCharge S next le_rfl hdrop]
+  exact Nat.lt_add_of_pos_right hspent
 
 end PrimitiveSolution
 

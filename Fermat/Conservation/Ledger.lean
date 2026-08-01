@@ -10,7 +10,8 @@ set-valued credit matrix.  A concrete cone may map its native stock, credit,
 and conversion objects into any common additive carrier `α`; only after such
 a map is supplied does the literal equation below apply.
 -/
-import Mathlib
+import Mathlib.Algebra.Group.Basic
+import Mathlib.Algebra.Group.Nat.Defs
 
 namespace Fermat.Conservation
 
