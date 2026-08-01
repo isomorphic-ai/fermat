@@ -34,6 +34,55 @@ native golden-norm ledger through its elaborated proof value. -/
 #guard_depends_on Fermat.Five.holdsAt_five_conservation,
   Fermat.Five.Conservation.quintic_ledger
 
+/-! The formerly scalar gauge and charged-descent claims are now literal
+projections of full accounted transactions. -/
+
+#check Fermat.Five.Conservation.chargeLedger
+#check Fermat.Five.Conservation.gaugeTransfer
+#check Fermat.Five.Conservation.gaugeTransfer_columns
+#check Fermat.Five.Conservation.ChargedState.accountLedger
+#check Fermat.Five.Conservation.ChargedState.accountTransfer
+#check Fermat.Five.Conservation.ChargedState.charged_descent_transfer
+#check Fermat.Five.Conservation.not_five_dvd_c_charged_transfer
+#check Fermat.Five.Conservation.five_dvd_c_charged_transfer
+
+#guard_depends_on Fermat.Five.Conservation.gaugeTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Five.Conservation.gaugeTransfer_columns,
+  Fermat.Five.Conservation.gaugeTransfer
+#guard_depends_on Fermat.Five.Conservation.charge_gauge_invariant,
+  Fermat.Five.Conservation.gaugeTransfer
+#guard_depends_on Fermat.Five.Conservation.charge_gauge_invariant,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Five.Conservation.ChargedState.charge_gauge_invariant,
+  Fermat.Five.Conservation.ChargedState.gaugeTransfer
+#guard_depends_on
+  Fermat.Five.Conservation.NotFiveDvdCState.charge_gauge_invariant,
+  Fermat.Five.Conservation.ChargedState.gaugeTransfer
+#guard_depends_on
+  Fermat.Five.Conservation.FiveDvdCState.charge_gauge_invariant,
+  Fermat.Five.Conservation.ChargedState.gaugeTransfer
+#guard_depends_on
+  Fermat.Five.Conservation.ChargedState.charged_descent_transfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Five.Conservation.not_five_dvd_c_charged_transfer,
+  Fermat.Five.Conservation.ChargedState.charged_descent_transfer
+#guard_depends_on Fermat.Five.Conservation.five_dvd_c_charged_transfer,
+  Fermat.Five.Conservation.ChargedState.charged_descent_transfer
+#guard_depends_on Fermat.Five.Conservation.not_five_dvd_c_charged_descent,
+  Fermat.Five.Conservation.not_five_dvd_c_charged_transfer
+#guard_depends_on Fermat.Five.Conservation.not_five_dvd_c_charged_descent,
+  Fermat.Conservation.Transfer.stock_decomposition_of_credit_eq
+#guard_depends_on Fermat.Five.Conservation.five_dvd_c_charged_descent,
+  Fermat.Five.Conservation.five_dvd_c_charged_transfer
+#guard_depends_on Fermat.Five.Conservation.five_dvd_c_charged_descent,
+  Fermat.Conservation.Transfer.stock_decomposition_of_credit_eq
+#guard_depends_on Fermat.Five.Conservation.not_five_dvd_c_impossible,
+  Fermat.Five.Conservation.not_five_dvd_c_charged_transfer
+#guard_depends_on Fermat.Five.Conservation.five_dvd_c_impossible,
+  Fermat.Five.Conservation.five_dvd_c_charged_transfer
+
 /--
 error: Unknown constant `Fermat.HoldsAt.mono_of_dvd`
 -/

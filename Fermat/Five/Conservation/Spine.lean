@@ -16,7 +16,7 @@ Write `φ` for a root of `φ² = φ + 1`.  The maximal golden order from
 classification proves that every unit is, up to sign, a power of `φ`.
 The norm of `x + yφ` is `x² + xy - y²`.
 -/
-import Fermat.Conservation.Floor
+import Fermat.Conservation.Transfer
 import Fermat.Quadratic.GoldenUnits
 import Mathlib.Tactic.Ring
 
@@ -86,11 +86,88 @@ theorem goldenCharge_unit (u : GoldenIntˣ) :
     goldenCharge (u : GoldenInt) = 1 := by
   exact MaximalOrder.natAbs_norm_eq_one_iff_isUnit.mpr u.isUnit
 
-/-- **Gauge invariance at exponent five.** Multiplication by any unit of the
-infinite golden-ring unit group leaves the observable charge unchanged. -/
-theorem charge_gauge_invariant (u : GoldenIntˣ) (z : GoldenInt) :
+private theorem charge_gauge_invariant_raw (u : GoldenIntˣ) (z : GoldenInt) :
     goldenCharge ((u : GoldenInt) * z) = goldenCharge z := by
   rw [goldenCharge_mul, goldenCharge_unit, one_mul]
+
+/-- A golden charge at one fixed accounting budget.  Unit normalization may
+change the representative `z`, but it cannot change any ledger column. -/
+def chargeLedger (budget : ℕ) (z : GoldenInt)
+    (hbudget : goldenCharge z ≤ budget) :
+    Fermat.Conservation.Ledger ℕ where
+  stock := goldenCharge z
+  credit := 0
+  converted := budget - goldenCharge z
+  total := budget
+  conservation := by
+    simp only [add_zero]
+    omega
+
+@[simp] theorem chargeLedger_stock (budget : ℕ) (z : GoldenInt)
+    (hbudget : goldenCharge z ≤ budget) :
+    (chargeLedger budget z hbudget).stock = goldenCharge z :=
+  rfl
+
+@[simp] theorem chargeLedger_credit (budget : ℕ) (z : GoldenInt)
+    (hbudget : goldenCharge z ≤ budget) :
+    (chargeLedger budget z hbudget).credit = 0 :=
+  rfl
+
+@[simp] theorem chargeLedger_converted (budget : ℕ) (z : GoldenInt)
+    (hbudget : goldenCharge z ≤ budget) :
+    (chargeLedger budget z hbudget).converted =
+      budget - goldenCharge z :=
+  rfl
+
+@[simp] theorem chargeLedger_total (budget : ℕ) (z : GoldenInt)
+    (hbudget : goldenCharge z ≤ budget) :
+    (chargeLedger budget z hbudget).total = budget :=
+  rfl
+
+/-- Unit multiplication is a zero-spent accounted transfer: stock, credit,
+converted, and total are all preserved, rather than only the scalar norm. -/
+def gaugeTransfer (budget : ℕ) (z : GoldenInt) (u : GoldenIntˣ)
+    (hbudget : goldenCharge z ≤ budget) :
+    Fermat.Conservation.Transfer ℕ where
+  before := chargeLedger budget z hbudget
+  after := chargeLedger budget ((u : GoldenInt) * z) (by
+    simpa only [charge_gauge_invariant_raw] using hbudget)
+  spent := 0
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    simp only [chargeLedger, add_zero]
+    exact (charge_gauge_invariant_raw u z).symm
+  converted_decomposition := by
+    simp only [chargeLedger, add_zero]
+    rw [charge_gauge_invariant_raw]
+
+/-- All four observable columns of the gauge transaction are fixed. -/
+theorem gaugeTransfer_columns (budget : ℕ) (z : GoldenInt) (u : GoldenIntˣ)
+    (hbudget : goldenCharge z ≤ budget) :
+    let transfer := gaugeTransfer budget z u hbudget
+    transfer.before.stock = transfer.after.stock ∧
+      transfer.before.credit = transfer.after.credit ∧
+      transfer.before.converted = transfer.after.converted ∧
+      transfer.before.total = transfer.after.total ∧
+      transfer.spent = 0 := by
+  dsimp only [gaugeTransfer, chargeLedger]
+  rw [charge_gauge_invariant_raw]
+  simp
+
+/-- **Gauge invariance at exponent five.** The legacy scalar statement is the
+stock projection of the full-column zero-spent gauge transfer. -/
+theorem charge_gauge_invariant (u : GoldenIntˣ) (z : GoldenInt) :
+    goldenCharge ((u : GoldenInt) * z) = goldenCharge z := by
+  let transfer := gaugeTransfer (goldenCharge z) z u le_rfl
+  have havailable := transfer.available_eq
+  have hstock : goldenCharge z = goldenCharge ((u : GoldenInt) * z) := by
+    simpa only [transfer, gaugeTransfer, chargeLedger,
+      Fermat.Conservation.Transfer.available, add_zero] using havailable
+  exact hstock.symm
 
 /-- The quartic cofactor in the factorization of a sum of fifth powers. -/
 def quinticCofactor (a b : ℤ) : ℤ :=
