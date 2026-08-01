@@ -180,3 +180,62 @@ Recorded before inspecting or editing the FOLD implementation.
   close by short compositions.  Continued resistance there would indicate
   that the permit is quantified over a broader factor family than the
   Fermat-produced ledger actually controls.
+
+## LEDGER-LITERAL prediction — 2026-08-01
+
+Recorded after reading `LEDGER-LITERAL-TASK.md` and before inspecting theorem
+bodies, declaration dependencies, or the Bernoulli table implementation.
+
+- **Bernoulli certificate cone (W1).**  I expect the present Boolean
+  `NoBernoulliCubeObstruction` to be DECORATIVE with respect to the missing
+  channel/surplus identities: it can certify a depth bound after projecting
+  away both the lift/coupling split and every unit of excess coupling depth.
+  The replacement two-channel certificate, its explicit surplus equation,
+  the Boolean corollary, and the 59 table adapter should all become LITERAL
+  with respect to named channel-conservation lemmas.  No new numerical
+  computation should be needed.
+- **Stock cone N1--N7.**  I expect N1's vacuum and N2's balance equation to be
+  LITERAL, because their conclusions are themselves the zero-ledger and
+  three-column identities.  I expect several later rungs to be DECORATIVE:
+  N3 drain likely routes through strict natural-number charge arithmetic;
+  N4 repayment/drain composition may mention balance but bypass the literal
+  three-column identity; N5 gauge and N7 normalization/gauge likely prove
+  charge invariance directly; and N6 fold likely proves an additive fold law
+  without carrying the three named ledger columns.  Exact theorem-level
+  classifications may split within a rung, but the honest expectation is
+  that N3--N7 contain several charge-arithmetic bypasses.
+- **Credit cone C1--C3 and flow.**  C1's empty generated ledger may be LITERAL
+  only for its local empty-ledger identity; its generator-absence proof is
+  expected to be DECORATIVE for the global stock/credit/converted ledger.
+  C2 capacity/index facts are expected ABSENT from that identity, since they
+  measure a sub-ledger rather than conserve a total.  C3 deep-flow and
+  zero-flow results are expected DECORATIVE or ABSENT: they fund repayment
+  arithmetically without themselves stating where the residual layer goes.
+- **Gauge quotient and fold cones.**  I expect both to be DECORATIVE.  Their
+  existing proofs likely preserve charge or identify conjugate coordinates,
+  but do not expose a morphism preserving the full three-column ledger or a
+  residual coupling-depth grading.  The missing invariants should be,
+  respectively, ledger preservation under quotient/gauge representatives and
+  additivity of every named channel under the fold.
+- **Repayment and graded-state cone (W2).**  I expect the existing
+  `repayment_of_capacity_and_flow` to be DECORATIVE for layer conservation:
+  capacity plus zero flow yields a repaid verdict, while the residual `pM`
+  has no typed address.  The new `C_d`, `Repay`, one-layer conservation law,
+  and the `d = 1` equivalence should be LITERAL.  The named layer-transport
+  interface should remain an explicitly guarded open seam; it is predicted
+  ABSENT as a theorem because this session must not manufacture its
+  depth-raising arithmetic input.
+- **N59 instance cone.**  I expect the current Bernoulli instance to be
+  DECORATIVE because it consumes the old Boolean, and the current repayment
+  instance to be DECORATIVE because it consumes the ungraded verdict.  After
+  W1/W2, the table-backed two-channel instance and the one-layer repayment
+  adapter should be LITERAL.  Any theorem beyond that adapter which closes by
+  stock charge arithmetic alone should remain honestly DECORATIVE rather than
+  being relabeled by a cosmetic reference to a ledger lemma.
+- **Known open seams.**  Lemma I / relation 7a is predicted to lack a
+  conserved class-coefficient allocation; the transformer successor is
+  predicted to lack a state-linked ledger morphism carrying conserved charge
+  from the factor state to its successor; and layer transport is predicted to
+  lack the funding law sending a depth-`(k+1)p` congruence to one spendable
+  coupling layer while retaining depth `k`.  These are boundaries to name,
+  guard, and leave open.
