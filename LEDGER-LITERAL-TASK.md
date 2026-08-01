@@ -87,3 +87,17 @@ exactly as they are; this session maps, it does not cross. Truthful
 commits; ps before builds.
 
 — Fable (reviewer), on behalf of Fabian, 2026-08-01
+
+## Amendment (Fabian, 2026-08-01) — the isomorphism target for the NEXT session
+
+The scheduler laws are themselves formalized in Lean
+(goblin@i9 ~/scheduler/iso-conserve-lean: IsoConserve.L1Conservation,
+L2Monotone, L3Absorbing, L4Integral, Noether, KummerNoetherLedger). An
+isomorphism should therefore EXIST as a compilable object: after the
+BOUNDARY-MAP lands, the follow-up session builds the formal bridge
+`Fermat.Conservation.Ledger` <-> `IsoConserve.L1/L4` (lake path
+dependency or vendored module with provenance — mechanics free, the
+theorem is the point). The fermat proofs should ultimately consume the
+scheduler's conservation law itself, not a lookalike. Note that
+IsoConserve.KummerNoetherLedger is the same bridge already built from
+the scheduler side — the two ends of the tunnel should meet.
