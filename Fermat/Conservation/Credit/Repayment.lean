@@ -18,6 +18,7 @@ inversion belong upstream in the flow calculus, not in this repayment
 consumer.  No repayment function or power conclusion is assumed.
 -/
 import Fermat.Conservation.Credit.Capacity
+import Fermat.Conservation.Ledger
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Group.Subgroup.Finsupp
 import Mathlib.Data.Int.GCD
@@ -39,9 +40,161 @@ def IsVandiverDeep {R : Type*} [CommRing R]
   ∃ c : ℤ,
     ramified ^ (2 * p) ∣ (u : R) - (c : R) ^ p
 
+/-- Grade `d` is funded by a depth-`(d+1)p` local congruence.  At grade one
+this is exactly the depth consumed by the existing Vandiver repayment.
+For larger grades, producing the next receipt is the open layer-transport
+problem rather than a field silently bundled into the state. -/
+def IsLayerDeep {R : Type*} [CommRing R]
+    (p : ℕ) (ramified : R) (d : ℕ) (u : Rˣ) : Prop :=
+  ∃ c : ℤ,
+    ramified ^ ((d + 1) * p) ∣ (u : R) - (c : R) ^ p
+
+/-- Grade one is definitionally the local depth used by Vandiver's existing
+repayment theorem. -/
+theorem isLayerDeep_one_iff_isVandiverDeep
+    {R : Type*} [CommRing R] (p : ℕ) (ramified : R) (u : Rˣ) :
+    IsLayerDeep p ramified 1 u ↔ IsVandiverDeep p ramified u := by
+  simp only [IsLayerDeep, IsVandiverDeep]
+
 /-- A debt is repaid when the checked unit is an actual `p`-th power. -/
 def IsRepaid {G : Type*} [Group G] (p : ℕ) (u : G) : Prop :=
   ∃ v : G, u = v ^ p
+
+/-! ## Graded obstruction states and one-layer repayment -/
+
+universe uC
+
+/-- `C d` stores exactly the current residual obstruction and its current
+grade receipt.  It is deliberately nonrecursive: a `C (d+1)` does not
+assume that its eventual root already carries a grade-`d` receipt.  In the
+exact-sequence reading, the current value is the class in `M / pM`; the
+target of `Repay` below is the explicitly addressed residual `pM`.
+
+The grade-zero constructor is the vacuum/regular closure.  Its `closed`
+receipt is supplied by the cone (C1 vacuum together with its stock closure),
+not asserted by this generic layer. -/
+inductive C (G : Type uC) [Group G] (closed : Prop)
+    (funded : ℕ → G → Prop) : ℕ → Type uC
+  | vacuum (residual : G) (closure : closed) : C G closed funded 0
+  | layer {d : ℕ} (residual : G)
+      (receipt : funded (d + 1) residual) : C G closed funded (d + 1)
+
+namespace C
+
+variable {G : Type*} [Group G] {closed : Prop}
+  {funded : ℕ → G → Prop} {d : ℕ}
+
+/-- The obstruction or residual value has an address at every grade,
+including the explicit regular root at grade zero. -/
+def residual : C G closed funded d → G
+  | .vacuum value _ => value
+  | .layer value _ => value
+
+/-- The exact number of unspent coupling layers carried by the type index. -/
+def totalLayers (_state : C G closed funded d) : ℕ := d
+
+@[simp] theorem totalLayers_eq (state : C G closed funded d) :
+    state.totalLayers = d :=
+  rfl
+
+end C
+
+
+/-- The Taylor--Wiles patching discipline, stated as a conservation law:
+one quotient layer is repaid, the chosen root is carried as the residual
+state, and the residual grade is exactly one smaller.  No `pM` layer may
+disappear behind a Boolean verdict. -/
+def LayerConservation {G : Type*} [Group G]
+    (p : ℕ) {closed : Prop} {funded : ℕ → G → Prop} {d : ℕ}
+    (source : C G closed funded d)
+    (residual : C G closed funded (d - 1)) : Prop :=
+  source.residual = residual.residual ^ p ∧
+    residual.totalLayers + 1 = source.totalLayers
+
+/-- A total repayment operator at positive grade.  Its target is the
+explicit residual obstruction state rather than only an `IsRepaid` verdict. -/
+structure Repay (p : ℕ) (G : Type*) [Group G] (closed : Prop)
+    (funded : ℕ → G → Prop) (d : ℕ) where
+  positive : 0 < d
+  toFun : C G closed funded d → C G closed funded (d - 1)
+  layer_conservation : ∀ state,
+    LayerConservation p state (toFun state)
+
+instance {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} {d : ℕ} :
+    CoeFun (Repay p G closed funded d)
+      (fun _ => C G closed funded d → C G closed funded (d - 1)) :=
+  ⟨Repay.toFun⟩
+
+/-- The named layer identity used by the mechanical literal-dependency
+gate.  It exposes both conservation channels in one theorem. -/
+theorem repay_layer_conservation
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} {d : ℕ}
+    (repay : Repay p G closed funded d)
+    (state : C G closed funded d) :
+    state.residual = (repay state).residual ^ p ∧
+      (repay state).totalLayers + 1 = state.totalLayers :=
+  repay.layer_conservation state
+
+/-- In particular, total residual depth decreases by exactly one. -/
+theorem repay_totalLayers
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} {d : ℕ}
+    (repay : Repay p G closed funded d)
+    (state : C G closed funded d) :
+    (repay state).totalLayers + 1 = state.totalLayers :=
+  (repay_layer_conservation repay state).2
+
+/-- The old one-layer output, isolated as a verdict type. -/
+def OneLayerVerdict {G : Type*} [Group G]
+    (p : ℕ) (funded : ℕ → G → Prop) : Prop :=
+  ∀ {u : G}, funded 1 u → IsRepaid p u
+
+/-- A one-layer root verdict constructs the total `C₁ → C₀` operator. -/
+noncomputable def Repay.oneOfVerdict
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop}
+    (hclosed : closed) (verdict : OneLayerVerdict p funded) :
+    Repay p G closed funded 1 where
+  positive := by omega
+  toFun := fun state => by
+    cases state with
+    | layer residual receipt =>
+        exact C.vacuum (verdict receipt).choose hclosed
+  layer_conservation := by
+    intro state
+    cases state with
+    | layer residual receipt =>
+        exact ⟨(verdict receipt).choose_spec, by simp [C.totalLayers]⟩
+
+/-- **The d=1 equivalence.** Existence of the total one-layer operator is
+exactly the existing `IsRepaid` verdict for every funded draw.  The forward
+proof reads the named layer-conservation equation; the reverse proof keeps
+the chosen root as the explicit `C₀` residual. -/
+theorem nonempty_repay_one_iff
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop} (hclosed : closed) :
+    Nonempty (Repay p G closed funded 1) ↔
+      OneLayerVerdict p funded := by
+  constructor
+  · rintro ⟨repay⟩ u hfunded
+    let state : C G closed funded 1 :=
+      C.layer u (by simpa using hfunded)
+    refine ⟨(repay state).residual, ?_⟩
+    exact (repay_layer_conservation repay state).1
+  · intro verdict
+    exact ⟨Repay.oneOfVerdict hclosed verdict⟩
+
+/-- The named higher-layer seam.  A depth-`(d+1)p` receipt must fund one
+repayment and prove that its selected root is the explicit grade-`d`
+residual.  This interface is stated, credited to the Taylor--Wiles patching
+discipline, and intentionally has no generic inhabitant in this session. -/
+def LayerTransport {G : Type*} [Group G]
+    (p : ℕ) (closed : Prop) (funded : ℕ → G → Prop) : Prop :=
+  ∀ (d : ℕ), 1 < d → ∀ state : C G closed funded d,
+    ∃ residual : C G closed funded (d - 1),
+      LayerConservation p state residual
 
 /-- The `p`-power map is injective on real units when `p` is odd.
 
