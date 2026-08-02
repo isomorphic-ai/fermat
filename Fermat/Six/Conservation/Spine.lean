@@ -30,6 +30,7 @@ No fixed-exponent theorem, exponent transport, Ladder module, or repository
 exponent-three module is imported.
 -/
 import Fermat.Conservation.Floor
+import Fermat.Conservation.Ledger
 import Mathlib.Algebra.QuadraticAlgebra.Basic
 import Mathlib.NumberTheory.PythagoreanTriples
 import Mathlib.Tactic.NormNum
@@ -89,21 +90,48 @@ theorem cofactor_charge (a b : ℤ) :
   rw [cofactorElement, charge_formula]
   ring
 
-/-- **The degree-six ledger.** The sum channel and the native
-sixth-cyclotomic charge account for the whole sixth-power equation. -/
+/-- The native factorization as a literal global accounting state. -/
+def sixthAccountLedger (a b : ℤ) :
+    Fermat.Conservation.Ledger ℤ where
+  stock := (a ^ 2 + b ^ 2) * charge (cofactorElement a b)
+  credit := 0
+  converted := 0
+  total := a ^ 6 + b ^ 6
+  conservation := by
+    rw [cofactor_charge]
+    ring
+
+/-- **The degree-six ledger.** The old factor identity is the stock/total
+projection of the literal global accounting state. -/
 theorem sixth_ledger (a b : ℤ) :
     a ^ 6 + b ^ 6 =
       (a ^ 2 + b ^ 2) * charge (cofactorElement a b) := by
-  rw [cofactor_charge]
-  ring
+  have hconservation :=
+    Fermat.Conservation.Ledger.conservation_identity
+      (sixthAccountLedger a b)
+  simpa only [sixthAccountLedger, add_zero] using hconservation.symm
+
+/-- A supplied sixth-power equation as a literal coupling-free global
+account. -/
+def pythagoreanCubeLedger {a b c : ℤ}
+    (h : a ^ 6 + b ^ 6 = c ^ 6) :
+    Fermat.Conservation.Ledger ℤ where
+  stock := a ^ 6 + b ^ 6
+  credit := 0
+  converted := 0
+  total := c ^ 6
+  conservation := by simpa only [add_zero] using h
 
 /-- **Balance at the top.** A sixth-power equation is a coupling-free
 Pythagorean ledger whose two legs and hypotenuse are cubes. -/
 theorem pythagorean_cube_balance {a b c : ℤ}
     (h : a ^ 6 + b ^ 6 = c ^ 6) :
     PythagoreanTriple (a ^ 3) (b ^ 3) (c ^ 3) := by
-  simpa only [PythagoreanTriple, ← pow_two, ← pow_mul,
-    Nat.reduceMul] using h
+  have hconservation :=
+    Fermat.Conservation.Ledger.conservation_identity
+      (pythagoreanCubeLedger h)
+  simpa only [pythagoreanCubeLedger, add_zero, PythagoreanTriple,
+    ← pow_two, ← pow_mul, Nat.reduceMul] using hconservation
 
 /-- The ramified drain quantum in sixth-root coordinates. -/
 def drainUnit : SixthCyclotomicInt :=

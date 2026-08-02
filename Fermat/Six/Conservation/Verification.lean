@@ -16,12 +16,34 @@ import Fermat.Six.Conservation
 
 /-! ## Ledger-literal gate -/
 
-/-! The native solution ledger is the exact N6 boundary at which the
-sixth-cyclotomic identity is load-bearing.  The later charged endpoint does
-not claim this dependency. -/
+/-! The native factor, cube balance, origin-carrying successor, and public
+closure are projections of literal global accounts and Transfers. -/
+
+#guard_depends_on Fermat.Six.Conservation.sixth_ledger,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Six.Conservation.pythagorean_cube_balance,
+  Fermat.Conservation.Ledger.conservation_identity
 
 #guard_depends_on Fermat.Six.Conservation.PrimitiveSolution.native_ledger,
   Fermat.Six.Conservation.sixth_ledger
+#guard_depends_on Fermat.Six.Conservation.PrimitiveSolution.native_ledger,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Six.Conservation.PrimitiveSolution.cube_balance,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Six.Conservation.OrientedState.accountTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Six.Conservation.OrientedState.accountTransfer,
+  Fermat.Six.Conservation.PrimitiveSolution.native_ledger
+#guard_depends_on
+  Fermat.Six.Conservation.OrientedState.accountTransfer_factor_ledgers,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Six.Conservation.exists_orientedStateCharge_lt,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Six.Conservation.PrimitiveSolution.impossible_conservation,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on Fermat.Six.holdsAt_six_conservation,
+  Fermat.Conservation.Transfer.available_eq
 
 /--
 info: 'Fermat.Conservation.noInfinitePositiveChargeDrain' depends on axioms: [propext, Classical.choice, Quot.sound]

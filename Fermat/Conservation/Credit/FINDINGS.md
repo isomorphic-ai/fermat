@@ -1,5 +1,25 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER-COMPLETE discovery: enrich the cone, not the generic arithmetic
+
+- The committed N6 and N7 verification leaves both compile before surgery.
+  Their generic arithmetic states also have legitimate callers with no
+  exponent-six or septic origin: `CubicChargedDescent.OrientedState` is shared
+  neutral cubic data, while Lebesgue's `ChargedState` proves Théorème I for an
+  arbitrary descent equation.  Adding factor fields directly to either type
+  would therefore overconstrain the reusable core and break unrelated callers.
+- The smallest honest enrichment is cone-local and mirrors N5: an iterable N6
+  state carries one `PrimitiveSolution` together with its current oriented
+  cubic state; each successor reuses that origin.  N7 needs one septic factor
+  origin carrying `(x,y,z)` and its ledger, then origin-carrying wrappers for
+  both the exceptional branch and the ordinary Lebesgue successor.  Their
+  fixed-budget accounts can use `ℕ × ℤ`: the first coordinate records norm
+  stock and conversion, while the second keeps the originating sixth/septic
+  factor equation load-bearing at both endpoints.
+- This preserves the old generic descent theorems as arithmetic inputs and
+  lets the public N6/N7 endpoint statements remain unchanged; only the
+  internal iterable state and floor route need to move to positive Transfers.
+
 ## 2026-08-02 — TRANSFER audit: the requested guard cone is green
 
 - One Lake invocation of all eight conservation verification leaves builds

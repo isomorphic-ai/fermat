@@ -18,6 +18,7 @@ strictly drains that native charge into the shared conservation floor.
 -/
 import Fermat.Six.Conservation.Entry
 import Fermat.Conservation.CubicChargedDescent
+import Fermat.Conservation.Transfer
 
 namespace Fermat.Six.Conservation
 
@@ -28,6 +29,13 @@ variable {K : Type*} [Field K]
 variable {ζ : K} {hζ : IsPrimitiveRoot ζ 3}
 
 local notation3 "λ" => hζ.toInteger - 1
+
+/-- The iterable N6 successor state.  The neutral cubic transformer remains
+generic, while this cone keeps the primitive sixth-power factor state that
+created it.  Every successor below retains the same `origin`. -/
+structure OrientedState (hζ : IsPrimitiveRoot ζ 3) where
+  origin : PrimitiveSolution
+  current : Fermat.Conservation.CubicChargedDescent.OrientedState hζ
 
 /-- Nondivisibility by three downstairs gives nondivisibility of the square
 of the corresponding integer by the ramified prime upstairs. -/
@@ -143,7 +151,7 @@ theorem orientedState_nonempty
   obtain ⟨raw : RawState hζ⟩ :=
     S.rawState_nonempty (K := K) (hζ := hζ)
   obtain ⟨oriented, -⟩ := raw.exists_oriented
-  exact ⟨oriented⟩
+  exact ⟨{ origin := S, current := oriented }⟩
 
 end PrimitiveSolution
 
@@ -151,7 +159,7 @@ end PrimitiveSolution
 noncomputable def orientedStateCharge
     [NumberField K] [IsCyclotomicExtension {3} ℚ K]
     (state : OrientedState hζ) : ℕ :=
-  drainCharge state.multiplicity
+  drainCharge state.current.multiplicity
 
 /-- Every oriented state carries positive native degree-six charge. -/
 theorem orientedStateCharge_pos
@@ -161,15 +169,136 @@ theorem orientedStateCharge_pos
   rw [orientedStateCharge, drainCharge_eq]
   positivity
 
-/-- The neutral cubic transformer strictly drains the native degree-six
-charge. -/
+namespace OrientedState
+
+/-- The originating sixth-cyclotomic factor carried by a charged state. -/
+def factorStock (state : OrientedState hζ) : ℤ :=
+  (state.origin.a ^ 2 + state.origin.b ^ 2) *
+    charge (cofactorElement state.origin.a state.origin.b)
+
+/-- An origin-carrying N6 state in one fixed-budget global account.
+
+The natural coordinate records live ramified charge and accumulated
+conversion.  The integer coordinate retains the primitive sixth-factor
+identity at every successor. -/
+noncomputable def accountLedger
+    [NumberField K] [IsCyclotomicExtension {3} ℚ K]
+    (state : OrientedState hζ) (budget : ℕ)
+    (hbudget : orientedStateCharge state ≤ budget) :
+    Fermat.Conservation.Ledger (ℕ × ℤ) where
+  stock := (orientedStateCharge state, state.factorStock)
+  credit := (0, 0)
+  converted := (budget - orientedStateCharge state, 0)
+  total := (budget, state.origin.c ^ 6)
+  conservation := by
+    apply Prod.ext
+    · simp only [Prod.fst_add]
+      omega
+    · simp only [Prod.snd_add, add_zero, factorStock]
+      exact state.origin.native_ledger
+
+/-- A fixed-budget N6 transaction.  `horigin` is the load-bearing statement
+that the neutral cubic successor still belongs to the same primitive
+sixth-factor state. -/
+noncomputable def accountTransfer
+    [NumberField K] [IsCyclotomicExtension {3} ℚ K]
+    (budget : ℕ) (before after : OrientedState hζ)
+    (hbefore : orientedStateCharge before ≤ budget)
+    (hdrop : orientedStateCharge after ≤ orientedStateCharge before)
+    (horigin : after.origin = before.origin) :
+    Fermat.Conservation.Transfer (ℕ × ℤ) where
+  before := before.accountLedger budget hbefore
+  after := after.accountLedger budget (hdrop.trans hbefore)
+  spent :=
+    (orientedStateCharge before - orientedStateCharge after, 0)
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := by
+    simp only [accountLedger]
+    rw [horigin]
+  available_decomposition := by
+    apply Prod.ext
+    · simp only [accountLedger, Prod.fst_add, add_zero]
+      omega
+    · simp only [accountLedger, factorStock, Prod.snd_add, add_zero]
+      rw [horigin]
+  converted_decomposition := by
+    apply Prod.ext
+    · simp only [accountLedger, Prod.fst_add]
+      omega
+    · simp only [accountLedger, Prod.snd_add, add_zero]
+
+/-- The exact norm-charge debit is the first-coordinate projection of the
+origin-linked transaction. -/
+theorem accountTransfer_stock_decomposition
+    [NumberField K] [IsCyclotomicExtension {3} ℚ K]
+    (budget : ℕ) (before after : OrientedState hζ)
+    (hbefore : orientedStateCharge before ≤ budget)
+    (hdrop : orientedStateCharge after ≤ orientedStateCharge before)
+    (horigin : after.origin = before.origin) :
+    orientedStateCharge before = orientedStateCharge after +
+      (accountTransfer budget before after hbefore hdrop horigin).spent.1 := by
+  have havailable := congrArg Prod.fst
+    (accountTransfer budget before after hbefore hdrop horigin).available_eq
+  simpa only [Fermat.Conservation.Transfer.available, accountTransfer,
+    accountLedger, Prod.fst_add, add_zero] using havailable
+
+/-- Both endpoint factor ledgers are projections of the same transaction. -/
+theorem accountTransfer_factor_ledgers
+    [NumberField K] [IsCyclotomicExtension {3} ℚ K]
+    (budget : ℕ) (before after : OrientedState hζ)
+    (hbefore : orientedStateCharge before ≤ budget)
+    (hdrop : orientedStateCharge after ≤ orientedStateCharge before)
+    (horigin : after.origin = before.origin) :
+    (before.factorStock = before.origin.c ^ 6) ∧
+      (after.factorStock = after.origin.c ^ 6) := by
+  let transfer :=
+    accountTransfer budget before after hbefore hdrop horigin
+  have hconservation := transfer.endpoint_conservation
+  constructor
+  · have hsnd := congrArg Prod.snd hconservation.1
+    simpa only [transfer, accountTransfer, accountLedger, Prod.snd_add,
+      add_zero] using hsnd
+  · have hsnd := congrArg Prod.snd hconservation.2
+    simpa only [transfer, accountTransfer, accountLedger, Prod.snd_add,
+      add_zero] using hsnd
+
+/-- Every origin-carrying oriented state produces a positive accounted
+transaction while retaining its primitive sixth-factor origin. -/
+theorem charged_descent_transfer
+    [NumberField K] [IsCyclotomicExtension {3} ℚ K]
+    (state : OrientedState hζ) (budget : ℕ)
+    (hbudget : orientedStateCharge state ≤ budget) :
+    ∃ (next : OrientedState hζ)
+      (horigin : next.origin = state.origin)
+      (hdrop : orientedStateCharge next ≤ orientedStateCharge state),
+      0 < (accountTransfer budget state next hbudget hdrop horigin).spent.1 := by
+  obtain ⟨nextCurrent, hlt⟩ := state.current.exists_multiplicity_lt
+  let next : OrientedState hζ :=
+    { origin := state.origin
+      current := nextCurrent }
+  have hcharge : orientedStateCharge next < orientedStateCharge state := by
+    exact drainCharge_lt hlt
+  refine ⟨next, rfl, hcharge.le, ?_⟩
+  simpa only [accountTransfer] using Nat.sub_pos_of_lt hcharge
+
+end OrientedState
+
+/-- The legacy strict successor is the stock projection of the positive,
+origin-linked N6 transaction. -/
 theorem exists_orientedStateCharge_lt
     [NumberField K] [IsCyclotomicExtension {3} ℚ K]
     (state : OrientedState hζ) :
     ∃ next : OrientedState hζ,
       orientedStateCharge next < orientedStateCharge state := by
-  obtain ⟨next, hlt⟩ := state.exists_multiplicity_lt
-  exact ⟨next, drainCharge_lt hlt⟩
+  obtain ⟨next, horigin, hdrop, hspent⟩ :=
+    state.charged_descent_transfer (orientedStateCharge state) le_rfl
+  refine ⟨next, ?_⟩
+  rw [OrientedState.accountTransfer_stock_decomposition
+    (orientedStateCharge state) state next le_rfl hdrop horigin]
+  exact Nat.lt_add_of_pos_right hspent
 
 namespace PrimitiveSolution
 
