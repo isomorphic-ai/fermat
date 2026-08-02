@@ -411,12 +411,55 @@ def channelCertificate :
     simp [depth]
   surplus_eq_coupling_sub_one := fun _row ↦ rfl
 
+/-- The selected high-Bernoulli coefficient vector in the generated flow
+carrier.  This is the conductor-59 specialization of `accountFlow`, not a
+second flow map. -/
+noncomputable def accountFlowCoefficients :
+    (RealFlow.generatorOrbit realGaugeData).CoefficientSpace :=
+  fun row ↦
+    (RealFlow.highEigenvalue (data := realGaugeData) row : ℚ)
+
+/-- One selected Bernoulli row as the product transaction joining generated
+coefficient flow to its coupling-credit debit. -/
+noncomputable def accountedFlowTransfer (row : Fin gaugeData.rank) :
+    Fermat.Conservation.Transfer
+      ((RealFlow.generatorOrbit realGaugeData).CoefficientSpace × ℕ) :=
+  RealFlow.BernoulliChannelCertificate.accountedChannelTransfer
+    realGaugeData channelCertificate accountFlowCoefficients row 0
+
+/-- The selected transaction retains the canonical `accountFlow` value as
+its generated stock at both endpoints. -/
+theorem accountedFlow_stock (row : Fin gaugeData.rank) :
+    (accountedFlowTransfer row).before.stock.1 =
+        (RealFlow.generatorOrbit realGaugeData).accountFlow
+          accountFlowCoefficients ∧
+      (accountedFlowTransfer row).after.stock.1 =
+        (RealFlow.generatorOrbit realGaugeData).accountFlow
+          accountFlowCoefficients := by
+  simpa only [accountedFlowTransfer] using
+    RealFlow.BernoulliChannelCertificate.accountedChannel_flow_stock
+      realGaugeData channelCertificate accountFlowCoefficients row 0
+
+/-- The table's coupling/surplus split is the natural credit projection of
+the selected generated-flow transaction. -/
+theorem accountedFlow_credit_decomposition (row : Fin gaugeData.rank) :
+    channelCertificate.couplingChannel row =
+      channelCertificate.surplus row + (accountedFlowTransfer row).spent.2 := by
+  simpa only [accountedFlowTransfer] using
+    RealFlow.BernoulliChannelCertificate.accountedChannel_credit_decomposition
+      realGaugeData channelCertificate accountFlowCoefficients row 0
+
 /-- The explicit surplus channel happens to vanish in all 28 selected rows;
 it remains a field of `channelCertificate` rather than disappearing. -/
 theorem channelCertificate_surplus_eq_zero
     (row : Fin gaugeData.rank) :
-    channelCertificate.surplus row = 0 :=
-  surplus_eq_zero row
+    channelCertificate.surplus row = 0 := by
+  have hcredit := accountedFlow_credit_decomposition row
+  change couplingChannel row =
+    surplus row + min (couplingChannel row) 1 at hcredit
+  rw [Nat.min_eq_left (couplingChannel_le_one row)] at hcredit
+  change surplus row = 0
+  omega
 
 /-- Every generated high Bernoulli numerator is cube-free at the campaign
 prime.  This is now a corollary of the full channel profile and its named

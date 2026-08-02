@@ -237,6 +237,122 @@ abbrev BernoulliChannelCertificate {p : ℕ}
   Bernoulli.ChannelCertificate p
     (highIndex (data := data)) (highEigenvalue (data := data))
 
+namespace BernoulliChannelCertificate
+
+variable {p : ℕ} (data : RealGaugeData p)
+  (channels : BernoulliChannelCertificate data)
+
+private theorem coupling_split (row : Fin data.rank) :
+    channels.couplingChannel row =
+      channels.surplus row + min (channels.couplingChannel row) 1 := by
+  rw [channels.surplus_eq_coupling_sub_one]
+  by_cases hzero : channels.couplingChannel row = 0
+  · simp [hzero]
+  · have hone : 1 ≤ channels.couplingChannel row :=
+      Nat.one_le_iff_ne_zero.mpr hzero
+    rw [Nat.min_eq_right hone]
+    omega
+
+/-- A generated coefficient vector together with the unspent Bernoulli
+coupling channel.  The structural lift has already entered the converted
+column, so one later coupling debit can line up with a graded repayment. -/
+noncomputable def accountedChannelBeforeLedger
+    (coefficients : (generatorOrbit data).CoefficientSpace)
+    (row : Fin data.rank) (converted : ℕ) :
+    Fermat.Conservation.Ledger
+      ((generatorOrbit data).CoefficientSpace × ℕ) where
+  stock := ((generatorOrbit data).accountFlow coefficients, 0)
+  credit := (0, channels.couplingChannel row)
+  converted := (0, channels.liftChannel row + converted)
+  total :=
+    ((generatorOrbit data).accountFlow coefficients,
+      channels.depth row + converted)
+  conservation := by
+    apply Prod.ext
+    · simp only [Prod.fst_add, add_zero]
+    · simp only [Prod.snd_add, zero_add]
+      rw [channels.depth_decomposition row]
+      omega
+
+/-- After one available coupling debit, explicit surplus remains as credit
+and the spent amount joins the converted structural lift. -/
+noncomputable def accountedChannelAfterLedger
+    (coefficients : (generatorOrbit data).CoefficientSpace)
+    (row : Fin data.rank) (converted : ℕ) :
+    Fermat.Conservation.Ledger
+      ((generatorOrbit data).CoefficientSpace × ℕ) where
+  stock := ((generatorOrbit data).accountFlow coefficients, 0)
+  credit := (0, channels.surplus row)
+  converted :=
+    (0, channels.liftChannel row + converted +
+      min (channels.couplingChannel row) 1)
+  total :=
+    ((generatorOrbit data).accountFlow coefficients,
+      channels.depth row + converted)
+  conservation := by
+    apply Prod.ext
+    · simp only [Prod.fst_add, add_zero]
+    · simp only [Prod.snd_add, zero_add]
+      have hdepth := channels.depth_decomposition row
+      have hcoupling := channels.coupling_split data row
+      omega
+
+/-- The generated flow stock and its Bernoulli coupling debit in one common
+product carrier.  Flow stock is fixed; at most one coupling layer moves to
+conversion, and every surplus layer remains credited. -/
+noncomputable def accountedChannelTransfer
+    (coefficients : (generatorOrbit data).CoefficientSpace)
+    (row : Fin data.rank) (converted : ℕ) :
+    Fermat.Conservation.Transfer
+      ((generatorOrbit data).CoefficientSpace × ℕ) where
+  before := channels.accountedChannelBeforeLedger data coefficients row converted
+  after := channels.accountedChannelAfterLedger data coefficients row converted
+  spent := (0, min (channels.couplingChannel row) 1)
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    apply Prod.ext
+    · simp only [accountedChannelBeforeLedger,
+        accountedChannelAfterLedger, Prod.fst_add, add_zero]
+    · simp only [accountedChannelBeforeLedger,
+        accountedChannelAfterLedger, Prod.snd_add, zero_add]
+      exact channels.coupling_split data row
+  converted_decomposition := by
+    apply Prod.ext
+    · simp only [accountedChannelBeforeLedger,
+        accountedChannelAfterLedger, Prod.fst_add, add_zero]
+    · simp only [accountedChannelBeforeLedger,
+        accountedChannelAfterLedger, Prod.snd_add]
+
+/-- The natural-coordinate projection is the exact coupling-credit split
+consumed by the selected one-layer repayment. -/
+theorem accountedChannel_credit_decomposition
+    (coefficients : (generatorOrbit data).CoefficientSpace)
+    (row : Fin data.rank) (converted : ℕ) :
+    channels.couplingChannel row = channels.surplus row +
+      (channels.accountedChannelTransfer data coefficients row converted).spent.2 := by
+  have havailable := congrArg Prod.snd
+    (channels.accountedChannelTransfer data coefficients row converted).available_eq
+  simpa only [Fermat.Conservation.Transfer.available,
+    accountedChannelTransfer, accountedChannelBeforeLedger,
+    accountedChannelAfterLedger, Prod.snd_add, zero_add] using havailable
+
+/-- The product account retains the generated `accountFlow` value as stock
+at both endpoints. -/
+theorem accountedChannel_flow_stock
+    (coefficients : (generatorOrbit data).CoefficientSpace)
+    (row : Fin data.rank) (converted : ℕ) :
+    (channels.accountedChannelTransfer data coefficients row converted).before.stock.1 =
+        (generatorOrbit data).accountFlow coefficients ∧
+      (channels.accountedChannelTransfer data coefficients row converted).after.stock.1 =
+        (generatorOrbit data).accountFlow coefficients :=
+  ⟨rfl, rfl⟩
+
+end BernoulliChannelCertificate
+
 /-- The flow permit retains every depth channel.  `surplus_eq_zero` is the
 checked no-obstruction boundary, while the possibly nonzero surplus itself
 remains available in `channels`. -/

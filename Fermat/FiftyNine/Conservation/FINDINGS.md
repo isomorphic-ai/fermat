@@ -1,5 +1,16 @@
 # N59 conservation findings
 
+## 2026-08-02 — row 21 is the selected one-layer account
+
+- The retained table already identifies row `21` as the only coupling row.
+  In the new product-carrier specialization, its second coordinate has
+  `credit 1 → 0`, `converted 1 → 2`, `total 2 → 2`, and `spent = 1`.
+- For any genuinely funded conductor-59 grade-one state, these columns agree
+  with `repay_layer_transfer (repayOne_of_capacity_and_flow hζ) state 1`.
+  Thus square attainment and selected forcing can use the same `accountFlow`
+  transaction that repayment consumes, while the funding receipt remains an
+  explicit argument and no higher-layer transport is asserted.
+
 ## 2026-08-01 — LEDGER-LITERAL discovery: the selected instance projects twice
 
 - `NoBernoulliCubeObstruction59` quantifies only the non-divisibility of the

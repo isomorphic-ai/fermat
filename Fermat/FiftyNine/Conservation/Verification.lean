@@ -51,6 +51,31 @@ claim for the other five fields. -/
 the way through the legacy cube-free compatibility theorem. -/
 
 #guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.BernoulliChannelCertificate.accountedChannelTransfer,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+#guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.BernoulliChannelCertificate.accountedChannelTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.BernoulliChannelCertificate.accountedChannel_credit_decomposition,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Conservation.Credit.RealFlow.BernoulliChannelCertificate.accountedChannel_flow_stock,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlow_credit_decomposition,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.channelCertificate_surplus_eq_zero,
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree,
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer
+
+#guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.highBernoulliNumerator_cubeFree,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #guard_depends_on
@@ -63,16 +88,44 @@ the way through the legacy cube-free compatibility theorem. -/
   Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59,
   Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.noBernoulliCubeObstruction59,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+#guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow,
   Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_of_flow,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+#guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_on_exponentCycle_of_flow,
   Fermat.Conservation.Credit.Bernoulli.ChannelCertificate.depth_conservation
 #guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_on_exponentCycle_of_flow,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.deepExponentForcing_on_exponentCycle_of_flow,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+
+/-! The unique square-depth row is the natural-coordinate projection of the
+selected funded grade-one repayment transaction. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DepthCertificate.highEigenvalue_square_attained,
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DepthCertificate.depthTwoCertificate,
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DepthCertificate.fundedRow_maps_to_repayLayer,
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DepthCertificate.fundedRow_maps_to_repayLayer,
+  Fermat.Conservation.Credit.Repayment.repay_layer_transfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DepthCertificate.fundedRow_maps_to_repayLayer,
   Fermat.Conservation.Ledger.conservation_identity
 
 /-! The selected `d = 1` equivalence and its legacy repayment corollary

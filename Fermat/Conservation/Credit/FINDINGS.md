@@ -224,6 +224,21 @@
 
 Newest findings are recorded first.
 
+## 2026-08-02 — accountFlow and the irregular layer share one transaction
+
+- A Bernoulli channel can retain generated coefficient flow and its depth
+  debit in one carrier, `CoefficientSpace × ℕ`: `accountFlow` is fixed stock,
+  coupling is credit, the structural lift is already converted, and at most
+  one coupling unit moves to conversion.  No second flow map is required.
+- At the conductor-59 irregular row the natural-coordinate transaction is
+  exactly `credit 1 → 0`, `converted 1 → 2`, `total 2 → 2`, with `spent = 1`.
+  Those are the columns of `repay_layer_transfer` for every supplied funded
+  grade-one state when its accumulated conversion counter is `1`.
+- This comparison is conditional on an actual `C ... 1` state, as it must be:
+  the table certifies the amount consumed but does not manufacture a funded
+  residual state.  It therefore maps exact depth to the existing one-layer
+  operator without inhabiting the higher-layer `LayerTransport` seam.
+
 ## 2026-07-30 — the fold is generic but the Fermat class ledger is absent
 
 - `Fold.lean` implements conjugation-compatible class ledgers, transpose as
