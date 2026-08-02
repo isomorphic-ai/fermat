@@ -273,9 +273,8 @@ equalities are projections of the corresponding global ledgers. -/
   Fermat.Conservation.Credit.Cycle.IndexCertificate.sound,
   Fermat.Conservation.Ledger.conservation_identity
 
-/-! Gauge quotient and class fold retain their native local identities.  C1
-now accounts the quotient vacuum globally; the source-to-quotient Transfer
-and the class-fold accounting adapter remain deliberately separate. -/
+/-! Gauge quotienting moves the faithful generated matrix account from credit
+to conversion while preserving the stock charge in a product carrier. -/
 
 #guard_depends_on
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot,
@@ -287,6 +286,18 @@ and the class-fold accounting adapter remain deliberately separate. -/
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot,
   Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.sourceToQuotientTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.sourceToQuotient_credit_decomposition,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientCharge_quotientState,
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.sourceToQuotientTransfer
+#guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientCharge_quotientState,
+  Fermat.Conservation.Transfer.total_preserved
+#guard_depends_on
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq,
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientLedger_eq_bot
 #guard_depends_on
@@ -296,8 +307,41 @@ and the class-fold accounting adapter remain deliberately separate. -/
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq,
   Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotient_vacuum_and_charge_eq,
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.sourceToQuotientTransfer
+#guard_depends_on
   Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation,
   Fermat.Conservation.Credit.Fold.relativeNormFold_apply
+#guard_depends_on
+  Fermat.Conservation.Credit.Fold.relativeNormFold_apply,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.Credit.Fold.relativeNormFold_class_eq_zero_of_coprime_card,
+  Fermat.Conservation.Credit.Fold.relativeNormFoldClassTransfer_of_coprime_card
+#guard_depends_on
+  Fermat.Conservation.Credit.Fold.relativeNormFold_class_eq_zero_of_coprime_card,
+  Fermat.Conservation.Transfer.converted_decomposition
+#guard_depends_on
+  Fermat.Conservation.Credit.Fold.conjugate_class_fold_eq_zero_of_coprime_card,
+  Fermat.Conservation.Credit.Fold.conjugateClassFoldTransfer_of_coprime_card
+#guard_depends_on
+  Fermat.Conservation.Credit.Fold.odd_torsion_netting,
+  Fermat.Conservation.Credit.Fold.oddTorsionNettingTransfer
+#guard_depends_on
+  Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenD_of_relativeNormFold,
+  Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenDFoldToVacuumTransfer
+#guard_depends_on
+  Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenD_of_conjugationTranspose,
+  Fermat.Conservation.KummerDrain.AllocatedFactorLedger.conjugationFoldToVacuumTransfer
+#guard_depends_on
+  Fermat.Conservation.KummerDrain.factorPrincipalizationPermit_of_vandiver_relations,
+  Fermat.Conservation.Credit.Fold.oddTorsionNettingTransfer
+#guard_depends_on
+  Fermat.Conservation.KummerDrain.factorPrincipalizationPermit_finTwo_of_vandiver_relations,
+  Fermat.Conservation.Credit.Fold.oddTorsionNettingTransfer
 
 /-! ## C1: generated vacuum and two-sided semilattice -/
 
@@ -508,13 +552,13 @@ info: 'Fermat.Conservation.Credit.Fold.conjugateTranspose_conjugateTranspose' de
 #print axioms Fermat.Conservation.Credit.Fold.conjugateTranspose_conjugateTranspose
 
 /--
-info: 'Fermat.Conservation.Credit.Fold.relativeNormFold_apply' depends on axioms: [Quot.sound]
+info: 'Fermat.Conservation.Credit.Fold.relativeNormFold_apply' depends on axioms: [propext, Quot.sound]
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.Fold.relativeNormFold_apply
 
 /--
-info: 'Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation' depends on axioms: [Quot.sound]
+info: 'Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation' depends on axioms: [propext, Quot.sound]
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.Credit.Fold.relativeNormFold_apply_of_conjugation

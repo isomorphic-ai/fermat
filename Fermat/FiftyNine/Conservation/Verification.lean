@@ -66,6 +66,9 @@ the way through the legacy cube-free compatibility theorem. -/
   Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer,
   Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlow_stock,
+  Fermat.Conservation.Credit.Flow.GeneratorOrbit.accountFlow
+#guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlow_credit_decomposition,
   Fermat.Conservation.Transfer.available_eq
 #guard_depends_on
@@ -116,6 +119,9 @@ selected funded grade-one repayment transaction. -/
   Fermat.FiftyNine.Conservation.DepthCertificate.highEigenvalue_square_attained,
   Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.DepthCertificate.fundedRow_accountedFlow_spends_one,
+  Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer
+#guard_depends_on
   Fermat.FiftyNine.Conservation.DepthCertificate.depthTwoCertificate,
   Fermat.FiftyNine.Conservation.Instance.BernoulliCertificate.accountedFlowTransfer
 #guard_depends_on
@@ -153,6 +159,9 @@ in its definition: the stock receipt and a generated C1 vacuum. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.regularClosure59,
   Fermat.Conservation.Credit.kummer_credit_vacuum
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.regularClosure59,
+  Fermat.Conservation.Ledger.conservation_identity
 
 /-! The mixed stock receipt remains heterogeneous, but each selected field is
 now routed through its own literal account. -/
@@ -174,18 +183,41 @@ now routed through its own literal account. -/
 
 #guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
   Fermat.Two.charge_ledger
+#guard_depends_on Fermat.Two.charge_ledger,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
+  Fermat.Four.Conservation.PrimitiveSolution.stateCharge_pos
 #guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
   Fermat.Six.Conservation.sixth_ledger
+#guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
+  Fermat.Seven.Conservation.gauge_decomposition
+#guard_depends_on Fermat.Seven.Conservation.gauge_decomposition,
+  Fermat.Conservation.Ledger.conservation_identity
 
-/-! N2's Pythagorean balance theorems remain locally literal.  These guards
-do not conflate them with the separately repaired isometry/Noether path. -/
+/-! N2's Pythagorean balance theorems now reach the global ledger through
+the source-inverted public expansion. -/
 
 #guard_depends_on Fermat.Two.pythagoras,
   Fermat.Two.charge_ledger
+#guard_depends_on Fermat.Two.pythagoras,
+  Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on Fermat.Two.emptyCoupling_of_additive,
   Fermat.Two.charge_ledger
+#guard_depends_on Fermat.Two.emptyCoupling_of_additive,
+  Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on Fermat.Two.pythagoras_conserved,
   Fermat.Two.charge_ledger
+#guard_depends_on Fermat.Two.pythagoras_conserved,
+  Fermat.Conservation.Ledger.conservation_identity
+
+/-! The selected N4 positivity receipt is now the positive-transaction
+projection used by the complete descent cone. -/
+
+#guard_depends_on
+  Fermat.Four.Conservation.PrimitiveSolution.stateCharge_pos,
+  Fermat.Conservation.Transfer.available_lt_of_spent_pos
+#guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
+  Fermat.Conservation.Transfer.available_lt_of_spent_pos
 
 /-! The scalar Noether invariant is now the total-column projection of a
 zero-spent global transfer.  The transfer itself consumes all four named
@@ -222,9 +254,8 @@ downstream floor path retain these dependencies transitively. -/
 #guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
   Fermat.Five.Conservation.gaugeTransfer
 
-/-! The selected gauge quotient keeps both of its native projection
-identities load-bearing, without pretending they have already been joined
-by a global accounting morphism. -/
+/-! The selected gauge quotient joins its stock and faithful matrix-credit
+projections in the specialized source-to-quotient transaction. -/
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot,
@@ -233,6 +264,15 @@ by a global accounting morphism. -/
   Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot,
   Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.sourceToQuotientTransfer,
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.sourceToQuotientTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.sourceToQuotient_credit_decomposition,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.sourceToQuotient_charge_eq,
+  Fermat.Conservation.Transfer.total_preserved
+#guard_depends_on
   Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq,
   Fermat.FiftyNine.Conservation.GaugeQuotient.debitLedger_quotient_eq_bot
 #guard_depends_on
@@ -240,7 +280,33 @@ by a global accounting morphism. -/
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.quotientCharge_quotientState
 #guard_depends_on
   Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq,
+  Fermat.FiftyNine.Conservation.GaugeQuotient.sourceToQuotient_charge_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq,
   Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeQuotient.quotient_vacuum_and_charge_eq,
+  Fermat.Conservation.Credit.GaugeQuotient.PrimeData.sourceToQuotientTransfer
+
+/-! Relative-norm (7d) and every consumer conditional on supplied (7a) now
+project the selected fold/netting transactions.  No guard asserts a producer
+for the still-open statewise (7a) premise. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Fold.vandiverSevenD_of_relativeNormFold,
+  Fermat.FiftyNine.Conservation.Fold.vandiverSevenDFoldToVacuumTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Fold.vandiverSevenD_of_conjugationTranspose,
+  Fermat.FiftyNine.Conservation.Fold.conjugationFoldToVacuumTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Fold.factorPrincipalizationPermit_of_sevenA_and_conjugationTranspose,
+  Fermat.Conservation.Credit.Fold.oddTorsionNettingTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD,
+  Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenDFoldToVacuumTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA,
+  Fermat.Conservation.Credit.Fold.oddTorsionNettingTransfer
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 

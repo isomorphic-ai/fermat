@@ -1,5 +1,19 @@
 # N59 conservation findings
 
+## 2026-08-02 — the remaining selected rows share their generic transfers
+
+- The selected N2 and N4 receipt fields can retain their public theorem
+  names while becoming projections of their generic Ledger/Transfer paths.
+  The N4 import is narrowed to the descent module so the selected receipt
+  cannot bypass the accounted positivity theorem.
+- The selected gauge quotient specializes the faithful source-to-quotient
+  product transaction; its stock equality is now the first-coordinate
+  projection of total preservation, while matrix debit is moved intact from
+  credit to converted.
+- Conductor-59 (7d) and every consumer conditional on supplied (7a) can
+  inherit the generic fold/netting Transfers.  The canonical state-produced
+  (7a) transaction remains absent and is still exactly the Lemma-I seam.
+
 ## 2026-08-02 — selected C3 now starts with the typed operator
 
 - `repayOne_of_capacity_and_flow` specializes the generic typed

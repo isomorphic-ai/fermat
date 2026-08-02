@@ -1,5 +1,53 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER-COMPLETE discovery: the final rows source-invert cleanly
+
+- N2's balance adapter must own the raw norm expansion in its `Ledger`
+  constructor; the public `charge_ledger` can then be the exact
+  `conservation_identity` projection.  N4 needs the dual dependency surgery:
+  its descent uses raw solution positivity internally, while the public
+  `stateCharge_pos` is moved below the descent transaction and derived from
+  `available_lt_of_spent_pos`.  This avoids a circular or cosmetic alias.
+- The gauge quotient has a faithful common carrier
+  `ℕ × MatrixAccount`: stock charge occupies the first coordinate, generated
+  debit credit occupies the second, and quotienting moves that exact matrix
+  amount to converted while preserving total.  No cardinality collapse or
+  replacement matrix is needed.
+- The relative-norm fold is an entrywise two-column ledger, and its class
+  vanishing proofs can be source-inverted as fold-to-vacuum Transfers.
+  Likewise, odd-torsion netting can move the `(debit, receivable)` pair to
+  converted in `Transfer (Class × Class)`.  Supplied-(7a) consumers then
+  become literal; only the state-produced (7a) transaction remains a seam.
+
+## 2026-08-02 — the legacy C3 verdict is a d=1 projection
+
+- The finite-index and primitive-relation calculation need only exist once:
+  it constructs a total typed `Repay ... 1`, after which the old
+  `IsRepaid` theorem is the residual projection of that operator.
+- A `Transfer ℕ` intentionally forgets the residual group element, so the
+  truthful compatibility theorem pairs the `IsRepaid` residual equation
+  from `LayerConservation` with the same step's exact one-unit credit debit.
+  This makes the legacy verdict depend on `repay_layer_transfer` without
+  pretending that natural-number columns alone prove a group root equation.
+- The selected conductor-59 operator can specialize the typed constructor
+  directly; no verdict-to-operator round trip and no `LayerTransport`
+  inhabitant is needed at grade one.
+
+## 2026-08-02 — accountFlow and the irregular layer share one transaction
+
+- A Bernoulli channel can retain generated coefficient flow and its depth
+  debit in one carrier, `CoefficientSpace × ℕ`: `accountFlow` is fixed stock,
+  coupling is credit, the structural lift is already converted, and at most
+  one coupling unit moves to conversion.  No second flow map is required.
+- At the conductor-59 irregular row the natural-coordinate transaction is
+  exactly `credit 1 → 0`, `converted 1 → 2`, `total 2 → 2`, with `spent = 1`.
+  Those are the columns of `repay_layer_transfer` for every supplied funded
+  grade-one state when its accumulated conversion counter is `1`.
+- This comparison is conditional on an actual `C ... 1` state, as it must be:
+  the table certifies the amount consumed but does not manufacture a funded
+  residual state.  It therefore maps exact depth to the existing one-layer
+  operator without inhabiting the higher-layer `LayerTransport` seam.
+
 ## 2026-08-02 — TRANSFER-COMPLETE discovery: N1 is the exact vacuum adapter
 
 - The requested N1 carrier needs no surrogate: `stock = charge u + charge v`,
@@ -221,37 +269,6 @@
   command must traverse declaration values transitively (not merely inspect
   source text or direct constants) and fail when the named identity is not
   reached.
-
-Newest findings are recorded first.
-
-## 2026-08-02 — the legacy C3 verdict is a d=1 projection
-
-- The finite-index and primitive-relation calculation need only exist once:
-  it constructs a total typed `Repay ... 1`, after which the old
-  `IsRepaid` theorem is the residual projection of that operator.
-- A `Transfer ℕ` intentionally forgets the residual group element, so the
-  truthful compatibility theorem pairs the `IsRepaid` residual equation
-  from `LayerConservation` with the same step's exact one-unit credit debit.
-  This makes the legacy verdict depend on `repay_layer_transfer` without
-  pretending that natural-number columns alone prove a group root equation.
-- The selected conductor-59 operator can specialize the typed constructor
-  directly; no verdict-to-operator round trip and no `LayerTransport`
-  inhabitant is needed at grade one.
-
-## 2026-08-02 — accountFlow and the irregular layer share one transaction
-
-- A Bernoulli channel can retain generated coefficient flow and its depth
-  debit in one carrier, `CoefficientSpace × ℕ`: `accountFlow` is fixed stock,
-  coupling is credit, the structural lift is already converted, and at most
-  one coupling unit moves to conversion.  No second flow map is required.
-- At the conductor-59 irregular row the natural-coordinate transaction is
-  exactly `credit 1 → 0`, `converted 1 → 2`, `total 2 → 2`, with `spent = 1`.
-  Those are the columns of `repay_layer_transfer` for every supplied funded
-  grade-one state when its accumulated conversion counter is `1`.
-- This comparison is conditional on an actual `C ... 1` state, as it must be:
-  the table certifies the amount consumed but does not manufacture a funded
-  residual state.  It therefore maps exact depth to the existing one-layer
-  operator without inhabiting the higher-layer `LayerTransport` seam.
 
 ## 2026-07-30 — the fold is generic but the Fermat class ledger is absent
 
