@@ -95,9 +95,23 @@ in its definition: the stock receipt and a generated C1 vacuum. -/
   Fermat.FiftyNine.Conservation.Instance.regularClosure59,
   Fermat.Conservation.Credit.kummer_credit_vacuum
 
-/-! The mixed stock receipt retains its native N2 and N6 identities.  The
-separate guards below record its newly accounted N3 and N5 fields without
-pretending that all seven fields form one common-carrier ledger. -/
+/-! The mixed stock receipt remains heterogeneous, but each selected field is
+now routed through its own literal account. -/
+
+#guard_depends_on Fermat.One.coupling_empty,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.One.charge_ledger,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.One.solvable,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.One.always_balances,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.One.not_holdsAt_one,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
+  Fermat.One.coupling_empty
+#guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
+  Fermat.Conservation.Ledger.conservation_identity
 
 #guard_depends_on Fermat.FiftyNine.Conservation.stockSpineReceipt,
   Fermat.Two.charge_ledger

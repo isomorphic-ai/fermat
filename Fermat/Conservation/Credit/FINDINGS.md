@@ -1,5 +1,19 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER-COMPLETE discovery: N1 is the exact vacuum adapter
+
+- The requested N1 carrier needs no surrogate: `stock = charge u + charge v`,
+  `credit = coupling u v`, `converted = 0`, and
+  `total = charge (u + v)` form a literal `Ledger ℕ`.  Its conservation proof
+  uses the raw exponent-one arithmetic once; the public empty-coupling and
+  balance equations are separate projections of
+  `Ledger.conservation_identity`.
+- `solvable`, `always_balances`, and `not_holdsAt_one` now derive through that
+  balance projection, so the endpoint no longer repeats the witness equation
+  with `norm_num`.  The N59 receipt's selected N1 field reaches the same
+  adapter, and all six new dependency guards compile in the complete selected
+  verification leaf.
+
 ## 2026-08-02 — TRANSFER-COMPLETE discovery: N7 has one genuine iterable branch
 
 - The septic source can be retained without weakening standalone Lebesgue
