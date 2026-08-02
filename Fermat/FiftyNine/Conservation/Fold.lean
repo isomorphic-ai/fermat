@@ -48,6 +48,30 @@ theorem not_dvd_plusClassNumber :
   exact Credit.boundedSinnottBridge (K := K) hζ
     (CapacityCertificate.capacityCertificate (K := K) hζ).2
 
+private theorem coprime_plusClassNumber :
+    Nat.Coprime 59 (Fintype.card (ClassGroup (𝓞 K⁺))) := by
+  have hclass :
+      ¬59 ∣ NumberField.classNumber K⁺ :=
+    not_dvd_plusClassNumber (K := K)
+  change ¬59 ∣ Fintype.card (ClassGroup (𝓞 K⁺)) at hclass
+  exact (by norm_num : Nat.Prime 59).coprime_iff_not_dvd.mpr hclass
+
+/-- The conductor-59 specialization of the allocated relative-norm
+fold-to-vacuum transaction. -/
+noncomputable def vandiverSevenDFoldToVacuumTransfer
+    {ι : Type*}
+    (ledger :
+      Fermat.Conservation.KummerDrain.AllocatedFactorLedger
+        (p := 59) (K := K) ι)
+    (i j : ι)
+    (hfold :
+      Ideal.map (algebraMap (𝓞 K⁺) (𝓞 K))
+          (Ideal.relNorm (𝓞 K⁺) (ledger.rootIdeal i)) =
+        ledger.rootIdeal i * ledger.rootIdeal j) :
+    Fermat.Conservation.Transfer (Additive (ClassGroup (𝓞 K))) :=
+  ledger.vandiverSevenDFoldToVacuumTransfer
+    (R := 𝓞 K⁺) (coprime_plusClassNumber (K := K)) i j hfold
+
 /-- Vandiver's equation (7d) for an allocated state pair whose product is
 the extension of its real relative norm. -/
 theorem vandiverSevenD_of_relativeNormFold
@@ -61,16 +85,34 @@ theorem vandiverSevenD_of_relativeNormFold
           (Ideal.relNorm (𝓞 K⁺) (ledger.rootIdeal i)) =
         ledger.rootIdeal i * ledger.rootIdeal j) :
     ledger.VandiverSevenD i j := by
-  have hclass :
-      ¬59 ∣ NumberField.classNumber K⁺ :=
-    not_dvd_plusClassNumber (K := K)
-  have hcoprime :
-      Nat.Coprime 59 (Fintype.card (ClassGroup (𝓞 K⁺))) := by
-    change ¬59 ∣ Fintype.card (ClassGroup (𝓞 K⁺)) at hclass
-    exact (by norm_num : Nat.Prime 59).coprime_iff_not_dvd.mpr hclass
-  set_option maxRecDepth 2000 in
-    exact ledger.vandiverSevenD_of_relativeNormFold
-      (R := 𝓞 K⁺) hcoprime i j hfold
+  unfold Fermat.Conservation.KummerDrain.AllocatedFactorLedger.VandiverSevenD
+  have hconverted :=
+    (vandiverSevenDFoldToVacuumTransfer
+      ledger i j hfold).converted_decomposition
+  simpa only [vandiverSevenDFoldToVacuumTransfer,
+    Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenDFoldToVacuumTransfer,
+    Fermat.Conservation.Credit.Fold.relativeNormFoldClassTransfer_of_coprime_card,
+    Fermat.Conservation.Credit.Fold.foldToVacuumTransfer,
+    Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootClass,
+    Fermat.Conservation.Ledger.vacuum, zero_add]
+    using hconverted.symm
+
+/-- Conjugation-transpose instantiated at conductor 59 as the same
+fold-to-vacuum transaction. -/
+noncomputable def conjugationFoldToVacuumTransfer
+    {ι : Type*}
+    (ledger :
+      Fermat.Conservation.KummerDrain.AllocatedFactorLedger
+        (p := 59) (K := K) ι)
+    (i j : ι)
+    (htranspose :
+      ledger.rootIdeal j =
+        Ideal.map
+          (NumberField.IsCMField.ringOfIntegersComplexConj K)
+          (ledger.rootIdeal i)) :
+    Fermat.Conservation.Transfer (Additive (ClassGroup (𝓞 K))) :=
+  ledger.conjugationFoldToVacuumTransfer
+    (coprime_plusClassNumber (K := K)) i j htranspose
 
 /-- Conjugation as ledger transpose supplies the relative-norm fold, so the
 selected allocated pair satisfies Vandiver's equation (7d). -/
@@ -86,15 +128,18 @@ theorem vandiverSevenD_of_conjugationTranspose
           (NumberField.IsCMField.ringOfIntegersComplexConj K)
           (ledger.rootIdeal i)) :
     ledger.VandiverSevenD i j := by
-  have hclass :
-      ¬59 ∣ NumberField.classNumber K⁺ :=
-    not_dvd_plusClassNumber (K := K)
-  have hcoprime :
-      Nat.Coprime 59 (Fintype.card (ClassGroup (𝓞 K⁺))) := by
-    change ¬59 ∣ Fintype.card (ClassGroup (𝓞 K⁺)) at hclass
-    exact (by norm_num : Nat.Prime 59).coprime_iff_not_dvd.mpr hclass
-  exact ledger.vandiverSevenD_of_conjugationTranspose
-    hcoprime i j htranspose
+  unfold Fermat.Conservation.KummerDrain.AllocatedFactorLedger.VandiverSevenD
+  have hconverted :=
+    (conjugationFoldToVacuumTransfer
+      ledger i j htranspose).converted_decomposition
+  simpa only [conjugationFoldToVacuumTransfer,
+    Fermat.Conservation.KummerDrain.AllocatedFactorLedger.conjugationFoldToVacuumTransfer,
+    Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenDFoldToVacuumTransfer,
+    Fermat.Conservation.Credit.Fold.relativeNormFoldClassTransfer_of_coprime_card,
+    Fermat.Conservation.Credit.Fold.foldToVacuumTransfer,
+    Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootClass,
+    Fermat.Conservation.Ledger.vacuum, zero_add]
+    using hconverted.symm
 
 /-- On a two-node allocated ledger, the one statewise (7a) equation and the
 conjugation-transpose law discharge the complete quotient permit.  The

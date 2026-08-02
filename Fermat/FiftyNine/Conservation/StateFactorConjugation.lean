@@ -211,6 +211,17 @@ theorem StateLinkedIdealPair.ledger_conjugationTranspose
   simpa using
     StateLinkedIdealPair.minusIdeal_eq_map_conj_plusIdeal pair
 
+/-- The actual normalized state pair retained as conductor 59's selected
+fold-to-vacuum class transaction. -/
+noncomputable def StateLinkedIdealPair.vandiverSevenDFoldToVacuumTransfer
+    {hζ : IsPrimitiveRoot ζ 59}
+    {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
+    (pair : StateLinkedIdealPair hζ S hz) :
+    Fermat.Conservation.Transfer (Additive (ClassGroup (𝓞 K))) :=
+  Fermat.FiftyNine.Conservation.Fold.conjugationFoldToVacuumTransfer
+    (ledger := pair.ledger) (i := 0) (j := 1)
+    (ledger_conjugationTranspose pair)
+
 set_option maxHeartbeats 0 in
 set_option maxRecDepth 2000 in
 /-- Vandiver's equation (7d) for the actual normalized state pair.  The
@@ -220,10 +231,19 @@ theorem StateLinkedIdealPair.vandiverSevenD
     {hζ : IsPrimitiveRoot ζ 59}
     {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
     (pair : StateLinkedIdealPair hζ S hz) :
-    pair.ledger.VandiverSevenD 0 1 :=
-  Fermat.FiftyNine.Conservation.Fold.vandiverSevenD_of_conjugationTranspose
-    (ledger := pair.ledger) (i := 0) (j := 1)
-    (ledger_conjugationTranspose pair)
+    pair.ledger.VandiverSevenD 0 1 := by
+  unfold Fermat.Conservation.KummerDrain.AllocatedFactorLedger.VandiverSevenD
+  have hconverted :=
+    (vandiverSevenDFoldToVacuumTransfer pair).converted_decomposition
+  simpa only [vandiverSevenDFoldToVacuumTransfer,
+    Fermat.FiftyNine.Conservation.Fold.conjugationFoldToVacuumTransfer,
+    Fermat.Conservation.KummerDrain.AllocatedFactorLedger.conjugationFoldToVacuumTransfer,
+    Fermat.Conservation.KummerDrain.AllocatedFactorLedger.vandiverSevenDFoldToVacuumTransfer,
+    Fermat.Conservation.Credit.Fold.relativeNormFoldClassTransfer_of_coprime_card,
+    Fermat.Conservation.Credit.Fold.foldToVacuumTransfer,
+    Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootClass,
+    Fermat.Conservation.Ledger.vacuum, zero_add]
+    using hconverted.symm
 
 /-- Once the same state pair supplies Vandiver's remaining Lemma-I
 relation (7a), its derived fold relation (7d) nets both selected classes

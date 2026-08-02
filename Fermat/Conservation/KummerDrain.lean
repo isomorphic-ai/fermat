@@ -198,6 +198,29 @@ def AllocatedFactorLedger.VandiverSevenD {ι : Type*}
   ledger.rootClass i + ledger.rootClass j = 0
 
 omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- The allocated debit/receivable class fold as an explicit transaction to
+vacuum.  Its spent field is the killed relative-norm class amount. -/
+noncomputable def AllocatedFactorLedger.vandiverSevenDFoldToVacuumTransfer
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    [Algebra R (𝓞 K)] [Module.Finite R (𝓞 K)]
+    [Module.IsTorsionFree R (𝓞 K)]
+    [Fintype (ClassGroup R)]
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (hp : p.Coprime (Fintype.card (ClassGroup R)))
+    (i j : ι)
+    (hfold :
+      Ideal.map (algebraMap R (𝓞 K))
+          (Ideal.relNorm R (ledger.rootIdeal i)) =
+        ledger.rootIdeal i * ledger.rootIdeal j) :
+    Fermat.Conservation.Transfer (Additive (ClassGroup (𝓞 K))) :=
+  Fermat.Conservation.Credit.Fold.relativeNormFoldClassTransfer_of_coprime_card
+    (R := R) (S := 𝓞 K) (L := K) hp
+    (ledger.rootIdeal i) (ledger.rootIdeal j)
+    (ledger.root_ne_zero i) (ledger.root_ne_zero j)
+    (ledger.factor i) (ledger.root_pow i) hfold
+
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
 /-- Vandiver's relation (7d) from the literal relative-norm fold of one
 allocated debit/receivable pair.  The base class-group coprimality kills
 the selected real norm class; no global assertion about the class group of
@@ -217,12 +240,52 @@ theorem AllocatedFactorLedger.vandiverSevenD_of_relativeNormFold
         ledger.rootIdeal i * ledger.rootIdeal j) :
     ledger.VandiverSevenD i j := by
   unfold AllocatedFactorLedger.VandiverSevenD
-  exact
-    Fermat.Conservation.Credit.Fold.relativeNormFold_class_eq_zero_of_coprime_card
-      (R := R) (S := 𝓞 K) (L := K) hp
-      (ledger.rootIdeal i) (ledger.rootIdeal j)
-      (ledger.root_ne_zero i) (ledger.root_ne_zero j)
-      (ledger.factor i) (ledger.root_pow i) hfold
+  have hconverted :=
+    (ledger.vandiverSevenDFoldToVacuumTransfer
+      (R := R) hp i j hfold).converted_decomposition
+  simpa only [AllocatedFactorLedger.vandiverSevenDFoldToVacuumTransfer,
+    Fermat.Conservation.Credit.Fold.relativeNormFoldClassTransfer_of_coprime_card,
+    Fermat.Conservation.Credit.Fold.foldToVacuumTransfer,
+    AllocatedFactorLedger.rootClass,
+    Fermat.Conservation.Ledger.vacuum, zero_add]
+    using hconverted.symm
+
+omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
+/-- Conjugation supplies the selected fold equality inside the same
+allocated fold-to-vacuum transaction. -/
+noncomputable def AllocatedFactorLedger.conjugationFoldToVacuumTransfer
+    [NumberField.IsCMField K]
+    {ι : Type*}
+    (ledger : AllocatedFactorLedger (p := p) (K := K) ι)
+    (hp :
+      p.Coprime
+        (Fintype.card
+          (ClassGroup
+            (𝓞 (NumberField.maximalRealSubfield K)))))
+    (i j : ι)
+    (htranspose :
+      ledger.rootIdeal j =
+        Ideal.map
+          (NumberField.IsCMField.ringOfIntegersComplexConj K)
+          (ledger.rootIdeal i)) :
+    Fermat.Conservation.Transfer (Additive (ClassGroup (𝓞 K))) :=
+  ledger.vandiverSevenDFoldToVacuumTransfer
+    (R := 𝓞 (NumberField.maximalRealSubfield K)) hp i j (by
+      calc
+        Ideal.map
+            (algebraMap
+              (𝓞 (NumberField.maximalRealSubfield K)) (𝓞 K))
+            (Ideal.relNorm
+              (𝓞 (NumberField.maximalRealSubfield K))
+              (ledger.rootIdeal i)) =
+            ledger.rootIdeal i *
+              Ideal.map
+                (NumberField.IsCMField.ringOfIntegersComplexConj K)
+                (ledger.rootIdeal i) :=
+          Fermat.Conservation.Credit.Fold.map_relativeNorm_eq_mul_conjugate
+            (ledger.rootIdeal i) (ledger.root_ne_zero i)
+        _ = ledger.rootIdeal i * ledger.rootIdeal j := by
+          rw [htranspose])
 
 omit [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K] in
 /-- Conjugation acting as the ledger transpose supplies the concrete
@@ -243,23 +306,17 @@ theorem AllocatedFactorLedger.vandiverSevenD_of_conjugationTranspose
           (NumberField.IsCMField.ringOfIntegersComplexConj K)
           (ledger.rootIdeal i)) :
     ledger.VandiverSevenD i j := by
-  apply ledger.vandiverSevenD_of_relativeNormFold
-    (R := 𝓞 (NumberField.maximalRealSubfield K)) hp i j
-  calc
-    Ideal.map
-        (algebraMap
-          (𝓞 (NumberField.maximalRealSubfield K)) (𝓞 K))
-        (Ideal.relNorm
-          (𝓞 (NumberField.maximalRealSubfield K))
-          (ledger.rootIdeal i)) =
-        ledger.rootIdeal i *
-          Ideal.map
-            (NumberField.IsCMField.ringOfIntegersComplexConj K)
-            (ledger.rootIdeal i) :=
-      Fermat.Conservation.Credit.Fold.map_relativeNorm_eq_mul_conjugate
-        (ledger.rootIdeal i) (ledger.root_ne_zero i)
-    _ = ledger.rootIdeal i * ledger.rootIdeal j := by
-      rw [htranspose]
+  unfold AllocatedFactorLedger.VandiverSevenD
+  have hconverted :=
+    (ledger.conjugationFoldToVacuumTransfer
+      hp i j htranspose).converted_decomposition
+  simpa only [AllocatedFactorLedger.conjugationFoldToVacuumTransfer,
+    AllocatedFactorLedger.vandiverSevenDFoldToVacuumTransfer,
+    Fermat.Conservation.Credit.Fold.relativeNormFoldClassTransfer_of_coprime_card,
+    Fermat.Conservation.Credit.Fold.foldToVacuumTransfer,
+    AllocatedFactorLedger.rootClass,
+    Fermat.Conservation.Ledger.vacuum, zero_add]
+    using hconverted.symm
 
 /-- The first post-allocation permit required by Kummer's weighted
 second-case step. -/

@@ -16,6 +16,7 @@ fields: an odd-torsion class which the two equations identify both with
 another class and with its negative must vanish.
 -/
 import Fermat.Conservation.Credit.Vacuum
+import Fermat.Conservation.Transfer
 import Mathlib.NumberTheory.NumberField.CMField
 import Mathlib.NumberTheory.NumberField.ClassNumber
 import Mathlib.RingTheory.ClassGroup.Basic
@@ -57,6 +58,56 @@ def relativeNormClass {Class : Type v} [AddCommGroup Class]
     (conjugate : Class →+ Class) (c : Class) : Class :=
   c + conjugate c
 
+/-- One debit/receivable pair in the class matrix, accounted in the global
+three-column vocabulary.  The two matrix views are the spendable columns;
+their relative-norm fold is the conserved total. -/
+def relativeNormFoldLedger {Node : Type u} {Class : Type v}
+    [AddCommGroup Class] (ledger : ClassLedger Node Class)
+    (debtor creditor : Node) : Fermat.Conservation.Ledger Class where
+  stock := ledger debtor creditor
+  credit := ledger creditor debtor
+  converted := 0
+  total := relativeNormFold ledger debtor creditor
+  conservation := by
+    simp only [add_zero, relativeNormFold, conjugateTranspose,
+      Matrix.add_apply, Matrix.transpose_apply]
+
+/-- A class pair whose relative-norm fold is zero is an accounted transaction
+to the global vacuum.  The killed fold remains explicit as `spent`; the
+converted equation records that this amount is zero in the class carrier. -/
+def foldToVacuumTransfer {Class : Type v} [AddCommGroup Class]
+    (debit receivable : Class) (hfold : debit + receivable = 0) :
+    Fermat.Conservation.Transfer Class where
+  before :=
+    { stock := debit
+      credit := receivable
+      converted := 0
+      total := debit + receivable
+      conservation := by simp }
+  after := Fermat.Conservation.Ledger.vacuum
+  spent := debit + receivable
+  before_conserved := Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved := Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := by
+    simpa only [Fermat.Conservation.Ledger.vacuum] using hfold
+  available_decomposition := by
+    change debit + receivable = 0 + 0 + (debit + receivable)
+    simp
+  converted_decomposition := by
+    change (0 : Class) = 0 + (debit + receivable)
+    simpa only [zero_add] using hfold.symm
+
+/-- The vanishing fold is the converted-column projection of its transaction
+to vacuum; the killed amount is retained as `spent` until this projection. -/
+theorem foldToVacuum_converted_eq_zero
+    {Class : Type v} [AddCommGroup Class]
+    (debit receivable : Class) (hfold : debit + receivable = 0) :
+    debit + receivable = 0 := by
+  have hconverted :=
+    (foldToVacuumTransfer debit receivable hfold).converted_decomposition
+  simpa only [foldToVacuumTransfer,
+    Fermat.Conservation.Ledger.vacuum, zero_add] using hconverted.symm
+
 /-- The additive class of a nonzero fractional ideal.  Nonzeroness is kept
 explicit because the class group contains only invertible fractional
 ideals. -/
@@ -87,7 +138,11 @@ theorem relativeNormFold_apply {Node : Type u} {Class : Type v}
     (debtor creditor : Node) :
     relativeNormFold ledger debtor creditor =
       ledger debtor creditor + ledger creditor debtor :=
-  rfl
+  by
+    have hconservation :=
+      Fermat.Conservation.Ledger.conservation_identity
+        (relativeNormFoldLedger ledger debtor creditor)
+    simpa only [relativeNormFoldLedger, add_zero] using hconservation.symm
 
 /-- On a conjugation-compatible ledger, the matrix fold is literally the
 relative norm of its debit entry. -/
@@ -240,7 +295,7 @@ private theorem product_isPrincipal_of_relativeNormFold
 The arithmetic input is the concrete state equality identifying the
 extension of `relNorm I` with the debit/receivable product `I * J`; the
 theorem does not assume the desired class relation. -/
-theorem relativeNormFold_class_eq_zero_of_coprime_card
+private theorem relativeNormFold_class_eq_zero_of_coprime_card_raw
     {R S L : Type*} [CommRing R] [CommRing S]
     [Algebra R S] [Module.Finite R S] [IsTorsionFree R S]
     [IsDedekindDomain R] [IsDedekindDomain S]
@@ -264,6 +319,59 @@ theorem relativeNormFold_class_eq_zero_of_coprime_card
     (R := S) (K := L) (I := I * J)).mpr
       (product_isPrincipal_of_relativeNormFold
         (R := R) (S := S) hp I J hI a hpow hfold)
+
+/-- The ideal-theoretic relative norm, accounted as a transaction from its
+two selected class columns to vacuum.  The arithmetic principality proof is
+encapsulated in the transaction's converted decomposition; `spent` retains
+the killed fold until consumers take that common `Transfer` projection. -/
+noncomputable def relativeNormFoldClassTransfer_of_coprime_card
+    {R S L : Type*} [CommRing R] [CommRing S]
+    [Algebra R S] [Module.Finite R S] [IsTorsionFree R S]
+    [IsDedekindDomain R] [IsDedekindDomain S]
+    [Fintype (ClassGroup R)]
+    [Field L] [Algebra S L] [IsFractionRing S L]
+    {p : ℕ} (hp : p.Coprime (Fintype.card (ClassGroup R)))
+    (I J : Ideal S) (hI : I ≠ 0) (hJ : J ≠ 0)
+    (a : S) (hpow : I ^ p = Ideal.span {a})
+    (hfold :
+      Ideal.map (algebraMap R S) (Ideal.relNorm R I) = I * J) :
+    Fermat.Conservation.Transfer (Additive (ClassGroup S)) :=
+  foldToVacuumTransfer
+    (fractionalIdealClass
+      (I : FractionalIdeal S⁰ L)
+      (FractionalIdeal.coeIdeal_ne_zero.mpr hI))
+    (fractionalIdealClass
+      (J : FractionalIdeal S⁰ L)
+      (FractionalIdeal.coeIdeal_ne_zero.mpr hJ))
+    (relativeNormFold_class_eq_zero_of_coprime_card_raw
+      hp I J hI hJ a hpow hfold)
+
+/-- The ideal-theoretic class fold is the converted-column projection of
+its accounted transfer to vacuum. -/
+theorem relativeNormFold_class_eq_zero_of_coprime_card
+    {R S L : Type*} [CommRing R] [CommRing S]
+    [Algebra R S] [Module.Finite R S] [IsTorsionFree R S]
+    [IsDedekindDomain R] [IsDedekindDomain S]
+    [Fintype (ClassGroup R)]
+    [Field L] [Algebra S L] [IsFractionRing S L]
+    {p : ℕ} (hp : p.Coprime (Fintype.card (ClassGroup R)))
+    (I J : Ideal S) (hI : I ≠ 0) (hJ : J ≠ 0)
+    (a : S) (hpow : I ^ p = Ideal.span {a})
+    (hfold :
+      Ideal.map (algebraMap R S) (Ideal.relNorm R I) = I * J) :
+    fractionalIdealClass
+        (I : FractionalIdeal S⁰ L)
+        (FractionalIdeal.coeIdeal_ne_zero.mpr hI) +
+      fractionalIdealClass
+        (J : FractionalIdeal S⁰ L)
+        (FractionalIdeal.coeIdeal_ne_zero.mpr hJ) = 0 := by
+  have hconverted :=
+    (relativeNormFoldClassTransfer_of_coprime_card
+      (R := R) (S := S) (L := L)
+      hp I J hI hJ a hpow hfold).converted_decomposition
+  simpa only [relativeNormFoldClassTransfer_of_coprime_card,
+    foldToVacuumTransfer, Fermat.Conservation.Ledger.vacuum, zero_add]
+    using hconverted.symm
 
 noncomputable section CMRelativeNorm
 
@@ -414,6 +522,33 @@ theorem map_relativeNorm_eq_mul_conjugate
   · exact map_relativeNorm_le_mul_conjugate I
   · rw [absNorm_map_relativeNorm, absNorm_mul_conjugate]
 
+private theorem map_conjugate_ne_zero
+    (I : Ideal (𝓞 K)) (hI : I ≠ 0) :
+    I.map (NumberField.IsCMField.ringOfIntegersComplexConj K) ≠ 0 := by
+  intro hz
+  apply hI
+  exact
+    (Ideal.map_eq_bot_iff_of_injective
+      (NumberField.IsCMField.ringOfIntegersComplexConj K).injective).mp hz
+
+/-- The concrete CM conjugate pair, retained as the selected class-fold
+transaction to vacuum. -/
+def conjugateClassFoldTransfer_of_coprime_card
+    {p : ℕ}
+    (hp :
+      p.Coprime
+        (Fintype.card (ClassGroup (𝓞 K⁺))))
+    (I : Ideal (𝓞 K)) (hI : I ≠ 0)
+    (a : 𝓞 K) (hpow : I ^ p = Ideal.span {a}) :
+    Fermat.Conservation.Transfer
+      (Additive (ClassGroup (𝓞 K))) :=
+  relativeNormFoldClassTransfer_of_coprime_card
+    (R := 𝓞 K⁺) (S := 𝓞 K) (L := K) hp
+    I
+    (I.map (NumberField.IsCMField.ringOfIntegersComplexConj K))
+    hI (map_conjugate_ne_zero I hI) a hpow
+    (map_relativeNorm_eq_mul_conjugate I hI)
+
 /-- The concrete CM conjugate pair has zero folded class whenever the real
 class-group order is coprime to `p` and the selected ideal has the allocated
 principal `p`th power. -/
@@ -439,19 +574,13 @@ theorem conjugate_class_fold_eq_zero_of_coprime_card
               (NumberField.IsCMField.ringOfIntegersComplexConj K).injective).mp
                 hz)) =
       0 := by
-  apply relativeNormFold_class_eq_zero_of_coprime_card
-    (R := 𝓞 K⁺) (S := 𝓞 K) (L := K) hp
-    I
-    (I.map (NumberField.IsCMField.ringOfIntegersComplexConj K))
-    hI
-    (by
-      intro hz
-      apply hI
-      exact
-        (Ideal.map_eq_bot_iff_of_injective
-          (NumberField.IsCMField.ringOfIntegersComplexConj K).injective).mp hz)
-    a hpow
-  exact map_relativeNorm_eq_mul_conjugate I hI
+  have hconverted :=
+    (conjugateClassFoldTransfer_of_coprime_card
+      hp I hI a hpow).converted_decomposition
+  simpa only [conjugateClassFoldTransfer_of_coprime_card,
+    relativeNormFoldClassTransfer_of_coprime_card,
+    foldToVacuumTransfer, Fermat.Conservation.Ledger.vacuum, zero_add]
+    using hconverted.symm
 
 end CMRelativeNorm
 
@@ -463,7 +592,7 @@ The `p`-torsion equation changes `(p - 1) • receivable` into
 `-receivable`, so (7a) says the two classes agree.  The relative-norm fold
 (7d) says they are negatives.  Oddness then eliminates the remaining
 two-torsion state class. -/
-theorem odd_torsion_netting
+private theorem odd_torsion_netting_raw
     {Class : Type v} [AddCommGroup Class] {p : ℕ}
     (hodd : Odd p) (debit receivable : Class)
     (htorsion : p • receivable = 0)
@@ -498,5 +627,64 @@ theorem odd_torsion_netting
     simpa only [add_nsmul, mul_nsmul, htwo, nsmul_zero,
       zero_add, one_nsmul] using htorsion
   exact ⟨heq.trans hreceivable, hreceivable⟩
+
+/-- Vandiver netting as one accounted transaction on the faithful product
+carrier.  Debit and receivable remain separate coordinates; the transaction
+can land in vacuum exactly because the odd-torsion arithmetic kills both.
+The `spent` field is the selected pair, so its converted decomposition is
+the load-bearing zero statement. -/
+def oddTorsionNettingTransfer
+    {Class : Type v} [AddCommGroup Class] {p : ℕ}
+    (hodd : Odd p) (debit receivable : Class)
+    (htorsion : p • receivable = 0)
+    (sevenA : debit + (p - 1) • receivable = 0)
+    (sevenD : debit + receivable = 0) :
+    Fermat.Conservation.Transfer (Class × Class) where
+  before :=
+    { stock := 0
+      credit := (debit, receivable)
+      converted := 0
+      total := (debit, receivable)
+      conservation := by simp }
+  after := Fermat.Conservation.Ledger.vacuum
+  spent := (debit, receivable)
+  before_conserved := Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved := Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := by
+    have hnet :=
+      odd_torsion_netting_raw hodd debit receivable htorsion sevenA sevenD
+    apply Prod.ext
+    · exact hnet.1
+    · exact hnet.2
+  available_decomposition := by
+    change (0 : Class × Class) + (debit, receivable) =
+      0 + 0 + (debit, receivable)
+    simp
+  converted_decomposition := by
+    have hnet :=
+      odd_torsion_netting_raw hodd debit receivable htorsion sevenA sevenD
+    change (0 : Class × Class) = 0 + (debit, receivable)
+    apply Prod.ext
+    · simpa using hnet.1.symm
+    · simpa using hnet.2.symm
+
+/-- **Odd-torsion netting.** The two zero-class conclusions are the two
+coordinate projections of the netting transaction's converted equation. -/
+theorem odd_torsion_netting
+    {Class : Type v} [AddCommGroup Class] {p : ℕ}
+    (hodd : Odd p) (debit receivable : Class)
+    (htorsion : p • receivable = 0)
+    (sevenA : debit + (p - 1) • receivable = 0)
+    (sevenD : debit + receivable = 0) :
+    debit = 0 ∧ receivable = 0 := by
+  have hconverted :=
+    (oddTorsionNettingTransfer
+      hodd debit receivable htorsion sevenA sevenD).converted_decomposition
+  change (0 : Class × Class) = 0 + (debit, receivable) at hconverted
+  have hpair : (debit, receivable) = (0 : Class × Class) := by
+    simpa only [zero_add] using hconverted.symm
+  exact
+    ⟨by simpa using congrArg Prod.fst hpair,
+      by simpa using congrArg Prod.snd hpair⟩
 
 end Fermat.Conservation.Credit.Fold
