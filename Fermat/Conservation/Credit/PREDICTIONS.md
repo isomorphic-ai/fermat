@@ -267,3 +267,32 @@ inspecting the implementation bodies or either project's toolchain.
   existing state equations line up.  The three prohibited seams should become
   sharper `Transfer`-inhabitation statements, not theorem claims: no Lemma I,
   transformer successor, or endpoint will be manufactured.
+
+## TRANSFER-COMPLETE prediction — 2026-08-02
+
+Recorded after reading `TRANSFER2-TASK.md` and the controlling boundary map,
+before inspecting or editing any Lean implementation for this sweep.
+
+- **N6/N7 enrichment.**  N7 is expected to resist more than N6.  The N6
+  oriented successor should be repairable by retaining its source
+  `PrimitiveSolution` and projecting the existing cube/factor laws, whereas
+  N7's source septic state must pass through the Lebesgue branch and charged
+  successor constructors before a single factor-linked account can be stated.
+  I expect constructor call sites, rather than the arithmetic proofs, to form
+  most of the compiler work queue.
+- **Endpoint stability.**  I predict the public statements of
+  `holdsAt_six_conservation` and `holdsAt_seven_conservation` will survive
+  untouched.  Their implementations and intermediate successor witnesses may
+  need rerouting through the enriched states and positive Transfers, but the
+  added origin fields should project away at the old theorem boundary.
+- **Remaining leverage order.**  N1 should be a small exact adapter once the
+  vacuum ledger uses `charge_ledger` as its conservation proof.  The
+  conductor-59 instance rows should then flip by specializing `accountFlow`
+  and identifying the selected depth/coupling/surplus split with the funded
+  one-layer debit.  Legacy C3 should be a derived verdict from the witnessed
+  graded `d = 1` transfer, with no second repayment proof.
+- **Expected frontier.**  I expect all other classified rows either to become
+  literal through these adapters or to reduce exactly to one of the three
+  prohibited inhabitants: the allocated Lemma-I transaction, the positive
+  stock-credit successor transaction, or the funded higher-layer residual
+  transaction.  No fourth free-standing obstruction is predicted.
