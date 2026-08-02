@@ -1,5 +1,26 @@
 # Credit-ladder findings
 
+## 2026-08-02 — TRANSFER-COMPLETE discovery: N7 has one genuine iterable branch
+
+- The septic source can be retained without weakening standalone Lebesgue
+  Théorème I: a `SepticFactorState` stores the original ternary equation and
+  derives its signed factor balance through the now-global
+  `septic_ledger`; `SepticChargedState` pairs that origin with the generic
+  arithmetic state and copies the origin at every successor.
+- The ordinary branch now has a fixed-budget `Ledger (ℕ × ℤ)` and positive
+  Transfer whose natural coordinate drains norm charge while its integer
+  stock/credit coordinates retain the originating septic factorization.
+  Its old strict successor, branch contradiction, ternary assembly, and both
+  exponent-seven endpoint declarations are projections of that transaction.
+- The exceptional `7 ∣ T` branch also carries the real septic origin, but its
+  only successor is elimination from its local allocation contradiction.
+  Manufacturing a positive transaction there would add no accounting
+  content, so that successor remains direct; the branch is globally literal
+  through its septic-origin ledger.  Separately, the complete rank-two gauge
+  decomposition and both norm-gauge equalities now project from global
+  Ledgers/zero-spent Transfers.  All old N7 guards and the public endpoint
+  statement survive unchanged.
+
 ## 2026-08-02 — TRANSFER-COMPLETE discovery: enrich the cone, not the generic arithmetic
 
 - The committed N6 and N7 verification leaves both compile before surgery.

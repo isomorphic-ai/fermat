@@ -18,6 +18,7 @@ its torsion coordinate.  Mathlib's regulator is the covolume of precisely
 this full unit lattice.
 -/
 import Fermat.Conservation.Floor
+import Fermat.Conservation.Transfer
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 import Mathlib.NumberTheory.NumberField.Units.Regulator
 import Mathlib.Tactic.NormNum
@@ -89,13 +90,37 @@ def fullGaugeUnit (K : Type*) [Field K] [NumberField K]
     (coordinates : FullGaugeCoordinates K) : (𝓞 K)ˣ :=
   coordinates.1 * gaugeUnit K coordinates.2
 
+/-- A supplied complete unit decomposition as a literal global account.
+The additive wrapper turns multiplication in the unit group into the
+additive carrier expected by `Ledger`. -/
+def gaugeAccountLedger (u : (𝓞 K)ˣ)
+    (coordinates : FullGaugeCoordinates K)
+    (hcoordinates : u = fullGaugeUnit K coordinates) :
+    Fermat.Conservation.Ledger (Additive (𝓞 K)ˣ) where
+  stock := Additive.ofMul (fullGaugeUnit K coordinates)
+  credit := 0
+  converted := 0
+  total := Additive.ofMul u
+  conservation := by
+    simpa only [add_zero] using congrArg Additive.ofMul hcoordinates.symm
+
 /-- Every unit has a unique decomposition into a torsion unit and powers of
 the complete Dirichlet fundamental system. -/
 theorem gauge_decomposition (u : (𝓞 K)ˣ) :
     ∃! coordinates : FullGaugeCoordinates K,
       u = fullGaugeUnit K coordinates := by
-  simpa only [FullGaugeCoordinates, fullGaugeUnit, gaugeUnit] using
-    NumberField.Units.exist_unique_eq_mul_prod K u
+  have hraw :
+      ∃! coordinates : FullGaugeCoordinates K,
+        u = fullGaugeUnit K coordinates := by
+    simpa only [FullGaugeCoordinates, fullGaugeUnit, gaugeUnit] using
+      NumberField.Units.exist_unique_eq_mul_prod K u
+  obtain ⟨coordinates, hcoordinates, hunique⟩ := hraw
+  refine ⟨coordinates, ?_, hunique⟩
+  have hconservation :=
+    Fermat.Conservation.Ledger.conservation_identity
+      (gaugeAccountLedger u coordinates hcoordinates)
+  simp only [gaugeAccountLedger, add_zero] at hconservation
+  exact congrArg Additive.toMul hconservation.symm
 
 /-- The free unit rank of a seventh cyclotomic field is exactly two. -/
 theorem unitRank_eq_two [IsCyclotomicExtension {7} ℚ K] :
@@ -112,19 +137,92 @@ def gaugeCoordinatesEquiv [IsCyclotomicExtension {7} ℚ K] :
   simpa only [GaugeCoordinates, unitRank_eq_two (K := K)] using
     finTwoArrowEquiv ℤ
 
-/-- **Rank-two gauge invariance.** Multiplication by the unit represented by
-either integer direction in the complete fundamental system leaves the
-observable charge unchanged. -/
-theorem charge_gauge_invariant (e : GaugeCoordinates K) (z : 𝓞 K) :
+private theorem charge_gauge_invariant_raw
+    (e : GaugeCoordinates K) (z : 𝓞 K) :
     charge ((gaugeUnit K e : 𝓞 K) * z) = charge z :=
   charge_unit_invariant (gaugeUnit K e) z
 
-/-- Torsion and both free coordinates together still leave charge
-unchanged. -/
-theorem charge_full_gauge_invariant
+private theorem charge_full_gauge_invariant_raw
     (coordinates : FullGaugeCoordinates K) (z : 𝓞 K) :
     charge ((fullGaugeUnit K coordinates : 𝓞 K) * z) = charge z :=
   charge_unit_invariant (fullGaugeUnit K coordinates) z
+
+/-- A seventh-cyclotomic charge under one fixed accounting budget. -/
+def chargeLedger (budget : ℕ) (z : 𝓞 K)
+    (hbudget : charge z ≤ budget) :
+    Fermat.Conservation.Ledger ℕ where
+  stock := charge z
+  credit := 0
+  converted := budget - charge z
+  total := budget
+  conservation := by omega
+
+/-- A free rank-two gauge step as a zero-spent transaction preserving all
+four global columns. -/
+def gaugeTransfer (budget : ℕ) (e : GaugeCoordinates K) (z : 𝓞 K)
+    (hbudget : charge z ≤ budget) :
+    Fermat.Conservation.Transfer ℕ where
+  before := chargeLedger budget z hbudget
+  after := chargeLedger budget ((gaugeUnit K e : 𝓞 K) * z) (by
+    rw [charge_gauge_invariant_raw]
+    exact hbudget)
+  spent := 0
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    simp only [chargeLedger, add_zero]
+    exact (charge_gauge_invariant_raw e z).symm
+  converted_decomposition := by
+    simp only [chargeLedger, add_zero]
+    rw [charge_gauge_invariant_raw]
+
+/-- A full torsion-plus-free gauge step as the corresponding zero-spent
+transaction. -/
+def fullGaugeTransfer (budget : ℕ)
+    (coordinates : FullGaugeCoordinates K) (z : 𝓞 K)
+    (hbudget : charge z ≤ budget) :
+    Fermat.Conservation.Transfer ℕ where
+  before := chargeLedger budget z hbudget
+  after := chargeLedger budget
+    ((fullGaugeUnit K coordinates : 𝓞 K) * z) (by
+      rw [charge_full_gauge_invariant_raw]
+      exact hbudget)
+  spent := 0
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity _
+  total_preserved := rfl
+  available_decomposition := by
+    simp only [chargeLedger, add_zero]
+    exact (charge_full_gauge_invariant_raw coordinates z).symm
+  converted_decomposition := by
+    simp only [chargeLedger, add_zero]
+    rw [charge_full_gauge_invariant_raw]
+
+/-- **Rank-two gauge invariance.** The legacy scalar equality is the stock
+projection of the zero-spent gauge transaction. -/
+theorem charge_gauge_invariant (e : GaugeCoordinates K) (z : 𝓞 K) :
+    charge ((gaugeUnit K e : 𝓞 K) * z) = charge z := by
+  have havailable :=
+    (gaugeTransfer (charge z) e z le_rfl).available_eq
+  symm
+  simpa only [Fermat.Conservation.Transfer.available, gaugeTransfer,
+    chargeLedger, add_zero] using havailable
+
+/-- Torsion and both free coordinates together still leave charge unchanged,
+as the same stock projection for the full-gauge transaction. -/
+theorem charge_full_gauge_invariant
+    (coordinates : FullGaugeCoordinates K) (z : 𝓞 K) :
+    charge ((fullGaugeUnit K coordinates : 𝓞 K) * z) = charge z := by
+  have havailable :=
+    (fullGaugeTransfer (charge z) coordinates z le_rfl).available_eq
+  symm
+  simpa only [Fermat.Conservation.Transfer.available, fullGaugeTransfer,
+    chargeLedger, add_zero] using havailable
 
 /-! ## Regulator vocabulary -/
 
@@ -190,11 +288,25 @@ theorem psiSeven_neg_compressed (a b : ℤ) :
   simp only [psiSeven]
   ring
 
-/-- The exact septic conservation ledger for a sum of seventh powers. -/
+/-- The septic factorization as a literal global accounting state. -/
+def septicAccountLedger (a b : ℤ) :
+    Fermat.Conservation.Ledger ℤ where
+  stock := (a + b) * psiSeven a (-b)
+  credit := 0
+  converted := 0
+  total := a ^ 7 + b ^ 7
+  conservation := by
+    simp only [psiSeven]
+    ring
+
+/-- The exact septic conservation ledger for a sum of seventh powers, now
+the stock/total projection of its global account. -/
 theorem septic_ledger (a b : ℤ) :
     a ^ 7 + b ^ 7 = (a + b) * psiSeven a (-b) := by
-  simp only [psiSeven]
-  ring
+  have hconservation :=
+    Fermat.Conservation.Ledger.conservation_identity
+      (septicAccountLedger a b)
+  simpa only [septicAccountLedger, add_zero] using hconservation.symm
 
 /-! ## The ramified drain quantum -/
 

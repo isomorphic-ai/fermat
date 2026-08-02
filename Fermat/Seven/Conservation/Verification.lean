@@ -16,8 +16,59 @@ import Fermat.Seven.Conservation
 
 /-! ## Ledger-literal gate -/
 
-/-! Both terminal case closures and every downstream N7 public assembly
-retain the septic ledger through their elaborated proof values. -/
+/-! The native septic fold, complete gauge, ordinary source successor, both
+terminal closures, and every downstream N7 assembly retain their literal
+global accounts. -/
+
+#guard_depends_on Fermat.Seven.Conservation.gauge_decomposition,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on Fermat.Seven.Conservation.charge_gauge_invariant,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on Fermat.Seven.Conservation.charge_full_gauge_invariant,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on Fermat.Seven.Conservation.septic_ledger,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SepticFactorState.ledger,
+  Fermat.Seven.Conservation.septic_ledger
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SepticChargedState.accountTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SepticChargedState.accountTransfer,
+  Fermat.Seven.Conservation.septic_ledger
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SepticChargedState.accountTransfer_stock_decomposition,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SepticChargedState.accountTransfer_factor_ledgers,
+  Fermat.Conservation.Transfer.endpoint_conservation
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SepticChargedState.charged_descent_transfer,
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SepticChargedState.accountTransfer
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SepticChargedState.exists_stateCharge_lt,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SepticChargedState.impossible_conservation,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.ChargedState.stateCharge_rankTwoGauge_invariant,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.SevenDvdTBranchState.stateCharge_rankTwoGauge_invariant,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.not_seven_dvd_t_branch_impossible,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.ternaryOnlyTrivial_lebesgue,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Seven.Conservation.Reconstruction.Lebesgue.holdsAt_seven_lebesgue,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on Fermat.Seven.holdsAt_seven_conservation,
+  Fermat.Conservation.Transfer.available_eq
 
 #guard_depends_on
   Fermat.Seven.Conservation.Reconstruction.Lebesgue.seven_dvd_t_branch_impossible,

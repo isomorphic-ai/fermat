@@ -37,13 +37,29 @@ closure are projections of literal global accounts and Transfers. -/
 #guard_depends_on
   Fermat.Six.Conservation.OrientedState.accountTransfer_factor_ledgers,
   Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Six.Conservation.OrientedState.accountTransfer_factor_ledgers,
+  Fermat.Conservation.Transfer.endpoint_conservation
+#guard_depends_on
+  Fermat.Six.Conservation.OrientedState.accountTransfer_stock_decomposition,
+  Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Six.Conservation.OrientedState.charged_descent_transfer,
+  Fermat.Six.Conservation.OrientedState.accountTransfer
 #guard_depends_on Fermat.Six.Conservation.exists_orientedStateCharge_lt,
   Fermat.Conservation.Transfer.available_eq
+#guard_depends_on Fermat.Six.Conservation.exists_orientedStateCharge_lt,
+  Fermat.Six.Conservation.OrientedState.charged_descent_transfer
 #guard_depends_on
   Fermat.Six.Conservation.PrimitiveSolution.impossible_conservation,
   Fermat.Conservation.Transfer.available_eq
+#guard_depends_on
+  Fermat.Six.Conservation.PrimitiveSolution.impossible_conservation,
+  Fermat.Six.Conservation.OrientedState.charged_descent_transfer
 #guard_depends_on Fermat.Six.holdsAt_six_conservation,
   Fermat.Conservation.Transfer.available_eq
+#guard_depends_on Fermat.Six.holdsAt_six_conservation,
+  Fermat.Six.Conservation.OrientedState.charged_descent_transfer
 
 /--
 info: 'Fermat.Conservation.noInfinitePositiveChargeDrain' depends on axioms: [propext, Classical.choice, Quot.sound]
