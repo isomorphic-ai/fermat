@@ -80,6 +80,41 @@ def stockDepthTwoJacobianBridge
       (Fermat.Seven.Conservation.charge (K := K)) :=
   fun _depthTwo => generatedGauge_chargeInvariant hζ
 
+/-- The generic source-to-quotient matrix transaction specialized to the
+conductor-59 real-unit gauge and its absolute-norm stock charge. -/
+def sourceToQuotientTransfer
+    (hζ : IsPrimitiveRoot ζ 59) (state : 𝓞 K) :
+    Fermat.Conservation.Transfer (primeData hζ).GaugeAccount :=
+  (primeData hζ).sourceToQuotientTransfer
+    (Fermat.Seven.Conservation.charge (K := K))
+    (generatedGauge_chargeInvariant hζ) state
+
+/-- At conductor 59 the removed generated matrix credit is exactly the
+converted increment of the selected quotient transaction. -/
+theorem sourceToQuotient_credit_decomposition
+    (hζ : IsPrimitiveRoot ζ 59) (state : 𝓞 K) :
+    (sourceToQuotientTransfer hζ state).before.credit =
+      (sourceToQuotientTransfer hζ state).after.credit +
+        (sourceToQuotientTransfer hζ state).spent := by
+  exact
+    (primeData hζ).sourceToQuotient_credit_decomposition
+      (Fermat.Seven.Conservation.charge (K := K))
+      (generatedGauge_chargeInvariant hζ) state
+
+/-- The selected stock-charge equality is the first-coordinate projection of
+the same transaction's preserved total. -/
+theorem sourceToQuotient_charge_eq
+    (hζ : IsPrimitiveRoot ζ 59) (state : 𝓞 K) :
+    (primeData hζ).quotientCharge
+        (Fermat.Seven.Conservation.charge (K := K))
+        (stockDepthTwoJacobianBridge hζ (primeData hζ).depthTwo)
+        ((primeData hζ).quotientState state) =
+      Fermat.Seven.Conservation.charge state := by
+  exact
+    (primeData hζ).quotientCharge_quotientState
+      (Fermat.Seven.Conservation.charge (K := K))
+      (stockDepthTwoJacobianBridge hζ (primeData hζ).depthTwo) state
+
 /-- Applying the generic quotient morphism to the actual generated debit
 ledger leaves the vacuum ledger. -/
 theorem debitLedger_quotient_eq_bot
@@ -109,11 +144,7 @@ theorem quotient_vacuum_and_charge_eq
           ((primeData hζ).quotientState state) =
         Fermat.Seven.Conservation.charge state :=
   ⟨debitLedger_quotient_eq_bot hζ,
-    (primeData hζ).quotientCharge_quotientState
-      (Fermat.Seven.Conservation.charge (K := K))
-      (stockDepthTwoJacobianBridge hζ
-        (primeData hζ).depthTwo)
-      state⟩
+    sourceToQuotient_charge_eq hζ state⟩
 
 end
 

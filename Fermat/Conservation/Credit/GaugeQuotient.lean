@@ -207,8 +207,100 @@ def quotientCharge (data : PrimeData p cycle realize deep gauge)
     simpa only [MulAction.subgroup_smul_def] using
       hinvariant g right)
 
+/-- The common carrier for the stock charge and the full generated credit
+matrix.  The second component is faithful: no cardinality or scalar summary
+of the routed entries is taken. -/
+abbrev GaugeAccount
+    (_data : PrimeData p cycle realize deep gauge) : Type :=
+  ℕ × MatrixAccount (Fin cycle.rank) (Fin cycle.rank × Fin cycle.rank)
+
+/-- The accounted source state.  Stock is the charge of the concrete state,
+and the complete generated matrix occupies the credit column. -/
+def sourceAccountLedger
+    (data : PrimeData p cycle realize deep gauge)
+    {X : Type uX} [MulAction G X] (charge : X → ℕ) (state : X) :
+    Fermat.Conservation.Ledger data.GaugeAccount where
+  stock := (charge state, 0)
+  credit := (0, accountMatrix data.sourceLedger)
+  converted := 0
+  total := (charge state, accountMatrix data.sourceLedger)
+  conservation := by simp
+
+/-- The accounted quotient state.  Residual quotient credit stays in its
+native matrix account, while the complete removed source matrix is retained
+in the converted column. -/
+def quotientAccountLedger
+    (data : PrimeData p cycle realize deep gauge)
+    {X : Type uX} [MulAction G X] (charge : X → ℕ)
+    (hinvariant : ChargeInvariant data.generatedGauge charge) (state : X) :
+    Fermat.Conservation.Ledger data.GaugeAccount where
+  stock :=
+    (data.quotientCharge charge hinvariant (data.quotientState state), 0)
+  credit := (0, accountMatrix data.quotientLedger)
+  converted := (0, accountMatrix data.sourceLedger)
+  total :=
+    (data.quotientCharge charge hinvariant (data.quotientState state),
+      accountMatrix data.sourceLedger)
+  conservation := by
+    rw [data.quotientLedger_eq_bot]
+    simp
+
+/-- The source-to-quotient transaction in one faithful carrier.  Its spent
+amount is exactly the removed source matrix credit, which reappears unchanged
+in the converted column. -/
+def sourceToQuotientTransfer
+    (data : PrimeData p cycle realize deep gauge)
+    {X : Type uX} [MulAction G X] (charge : X → ℕ)
+    (hinvariant : ChargeInvariant data.generatedGauge charge) (state : X) :
+    Fermat.Conservation.Transfer data.GaugeAccount where
+  before := data.sourceAccountLedger charge state
+  after := data.quotientAccountLedger charge hinvariant state
+  spent := (0, accountMatrix data.sourceLedger)
+  before_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity
+      (data.sourceAccountLedger charge state)
+  after_conserved :=
+    Fermat.Conservation.Ledger.conservation_identity
+      (data.quotientAccountLedger charge hinvariant state)
+  total_preserved := by
+    have hcharge :
+        data.quotientCharge charge hinvariant (data.quotientState state) =
+          charge state := rfl
+    simp only [sourceAccountLedger, quotientAccountLedger]
+    exact congrArg (fun amount => (amount, accountMatrix data.sourceLedger))
+      hcharge.symm
+  available_decomposition := by
+    have hcharge :
+        data.quotientCharge charge hinvariant (data.quotientState state) =
+          charge state := rfl
+    simp only [sourceAccountLedger, quotientAccountLedger]
+    rw [data.quotientLedger_eq_bot]
+    rw [hcharge]
+    simp
+  converted_decomposition := by
+    simp [sourceAccountLedger, quotientAccountLedger]
+
+/-- The transaction exposes the exact faithful matrix-credit movement. -/
+theorem sourceToQuotient_credit_decomposition
+    (data : PrimeData p cycle realize deep gauge)
+    {X : Type uX} [MulAction G X] (charge : X → ℕ)
+    (hinvariant : ChargeInvariant data.generatedGauge charge) (state : X) :
+    (data.sourceToQuotientTransfer charge hinvariant state).before.credit =
+      (data.sourceToQuotientTransfer charge hinvariant state).after.credit +
+        (data.sourceToQuotientTransfer charge hinvariant state).spent := by
+  apply Prod.ext
+  · rfl
+  · have hmatrix :=
+      congrArg Prod.snd
+        (Fermat.Conservation.Transfer.available_eq
+          (data.sourceToQuotientTransfer charge hinvariant state))
+    simpa [Fermat.Conservation.Transfer.available,
+      sourceToQuotientTransfer, sourceAccountLedger,
+      quotientAccountLedger] using hmatrix
+
 /-- **W1 equal charge.** The quotient representative has exactly the source
-charge once the depth-two Jacobian bridge supplies gauge invariance. -/
+charge once the depth-two Jacobian bridge supplies gauge invariance.  This is
+the stock-coordinate projection of the joint transaction's preserved total. -/
 @[simp]
 theorem quotientCharge_quotientState
     (data : PrimeData p cycle realize deep gauge)
@@ -216,8 +308,10 @@ theorem quotientCharge_quotientState
     (hinvariant : ChargeInvariant data.generatedGauge charge)
     (state : X) :
     data.quotientCharge charge hinvariant (data.quotientState state) =
-      charge state :=
-  rfl
+      charge state := by
+  have htotal :=
+    (data.sourceToQuotientTransfer charge hinvariant state).total_preserved
+  exact (congrArg Prod.fst htotal).symm
 
 /-- The still-visible arithmetic seam between the typed depth-two reading
 and charge preservation for a concrete stock action. -/
