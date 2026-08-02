@@ -259,6 +259,23 @@ theorem repay_totalLayers
     (repay state).totalLayers + 1 = state.totalLayers :=
   (repay_layer_credit_decomposition repay state 0).symm
 
+/-- A typed grade-one repayment exposes its legacy root verdict together
+with the globally accounted one-unit credit debit.  The residual equation
+still comes from `LayerConservation`; `Transfer` accounts the columns rather
+than erasing the residual group element. -/
+theorem repay_one_accounted
+    {p : ℕ} {G : Type*} [Group G] {closed : Prop}
+    {funded : ℕ → G → Prop}
+    (repay : Repay p G closed funded 1)
+    (state : C G closed funded 1) (converted : ℕ) :
+    IsRepaid p state.residual ∧
+      (repay_layer_transfer repay state converted).before.credit =
+        (repay_layer_transfer repay state converted).after.credit + 1 := by
+  constructor
+  · exact ⟨(repay state).residual,
+      (repay_layer_conservation repay state).1⟩
+  · exact repay_layer_credit_decomposition repay state converted
+
 /-- The old one-layer output, isolated as a verdict type. -/
 def OneLayerVerdict {G : Type*} [Group G]
     (p : ℕ) (funded : ℕ → G → Prop) : Prop :=
@@ -294,8 +311,7 @@ theorem nonempty_repay_one_iff
   · rintro ⟨repay⟩ u hfunded
     let state : C G closed funded 1 :=
       C.layer u (by simpa using hfunded)
-    refine ⟨(repay state).residual, ?_⟩
-    exact (repay_layer_conservation repay state).1
+    exact (repay_one_accounted repay state 0).1
   · intro verdict
     exact ⟨Repay.oneOfVerdict hclosed verdict⟩
 
@@ -482,9 +498,44 @@ def DeepExponentForcing
       ¬(p ∣ t ∧ ∀ i, (p : ℤ) ∣ a i) →
       ∀ i, (p : ℤ) ∣ a i
 
-/-- **C3 repayment.** A finite C2 capacity for the one generated edge
-family, together with the exponent divisibility proved by the
-generator-derived flow, constructs the repayment root. -/
+/-- A finite C2 capacity and generator-derived exponent forcing construct
+the total typed `C₁ → C₀` repayment operator.  This is the single home of
+the finite-index/primitive-relation arithmetic proof. -/
+noncomputable def Repay.oneOfDeepGeneratedCycle
+    {G α : Type*} [CommGroup G]
+    {cycle : Cycle α} {realize : α → G}
+    {p : ℕ} (hp : p.Prime)
+    (data : Cycle.CapacityData cycle realize)
+    (hambient : data.ambient = ⊤)
+    (hpow : Function.Injective (fun x : G ↦ x ^ p))
+    (deep : G → Prop)
+    (hforcing : DeepExponentForcing cycle realize p deep)
+    {closed : Prop} {funded : ℕ → G → Prop}
+    (hclosed : closed)
+    (funded_deep : ∀ {u : G}, funded 1 u → deep u) :
+    Repay p G closed funded 1 :=
+  Repay.oneOfVerdict hclosed (by
+    intro u hfunded
+    letI hfiniteGenerated :
+        (cycle.generatedSubledger realize).FiniteIndex := by
+      rw [← Subgroup.isFiniteRelIndex_top_iff]
+      rw [← hambient]
+      exact data.finite
+    letI :
+        (Subgroup.closure
+          (Set.range (cycle.edge realize))).FiniteIndex := by
+      simpa only [Cycle.generatedSubledger] using hfiniteGenerated
+    obtain ⟨a, ht, hrel⟩ :=
+      exists_index_relation (cycle.edge realize) u
+    obtain ⟨t', a', ht', hrel', hprimitive⟩ :=
+      exists_primitive_relation_of_relation hp.two_le hpow
+        u (cycle.edge realize) a ht hrel
+    exact isPower_of_primitive_relation_and_exponent_divisibility
+      hp u (cycle.edge realize) a' hrel' hprimitive
+        (hforcing u (funded_deep hfunded) t' a' ht' hrel' hprimitive))
+
+/-- **Legacy C3 repayment.** The verdict-shaped interface is now a projection
+of the typed grade-one constructor and its globally accounted transfer. -/
 theorem repay_of_deep_generated_cycle
     {G α : Type*} [CommGroup G]
     {cycle : Cycle α} {realize : α → G}
@@ -496,23 +547,13 @@ theorem repay_of_deep_generated_cycle
     (hforcing : DeepExponentForcing cycle realize p deep)
     {u : G} (hdeep : deep u) :
     IsRepaid p u := by
-  letI hfiniteGenerated :
-      (cycle.generatedSubledger realize).FiniteIndex := by
-    rw [← Subgroup.isFiniteRelIndex_top_iff]
-    rw [← hambient]
-    exact data.finite
-  letI :
-      (Subgroup.closure
-        (Set.range (cycle.edge realize))).FiniteIndex := by
-    simpa only [Cycle.generatedSubledger] using hfiniteGenerated
-  obtain ⟨a, ht, hrel⟩ :=
-    exists_index_relation (cycle.edge realize) u
-  obtain ⟨t', a', ht', hrel', hprimitive⟩ :=
-    exists_primitive_relation_of_relation hp.two_le hpow
-      u (cycle.edge realize) a ht hrel
-  exact isPower_of_primitive_relation_and_exponent_divisibility
-    hp u (cycle.edge realize) a' hrel' hprimitive
-      (hforcing u hdeep t' a' ht' hrel' hprimitive)
+  let funded : ℕ → G → Prop := fun d v ↦ d = 1 ∧ deep v
+  let repay : Repay p G True funded 1 :=
+    Repay.oneOfDeepGeneratedCycle hp data hambient hpow deep hforcing
+      True.intro (fun hfunded ↦ hfunded.2)
+  let state : C G True funded 1 :=
+    C.layer u ⟨rfl, hdeep⟩
+  exact (repay_one_accounted repay state 0).1
 
 end Repayment
 

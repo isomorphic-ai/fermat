@@ -621,32 +621,23 @@ theorem deepExponentForcing_on_exponentCycle_of_flow {ζ : K}
     rw [realGauge_cycle_edge_eq_exponentCycle_edge]
   · exact hprimitive
 
-private theorem repayment_of_capacity_and_flow_direct
-    {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
-    {u : NumberField.IsCMField.realUnits K}
-    (hdeep : IsDeeplyRepayable hζ u) :
-    Fermat.Conservation.Credit.Repayment.IsRepaid 59 u := by
-  exact Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle
-    (by norm_num) (capacityData hζ) rfl
-    (Fermat.Conservation.Credit.Repayment.realUnits_odd_pow_injective
-      59 (by norm_num))
-    (IsDeeplyRepayable hζ)
-    (deepExponentForcing_on_exponentCycle_of_flow hζ) hdeep
-
 /-- The total selected one-layer operator. Its output is the explicit
-grade-zero residual, and its construction uses only the already-proved
-capacity-and-flow repayment. -/
+grade-zero residual, constructed directly by the generic typed C3 theorem. -/
 noncomputable def repayOne_of_capacity_and_flow
     {ζ : K} (hζ : IsPrimitiveRoot ζ 59) :
     Fermat.Conservation.Credit.Repayment.Repay 59
       (NumberField.IsCMField.realUnits K) RegularClosure59
       (RepaymentFunded59 hζ) 1 :=
-  Fermat.Conservation.Credit.Repayment.Repay.oneOfVerdict
+  Fermat.Conservation.Credit.Repayment.Repay.oneOfDeepGeneratedCycle
+    (by norm_num) (capacityData hζ) rfl
+    (Fermat.Conservation.Credit.Repayment.realUnits_odd_pow_injective
+      59 (by norm_num))
+    (IsDeeplyRepayable hζ)
+    (deepExponentForcing_on_exponentCycle_of_flow hζ)
     regularClosure59 (by
       intro u hfunded
-      exact repayment_of_capacity_and_flow_direct hζ
-        ((repaymentFunded59_one_iff_isDeeplyRepayable hζ u).mp
-          hfunded))
+      exact (repaymentFunded59_one_iff_isDeeplyRepayable hζ u).mp
+        hfunded)
 
 omit [NumberField K] [IsCyclotomicExtension {59} ℚ K] in
 /-- At conductor 59, existence of the total `C₁ → C₀` operator is

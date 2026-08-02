@@ -1,5 +1,15 @@
 # N59 conservation findings
 
+## 2026-08-02 — selected C3 now starts with the typed operator
+
+- `repayOne_of_capacity_and_flow` specializes the generic typed
+  finite-capacity/flow constructor directly.  The former private direct
+  verdict proof is gone, so selected repayment no longer travels through a
+  parallel `IsRepaid → Repay` reconstruction.
+- The public selected verdict keeps its old type, but now projects through
+  the generic `d = 1` accounted theorem and therefore reaches the actual
+  spent-one `repay_layer_transfer`.  No higher funded residual is asserted.
+
 ## 2026-08-02 — row 21 is the selected one-layer account
 
 - The retained table already identifies row `21` as the only coupling row.

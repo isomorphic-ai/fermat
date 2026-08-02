@@ -152,8 +152,15 @@ transport is inhabited. -/
   Fermat.Conservation.Credit.Repayment.repay_layer_transfer
 #guard_depends_on Fermat.Conservation.Credit.Repayment.repay_totalLayers,
   Fermat.Conservation.Transfer.credit_decomposition_of_stock_eq
+#guard_depends_on Fermat.Conservation.Credit.Repayment.repay_one_accounted,
+  Fermat.Conservation.Credit.Repayment.repay_layer_transfer
 #guard_depends_on Fermat.Conservation.Credit.Repayment.nonempty_repay_one_iff,
   Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#guard_depends_on Fermat.Conservation.Credit.Repayment.nonempty_repay_one_iff,
+  Fermat.Conservation.Credit.Repayment.repay_layer_transfer
+#guard_depends_on
+  Fermat.Conservation.Credit.Repayment.repay_of_deep_generated_cycle,
+  Fermat.Conservation.Credit.Repayment.repay_layer_transfer
 #guard_depends_on Fermat.Conservation.Credit.Repayment.LayerTransport,
   Fermat.Conservation.Credit.Repayment.LayerConservation
 #guard_depends_on Fermat.Conservation.Credit.Repayment.Repay.ofLayerTransport,

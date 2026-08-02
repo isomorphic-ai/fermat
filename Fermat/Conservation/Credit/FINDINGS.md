@@ -224,6 +224,20 @@
 
 Newest findings are recorded first.
 
+## 2026-08-02 — the legacy C3 verdict is a d=1 projection
+
+- The finite-index and primitive-relation calculation need only exist once:
+  it constructs a total typed `Repay ... 1`, after which the old
+  `IsRepaid` theorem is the residual projection of that operator.
+- A `Transfer ℕ` intentionally forgets the residual group element, so the
+  truthful compatibility theorem pairs the `IsRepaid` residual equation
+  from `LayerConservation` with the same step's exact one-unit credit debit.
+  This makes the legacy verdict depend on `repay_layer_transfer` without
+  pretending that natural-number columns alone prove a group root equation.
+- The selected conductor-59 operator can specialize the typed constructor
+  directly; no verdict-to-operator round trip and no `LayerTransport`
+  inhabitant is needed at grade one.
+
 ## 2026-08-02 — accountFlow and the irregular layer share one transaction
 
 - A Bernoulli channel can retain generated coefficient flow and its depth

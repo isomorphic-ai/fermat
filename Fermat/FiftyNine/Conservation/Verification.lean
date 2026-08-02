@@ -135,8 +135,14 @@ retain the named one-layer conservation identity transitively. -/
   Fermat.FiftyNine.Conservation.Instance.nonempty_repayOne_iff_deep_repayment59,
   Fermat.Conservation.Credit.Repayment.repay_layer_conservation
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.nonempty_repayOne_iff_deep_repayment59,
+  Fermat.Conservation.Credit.Repayment.repay_layer_transfer
+#guard_depends_on
   Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow,
   Fermat.Conservation.Credit.Repayment.repay_layer_conservation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow,
+  Fermat.Conservation.Credit.Repayment.repay_layer_transfer
 
 /-! The selected grade-zero state is literally funded by both halves named
 in its definition: the stock receipt and a generated C1 vacuum. -/
