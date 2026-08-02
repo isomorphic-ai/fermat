@@ -163,7 +163,7 @@ private theorem exists_oriented (S : PrimitiveSolution) :
   rcases lt_trichotomy 0 T.z with hz | hz | hz
   · exact ⟨T, hodd, hz, hcharge⟩
   · exact False.elim
-      ((Int.natAbs_pos.mp T.stateCharge_pos) hz.symm)
+      ((Int.natAbs_pos.mp T.solution.charge_pos) hz.symm)
   · exact
       ⟨T.negZ, hodd, neg_pos.mpr hz,
         T.negZ_stateCharge.trans hcharge⟩
@@ -397,6 +397,20 @@ theorem charged_descent_transfer (S : PrimitiveSolution) (budget : ℕ)
   obtain ⟨next, hlt⟩ := S.exists_stateCharge_lt_raw
   refine ⟨next, hlt.le, ?_⟩
   simpa only [accountTransfer] using Nat.sub_pos_of_lt hlt
+
+/-- Every primitive descent state carries positive charge.  Positivity is
+the spendable-column projection of its positive accounted descent, rather
+than an independent scalar route around the transaction. -/
+theorem stateCharge_pos (S : PrimitiveSolution) :
+    0 < S.stateCharge := by
+  obtain ⟨next, hdrop, hspent⟩ :=
+    S.charged_descent_transfer S.stateCharge le_rfl
+  have havailable :=
+    Fermat.Conservation.Transfer.available_lt_of_spent_pos
+      (accountTransfer S.stateCharge S next le_rfl hdrop) hspent
+  simp only [Fermat.Conservation.Transfer.available, accountTransfer,
+    accountLedger, add_zero] at havailable
+  omega
 
 /-- **The legacy charged double-descent step.** Strict decrease is now only a
 projection of the positive accounted transaction and its exact stock

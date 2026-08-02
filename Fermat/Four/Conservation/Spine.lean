@@ -88,9 +88,4 @@ theorem StrongerSolution.charge_pos {x y z : ℤ}
       (sq_pos_of_ne_zero (pow_ne_zero 2 h.1))
       (sq_pos_of_ne_zero (pow_ne_zero 2 h.2.1))
 
-/-- Every primitive descent state carries positive charge. -/
-theorem PrimitiveSolution.stateCharge_pos (S : PrimitiveSolution) :
-    0 < S.stateCharge :=
-  S.solution.charge_pos
-
 end Fermat.Four.Conservation

@@ -24,6 +24,9 @@ import Fermat.Four.Conservation
   Fermat.Four.Conservation.PrimitiveSolution.charged_descent_transfer,
   Fermat.Conservation.Ledger.conservation_identity
 #guard_depends_on
+  Fermat.Four.Conservation.PrimitiveSolution.stateCharge_pos,
+  Fermat.Conservation.Transfer.available_lt_of_spent_pos
+#guard_depends_on
   Fermat.Four.Conservation.PrimitiveSolution.charged_descent,
   Fermat.Four.Conservation.PrimitiveSolution.charged_descent_transfer
 #guard_depends_on

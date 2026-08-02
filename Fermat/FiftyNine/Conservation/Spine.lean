@@ -22,7 +22,7 @@ import Fermat.Statement.Basic
 import Fermat.One.Conservation
 import Fermat.Two.PythagorasConservation
 import Fermat.Three.Conservation.Spine
-import Fermat.Four.Conservation.Spine
+import Fermat.Four.Conservation.Descent
 import Fermat.Five.Conservation.Spine
 import Fermat.Six.Conservation.Spine
 import Fermat.Seven.Conservation.Spine

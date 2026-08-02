@@ -32,14 +32,6 @@ noncomputable def charge (v : V) : ℝ := ‖v‖ ^ 2
 of the ledger. Empty coupling = no interaction = the "regular" case. -/
 noncomputable def coupling (u v : V) : ℝ := inner ℝ u v
 
-/-- **The ledger expansion.** The charge of a sum is the sum of charges
-plus twice the coupling: bilinearity is the bookkeeping. Nothing is
-created or destroyed; the cross term is exactly the coupling channel. -/
-theorem charge_ledger (u v : V) :
-    charge (u + v) = charge u + charge v + 2 * coupling u v := by
-  simp only [charge, coupling, norm_add_sq_real]
-  ring
-
 /-! ## The global three-column accounting adapter -/
 
 /-- The Noether balance placed in the route-neutral global ledger.  The two
@@ -52,7 +44,17 @@ noncomputable def chargeLedger (u v : V) :
   converted := 0
   total := charge (u + v)
   conservation := by
-    rw [add_zero, ← charge_ledger]
+    simp only [charge, coupling, norm_add_sq_real, add_zero]
+    ring
+
+/-- **The ledger expansion.** The charge of a sum is the sum of charges
+plus twice the coupling: bilinearity is the bookkeeping. Nothing is
+created or destroyed; the cross term is exactly the coupling channel. -/
+theorem charge_ledger (u v : V) :
+    charge (u + v) = charge u + charge v + 2 * coupling u v := by
+  have h :=
+    Fermat.Conservation.Ledger.conservation_identity (chargeLedger u v)
+  simpa only [chargeLedger, add_zero] using h.symm
 
 /-- A linear isometry preserves the stock column component by component. -/
 theorem chargeLedger_stock_isometry (R : V ≃ₗᵢ[ℝ] V) (u v : V) :
