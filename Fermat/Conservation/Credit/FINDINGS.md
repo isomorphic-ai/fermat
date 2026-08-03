@@ -1,5 +1,68 @@
 # Credit-ladder findings
 
+## 2026-08-03 — AREA discovery: the honest D=1 shadow is route-neutral
+
+- The existing four-field `Ledger` cannot be equivalent to the
+  two-coordinate Heisenberg abelianization.  The canonical, Transfer-compatible
+  projection is exactly
+  `(stock + credit, converted)`: it forgets the intentionally neutral
+  stock/credit split, and `Ledger.conservation_identity` says that the sum of
+  those two visible coordinates is `total`.  A reverse dictionary therefore
+  needs an explicit stock/credit split and central coordinate; a canonical
+  section may choose zero credit and zero area, but it is not a two-sided
+  inverse for arbitrary ledgers.
+- `Transfer.available_decomposition` and `converted_decomposition` already
+  give the full D=1 displacement of a signed transaction: the payload word's
+  visible coordinates are `(-spent, spent)`.  The new `AreaTransfer` can
+  consequently extend the existing `Transfer` over a commutative ring, retain
+  before/after central coordinates and one ordered Heisenberg word, and derive
+  the old transaction by projection.  Composition must use the upstream order
+  `first.word * second.word`, whose central cross term is
+  `first.word.a * second.word.b`; strengthening the old natural-valued
+  `Transfer` carrier would break its existing clients and is unnecessary.
+- Upstream's structural no-erasure jewel is injectivity of
+  `c ↦ center c * word`, not pointwise preservation of a nonzero central
+  coordinate.  One chosen nonzero `c` can land at central coordinate zero
+  exactly when `word.c = -c`; that exact-cancellation iff is the companion
+  theorem, not an exception to injectivity.  Fermat's wrappers must preserve
+  this distinction and must not claim whole-word identity from a statement
+  about the central coordinate alone.
+
+## 2026-08-03 — AREA discovery: the vendored payload boundary is two files
+
+- The generic carrier source is
+  `/home/goblin/scheduler/iso-conserve-lean/IsoConserve/Heis.lean` at commit
+  `e5b23b59a09c4406e09f50ded9e24ec0e08d300f`, SHA-256
+  `f7301f8cef1c9b84756528821218be45139b9d3ca883f0a8fe26e85accf9bed4`.
+  It supplies the twisted product, group laws, centre, dedicated abelian
+  carrier and homomorphism, kernel-is-centre, and commutator-is-area over a
+  generic commutative ring.
+- The route-neutral payload jewels come from
+  `/home/goblin/scheduler/iso-conserve-lean/IsoConserve/HeisenbergPayload.lean`
+  at commit `f7b8e6fddd8e2429864a923abc5baf89a40f4b37`, SHA-256
+  `061cffa58e76b0e7ead41e6e4458862e184218dcd0a9e022fb6a27ef5650591d`.
+  Its scheduler-specific `PayloadRun`/`CoreTrace` wrappers should not be
+  copied; their Fermat analogue is the smaller `AreaTransfer` lift.  The final
+  audit commit `ea920d97f1d8f31b1bc9bbbe8235d8587046473e` changes evidence
+  records only and reports all 41 source declarations clean.
+- The source uses Lean 4.30's `Std`/`Lean.Grind` commutative-ring support,
+  while Fermat pins Lean 4.31.0-rc1 with Mathlib.  This is a proof-port
+  boundary only: the statements remain generic, and their elementary
+  coordinate identities can be reproved here with extensionality and `ring`.
+
+## 2026-08-03 — AREA discovery: verification has one authoritative cone
+
+- The recorded 8,691-job audit is one nine-target Lake invocation: the direct
+  IsoConserve bridge plus the common, N3--N7, credit, and selected-N59
+  verification leaves.  Adding the two new imported modules may change Lake's
+  displayed DAG count, so the target set rather than the old count is the
+  stable contract and the closing report must give the actual new count.
+- New LITERAL claims need value-level dependency guards: carrier aggregates,
+  Ledger shadow, AreaTransfer composition/projection, both payload-dictionary
+  directions, no-erasure, and exact cancellation.  `#guard_depends_on` ignores
+  types, so an `rfl` proposition alone is not evidence.  The selected-prime
+  source scan must explicitly add both `Heis.lean` and the AreaTransfer source.
+
 ## 2026-08-02 — TRANSFER-COMPLETE discovery: the final rows source-invert cleanly
 
 - N2's balance adapter must own the raw norm expansion in its `Ledger`
