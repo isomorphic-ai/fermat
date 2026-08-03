@@ -296,3 +296,35 @@ before inspecting or editing any Lean implementation for this sweep.
   prohibited inhabitants: the allocated Lemma-I transaction, the positive
   stock-credit successor transaction, or the funded higher-layer residual
   transaction.  No fourth free-standing obstruction is predicted.
+
+## AREA prediction — 2026-08-03
+
+Recorded after reading `AREA-TASK.md` and before inspecting either the Fermat
+Lean implementation or the IsoConserve payload sources.
+
+- **Carrier port.**  I expect the minimal Heisenberg carrier to be an integer
+  triple with a bilinear twist, so its group, centre, abelianization, and
+  commutator statements should survive as short structural proofs.  The
+  likely port resistance is proof automation rather than mathematics: the
+  two projects may normalize the twist with different `simp`/arithmetic
+  support.  If so, the honest port should retain the statements and replace
+  only the small proofs with `ext` plus the arithmetic available here.
+- **Ledger as shadow.**  I expect forgetting the payload coordinate itself to
+  be definitionally (`rfl`-)grade, like the existing tunnel round trip.  The
+  compiled theorem identifying that pair with all of the existing named
+  `Ledger` columns is more likely to need a small extensional adapter, because
+  the campaign ledger carries semantic column names rather than presenting
+  itself as a bare pair.  No new arithmetic premise should be needed.
+- **AreaTransfer.**  I expect projection of one area transfer to an existing
+  `Transfer` to be definitional once the structure extends the old carrier.
+  Composition and chain projection may require explicit associativity and
+  functoriality lemmas for the twisted payload law; any independent parallel
+  conservation proof would signal a wrong representation.  The no-erasure
+  and exact-cancellation jewels should then port as algebraic consequences of
+  that same payload composition, not as admissibility fields.
+- **Tunnel and guards.**  I expect the payload dictionary to fit the bridge in
+  both directions at the statement level, with at most one direction exposed
+  as a named interface if reconstructing payload history from an abelian
+  ledger is intentionally non-canonical.  Provenance hashes, literal guards,
+  and the route-neutral no-prime grep should be mechanical; the three frontier
+  seams must remain uninhabited predictions.
