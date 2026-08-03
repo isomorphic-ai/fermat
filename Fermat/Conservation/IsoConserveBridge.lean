@@ -20,7 +20,7 @@ a substitute for L1: L1 preserves the global accounted sum, while L4 identifies
 the two available columns with their flow integral.
 -/
 import Fermat.Conservation.IsoConserveStatements
-import Fermat.Conservation.Transfer
+import Fermat.Conservation.AreaTransfer
 
 namespace Fermat.Conservation.IsoConserveBridge
 
@@ -56,6 +56,103 @@ def ofColumns (state : Columns α) : Ledger α where
       subst total
       rfl
 
+section PayloadDictionary
+
+variable {R : Type*} [CommRing R]
+
+/-- The two visible payload coordinates carried by scheduler columns.
+
+The first coordinate is the route-neutral available balance, so passing to
+the payload shadow forgets how that balance was split between `stock` and
+`credit`.  The second coordinate is the converted balance. -/
+def columnsAbelian (state : Columns R) : Heis.Abelian R :=
+  AreaTransfer.ledgerAbelian (ofColumns state)
+
+/-- Lift scheduler columns to a Heisenberg payload with an explicitly chosen
+central coordinate.  The columns do not determine that private coordinate. -/
+def columnsPayload (state : Columns R) (central : R) : Heis R :=
+  AreaTransfer.ledgerPayload (ofColumns state) central
+
+/-- The payload dictionary relates scheduler columns to exactly their visible
+Heisenberg projection.  It deliberately says nothing about the forgotten
+stock/credit split or central coordinate. -/
+def PayloadDictionary (state : Columns R) (payload : Heis R) : Prop :=
+  Heis.abelianization payload = columnsAbelian state
+
+/-- Forgetting the chosen central coordinate of `columnsPayload` gives
+exactly the two-column abelian shadow. -/
+theorem abelianization_columnsPayload (state : Columns R) (central : R) :
+    Heis.abelianization (columnsPayload state central) =
+      columnsAbelian state := by
+  simpa only [columnsPayload, columnsAbelian] using
+    AreaTransfer.ledgerPayload_abelianization (ofColumns state) central
+
+/-- Forward dictionary direction: every chosen central lift represents its
+source columns. -/
+theorem columnsPayload_dictionary (state : Columns R) (central : R) :
+    PayloadDictionary state (columnsPayload state central) :=
+  abelianization_columnsPayload state central
+
+/-- The visible first coordinate of a column payload is the combined
+stock-plus-credit balance. -/
+theorem columnsPayload_stock_credit (state : Columns R) (central : R) :
+    state.stock + state.credit = (columnsPayload state central).a :=
+  rfl
+
+/-- Rebuild columns from a payload after supplying the stock/credit split
+which abelianization necessarily forgot.  No claim is made about recovering
+the payload's central coordinate. -/
+def columnsOfPayload (payload : Heis R) (stock credit : R)
+    (_hsplit : stock + credit = payload.a) : Columns R where
+  stock := stock
+  credit := credit
+  converted := payload.b
+
+/-- `columnsOfPayload` recovers precisely the abelian projection when its
+explicit stock/credit split is valid. -/
+theorem columnsAbelian_columnsOfPayload (payload : Heis R)
+    (stock credit : R) (hsplit : stock + credit = payload.a) :
+    columnsAbelian (columnsOfPayload payload stock credit hsplit) =
+      Heis.abelianization payload := by
+  cases payload with
+  | mk a b c =>
+      simp only [columnsAbelian, columnsOfPayload,
+        AreaTransfer.ledgerAbelian, Transfer.available, ofColumns,
+        Heis.abelianization]
+      rw [hsplit]
+
+/-- Reverse dictionary direction under the named, explicit stock/credit
+split. -/
+theorem columnsOfPayload_dictionary (payload : Heis R)
+    (stock credit : R) (hsplit : stock + credit = payload.a) :
+    PayloadDictionary (columnsOfPayload payload stock credit hsplit)
+      payload := by
+  unfold PayloadDictionary
+  exact (columnsAbelian_columnsOfPayload payload stock credit hsplit).symm
+
+/-- Lifting columns with any central coordinate and then using their original
+stock/credit split returns the original columns exactly. -/
+@[simp] theorem columnsOfPayload_columnsPayload
+    (state : Columns R) (central : R) :
+    columnsOfPayload (columnsPayload state central) state.stock state.credit
+      (columnsPayload_stock_credit state central) = state := by
+  cases state
+  rfl
+
+/-- With the forgotten split supplied and the original center retained, the
+reverse dictionary also reconstructs the complete payload. -/
+@[simp] theorem columnsPayload_columnsOfPayload
+    (payload : Heis R) (stock credit : R)
+    (hsplit : stock + credit = payload.a) :
+    columnsPayload (columnsOfPayload payload stock credit hsplit) payload.c =
+      payload := by
+  cases payload with
+  | mk a b c =>
+      change (⟨stock + credit, b, c⟩ : Heis R) = ⟨a, b, c⟩
+      rw [hsplit]
+
+end PayloadDictionary
+
 /-- Attach the cached integral used by the distinct L4 statement. -/
 def toIntegralColumns (ledger : Ledger α) : IntegralColumns α where
   toColumns := toColumns ledger
@@ -83,11 +180,76 @@ def toBalancedStep (transfer : Transfer α) : BalancedStep α where
   converted_decomposition := by
     simpa [toColumns] using transfer.converted_decomposition
 
+/-- The scheduler-shaped balanced relation together with the payload before
+and after the step and the Heisenberg word composed on the right. -/
+structure PayloadBalancedStep (α R : Type*) [AddCommMonoid α] [CommRing R]
+    extends BalancedStep α where
+  beforePayload : Heis R
+  afterPayload : Heis R
+  word : Heis R
+  payload_decomposition : afterPayload = beforePayload * word
+
+/-- Read an area-aware Fermat transaction as a scheduler balanced step while
+retaining its full payload equation. -/
+def toPayloadBalancedStep {R : Type*} [CommRing R]
+    (transfer : AreaTransfer α R) : PayloadBalancedStep α R where
+  toBalancedStep := toBalancedStep transfer.toTransfer
+  beforePayload := transfer.beforePayload
+  afterPayload := transfer.afterPayload
+  word := transfer.word
+  payload_decomposition := transfer.payload_decomposition
+
+@[simp] theorem toPayloadBalancedStep_toBalancedStep
+    {R : Type*} [CommRing R] (transfer : AreaTransfer α R) :
+    (toPayloadBalancedStep transfer).toBalancedStep =
+      toBalancedStep transfer.toTransfer :=
+  rfl
+
+@[simp] theorem toPayloadBalancedStep_before
+    {R : Type*} [CommRing R] (transfer : AreaTransfer α R) :
+    (toPayloadBalancedStep transfer).before =
+      toColumns transfer.toTransfer.before :=
+  rfl
+
+@[simp] theorem toPayloadBalancedStep_after
+    {R : Type*} [CommRing R] (transfer : AreaTransfer α R) :
+    (toPayloadBalancedStep transfer).after =
+      toColumns transfer.toTransfer.after :=
+  rfl
+
+@[simp] theorem toPayloadBalancedStep_spent
+    {R : Type*} [CommRing R] (transfer : AreaTransfer α R) :
+    (toPayloadBalancedStep transfer).spent = transfer.toTransfer.spent :=
+  rfl
+
+@[simp] theorem toPayloadBalancedStep_beforePayload
+    {R : Type*} [CommRing R] (transfer : AreaTransfer α R) :
+    (toPayloadBalancedStep transfer).beforePayload = transfer.beforePayload :=
+  rfl
+
+@[simp] theorem toPayloadBalancedStep_afterPayload
+    {R : Type*} [CommRing R] (transfer : AreaTransfer α R) :
+    (toPayloadBalancedStep transfer).afterPayload = transfer.afterPayload :=
+  rfl
+
+@[simp] theorem toPayloadBalancedStep_word
+    {R : Type*} [CommRing R] (transfer : AreaTransfer α R) :
+    (toPayloadBalancedStep transfer).word = transfer.word :=
+  rfl
+
 /-- Every Fermat transfer induces the scheduler's L1 equality. -/
 theorem transfer_L1_conservation (transfer : Transfer α) :
     Columns.accounted (toColumns transfer.after) =
       Columns.accounted (toColumns transfer.before) :=
   (toBalancedStep transfer).L1_conservation
+
+/-- Area-aware transfers inherit L1 conservation from their abelian
+`Transfer` projection. -/
+theorem areaTransfer_L1_conservation {R : Type*} [CommRing R]
+    (transfer : AreaTransfer α R) :
+    Columns.accounted (toColumns transfer.toTransfer.after) =
+      Columns.accounted (toColumns transfer.toTransfer.before) :=
+  transfer_L1_conservation transfer.toTransfer
 
 /-- Every Fermat transfer is a step of the scheduler-shaped balanced relation. -/
 theorem transfer_induces_scheduler_rel (transfer : Transfer α) :
@@ -164,6 +326,66 @@ def ofBalancedStep (step : BalancedStep α) : Transfer α where
     ofBalancedStep (toBalancedStep transfer) = transfer := by
   cases transfer
   simp [ofBalancedStep, toBalancedStep]
+
+/-- Reconstruct an area-aware Fermat transfer from the scheduler-shaped
+balanced payload step. -/
+def ofPayloadBalancedStep {R : Type*} [CommRing R]
+    (step : PayloadBalancedStep α R) : AreaTransfer α R where
+  toTransfer := ofBalancedStep step.toBalancedStep
+  beforePayload := step.beforePayload
+  afterPayload := step.afterPayload
+  word := step.word
+  payload_decomposition := step.payload_decomposition
+
+@[simp] theorem ofPayloadBalancedStep_toTransfer
+    {R : Type*} [CommRing R] (step : PayloadBalancedStep α R) :
+    (ofPayloadBalancedStep step).toTransfer =
+      ofBalancedStep step.toBalancedStep :=
+  rfl
+
+@[simp] theorem ofPayloadBalancedStep_before
+    {R : Type*} [CommRing R] (step : PayloadBalancedStep α R) :
+    (ofPayloadBalancedStep step).toTransfer.before = ofColumns step.before :=
+  rfl
+
+@[simp] theorem ofPayloadBalancedStep_after
+    {R : Type*} [CommRing R] (step : PayloadBalancedStep α R) :
+    (ofPayloadBalancedStep step).toTransfer.after = ofColumns step.after :=
+  rfl
+
+@[simp] theorem ofPayloadBalancedStep_spent
+    {R : Type*} [CommRing R] (step : PayloadBalancedStep α R) :
+    (ofPayloadBalancedStep step).toTransfer.spent = step.spent :=
+  rfl
+
+@[simp] theorem ofPayloadBalancedStep_beforePayload
+    {R : Type*} [CommRing R] (step : PayloadBalancedStep α R) :
+    (ofPayloadBalancedStep step).beforePayload = step.beforePayload :=
+  rfl
+
+@[simp] theorem ofPayloadBalancedStep_afterPayload
+    {R : Type*} [CommRing R] (step : PayloadBalancedStep α R) :
+    (ofPayloadBalancedStep step).afterPayload = step.afterPayload :=
+  rfl
+
+@[simp] theorem ofPayloadBalancedStep_word
+    {R : Type*} [CommRing R] (step : PayloadBalancedStep α R) :
+    (ofPayloadBalancedStep step).word = step.word :=
+  rfl
+
+/-- The scheduler-to-Fermat-to-scheduler payload correspondence is exact. -/
+@[simp] theorem toPayloadBalancedStep_ofPayloadBalancedStep
+    {R : Type*} [CommRing R] (step : PayloadBalancedStep α R) :
+    toPayloadBalancedStep (ofPayloadBalancedStep step) = step := by
+  cases step
+  simp [toPayloadBalancedStep, ofPayloadBalancedStep]
+
+/-- The Fermat-to-scheduler-to-Fermat payload correspondence is exact. -/
+@[simp] theorem ofPayloadBalancedStep_toPayloadBalancedStep
+    {R : Type*} [CommRing R] (transfer : AreaTransfer α R) :
+    ofPayloadBalancedStep (toPayloadBalancedStep transfer) = transfer := by
+  cases transfer
+  simp [toPayloadBalancedStep, ofPayloadBalancedStep]
 
 namespace KummerNoether
 
