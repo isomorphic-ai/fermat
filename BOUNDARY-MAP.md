@@ -3,9 +3,9 @@
 This file is the in-place closing revision of the LEDGER-LITERAL and
 TRANSFER boundary map.  Historical classifications remain visible as
 before → after.  A row is final-LITERAL only when a compiled
-#guard_depends_on command reaches its named Ledger or Transfer anchor through
-the declaration value; a matching type, comment, or unused premise does not
-count.
+#guard_depends_on command reaches its named Ledger, Transfer, Heis, or
+AreaTransfer anchor through the declaration value; a matching type, comment,
+or unused premise does not count.
 
 Every classified row is LITERAL except the following named seams.
 
@@ -17,7 +17,8 @@ inhabitant, or exponent-59 endpoint is constructed here.
 - LITERAL means the implementation value transitively consumes
   Fermat.Conservation.Ledger.conservation_identity, a named
   Fermat.Conservation.Transfer projection, Bernoulli channel conservation,
-  or Repayment.repay_layer_transfer as appropriate.
+  Repayment.repay_layer_transfer, or a named Heis/AreaTransfer payload law as
+  appropriate.
 - DECORATIVE was the historical state in which a compatible identity existed
   beside a proof but was bypassed.
 - ABSENT was the historical state in which no common accounting carrier or
@@ -25,9 +26,12 @@ inhabitant, or exponent-59 endpoint is constructed here.
 - SEAM is reserved below for one of the three named missing producers.  A
   theorem conditional on a seam premise may itself be LITERAL.
 
-The common transaction vocabulary is Fermat.Conservation.Transfer.  Its
+The common D=1 transaction vocabulary is Fermat.Conservation.Transfer.  Its
 available_eq and converted_decomposition fields account the amount moved,
 while total_preserved and both endpoint Ledger identities prevent loss.
+Fermat.Conservation.AreaTransfer is its additive D=2 refinement: its generated
+abelianProjection is the old Transfer, while one ordered Heisenberg word and
+the before/after payloads retain the enclosed area.
 
 ### IsoConserve tunnel
 
@@ -44,6 +48,32 @@ Fermat.Conservation.IsoConserveBridge still compiles in both directions:
 
 L4 remains a distinct columnwise integral statement.  It is not conflated
 with L1 total preservation.
+
+The D=2 carrier is now vendored in Fermat.Conservation.Heis with source commit
+and SHA-256 provenance.  The compiled Ledger shadow is exactly
+
+    (Transfer.available ledger, ledger.converted)
+      = (ledger.stock + ledger.credit, ledger.converted).
+
+These are the two visible coordinates of `ledgerPayload`; their sum is the
+carried Ledger total.  This is not a false equivalence with all three named
+columns: abelianization forgets both the stock/credit split and the central
+area.  IsoConserveBridge.PayloadDictionary therefore has a canonical forward
+lift with a chosen center and a reverse direction requiring an explicit
+stock/credit split.  With that split and center supplied, both dictionary
+round trips compile.
+
+AreaTransfer composition uses the twisted order `first.word * second.word`,
+and its abelianProjection and chain projection are the existing Transfer
+composition and chain.  The bridge's PayloadBalancedStep conversions compile
+exactly in both directions.  Its L1 theorem is derived from
+transfer_L1_conservation on the generated projection; no parallel
+conservation proof is stored.
+
+The ported structural no-erasure law is injectivity of
+`c ↦ Heis.center c * word`.  It does not make the false pointwise claim that a
+chosen nonzero central coordinate can never land at zero: the compiled exact
+cancellation iff says this happens precisely when `word.c = -c`.
 
 ## Stock receipt N1–N7
 
@@ -152,7 +182,10 @@ The verification leaves contain at least one direct guard for every final
 LITERAL row:
 
 - TransferVerification covers the common transaction algebra and both
-  IsoConserve tunnel directions.
+  IsoConserve tunnel directions.  It now also covers the Heis group, center,
+  abelianization and commutator-area anchors; the Ledger shadow; AreaTransfer
+  composition and chain projection; both payload-dictionary directions and
+  lifted-step round trips; and the no-erasure/exact-cancellation pair.
 - N3, N4, N5, N6, and N7 verification cover the origin-carrying stock
   successors, endpoints, and floor projections.
 - Credit Verification covers C1, C2, both C3 views, accountFlow, Bernoulli
@@ -162,10 +195,10 @@ LITERAL row:
   and depth, funded row mapping, selected repayment, selected quotient,
   selected (7d), and the consumers conditional on supplied (7a).
 
-The selected-prime literal scan includes Transfer.lean and the generic
-credit, drain, and Kummer source cone.  Forbidden declaration/module guards
-continue to exclude the classical irregular, regular, ladder, transport, and
-endpoint cones.
+The selected-prime literal scan includes Transfer.lean, Heis.lean,
+AreaTransfer.lean, and the generic credit, drain, and Kummer source cone.
+Forbidden declaration/module guards continue to exclude the classical
+irregular, regular, ladder, transport, and endpoint cones.
 
 ## The remaining frontier
 
@@ -189,6 +222,28 @@ Its converted_decomposition then projects r₀ + 58 • r₁ = 0, exactly
 VandiverSevenA 0 1.  Existing root-class torsion, derived (7d), netting, and
 principalization consumers do not construct this transaction.
 
+**PREDICTION — not theorem (D=2 rereading).**  Relation (7d) is predicted to
+be the endpoint/abelian half of the two class relations, while (7a) is the
+area/holonomy half.  Let `w₇a : Heis ℤ` denote an explicitly unconstructed
+closed reflection word and let `c₇a` be its unconstructed incoming central
+receipt.  The prediction is that conjugation reverses the reflection's
+orientation: it fixes the abelian endpoint, sends the signed area of `w₇a` to
+its negative, and lets the two conjugate views net endpoint-wise while the
+central coordinate retains the residual.
+
+The candidate whose existence would be (7a) is an unconstructed
+
+    τ₂ : AreaTransfer (Additive (ClassGroup (𝓞 K))) ℤ
+
+whose `τ₂.abelianProjection` has exactly the `r₀`, `58 • r₁`, vacuum, and
+spent fields displayed above, with
+`τ₂.beforePayload = Heis.center c₇a`,
+`τ₂.afterPayload = Heis.center 0`, and `τ₂.word = w₇a`.  Its payload equation
+would therefore realize exact central cancellation `w₇a.c = -c₇a`.
+Producing such a `τ₂` from the canonical allocated state, without accepting
+`VandiverSevenA` as an input, would project to exactly `VandiverSevenA 0 1`.
+No `w₇a`, `c₇a`, or `τ₂` is asserted here.
+
 ### 2. Stock-credit transformer successor
 
 For every PrimitiveSecondCaseSolution S, the missing producer must retain a
@@ -208,6 +263,26 @@ Transfer.available_lt_of_spent_pos would then derive StrictSuccessor S, and
 the family of witnesses would inhabit StockCreditTransformer.  Repayment and
 the ramified norm comparison provide neither endpoint equality.
 
+**PREDICTION — not theorem (D=2 rereading).**  For
+`δ = S.charge - next.charge`, the successor receipt must not be an arbitrary
+payload label.  It is predicted to carry the ordered closed word
+
+    wS = Heis.commutator factorLeg repaymentLeg
+
+of the as-yet-unconstructed actual factor-normalization and repayment legs.
+The required `τ₂ : AreaTransfer ℕ ℤ` would have
+`τ₂.abelianProjection` equal to the fixed-budget Transfer above with
+`spent = δ`, normalized incoming central coordinate
+`τ₂.beforePayload.c = 0`, and payload law
+
+    τ₂.afterPayload.c =
+      τ₂.beforePayload.c + Heis.area factorLeg repaymentLeg.
+
+Thus `τ₂.afterPayload.c = Heis.area factorLeg repaymentLeg`: the successor's
+receipt is predicted to equal its enclosed area.  No factor leg, repayment
+leg, `next`, `wS`, AreaTransfer, or transformer inhabitant is constructed
+here.
+
 ### 3. Higher layer transport
 
 The missing object is exactly
@@ -226,3 +301,13 @@ Repay.ofLayerTransport and repay_layer_transfer already produce
 
 with credit down one, conversion up one, and stock/total fixed.  No concrete
 inhabitant is asserted here.
+
+**PREDICTION — not theorem (D=2 rereading).**  The grading `C_d` is predicted
+to be a commutator-depth filtration: one LayerTransport peels exactly one
+commutator layer, retains the explicit `C_(d-1)` residual, and has an
+AreaTransfer whose abelianProjection is the existing `spent = 1` transaction
+above.  At D=3 the next carrier would add only the two length-three brackets
+`[A,[A,B]]` and `[B,[A,B]]`, distinguishing routes with equal endpoints and
+equal enclosed area.  This merely names the next datum.  Constructing a D=3
+carrier, a Magnus/lower-central tower, or any concrete layer-transport
+inhabitant is explicitly out of scope.
