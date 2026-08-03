@@ -1,5 +1,31 @@
 # Credit-ladder findings
 
+## 2026-08-03 — AREA verification: D=2 passes through the complete cone
+
+- The unchanged nine-target conservation audit completes successfully at
+  8,693/8,693 jobs.  The old recorded count was 8,691; the exact two-job
+  increase is the new `Heis` and `AreaTransfer` modules now imported through
+  `IsoConserveBridge`.  All common, N3--N7, credit, and selected-N59 guard
+  leaves remain green.  The output contains only the pre-existing
+  `CapacityCertificate` linter warnings.
+- The new value guards confirm that the group certificate consumes all five
+  carrier laws, commutator-as-area consumes the coordinate formula, the
+  Ledger shadow consumes both Heis abelianization and
+  `Ledger.conservation_identity`, AreaTransfer composition consumes the old
+  `Transfer.comp` and twisted associativity, and both tunnel directions
+  consume their old balanced-step maps.  The no-erasure and exact-cancellation
+  wrappers reach the two vendored payload jewels.  The expanded selected-prime
+  scan accepts both new route-neutral files.
+- The prediction split was accurate.  Raw payload abelianization remains
+  `rfl`-grade behind a named helper, but proving that a coherent transaction's
+  word is exactly `(-spent, spent)` needs additive cancellation through the
+  inherited Transfer decompositions.  The source's `grind` proofs ported with
+  local extensionality and ring normalization; there was no mathematical or
+  toolchain obstruction.
+- No Lemma-I producer, transformer successor, layer transport, Magnus tower,
+  or endpoint was constructed.  The three D=2 readings in `BOUNDARY-MAP.md`
+  are explicitly predictions and leave all three existing seams open.
+
 ## 2026-08-03 — AREA discovery: the honest D=1 shadow is route-neutral
 
 - The existing four-field `Ledger` cannot be equivalent to the
