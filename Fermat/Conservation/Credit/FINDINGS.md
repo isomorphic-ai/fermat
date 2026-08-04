@@ -1,5 +1,35 @@
 # Credit-ladder findings
 
+## 2026-08-04 — INTERACTION verification: the bounded carrier keeps its receipts
+
+- The unchanged nine-target conservation audit is green at 8,697/8,697
+  jobs.  The previous count was 8,693; the four new DAG nodes are the three
+  route-neutral interaction modules and the Sophie--Germain condition module
+  reached by the named lamp interface.  Every common, N3--N7, credit, and
+  selected-N59 verification leaf replayed.  Output contains only the
+  pre-existing `CapacityCertificate` linter warnings.
+- `TransferVerification` now freezes exact axiom output for all 62 new public
+  theorems (30 interaction, 16 class-carrier, 16 transverse-annihilator), each
+  at `[propext, Classical.choice, Quot.sound]` or less.  Value-level guards
+  reach all three branches of the flow trichotomy, the genuine exit theorem,
+  both halves of the quotient warning, AreaTransfer payload invariance,
+  receipt reconstruction, Mathlib's bounded-class theorem, the Bézout kill
+  law, condition-(a) failure channels, and the sixfold/Wendt channel.
+- Independent review tightened the critical branch to retain non-fixity
+  inside `flow_bound_trichotomy` itself and combined integer gain-three growth
+  with mod-three fixation in one guarded warning theorem.  No remaining W1
+  or W2 correctness defect was found.
+- The final prediction verdict splits cleanly: W1 and the generic W3 Bézout
+  core were as direct as expected; W2 was stronger than predicted because
+  Mathlib closes the number-field Minkowski specialization with an exact
+  `β` receipt.  Stickelberger and the lamp remain honest named transverse
+  interfaces, and no conductor-59 gcd was fabricated without a same-action
+  polynomial pair.
+- No (7a) construction, transformer, successor, higher-layer transport,
+  endpoint, or finite-quotient substitute was added.  All pre-existing
+  forbidden-name/module guards and the expanded generic selected-prime scan
+  remain green.
+
 ## 2026-08-04 — INTERACTION discovery: the transverse polynomial is an interface
 
 - The permitted dependency cone does not expose the Stickelberger action as

@@ -185,7 +185,11 @@ LITERAL row:
   IsoConserve tunnel directions.  It now also covers the Heis group, center,
   abelianization and commutator-area anchors; the Ledger shadow; AreaTransfer
   composition and chain projection; both payload-dictionary directions and
-  lifted-step round trips; and the no-erasure/exact-cancellation pair.
+  lifted-step round trips; and the no-erasure/exact-cancellation pair.  The
+  same leaf now guards the two-account flow trichotomy and exit theorem, the
+  closed critical AreaTransfer word, the quotient-energy warning, every
+  receipted class-carrier projection, the concrete Minkowski representative,
+  the polynomial Bézout kill law, and both retained lamp livelock channels.
 - N3, N4, N5, N6, and N7 verification cover the origin-carrying stock
   successors, endpoints, and floor projections.
 - Credit Verification covers C1, C2, both C3 views, accountFlow, Bernoulli
@@ -196,8 +200,9 @@ LITERAL row:
   selected (7d), and the consumers conditional on supplied (7a).
 
 The selected-prime literal scan includes Transfer.lean, Heis.lean,
-AreaTransfer.lean, and the generic credit, drain, and Kummer source cone.
-Forbidden declaration/module guards continue to exclude the classical
+AreaTransfer.lean, Interaction.lean, ClassCarrier.lean,
+TransverseAnnihilator.lean, and the generic credit, drain, and Kummer source
+cone.  Forbidden declaration/module guards continue to exclude the classical
 irregular, regular, ladder, transport, and endpoint cones.
 
 ## The remaining frontier
