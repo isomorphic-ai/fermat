@@ -1,5 +1,47 @@
 # N59 conservation findings
 
+## 2026-08-04 — SEAM-7A discovery: the payload product does not cross the reflection seam
+
+- Removing the `sevenA` argument from the real
+  `StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA` source makes
+  Lean stop at the exact unsolved goal
+  `pair.ledger.VandiverSevenA 0 1`.  Allocation, literal ideal conjugacy,
+  the capacity/Sinnott plus-class certificate, and the derived (7d) fold all
+  elaborate before this goal; no later transformer or endpoint was entered.
+- `AreaTransfer (Additive (ClassGroup (𝒪 K))) ℤ` is a product-style
+  refinement: it extends an *already valid* class-group `Transfer`, while its
+  payload equation lives independently in `Heis ℤ`.  For the wanted
+  `r₀` / `58 • r₁` / vacuum fields, both `Transfer.total_preserved` and
+  `Transfer.converted_decomposition` already require
+  `r₀ + 58 • r₁ = 0`.  Thus `abelianProjection` cannot produce (7a) from
+  central cancellation; it presupposes (7a) before the word field is reached.
+- The clean cone contains neither a map from `StateLinkedIdealPair` (or its
+  root classes) to `Heis ℤ`, nor a Heisenberg conjugation/area-negation law,
+  nor a dependent law coupling an integer equality `word.c = -c₇a` to the
+  class-group equality.  `AreaTransfer.HasLedgerShadow` cannot repair this:
+  it is available only when ledger and payload use the same commutative-ring
+  carrier, whereas an additive class group is not the integer payload ring.
+- The nearby dependency theorem named `weakReflection_dvd_hMinus_of_dvd_hPlus_units`
+  is only a global class-number divisibility implication.  The in-progress
+  `KummerCriterion.Reflection` tree supplies local/Artin--Hasse infrastructure
+  but no statewise ideal-class principalization theorem.  Capacity plus
+  `boundedSinnottBridge` prove `59 ∤ h⁺`; flow and repayment conclude in the
+  real-unit carrier.  None supplies the missing state-to-class-group bridge.
+- The exact absent sub-construction is therefore the statewise reflection
+  producer itself: principality of the weighted root
+  `pair.plusIdeal * pair.minusIdeal ^ 58`, equivalently
+  `pair.ledger.VandiverSevenA 0 1`.  This is Vandiver's Lemma I, whose deep
+  mechanism is Leopoldt's 1958 Spiegelungssatz (with Kummer's primary
+  unramified-extension argument), not an integer-area identity.  The existing
+  forbidden reflection cone contains the required primary-radicand and
+  unramified-Kummer/Hilbert-94 construction; the campaign's clean state has
+  neither, and it was not imported or copied.
+- The obstruction is mathematically genuine rather than missing additive
+  simplification: in `Additive (ZMod 59)`, `r₀ = 1` and `r₁ = -1` satisfy
+  both 59-torsion and (7d), but (7a) reduces to `2 = 0`.  Consequently no
+  truthful `τ₂` or unconditional `FactorPrincipalizationPermit` can be
+  assembled from the presently exposed premises.
+
 ## 2026-08-02 — the remaining selected rows share their generic transfers
 
 - The selected N2 and N4 receipt fields can retain their public theorem
