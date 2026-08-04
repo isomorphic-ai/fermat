@@ -328,3 +328,39 @@ Lean implementation or the IsoConserve payload sources.
   ledger is intentionally non-canonical.  Provenance hashes, literal guards,
   and the route-neutral no-prime grep should be mechanical; the three frontier
   seams must remain uninhabited predictions.
+
+## INTERACTION prediction — 2026-08-04
+
+Recorded after reading `INTERACTION-TASK.md` and before inspecting or editing
+the interaction, class-carrier, or annihilator implementation.
+
+- **W1 — two-account dynamics.**  I expect the conservation and one-step
+  difference laws to be normalization-grade over a linear ordered field.  The
+  energy bound should follow from positivity as `|d| ≤ s`; the critical
+  `g = 2` swap should give a literal closed `AreaTransfer` word.  The only
+  likely friction is stating “supercritical-impossible forever” finitely and
+  honestly: it should become a quantified bounded-orbit theorem and an exit
+  trilemma, rather than an informal claim about an unspecified process.
+- **W2 — receipted class carrier.**  This is predicted to resist most.  Mathlib
+  likely supplies finiteness of class groups and specialized Minkowski
+  principalization arguments, but not a reusable choice of bounded ideal
+  representative together with an equality `I = (β) * I_red`.  I expect the
+  honest generic result to use a named `BoundedRepresentative` interface,
+  retain `I_red`, `β`, and every annihilator receipt in the state, prove that
+  reduction emits those receipts, and explicitly name the missing full
+  Minkowski boundedness construction.
+- **W3 — transverse annihilator.**  The polynomial Bézout core should be small:
+  coprimality of `P` and `T^r - 1` gives coefficients whose actions kill the
+  difference mode.  A nonunit gcd should itself be retained as the
+  constructive surviving-channel record.  Existing Stickelberger theorems
+  are predicted to be arithmetically specialized and not directly exposed as
+  a polynomial-module annihilator, so a named interface field will probably
+  be required.  The lamp/Wendt interface should cite the on-file `k_first`
+  sweep in `GENERATION-CHAINS.md`, not recompute it.
+- **W4 — gauge only.**  I expect the boundary-map update to be documentation
+  only: 7a is the conserved common mode requiring a transverse third view;
+  Bernoulli depth two and interaction gain two remain a named open
+  correspondence.  The optional conductor-59 gcd will be recorded only if W3
+  exposes both concrete polynomials without inventing instance data.  No 7a
+  producer, transformer, successor, layer endpoint, or FLT endpoint is
+  predicted or authorized.
