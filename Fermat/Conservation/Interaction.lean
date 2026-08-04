@@ -247,15 +247,16 @@ exit. -/
 theorem flow_bound_trichotomy {g : R} {x : TwoAccount R}
     (hg0 : 0 < g) (hd : difference x ≠ 0) :
     (g < 2 ∧ energy (step g x) < energy x) ∨
-      (g = 2 ∧ step g x = x.swap ∧ step g (step g x) = x ∧
-        energy (step g x) = energy x) ∨
+      (g = 2 ∧ step g x = x.swap ∧ step g x ≠ x ∧
+        step g (step g x) = x ∧ energy (step g x) = energy x) ∨
       (2 < g ∧ ∃ n : ℕ, ¬ PositiveLedger (orbit g x n)) := by
   rcases lt_trichotomy g 2 with hg2 | hg2 | hg2
   · exact Or.inl ⟨hg2, damped_energy_strict hg0 hg2 hd⟩
   · subst g
+    have hlivelock := critical_livelock x hd
     exact Or.inr (Or.inl
-      ⟨rfl, step_two_eq_swap x, critical_period_two x,
-        critical_energy_invariant x⟩)
+      ⟨rfl, step_two_eq_swap x, hlivelock.1, hlivelock.2.1,
+        hlivelock.2.2⟩)
   · exact Or.inr (Or.inr
       ⟨hg2, supercritical_eventually_leaves_positive_ledger hg2 hd⟩)
 
@@ -419,6 +420,18 @@ theorem quotient_erases_energy_mod_three (d : ZMod 3) :
         (1 - (3 : ZMod 3)) * d = (-2 : ZMod 3) * d := by norm_num
         _ = 1 * d := by rw [hminusTwo]
         _ = d := one_mul d]
+
+/-- The compiled warning in one statement: gain three grows every nonzero
+integer mode, while the same update fixes every mode and its energy after
+passing to `ZMod 3`.  A finite quotient therefore cannot serve as the bounded
+positive carrier required by the flow-bound argument. -/
+theorem quotient_erases_energy_warning :
+    (∀ d : ℤ, d ≠ 0 → d ^ 2 < ((1 - (3 : ℤ)) * d) ^ 2) ∧
+      (∀ d : ZMod 3,
+        ((1 - (3 : ZMod 3)) * d = d) ∧
+          (((1 - (3 : ZMod 3)) * d) ^ 2 = d ^ 2)) :=
+  ⟨fun _ hd ↦ gain_three_integer_energy_strict hd,
+    quotient_erases_energy_mod_three⟩
 
 end TwoAccount
 
