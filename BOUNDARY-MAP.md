@@ -283,6 +283,37 @@ reflection compares global class-number divisibility and does not imply this
 special class relation.  No forbidden implementation was imported or copied,
 so `τ₂` and the unconditional `FactorPrincipalizationPermit` remain absent.
 
+**GAUGE READING — interaction vocabulary, not a seam crossing
+(2026-08-04).**  Put the two selected class accounts in the signed coordinates
+
+    A = r₀,       B = -r₁.
+
+Then the interaction difference is `d = A - B = r₀ + r₁`, so the
+compiled relation (7d) is exactly the statement that the `d`-mode vanishes.
+The conserved common mode is `s = A + B = r₀ - r₁`.  Because the
+allocated ledger already proves `59 • r₁ = 0`, the missing (7a) expression
+
+    r₀ + 58 • r₁
+
+is the same common mode `s`.  An internal two-account interaction can change
+`d` but conserves `s`; consequently the `(r₀,-r₁)` pair alone cannot turn
+the proved (7d) reading into (7a).
+
+The named open correspondence is therefore transverse: a third view must
+pair the retained state with either the `827` lamp view and/or a
+Stickelberger view, so that the old common mode becomes a new difference mode
+of `(state, transverse-view)`.  No such state-to-lamp or
+state-to-Stickelberger map, polynomial annihilator, coprimality proof, or (7a)
+producer is asserted here.
+
+There are also two unrelated readings of the numeral two which must not be
+conflated.  `DepthCertificate.depthTwoCertificate` measures Bernoulli
+valuation depth `2`; critical interaction gain `g = 2` marks period-two
+livelock.  A theorem connecting those readings would need a typed map from
+the depth filtration to the interaction action.  That **two-2s
+correspondence is open future work**, not a theorem or heuristic rewrite in
+the present cone.
+
 ### 2. Stock-credit transformer successor
 
 For every PrimitiveSecondCaseSolution S, the missing producer must retain a

@@ -1,5 +1,22 @@
 # Credit-ladder findings
 
+## 2026-08-04 — INTERACTION discovery: (7d) is difference; (7a) is common mode
+
+- In the signed two-account coordinates `A = r₀` and `B = -r₁`, the
+  compiled relative-norm relation (7d) is exactly
+  `d = A - B = r₀ + r₁ = 0`.  The common mode is
+  `s = A + B = r₀ - r₁`; because the allocated class receipts already give
+  `59 • r₁ = 0`, Vandiver's missing expression `r₀ + 58 • r₁` is that
+  same `s`-mode.
+- This locates the obstruction without attempting it: every internal
+  two-account interaction conserves `s`, so (7d) cannot manufacture (7a).
+  A future construction needs a typed transverse third view—the `827` lamp
+  and/or Stickelberger—which turns the old common mode into a difference of a
+  new pair.  `BOUNDARY-MAP.md` records this strictly as a gauge reading.
+- Bernoulli depth `2` and critical interaction gain `g = 2` currently inhabit
+  unrelated types.  The named two-2s correspondence remains open until a map
+  from the depth filtration to the interaction action is constructed.
+
 ## 2026-08-03 — AREA verification: D=2 passes through the complete cone
 
 - The unchanged nine-target conservation audit completes successfully at
