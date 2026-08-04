@@ -20,6 +20,7 @@ injective in the ideal monoid of a Dedekind domain.
 -/
 import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.StateFactorPair
+import Fermat.Conservation.AreaTransfer
 
 open scoped NumberField
 
@@ -244,6 +245,45 @@ theorem StateLinkedIdealPair.vandiverSevenD
     Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootClass,
     Fermat.Conservation.Ledger.vacuum, zero_add]
     using hconverted.symm
+
+/-- Any area transfer with the wanted relation-(7a) class-group endpoints
+already contains Vandiver's Lemma-I relation in its inherited abelian
+transaction.  The `Heis ℤ` payload is deliberately absent from the proof:
+with the current product carrier it cannot manufacture this projection. -/
+theorem StateLinkedIdealPair.vandiverSevenA_of_areaTransfer_to_vacuum
+    {hζ : IsPrimitiveRoot ζ 59}
+    {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
+    (pair : StateLinkedIdealPair hζ S hz)
+    (transfer :
+      Fermat.Conservation.AreaTransfer
+        (Additive (ClassGroup (𝓞 K))) ℤ)
+    (hstock :
+      transfer.abelianProjection.before.stock =
+        pair.ledger.rootClass 0)
+    (hcredit :
+      transfer.abelianProjection.before.credit =
+        58 • pair.ledger.rootClass 1)
+    (hconverted :
+      transfer.abelianProjection.before.converted = 0)
+    (hafter :
+      transfer.abelianProjection.after =
+        Fermat.Conservation.Ledger.vacuum) :
+    pair.ledger.VandiverSevenA 0 1 := by
+  have hspent : transfer.abelianProjection.spent = 0 := by
+    have h := transfer.abelianProjection.converted_decomposition
+    rw [hafter, hconverted] at h
+    simpa only [Fermat.Conservation.Ledger.vacuum, zero_add] using h.symm
+  have havailable := transfer.abelianProjection.available_eq
+  change
+    transfer.abelianProjection.before.stock +
+        transfer.abelianProjection.before.credit =
+      transfer.abelianProjection.after.stock +
+        transfer.abelianProjection.after.credit +
+          transfer.abelianProjection.spent at havailable
+  rw [hstock, hcredit, hafter, hspent] at havailable
+  simpa only [Fermat.Conservation.Ledger.vacuum, zero_add, add_zero,
+    Fermat.Conservation.KummerDrain.AllocatedFactorLedger.VandiverSevenA,
+    Nat.reduceSub] using havailable
 
 /-- Once the same state pair supplies Vandiver's remaining Lemma-I
 relation (7a), its derived fold relation (7d) nets both selected classes

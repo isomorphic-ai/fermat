@@ -244,6 +244,45 @@ Producing such a `τ₂` from the canonical allocated state, without accepting
 `VandiverSevenA` as an input, would project to exactly `VandiverSevenA 0 1`.
 No `w₇a`, `c₇a`, or `τ₂` is asserted here.
 
+**FINDING — typed obstruction at the authorized crossing (2026-08-04).**
+The no-input core patch reaches exactly
+
+    pair.ledger.VandiverSevenA 0 1
+
+after allocation, conjugation transpose, capacity, bounded Sinnott, and (7d)
+have all elaborated.  The current `AreaTransfer` cannot discharge this goal:
+it extends an already valid `Transfer`, and `abelianProjection` is
+definitionally that parent.  With the displayed class-group endpoints,
+`total_preserved` and `converted_decomposition` each require
+`r₀ + 58 • r₁ = 0` before `beforePayload`, `afterPayload`, or `word` can
+contribute.  Meanwhile exact central cancellation has type
+
+    w₇a.c = -c₇a : Prop
+
+in `ℤ`; there is no dependent map from this equality, or from any
+`StateLinkedIdealPair`, into the class-group relation.  The compiled theorem
+`StateLinkedIdealPair.vandiverSevenA_of_areaTransfer_to_vacuum` proves the
+one available direction: any area transfer with the wanted abelian endpoints
+already projects to (7a).  `TransformerProbe` guards the reverse carrier
+mismatch directly.
+
+Thus the exact missing sub-construction is not central cancellation but the
+statewise theorem
+
+    StateLinkedIdealPair.vandiverSevenA
+      (pair : StateLinkedIdealPair hζ S hz) :
+      pair.ledger.VandiverSevenA 0 1
+
+equivalently principality of `pair.plusIdeal * pair.minusIdeal ^ 58`.
+This is Vandiver's Lemma I through Leopoldt's 1958 Spiegelungssatz and
+Kummer's primary unramified-extension argument.  The permitted cone proves
+`59 ∤ h⁺`, but it has no primary-radicand/unramified-Kummer reflection
+constructor and no state-to-real-unit/Heisenberg bridge; flow and repayment
+end in the unrelated real-unit carrier.  KummerCriterion's available weak
+reflection compares global class-number divisibility and does not imply this
+special class relation.  No forbidden implementation was imported or copied,
+so `τ₂` and the unconditional `FactorPrincipalizationPermit` remain absent.
+
 ### 2. Stock-credit transformer successor
 
 For every PrimitiveSecondCaseSolution S, the missing producer must retain a

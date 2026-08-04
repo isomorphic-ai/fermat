@@ -21,6 +21,7 @@ rather than a successor solution, and the strict drain compares ramified
 norm charges rather than the hypotenuse charges of two integral solutions.
 -/
 import Fermat.Conservation.KummerDrain
+import Fermat.Conservation.AreaTransfer
 import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.GaugeQuotient
 import Fermat.FiftyNine.Conservation.StateFactorConjugation
@@ -101,6 +102,28 @@ example
   exact
     Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA
       (allocatedPair hζ S hz) sevenA
+
+/-! The exact-cancellation equation exported by `Heis` is an integer
+payload fact.  It cannot fill the class-group relation required by the
+inherited abelian transaction. -/
+
+/--
+error: Type mismatch
+  hcancel
+has type
+  word.c = -c
+but is expected to have type
+  (allocatedPair hζ S hz).ledger.VandiverSevenA 0 1
+-/
+#guard_msgs in
+example
+    {ζ : K} (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution)
+    (hz : (59 : ℤ) ∣ S.z)
+    (word : Fermat.Conservation.Heis ℤ) (c : ℤ)
+    (hcancel : word.c = -c) :
+    (allocatedPair hζ S hz).ledger.VandiverSevenA 0 1 := by
+  exact hcancel
 
 variable {ζ : K}
 variable (hζ : IsPrimitiveRoot ζ 59)

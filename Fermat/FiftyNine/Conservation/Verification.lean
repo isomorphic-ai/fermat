@@ -289,8 +289,9 @@ projections in the specialized source-to-quotient transaction. -/
   Fermat.Conservation.Credit.GaugeQuotient.PrimeData.sourceToQuotientTransfer
 
 /-! Relative-norm (7d) and every consumer conditional on supplied (7a) now
-project the selected fold/netting transactions.  No guard asserts a producer
-for the still-open statewise (7a) premise. -/
+project the selected fold/netting transactions.  The new obstruction theorem
+checks that a wanted area transfer projects to (7a); no guard asserts a
+producer for that still-open statewise premise. -/
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.Fold.vandiverSevenD_of_relativeNormFold,
@@ -304,6 +305,12 @@ for the still-open statewise (7a) premise. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD,
   Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenDFoldToVacuumTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenA_of_areaTransfer_to_vacuum,
+  Fermat.Conservation.AreaTransfer.abelianProjection
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenA_of_areaTransfer_to_vacuum,
+  Fermat.Conservation.Transfer.available_eq
 #guard_depends_on
   Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA,
   Fermat.Conservation.Credit.Fold.oddTorsionNettingTransfer
@@ -870,6 +877,14 @@ info: 'Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenA_of_areaTransfer_to_vacuum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenA_of_areaTransfer_to_vacuum
 
 /--
 info: 'Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA' depends on axioms: [propext,
