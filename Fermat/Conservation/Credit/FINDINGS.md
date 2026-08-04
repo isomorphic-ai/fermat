@@ -1,5 +1,38 @@
 # Credit-ladder findings
 
+## 2026-08-04 — INTERACTION discovery: the transverse polynomial is an interface
+
+- The permitted dependency cone does not expose the Stickelberger action as
+  a polynomial-module annihilator.  Existing appearances are specialized
+  Sinnott bibliography and Gauss-sum arithmetic, so the honest W3 carrier
+  names a `StickelbergerTransverse` interface rather than relabeling an
+  unrelated theorem.
+- The concrete conductor-59 first-case source contains a pointwise Bézout
+  calculation for two residue polynomials, but it does not supply a cycle and
+  transverse polynomial acting on the same retained `d`-mode.  Consequently
+  there is no meaningful cheap 59-instance gcd to record: computing one from
+  those unrelated expressions would invent the missing correspondence.
+- `GENERATION-CHAINS.md` remains the empirical periodic-annihilator record:
+  its `k_first` table reports the strict Sophie--Germain sweep and the
+  sixfold/Wendt failure pattern.  W3 cites that record and formalizes what a
+  lamp certificate must provide, but does not recompute or promote the table
+  into a proof of a polynomial action.
+
+## 2026-08-04 — INTERACTION discovery: Mathlib emits the Minkowski receipt
+
+- The W2 resistance prediction was too pessimistic for number fields.
+  `NumberField.exists_ideal_in_class_of_norm_le` supplies an integral ideal
+  representative in each class with the classical Minkowski norm bound.
+  The quotient equality exposed by `ClassGroup.equiv` can then be unpacked to
+  obtain a principal scalar `β` and the retained equality
+  `I = (β) * I_red` at the fractional-ideal level.
+- The generic carrier still benefits from a named bounded-representative
+  interface, since an arbitrary Dedekind domain has no canonical geometric
+  norm region.  For rings of integers of number fields, however, the intended
+  bounded region and principalization receipt can be constructed from
+  Mathlib rather than postulated; there is no full-Minkowski gap to hide in
+  that specialization.
+
 ## 2026-08-04 — INTERACTION discovery: (7d) is difference; (7a) is common mode
 
 - In the signed two-account coordinates `A = r₀` and `B = -r₁`, the
