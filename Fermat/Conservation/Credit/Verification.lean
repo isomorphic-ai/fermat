@@ -1252,10 +1252,10 @@ private partial def selectedPrimeTokenLines
   "/- outer /- 59 -/ -/\n-- 59\n\"59\"".toList == #[]
 
 /-- Scan every generic credit Lean source together with the route-neutral
-drain, Kummer factor-ledger, Transfer, and Heisenberg payload modules,
-rejecting the campaign's selected prime numeral `59` when it occurs as a
-standalone code token.  Campaign prose in comments and strings is deliberately
-ignored. -/
+drain, Kummer factor-ledger, Transfer, Heisenberg payload, interaction,
+receipted class-carrier, and transverse-annihilator modules, rejecting the
+campaign's selected prime numeral `59` when it occurs as a standalone code
+token.  Campaign prose in comments and strings is deliberately ignored. -/
 elab "#guard_no_selected_prime_literal" : command => do
   let currentPath := System.FilePath.mk (← getFileName)
   let some sourceDirectory := currentPath.parent
@@ -1271,7 +1271,8 @@ elab "#guard_no_selected_prime_literal" : command => do
         offenders := offenders.push s!"{entry.path}:{line}"
   for filename in
       #["CyclotomicDrain.lean", "KummerDrain.lean", "Transfer.lean",
-        "Heis.lean", "AreaTransfer.lean"] do
+        "Heis.lean", "AreaTransfer.lean", "Interaction.lean",
+        "ClassCarrier.lean", "TransverseAnnihilator.lean"] do
     let path := conservationDirectory / System.FilePath.mk filename
     let source ← liftIO <| IO.FS.readFile path
     for line in selectedPrimeTokenLines source.toList do
