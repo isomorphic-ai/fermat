@@ -3,6 +3,33 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-04 — seam 7a reflection crossing prediction
+
+- The generic `Heis`/`AreaTransfer` layer is predicted to make exact central
+  cancellation routine once a reflection word is present: a word of area
+  `-c₇a` should carry `Heis.center c₇a` to `Heis.center 0`, and its
+  abelian projection should expose the wanted `r₀ + 58 • r₁ = 0` relation.
+- The likely resistance is the producer from the canonical allocated state,
+  not the payload packaging.  In decreasing order of risk: (1) turning the
+  `StateFactorPair` allocation and its `StateFactorConjugation` view into an
+  actual ordered word on `Additive (ClassGroup (𝒪 K))`; (2) proving on that
+  statewise word that conjugation fixes its abelian endpoint and negates its
+  signed area; (3) extracting a non-postulated incoming central receipt
+  `c₇a` whose exact cancellation has arithmetic content rather than choosing
+  the receipt retrospectively as `-w.c`.
+- `boundedSinnottBridge`, `capacityCertificate`, flow, and repayment are
+  predicted to certify that the special plus-side draw is silent, but their
+  current conclusions may live respectively in class-number and real-unit
+  carriers without a map to the ordered class-group word.  If that carrier
+  bridge is absent, the typed obstruction should be localized to precisely
+  this state-to-reflection-word constructor, credited to Leopoldt's 1958
+  Spiegelungssatz and Vandiver's Lemma I, rather than disguised as an assumed
+  `VandiverSevenA` premise.
+- If the constructor does compile, projection of the resulting `τ₂` is
+  expected to feed the existing conditional `factorPrincipalizationPermit_of_sevenA`
+  theorem directly.  No stock transformer, successor, or endpoint should be
+  entered in this crossing.
+
 ## 2026-07-29 — credit-seam patch prediction
 
 - Seam 1 should fall first.  The expected tractable core is a generated
