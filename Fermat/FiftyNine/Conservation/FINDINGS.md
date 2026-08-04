@@ -41,6 +41,14 @@
   both 59-torsion and (7d), but (7a) reduces to `2 = 0`.  Consequently no
   truthful `τ₂` or unconditional `FactorPrincipalizationPermit` can be
   assembled from the presently exposed premises.
+- The executable obstruction surface now has both directions needed for
+  review: `vandiverSevenA_of_areaTransfer_to_vacuum` proves that any wanted
+  area-transfer endpoint already contains (7a), while `TransformerProbe`
+  guards the type mismatch between `word.c = -c` and that class-group goal.
+  The public projection theorem has exactly the standard axiom trio.
+- The unchanged nine-target verification cone is green at 8,693/8,693 jobs.
+  All forbidden declaration/module guards and the selected-prime source scan
+  pass; the only warnings are the pre-existing `CapacityCertificate` lints.
 
 ## 2026-08-02 — the remaining selected rows share their generic transfers
 
