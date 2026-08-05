@@ -984,3 +984,19 @@
 - C1 is consequently absence of a funded generator: when the generator type
   is empty, the generated matrix is bottom.  It is not a separately asserted
   table of zero entries.
+
+## 2026-08-05 — Mathlib already has the strict skew-polynomial route
+
+- The pinned Mathlib contains `Mathlib.Algebra.SkewPolynomial.Basic`.
+  `SkewPolynomial R` is implemented as the finitely-supported
+  `SkewMonoidAlgebra R (Multiplicative ℕ)` and its multiplication satisfies
+  `X * C a = C (φ a) * X`.  Powers of `X` remain distinct; no relation on
+  `X ^ 2` is imposed.  This is exactly the strict normal form required for
+  `Lambda[R; #]`, so a free-algebra quotient would add proof machinery without
+  improving the presentation.
+- The route will therefore be named the **Mathlib skew-polynomial route** and
+  will register iteration of the involution as the required
+  `Multiplicative ℕ` semiring action.  The library file explicitly lists an
+  algebra instance as a TODO, so coefficient/corner maps may need to be built
+  as explicit ring or additive equivalences rather than obtained from a
+  ready-made `AlgEquiv` API.
