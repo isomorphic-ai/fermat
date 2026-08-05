@@ -1000,3 +1000,18 @@
   algebra instance as a TODO, so coefficient/corner maps may need to be built
   as explicit ring or additive equivalences rather than obtained from a
   ready-made `AlgEquiv` API.
+
+## 2026-08-05 — the reflected pairing is weighted, and the projectors are integral
+
+- The ordinary coefficient dot product is not adjoint for the
+  Teichmuller-twisted involution unless `omega` is trivial.  The natural
+  pairing is instead `⟪x,y⟫ = (x# * y)(1)`, equivalently the coefficient sum
+  weighted by `omega`.  Associativity and commutativity then give the exact
+  reflection conservation law `⟪a*x,y⟫ = ⟪x,a#*y⟫`; no unrecorded pairing
+  premise is needed.
+- Character orthogonality is also unnecessary for idempotency of one
+  character projector.  When `|Delta|` is invertible in the coefficient ring,
+  `e_chi` is the inverse-character diagonal twist of the normalized group
+  average.  The average is idempotent by reindexing the finite group sum, and
+  the algebra twist transports that proof.  W1 therefore works over a
+  commutative ring with invertible denominators, not merely over a field.
