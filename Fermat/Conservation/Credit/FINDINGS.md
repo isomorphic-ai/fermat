@@ -1068,3 +1068,14 @@
   `ClassCarrier.PrincipalizationReceipt` carrying `beta` and `source_eq`.
   Making an `AnnihilatorReceipt` here would assert the wrong zero equation
   and erase exactly the principal flow the task requires retaining.
+
+## 2026-08-05 — the complete linking stage passes both audit layers
+
+- `Fermat.Conservation.LinkingVerification` builds successfully in 8,523
+  jobs.  Its public-surface checks and exhaustive prefix axiom scan cover W1,
+  W2, W3, the W4 corner service, and W5, admitting only `propext`,
+  `Classical.choice`, and `Quot.sound`.
+- The unchanged nine-target conservation audit completes successfully in
+  exactly 8,697 jobs.  The selected-prime source scanner includes every new
+  linking module, and no forbidden route or architecture vocabulary occurs
+  in the linking surface.

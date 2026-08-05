@@ -133,7 +133,7 @@ theorem closedRoute_ne_one [Nontrivial Lambda] :
   rw [closedRoute, ← SkewPolynomial.monomial_one_right_eq_X_pow] at h
   have hcoeff := congrArg
     (fun p : Route Lambda ↦ SkewPolynomial.coeff p 2) h
-  simpa [SkewPolynomial.coeff_monomial, SkewPolynomial.coeff_one] using hcoeff
+  simp [SkewPolynomial.coeff_monomial, SkewPolynomial.coeff_one] at hcoeff
 
 /-! ## Named canonical path form
 
