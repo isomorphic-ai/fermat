@@ -1,5 +1,48 @@
 # N59 conservation findings
 
+## 2026-08-06 — TATE-BRIDGE discovery: the bank reaches the audit, not localization
+
+- `TransverseAnnihilator.LampTransverse` records the two prime facts, the
+  supporter equation `q = 2*k*p+1`, a polynomial, and its annihilator law.
+  Its Sophie--Germain and sixfold interfaces compare that polynomial with a
+  reflection-cycle polynomial.  It contains no arithmetic place,
+  localization map, local condition, pairing, or global detector.  A Tate
+  bridge can therefore retain an actual lamp as the certificate selecting
+  the auxiliary prime, but the Poitou--Tate construction and its exact
+  two-place support remain an `INTERFACE`.
+- The existing conductor-59 bank genuinely proves four useful receipts:
+  finite prime-to-59 capacity, the bounded Sinnott implication, deep
+  real-unit repayment from generated flow, and the statewise (7d) fold for
+  the allocated ideal-class pair.  These conclusions live in relative-index,
+  real-unit, and ideal-class carriers.  No existing declaration localizes
+  them into a local Tate-pairing carrier or proves that the localized class
+  lies in the orthogonal complement of the detector's local condition.
+- Consequently `bank_silences_other_places` can be a compiled
+  place-by-place audit whose bank-receipt fields are `PROVEN`, but its
+  `reading = 0` conclusions must consume an explicit orthogonality guard at
+  every audited place.  In particular, Selmer membership is not accepted as
+  a substitute for local-condition orthogonality, and (7d) does not kill the
+  auxiliary reading until a separate localization compatibility is supplied.
+- `gauge_eq_local_tate_pairing` and `transverse_detector_exists` remain
+  falsifiable arithmetic targets rather than constructions in the current
+  import cone.  The former must identify the already computed difference
+  gauge with the 59-local pairing up to a unit; the latter must construct one
+  global detector whose support is exactly the distinguished and lamp places.
+- There is a necessary typed refinement to the informal gauge equation.  The
+  existing `differenceGauge` takes values in
+  `Additive (ClassGroup (𝓞 K))`, whereas a local Tate reading takes values in
+  `ZMod 59`; the clean cone has no map between them.  The single gauge target
+  must therefore package an additive scalar readout together with
+  zero-reflection on this selected gauge.  Without that nondegeneracy clause,
+  reciprocity can kill a scalar while leaving (7a) completely untouched.
+- The three targets must share one detector witness.  Independent
+  existentials would let the gauge theorem use a different `y` from the
+  Poitou--Tate theorem.  Moreover, “two-reading” must mean support contained
+  in `{59,q}`, not support equal to that set: the bank is supposed to kill the
+  `q` coordinate.  The bank target must expose that auxiliary reading's
+  vanishing in addition to its audit of places outside `{59,q}`; otherwise
+  reciprocity yields only `reading(59) + reading(q) = 0`.
+
 ## 2026-08-04 — SEAM-7A discovery: the payload product does not cross the reflection seam
 
 - Removing the `sevenA` argument from the real

@@ -15,6 +15,7 @@ import Fermat.Conservation.CommonActionStage
 import Fermat.Conservation.LinkingInterfaces
 import Fermat.Conservation.SelmerSequence
 import Fermat.Conservation.SwapQuotient
+import Fermat.Conservation.TatePairing
 import Fermat.Conservation.TransverseAnnihilator
 
 open Fermat.Conservation
@@ -123,6 +124,27 @@ open Fermat.Conservation
 #check LinkingInterfaces.StrictRouteArithmeticRepresentation
 #check LinkingInterfaces.WithheldStrictRouteArithmeticRepresentation
 #check LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
+
+/-! ## Place-indexed Tate pairing and reciprocity surface -/
+
+#check TatePairing.character_mul_reflectedCharacter
+#check TatePairing.PlaceIndexedLocalPairing
+#check TatePairing.PlaceIndexedLocalPairing.pairAt
+#check TatePairing.PlaceIndexedLocalPairing.pairAt_smul_adjoint
+#check TatePairing.PlaceIndexedLocalPairing.pairAt_hash_smul_adjoint
+#check TatePairing.PlaceIndexedLocalPairing.finite_support
+#check TatePairing.PlaceLedger
+#check TatePairing.PlaceLedger.toLedger
+#check TatePairing.PlaceLedger.toVacuumTransfer
+#check TatePairing.PlaceLedger.toVacuumTransfer_L1
+#check TatePairing.GlobalReciprocityLaw
+#check TatePairing.GlobalReciprocityLaw.placeLedger
+#check TatePairing.GlobalReciprocityLaw.ledger_conservation_identity
+#check TatePairing.GlobalReciprocityLaw.reciprocityTransfer
+#check TatePairing.GlobalReciprocityLaw.reciprocity_L1_conservation
+#check TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places
+#check TatePairing.LocalOrthogonalityGuard
+#check TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero
 
 /-! ## Vendored Selmer class-sequence surface -/
 
@@ -340,6 +362,55 @@ open Fermat.Conservation
   LinkingInterfaces.StrictRouteArithmeticRepresentation.rho_closedRoute,
   LinkingInterfaces.ArithmeticRepresentation.rho_routeSquared
 
+/-! ## Tate pairing proof-value wiring -/
+
+#guard_depends_on TatePairing.character_mul_reflectedCharacter,
+  InvolutiveBase.reflectedCharacter
+#guard_depends_on
+  TatePairing.PlaceIndexedLocalPairing.pairAt_smul_adjoint,
+  TatePairing.PlaceIndexedLocalPairing.adjoint_law
+#guard_depends_on
+  TatePairing.PlaceIndexedLocalPairing.pairAt_hash_smul_adjoint,
+  TatePairing.PlaceIndexedLocalPairing.pairAt_smul_adjoint
+#guard_depends_on
+  TatePairing.PlaceIndexedLocalPairing.pairAt_hash_smul_adjoint,
+  InvolutiveBase.hash_hash
+#guard_depends_on TatePairing.PlaceIndexedLocalPairing.finite_support,
+  TatePairing.PlaceIndexedLocalPairing.pairAt
+#guard_depends_on TatePairing.PlaceLedger.toLedger_stock,
+  TatePairing.PlaceLedger.toLedger
+#guard_depends_on TatePairing.PlaceLedger.toLedger_credit,
+  TatePairing.PlaceLedger.toLedger
+#guard_depends_on TatePairing.PlaceLedger.toLedger_converted,
+  TatePairing.PlaceLedger.toLedger
+#guard_depends_on TatePairing.PlaceLedger.toLedger_total,
+  TatePairing.PlaceLedger.toLedger
+#guard_depends_on TatePairing.PlaceLedger.toVacuumTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on TatePairing.PlaceLedger.toVacuumTransfer_before,
+  TatePairing.PlaceLedger.toVacuumTransfer
+#guard_depends_on TatePairing.PlaceLedger.toVacuumTransfer_after,
+  TatePairing.PlaceLedger.toVacuumTransfer
+#guard_depends_on TatePairing.PlaceLedger.toVacuumTransfer_spent,
+  TatePairing.PlaceLedger.toVacuumTransfer
+#guard_depends_on TatePairing.PlaceLedger.toVacuumTransfer_L1,
+  IsoConserveBridge.transfer_L1_conservation
+#guard_depends_on TatePairing.GlobalReciprocityLaw.placeLedger,
+  TatePairing.PlaceLedger.mk
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.ledger_conservation_identity,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on TatePairing.GlobalReciprocityLaw.reciprocityTransfer,
+  TatePairing.PlaceLedger.toVacuumTransfer
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.reciprocity_L1_conservation,
+  IsoConserveBridge.transfer_L1_conservation
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places,
+  TatePairing.PlaceIndexedLocalPairing.pairAt
+#guard_depends_on TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero,
+  TatePairing.LocalOrthogonalityGuard.orthogonal
+
 /-! ## Common-action proof-value wiring -/
 
 #guard_depends_on IsDedekindDomain.selmerGroup.toClass_ker,
@@ -534,3 +605,4 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.TransverseAnnihilator.CornerService
 #guard_standard_axioms_prefix Fermat.Conservation.LinkingInterfaces
 #guard_standard_axioms_prefix Fermat.Conservation.CommonActionStage
+#guard_standard_axioms_prefix Fermat.Conservation.TatePairing
