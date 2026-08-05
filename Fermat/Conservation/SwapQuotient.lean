@@ -55,6 +55,36 @@ def generator : Swap (Lambda := Lambda) :=
   quotientMap (Lambda := Lambda)
     (SkewPolynomial.X : RouteAlgebra.Route Lambda)
 
+/-- The strict-route word for relation (7a).  Its action on a two-account
+state is `x - y`; the word itself is not asserted to vanish. -/
+def sevenARouteWord : RouteAlgebra.Route Lambda :=
+  1 - (SkewPolynomial.X : RouteAlgebra.Route Lambda)
+
+/-- The strict-route word for relation (7d).  Its action on a two-account
+state is `x + y`; the word itself is not asserted to vanish. -/
+def sevenDRouteWord : RouteAlgebra.Route Lambda :=
+  1 + (SkewPolynomial.X : RouteAlgebra.Route Lambda)
+
+/-- The image of the relation-(7a) word in the earned swap quotient. -/
+def sevenARelationWord : Swap (Lambda := Lambda) :=
+  quotientMap (Lambda := Lambda) (sevenARouteWord (Lambda := Lambda))
+
+/-- The image of the relation-(7d) word in the earned swap quotient. -/
+def sevenDRelationWord : Swap (Lambda := Lambda) :=
+  quotientMap (Lambda := Lambda) (sevenDRouteWord (Lambda := Lambda))
+
+@[simp]
+theorem sevenARelationWord_image :
+    sevenARelationWord (Lambda := Lambda) =
+      1 - generator (Lambda := Lambda) := by
+  simp [sevenARelationWord, sevenARouteWord, generator]
+
+@[simp]
+theorem sevenDRelationWord_image :
+    sevenDRelationWord (Lambda := Lambda) =
+      1 + generator (Lambda := Lambda) := by
+  simp [sevenDRelationWord, sevenDRouteWord, generator]
+
 /-- The coefficient embedding into the swap quotient. -/
 def coefficient : Lambda →+* Swap (Lambda := Lambda) :=
   (quotientMap (Lambda := Lambda)).comp SkewPolynomial.CRingHom
@@ -226,6 +256,60 @@ theorem piCommon_piDifference_orthogonal :
       _ = h * (h * qm) * qp := by rw [hqm.symm.eq]
       _ = (h * h) * (qm * qp) := by simp only [mul_assoc]
       _ = 0 := by rw [hmzero, mul_zero]
+
+/-- Erratum E1, derived in the earned quotient: the (7a) word is a `-1`
+eigenvector for the swap.  The common projector kills it and the difference
+projector fixes it. -/
+theorem sevenARelationWord_eigenspace :
+    generator (Lambda := Lambda) * sevenARelationWord (Lambda := Lambda) =
+        -sevenARelationWord (Lambda := Lambda) ∧
+      piCommon (Lambda := Lambda) * sevenARelationWord (Lambda := Lambda) = 0 ∧
+      piDifference (Lambda := Lambda) * sevenARelationWord (Lambda := Lambda) =
+        sevenARelationWord (Lambda := Lambda) := by
+  rw [sevenARelationWord_image]
+  let h := coefficientHalf (Lambda := Lambda)
+  let s := generator (Lambda := Lambda)
+  have hs : s * s = 1 := by
+    simpa only [pow_two] using generator_sq (Lambda := Lambda)
+  have hh : h + h = 1 := coefficientHalf_add_self (Lambda := Lambda)
+  change s * (1 - s) = -(1 - s) ∧
+    (h * (1 + s)) * (1 - s) = 0 ∧
+    (h * (1 - s)) * (1 - s) = 1 - s
+  constructor
+  · noncomm_ring [hs]
+  · constructor
+    · noncomm_ring [hs]
+    · calc
+        (h * (1 - s)) * (1 - s) = (h + h) * (1 - s) := by
+          noncomm_ring [hs]
+        _ = 1 - s := by rw [hh, one_mul]
+
+/-- Erratum E1, derived in the earned quotient: the proved (7d) word is a
+`+1` eigenvector for the swap.  The common projector fixes it and the
+difference projector kills it. -/
+theorem sevenDRelationWord_eigenspace :
+    generator (Lambda := Lambda) * sevenDRelationWord (Lambda := Lambda) =
+        sevenDRelationWord (Lambda := Lambda) ∧
+      piCommon (Lambda := Lambda) * sevenDRelationWord (Lambda := Lambda) =
+        sevenDRelationWord (Lambda := Lambda) ∧
+      piDifference (Lambda := Lambda) * sevenDRelationWord (Lambda := Lambda) = 0 := by
+  rw [sevenDRelationWord_image]
+  let h := coefficientHalf (Lambda := Lambda)
+  let s := generator (Lambda := Lambda)
+  have hs : s * s = 1 := by
+    simpa only [pow_two] using generator_sq (Lambda := Lambda)
+  have hh : h + h = 1 := coefficientHalf_add_self (Lambda := Lambda)
+  change s * (1 + s) = 1 + s ∧
+    (h * (1 + s)) * (1 + s) = 1 + s ∧
+    (h * (1 - s)) * (1 + s) = 0
+  constructor
+  · noncomm_ring [hs]
+  · constructor
+    · calc
+        (h * (1 + s)) * (1 + s) = (h + h) * (1 + s) := by
+          noncomm_ring [hs]
+        _ = 1 + s := by rw [hh, one_mul]
+    · noncomm_ring [hs]
 
 /-- The quotient flow element `(1 - g/2) + (g/2)R`.  Its ordinary scalar
 interpretation is used below when `g` is sharp-fixed. -/
@@ -435,6 +519,24 @@ theorem commonDifference_differenceProjector (x : Interaction.TwoAccount K) :
   ext <;> simp [commonDifference, differenceProjector,
     Interaction.TwoAccount.sum, Interaction.TwoAccount.difference] <;>
     field_simp <;> ring
+
+omit [NeZero (2 : K)] in
+/-- In the ordinary two-account representation, the (7a) quotient word
+`1 - R` reads exactly as the difference mode `(x-y, y-x)`. -/
+theorem sevenARelationOperator_apply (x : Interaction.TwoAccount K) :
+    ((LinearMap.id : Interaction.TwoAccount K →ₗ[K]
+        Interaction.TwoAccount K) - swapLinear (K := K)) x =
+      ⟨x.difference, -x.difference⟩ := by
+  ext <;> simp [swapLinear, Interaction.TwoAccount.difference]
+
+omit [NeZero (2 : K)] in
+/-- In the ordinary two-account representation, the (7d) quotient word
+`1 + R` reads exactly as the common mode `(x+y, x+y)`. -/
+theorem sevenDRelationOperator_apply (x : Interaction.TwoAccount K) :
+    ((LinearMap.id : Interaction.TwoAccount K →ₗ[K]
+        Interaction.TwoAccount K) + swapLinear (K := K)) x =
+      ⟨x.sum, x.sum⟩ := by
+  ext <;> simp [swapLinear, Interaction.TwoAccount.sum, add_comm]
 
 /-- The sharp-fixed scalar action of the quotient flow element.  A full
 twisted-coefficient representation requires additional semilinear data; this

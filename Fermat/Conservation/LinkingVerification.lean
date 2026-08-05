@@ -65,6 +65,12 @@ open Fermat.Conservation
 #check SwapQuotient.quotientMap
 #check SwapQuotient.generator
 #check SwapQuotient.coefficient
+#check SwapQuotient.sevenARouteWord
+#check SwapQuotient.sevenDRouteWord
+#check SwapQuotient.sevenARelationWord
+#check SwapQuotient.sevenDRelationWord
+#check SwapQuotient.sevenARelationWord_image
+#check SwapQuotient.sevenDRelationWord_image
 #check SwapQuotient.quotientMap_closedRoute
 #check SwapQuotient.generator_sq
 #check SwapQuotient.generator_coefficient
@@ -76,12 +82,16 @@ open Fermat.Conservation
 #check SwapQuotient.piCommon_idempotent
 #check SwapQuotient.piDifference_idempotent
 #check SwapQuotient.piCommon_piDifference_orthogonal
+#check SwapQuotient.sevenARelationWord_eigenspace
+#check SwapQuotient.sevenDRelationWord_eigenspace
 #check SwapQuotient.swapLinear
 #check SwapQuotient.swapLinear_sq
 #check SwapQuotient.commonDifference
 #check SwapQuotient.commonDifference_swap
 #check SwapQuotient.commonProjector_formula
 #check SwapQuotient.differenceProjector_formula
+#check SwapQuotient.sevenARelationOperator_apply
+#check SwapQuotient.sevenDRelationOperator_apply
 #check SwapQuotient.flowOperator
 #check SwapQuotient.flowOperator_apply
 #check SwapQuotient.flowOperator_two
@@ -146,6 +156,10 @@ open Fermat.Conservation
 
 #guard_depends_on SwapQuotient.quotientMap_closedRoute,
   TwoSidedIdeal.subset_span
+#guard_depends_on SwapQuotient.sevenARelationWord_image,
+  SwapQuotient.quotientMap
+#guard_depends_on SwapQuotient.sevenDRelationWord_image,
+  SwapQuotient.quotientMap
 #guard_depends_on SwapQuotient.generator_sq,
   SwapQuotient.quotientMap_closedRoute
 #guard_depends_on SwapQuotient.piCommon_idempotent,
@@ -154,6 +168,18 @@ open Fermat.Conservation
   SwapQuotient.generator_sq
 #guard_depends_on SwapQuotient.piCommon_piDifference_orthogonal,
   SwapQuotient.generator_sq
+#guard_depends_on SwapQuotient.sevenARelationWord_eigenspace,
+  SwapQuotient.sevenARelationWord_image
+#guard_depends_on SwapQuotient.sevenARelationWord_eigenspace,
+  SwapQuotient.generator_sq
+#guard_depends_on SwapQuotient.sevenARelationWord_eigenspace,
+  SwapQuotient.coefficientHalf_add_self
+#guard_depends_on SwapQuotient.sevenDRelationWord_eigenspace,
+  SwapQuotient.sevenDRelationWord_image
+#guard_depends_on SwapQuotient.sevenDRelationWord_eigenspace,
+  SwapQuotient.generator_sq
+#guard_depends_on SwapQuotient.sevenDRelationWord_eigenspace,
+  SwapQuotient.coefficientHalf_add_self
 #guard_depends_on SwapQuotient.flowElement_two,
   SwapQuotient.flowElement
 #guard_depends_on SwapQuotient.commonDifference_swap,
@@ -162,6 +188,10 @@ open Fermat.Conservation
   SwapQuotient.commonProjector
 #guard_depends_on SwapQuotient.differenceProjector_formula,
   SwapQuotient.differenceProjector
+#guard_depends_on SwapQuotient.sevenARelationOperator_apply,
+  SwapQuotient.swapLinear
+#guard_depends_on SwapQuotient.sevenDRelationOperator_apply,
+  SwapQuotient.swapLinear
 #guard_depends_on SwapQuotient.flowOperator_apply,
   Interaction.TwoAccount.step
 #guard_depends_on SwapQuotient.flowOperator_two,

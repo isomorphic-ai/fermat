@@ -1,5 +1,25 @@
 # Credit-ladder findings
 
+## 2026-08-05 — COMMON-ACTION-STAGE discovery: E1 flips the words, not the need
+
+- The earned quotient computes the historical relation words directly.
+  Relation (7a) maps from `1 - R` to a `-1` swap eigenvector: `piCommon`
+  kills it and `piDifference` fixes it.  The proved relation (7d) maps from
+  `1 + R` to a `+1` eigenvector: `piCommon` fixes it and `piDifference`
+  kills it.  In the account representation these operators read literally
+  as `(x-y, y-x)` and `(x+y, x+y)`.  Thus (7a) is the difference mode and
+  (7d) is the common mode, discharging `ERRATA.md` E1 by computation rather
+  than relabelling prose.
+- The corrected computation withdraws the former inference that (7a) must
+  use a third party because it was allegedly the conserved common mode.  The
+  demonstrated third-structure route belongs instead to the already-proved
+  common-mode (7d): its relative norm descends to the maximal real subfield,
+  is principalized there using plus-class-number coprimality, and is extended
+  back to the conjugate-ideal product.  That proof is not a two-account
+  internal transfer.  Eigenspace algebra alone neither requires nor excludes
+  a lamp or Stickelberger route for the open difference-mode (7a); that claim
+  must wait for a common arithmetic representation.
+
 ## 2026-08-04 — INTERACTION verification: the bounded carrier keeps its receipts
 
 - The unchanged nine-target conservation audit is green at 8,697/8,697

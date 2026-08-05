@@ -288,28 +288,39 @@ reflection compares global class-number divisibility and does not imply this
 special class relation.  No forbidden implementation was imported or copied,
 so `τ₂` and the unconditional `FactorPrincipalizationPermit` remain absent.
 
-**GAUGE READING — interaction vocabulary, not a seam crossing
-(2026-08-04).**  Put the two selected class accounts in the signed coordinates
+**DERIVED GAUGE READING — earned swap quotient
+(2026-08-05; discharges `ERRATA.md` E1).**  Put `x = r₀` and `y = r₁`
+before applying the earned swap.  Since the allocated ledger proves
+`59 • r₁ = 0`, the open (7a) expression satisfies
 
-    A = r₀,       B = -r₁.
+    r₀ + 58 • r₁ = r₀ - r₁ = x - y,
 
-Then the interaction difference is `d = A - B = r₀ + r₁`, so the
-compiled relation (7d) is exactly the statement that the `d`-mode vanishes.
-The conserved common mode is `s = A + B = r₀ - r₁`.  Because the
-allocated ledger already proves `59 • r₁ = 0`, the missing (7a) expression
+whereas the compiled (7d) relation is
 
-    r₀ + 58 • r₁
+    r₀ + r₁ = x + y.
 
-is the same common mode `s`.  An internal two-account interaction can change
-`d` but conserves `s`; consequently the `(r₀,-r₁)` pair alone cannot turn
-the proved (7d) reading into (7a).
+The strict route words `1 - R` and `1 + R` map along `quotientMap` to
+`SwapQuotient.sevenARelationWord` and
+`SwapQuotient.sevenDRelationWord` in `A_swap`.  The compiled theorems
+`sevenARelationWord_eigenspace` and `sevenDRelationWord_eigenspace` derive
+that (7a) is the `-1`/difference word (`piCommon` kills it and
+`piDifference` fixes it), while (7d) is the `+1`/common word (`piCommon`
+fixes it and `piDifference` kills it).  Thus the proved (7d) kills the
+common mode and the open (7a) is the difference mode, reversing the former
+labels exactly as recorded in E1.
 
-The named open correspondence is therefore transverse: a third view must
-pair the retained state with either the `827` lamp view and/or a
-Stickelberger view, so that the old common mode becomes a new difference mode
-of `(state, transverse-view)`.  No such state-to-lamp or
-state-to-Stickelberger map, polynomial annihilator, coprimality proof, or (7a)
-producer is asserted here.
+The former inference that (7a) must use a third party because it is the
+conserved common mode is therefore withdrawn.  The interaction-side
+common-mode observation now attaches to (7d), and its existing arithmetic
+proof already takes a genuine third-structure route: it sends the selected
+ideal through the relative norm to the maximal real subfield, principalizes
+there using the plus-class-number coprimality, and extends back to identify
+the norm with the product of the two conjugate ideals.  This is not an
+internal transfer between the two class accounts.  The swap-quotient
+computation by itself neither requires nor excludes a lamp or Stickelberger
+third view for the open difference-mode (7a); such a transverse route needs
+the missing common arithmetic representation and remains a named interface,
+not a theorem.
 
 There are also two unrelated readings of the numeral two which must not be
 conflated.  `DepthCertificate.depthTwoCertificate` measures Bernoulli
