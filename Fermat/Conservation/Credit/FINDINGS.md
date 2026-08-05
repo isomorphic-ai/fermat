@@ -1,5 +1,73 @@
 # Credit-ladder findings
 
+## 2026-08-05 — COMMON-ACTION-STAGE verification: the same audit command is green
+
+- The unchanged nine-target conservation command is green at 8,703/8,703
+  jobs.  Its previous graph contained 8,697 jobs; the expanded graph adds six
+  nodes while replaying every common, N3--N7, credit, and selected-N59 audit
+  leaf.  Output contains only the pre-existing `CapacityCertificate` linter
+  warnings.
+- `LinkingVerification.lean` independently checks the complete generic public
+  surface and proof-value wiring.  Every hand-written public theorem has a
+  dependency guard, and the exhaustive namespace audit limits all generated
+  and hand-written declarations to `propext`, `Classical.choice`, and
+  `Quot.sound` or less.  The selected namespace receives the same exhaustive
+  audit and theorem-level checks in the N59 verification leaf.
+- The generic selected-prime scanner now includes
+  `CommonActionStage.lean`; it remains green.  The two new stage modules also
+  contain none of the three forbidden construction names.  Direct compilation
+  of both stage sources, the generic linking audit, the credit audit, and the
+  selected audit all pass in addition to the full build.
+- The prediction was correct about W0, the dual/character allocation seam,
+  and the missing representation.  Compiler-driven review sharpened the
+  result: the unconditional selected wall is earlier, at Selmer class
+  exactness.  The rho wall is available only as a second, conditional result
+  whose `StrictRouteBoundary` proves that every intervening carrier, guard,
+  class-lift, and beta seam has actually been crossed.
+
+## 2026-08-05 — COMMON-ACTION-STAGE discovery: the carrier reaches a two-step wall
+
+- Mathlib supplies the genuine units-to-Selmer map and its injectivity, but
+  its Dedekind-domain Selmer implementation still leaves the class projection
+  and exactness theorem unconstructed.  The common stage maps the campaign's
+  real-unit subgroup into units modulo `p`th powers and then through that
+  actual Kummer map.  A compatibility record prevents a filtered character
+  leg from substituting an unrelated map merely bearing the same name.
+- Two supplied exact legs derive the product exact sequence, surjectivity,
+  `p`-torsion law, and decreasing product filtration.  The reflected leg is
+  additionally bound to an omega-twisted `CharacterModule`: its inclusion is
+  the dual of the `chi*` class projection and its projection is the dual of
+  the `chi*` unit inclusion.  Its filtration remains separately supplied and
+  decreasing.  No swap equivalence exists in the record.
+- The campaign's `FilteredStickelbergerCarrier` supplies beta-bearing unit
+  conversion once instantiated.  One source-ideal element now produces both
+  corner receipts, with the dual receipt using its actual sharp transport
+  into the separately guarded reflected ideal.  A state-conversion
+  compatibility identifies source, reduced representative, and beta with a
+  particular non-lossy `ClassCarrier` state.  Coefficient and Delta actions
+  are real module maps; named route maps give the closed endomorphisms
+  `s.comp r` and `r.comp s`.
+- Each allocated Fermat root has a concrete Minkowski-reduced state retaining
+  beta and its exact source reconstruction.  Only its earned class lies in
+  `Cl[p]`; the code no longer demands that the whole class group be
+  `p`-torsion.  Separate chi and reflected-dual allocation maps lift those
+  two subtype values.  The proved (7d) receipt is accurately named a
+  class-shadow receipt: its corner operator is `1 + classSwap`.  The genuine
+  strict word `C^r - 1` is constructed separately, and its receipt remains the
+  named `StrictReflectionCycleReceiptTarget` until arithmetic transport is
+  supplied.
+- The selected construction consequently has two ordered current addresses.
+  Unconditionally it stops at `SelmerClassSequenceRealization`.  Only a
+  `StrictRouteBoundary` carrying exactness, both character allocations, the
+  omega-dual laws, both integral guards, the allocated Selmer lift, and both
+  beta compatibilities may advance to
+  `ReflectedSelmerArithmeticRepresentationTarget`.  The typed wall is indexed
+  by its retained obstruction, so an unrelated carrier cannot inhabit it.
+  Unit-ideal success records the literal Bezout identity and gauge reading;
+  the noncommutative alternative records the surviving quotient channel, and
+  the polynomial specialization records an actual named nonunit common
+  factor with both divisibility receipts.
+
 ## 2026-08-05 — COMMON-ACTION-STAGE discovery: E1 flips the words, not the need
 
 - The earned quotient computes the historical relation words directly.

@@ -5,12 +5,13 @@ Authors: Fabian Franz, Fable
 
 # Executable audit for the twisted linking stage
 
-This non-imported leaf checks the W1--W5 public surfaces, the intended
-proof-value dependency direction, and the standard-axiom boundary.  In
-particular, strict-route perfect return is refuted upstream and is obtained
-only through the explicit swap quotient map.
+This non-imported leaf checks the linking W1--W5 and common-action W0--W3
+public surfaces, the intended proof-value dependency direction, and the
+standard-axiom boundary.  In particular, strict-route perfect return is
+refuted upstream and is obtained only through the explicit swap quotient map.
 -/
 import Fermat.Conservation.GuardDependsOn
+import Fermat.Conservation.CommonActionStage
 import Fermat.Conservation.LinkingInterfaces
 import Fermat.Conservation.SwapQuotient
 import Fermat.Conservation.TransverseAnnihilator
@@ -122,6 +123,104 @@ open Fermat.Conservation
 #check LinkingInterfaces.WithheldStrictRouteArithmeticRepresentation
 #check LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
 
+/-! ## Common-action stage surface -/
+
+#check CommonActionStage.UnitModP
+#check CommonActionStage.Selmer
+#check CommonActionStage.ClassPTorsion
+#check CommonActionStage.unitInclusion
+#check CommonActionStage.unitInclusion_injective
+#check CommonActionStage.realUnitClass
+#check CommonActionStage.realUnitInclusion
+#check CommonActionStage.SelmerClassSequenceRealization
+#check CommonActionStage.WithheldSelmerClassSequenceRealization
+#check CommonActionStage.SelmerCharacterDual
+#check CommonActionStage.ExactFilteredLeg
+#check CommonActionStage.ReflectedDualRealization
+#check CommonActionStage.ExactFilteredPair
+#check CommonActionStage.ReflectedExactFilteredPair
+#check CommonActionStage.ExactFilteredPair.Carrier
+#check CommonActionStage.ExactFilteredPair.unitInclusion
+#check CommonActionStage.ExactFilteredPair.classProjection
+#check CommonActionStage.ExactFilteredPair.unitInclusion_injective
+#check CommonActionStage.ExactFilteredPair.exact_at_carrier
+#check CommonActionStage.ExactFilteredPair.classProjection_surjective
+#check CommonActionStage.ExactFilteredPair.liftClassPair
+#check CommonActionStage.ExactFilteredPair.classProjection_liftClassPair
+#check CommonActionStage.ExactFilteredPair.filtration
+#check CommonActionStage.ExactFilteredPair.antitone_filtration
+#check CommonActionStage.ExactFilteredPair.class_p_torsion
+#check CommonActionStage.KummerCharacterLegCompatibility
+#check CommonActionStage.KummerPairedBinding
+#check CommonActionStage.exactLegOfFilteredStickelbergerCarrier
+#check CommonActionStage.IntegralReflectionInput
+#check CommonActionStage.IntegralReflectionInput.sharpTransport
+#check CommonActionStage.IntegralReflectionInput.sharpTransport_coe
+#check CommonActionStage.GuardedPairedCarrier
+#check CommonActionStage.GuardedPairedCarrier.exactPair
+#check CommonActionStage.GuardedPairedCarrier.chiConversionReceipt
+#check CommonActionStage.GuardedPairedCarrier.reflectedDualConversionReceipt
+#check CommonActionStage.GuardedPairedCarrier.pairedConversionReceipts
+#check CommonActionStage.lambdaAction
+#check CommonActionStage.lambdaAction_apply
+#check CommonActionStage.deltaAction
+#check CommonActionStage.deltaAction_apply
+#check CommonActionStage.RouteMaps
+#check CommonActionStage.RouteMaps.closedAtChi
+#check CommonActionStage.RouteMaps.closedAtReflected
+#check CommonActionStage.RouteMaps.openRoute
+#check CommonActionStage.RouteMaps.openRoute_apply
+#check CommonActionStage.RouteMaps.openRoute_sq_apply
+#check CommonActionStage.RouteMaps.ofArithmeticRepresentation
+#check CommonActionStage.RouteMaps.rho_routeSquared_eq_closed
+#check CommonActionStage.reflectionCycleCorner
+#check CommonActionStage.reflectionCycleCorner_eq
+#check CommonActionStage.StrictReflectionCycleReceipt
+#check CommonActionStage.StrictReflectionCycleReceiptTarget
+#check CommonActionStage.baseCornerProjection
+#check CommonActionStage.stickelbergerCorner
+#check CommonActionStage.stickelbergerCorner_val
+#check CommonActionStage.cornerCoefficient_smul_eq
+#check CommonActionStage.CornerConversionReceipt
+#check CommonActionStage.cornerConversionReceipt
+#check CommonActionStage.cornerConversionReceipt_beta
+#check CommonActionStage.classProjection_cornerCoefficient_smul_eq_zero
+#check CommonActionStage.StateConversionCompatibility
+#check CommonActionStage.StateConversionCompatibility.conversionReceipt_beta_eq_state_beta
+#check CommonActionStage.GuardedPairedCarrier.pairedCornerConversionReceipts
+#check CommonActionStage.AllocatedClass
+#check CommonActionStage.classSwap
+#check CommonActionStage.sevenDClassOperator
+#check CommonActionStage.classCornerIdempotent
+#check CommonActionStage.ClassActionCorner
+#check CommonActionStage.sevenDClassCornerElement
+#check CommonActionStage.differenceGauge
+#check CommonActionStage.sevenDClassShadowReceipt
+#check CommonActionStage.allocatedRootSource
+#check CommonActionStage.allocatedRootState
+#check CommonActionStage.allocatedRootState_receipts
+#check CommonActionStage.allocatedRootState_class
+#check CommonActionStage.allocatedRootState_source_eq
+#check CommonActionStage.allocatedClassObstruction
+#check CommonActionStage.allocatedSevenDClassReceipt
+#check CommonActionStage.allocatedSevenDReceiptedRootState
+#check CommonActionStage.allocatedSevenDReceiptedRootState_receipt
+#check CommonActionStage.allocatedSevenDClassReceipt_payload
+#check CommonActionStage.allocatedRootClassPTorsion
+#check CommonActionStage.CharacterClassAllocation
+#check CommonActionStage.allocatedCharacterClassObstruction
+#check CommonActionStage.allocatedSelmerObstruction
+#check CommonActionStage.classProjection_allocatedSelmerObstruction
+#check CommonActionStage.Outcome.UnitIdealResult
+#check CommonActionStage.Outcome.unitIdealResult
+#check CommonActionStage.Outcome.SurvivingChannelResult
+#check CommonActionStage.Outcome.WallAddress
+#check CommonActionStage.Outcome.LocalizedWall
+#check CommonActionStage.Outcome.TypedResult
+#check CommonActionStage.Outcome.PolynomialTypedResult
+#check CommonActionStage.reflectedSelmerRhoWall
+#check CommonActionStage.reflectedSelmerRhoWall_target
+
 /-! ## Proof-value wiring -/
 
 #guard_depends_on InvolutiveBase.hash_hash,
@@ -232,6 +331,122 @@ open Fermat.Conservation
   LinkingInterfaces.StrictRouteArithmeticRepresentation.rho_closedRoute,
   LinkingInterfaces.ArithmeticRepresentation.rho_routeSquared
 
+/-! ## Common-action proof-value wiring -/
+
+#guard_depends_on CommonActionStage.unitInclusion_injective,
+  IsDedekindDomain.selmerGroup.fromUnitLift_injective
+#guard_depends_on CommonActionStage.realUnitInclusion,
+  CommonActionStage.realUnitClass
+#guard_depends_on CommonActionStage.realUnitInclusion,
+  CommonActionStage.unitInclusion
+#guard_depends_on CommonActionStage.ExactFilteredPair.unitInclusion_injective,
+  CommonActionStage.ExactFilteredLeg.unitInclusion_injective
+#guard_depends_on CommonActionStage.ExactFilteredPair.exact_at_carrier,
+  CommonActionStage.ExactFilteredLeg.exact_at_carrier
+#guard_depends_on CommonActionStage.ExactFilteredPair.classProjection_surjective,
+  CommonActionStage.ExactFilteredLeg.classProjection_surjective
+#guard_depends_on CommonActionStage.ExactFilteredPair.classProjection_liftClassPair,
+  CommonActionStage.ExactFilteredPair.classProjection_surjective
+#guard_depends_on CommonActionStage.ExactFilteredPair.antitone_filtration,
+  CommonActionStage.ExactFilteredLeg.antitone_filtration
+#guard_depends_on CommonActionStage.ExactFilteredPair.class_p_torsion,
+  CommonActionStage.ExactFilteredLeg.class_p_torsion
+#guard_depends_on CommonActionStage.IntegralReflectionInput.sharpTransport,
+  LinkingInterfaces.IntegralStickelbergerIdeal.SharpTransformationGuard.sharp_image_eq_omega_reflected
+#guard_depends_on CommonActionStage.IntegralReflectionInput.sharpTransport,
+  Ideal.mem_map_of_mem
+#guard_depends_on CommonActionStage.IntegralReflectionInput.sharpTransport_coe,
+  CommonActionStage.IntegralReflectionInput.sharpTransport
+#guard_depends_on CommonActionStage.GuardedPairedCarrier.exactPair,
+  CommonActionStage.exactLegOfFilteredStickelbergerCarrier
+#guard_depends_on CommonActionStage.GuardedPairedCarrier.chiConversionReceipt,
+  LinkingInterfaces.FilteredStickelbergerCarrier.conversionReceipt
+#guard_depends_on
+  CommonActionStage.GuardedPairedCarrier.reflectedDualConversionReceipt,
+  LinkingInterfaces.FilteredStickelbergerCarrier.conversionReceipt
+#guard_depends_on CommonActionStage.GuardedPairedCarrier.pairedConversionReceipts,
+  CommonActionStage.IntegralReflectionInput.sharpTransport
+#guard_depends_on CommonActionStage.GuardedPairedCarrier.pairedConversionReceipts,
+  LinkingInterfaces.FilteredStickelbergerCarrier.conversionReceipt
+#guard_depends_on CommonActionStage.lambdaAction_apply,
+  CommonActionStage.lambdaAction
+#guard_depends_on CommonActionStage.deltaAction,
+  CommonActionStage.lambdaAction
+#guard_depends_on CommonActionStage.deltaAction_apply,
+  CommonActionStage.deltaAction
+#guard_depends_on CommonActionStage.RouteMaps.closedAtChi,
+  LinearMap.comp
+#guard_depends_on CommonActionStage.RouteMaps.closedAtReflected,
+  LinearMap.comp
+#guard_depends_on CommonActionStage.RouteMaps.openRoute_apply,
+  CommonActionStage.RouteMaps.openRoute
+#guard_depends_on CommonActionStage.RouteMaps.openRoute_sq_apply,
+  CommonActionStage.RouteMaps.openRoute_apply
+#guard_depends_on CommonActionStage.RouteMaps.ofArithmeticRepresentation,
+  LinkingInterfaces.ArithmeticRepresentation.routeChiToReflected
+#guard_depends_on CommonActionStage.RouteMaps.rho_routeSquared_eq_closed,
+  LinkingInterfaces.ArithmeticRepresentation.rho_routeSquared
+#guard_depends_on CommonActionStage.reflectionCycleCorner_eq,
+  CommonActionStage.reflectionCycleCorner
+#guard_depends_on CommonActionStage.reflectionCycleCorner_eq,
+  TransverseAnnihilator.cyclePolynomial
+#guard_depends_on CommonActionStage.stickelbergerCorner,
+  CommonActionStage.baseCornerProjection
+#guard_depends_on CommonActionStage.stickelbergerCorner_val,
+  CommonActionStage.stickelbergerCorner
+#guard_depends_on CommonActionStage.cornerCoefficient_smul_eq,
+  smul_comm
+#guard_depends_on CommonActionStage.cornerConversionReceipt,
+  LinkingInterfaces.FilteredStickelbergerCarrier.stickelberger_conversion
+#guard_depends_on CommonActionStage.cornerConversionReceipt,
+  LinkingInterfaces.FilteredStickelbergerCarrier.conversionReceipt
+#guard_depends_on CommonActionStage.cornerConversionReceipt_beta,
+  CommonActionStage.cornerConversionReceipt
+#guard_depends_on
+  CommonActionStage.classProjection_cornerCoefficient_smul_eq_zero,
+  LinkingInterfaces.FilteredStickelbergerCarrier.classProjection_smul_eq_zero
+#guard_depends_on CommonActionStage.sevenDClassOperator,
+  CommonActionStage.classSwap
+#guard_depends_on CommonActionStage.sevenDClassCornerElement,
+  CommonActionStage.sevenDClassOperator
+#guard_depends_on CommonActionStage.sevenDClassShadowReceipt,
+  CommonActionStage.sevenDClassCornerElement
+#guard_depends_on CommonActionStage.allocatedRootState,
+  ClassCarrier.numberFieldBoundedRepresentative
+#guard_depends_on CommonActionStage.allocatedRootState_receipts,
+  CommonActionStage.allocatedRootState
+#guard_depends_on CommonActionStage.allocatedRootState_class,
+  ClassCarrier.idealClassProjection_eq_source_class
+#guard_depends_on CommonActionStage.allocatedRootState_source_eq,
+  ClassCarrier.State.source_eq_principal_mul_reduced
+#guard_depends_on CommonActionStage.allocatedSevenDClassReceipt,
+  CommonActionStage.sevenDClassShadowReceipt
+#guard_depends_on CommonActionStage.allocatedSevenDReceiptedRootState,
+  CommonActionStage.allocatedSevenDClassReceipt
+#guard_depends_on CommonActionStage.allocatedSevenDReceiptedRootState_receipt,
+  CommonActionStage.allocatedSevenDReceiptedRootState
+#guard_depends_on CommonActionStage.allocatedSevenDClassReceipt_payload,
+  CommonActionStage.allocatedSevenDClassReceipt
+#guard_depends_on CommonActionStage.allocatedRootClassPTorsion,
+  KummerDrain.AllocatedFactorLedger.rootClass_torsion
+#guard_depends_on CommonActionStage.allocatedSelmerObstruction,
+  CommonActionStage.ExactFilteredPair.liftClassPair
+#guard_depends_on CommonActionStage.classProjection_allocatedSelmerObstruction,
+  CommonActionStage.ExactFilteredPair.classProjection_liftClassPair
+#guard_depends_on CommonActionStage.Outcome.unitIdealResult,
+  TransverseAnnihilator.CornerService.eq_zero_of_annihilates_of_bezout
+#guard_depends_on
+  CommonActionStage.StateConversionCompatibility.conversionReceipt_beta_eq_state_beta,
+  CommonActionStage.StateConversionCompatibility.beta_eq
+#guard_depends_on
+  CommonActionStage.GuardedPairedCarrier.pairedCornerConversionReceipts,
+  CommonActionStage.IntegralReflectionInput.sharpTransport
+#guard_depends_on
+  CommonActionStage.GuardedPairedCarrier.pairedCornerConversionReceipts,
+  CommonActionStage.cornerConversionReceipt
+#guard_depends_on CommonActionStage.reflectedSelmerRhoWall_target,
+  CommonActionStage.reflectedSelmerRhoWall
+
 /-! ## Exhaustive axiom boundary
 
 Every declaration created below each W1--W5 namespace is inspected.  This is
@@ -264,3 +479,4 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.SwapQuotient
 #guard_standard_axioms_prefix Fermat.Conservation.TransverseAnnihilator.CornerService
 #guard_standard_axioms_prefix Fermat.Conservation.LinkingInterfaces
+#guard_standard_axioms_prefix Fermat.Conservation.CommonActionStage

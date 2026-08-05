@@ -11,8 +11,10 @@ credit-flow instance.  It also checks declarations and the transitive module
 graph, rather than relying only on representative unused-name tests.
 
 The final `Fermat.HoldsAt 59` theorem is not present here.  The selected
-gauge quotient is complete, while the guarded transformer probe records the
-statewise relation-production and pullback obligations that stop W2 and W3.
+gauge quotient is complete, while the common-action stage retains the
+statewise class receipts and localizes the first Selmer-exactness wall, then
+the strict-route representation wall only behind evidence for every earlier
+seam.
 -/
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.Ledger
@@ -26,6 +28,7 @@ import Fermat.FiftyNine.Conservation.GaugeQuotient
 import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.StateFactorPair
 import Fermat.FiftyNine.Conservation.StateFactorConjugation
+import Fermat.FiftyNine.Conservation.CommonActionStage
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
 /-! ## Ledger-literal gate -/
@@ -315,6 +318,86 @@ producer for that still-open statewise premise. -/
   Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.factorPrincipalizationPermit_of_sevenA,
   Fermat.Conservation.Credit.Fold.oddTorsionNettingTransfer
 
+/-! ## Selected common-action carrier, receipts, and localized walls -/
+
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.classObstruction
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.reflectionFoldTransfer
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.sevenDClassReceipt
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.plusClassCarrierState
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.minusClassCarrierState
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.plusClassCarrierState_receipt
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.minusClassCarrierState_receipt
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.plusClassCarrierState_class
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.minusClassCarrierState_class
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.plusClassCarrierState_source_eq
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.minusClassCarrierState_source_eq
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.sevenDClassReceipt_payload
+#check Fermat.FiftyNine.Conservation.CommonActionStage.canonicalClassObstruction
+#check Fermat.FiftyNine.Conservation.CommonActionStage.canonicalSevenDClassReceipt
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.selmerClassExactnessWall
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.StrictRouteBoundary
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall_target
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.typedLocalizedResult
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.classObstruction,
+  Fermat.Conservation.CommonActionStage.allocatedClassObstruction
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.reflectionFoldTransfer,
+  Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenDFoldToVacuumTransfer
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.sevenDClassReceipt,
+  Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.sevenDClassReceipt,
+  Fermat.Conservation.CommonActionStage.allocatedSevenDClassReceipt
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.plusClassCarrierState,
+  Fermat.Conservation.CommonActionStage.allocatedSevenDReceiptedRootState
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.minusClassCarrierState,
+  Fermat.Conservation.CommonActionStage.allocatedSevenDReceiptedRootState
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.plusClassCarrierState_receipt,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.plusClassCarrierState
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.minusClassCarrierState_receipt,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.minusClassCarrierState
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.plusClassCarrierState_class,
+  Fermat.Conservation.CommonActionStage.allocatedRootState_class
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.minusClassCarrierState_class,
+  Fermat.Conservation.CommonActionStage.allocatedRootState_class
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.plusClassCarrierState_source_eq,
+  Fermat.Conservation.CommonActionStage.allocatedRootState_source_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.minusClassCarrierState_source_eq,
+  Fermat.Conservation.CommonActionStage.allocatedRootState_source_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.sevenDClassReceipt_payload,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.sevenDClassReceipt
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.canonicalClassObstruction,
+  Fermat.FiftyNine.Conservation.StateFactorPair.allocatedPair
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.canonicalSevenDClassReceipt,
+  Fermat.FiftyNine.Conservation.StateFactorPair.allocatedPair
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.selmerClassExactnessWall,
+  Fermat.Conservation.CommonActionStage.WithheldSelmerClassSequenceRealization
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall,
+  Fermat.Conservation.LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall_target,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.typedLocalizedResult,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.selmerClassExactnessWall
+
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 
 /--
@@ -552,6 +635,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.FermatState
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.StateFactorPair
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.StateFactorConjugation
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CommonActionStage
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
 /--
