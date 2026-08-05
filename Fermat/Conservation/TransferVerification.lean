@@ -87,6 +87,20 @@ gcd channel. -/
 #check TransverseAnnihilator.LampTransverse
 #check TransverseAnnihilator.SophieGermainGCDLaw
 #check TransverseAnnihilator.SixfoldWendtLaw
+#check TransverseAnnihilator.CornerService.BezoutCertificate
+#check TransverseAnnihilator.CornerService.BreaksCycle
+#check TransverseAnnihilator.CornerService.eq_zero_of_annihilates_of_bezout
+#check TransverseAnnihilator.CornerService.relationSubmodule
+#check TransverseAnnihilator.CornerService.LivelockCarrier
+#check TransverseAnnihilator.CornerService.one_mem_relationSubmodule_iff
+#check TransverseAnnihilator.CornerService.relationSubmodule_eq_top_iff
+#check TransverseAnnihilator.CornerService.livelockCarrier_subsingleton_iff
+#check TransverseAnnihilator.CornerService.livelockCarrier_nontrivial_iff
+#check TransverseAnnihilator.CornerService.CornerLivelockChannel
+#check TransverseAnnihilator.CornerService.nonempty_cornerLivelockChannel_iff
+#check TransverseAnnihilator.breaksCycle_iff_polynomialGCD_eq_one
+#check TransverseAnnihilator.polynomial_livelockCarrier_subsingleton_iff
+#check TransverseAnnihilator.nonempty_polynomial_cornerLivelockChannel_iff
 #check TransverseAnnihilator.eq_zero_of_cycle_and_transverse_gcd_eq_one
 #check TransverseAnnihilator.TwoAnnihilatorMode.livelockChannel
 #check TransverseAnnihilator.StickelbergerTransverse.mode_eq_zero_of_gcd_eq_one
@@ -270,7 +284,10 @@ the explicit Wendt shared-factor witness. -/
   Fermat.Conservation.TransverseAnnihilator.annihilates_euclideanGCD
 #guard_depends_on
   Fermat.Conservation.TransverseAnnihilator.eq_zero_of_cycle_and_transverse_gcd_eq_one,
-  Fermat.Conservation.TransverseAnnihilator.annihilates_polynomialGCD
+  Fermat.Conservation.TransverseAnnihilator.breaksCycle_iff_polynomialGCD_eq_one
+#guard_depends_on
+  Fermat.Conservation.TransverseAnnihilator.eq_zero_of_cycle_and_transverse_gcd_eq_one,
+  Fermat.Conservation.TransverseAnnihilator.CornerService.eq_zero_of_annihilates_of_bezout
 #guard_depends_on
   Fermat.Conservation.TransverseAnnihilator.TwoAnnihilatorMode.mode_eq_zero,
   Fermat.Conservation.TransverseAnnihilator.eq_zero_of_cycle_and_transverse_gcd_eq_one
@@ -914,6 +931,76 @@ info: 'Fermat.Conservation.ClassCarrier.numberField_source_eq_principal_mul_redu
 
 /-! Every public transverse-annihilator theorem stays within the standard
 axiom trio. -/
+
+/--
+info: 'Fermat.Conservation.TransverseAnnihilator.CornerService.eq_zero_of_annihilates_of_bezout' depends on axioms: [propext]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.TransverseAnnihilator.CornerService.eq_zero_of_annihilates_of_bezout
+
+/--
+info: 'Fermat.Conservation.TransverseAnnihilator.CornerService.one_mem_relationSubmodule_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.TransverseAnnihilator.CornerService.one_mem_relationSubmodule_iff
+
+/--
+info: 'Fermat.Conservation.TransverseAnnihilator.CornerService.relationSubmodule_eq_top_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.TransverseAnnihilator.CornerService.relationSubmodule_eq_top_iff
+
+/--
+info: 'Fermat.Conservation.TransverseAnnihilator.CornerService.livelockCarrier_subsingleton_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.TransverseAnnihilator.CornerService.livelockCarrier_subsingleton_iff
+
+/--
+info: 'Fermat.Conservation.TransverseAnnihilator.CornerService.livelockCarrier_nontrivial_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.TransverseAnnihilator.CornerService.livelockCarrier_nontrivial_iff
+
+/--
+info: 'Fermat.Conservation.TransverseAnnihilator.CornerService.nonempty_cornerLivelockChannel_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.TransverseAnnihilator.CornerService.nonempty_cornerLivelockChannel_iff
+
+/--
+info: 'Fermat.Conservation.TransverseAnnihilator.breaksCycle_iff_polynomialGCD_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.TransverseAnnihilator.breaksCycle_iff_polynomialGCD_eq_one
+
+/--
+info: 'Fermat.Conservation.TransverseAnnihilator.polynomial_livelockCarrier_subsingleton_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.TransverseAnnihilator.polynomial_livelockCarrier_subsingleton_iff
+
+/--
+info: 'Fermat.Conservation.TransverseAnnihilator.nonempty_polynomial_cornerLivelockChannel_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.TransverseAnnihilator.nonempty_polynomial_cornerLivelockChannel_iff
 
 /--
 info: 'Fermat.Conservation.TransverseAnnihilator.normalize_polynomialGCD' depends on axioms: [propext,
