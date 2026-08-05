@@ -1054,3 +1054,17 @@
   require coefficient compatibility, off-diagonal route action, and the two
   composite closed returns, but it must not contain a witness or an
   `R^2 = 1` field.
+
+## 2026-08-05 — conversion has an integral type and a principal-flow receipt
+
+- The sharpest guard against the rational Stickelberger shortcut is a field
+  whose type is literally
+  `Ideal (MonoidAlgebra (PadicInt p) Delta)` under `[Fact p.Prime]`.  A
+  rational element containing `1/p` cannot inhabit that interface, while the
+  ideal's sharp image is still integral and must be identified with a
+  separately named reflected ideal by an explicit transformation law.
+- The conversion law has type `theta • s ∈ range(unitInclusion)`.  Its
+  evidence is a converted unit, and the resulting accounting artifact is a
+  `ClassCarrier.PrincipalizationReceipt` carrying `beta` and `source_eq`.
+  Making an `AnnihilatorReceipt` here would assert the wrong zero equation
+  and erase exactly the principal flow the task requires retaining.
