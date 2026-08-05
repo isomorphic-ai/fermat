@@ -29,6 +29,7 @@ import Fermat.FiftyNine.Conservation.Fold
 import Fermat.FiftyNine.Conservation.StateFactorPair
 import Fermat.FiftyNine.Conservation.StateFactorConjugation
 import Fermat.FiftyNine.Conservation.CommonActionStage
+import Fermat.FiftyNine.Conservation.TateBridge
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
 /-! ## Ledger-literal gate -/
@@ -432,6 +433,197 @@ producer for that still-open statewise premise. -/
   Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.typedLocalizedResult,
   Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.characterDualAllocationWall
 
+/-! ## Place-indexed Tate pairing and conditional relation-(7a) bridge -/
+
+/-! W1 exposes local readings with finite support, makes the `#`-adjoint law
+proof-relevant, and routes global reciprocity through the existing
+`Ledger`/`Transfer`/`IsoConserveBridge` vocabulary. -/
+
+#check Fermat.Conservation.TatePairing.character_mul_reflectedCharacter
+#check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing
+#check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt
+#check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt_smul_adjoint
+#check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt_hash_smul_adjoint
+#check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.finite_support
+#check Fermat.Conservation.TatePairing.PlaceLedger
+#check Fermat.Conservation.TatePairing.PlaceLedger.toLedger
+#check Fermat.Conservation.TatePairing.PlaceLedger.toVacuumTransfer
+#check Fermat.Conservation.TatePairing.PlaceLedger.toVacuumTransfer_L1
+#check Fermat.Conservation.TatePairing.GlobalReciprocityLaw
+#check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.placeLedger
+#check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.ledger_conservation_identity
+#check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.reciprocityTransfer
+#check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.reciprocity_L1_conservation
+#check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places
+#check Fermat.Conservation.TatePairing.LocalOrthogonalityGuard
+#check Fermat.Conservation.TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero
+
+#guard_depends_on
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt_smul_adjoint,
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.adjoint_law
+#guard_depends_on
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt_hash_smul_adjoint,
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt_smul_adjoint
+#guard_depends_on
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt_hash_smul_adjoint,
+  Fermat.Conservation.InvolutiveBase.hash_hash
+#guard_depends_on
+  Fermat.Conservation.TatePairing.PlaceLedger.toVacuumTransfer,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.TatePairing.PlaceLedger.toVacuumTransfer_L1,
+  Fermat.Conservation.IsoConserveBridge.transfer_L1_conservation
+#guard_depends_on
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.placeLedger,
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.sum_eq_zero
+#guard_depends_on
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.ledger_conservation_identity,
+  Fermat.Conservation.Ledger.conservation_identity
+#guard_depends_on
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.reciprocity_L1_conservation,
+  Fermat.Conservation.IsoConserveBridge.transfer_L1_conservation
+#guard_depends_on
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places,
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.sum_eq_zero
+#guard_depends_on
+  Fermat.Conservation.TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero,
+  Fermat.Conservation.TatePairing.LocalOrthogonalityGuard.orthogonal
+
+/-! W2 keeps the three exact lowercase arithmetic targets as interfaces on
+one shared detector.  The bank receipts and their assembly are proved, but
+the auxiliary and remaining place rows retain explicit orthogonality
+guards. -/
+
+#check Fermat.FiftyNine.Conservation.TateBridge.LocalPairing
+#check Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction
+#check Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction.toLampTransverse
+#check Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector
+#check Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.lamp
+#check Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.lamp_annihilates_detector
+#check Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.outside_reading_eq_zero
+#check Fermat.FiftyNine.Conservation.TateBridge.transverse_detector_exists
+#check Fermat.FiftyNine.Conservation.TateBridge.chosenTransverseDetector
+#check Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison
+#check Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_of_local_reading_eq_zero
+#check Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.gauge_eq_zero_of_local_reading_eq_zero
+#check Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_local_tate_pairing
+#check Fermat.FiftyNine.Conservation.TateBridge.N59BankReceipts
+#check Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts
+#check Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard
+#check Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.pairAt_eq_zero
+#check Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit
+#check Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.auxiliary_reading_eq_zero
+#check Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.other_reading_eq_zero
+#check Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.away_reading_eq_zero
+#check Fermat.FiftyNine.Conservation.TateBridge.bank_silences_other_places
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction.toLampTransverse,
+  Fermat.FiftyNine.Conservation.Credit.attestationPrime_isPrime
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.lamp,
+  Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction.toLampTransverse
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.lamp_annihilates_detector,
+  Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.lamp_realizes_detector
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.lamp_annihilates_detector,
+  Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction.annihilates
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.outside_reading_eq_zero,
+  Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.outside_two_readings
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_local_tate_pairing,
+  Fermat.FiftyNine.Conservation.TateBridge.chosenTransverseDetector
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.bank_silences_other_places,
+  Fermat.FiftyNine.Conservation.TateBridge.chosenTransverseDetector
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.chosenTransverseDetector,
+  Classical.choice
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_of_local_reading_eq_zero,
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.pairing_eq_gauge
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.gauge_eq_zero_of_local_reading_eq_zero,
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.reflects_selected_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.gauge_eq_zero_of_local_reading_eq_zero,
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_of_local_reading_eq_zero
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts,
+  Fermat.FiftyNine.Conservation.CapacityCertificate.capacityCertificate
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts,
+  Fermat.FiftyNine.Conservation.Credit.boundedSinnottBridge
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts,
+  Fermat.FiftyNine.Conservation.Fold.not_dvd_plusClassNumber
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts,
+  Fermat.FiftyNine.Conservation.Instance.deepFlowLaw59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts,
+  Fermat.FiftyNine.Conservation.Instance.repayment_of_capacity_and_flow
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts,
+  Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.pairAt_eq_zero,
+  Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.pairAt_eq_zero,
+  Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.orthogonal_of_sevenD
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.auxiliary_reading_eq_zero,
+  Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.pairAt_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.other_reading_eq_zero,
+  Fermat.Conservation.TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.away_reading_eq_zero,
+  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.auxiliary_reading_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.away_reading_eq_zero,
+  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.other_reading_eq_zero
+
+/-! W3 is a compiled conditional theorem, not an unconditional producer.
+Its proof consumes reciprocity, the one chosen detector shared by all three
+targets, the complete bank silence audit, the gauge zero-reflection law, and
+the existing exact relation-(7a) vanishing theorem. -/
+
+#check Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge
+#check Fermat.FiftyNine.Conservation.TateBridge.Mu59ToTheNRisk
+#check Fermat.FiftyNine.Conservation.TateBridge.mu_59_to_the_n_risk
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge,
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge,
+  Fermat.FiftyNine.Conservation.TateBridge.chosenTransverseDetector
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge,
+  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.away_reading_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge,
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.reflects_selected_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.mu_59_to_the_n_risk,
+  Fermat.FiftyNine.Conservation.TateBridge.Mu59ToTheNRisk.mk
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge
+
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 
 /--
@@ -670,6 +862,8 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.StateFactorPair
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.StateFactorConjugation
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CommonActionStage
+#guard_standard_axioms_prefix Fermat.Conservation.TatePairing
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TateBridge
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
 /--
