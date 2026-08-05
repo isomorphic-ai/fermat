@@ -410,3 +410,48 @@ Lean source for this task.
   receipt conversion, and reflected Selmer representation will remain named
   interfaces only; no dg enhancement, Lemma 7a, transformer, or endpoint is
   predicted or authorized.
+
+## COMMON-ACTION-STAGE prediction — 2026-08-05
+
+Recorded after reading `STAGE-TASK.md`, `ERRATA.md`, and the collaboration
+protocol, but before inspecting `SwapQuotient.lean` or any implementation
+body for the common-action stage.
+
+- **W0 committed guess.**  In the earned swap quotient, I predict that the
+  image of the (7a) relation word `x - y` is a `-1` eigenvector for the swap
+  and is fixed by `pi_diff = (1 - R) / 2` while `pi_common` kills it.  The
+  image of the proved (7d) word `x + y` should be a `+1` eigenvector, fixed by
+  `pi_common = (1 + R) / 2` while `pi_diff` kills it.  Thus E1 should reverse
+  the old W4 labels.  I expect the old claim that (7a) itself necessarily
+  needs a third party not to survive as stated: the algebra should establish
+  only that the already-proved common-mode (7d) used a third structure,
+  namely the relative norm through the real subfield.  A third view for the
+  open difference-mode (7a) will remain a possible arithmetic route, not a
+  consequence of two-account eigenspace bookkeeping alone.
+- **W1 carrier resistance.**  I expect the class component and its retained
+  `ClassCarrier` receipts to assemble directly, and the real-unit component
+  to expose the beta/principal-flow direction of the Kummer sequence.  The
+  reflected dual leg should resist first: the available Selmer API does not
+  provide the exact sequence, character decomposition, or duality map as one
+  concrete representation.  The honest carrier should therefore be a
+  filtered paired record with a named exact-sequence realization interface;
+  reflection supplies routes between its two legs, never a swap equality.
+- **W2 representation wall.**  The diagonal `Lambda`/`Delta` action is
+  expected to be constructible wherever an existing module action is already
+  present.  I predict `rho` bites first at the off-diagonal route `r` from the
+  `chi` leg to the dual of the `chi*` leg (and symmetrically at `s`), because
+  the campaign has pairing-shaped reflection receipts but no arithmetic
+  representation of the full route algebra.  Closed composites should be
+  honest endomorphisms once both named maps are supplied.  Both integral
+  Stickelberger and sharp-transformation fields from `LinkingInterfaces` must
+  occur in the implementation values, not merely in theorem assumptions that
+  are never consumed.
+- **W3 expected outcome.**  I expect the allocated state classes to enter the
+  class summand through existing reduction/principalization receipts, and the
+  relative-norm fold plus Stickelberger conversion to produce typed corner
+  receipts.  I do not expect the permitted cone to prove a common-action
+  unit-ideal identity, nor to identify a meaningful nonunit common factor,
+  before `rho` exists on that same carrier.  The likely result is therefore a
+  localized wall naming the first missing route representation and retaining
+  the would-be obstruction and receipts on its boundary.  No endpoint,
+  transformer, or dg replacement is predicted.
