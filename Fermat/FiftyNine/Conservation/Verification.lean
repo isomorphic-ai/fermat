@@ -12,9 +12,9 @@ graph, rather than relying only on representative unused-name tests.
 
 The final `Fermat.HoldsAt 59` theorem is not present here.  The selected
 gauge quotient is complete, while the common-action stage retains the
-statewise class receipts and localizes the first Selmer-exactness wall, then
-the strict-route representation wall only behind evidence for every earlier
-seam.
+statewise class receipts and, at one supplied reflected pair, localizes the
+first character-allocation wall.  It reaches the strict-route representation
+wall only behind evidence for every earlier seam.
 -/
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.Ledger
@@ -334,8 +334,12 @@ producer for that still-open statewise premise. -/
 #check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.sevenDClassReceipt_payload
 #check Fermat.FiftyNine.Conservation.CommonActionStage.canonicalClassObstruction
 #check Fermat.FiftyNine.Conservation.CommonActionStage.canonicalSevenDClassReceipt
-#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.selmerClassExactnessWall
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_reading
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.CharacterDualAllocationTarget
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.characterDualAllocationWall
 #check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.StrictRouteBoundary
+#check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.StrictRouteBoundary.selmerObstruction
 #check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall
 #check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall_target
 #check Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.typedLocalizedResult
@@ -386,17 +390,47 @@ producer for that still-open statewise premise. -/
   Fermat.FiftyNine.Conservation.CommonActionStage.canonicalSevenDClassReceipt,
   Fermat.FiftyNine.Conservation.StateFactorPair.allocatedPair
 #guard_depends_on
-  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.selmerClassExactnessWall,
-  Fermat.Conservation.CommonActionStage.WithheldSelmerClassSequenceRealization
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_reading,
+  Fermat.Conservation.CommonActionStage.differenceGauge
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_reading,
+  Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootClass_torsion
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_reading
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA,
+  Fermat.Conservation.KummerDrain.AllocatedFactorLedger.VandiverSevenA
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.CharacterDualAllocationTarget,
+  Fermat.Conservation.CommonActionStage.KummerPairedBinding
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.CharacterDualAllocationTarget,
+  Fermat.Conservation.CommonActionStage.selmerClassSequenceRealization
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.CharacterDualAllocationTarget,
+  Fermat.Conservation.CommonActionStage.CharacterClassAllocation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.CharacterDualAllocationTarget,
+  Fermat.Conservation.CommonActionStage.allocatedRootClassPTorsion
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.characterDualAllocationWall,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.CharacterDualAllocationTarget
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.StrictRouteBoundary.selmerObstruction,
+  Fermat.Conservation.CommonActionStage.allocatedSelmerObstruction
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall,
   Fermat.Conservation.LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.StrictRouteBoundary.selmerObstruction
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall_target,
   Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.strictRouteRhoWall
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.typedLocalizedResult,
-  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.selmerClassExactnessWall
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.characterDualAllocationWall
 
 /-! ## Generated N59 credit: tower, orbit, matrix, capacity, repayment -/
 

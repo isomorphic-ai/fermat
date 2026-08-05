@@ -8,9 +8,12 @@ Authors: Fabian Franz, Fable
 The actual normalized Fermat pair supplies two allocated ideals and the
 proved relative-norm fold.  This module lifts both roots into non-lossy
 `ClassCarrier` states, threads the fold receipt through them, and retains the
-statewise class obstruction.  Transport of that receipt to the strict-route
-Selmer corner is deliberately stopped at the named arithmetic-representation
-target.
+statewise class obstruction.  The vendored Selmer class sequence now supplies
+the formerly missing exactness canonically.  Conditional on a supplied
+reflected exact pair, which already carries the omega-dual laws, the selected
+stage stops next at its missing character allocations.  Only a boundary also
+carrying the integral data and both beta compatibilities may advance to the
+strict-route arithmetic-representation target.
 -/
 import Fermat.Conservation.CommonActionStage
 import Fermat.FiftyNine.Conservation.StateFactorConjugation
@@ -149,18 +152,137 @@ def canonicalSevenDClassReceipt
     (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z) :=
   StateLinkedIdealPair.sevenDClassReceipt (allocatedPair hζ S hz)
 
-/-- The exact first missing selected-instance seam.  The state and fold
-receipt exist, while Mathlib still withholds the class projection/exactness
-needed to realize the concrete Selmer lift. -/
-def StateLinkedIdealPair.selmerClassExactnessWall
+/-- The selected difference gauge is exactly the relation-(7a) word.  The
+rewrite from subtraction uses only the already-earned `59`-torsion receipt;
+it does not assert that the reading vanishes. -/
+theorem StateLinkedIdealPair.differenceGauge_reading
     (pair : StateLinkedIdealPair hζ S hz) :
+    differenceGauge (AllocatedClass K)
+        (StateLinkedIdealPair.classObstruction pair) =
+      pair.ledger.rootClass 0 + 58 • pair.ledger.rootClass 1 := by
+  change pair.ledger.rootClass 0 - pair.ledger.rootClass 1 =
+    pair.ledger.rootClass 0 + 58 • pair.ledger.rootClass 1
+  rw [sub_eq_add_neg]
+  congr 1
+  have htorsion := pair.ledger.rootClass_torsion 1
+  have hsplit :
+      58 • pair.ledger.rootClass 1 + pair.ledger.rootClass 1 = 0 := by
+    calc
+      58 • pair.ledger.rootClass 1 + pair.ledger.rootClass 1 =
+          58 • pair.ledger.rootClass 1 + 1 • pair.ledger.rootClass 1 := by
+            rw [one_nsmul]
+      _ = (58 + 1) • pair.ledger.rootClass 1 := by rw [add_nsmul]
+      _ = 59 • pair.ledger.rootClass 1 := by norm_num
+      _ = 0 := htorsion
+  exact (eq_neg_of_add_eq_zero_left hsplit).symm
+
+/-- Vanishing of the selected difference gauge is precisely the still-open
+Vandiver relation (7a), rather than a newly proved unit-ideal reading. -/
+theorem StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA
+    (pair : StateLinkedIdealPair hζ S hz) :
+    differenceGauge (AllocatedClass K)
+          (StateLinkedIdealPair.classObstruction pair) = 0 ↔
+      pair.ledger.VandiverSevenA 0 1 := by
+  rw [StateLinkedIdealPair.differenceGauge_reading]
+  rfl
+
+/-- The first missing stage service after the now-canonical Selmer class
+sequence, conditional on one supplied reflected exact pair.  The pair already
+supplies the omega-dual laws; the target asks only for both commuting Kummer
+character allocations and the separately directed allocation into the
+reflected-dual class leg.  Readback maps retain the actual allocated roots on
+all three class views, so zero maps cannot fake the service unless the
+corresponding retained root itself vanishes. -/
+def StateLinkedIdealPair.CharacterDualAllocationTarget
+    {Delta : Type*} [CommGroup Delta] [Fintype Delta]
+    [Invertible (Fintype.card Delta : PadicInt 59)]
+    {UChi SelmerChi ClassChi UStar SelmerChiStar ClassStar
+      UDual DOmegaSelmerChiStar ClassDual : Type*}
+    [AddCommGroup UChi] [Module (IntegralPadicGroupAlgebra 59 Delta) UChi]
+    [AddCommGroup SelmerChi]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) SelmerChi]
+    [AddCommGroup ClassChi]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassChi]
+    [AddCommGroup UStar] [Module (IntegralPadicGroupAlgebra 59 Delta) UStar]
+    [AddCommGroup SelmerChiStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) SelmerChiStar]
+    [AddCommGroup ClassStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassStar]
+    [AddCommGroup UDual] [Module (IntegralPadicGroupAlgebra 59 Delta) UDual]
+    [AddCommGroup DOmegaSelmerChiStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) DOmegaSelmerChiStar]
+    [AddCommGroup ClassDual]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassDual]
+    (pair : StateLinkedIdealPair hζ S hz)
+    (omega : Fermat.Conservation.InvolutiveBase.Character (PadicInt 59) Delta)
+    (reflectedPair : ReflectedExactFilteredPair 59
+      (IntegralPadicGroupAlgebra 59 Delta)
+      UChi SelmerChi ClassChi UStar SelmerChiStar ClassStar
+      UDual DOmegaSelmerChiStar ClassDual
+      (Fermat.Conservation.InvolutiveBase.hash omega)) : Prop :=
+  ∃ (binding : KummerPairedBinding
+        (selmerClassSequenceRealization
+          (R := NumberField.RingOfIntegers K) (K := K) (p := 59))
+        reflectedPair)
+      (allocation : CharacterClassAllocation
+        (p := 59) (K := K) (ClassChi := ClassChi) (ClassDual := ClassDual))
+      (chiReadback : ClassChi →+
+        ClassPTorsion (NumberField.RingOfIntegers K) 59)
+      (chiStarReadback : ClassStar →+
+        ClassPTorsion (NumberField.RingOfIntegers K) 59)
+      (reflectedDualReadback : ClassDual →+
+        ClassPTorsion (NumberField.RingOfIntegers K) 59),
+      allocation.chi = binding.chi.classAllocation ∧
+      chiReadback
+          (allocation.chi (allocatedRootClassPTorsion pair.ledger 0)) =
+        allocatedRootClassPTorsion pair.ledger 0 ∧
+      chiStarReadback
+          (binding.chiStar.classAllocation
+            (allocatedRootClassPTorsion pair.ledger 1)) =
+        allocatedRootClassPTorsion pair.ledger 1 ∧
+      reflectedDualReadback
+          (allocation.reflectedDual
+            (allocatedRootClassPTorsion pair.ledger 1)) =
+        allocatedRootClassPTorsion pair.ledger 1
+
+/-- Conditional on one supplied reflected exact pair, the selected stage now
+stops at character allocation.  The pair already supplies the omega-dual laws,
+while the class obstruction and its difference gauge remain retained and
+exactness is provided by the vendored sequence. -/
+def StateLinkedIdealPair.characterDualAllocationWall
+    {Delta : Type*} [CommGroup Delta] [Fintype Delta]
+    [Invertible (Fintype.card Delta : PadicInt 59)]
+    {UChi SelmerChi ClassChi UStar SelmerChiStar ClassStar
+      UDual DOmegaSelmerChiStar ClassDual : Type*}
+    [AddCommGroup UChi] [Module (IntegralPadicGroupAlgebra 59 Delta) UChi]
+    [AddCommGroup SelmerChi]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) SelmerChi]
+    [AddCommGroup ClassChi]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassChi]
+    [AddCommGroup UStar] [Module (IntegralPadicGroupAlgebra 59 Delta) UStar]
+    [AddCommGroup SelmerChiStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) SelmerChiStar]
+    [AddCommGroup ClassStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassStar]
+    [AddCommGroup UDual] [Module (IntegralPadicGroupAlgebra 59 Delta) UDual]
+    [AddCommGroup DOmegaSelmerChiStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) DOmegaSelmerChiStar]
+    [AddCommGroup ClassDual]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassDual]
+    (pair : StateLinkedIdealPair hζ S hz)
+    (omega : Fermat.Conservation.InvolutiveBase.Character (PadicInt 59) Delta)
+    (reflectedPair : ReflectedExactFilteredPair 59
+      (IntegralPadicGroupAlgebra 59 Delta)
+      UChi SelmerChi ClassChi UStar SelmerChiStar ClassStar
+      UDual DOmegaSelmerChiStar ClassDual
+      (Fermat.Conservation.InvolutiveBase.hash omega)) :
     Outcome.LocalizedWall
       (StateLinkedIdealPair.classObstruction pair) where
   obstruction := StateLinkedIdealPair.classObstruction pair
   obstruction_eq := rfl
-  address := Outcome.WallAddress.selmerClassExactness
-  target := WithheldSelmerClassSequenceRealization
-    (R := NumberField.RingOfIntegers K) (K := K) (p := 59)
+  address := Outcome.WallAddress.characterDualAllocation
+  target := StateLinkedIdealPair.CharacterDualAllocationTarget
+    pair omega reflectedPair
 
 /-- Evidence that every seam before the strict-route representation has
 actually been crossed on this selected state.  It binds the actual Kummer
@@ -195,8 +317,6 @@ structure StateLinkedIdealPair.StrictRouteBoundary
     (pair : StateLinkedIdealPair hζ S hz)
     (omega :
       Fermat.Conservation.InvolutiveBase.Character (PadicInt 59) Delta) where
-  sequence : SelmerClassSequenceRealization
-    (R := NumberField.RingOfIntegers K) (K := K) (p := 59)
   guarded : GuardedPairedCarrier 59 Delta omega
     UChi SelmerChi ClassChi UDual DOmegaSelmerChiStar ClassDual
     Kˣ (FractionalIdeal (NumberField.RingOfIntegers K)⁰ K)ˣ
@@ -207,20 +327,85 @@ structure StateLinkedIdealPair.StrictRouteBoundary
     UDual DOmegaSelmerChiStar ClassDual
     (Fermat.Conservation.InvolutiveBase.hash omega)
   exactPair_eq : reflectedPair.pair = guarded.exactPair
-  kummerBinding : KummerPairedBinding sequence reflectedPair
+  kummerBinding : KummerPairedBinding
+    (selmerClassSequenceRealization
+      (R := NumberField.RingOfIntegers K) (K := K) (p := 59))
+    reflectedPair
   classAllocation : CharacterClassAllocation
     (p := 59) (K := K) (ClassChi := ClassChi) (ClassDual := ClassDual)
-  selmerObstruction : SelmerChi × DOmegaSelmerChiStar
-  selmerObstruction_eq :
-    selmerObstruction = allocatedSelmerObstruction guarded.exactPair
-      classAllocation pair.ledger 0 1
+  classAllocation_chi_eq :
+    classAllocation.chi = kummerBinding.chi.classAllocation
+  chiClassReadback :
+    ClassChi →+ ClassPTorsion (NumberField.RingOfIntegers K) 59
+  chiClassReadback_root_zero :
+    chiClassReadback
+        (classAllocation.chi (allocatedRootClassPTorsion pair.ledger 0)) =
+      allocatedRootClassPTorsion pair.ledger 0
+  chiStarClassReadback :
+    ClassStar →+ ClassPTorsion (NumberField.RingOfIntegers K) 59
+  chiStarClassReadback_root_one :
+    chiStarClassReadback
+        (kummerBinding.chiStar.classAllocation
+          (allocatedRootClassPTorsion pair.ledger 1)) =
+      allocatedRootClassPTorsion pair.ledger 1
+  reflectedDualClassReadback :
+    ClassDual →+ ClassPTorsion (NumberField.RingOfIntegers K) 59
+  reflectedDualClassReadback_root_one :
+    reflectedDualClassReadback
+        (classAllocation.reflectedDual
+          (allocatedRootClassPTorsion pair.ledger 1)) =
+      allocatedRootClassPTorsion pair.ledger 1
   theta : guarded.integral.source.ideal
   plusBetaCompatibility : StateConversionCompatibility
     (StateLinkedIdealPair.plusClassCarrierState pair) guarded.chi theta
-      selmerObstruction.1
+      (allocatedSelmerObstruction guarded.exactPair
+        classAllocation pair.ledger 0 1).1
   minusBetaCompatibility : StateConversionCompatibility
     (StateLinkedIdealPair.minusClassCarrierState pair) guarded.reflectedDual
-      (guarded.integral.sharpTransport theta) selmerObstruction.2
+      (guarded.integral.sharpTransport theta)
+      (allocatedSelmerObstruction guarded.exactPair
+        classAllocation pair.ledger 0 1).2
+
+/-- The paired Selmer obstruction is determined by the paired exact carrier,
+the two directional class allocations, and the allocated Fermat roots.  It is
+not separately stored in `StrictRouteBoundary`. -/
+def StateLinkedIdealPair.StrictRouteBoundary.selmerObstruction
+    {Delta : Type*} [CommGroup Delta] [Fintype Delta]
+    [Invertible (Fintype.card Delta : PadicInt 59)]
+    {UChi SelmerChi ClassChi UStar SelmerChiStar ClassStar
+      UDual DOmegaSelmerChiStar ClassDual : Type*}
+    [AddCommGroup UChi]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) UChi]
+    [AddCommGroup SelmerChi]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) SelmerChi]
+    [Module (PadicInt 59) SelmerChi]
+    [AddCommGroup ClassChi]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassChi]
+    [AddCommGroup UStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) UStar]
+    [AddCommGroup SelmerChiStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) SelmerChiStar]
+    [AddCommGroup ClassStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassStar]
+    [AddCommGroup UDual]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) UDual]
+    [AddCommGroup DOmegaSelmerChiStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) DOmegaSelmerChiStar]
+    [Module (PadicInt 59) DOmegaSelmerChiStar]
+    [AddCommGroup ClassDual]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassDual]
+    {pair : StateLinkedIdealPair hζ S hz}
+    {omega :
+      Fermat.Conservation.InvolutiveBase.Character (PadicInt 59) Delta}
+    (boundary : StateLinkedIdealPair.StrictRouteBoundary pair omega
+      (UChi := UChi) (SelmerChi := SelmerChi) (ClassChi := ClassChi)
+      (UStar := UStar) (SelmerChiStar := SelmerChiStar)
+      (ClassStar := ClassStar) (UDual := UDual)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar)
+      (ClassDual := ClassDual)) :
+    SelmerChi × DOmegaSelmerChiStar :=
+  allocatedSelmerObstruction boundary.guarded.exactPair
+    boundary.classAllocation pair.ledger 0 1
 
 /-- Once a `StrictRouteBoundary` supplies every earlier receipt, the next
 wall is exactly the existing missing strict-route representation.  Its
@@ -308,11 +493,38 @@ theorem StateLinkedIdealPair.strictRouteRhoWall_target
         (DOmegaSelmerChiStar := DOmegaSelmerChiStar) omega chi :=
   rfl
 
-/-- The unconditional selected-stage result stops at the first missing
-class-projection/exactness theorem.  Later route data is not accepted here,
-so this value cannot skip directly to the representation wall. -/
+/-- Conditional on one supplied reflected exact pair, the selected-stage
+result stops at the first missing character-allocation service.  The pair
+already supplies the omega-dual laws; later integral, beta, and route data is
+not accepted here, so this value cannot skip directly to the representation
+wall. -/
 def StateLinkedIdealPair.typedLocalizedResult
+    {Delta : Type*} [CommGroup Delta] [Fintype Delta]
+    [Invertible (Fintype.card Delta : PadicInt 59)]
+    {UChi SelmerChi ClassChi UStar SelmerChiStar ClassStar
+      UDual DOmegaSelmerChiStar ClassDual : Type*}
+    [AddCommGroup UChi] [Module (IntegralPadicGroupAlgebra 59 Delta) UChi]
+    [AddCommGroup SelmerChi]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) SelmerChi]
+    [AddCommGroup ClassChi]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassChi]
+    [AddCommGroup UStar] [Module (IntegralPadicGroupAlgebra 59 Delta) UStar]
+    [AddCommGroup SelmerChiStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) SelmerChiStar]
+    [AddCommGroup ClassStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassStar]
+    [AddCommGroup UDual] [Module (IntegralPadicGroupAlgebra 59 Delta) UDual]
+    [AddCommGroup DOmegaSelmerChiStar]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) DOmegaSelmerChiStar]
+    [AddCommGroup ClassDual]
+    [Module (IntegralPadicGroupAlgebra 59 Delta) ClassDual]
     (pair : StateLinkedIdealPair hζ S hz)
+    (omega : Fermat.Conservation.InvolutiveBase.Character (PadicInt 59) Delta)
+    (reflectedPair : ReflectedExactFilteredPair 59
+      (IntegralPadicGroupAlgebra 59 Delta)
+      UChi SelmerChi ClassChi UStar SelmerChiStar ClassStar
+      UDual DOmegaSelmerChiStar ClassDual
+      (Fermat.Conservation.InvolutiveBase.hash omega))
     (transverse :
       Module.End ℤ (AllocatedClass K × AllocatedClass K)) :
     Outcome.TypedResult
@@ -321,6 +533,7 @@ def StateLinkedIdealPair.typedLocalizedResult
       (m := StateLinkedIdealPair.classObstruction pair)
       (differenceGauge (AllocatedClass K)) :=
   .localizedWall
-    (StateLinkedIdealPair.selmerClassExactnessWall pair)
+    (StateLinkedIdealPair.characterDualAllocationWall
+      pair omega reflectedPair)
 
 end Fermat.FiftyNine.Conservation.CommonActionStage
