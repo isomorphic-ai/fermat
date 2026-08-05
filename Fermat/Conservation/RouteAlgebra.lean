@@ -456,4 +456,44 @@ theorem cornerPolynomialEquiv_X (horth : e * HasSharp.sharp e = 0) :
 
 end Corner
 
+section CharacterCorner
+
+variable {O : Type uO} {Delta : Type uDelta}
+  [CommRing O] [CommGroup Delta] [Fintype Delta]
+  [Invertible (Fintype.card Delta : O)]
+
+variable (omega chi : InvolutiveBase.Character O Delta)
+
+/-- On the group-algebra route, the chosen sharp structure really sends the
+`chi` idempotent to the reflected `chi*` idempotent. -/
+theorem teichmullerSharp_characterIdempotent :
+    (teichmullerSharp omega).sharp
+        (InvolutiveBase.characterIdempotent chi) =
+      InvolutiveBase.characterIdempotent
+        (InvolutiveBase.reflectedCharacter omega chi) :=
+  InvolutiveBase.hash_characterIdempotent omega chi
+
+/-- The requested character-corner form of `B_chi[C]`.  Orthogonality of
+the exchanged character idempotents is explicit because it is the precise
+condition which removes odd routes; it cannot be inferred over an arbitrary
+integral coefficient ring. -/
+def characterCornerPolynomialEquiv
+    (horth : InvolutiveBase.characterIdempotent chi *
+      InvolutiveBase.characterIdempotent
+        (InvolutiveBase.reflectedCharacter omega chi) = 0) :
+    letI : HasSharp (InvolutiveBase.GroupAlgebra O Delta) :=
+      teichmullerSharp omega
+    Polynomial
+        ((InvolutiveBase.characterIdempotent_isIdempotent chi).Corner) ≃+*
+      RouteCorner (InvolutiveBase.characterIdempotent chi)
+        (InvolutiveBase.characterIdempotent_isIdempotent chi) := by
+  letI : HasSharp (InvolutiveBase.GroupAlgebra O Delta) :=
+    teichmullerSharp omega
+  apply cornerPolynomialEquiv (InvolutiveBase.characterIdempotent chi)
+    (InvolutiveBase.characterIdempotent_isIdempotent chi)
+  rw [teichmullerSharp_characterIdempotent omega chi]
+  exact horth
+
+end CharacterCorner
+
 end Fermat.Conservation.RouteAlgebra
