@@ -1015,3 +1015,42 @@
   average.  The average is idempotent by reindexing the finite group sum, and
   the algebra twist transports that proof.  W1 therefore works over a
   commutative ring with invertible denominators, not merely over a field.
+
+## 2026-08-05 — the route corner is polynomial exactly across an orthogonal exchange
+
+- The unqualified statement `e A_route e ≃ (e Lambda e)[C]` is false for a
+  self-reflected idempotent: the odd route `e R e` can survive.  The exact
+  sufficient condition exposed by the coefficient equations is
+  `e * e# = 0`.  It kills every odd coefficient in the corner, as intended
+  for distinct reflected character idempotents.
+- Under that condition the pinned skew-polynomial normal form supports a
+  fully explicit equivalence.  Its inverse sends a corner route to the
+  polynomial with coefficient `n` equal to the route coefficient at `2*n`;
+  finite support is inherited by mapping the skew support through division
+  by two.  The polynomial variable maps literally to the corner element
+  `e * R^2`, not to the generally non-corner element `R^2`.
+
+## 2026-08-05 — the corner service is genuinely upstream of the gcd law
+
+- A noncommutative corner only needs a left Bezout certificate
+  `u*c + v*a = 1` to kill a module element annihilated by `c` and `a`.
+  Its surviving carrier is the module quotient by the sum of the two
+  left-principal submodules; it is subsingleton exactly when that certificate
+  exists, and otherwise it contains a named nonzero channel.
+- For `F[T]`, Mathlib's `EuclideanDomain.gcd_isUnit_iff` identifies this
+  abstract cycle-breaking condition with normalized polynomial gcd equal to
+  one.  The pre-existing polynomial kill theorem can therefore be derived
+  through the corner service rather than maintained as a parallel proof.
+
+## 2026-08-05 — Mathlib's Selmer layer stops before the reflected representation
+
+- `Mathlib.RingTheory.DedekindDomain.SelmerGroup` defines the multiplicative
+  Selmer subgroup and proves an injection from units, but its own module
+  header still lists maps in the sequence and proofs of exactness as TODOs.
+  Neither Mathlib nor this repository exposes the `chi/chi*` decomposition or
+  the `D_omega` reflection required by the requested arithmetic action.
+- The honest W5 summit must consequently remain a `Nonempty` target for a
+  ring representation on a named reflected Selmer pair.  Its interface may
+  require coefficient compatibility, off-diagonal route action, and the two
+  composite closed returns, but it must not contain a witness or an
+  `R^2 = 1` field.
