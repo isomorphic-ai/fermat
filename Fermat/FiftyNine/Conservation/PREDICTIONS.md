@@ -3,6 +3,48 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-06 — Tate bridge prediction
+
+- Of the three named arithmetic targets, `bank_silences_other_places` is
+  predicted to get furthest into the existing bank.  Capacity, bounded
+  Sinnott, the funded flow/repayment receipt, and the state-produced (7d)
+  fold already provide genuine silence certificates on their own carriers.
+  The likely stopping point is the arithmetic localization map showing that
+  those certificates put the particular local class of `x` in the
+  orthogonal complement of the particular dual local condition containing
+  `y`; no ledger identity can infer that guard from Selmer membership alone.
+- `gauge_eq_local_tate_pairing` is predicted to remain an interface at the
+  class-field-theory boundary.  The scalar gauge `r₀ + 58 • r₁` is already
+  compiled, but the clean cone is not expected to contain a local Kummer or
+  Artin pairing identifying that scalar with the reading at 59.  The
+  structural theorem should expose a detector and a unit without choosing
+  either retrospectively.
+- `transverse_detector_exists` is predicted to remain an interface at the
+  Poitou–Tate boundary while admitting the strongest structural wiring: the
+  existing lamp/server graph should type the distinguished place 59, an
+  auxiliary place `q`, and the assertion that all other readings are dark.
+  The key honesty constraint is that reciprocity forbids treating an
+  arbitrary 59-only detector as globally legal; `q` must supply the second
+  local coordinate rather than merely annotate a detector already assumed
+  global.
+- The orthogonality audit is predicted to bite place by place before the
+  global sum is simplified.  At 59 the gauge comparison is its own named
+  interface; at `q` the bank may genuinely kill the second reading only if
+  the (7d)/repayment data is connected to the local conditions; at every
+  other finite or infinite place the explicit local-condition
+  orthogonality guard should remain visible even when the transverse support
+  theorem says the detector has no reading there.
+- Once the pairing adjoint law, reciprocity conservation law, and the three
+  arithmetic hypotheses are supplied, the master implication is expected to
+  be formal ledger algebra: all non-59 readings vanish, reciprocity kills the
+  59 reading, the unit-valued gauge identity kills the gauge, and the
+  existing exact-7a vanishing theorem yields `VandiverSevenA 0 1`.
+- The first implementation will stay at the mod-59 layer.  A named
+  `mu_59_pow_n` risk must remain attached to the master surface: if the
+  arithmetic class lives below mod 59, replacing `58` by `-1` in `ZMod 59`
+  erases the correction term instead of transporting it through the bank,
+  so a later proof may require a `ZMod (59 ^ n)`-valued pairing.
+
 ## 2026-08-04 — seam 7a reflection crossing prediction
 
 - The generic `Heis`/`AreaTransfer` layer is predicted to make exact central
