@@ -145,6 +145,20 @@ theorem reflectedCharacter_apply (omega chi : Character O Delta)
 
 omit [Fintype Delta] [Invertible (Fintype.card Delta : O)] in
 @[simp]
+theorem reflectedCharacter_one (omega : Character O Delta) :
+    reflectedCharacter omega 1 = omega := by
+  ext s
+  simp [reflectedCharacter]
+
+omit [Fintype Delta] [Invertible (Fintype.card Delta : O)] in
+@[simp]
+theorem reflectedCharacter_self (omega : Character O Delta) :
+    reflectedCharacter omega omega = 1 := by
+  ext s
+  simp [reflectedCharacter]
+
+omit [Fintype Delta] [Invertible (Fintype.card Delta : O)] in
+@[simp]
 theorem reflectedCharacter_reflectedCharacter
     (omega chi : Character O Delta) :
     reflectedCharacter omega (reflectedCharacter omega chi) = chi := by
@@ -236,6 +250,13 @@ theorem hash_characterIdempotent (omega chi : Character O Delta) :
       Equiv.sum_comp (Equiv.inv Delta)
         (fun s : Delta => MonoidAlgebra.single s
           (↑((reflectedCharacter omega chi s)⁻¹) : O))
+
+/-- In particular, `#` sends the trivial projector to the `omega`
+projector.  It is not generally fixed. -/
+theorem hash_trivialCharacterIdempotent (omega : Character O Delta) :
+    hash omega (characterIdempotent (1 : Character O Delta)) =
+      characterIdempotent omega := by
+  simpa using hash_characterIdempotent omega (1 : Character O Delta)
 
 end Characters
 
