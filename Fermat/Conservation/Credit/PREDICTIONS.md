@@ -455,3 +455,41 @@ body for the common-action stage.
   localized wall naming the first missing route representation and retaining
   the would-be obstruction and receipts on its boundary.  No endpoint,
   transformer, or dg replacement is predicted.
+
+## VENDOR-SELMER prediction — 2026-08-05
+
+Recorded after reading `VENDOR-SELMER-TASK.md`, `STAGE-TASK.md`, the existing
+prediction log, and the collaboration protocol, but before inspecting either
+the fork's Selmer source or any Selmer/common-action implementation body in
+this repository.
+
+- **W1 port deltas.**  I expect the mathematical declarations `toClass`,
+  `toClass_ker`, and `toClass_range`, including their private helpers, to port
+  without a theorem-statement or proof-strategy change because the underlying
+  `SelmerGroup.lean` API is reported identical.  I predict that every actual
+  delta will be module-system syntax: replacing the newer branch's
+  `public import`/`expose` forms with imports and namespace access accepted by
+  the pinned Lean/Mathlib module system.  No local strengthening, cleanup, or
+  generalized API should be necessary.
+- **W2 realization.**  I expect the additive wrapper to be the only adapter:
+  the class projection should be `AddMonoidHom.toAdditive`-shaped (or the
+  pinned equivalent), while kernel exactness and p-torsion surjectivity should
+  follow directly from the two vendored theorems.  Thus the currently
+  withheld Selmer-class-sequence realization should become an unconditional
+  theorem without adding arithmetic hypotheses.
+- **W3 next binding item.**  Exactness should fall immediately, and I expect
+  both character allocations and both integral guards to be already
+  campaign-supplied data once the checklist is re-run.  My committed guess is
+  that the first genuinely unfilled item will be the omega-dual route laws,
+  i.e. the arithmetic representation `rho` needed to make the off-diagonal
+  reflection routes act on the paired carrier.  The allocated Selmer lift may
+  now become definable through `toClass`; beta compatibility is predicted to
+  remain downstream of that same route-law wall rather than create a second
+  independent obstruction.
+- **Gauge-reading guess.**  Of the three typed outcomes, I commit to
+  **localized wall**, specifically at the missing `rho`/omega-dual action.
+  I do not predict that the newly available exact sequence alone evaluates
+  the two corner receipts to either the unit ideal or a named nonunit common
+  factor.  The honest reading should retain the allocated obstruction and all
+  now-constructible receipts at that wall; endpoint and transformer remain
+  outside the cone.
