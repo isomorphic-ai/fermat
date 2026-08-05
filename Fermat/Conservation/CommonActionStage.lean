@@ -7,9 +7,10 @@ Authors: Fabian Franz, Fable
 
 This module seats the linking algebra on the paired Selmer carrier as far as
 the available arithmetic permits.  The units--Selmer map is Mathlib's actual
-Kummer map.  The missing class projection/exactness remains a named
-realization, while two supplied filtered exact legs assemble into a genuine
-product exact sequence with a decreasing filtration.
+Kummer map, and the vendored unit--Selmer--class sequence supplies its class
+projection, middle exactness, and surjectivity onto class-group `p`-torsion.
+Two supplied filtered exact legs assemble into a genuine product exact
+sequence with a decreasing filtration.
 
 The reflected leg is a dual leg, not a second copy identified by swapping.
 Route and return maps are therefore distinct.  Only their closed composites
@@ -20,11 +21,11 @@ and localized-representation-wall results.
 -/
 import Fermat.Conservation.KummerDrain
 import Fermat.Conservation.LinkingInterfaces
+import Fermat.Conservation.SelmerSequence
 import Fermat.Conservation.SwapQuotient
 import Fermat.Conservation.TransverseAnnihilator
 import Mathlib.Algebra.Module.CharacterModule
 import Mathlib.NumberTheory.NumberField.CMField
-import Mathlib.RingTheory.DedekindDomain.SelmerGroup
 import Mathlib.Tactic
 
 open scoped nonZeroDivisors NumberField
@@ -38,7 +39,7 @@ open Fermat.Conservation.LinkingInterfaces
 universe uR uK uLambda uUChi uSChi uCChi uUDual uSDual uCDual
   uUStar uSStar uCStar uDelta uBeta uG uO uChi uDual uA uM uGauge
 
-/-! ## The actual Kummer map and the named exactness boundary -/
+/-! ## The actual Kummer unit--Selmer--class sequence -/
 
 /-- Units modulo `p`th powers, in additive notation. -/
 abbrev UnitModP (R : Type uR) [CommRing R] (p : ℕ) :=
@@ -76,10 +77,7 @@ theorem unitInclusion_injective :
   IsDedekindDomain.selmerGroup.fromUnitLift_injective
     (R := R) (K := K) (n := p)
 
-/-- The missing remainder of the advertised exact sequence.  Mathlib
-constructs `unitInclusion` above, but currently leaves the class map and its
-exactness as TODOs.  Supplying this structure is therefore arithmetic data,
-not a theorem asserted by this module. -/
+/-- The stage-facing additive packaging of the Selmer unit--class sequence. -/
 structure SelmerClassSequenceRealization where
   classProjection : Selmer R K p →+ ClassPTorsion R p
   exact_at_selmer :
@@ -87,10 +85,85 @@ structure SelmerClassSequenceRealization where
       {s | classProjection s = 0}
   classProjection_surjective : Function.Surjective classProjection
 
-/-- Named uninhabited target for Mathlib's missing class projection and
-exactness theorem. -/
-def WithheldSelmerClassSequenceRealization : Prop :=
-  Nonempty (SelmerClassSequenceRealization (R := R) (K := K) (p := p))
+/-- The vendored class map, restricted to the class-group `p`-torsion and
+transported through the additive wrappers used by the common-action stage. -/
+def selmerClassProjection : Selmer R K p →+ ClassPTorsion R p :=
+  (MonoidHom.toAdditive
+    (IsDedekindDomain.selmerGroup.toClass
+      (R := R) (K := K) (n := p))).codRestrict
+    (ClassPTorsion R p) fun s => by
+      apply AddSubgroup.torsionBy.nsmul_iff.mpr
+      change Additive.ofMul
+        ((IsDedekindDomain.selmerGroup.toClass
+          (R := R) (K := K) (n := p) (Additive.toMul s)) ^ p) = 0
+      rw [show (IsDedekindDomain.selmerGroup.toClass
+        (R := R) (K := K) (n := p) (Additive.toMul s)) ^ p = 1 by
+          rw [← powMonoidHom_apply]
+          exact MonoidHom.mem_ker.mp <|
+            (IsDedekindDomain.selmerGroup.toClass_range
+              (R := R) (K := K) (n := p)) ▸
+              ⟨Additive.toMul s, rfl⟩]
+      rfl
+
+/-- The vendored kernel and range theorems realize the complete additive
+unit--Selmer--class sequence used by the stage. -/
+def selmerClassSequenceRealization :
+    SelmerClassSequenceRealization (R := R) (K := K) (p := p) where
+  classProjection := selmerClassProjection
+  exact_at_selmer := by
+    ext s
+    constructor
+    · rintro ⟨u, rfl⟩
+      have hm :
+          IsDedekindDomain.selmerGroup.fromUnitLift
+              (R := R) (K := K) (n := p) (Additive.toMul u) ∈
+            (IsDedekindDomain.selmerGroup.toClass
+              (R := R) (K := K) (n := p)).ker := by
+        rw [IsDedekindDomain.selmerGroup.toClass_ker
+          (R := R) (K := K) (n := p)]
+        exact ⟨Additive.toMul u, rfl⟩
+      apply Subtype.ext
+      exact congr_arg Additive.ofMul (MonoidHom.mem_ker.mp hm)
+    · intro hs
+      have hval := congr_arg Subtype.val hs
+      have hm : Additive.toMul s ∈
+          (IsDedekindDomain.selmerGroup.toClass
+            (R := R) (K := K) (n := p)).ker := by
+        rw [MonoidHom.mem_ker]
+        apply Additive.ofMul.injective
+        simpa [selmerClassProjection] using hval
+      rw [IsDedekindDomain.selmerGroup.toClass_ker
+        (R := R) (K := K) (n := p)] at hm
+      obtain ⟨u, hu⟩ := hm
+      refine ⟨Additive.ofMul u, ?_⟩
+      apply Additive.toMul.injective
+      exact hu
+  classProjection_surjective := by
+    intro c
+    have hc : (c : Additive (ClassGroup R)) ∈
+        AddSubgroup.torsionBy (Additive (ClassGroup R)) (p : ℤ) :=
+      c.property
+    rw [AddSubgroup.torsionBy.nsmul_iff] at hc
+    change Additive.ofMul
+      ((Additive.toMul (c : Additive (ClassGroup R))) ^ p) = 0 at hc
+    have hpow : (Additive.toMul (c : Additive (ClassGroup R))) ^ p = 1 :=
+      Additive.ofMul.injective hc
+    have hker : Additive.toMul (c : Additive (ClassGroup R)) ∈
+        (powMonoidHom p : ClassGroup R →* ClassGroup R).ker := by
+      rw [MonoidHom.mem_ker, powMonoidHom_apply]
+      exact hpow
+    rw [← IsDedekindDomain.selmerGroup.toClass_range
+      (R := R) (K := K) (n := p)] at hker
+    obtain ⟨s, hs⟩ := hker
+    refine ⟨Additive.ofMul s, Subtype.ext ?_⟩
+    exact congr_arg Additive.ofMul hs
+
+/-- The formerly withheld Selmer class-sequence realization is inhabited by
+the vendored class projection, kernel theorem, and range theorem. -/
+theorem WithheldSelmerClassSequenceRealization :
+    Nonempty (SelmerClassSequenceRealization
+      (R := R) (K := K) (p := p)) :=
+  ⟨selmerClassSequenceRealization (R := R) (K := K) (p := p)⟩
 
 end KummerSequence
 

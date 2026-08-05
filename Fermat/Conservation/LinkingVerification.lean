@@ -13,6 +13,7 @@ refuted upstream and is obtained only through the explicit swap quotient map.
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.CommonActionStage
 import Fermat.Conservation.LinkingInterfaces
+import Fermat.Conservation.SelmerSequence
 import Fermat.Conservation.SwapQuotient
 import Fermat.Conservation.TransverseAnnihilator
 
@@ -123,6 +124,12 @@ open Fermat.Conservation
 #check LinkingInterfaces.WithheldStrictRouteArithmeticRepresentation
 #check LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
 
+/-! ## Vendored Selmer class-sequence surface -/
+
+#check IsDedekindDomain.selmerGroup.toClass
+#check IsDedekindDomain.selmerGroup.toClass_ker
+#check IsDedekindDomain.selmerGroup.toClass_range
+
 /-! ## Common-action stage surface -/
 
 #check CommonActionStage.UnitModP
@@ -130,6 +137,8 @@ open Fermat.Conservation
 #check CommonActionStage.ClassPTorsion
 #check CommonActionStage.unitInclusion
 #check CommonActionStage.unitInclusion_injective
+#check CommonActionStage.selmerClassProjection
+#check CommonActionStage.selmerClassSequenceRealization
 #check CommonActionStage.realUnitClass
 #check CommonActionStage.realUnitInclusion
 #check CommonActionStage.SelmerClassSequenceRealization
@@ -333,6 +342,23 @@ open Fermat.Conservation
 
 /-! ## Common-action proof-value wiring -/
 
+#guard_depends_on IsDedekindDomain.selmerGroup.toClass_ker,
+  IsDedekindDomain.selmerGroup.toClass
+#guard_depends_on IsDedekindDomain.selmerGroup.toClass_range,
+  IsDedekindDomain.selmerGroup.toClass
+#guard_depends_on CommonActionStage.selmerClassProjection,
+  IsDedekindDomain.selmerGroup.toClass
+#guard_depends_on CommonActionStage.selmerClassProjection,
+  IsDedekindDomain.selmerGroup.toClass_range
+#guard_depends_on CommonActionStage.selmerClassSequenceRealization,
+  CommonActionStage.selmerClassProjection
+#guard_depends_on CommonActionStage.selmerClassSequenceRealization,
+  IsDedekindDomain.selmerGroup.toClass_ker
+#guard_depends_on CommonActionStage.selmerClassSequenceRealization,
+  IsDedekindDomain.selmerGroup.toClass_range
+#guard_depends_on CommonActionStage.WithheldSelmerClassSequenceRealization,
+  CommonActionStage.selmerClassSequenceRealization
+
 #guard_depends_on CommonActionStage.unitInclusion_injective,
   IsDedekindDomain.selmerGroup.fromUnitLift_injective
 #guard_depends_on CommonActionStage.realUnitInclusion,
@@ -446,6 +472,34 @@ open Fermat.Conservation
   CommonActionStage.cornerConversionReceipt
 #guard_depends_on CommonActionStage.reflectedSelmerRhoWall_target,
   CommonActionStage.reflectedSelmerRhoWall
+
+/-! ## Vendored and realized sequence axiom boundary -/
+
+/--
+info: 'IsDedekindDomain.selmerGroup.toClass' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.toClass
+
+/--
+info: 'IsDedekindDomain.selmerGroup.toClass_ker' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.toClass_ker
+
+/--
+info: 'IsDedekindDomain.selmerGroup.toClass_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.toClass_range
+
+/--
+info: 'Fermat.Conservation.CommonActionStage.WithheldSelmerClassSequenceRealization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms CommonActionStage.WithheldSelmerClassSequenceRealization
 
 /-! ## Exhaustive axiom boundary
 
