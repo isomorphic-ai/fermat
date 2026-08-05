@@ -135,6 +135,47 @@ theorem closedRoute_ne_one [Nontrivial Lambda] :
     (fun p : Route Lambda ↦ SkewPolynomial.coeff p 2) h
   simpa [SkewPolynomial.coeff_monomial, SkewPolynomial.coeff_one] using hcoeff
 
+/-! ## Named canonical path form
+
+The strict skew-polynomial presentation above is the working construction.
+For comparison, the rank-one two-corner/path presentation is named below as
+the canonical geometric form.  No equivalence is asserted without the
+additional rank-one identification data required to construct one.
+-/
+
+/-- The canonical two-corner path presentation: `route` crosses from the
+`chi` corner to the reflected corner and `returnRoute` crosses back. -/
+structure CanonicalPathPresentation (A : Type*) [Ring A]
+    (base : Lambda →+* A) where
+  eChi : A
+  eReflected : A
+  eChi_idempotent : IsIdempotentElem eChi
+  eReflected_idempotent : IsIdempotentElem eReflected
+  orthogonal : eChi * eReflected = 0 ∧ eReflected * eChi = 0
+  route : A
+  returnRoute : A
+  route_in_corners : eReflected * route * eChi = route
+  return_in_corners : eChi * returnRoute * eReflected = returnRoute
+  route_covariance : ∀ a,
+    route * base a = base (HasSharp.sharp a) * route
+  return_covariance : ∀ a,
+    returnRoute * base (HasSharp.sharp a) = base a * returnRoute
+
+namespace CanonicalPathPresentation
+
+variable {A : Type*} [Ring A] {base : Lambda →+* A}
+
+/-- The closed route in the `chi` corner, conventionally `C_chi = s r`. -/
+def closedAtChi (path : CanonicalPathPresentation A base) : A :=
+  path.returnRoute * path.route
+
+/-- The closed route in the reflected corner, conventionally
+`C_chi* = r s`. -/
+def closedAtReflected (path : CanonicalPathPresentation A base) : A :=
+  path.route * path.returnRoute
+
+end CanonicalPathPresentation
+
 section Corner
 
 variable (e : Lambda) (he : IsIdempotentElem e)
