@@ -2,6 +2,25 @@
 
 ## 2026-08-06 — TATE-BRIDGE discovery: the bank reaches the audit, not localization
 
+- The required process scans found no competing Lean/Lake build.  Direct
+  builds of `TatePairing`, `LinkingVerification`, `TateBridge`, and the
+  selected `Verification` leaf are green.  The unchanged authoritative
+  nine-target conservation audit exits successfully at 8,706/8,706 jobs;
+  its only diagnostics are the pre-existing `CapacityCertificate` warnings
+  and the deliberately retained vendored-Selmer linter warnings.
+- The generic W1 layer now compiles with finite-support readings
+  `SelmerChi →+ (Dual →+ (Place →₀ ZMod p))`.  Its adjoint law moves an
+  algebra action across the pairing through the existing
+  `InvolutiveBase.hash omega`; applying the law to a hashed action consumes
+  the proved `hash_hash` theorem.  The reflected-character identity
+  `chi * (omega * chi⁻¹) = omega` is separately named and proved.
+- Global reciprocity is retained rather than flattened: its local `Finsupp`
+  becomes a `PlaceLedger`, the place sum becomes the stock of the existing
+  three-column `Ledger`, and the zero sum constructs a zero-spent `Transfer`
+  to vacuum.  `IsoConserveBridge.transfer_L1_conservation` then supplies the
+  compiled scheduler conservation identity.  Thus the local pairing and
+  reciprocity witnesses are `INTERFACE`, while every conversion from their
+  laws into `Ledger`/`Transfer`/L1 consequences is `PROVEN`.
 - `TransverseAnnihilator.LampTransverse` records the two prime facts, the
   supporter equation `q = 2*k*p+1`, a polynomial, and its annihilator law.
   Its Sophie--Germain and sixfold interfaces compare that polynomial with a
@@ -42,6 +61,31 @@
   `q` coordinate.  The bank target must expose that auxiliary reading's
   vanishing in addition to its audit of places outside `{59,q}`; otherwise
   reciprocity yields only `reading(59) + reading(q) = 0`.
+- The selected implementation now compiles this dependency shape.
+  `transverse_detector_exists` selects one witness, and both
+  `gauge_eq_local_tate_pairing` and `bank_silences_other_places` are indexed
+  by that same existential proof, so they are neither vacuous nor universal
+  over unrelated detectors and the master cannot switch witnesses.  The
+  detector carries an actual `LampTransverse` specialization at
+  `q = Credit.attestationPrime = 827`, a linear realization taking its lamp
+  mode to the detector, and a support-containment law.
+- `N59BankReceipts` is fully `PROVEN`: its constructor consumes the existing
+  capacity certificate, bounded Sinnott bridge, plus-class-number theorem,
+  deep-flow law, repayment theorem, and statewise (7d) fold.  Only the (7d)
+  field is used to kill the auxiliary reading, through
+  `AuxiliaryFoldOrthogonalityGuard`; flow and repayment remain visible bank
+  receipts but are not falsely claimed to localize the selected detector.
+  Every other audit row carries a full `LocalOrthogonalityGuard`.
+- The compiled master is conditional and purely one-way.  The complete bank
+  audit silences all non-59 readings, reciprocity kills the last reading, a
+  unit cancellation plus the gauge target's zero-reflection clause kills
+  the actual class-group difference gauge, and the existing
+  `differenceGauge_eq_zero_iff_vandiverSevenA` yields (7a).  No value of any
+  W2 target, unconditional (7a), endpoint, or transformer is introduced.
+- The named `mu_59_to_the_n_risk` is executable: `58 = -1` in `ZMod 59`,
+  while `58 ≠ -1` in `ZMod (59 ^ 2)`.  The present conditional theorem is
+  therefore explicitly only a first-layer statement, not evidence that a
+  deeper class would be detected mod 59.
 
 ## 2026-08-04 — SEAM-7A discovery: the payload product does not cross the reflection seam
 

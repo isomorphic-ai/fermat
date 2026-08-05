@@ -183,7 +183,10 @@ or proof strategy is changed.
 | Both Kummer character allocations | ABSENT → SEAM (first remaining item at a fixed reflected pair) | No `KummerPairedBinding.chi`/`.chiStar` producer or selected character projector exists.  For one supplied `ReflectedExactFilteredPair`, `CharacterDualAllocationTarget` asks for those allocations, the separate reflected-dual allocation, and readbacks preserving the actual roots; it does not quantify over every possible carrier. |
 | Omega-dual laws, both integral guards, both beta compatibilities | ABSENT → SEAM (downstream checklist) | The structures state the required equivalences/action laws, integral ideal plus sharp law, and state/conversion equalities, but the selected cone has no producer.  Supplying a reflected pair to inspect the earlier character seam already supplies that pair's omega-dual laws; it is a parameter of the conditional result, not an unconditional construction. |
 | Selected typed outcome | Unconditional `selmerClassExactness` localized wall → fixed-pair `characterDualAllocation` localized wall | The obsolete exactness wall is removed.  The character wall and typed result are conditional on one supplied reflected exact pair, because the selected cone names no concrete character carrier.  The later `strictRouteRhoWall` remains valid only behind a complete `StrictRouteBoundary`. |
-| Corner gauge attempt | Not reached → LOCALIZED WALL | `differenceGauge_reading` computes `r₀ - r₁ = r₀ + 58 • r₁`, and `differenceGauge_eq_zero_iff_vandiverSevenA` identifies zero reading with exactly open (7a).  There are not yet two same-action annihilators plus a Bezout identity, nor a same-action polynomial pair yielding a named factor. |
+| Local Tate pairing and adjoint law | ABSENT → INTERFACE | `TatePairing.PlaceIndexedLocalPairing` retains the local readings as a place-indexed `Finsupp` and states `pair_v (a • x) y = pair_v x (a# • y)` using the existing `InvolutiveBase.hash`; no arithmetic pairing value is manufactured. |
+| Global reciprocity and conservation tunnel | ABSENT → INTERFACE law / PROVEN wiring | `TatePairing.GlobalReciprocityLaw` is the class-field-theory interface.  From that law, `PlaceLedger.toLedger`, `toVacuumTransfer`, and `reciprocity_L1_conservation` compile its zero sum through `Ledger`, `Transfer`, and `IsoConserveBridge`. |
+| Selected relation-(7a) arithmetic inputs | Unnamed missing producer → THREE NAMED INTERFACES | `gauge_eq_local_tate_pairing`, `transverse_detector_exists`, and `bank_silences_other_places` are typed, falsifiable targets.  The selected bank receipts used by the audit are proved, but their localization and placewise orthogonality guards are not. |
+| Conditional Tate master implication | ABSENT → PROVEN (conditional) | The pairing laws plus exactly the three named arithmetic hypotheses force the difference gauge to vanish; `differenceGauge_eq_zero_iff_vandiverSevenA` then yields `VandiverSevenA 0 1`.  This is not an unconditional proof of (7a). |
 
 ## N59 assembly summary
 
@@ -196,6 +199,7 @@ or proof strategy is changed.
 | Selected gauge quotient | Transfer-ABSENT → LITERAL (Ledger/Transfer) | The full matrix debit is transferred to conversion with stock fixed. |
 | Selected fold and principalization consumers | ABSENT → LITERAL (Transfer), conditional on supplied (7a) | Derived (7d) and odd-torsion netting are accounted; only the missing producer is a seam. |
 | Selected common-action stage | Selmer exactness SEAM → character-allocation SEAM at a fixed reflected pair | The vendored sequence and its additive realization are unconditional.  Once a reflected pair is supplied, the typed gauge attempt retains the class obstruction at the first missing character service; the selected cone itself does not manufacture that pair, and rho remains a later conditional wall. |
+| Selected Tate route to (7a) | Unnamed Lemma-I seam → PROVEN conditional implication over three INTERFACES | The compiled route consumes `gauge_eq_local_tate_pairing`, `transverse_detector_exists`, and `bank_silences_other_places`; it concludes (7a) only under all three, with no endpoint or transformer. |
 | FermatState.StockCreditTransformer | ABSENT → SEAM | No state-linked positive successor transaction is constructed. |
 
 The guarded transformer probes remain evidence of type boundaries, not
@@ -221,17 +225,22 @@ LITERAL row:
 - Credit Verification covers C1, C2, both C3 views, accountFlow, Bernoulli
   depth, generic gauge quotient, relative-norm fold, class-zero transfer, and
   odd-torsion consumers.
+- LinkingVerification covers the generic place-indexed pairing surface, the
+  arithmetic adjoint law, and the compiled reciprocity passage through the
+  `Ledger`/`Transfer`/`IsoConserveBridge` tunnel.
 - N59 Verification covers every selected receipt field, conductor-59 flow
   and depth, funded row mapping, selected repayment, selected quotient,
-  selected (7d), and the consumers conditional on supplied (7a).
+  selected (7d), the three named Tate targets, their conditional master
+  implication, and the consumers conditional on supplied (7a).
 
 The selected-prime literal scan includes Transfer.lean, Heis.lean,
 AreaTransfer.lean, Interaction.lean, ClassCarrier.lean,
-TransverseAnnihilator.lean, and the generic credit, drain, and Kummer source
-cone.  It now includes SelmerSequence.lean as well.  LinkingVerification
-checks and dependency-guards every new sequence/realization declaration and
-freezes the standard axiom trio; N59 Verification guards the exact (7a) gauge
-reading, the relocalized selected wall, and the derived allocated lift.
+TransverseAnnihilator.lean, TatePairing.lean, and the generic credit, drain,
+and Kummer source cone.  It now includes SelmerSequence.lean as well.
+LinkingVerification checks and dependency-guards every new
+sequence/realization and pairing declaration and freezes the standard axiom
+trio; N59 Verification guards the exact (7a) gauge reading, the relocalized
+selected wall, the derived allocated lift, and the conditional Tate route.
 Forbidden declaration/module guards continue to exclude the classical
 irregular, regular, ladder, transport, and endpoint cones.
 
@@ -257,11 +266,44 @@ classes to vanish on degenerate carriers.  Its retained difference-gauge
 value is the open (7a) class `r₀ + 58 • r₁`; it is neither a proof that the
 corner ideal is the unit ideal nor a named nonunit common factor.
 
-### 2. Lemma I / relation (7a)
+### 2. Lemma I / relation (7a): the conditional Tate route
 
-For the canonical allocated state pair, let r₀ be ledger.rootClass 0 and r₁
-be ledger.rootClass 1.  The missing producer must construct, without taking
-VandiverSevenA as an input, a transaction
+The current seam is no longer an unnamed request for a class-group
+transaction.  It is the following compiled route with every boundary marked
+explicitly.
+
+| Component | Status | Exact boundary |
+| --- | --- | --- |
+| `TatePairing.character_mul_reflectedCharacter` and finite-support projections | **PROVEN** | The existing `#` machinery proves `chi * chi* = omega`, and the `Finsupp` carrier proves that every displayed family of local readings has finite support. |
+| `TatePairing.PlaceIndexedLocalPairing` and its adjoint law | **INTERFACE** | Mathlib supplies neither the local Kummer--Artin/Tate pairing nor its arithmetic compatibility with `InvolutiveBase.hash`.  The interface states the law and retains finite support without pretending to construct it. |
+| `TatePairing.GlobalReciprocityLaw` | **INTERFACE** | The global sum-zero theorem is the missing class-field-theory input. |
+| `PlaceLedger.toLedger`, `PlaceLedger.toVacuumTransfer`, and `GlobalReciprocityLaw.reciprocity_L1_conservation` | **PROVEN** | Once reciprocity is supplied, the place-indexed sum is literally carried through `Ledger`, a zero-spent `Transfer`, and the `IsoConserveBridge` L1 identity. |
+| `gauge_eq_local_tate_pairing` | **INTERFACE** | One selected detector and a unit must identify its 59-local reading with the computed difference gauge and reflect zero scalar reading back to zero of that retained class-group gauge. |
+| `transverse_detector_exists` | **INTERFACE** | Poitou--Tate must construct one global detector with the 59-place and one lamp-selected auxiliary place `q` as its only possible readings.  The same detector witness is consumed by the other two hypotheses. |
+| Capacity, bounded Sinnott, funded flow/repayment, and the statewise (7d) fold | **PROVEN** | These are genuine selected bank receipts and are retained in the place-by-place audit rather than redescribed as local theorems. |
+| Localization compatibility and `LocalOrthogonalityGuard` at each audited place | **INTERFACE** | The bank receipts live in relative-index, real-unit, and ideal-class carriers.  They do not by themselves show that the localized primal and dual conditions are orthogonal.  In particular, Selmer membership alone never silences a place. |
+| `bank_silences_other_places` | **INTERFACE**, with **PROVEN** bank fields | Its audit must separately silence the auxiliary `q` reading and every reading outside `{59, q}` using explicit orthogonality guards.  Merely proving support in `{59, q}` would leave `pair_59 + pair_q = 0`, not `pair_59 = 0`. |
+| Conditional master implication | **PROVEN** | Given the W1 laws and exactly the three named W2 hypotheses, the bank kills every non-59 column, reciprocity kills the 59-column, the unit-valued gauge comparison kills the retained difference gauge, and `differenceGauge_eq_zero_iff_vandiverSevenA` projects exactly `pair.ledger.VandiverSevenA 0 1`. |
+
+Thus the public result is an implication, not a new producer of any of its
+three arithmetic premises.  There is no unconditional
+`StateLinkedIdealPair.vandiverSevenA`, no unconditional (7a) transaction,
+and no endpoint or transformer in this route.
+
+**NAMED RISK — `mu_59_to_the_n`.**  The first interface is deliberately the
+mod-59 layer.  If the class detected by relation (7a) lives deeper in a
+`mu_{59^n}` tower, the local pairing must instead retain a
+`ZMod (59 ^ n)`-valued reading (or equivalent integral lift).  Reducing too
+early identifies `58` with `-1` and discards the `+59` correction instead of
+routing it through the bank.  The conditional master theorem therefore does
+not certify that mod 59 is the final arithmetic depth.
+
+#### Historical AreaTransfer obstruction (2026-08-04)
+
+Before the Tate route was named, the attempted direct crossing asked, for the
+canonical allocated state pair with r₀ = ledger.rootClass 0 and r₁ =
+ledger.rootClass 1, for a transaction constructed without taking
+VandiverSevenA as an input:
 
     τ : Transfer (Additive (ClassGroup (𝓞 K)))
     τ.before.stock     = r₀
@@ -319,8 +361,8 @@ one available direction: any area transfer with the wanted abelian endpoints
 already projects to (7a).  `TransformerProbe` guards the reverse carrier
 mismatch directly.
 
-Thus the exact missing sub-construction is not central cancellation but the
-statewise theorem
+Thus, inside that historical AreaTransfer attempt, the exact missing
+sub-construction was not central cancellation but the statewise theorem
 
     StateLinkedIdealPair.vandiverSevenA
       (pair : StateLinkedIdealPair hζ S hz) :
