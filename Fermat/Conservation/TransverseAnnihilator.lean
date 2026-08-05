@@ -37,6 +37,143 @@ zero. -/
 def Annihilates {R M : Type*} [Zero M] [SMul R M] (P : R) (d : M) : Prop :=
   P • d = 0
 
+/-! ## The abstract corner service
+
+An idempotent corner is a unital ring in its own right, whose unit is the
+ambient idempotent.  The service below is therefore stated for an arbitrary
+ring `A`; taking `A = h_e.Corner` makes the displayed `1` literally `e` in
+the ambient algebra.  No commutativity is needed: the relation carrier is
+the quotient by the sum of the two left-principal submodules.
+-/
+
+namespace CornerService
+
+variable {A M : Type*} [Ring A] [AddCommGroup M] [Module A M]
+
+/-- A left Bézout identity in a unital corner.  In an idempotent corner the
+right side `1` is the corner idempotent itself. -/
+structure BezoutCertificate (cycle transverse : A) where
+  cycleCoefficient : A
+  transverseCoefficient : A
+  combine :
+    cycleCoefficient * cycle + transverseCoefficient * transverse = 1
+
+/-- A transverse relation breaks the cycle precisely when the two relations
+generate the unit of the corner as a left ideal. -/
+def BreaksCycle (cycle transverse : A) : Prop :=
+  Nonempty (BezoutCertificate cycle transverse)
+
+/-- The corner service theorem: two annihilators whose left Bézout
+combination is the corner identity kill the carried mode. -/
+theorem eq_zero_of_annihilates_of_bezout
+    {cycle transverse : A} {m : M}
+    (hcycle : Annihilates cycle m)
+    (htransverse : Annihilates transverse m)
+    (bezout : BezoutCertificate cycle transverse) :
+    m = 0 := by
+  change cycle • m = 0 at hcycle
+  change transverse • m = 0 at htransverse
+  calc
+    m = (1 : A) • m := (one_smul A m).symm
+    _ = (bezout.cycleCoefficient * cycle +
+          bezout.transverseCoefficient * transverse) • m := by
+      rw [bezout.combine]
+    _ = 0 := by simp [add_smul, mul_smul, hcycle, htransverse]
+
+/-- The sum `A cycle + A transverse` of the two left-principal relation
+submodules. -/
+def relationSubmodule (cycle transverse : A) : Submodule A A :=
+  Submodule.span A {cycle} ⊔ Submodule.span A {transverse}
+
+/-- The surviving corner carrier
+`A / (A cycle + A transverse)`. -/
+abbrev LivelockCarrier (cycle transverse : A) :=
+  A ⧸ relationSubmodule cycle transverse
+
+/-- Membership of the corner unit in the relation submodule is exactly a
+left Bézout certificate. -/
+theorem one_mem_relationSubmodule_iff
+    {cycle transverse : A} :
+    (1 : A) ∈ relationSubmodule cycle transverse ↔
+      BreaksCycle cycle transverse := by
+  constructor
+  · intro h
+    rw [relationSubmodule, Submodule.mem_sup] at h
+    obtain ⟨x, hx, y, hy, hxy⟩ := h
+    rw [Submodule.mem_span_singleton] at hx hy
+    obtain ⟨u, rfl⟩ := hx
+    obtain ⟨v, rfl⟩ := hy
+    exact ⟨⟨u, v, by simpa [smul_eq_mul] using hxy⟩⟩
+  · rintro ⟨bezout⟩
+    rw [← bezout.combine]
+    exact Submodule.add_mem_sup
+      ((Submodule.span A {cycle}).smul_mem bezout.cycleCoefficient
+        (Submodule.mem_span_singleton_self cycle))
+      ((Submodule.span A {transverse}).smul_mem bezout.transverseCoefficient
+        (Submodule.mem_span_singleton_self transverse))
+
+/-- The relation submodule fills the corner exactly when the transverse
+relation breaks the cycle. -/
+theorem relationSubmodule_eq_top_iff
+    {cycle transverse : A} :
+    relationSubmodule cycle transverse = ⊤ ↔
+      BreaksCycle cycle transverse := by
+  rw [← one_mem_relationSubmodule_iff]
+  constructor
+  · intro htop
+    rw [htop]
+    exact Submodule.mem_top
+  · intro hone
+    apply le_antisymm le_top
+    intro x _
+    simpa [smul_eq_mul] using
+      (relationSubmodule cycle transverse).smul_mem x hone
+
+/-- `L = 0` in the module sense (`L` is subsingleton) if and only if the
+transverse relation breaks the cycle. -/
+theorem livelockCarrier_subsingleton_iff
+    {cycle transverse : A} :
+    Subsingleton (LivelockCarrier cycle transverse) ↔
+      BreaksCycle cycle transverse := by
+  rw [Submodule.Quotient.subsingleton_iff, relationSubmodule_eq_top_iff]
+
+/-- The quotient carrier is nontrivial exactly when the cycle survives the
+transverse relation. -/
+theorem livelockCarrier_nontrivial_iff
+    {cycle transverse : A} :
+    Nontrivial (LivelockCarrier cycle transverse) ↔
+      ¬ BreaksCycle cycle transverse := by
+  rw [Submodule.Quotient.nontrivial_iff, ne_eq,
+    relationSubmodule_eq_top_iff]
+
+/-- A surviving livelock channel retains an actual nonzero class in the
+two-relation quotient, rather than only a Boolean failure flag. -/
+structure CornerLivelockChannel (cycle transverse : A) where
+  carrierClass : LivelockCarrier cycle transverse
+  carrierClass_ne_zero : carrierClass ≠ 0
+
+/-- A nonzero quotient class exists exactly when the transverse relation
+does not break the cycle. -/
+theorem nonempty_cornerLivelockChannel_iff
+    {cycle transverse : A} :
+    Nonempty (CornerLivelockChannel cycle transverse) ↔
+      ¬ BreaksCycle cycle transverse := by
+  constructor
+  · rintro ⟨channel⟩ hbreak
+    have hsubsingle : Subsingleton (LivelockCarrier cycle transverse) :=
+      livelockCarrier_subsingleton_iff.mpr hbreak
+    exact channel.carrierClass_ne_zero
+      (@Subsingleton.elim _ hsubsingle channel.carrierClass 0)
+  · intro hsurvives
+    have hnontrivial : Nontrivial (LivelockCarrier cycle transverse) :=
+      livelockCarrier_nontrivial_iff.mpr hsurvives
+    letI := hnontrivial
+    obtain ⟨channel, hchannel⟩ :=
+      exists_ne (0 : LivelockCarrier cycle transverse)
+    exact ⟨⟨channel, hchannel⟩⟩
+
+end CornerService
+
 section PolynomialGCD
 
 variable {F M : Type*} [Field F] [DecidableEq F]
@@ -47,6 +184,44 @@ normalization matters: a unit gcd is then literally `1`, not an arbitrary
 nonzero constant. -/
 noncomputable def polynomialGCD (P Q : Polynomial F) : Polynomial F :=
   normalize (EuclideanDomain.gcd P Q)
+
+/-- In the commutative polynomial image, the abstract corner Bézout
+condition is exactly the normalized-gcd-one condition. -/
+theorem breaksCycle_iff_polynomialGCD_eq_one
+    {P Q : Polynomial F} :
+    CornerService.BreaksCycle P Q ↔ polynomialGCD P Q = 1 := by
+  constructor
+  · rintro ⟨bezout⟩
+    have hcoprime : IsCoprime P Q :=
+      ⟨bezout.cycleCoefficient, bezout.transverseCoefficient,
+        bezout.combine⟩
+    have hunit : IsUnit (EuclideanDomain.gcd P Q) :=
+      EuclideanDomain.gcd_isUnit_iff.mpr hcoprime
+    exact normalize_eq_one.mpr hunit
+  · intro hgcd
+    have hunit : IsUnit (EuclideanDomain.gcd P Q) :=
+      normalize_eq_one.mp hgcd
+    obtain ⟨u, v, huv⟩ := EuclideanDomain.gcd_isUnit_iff.mp hunit
+    exact ⟨⟨u, v, huv⟩⟩
+
+/-- The old polynomial gcd law is the one-loop commutative image of the
+corner quotient law: its two-relation carrier is zero exactly when the
+normalized gcd is one. -/
+theorem polynomial_livelockCarrier_subsingleton_iff
+    {P Q : Polynomial F} :
+    Subsingleton (CornerService.LivelockCarrier P Q) ↔
+      polynomialGCD P Q = 1 :=
+  CornerService.livelockCarrier_subsingleton_iff.trans
+    breaksCycle_iff_polynomialGCD_eq_one
+
+/-- A genuine polynomial quotient channel survives exactly when the
+normalized gcd is not one. -/
+theorem nonempty_polynomial_cornerLivelockChannel_iff
+    {P Q : Polynomial F} :
+    Nonempty (CornerService.CornerLivelockChannel P Q) ↔
+      polynomialGCD P Q ≠ 1 :=
+  CornerService.nonempty_cornerLivelockChannel_iff.trans
+    (not_congr breaksCycle_iff_polynomialGCD_eq_one)
 
 @[simp] theorem normalize_polynomialGCD (P Q : Polynomial F) :
     normalize (polynomialGCD P Q) = polynomialGCD P Q := by
@@ -103,10 +278,11 @@ theorem eq_zero_of_cycle_and_transverse_gcd_eq_one
     (htransverse : Annihilates P d)
     (hcoprime : polynomialGCD P (cyclePolynomial F r) = 1) :
     d = 0 := by
-  have hgcd := annihilates_polynomialGCD htransverse hcycle
-  change polynomialGCD P (cyclePolynomial F r) • d = 0 at hgcd
-  rw [hcoprime, one_smul] at hgcd
-  exact hgcd
+  obtain ⟨bezout⟩ :=
+    (breaksCycle_iff_polynomialGCD_eq_one (P := P)
+      (Q := cyclePolynomial F r)).mpr hcoprime
+  exact CornerService.eq_zero_of_annihilates_of_bezout
+    htransverse hcycle bezout
 
 /-- A normalized polynomial is nonunit exactly when it is not one.  This
 form is used to ensure that a retained channel is genuinely nontrivial. -/
