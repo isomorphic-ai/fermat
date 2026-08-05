@@ -80,6 +80,32 @@ theorem eq_zero_of_annihilates_of_bezout
       rw [bezout.combine]
     _ = 0 := by simp [add_smul, mul_smul, hcycle, htransverse]
 
+section
+
+variable {R : Type*} [Ring R] {e : R} (he : IsIdempotentElem e)
+  {N : Type*} [AddCommGroup N] [Module he.Corner N]
+
+/-- In an actual idempotent corner, the certificate's right-hand `1`
+coerces to the ambient idempotent `e`. -/
+theorem bezout_identity_in_ambient
+    {cycle transverse : he.Corner}
+    (bezout : BezoutCertificate cycle transverse) :
+    (bezout.cycleCoefficient * cycle +
+        bezout.transverseCoefficient * transverse).1 = e := by
+  rw [bezout.combine]
+  rfl
+
+/-- Literal idempotent-corner form of the service theorem. -/
+theorem eq_zero_in_idempotentCorner
+    {cycle transverse : he.Corner} {m : N}
+    (hcycle : Annihilates cycle m)
+    (htransverse : Annihilates transverse m)
+    (bezout : BezoutCertificate cycle transverse) :
+    m = 0 :=
+  eq_zero_of_annihilates_of_bezout hcycle htransverse bezout
+
+end
+
 /-- The sum `A cycle + A transverse` of the two left-principal relation
 submodules. -/
 def relationSubmodule (cycle transverse : A) : Submodule A A :=
