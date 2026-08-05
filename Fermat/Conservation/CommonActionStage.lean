@@ -23,6 +23,7 @@ import Fermat.Conservation.LinkingInterfaces
 import Fermat.Conservation.SwapQuotient
 import Fermat.Conservation.TransverseAnnihilator
 import Mathlib.Algebra.Module.CharacterModule
+import Mathlib.NumberTheory.NumberField.CMField
 import Mathlib.RingTheory.DedekindDomain.SelmerGroup
 import Mathlib.Tactic
 
@@ -92,6 +93,36 @@ def WithheldSelmerClassSequenceRealization : Prop :=
   Nonempty (SelmerClassSequenceRealization (R := R) (K := K) (p := p))
 
 end KummerSequence
+
+section RealUnitKummerMap
+
+variable {K : Type uK} [Field K] [NumberField K]
+  [NumberField.IsCMField K]
+  {p : ℕ} [Fact (0 < p)]
+
+/-- The campaign's real-unit subgroup mapped into units modulo `p`th powers.
+This is the concrete bridge from the real-units machinery to the Kummer
+exact sequence, not a separately postulated unit map. -/
+def realUnitClass :
+    Additive (NumberField.IsCMField.realUnits K) →+
+      UnitModP (NumberField.RingOfIntegers K) p :=
+  MonoidHom.toAdditive <|
+    (QuotientGroup.mk'
+      (powMonoidHom p :
+        (NumberField.RingOfIntegers K)ˣ →*
+          (NumberField.RingOfIntegers K)ˣ).range).comp
+      (NumberField.IsCMField.realUnits K).subtype
+
+/-- Real units enter the actual Selmer group through Mathlib's injective
+units leg. -/
+def realUnitInclusion :
+    Additive (NumberField.IsCMField.realUnits K) →+
+      Selmer (NumberField.RingOfIntegers K) K p :=
+  (unitInclusion
+    (R := NumberField.RingOfIntegers K) (K := K) (p := p)).comp
+      (realUnitClass (K := K) (p := p))
+
+end RealUnitKummerMap
 
 /-- The contravariant character dual used for the `chi*` leg.  No equivalence
 with the primal leg is implied. -/
