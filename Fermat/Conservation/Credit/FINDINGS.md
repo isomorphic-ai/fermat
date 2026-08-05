@@ -1,5 +1,108 @@
 # Credit-ladder findings
 
+## 2026-08-05 — VENDOR-SELMER verification: full audit green
+
+- The required pre-build process scan found no competing Lean build.  The
+  standard nine-target conservation command completed all 8,704 jobs,
+  including the generic credit literal scan and the selected-N59 guard leaf.
+  Its warnings are the pre-existing `CapacityCertificate` diagnostics and the
+  deliberately preserved upstream `convert hu <;> rfl` linter diagnostic in
+  the faithful port.
+- Direct compilation is also green for `SelmerSequence.lean`, both generic
+  and selected `CommonActionStage.lean` modules, `LinkingVerification.lean`,
+  `Credit/Verification.lean`, and the selected `Verification.lean`.  The
+  latter checks the two exact gauge theorems, the fixed-pair allocation wall,
+  the derived Selmer lift, and the later conditional rho wall.  The literal,
+  forbidden-module, forbidden-declaration, and standard-axiom guards all
+  pass; no endpoint or transformer was added.
+
+## 2026-08-05 — VENDOR-SELMER discovery: exactness falls, character allocation binds
+
+- The fork contribution is concentrated in
+  `Mathlib/RingTheory/DedekindDomain/SelmerGroup.lean` at commit
+  `6c01b3a6a13de72eabd868ca50d743f43888af92`; the complete source file has
+  SHA-256
+  `37d78b8e5b3f9b757d1eb8b33286680501820aba250644a407e36381ee34c4d2`.
+  Its new empty-support sequence constructs `toClass` from an explicit root
+  fractional ideal, proves that its kernel is the range of `fromUnitLift`,
+  and proves that its range is exactly the power-map kernel in the class
+  group.  This is precisely the source material needed by the withheld
+  realization; no per-prime certificate is required.  A final extraction
+  audit counts 22 private helpers followed by the three requested public
+  declarations.  After normalizing exactly the documented compatibility
+  deltas and whitespace, the source and vendored blocks have the same
+  SHA-256, `94e5091e204753895c6b27eeccca2da607fa94134fa9dc99b2efd0a02f9e231c`.
+- The port prediction was almost exact.  Module/export syntax accounts for
+  the expected standalone-file changes.  Compiler-driven repair exposed two
+  additional pinned-API deltas and no mathematical delta:
+  `MonoidHom.domRestrict` is named `MonoidHom.restrict` at the Fermat pin, and
+  the source simplifier lemma `Set.mem_ofPred_eq` is named
+  `Set.mem_setOf_eq` at the Fermat pin.  Every
+  declaration, theorem statement, and proof strategy is otherwise retained;
+  the provenance header records the complete delta list.
+- The task's prior byte-identity audit does not hold against the PR's actual
+  parent `550612a8ead6b270d197c727eb666402f3b571b7`.  A direct Git comparison
+  finds one four-line, API-neutral proof-engineering hunk in the pre-existing
+  `valuationOfNeZeroToFun`/`valuationOfNeZeroToFun_eq`: current upstream
+  changes a local `Classical` scope, installs a transparency option, and
+  rewrites `valuation_def` where the pin closes by `rfl`.  This hunk lies
+  outside the contributed sequence, is not needed by the port, and was not
+  copied.  The provenance header records it rather than silently treating
+  the two base files as byte-identical.
+- The unchanged upstream proof compiles on Lean 4.31 with one paired linter
+  diagnostic at `convert hu <;> rfl`: the second `rfl` is unreachable and
+  unused under the older elaborator.  Removing it would be an unrequested
+  proof-body cleanup, so the faithful port retains it.
+- `SelmerClassSequenceRealization` is therefore no longer arithmetic input.
+  The additive class projection is the vendored multiplicative `toClass`
+  restricted to the torsion subgroup; `toClass_ker` supplies middle
+  exactness and `toClass_range` supplies surjectivity.  The former
+  `WithheldSelmerClassSequenceRealization` proposition can now be proved at
+  every Dedekind-domain instance satisfying its existing hypotheses, in
+  particular at conductor 59.
+- Walking the selected `StrictRouteBoundary` field by field changes the
+  address but does not reach `rho`.  The base sequence exactness is now
+  supplied.  No producer exists for either Kummer character allocation, so
+  `characterDualAllocation` binds first.  The omega-twisted dual
+  equivalences/laws, both integral Stickelberger guards, and both beta
+  conversion compatibilities also remain supplied interfaces.  Once an exact
+  pair and coherent allocations are supplied, the character-paired allocated
+  lift is now derived instead of stored as another field.  The already-defined
+  strict-route `rho` wall remains correct only conditionally after all of
+  those fields are inhabited.
+- Independent proof-value review rejected the first attempted character wall
+  before commit.  `KummerPairedBinding` alone is inhabited for every supplied
+  reflected pair by taking all six allocation maps to be zero; its two
+  commuting squares then close by `map_zero`.  It also has no field relating
+  the separate `CharacterClassAllocation.reflectedDual` used by the selected
+  lift.  Thus a bare `Nonempty (KummerPairedBinding ...)` is not evidence that
+  either retained Fermat class reached a character leg.
+- The corrected target is indexed by the selected state and one fixed,
+  supplied reflected exact pair; it does not demand an allocation for every
+  possible carrier.  Besides both Kummer character-leg compatibilities and
+  the separate reflected-dual allocation, it requires additive readback maps
+  to the actual class-group `59`-torsion.  Their receipts show that chi
+  preserves root `0`, while chi-star and the reflected-dual route each
+  preserve root `1`.  The chi allocation used by the selected lift is also
+  identified with the chi
+  allocation in the Kummer binding.  Zero maps can satisfy these laws only
+  when the corresponding retained root is genuinely zero; no nonvanishing
+  assumption or global equivalence is added.  Because the cone names no
+  concrete conductor-59 character carrier, the wall and typed result remain
+  explicitly parametric over that one pair rather than inventing a provider,
+  selecting fake zero carrier types, or universally principalizing the roots
+  through degenerate pairs.
+- The committed gauge category was correct but its predicted address was
+  not.  `differenceGauge_reading` derives
+  `r₀ - r₁ = r₀ + 58 • r₁` from the already-earned `59`-torsion
+  receipt, and `differenceGauge_eq_zero_iff_vandiverSevenA` says that its zero
+  reading is exactly the still-open (7a).  The stage has neither two
+  same-action annihilations with a Bezout certificate nor a polynomial
+  common-factor specialization.  Thus it reaches neither the unit-ideal
+  identity nor a named factor: at a supplied reflected pair, the honest typed
+  outcome is a localized character-allocation wall retaining the obstruction.
+  No unconditional character carrier, endpoint, or transformer follows.
+
 ## 2026-08-05 — COMMON-ACTION-STAGE verification: the same audit command is green
 
 - The unchanged nine-target conservation command is green at 8,703/8,703

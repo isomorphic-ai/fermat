@@ -160,6 +160,31 @@ The conditional permit declarations are LITERAL even though their (7a)
 argument is a seam premise.  Only production of that premise from the
 canonical state belongs to the frontier.
 
+## Vendored Selmer class sequence and common-action boundary
+
+The sequence port is sourced from
+[`fabianx-ai/mathlib4` pull request 1](https://github.com/fabianx-ai/mathlib4/pull/1),
+head commit `6c01b3a6a13de72eabd868ca50d743f43888af92`.  Its sole source file,
+`Mathlib/RingTheory/DedekindDomain/SelmerGroup.lean`, has SHA-256
+`37d78b8e5b3f9b757d1eb8b33286680501820aba250644a407e36381ee34c4d2`.
+`Fermat/Conservation/SelmerSequence.lean` records the complete port delta:
+ordinary imports and omitted module export-control commands; repeated
+file-local notation/options; the pinned names `MonoidHom.restrict` and
+`Set.mem_setOf_eq`; and omission of an unrelated four-line, API-neutral
+change in the pre-existing upstream valuation proof.  No theorem statement
+or proof strategy is changed.
+
+| Declarations/checklist item | Status, before → after | Final account |
+| --- | --- | --- |
+| `IsDedekindDomain.selmerGroup.toClass`, `toClass_ker`, `toClass_range` | ABSENT at the pin → LITERAL (vendored theorem surface) | The explicit root-ideal class map has kernel equal to `fromUnitLift.range` and range equal to the class-group power-map kernel. |
+| `CommonActionStage.WithheldSelmerClassSequenceRealization` | Named SEAM proposition → THEOREM | `selmerClassProjection` is the additive `toClass` restricted to `ClassPTorsion`; middle exactness and surjectivity use the two vendored theorems. |
+| Selected `StrictRouteBoundary.sequence` | Supplied field → LITERAL specialization | The field is removed; `kummerBinding` is tied directly to the canonical realization at `p = 59`. |
+| Selected allocated Selmer obstruction | Supplied value plus equality → DERIVED when the character pair/allocation is supplied | `StrictRouteBoundary.selmerObstruction` is definitionally `allocatedSelmerObstruction` from the guarded exact pair, both directional class allocations, and roots `0,1`; it is no longer separately stored. |
+| Both Kummer character allocations | ABSENT → SEAM (first remaining item at a fixed reflected pair) | No `KummerPairedBinding.chi`/`.chiStar` producer or selected character projector exists.  For one supplied `ReflectedExactFilteredPair`, `CharacterDualAllocationTarget` asks for those allocations, the separate reflected-dual allocation, and readbacks preserving the actual roots; it does not quantify over every possible carrier. |
+| Omega-dual laws, both integral guards, both beta compatibilities | ABSENT → SEAM (downstream checklist) | The structures state the required equivalences/action laws, integral ideal plus sharp law, and state/conversion equalities, but the selected cone has no producer.  Supplying a reflected pair to inspect the earlier character seam already supplies that pair's omega-dual laws; it is a parameter of the conditional result, not an unconditional construction. |
+| Selected typed outcome | Unconditional `selmerClassExactness` localized wall → fixed-pair `characterDualAllocation` localized wall | The obsolete exactness wall is removed.  The character wall and typed result are conditional on one supplied reflected exact pair, because the selected cone names no concrete character carrier.  The later `strictRouteRhoWall` remains valid only behind a complete `StrictRouteBoundary`. |
+| Corner gauge attempt | Not reached → LOCALIZED WALL | `differenceGauge_reading` computes `r₀ - r₁ = r₀ + 58 • r₁`, and `differenceGauge_eq_zero_iff_vandiverSevenA` identifies zero reading with exactly open (7a).  There are not yet two same-action annihilators plus a Bezout identity, nor a same-action polynomial pair yielding a named factor. |
+
 ## N59 assembly summary
 
 | Instance surface | Status, before → after | Final reading |
@@ -170,6 +195,7 @@ canonical state belongs to the frontier.
 | Selected grade-one repayment verdicts | Verdict-global ABSENT → LITERAL (Transfer) | The public result shapes are unchanged, but their proof values consume repay_layer_transfer. |
 | Selected gauge quotient | Transfer-ABSENT → LITERAL (Ledger/Transfer) | The full matrix debit is transferred to conversion with stock fixed. |
 | Selected fold and principalization consumers | ABSENT → LITERAL (Transfer), conditional on supplied (7a) | Derived (7d) and odd-torsion netting are accounted; only the missing producer is a seam. |
+| Selected common-action stage | Selmer exactness SEAM → character-allocation SEAM at a fixed reflected pair | The vendored sequence and its additive realization are unconditional.  Once a reflected pair is supplied, the typed gauge attempt retains the class obstruction at the first missing character service; the selected cone itself does not manufacture that pair, and rho remains a later conditional wall. |
 | FermatState.StockCreditTransformer | ABSENT → SEAM | No state-linked positive successor transaction is constructed. |
 
 The guarded transformer probes remain evidence of type boundaries, not
@@ -202,14 +228,36 @@ LITERAL row:
 The selected-prime literal scan includes Transfer.lean, Heis.lean,
 AreaTransfer.lean, Interaction.lean, ClassCarrier.lean,
 TransverseAnnihilator.lean, and the generic credit, drain, and Kummer source
-cone.  Forbidden declaration/module guards continue to exclude the classical
+cone.  It now includes SelmerSequence.lean as well.  LinkingVerification
+checks and dependency-guards every new sequence/realization declaration and
+freezes the standard axiom trio; N59 Verification guards the exact (7a) gauge
+reading, the relocalized selected wall, and the derived allocated lift.
+Forbidden declaration/module guards continue to exclude the classical
 irregular, regular, ladder, transport, and endpoint cones.
 
 ## The remaining frontier
 
 every classified row is LITERAL except the following named seams.
 
-### 1. Lemma I / relation (7a)
+### 1. Common-action character allocation
+
+The former Selmer-class exactness address is closed by the vendored
+`toClass_ker` and `toClass_range` theorems.  The first uninhabited item in the
+selected `StrictRouteBoundary` is now both commuting Kummer character
+allocations.  The omega-dual realization, integral source/reflected ideals
+and sharp guard, theta, and both beta compatibilities are also still
+interfaces.  Only after all of them are supplied does the existing
+`strictRouteRhoWall` identify the missing arithmetic representation.
+
+For any one fixed reflected pair, `typedLocalizedResult` therefore has
+address `characterDualAllocation`.  It is deliberately parameterized by that
+pair: the selected cone does not contain a concrete character carrier, and a
+universal demand over arbitrary reflected pairs would falsely force the root
+classes to vanish on degenerate carriers.  Its retained difference-gauge
+value is the open (7a) class `r₀ + 58 • r₁`; it is neither a proof that the
+corner ideal is the unit ideal nor a named nonunit common factor.
+
+### 2. Lemma I / relation (7a)
 
 For the canonical allocated state pair, let r₀ be ledger.rootClass 0 and r₁
 be ledger.rootClass 1.  The missing producer must construct, without taking
@@ -330,7 +378,7 @@ the depth filtration to the interaction action.  That **two-2s
 correspondence is open future work**, not a theorem or heuristic rewrite in
 the present cone.
 
-### 2. Stock-credit transformer successor
+### 3. Stock-credit transformer successor
 
 For every PrimitiveSecondCaseSolution S, the missing producer must retain a
 fixed budget B = S.charge and construct next plus
@@ -369,7 +417,7 @@ receipt is predicted to equal its enclosed area.  No factor leg, repayment
 leg, `next`, `wS`, AreaTransfer, or transformer inhabitant is constructed
 here.
 
-### 3. Higher layer transport
+### 4. Higher layer transport
 
 The missing object is exactly
 
