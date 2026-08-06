@@ -493,3 +493,56 @@ this repository.
   factor.  The honest reading should retain the allocated obstruction and all
   now-constructible receipts at that wall; endpoint and transformer remain
   outside the cone.
+
+## TAME-SYMBOLS Stage 1 prediction — 2026-08-06
+
+Recorded after reading `STAGE1-TASK.md` and the collaboration protocol, and
+before inspecting Mathlib's finite-residue-field machinery or editing any
+Stage-1 Lean source.
+
+- **W1 — where residue arithmetic will fight.**  I expect the valuation
+  exponents and the signed tame residue to be straightforward once the
+  valuation is exposed as an additive homomorphism on units.  The resistance
+  should occur one layer later: Mathlib is unlikely to package the residue
+  homomorphism, the finite-field cardinality exponent, and a chosen
+  `p`-torsion character into the exact additive `ZMod p` target needed here.
+  I therefore predict a small route-neutral `TameContext` carrying those
+  maps and their compatibility, plus reusable generic lemmas for finite
+  cyclic residue groups.  Those lemmas should be explicitly marked as
+  Mathlib-welcome rather than hidden in the conductor-59 instance.
+- **W1 — laws and Steinberg.**  Bilinearity and antisymmetry should be
+  compiler-level group algebra after the raw tame residue is defined.
+  Both-units silence should be strictly easier and should become the public
+  workhorse theorem.  Steinberg is not needed to silence the tame rows in
+  W3, so it is *logically deferrable for this stage's downstream use*, but the
+  task explicitly requests it and I predict it can still be proved now from
+  the valuation trichotomy for `a` and `1-a`; the likely friction is the
+  generic residue-of-`1-a` lemma, not the final character map.  If Mathlib's
+  valued-field API cannot state that trichotomy without importing a concrete
+  DVR completion, the honest generic layer should make precisely that raw
+  Steinberg identity a named context law and prove the exported symbol
+  theorem from it—never manufacture it at 59.
+- **W1 — equivariance.**  I expect ordinary Galois invariance of valuation
+  and residue to yield symbol equivariance, while the campaign's adjoint
+  shape will use antisymmetry together with `InvolutiveBase.hash`.  The
+  generic tame module should state the closest lawful action-level theorem;
+  the exact character-eigenspace specialization may live in the W2/W3 glue
+  module because `InvolutiveBase` acts on Selmer carriers rather than on an
+  arbitrary valued field.
+- **W2 — concrete carrier seam.**  Mathlib's
+  `HeightOneSpectrum.selmerGroup` is a multiplicative subgroup of a Kummer
+  quotient, whereas the current stage uses additive modules and character
+  eigenspaces.  I predict the carrier itself can be seated by `Additive` and
+  a literal eigenspace subtype, but the full Delta action on the quotient is
+  not inferred automatically from Mathlib.  Named glue should separate
+  carrier equality/equivalence, action preservation, and the reflected
+  character-dual leg.  No abstract provider or per-prime Selmer certificate
+  should replace that subtype.
+- **W3 — tame discharge boundary.**  Once seated representatives expose
+  their local valuation-zero receipts away from the defining support, the
+  both-units theorem should discharge every audited tame row by two rewrites.
+  I expect `outside_two_readings` to split into a proved tame-place theorem
+  and a residual statement at the wild place 59.  `bank_silences_other_places`
+  should likewise gain a constructor whose tame fields are derived and whose
+  59-local orthogonality input remains explicit.  Global reciprocity,
+  unconditional (7a), an endpoint, and a transformer remain out of scope.
