@@ -489,12 +489,12 @@ proof-relevant, and routes global reciprocity through the existing
   Fermat.Conservation.TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero,
   Fermat.Conservation.TatePairing.LocalOrthogonalityGuard.orthogonal
 
-/-! W2 keeps the three exact lowercase arithmetic targets as interfaces on
-one shared detector.  The bank receipts and their assembly are proved, but
-the auxiliary and remaining place rows retain explicit orthogonality
-guards. -/
+/-! The tame layer constructs the complete finite-support pairing from one
+wild local interface.  Detector existence and the selected gauge comparison
+remain interfaces; the bank audit and every away row are now proved. -/
 
 #check Fermat.FiftyNine.Conservation.TateBridge.LocalPairing
+#check Fermat.FiftyNine.Conservation.TateBridge.WildLocalInterface
 #check Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction
 #check Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction.toLampTransverse
 #check Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector
@@ -509,8 +509,6 @@ guards. -/
 #check Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_local_tate_pairing
 #check Fermat.FiftyNine.Conservation.TateBridge.N59BankReceipts
 #check Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts
-#check Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard
-#check Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.pairAt_eq_zero
 #check Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit
 #check Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.auxiliary_reading_eq_zero
 #check Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.other_reading_eq_zero
@@ -531,13 +529,16 @@ guards. -/
   Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction.annihilates
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.outside_reading_eq_zero,
-  Fermat.FiftyNine.Conservation.TateBridge.TransverseDetector.outside_two_readings
+  Fermat.Conservation.TamePlacePairing.WildLocalInterface.pairAt_eq_zero_of_ne
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_local_tate_pairing,
   Fermat.FiftyNine.Conservation.TateBridge.chosenTransverseDetector
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.bank_silences_other_places,
   Fermat.FiftyNine.Conservation.TateBridge.chosenTransverseDetector
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.bank_silences_other_places,
+  Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.chosenTransverseDetector,
   Classical.choice
@@ -570,27 +571,18 @@ guards. -/
   Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts,
   Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD
 #guard_depends_on
-  Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.pairAt_eq_zero,
-  Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts
-#guard_depends_on
-  Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.pairAt_eq_zero,
-  Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.orthogonal_of_sevenD
-#guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.auxiliary_reading_eq_zero,
-  Fermat.FiftyNine.Conservation.TateBridge.AuxiliaryFoldOrthogonalityGuard.pairAt_eq_zero
+  Fermat.Conservation.TamePlacePairing.WildLocalInterface.pairAt_eq_zero_of_ne
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.other_reading_eq_zero,
-  Fermat.Conservation.TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero
+  Fermat.Conservation.TamePlacePairing.WildLocalInterface.pairAt_eq_zero_of_ne
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.away_reading_eq_zero,
-  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.auxiliary_reading_eq_zero
-#guard_depends_on
-  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.away_reading_eq_zero,
-  Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.other_reading_eq_zero
+  Fermat.Conservation.TamePlacePairing.WildLocalInterface.pairAt_eq_zero_of_ne
 
 /-! W3 is a compiled conditional theorem, not an unconditional producer.
-Its proof consumes reciprocity, the one chosen detector shared by all three
-targets, the complete bank silence audit, the gauge zero-reflection law, and
+Its proof consumes reciprocity, the chosen detector, and the gauge
+zero-reflection law; it constructs the bank audit internally and then uses
 the existing exact relation-(7a) vanishing theorem. -/
 
 #check Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge
@@ -606,6 +598,9 @@ the existing exact relation-(7a) vanishing theorem. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge,
   Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.away_reading_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge,
+  Fermat.FiftyNine.Conservation.TateBridge.bank_silences_other_places
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge,
   Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.reflects_selected_zero

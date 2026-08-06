@@ -14,8 +14,11 @@ import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.CommonActionStage
 import Fermat.Conservation.LinkingInterfaces
 import Fermat.Conservation.SelmerSequence
+import Fermat.Conservation.SelmerEigenspace
 import Fermat.Conservation.SwapQuotient
 import Fermat.Conservation.TatePairing
+import Fermat.Conservation.TamePlacePairing
+import Fermat.Conservation.TameSymbol
 import Fermat.Conservation.TransverseAnnihilator
 
 open Fermat.Conservation
@@ -145,6 +148,138 @@ open Fermat.Conservation
 #check TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places
 #check TatePairing.LocalOrthogonalityGuard
 #check TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero
+
+/-! ## Explicit tame Hilbert-symbol surface -/
+
+#check TameSymbol.KummerClass
+#check TameSymbol.Context
+#check TameSymbol.Context.residueCard
+#check TameSymbol.Context.tameExponent
+#check TameSymbol.Context.raw
+#check TameSymbol.Context.raw_one_left
+#check TameSymbol.Context.raw_one_right
+#check TameSymbol.Context.raw_mul_left
+#check TameSymbol.Context.raw_mul_right
+#check TameSymbol.Context.raw_swap
+#check TameSymbol.Context.residue_power_pow_eq_one
+#check TameSymbol.Context.powerToRoots
+#check TameSymbol.Context.rootsEquivZPowers
+#check TameSymbol.Context.residueCharacter
+#check TameSymbol.Context.residueCharacter_one
+#check TameSymbol.Context.residueCharacter_mul
+#check TameSymbol.Context.value
+#check TameSymbol.Context.value_eq_explicit_formula
+#check TameSymbol.Context.value_one_left
+#check TameSymbol.Context.value_one_right
+#check TameSymbol.Context.value_mul_left
+#check TameSymbol.Context.value_mul_right
+#check TameSymbol.Context.value_swap
+#check TameSymbol.Context.toAddMonoidHom
+#check TameSymbol.Context.toAddMonoidHom_apply
+#check TameSymbol.Context.raw_eq_one_of_ord_eq_zero
+#check TameSymbol.Context.both_units_silence
+#check TameSymbol.Context.value_eq_zero_of_ord_eq_zero
+#check TameSymbol.Context.raw_eq_pth_power_of_p_dvd_ord
+#check TameSymbol.Context.value_eq_zero_of_p_dvd_ord
+#check TameSymbol.Context.value_pow_left
+#check TameSymbol.Context.value_pow_right
+#check TameSymbol.Context.value_pth_power_left
+#check TameSymbol.Context.value_pth_power_right
+#check TameSymbol.Context.rightMonoidHom
+#check TameSymbol.Context.ordModPRep
+#check TameSymbol.Context.ordModP
+#check TameSymbol.Context.ordModP_mk
+#check TameSymbol.Context.rightModP
+#check TameSymbol.Context.rightModP_mk
+#check TameSymbol.Context.rightModPFamily
+#check TameSymbol.Context.modPMul
+#check TameSymbol.Context.modP
+#check TameSymbol.Context.modP_mk_mk
+#check TameSymbol.Context.modP_eq_zero_of_ordModP_eq_zero
+#check TameSymbol.Context.SteinbergValuationCases
+#check TameSymbol.Context.SteinbergValuationCases.raw_eq_one
+#check TameSymbol.Context.SteinbergValuationCases.steinberg_of_cases
+#check TameSymbol.Context.SteinbergRealization
+#check TameSymbol.Context.steinberg
+#check TameSymbol.Context.PlaceGaloisData
+#check TameSymbol.Context.PlaceGaloisData.raw_place_action
+#check TameSymbol.Context.PlaceGaloisData.value_place_galois_equivariant
+#check TameSymbol.Context.GaloisData
+#check TameSymbol.Context.GaloisData.raw_action
+#check TameSymbol.Context.GaloisData.value_galois_equivariant
+#check TameSymbol.Context.GaloisData.value_action_adjoint
+
+/-! ## Seated Selmer-eigenspace surface -/
+
+#check SelmerEigenspace.SelmerCarrier
+#check SelmerEigenspace.selmerCarrier_eq_commonActionStage
+#check SelmerEigenspace.p_nsmul_eq_zero
+#check SelmerEigenspace.instModuleZMod
+#check SelmerEigenspace.instModulePadicInt
+#check SelmerEigenspace.padicInt_smul_eq_toZMod_smul
+#check SelmerEigenspace.SelmerDeltaRepresentation
+#check SelmerEigenspace.characterEigenspace
+#check SelmerEigenspace.instCharacterEigenspaceAddCommGroup
+#check SelmerEigenspace.mem_characterEigenspace_iff
+#check SelmerEigenspace.SelmerChi
+#check SelmerEigenspace.SelmerChiStar
+#check SelmerEigenspace.characterEigenspaceRepresentation
+#check SelmerEigenspace.instCharacterEigenspaceGroupAlgebraModule
+#check SelmerEigenspace.coe_groupElement_smul
+#check SelmerEigenspace.toSeatedCarrier
+#check SelmerEigenspace.toAdditiveSelmer
+#check SelmerEigenspace.toConcreteSelmer
+#check SelmerEigenspace.toKummerQuotient
+#check SelmerEigenspace.toKummerClass
+#check SelmerEigenspace.toSeatedCarrier_apply
+#check SelmerEigenspace.toAdditiveSelmer_apply
+#check SelmerEigenspace.toConcreteSelmer_apply
+#check SelmerEigenspace.toKummerQuotient_apply
+#check SelmerEigenspace.toKummerClass_apply
+#check SelmerEigenspace.toAdditiveSelmer_injective
+#check SelmerEigenspace.toConcreteSelmer_injective
+#check SelmerEigenspace.toKummerQuotient_injective
+#check SelmerEigenspace.valuationOfNeZeroMod_eq_one
+#check SelmerEigenspace.valuationOfNeZeroMod_mk_eq_one_iff_dvd
+#check SelmerEigenspace.representative_valuation_dvd
+#check SelmerEigenspace.quotientRepresentative
+#check SelmerEigenspace.quotientRepresentative_mk
+#check SelmerEigenspace.quotientRepresentative_valuation_dvd
+#check SelmerEigenspace.exists_representative_valuation_dvd
+#check SelmerEigenspace.DOmegaSelmerChiStar
+#check SelmerEigenspace.ReflectedDualCharacterGlue
+#check SelmerEigenspace.ReflectedDualCharacterGlue.carrierDualEquiv_smul
+#check SelmerEigenspace.ReflectedSelmerPair
+
+/-! ## Tame place-indexed realization surface -/
+
+#check TamePlacePairing.PlaceIndexedTameRealization
+#check TamePlacePairing.PlaceIndexedTameRealization.SelectedValuationsZeroAt
+#check TamePlacePairing.PlaceIndexedTameRealization.pairAt_eq_zero_of_p_dvd_ord
+#check TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping
+#check TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_at_tame_places
+#check TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_of_tame_and_residual
+#check TamePlacePairing.WildLocalInterface
+#check TamePlacePairing.WildLocalInterface.toPlaceIndexedLocalPairing
+#check TamePlacePairing.WildLocalInterface.pairAt_distinguished
+#check TamePlacePairing.WildLocalInterface.pairAt_eq_zero_of_ne
+#check TamePlacePairing.Seated.Place
+#check TamePlacePairing.Seated.Primal
+#check TamePlacePairing.Seated.ReflectedDual
+#check TamePlacePairing.Seated.Pairing
+#check TamePlacePairing.Seated.WildInterface
+#check TamePlacePairing.Seated.ordModP_toKummerClass_eq_zero_of_ord_eq_valuation
+#check TamePlacePairing.Seated.Realization
+#check TamePlacePairing.Seated.Realization.ofWild
+#check TamePlacePairing.Seated.Realization.toPlaceIndexedTameRealization
+#check TamePlacePairing.Seated.Realization.toPlaceIndexedTameRealization_primalClass
+#check TamePlacePairing.Seated.Realization.toPlaceIndexedTameRealization_dualClass
+#check TamePlacePairing.Seated.Realization.ordModP_toKummerClass_eq_zero
+#check TamePlacePairing.Seated.Realization.selectedValuationsZeroAt
+#check TamePlacePairing.Seated.Realization.pairAt_eq_zero_at_tame_place
+#check TamePlacePairing.Seated.Realization.outsideTwoTameBookkeeping
+#check TamePlacePairing.Seated.Realization.outside_two_readings_at_tame_places
+#check TamePlacePairing.Seated.Realization.outside_two_readings_of_residual
 
 /-! ## Vendored Selmer class-sequence surface -/
 
@@ -411,6 +546,179 @@ open Fermat.Conservation
 #guard_depends_on TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero,
   TatePairing.LocalOrthogonalityGuard.orthogonal
 
+/-! ## Explicit tame Hilbert-symbol proof-value wiring -/
+
+#guard_depends_on TameSymbol.Context.raw_one_left,
+  TameSymbol.Context.raw
+#guard_depends_on TameSymbol.Context.raw_one_right,
+  TameSymbol.Context.raw
+#guard_depends_on TameSymbol.Context.raw_mul_left,
+  TameSymbol.Context.raw
+#guard_depends_on TameSymbol.Context.raw_mul_right,
+  TameSymbol.Context.raw
+#guard_depends_on TameSymbol.Context.raw_swap,
+  TameSymbol.Context.raw
+#guard_depends_on TameSymbol.Context.residue_power_pow_eq_one,
+  FiniteField.pow_card_sub_one_eq_one
+#guard_depends_on TameSymbol.Context.residueCharacter_one,
+  TameSymbol.Context.residueCharacter
+#guard_depends_on TameSymbol.Context.residueCharacter_mul,
+  TameSymbol.Context.residueCharacter
+#guard_depends_on TameSymbol.Context.value_eq_explicit_formula,
+  TameSymbol.Context.value
+#guard_depends_on TameSymbol.Context.value_one_left,
+  TameSymbol.Context.value
+#guard_depends_on TameSymbol.Context.value_one_right,
+  TameSymbol.Context.value
+#guard_depends_on TameSymbol.Context.value_mul_left,
+  TameSymbol.Context.raw_mul_left
+#guard_depends_on TameSymbol.Context.value_mul_right,
+  TameSymbol.Context.raw_mul_right
+#guard_depends_on TameSymbol.Context.value_swap,
+  TameSymbol.Context.raw_swap
+#guard_depends_on TameSymbol.Context.toAddMonoidHom_apply,
+  TameSymbol.Context.toAddMonoidHom
+#guard_depends_on TameSymbol.Context.raw_eq_one_of_ord_eq_zero,
+  TameSymbol.Context.raw
+#guard_depends_on TameSymbol.Context.both_units_silence,
+  TameSymbol.Context.raw_eq_one_of_ord_eq_zero
+#guard_depends_on TameSymbol.Context.value_eq_zero_of_ord_eq_zero,
+  TameSymbol.Context.both_units_silence
+#guard_depends_on TameSymbol.Context.raw_eq_pth_power_of_p_dvd_ord,
+  TameSymbol.Context.raw
+#guard_depends_on TameSymbol.Context.value_eq_zero_of_p_dvd_ord,
+  TameSymbol.Context.raw_eq_pth_power_of_p_dvd_ord
+#guard_depends_on TameSymbol.Context.value_pow_left,
+  TameSymbol.Context.toAddMonoidHom
+#guard_depends_on TameSymbol.Context.value_pow_right,
+  TameSymbol.Context.toAddMonoidHom
+#guard_depends_on TameSymbol.Context.value_pth_power_left,
+  TameSymbol.Context.value_pow_left
+#guard_depends_on TameSymbol.Context.value_pth_power_right,
+  TameSymbol.Context.value_pow_right
+#guard_depends_on TameSymbol.Context.ordModP_mk,
+  TameSymbol.Context.ordModP
+#guard_depends_on TameSymbol.Context.rightModP_mk,
+  QuotientGroup.lift_mk'
+#guard_depends_on TameSymbol.Context.modP_mk_mk,
+  TameSymbol.Context.modP
+#guard_depends_on TameSymbol.Context.modP_eq_zero_of_ordModP_eq_zero,
+  TameSymbol.Context.value_eq_zero_of_p_dvd_ord
+#guard_depends_on TameSymbol.Context.SteinbergValuationCases.raw_eq_one,
+  TameSymbol.Context.raw_eq_one_of_ord_eq_zero
+#guard_depends_on TameSymbol.Context.SteinbergValuationCases.steinberg_of_cases,
+  TameSymbol.Context.SteinbergValuationCases.raw_eq_one
+#guard_depends_on TameSymbol.Context.steinberg,
+  TameSymbol.Context.SteinbergValuationCases.steinberg_of_cases
+#guard_depends_on TameSymbol.Context.PlaceGaloisData.raw_place_action,
+  TameSymbol.Context.raw
+#guard_depends_on
+  TameSymbol.Context.PlaceGaloisData.value_place_galois_equivariant,
+  TameSymbol.Context.PlaceGaloisData.raw_place_action
+#guard_depends_on TameSymbol.Context.GaloisData.raw_action,
+  TameSymbol.Context.raw
+#guard_depends_on TameSymbol.Context.GaloisData.value_galois_equivariant,
+  TameSymbol.Context.GaloisData.raw_action
+#guard_depends_on TameSymbol.Context.GaloisData.value_action_adjoint,
+  TameSymbol.Context.GaloisData.value_galois_equivariant
+#guard_depends_on TameSymbol.Context.GaloisData.value_action_adjoint,
+  TameSymbol.Context.value_pow_right
+
+/-! ## Seated Selmer-eigenspace proof-value wiring -/
+
+#guard_depends_on SelmerEigenspace.selmerCarrier_eq_commonActionStage,
+  Eq.refl
+#guard_depends_on SelmerEigenspace.p_nsmul_eq_zero,
+  QuotientGroup.eq_one_iff
+#guard_depends_on SelmerEigenspace.padicInt_smul_eq_toZMod_smul,
+  PadicInt.toZMod
+#guard_depends_on SelmerEigenspace.mem_characterEigenspace_iff,
+  SelmerEigenspace.characterEigenspace
+#guard_depends_on SelmerEigenspace.coe_groupElement_smul,
+  Representation.asAlgebraHom_of
+#guard_depends_on SelmerEigenspace.toSeatedCarrier_apply,
+  SelmerEigenspace.toSeatedCarrier
+#guard_depends_on SelmerEigenspace.toAdditiveSelmer_apply,
+  SelmerEigenspace.toAdditiveSelmer
+#guard_depends_on SelmerEigenspace.toConcreteSelmer_apply,
+  SelmerEigenspace.toConcreteSelmer
+#guard_depends_on SelmerEigenspace.toKummerQuotient_apply,
+  SelmerEigenspace.toKummerQuotient
+#guard_depends_on SelmerEigenspace.toKummerClass_apply,
+  SelmerEigenspace.toKummerClass
+#guard_depends_on SelmerEigenspace.toAdditiveSelmer_injective,
+  Subtype.ext
+#guard_depends_on SelmerEigenspace.toConcreteSelmer_injective,
+  SelmerEigenspace.toAdditiveSelmer_injective
+#guard_depends_on SelmerEigenspace.toKummerQuotient_injective,
+  SelmerEigenspace.toConcreteSelmer_injective
+#guard_depends_on SelmerEigenspace.valuationOfNeZeroMod_eq_one,
+  SelmerEigenspace.toConcreteSelmer
+#guard_depends_on SelmerEigenspace.valuationOfNeZeroMod_mk_eq_one_iff_dvd,
+  ZMod.intCast_zmod_eq_zero_iff_dvd
+#guard_depends_on SelmerEigenspace.representative_valuation_dvd,
+  SelmerEigenspace.valuationOfNeZeroMod_mk_eq_one_iff_dvd
+#guard_depends_on SelmerEigenspace.representative_valuation_dvd,
+  SelmerEigenspace.valuationOfNeZeroMod_eq_one
+#guard_depends_on SelmerEigenspace.quotientRepresentative_mk,
+  QuotientGroup.out_eq'
+#guard_depends_on SelmerEigenspace.quotientRepresentative_valuation_dvd,
+  SelmerEigenspace.representative_valuation_dvd
+#guard_depends_on SelmerEigenspace.exists_representative_valuation_dvd,
+  SelmerEigenspace.quotientRepresentative_valuation_dvd
+#guard_depends_on
+  SelmerEigenspace.ReflectedDualCharacterGlue.carrierDualEquiv_smul,
+  SelmerEigenspace.ReflectedDualCharacterGlue.omegaTwistedAction
+
+/-! ## Tame place-indexed realization proof-value wiring -/
+
+#guard_depends_on
+  TamePlacePairing.PlaceIndexedTameRealization.pairAt_eq_zero_of_p_dvd_ord,
+  TameSymbol.Context.modP_eq_zero_of_ordModP_eq_zero
+#guard_depends_on
+  TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_at_tame_places,
+  TamePlacePairing.PlaceIndexedTameRealization.pairAt_eq_zero_of_p_dvd_ord
+#guard_depends_on
+  TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_of_tame_and_residual,
+  TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_at_tame_places
+#guard_depends_on TamePlacePairing.WildLocalInterface.pairAt_distinguished,
+  TamePlacePairing.WildLocalInterface.toPlaceIndexedLocalPairing
+#guard_depends_on TamePlacePairing.WildLocalInterface.pairAt_eq_zero_of_ne,
+  TamePlacePairing.WildLocalInterface.toPlaceIndexedLocalPairing
+#guard_depends_on
+  TamePlacePairing.Seated.ordModP_toKummerClass_eq_zero_of_ord_eq_valuation,
+  SelmerEigenspace.quotientRepresentative_valuation_dvd
+#guard_depends_on
+  TamePlacePairing.Seated.ordModP_toKummerClass_eq_zero_of_ord_eq_valuation,
+  TameSymbol.Context.ordModP_mk
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.toPlaceIndexedTameRealization_primalClass,
+  TamePlacePairing.Seated.Realization.toPlaceIndexedTameRealization
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.toPlaceIndexedTameRealization_dualClass,
+  TamePlacePairing.Seated.Realization.toPlaceIndexedTameRealization
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.ordModP_toKummerClass_eq_zero,
+  TamePlacePairing.Seated.ordModP_toKummerClass_eq_zero_of_ord_eq_valuation
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.pairAt_eq_zero_at_tame_place,
+  TamePlacePairing.PlaceIndexedTameRealization.pairAt_eq_zero_of_p_dvd_ord
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.pairAt_eq_zero_at_tame_place,
+  TamePlacePairing.Seated.Realization.selectedValuationsZeroAt
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.outside_two_readings_at_tame_places,
+  TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_at_tame_places
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.outside_two_readings_at_tame_places,
+  TamePlacePairing.Seated.Realization.outsideTwoTameBookkeeping
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.outside_two_readings_of_residual,
+  TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_of_tame_and_residual
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.outside_two_readings_of_residual,
+  TamePlacePairing.Seated.Realization.outsideTwoTameBookkeeping
+
 /-! ## Common-action proof-value wiring -/
 
 #guard_depends_on IsDedekindDomain.selmerGroup.toClass_ker,
@@ -606,3 +914,6 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.LinkingInterfaces
 #guard_standard_axioms_prefix Fermat.Conservation.CommonActionStage
 #guard_standard_axioms_prefix Fermat.Conservation.TatePairing
+#guard_standard_axioms_prefix Fermat.Conservation.TameSymbol
+#guard_standard_axioms_prefix Fermat.Conservation.SelmerEigenspace
+#guard_standard_axioms_prefix Fermat.Conservation.TamePlacePairing
