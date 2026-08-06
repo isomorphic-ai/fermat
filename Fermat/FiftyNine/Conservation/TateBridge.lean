@@ -5,16 +5,17 @@ Authors: Fabian Franz, Fable
 
 # The conditional conductor-59 Tate bridge
 
-The generic local pairing and reciprocity laws live in `TatePairing`.  This
-file states the three remaining conductor-59 arithmetic targets on one
-shared detector, records exactly which bank receipts already exist, and
-compiles the conditional route from those inputs to relation (7a).
+The generic tame and wild local pairing constructions live in
+`TamePlacePairing`.  This file now takes only one bilinear reading at the
+distinguished place above `59`; the complete `Finsupp` pairing is constructed
+as its single supported column.  Consequently every tame/non-distinguished
+row is a theorem, not a local-orthogonality premise.
 
-No value of any of the three target propositions is asserted here.  In
-particular, the bank receipts do not silently become localization theorems:
-every local vanishing still passes through an explicit orthogonality guard.
+Poitou--Tate detector existence, the comparison with the selected gauge, and
+global reciprocity remain explicit interfaces.  No unconditional relation
+(7a), endpoint, or transformer is asserted here.
 -/
-import Fermat.Conservation.TatePairing
+import Fermat.Conservation.TamePlacePairing
 import Fermat.FiftyNine.Conservation.CommonActionStage
 import Fermat.FiftyNine.Conservation.Instance
 
@@ -28,6 +29,7 @@ open Fermat.Conservation
 open Fermat.Conservation.CommonActionStage
 open Fermat.Conservation.LinkingInterfaces
 open Fermat.Conservation.TatePairing
+open Fermat.Conservation.TamePlacePairing
 open Fermat.Conservation.TransverseAnnihilator
 open Fermat.FiftyNine.Conservation.FermatState
 open Fermat.FiftyNine.Conservation.StateFactorPair
@@ -58,10 +60,16 @@ variable {ζ : K} {hζ : IsPrimitiveRoot ζ 59}
   {LampMode : Type uLamp} [AddCommGroup LampMode]
   [Module (Polynomial (ZMod 59)) LampMode]
 
-/-- The selected specialization of the generic local-pairing interface. -/
+/-- The ambient type of the selected place-indexed pairing. -/
 abbrev LocalPairing :=
   TatePairing.PlaceIndexedLocalPairing 59 Delta omega chi Place
     SelmerChi DOmegaSelmerChiStar
+
+/-- The sole remaining local pairing interface: one bilinear, `#`-adjoint
+reading at the distinguished place above `59`. -/
+abbrev WildLocalInterface (distinguishedPlace : Place) :=
+  TamePlacePairing.WildLocalInterface 59 Delta omega chi Place
+    SelmerChi DOmegaSelmerChiStar distinguishedPlace
 
 /-! ## The selected supporter-prime lamp -/
 
@@ -87,20 +95,20 @@ def toLampTransverse (action : SelectedLampAction d) :
 
 end SelectedLampAction
 
-/-! ## W2.2: one global detector with two possible readings -/
+/-! ## W2.2: one global detector; support is already constructed -/
 
-/-- A Poitou--Tate detector whose only possible nonzero readings are the
-distinguished place above 59 and one lamp-selected place above 827.
+/-- A Poitou--Tate detector with one lamp-selected place above 827.
 
-The support statement is containment, not equality: the bank is intended to
-kill the auxiliary coordinate, so demanding that coordinate be nonzero would
-make the three hypotheses inconsistent.  No value of this structure is
-constructed in the current cone. -/
+There is no support field: `wild.toPlaceIndexedLocalPairing` has only the
+distinguished column by construction.  In particular, the auxiliary tame
+reading is already zero even though the lamp is used to construct the global
+detector.  Detector existence itself remains an arithmetic interface. -/
 structure TransverseDetector
-    (pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    (distinguishedPlace : Place)
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar))
-    (distinguishedPlace : Place) (placePrime : Place → ℕ)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (placePrime : Place → ℕ)
     (x : SelmerChi) (d : LampMode) where
   detector : DOmegaSelmerChiStar
   auxiliaryPlace : Place
@@ -112,21 +120,19 @@ structure TransverseDetector
   lampRealization :
     LampMode →ₗ[Polynomial (ZMod 59)] DOmegaSelmerChiStar
   lamp_realizes_detector : lampRealization d = detector
-  outside_two_readings : ∀ v,
-    v ≠ distinguishedPlace → v ≠ auxiliaryPlace →
-      pairing.pairAt v x detector = 0
 
 namespace TransverseDetector
 
 /-- The detector carries an actual instance of the repository's lamp
 interface, rather than only the numeral naming its auxiliary prime. -/
 def lamp
-    {pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    {distinguishedPlace : Place}
+    {wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar)}
-    {distinguishedPlace : Place} {placePrime : Place → ℕ}
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace}
+    {placePrime : Place → ℕ}
     {x : SelmerChi} {d : LampMode}
-    (detector : TransverseDetector pairing distinguishedPlace placePrime x d) :
+    (detector : TransverseDetector distinguishedPlace wild placePrime x d) :
     LampTransverse (ZMod 59) LampMode 59
       Credit.attestationPrime 7 d :=
   detector.lampAction.toLampTransverse
@@ -135,12 +141,13 @@ def lamp
 annihilator transports through the named realization to the actual global
 detector. -/
 theorem lamp_annihilates_detector
-    {pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    {distinguishedPlace : Place}
+    {wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar)}
-    {distinguishedPlace : Place} {placePrime : Place → ℕ}
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace}
+    {placePrime : Place → ℕ}
     {x : SelmerChi} {d : LampMode}
-    (detector : TransverseDetector pairing distinguishedPlace placePrime x d) :
+    (detector : TransverseDetector distinguishedPlace wild placePrime x d) :
     Annihilates detector.lampAction.polynomial detector.detector := by
   change detector.lampAction.polynomial • detector.detector = 0
   calc
@@ -154,45 +161,49 @@ theorem lamp_annihilates_detector
           rw [detector.lampAction.annihilates]
     _ = 0 := map_zero detector.lampRealization
 
-/-- Named support-containment projection recording the detector's two-place
-Poitou--Tate condition. -/
+/-- Every detector reading away from the distinguished wild place is zero by
+the constructed single-column support.  The auxiliary inequality is retained
+in the statement only to match the historical two-reading audit shape. -/
 theorem outside_reading_eq_zero
-    {pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    {distinguishedPlace : Place}
+    {wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar)}
-    {distinguishedPlace : Place} {placePrime : Place → ℕ}
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace}
+    {placePrime : Place → ℕ}
     {x : SelmerChi} {d : LampMode}
-    (detector : TransverseDetector pairing distinguishedPlace placePrime x d)
+    (detector : TransverseDetector distinguishedPlace wild placePrime x d)
     (v : Place) (hv : v ≠ distinguishedPlace)
-    (haux : v ≠ detector.auxiliaryPlace) :
-    pairing.pairAt v x detector.detector = 0 :=
-  detector.outside_two_readings v hv haux
+    (_haux : v ≠ detector.auxiliaryPlace) :
+    wild.toPlaceIndexedLocalPairing.pairAt v x detector.detector = 0 :=
+  wild.pairAt_eq_zero_of_ne hv x detector.detector
 
 end TransverseDetector
 
 /-- **INTERFACE — W2.2.** Poitou--Tate supplies a global detector after one
-auxiliary lamp place is relaxed.  Its two possible readings are at the place
-above 59 and the place above the selected supporter prime 827. -/
+auxiliary lamp place is relaxed.  Pairing support is not part of this target:
+it is already the single distinguished column. -/
 def transverse_detector_exists
-    (pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    (distinguishedPlace : Place)
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar))
-    (distinguishedPlace : Place) (placePrime : Place → ℕ)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (placePrime : Place → ℕ)
     (x : SelmerChi) (d : LampMode) : Prop :=
-  Nonempty (TransverseDetector pairing distinguishedPlace placePrime x d)
+  Nonempty (TransverseDetector distinguishedPlace wild placePrime x d)
 
 /-- The one detector selected by the existential target.  The two remaining
 W2 targets are indexed by this exact witness, so they cannot silently switch
 detectors or demand a theorem about every possible detector. -/
 noncomputable def chosenTransverseDetector
-    (pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    (distinguishedPlace : Place)
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar))
-    (distinguishedPlace : Place) (placePrime : Place → ℕ)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (placePrime : Place → ℕ)
     (x : SelmerChi) (d : LampMode)
-    (hDetector : transverse_detector_exists pairing
-      distinguishedPlace placePrime x d) :
-    TransverseDetector pairing distinguishedPlace placePrime x d :=
+    (hDetector : transverse_detector_exists distinguishedPlace wild
+      placePrime x d) :
+    TransverseDetector distinguishedPlace wild placePrime x d :=
   Classical.choice hDetector
 
 /-! ## W2.1: the local reading is the selected difference gauge -/
@@ -206,16 +217,18 @@ this selected gauge; without it, vanishing of a scalar coordinate would not
 imply relation (7a). -/
 structure GaugeComparison
     (pair : StateLinkedIdealPair hζ S hz)
-    (pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    (distinguishedPlace : Place)
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar))
-    (distinguishedPlace : Place) (placePrime : Place → ℕ)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (placePrime : Place → ℕ)
     (x : SelmerChi) (d : LampMode)
-    (detector : TransverseDetector pairing distinguishedPlace placePrime x d) where
+    (detector : TransverseDetector distinguishedPlace wild placePrime x d) where
   readout : AllocatedClass K →+ ZMod 59
   unit : (ZMod 59)ˣ
   pairing_eq_gauge :
-    pairing.pairAt distinguishedPlace x detector.detector =
+    wild.toPlaceIndexedLocalPairing.pairAt
+        distinguishedPlace x detector.detector =
       (unit : ZMod 59) *
         readout (pair.ledger.rootClass 0 + 58 • pair.ledger.rootClass 1)
   reflects_selected_zero :
@@ -231,19 +244,21 @@ namespace GaugeComparison
 
 variable
   {pair : StateLinkedIdealPair hζ S hz}
-  {pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+  {distinguishedPlace : Place}
+  {wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
     (Place := Place) (SelmerChi := SelmerChi)
-    (DOmegaSelmerChiStar := DOmegaSelmerChiStar)}
-  {distinguishedPlace : Place} {placePrime : Place → ℕ}
+    (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace}
+  {placePrime : Place → ℕ}
   {x : SelmerChi} {d : LampMode}
-  {detector : TransverseDetector pairing distinguishedPlace placePrime x d}
+  {detector : TransverseDetector distinguishedPlace wild placePrime x d}
 
 /-- Cancellation of the unit in the local comparison kills the scalar
 readout of the displayed relation-(7a) word. -/
 theorem scalarGauge_eq_zero_of_local_reading_eq_zero
-    (comparison : GaugeComparison pair pairing distinguishedPlace
+    (comparison : GaugeComparison pair distinguishedPlace wild
       placePrime x d detector)
-    (hlocal : pairing.pairAt distinguishedPlace x detector.detector = 0) :
+    (hlocal : wild.toPlaceIndexedLocalPairing.pairAt
+      distinguishedPlace x detector.detector = 0) :
     comparison.readout
         (pair.ledger.rootClass 0 + 58 • pair.ledger.rootClass 1) = 0 := by
   have hmul :
@@ -257,9 +272,10 @@ theorem scalarGauge_eq_zero_of_local_reading_eq_zero
 /-- Scalar local vanishing reflects back through the typed readout to zero
 of the actual class-group difference gauge. -/
 theorem gauge_eq_zero_of_local_reading_eq_zero
-    (comparison : GaugeComparison pair pairing distinguishedPlace
+    (comparison : GaugeComparison pair distinguishedPlace wild
       placePrime x d detector)
-    (hlocal : pairing.pairAt distinguishedPlace x detector.detector = 0) :
+    (hlocal : wild.toPlaceIndexedLocalPairing.pairAt
+      distinguishedPlace x detector.detector = 0) :
     Fermat.Conservation.CommonActionStage.differenceGauge
         (AllocatedClass K)
         (CommonActionStage.StateLinkedIdealPair.classObstruction pair) = 0 := by
@@ -276,16 +292,17 @@ clause.  Indexing by `hDetector` makes the witness shared and prevents this
 target from being vacuous when no global detector exists. -/
 def gauge_eq_local_tate_pairing
     (pair : StateLinkedIdealPair hζ S hz)
-    (pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    (distinguishedPlace : Place)
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar))
-    (distinguishedPlace : Place) (placePrime : Place → ℕ)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (placePrime : Place → ℕ)
     (x : SelmerChi) (d : LampMode)
-    (hDetector : transverse_detector_exists pairing
-      distinguishedPlace placePrime x d) : Prop :=
-  Nonempty (GaugeComparison pair pairing distinguishedPlace
+    (hDetector : transverse_detector_exists distinguishedPlace wild
+      placePrime x d) : Prop :=
+  Nonempty (GaugeComparison pair distinguishedPlace wild
     placePrime x d
-      (chosenTransverseDetector pairing distinguishedPlace
+      (chosenTransverseDetector distinguishedPlace wild
         placePrime x d hDetector))
 
 /-! ## The proved bank and the explicit place-by-place audit -/
@@ -316,136 +333,93 @@ def n59BankReceipts (pair : StateLinkedIdealPair hζ S hz) :
   sevenD :=
     StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD pair
 
-/-- The explicit missing localization law at the auxiliary place.  The
-proved (7d) fold is a genuine input, but it may silence the local reading
-only after both localized conditions and their conditional orthogonality
-have been exhibited. -/
-structure AuxiliaryFoldOrthogonalityGuard
-    (pair : StateLinkedIdealPair hζ S hz)
-    (pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
-      (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar))
-    (distinguishedPlace : Place) (placePrime : Place → ℕ)
-    (x : SelmerChi) (d : LampMode)
-    (detector : TransverseDetector pairing distinguishedPlace placePrime x d) where
-  primalCondition : AddSubgroup SelmerChi
-  dualCondition : AddSubgroup DOmegaSelmerChiStar
-  primal_mem : x ∈ primalCondition
-  dual_mem : detector.detector ∈ dualCondition
-  orthogonal_of_sevenD : pair.ledger.VandiverSevenD 0 1 →
-    ∀ x' ∈ primalCondition, ∀ y' ∈ dualCondition,
-      pairing.pairAt detector.auxiliaryPlace x' y' = 0
-
-namespace AuxiliaryFoldOrthogonalityGuard
-
-variable
-  {pair : StateLinkedIdealPair hζ S hz}
-  {pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
-    (Place := Place) (SelmerChi := SelmerChi)
-    (DOmegaSelmerChiStar := DOmegaSelmerChiStar)}
-  {distinguishedPlace : Place} {placePrime : Place → ℕ}
-  {x : SelmerChi} {d : LampMode}
-  {detector : TransverseDetector pairing distinguishedPlace placePrime x d}
-
-/-- The auxiliary local reading is zero after consuming both the explicit
-orthogonality interface and the actually proved statewise (7d) receipt. -/
-theorem pairAt_eq_zero
-    (guard : AuxiliaryFoldOrthogonalityGuard pair pairing
-      distinguishedPlace placePrime x d detector) :
-    pairing.pairAt detector.auxiliaryPlace x detector.detector = 0 :=
-  guard.orthogonal_of_sevenD (n59BankReceipts pair).sevenD
-    x guard.primal_mem detector.detector guard.dual_mem
-
-end AuxiliaryFoldOrthogonalityGuard
-
 /-- The complete audit object behind `bank_silences_other_places`.
 
-The auxiliary row names the fold-specific compatibility.  Every remaining
-row has a full `LocalOrthogonalityGuard`, so neither Selmer membership nor
-the detector's support is mislabeled as a bank theorem.  The proved bank is
-assembled when the auxiliary row is discharged; it is not duplicated as a
-decorative field here. -/
+All existing conductor-59 bank receipts remain present as an auditable
+record.  There are no local-orthogonality fields: the pairing itself has a
+single supported column, so every row away from the distinguished place is
+already proved. -/
 structure BankSilenceAudit
     (pair : StateLinkedIdealPair hζ S hz)
-    (pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    (distinguishedPlace : Place)
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar))
-    (distinguishedPlace : Place) (placePrime : Place → ℕ)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (placePrime : Place → ℕ)
     (x : SelmerChi) (d : LampMode)
-    (detector : TransverseDetector pairing distinguishedPlace placePrime x d) where
-  auxiliary : AuxiliaryFoldOrthogonalityGuard pair pairing
-    distinguishedPlace placePrime x d detector
-  other : ∀ v, v ≠ distinguishedPlace → v ≠ detector.auxiliaryPlace →
-    TatePairing.LocalOrthogonalityGuard pairing v x detector.detector
+    (detector : TransverseDetector distinguishedPlace wild placePrime x d) where
+  receipts : N59BankReceipts pair
 
 namespace BankSilenceAudit
 
 variable
   {pair : StateLinkedIdealPair hζ S hz}
-  {pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+  {distinguishedPlace : Place}
+  {wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
     (Place := Place) (SelmerChi := SelmerChi)
-    (DOmegaSelmerChiStar := DOmegaSelmerChiStar)}
-  {distinguishedPlace : Place} {placePrime : Place → ℕ}
+    (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace}
+  {placePrime : Place → ℕ}
   {x : SelmerChi} {d : LampMode}
-  {detector : TransverseDetector pairing distinguishedPlace placePrime x d}
+  {detector : TransverseDetector distinguishedPlace wild placePrime x d}
 
 /-- Audit row for the lamp-selected auxiliary place. -/
 theorem auxiliary_reading_eq_zero
-    (audit : BankSilenceAudit pair pairing distinguishedPlace
+    (_audit : BankSilenceAudit pair distinguishedPlace wild
       placePrime x d detector) :
-    pairing.pairAt detector.auxiliaryPlace x detector.detector = 0 :=
-  audit.auxiliary.pairAt_eq_zero
+    wild.toPlaceIndexedLocalPairing.pairAt
+      detector.auxiliaryPlace x detector.detector = 0 :=
+  wild.pairAt_eq_zero_of_ne detector.auxiliary_ne_distinguished
+    x detector.detector
 
 /-- Audit row for an arbitrary place outside the distinguished/auxiliary
-pair, consuming the explicit local-condition orthogonality guard. -/
+pair, discharged by the single-column support theorem. -/
 theorem other_reading_eq_zero
-    (audit : BankSilenceAudit pair pairing distinguishedPlace
+    (_audit : BankSilenceAudit pair distinguishedPlace wild
       placePrime x d detector)
     (v : Place) (hv : v ≠ distinguishedPlace)
-    (haux : v ≠ detector.auxiliaryPlace) :
-    pairing.pairAt v x detector.detector = 0 :=
-  (audit.other v hv haux).pairAt_eq_zero
+    (_haux : v ≠ detector.auxiliaryPlace) :
+    wild.toPlaceIndexedLocalPairing.pairAt v x detector.detector = 0 :=
+  wild.pairAt_eq_zero_of_ne hv x detector.detector
 
 /-- The place-by-place audit silences every column other than the
 distinguished one, including the auxiliary column as a separate case. -/
 theorem away_reading_eq_zero
-    (audit : BankSilenceAudit pair pairing distinguishedPlace
+    (_audit : BankSilenceAudit pair distinguishedPlace wild
       placePrime x d detector)
     (v : Place) (hv : v ≠ distinguishedPlace) :
-    pairing.pairAt v x detector.detector = 0 := by
-  by_cases haux : v = detector.auxiliaryPlace
-  · subst v
-    exact audit.auxiliary_reading_eq_zero
-  · exact audit.other_reading_eq_zero v hv haux
+    wild.toPlaceIndexedLocalPairing.pairAt v x detector.detector = 0 :=
+  wild.pairAt_eq_zero_of_ne hv x detector.detector
 
 end BankSilenceAudit
 
-/-- **INTERFACE — W2.3.** A place-by-place audit for the same transverse
-detector.  Its bank assembly is already proved, while its auxiliary
-localization compatibility and all local orthogonality rows remain explicit
-interfaces. -/
+/-- **PROVEN tame bank audit.** All selected bank receipts are assembled and
+all non-59 columns are silent by the constructed single support. -/
 def bank_silences_other_places
     (pair : StateLinkedIdealPair hζ S hz)
-    (pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    (distinguishedPlace : Place)
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar))
-    (distinguishedPlace : Place) (placePrime : Place → ℕ)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (placePrime : Place → ℕ)
     (x : SelmerChi) (d : LampMode)
-    (hDetector : transverse_detector_exists pairing
-      distinguishedPlace placePrime x d) : Prop :=
-  Nonempty (BankSilenceAudit pair pairing distinguishedPlace
+    (hDetector : transverse_detector_exists distinguishedPlace wild
+      placePrime x d) :
+    BankSilenceAudit pair distinguishedPlace wild
     placePrime x d
-      (chosenTransverseDetector pairing distinguishedPlace
-        placePrime x d hDetector))
+      (chosenTransverseDetector distinguishedPlace wild
+        placePrime x d hDetector) where
+  receipts := n59BankReceipts pair
 
 /-! ## W3: the compiled conditional implication -/
 
 namespace StateLinkedIdealPair
 
-/-- **PROVEN conditional master theorem.** The W1 pairing/adjoint interface
-and reciprocity law, together with exactly the three named W2 arithmetic
-hypotheses, force the selected difference gauge to vanish and hence prove
-relation (7a) through the existing exact gauge theorem.
+/-- **PROVEN conditional master theorem.** The sole wild pairing interface
+and reciprocity law, together with detector existence and the selected gauge
+comparison, force the selected difference gauge to vanish and hence prove
+relation (7a) through the existing exact gauge theorem.  The former bank
+premise has been removed: its receipts and all away rows are now constructed
+inside the proof.
 
 This is deliberately not an unconditional `vandiverSevenA` declaration.
 Its mod-59 depth limitation is recorded below as the named
@@ -453,33 +427,33 @@ Its mod-59 depth limitation is recorded below as the named
 detect a class living deeper in the 59-power tower. -/
 theorem vandiverSevenA_of_tate_bridge
     (pair : StateLinkedIdealPair hζ S hz)
-    (pairing : LocalPairing (Delta := Delta) (omega := omega) (chi := chi)
+    (distinguishedPlace : Place)
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
       (Place := Place) (SelmerChi := SelmerChi)
-      (DOmegaSelmerChiStar := DOmegaSelmerChiStar))
-    (reciprocity : TatePairing.GlobalReciprocityLaw pairing)
-    (distinguishedPlace : Place) (placePrime : Place → ℕ)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (reciprocity : TatePairing.GlobalReciprocityLaw
+      wild.toPlaceIndexedLocalPairing)
+    (placePrime : Place → ℕ)
     (x : SelmerChi) (d : LampMode)
-    (hDetector : transverse_detector_exists pairing
-      distinguishedPlace placePrime x d)
-    (hGauge : gauge_eq_local_tate_pairing pair pairing
-      distinguishedPlace placePrime x d hDetector)
-    (hBank : bank_silences_other_places pair pairing
-      distinguishedPlace placePrime x d hDetector) :
+    (hDetector : transverse_detector_exists distinguishedPlace wild
+      placePrime x d)
+    (hGauge : gauge_eq_local_tate_pairing pair distinguishedPlace wild
+      placePrime x d hDetector) :
     pair.ledger.VandiverSevenA 0 1 := by
-  let detector := chosenTransverseDetector pairing distinguishedPlace
+  let detector := chosenTransverseDetector distinguishedPlace wild
     placePrime x d hDetector
-  change Nonempty (GaugeComparison pair pairing distinguishedPlace
+  change Nonempty (GaugeComparison pair distinguishedPlace wild
     placePrime x d detector) at hGauge
-  change Nonempty (BankSilenceAudit pair pairing distinguishedPlace
-    placePrime x d detector) at hBank
   rcases hGauge with ⟨comparison⟩
-  rcases hBank with ⟨audit⟩
+  let audit := bank_silences_other_places pair distinguishedPlace wild
+    placePrime x d hDetector
   have hother : ∀ v, v ≠ distinguishedPlace →
-      pairing.pairAt v x detector.detector = 0 := by
+      wild.toPlaceIndexedLocalPairing.pairAt v x detector.detector = 0 := by
     intro v hv
     exact audit.away_reading_eq_zero v hv
   have hlocal :
-      pairing.pairAt distinguishedPlace x detector.detector = 0 :=
+      wild.toPlaceIndexedLocalPairing.pairAt
+        distinguishedPlace x detector.detector = 0 :=
     reciprocity.pairAt_eq_zero_of_other_places
       distinguishedPlace x detector.detector hother
   have hgauge := comparison.gauge_eq_zero_of_local_reading_eq_zero hlocal
