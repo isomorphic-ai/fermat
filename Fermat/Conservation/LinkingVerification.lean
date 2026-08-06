@@ -176,6 +176,8 @@ open Fermat.Conservation
 #check TameSymbol.Context.value_swap
 #check TameSymbol.Context.toAddMonoidHom
 #check TameSymbol.Context.toAddMonoidHom_apply
+#check TameSymbol.Context.toAddMonoidHomDualFirst
+#check TameSymbol.Context.toAddMonoidHomDualFirst_apply
 #check TameSymbol.Context.raw_eq_one_of_ord_eq_zero
 #check TameSymbol.Context.both_units_silence
 #check TameSymbol.Context.value_eq_zero_of_ord_eq_zero
@@ -578,6 +580,8 @@ open Fermat.Conservation
   TameSymbol.Context.raw_swap
 #guard_depends_on TameSymbol.Context.toAddMonoidHom_apply,
   TameSymbol.Context.toAddMonoidHom
+#guard_depends_on TameSymbol.Context.toAddMonoidHomDualFirst_apply,
+  TameSymbol.Context.toAddMonoidHomDualFirst
 #guard_depends_on TameSymbol.Context.raw_eq_one_of_ord_eq_zero,
   TameSymbol.Context.raw
 #guard_depends_on TameSymbol.Context.both_units_silence,

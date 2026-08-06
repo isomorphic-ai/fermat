@@ -236,6 +236,34 @@ theorem toAddMonoidHom_apply (ctx : Context p K k) (a b : Additive Kˣ) :
     ctx.toAddMonoidHom a b = ctx.value (Additive.toMul a) (Additive.toMul b) :=
   rfl
 
+/-- The same bilinear symbol curried dual-first.
+
+FLT PR 1110 uses the primal-first order of `toAddMonoidHom`, while the
+Poitou--Tate statement layer in PR 1105 writes the local evaluation dual-first.
+This named flip makes the two conventions definitionally alignable without
+changing either mathematical argument. -/
+def toAddMonoidHomDualFirst (ctx : Context p K k) :
+    Additive Kˣ →+ (Additive Kˣ →+ ZMod p) where
+  toFun b :=
+    { toFun := fun a ↦ ctx.value (Additive.toMul a) (Additive.toMul b)
+      map_zero' := ctx.value_one_left (Additive.toMul b)
+      map_add' := fun a₁ a₂ ↦ ctx.value_mul_left
+        (Additive.toMul a₁) (Additive.toMul a₂) (Additive.toMul b) }
+  map_zero' := by
+    ext a
+    exact ctx.value_one_right (Additive.toMul a)
+  map_add' b₁ b₂ := by
+    ext a
+    exact ctx.value_mul_right
+      (Additive.toMul a) (Additive.toMul b₁) (Additive.toMul b₂)
+
+@[simp]
+theorem toAddMonoidHomDualFirst_apply
+    (ctx : Context p K k) (b a : Additive Kˣ) :
+    ctx.toAddMonoidHomDualFirst b a =
+      ctx.value (Additive.toMul a) (Additive.toMul b) :=
+  rfl
+
 /-- Valuation-zero in both entries makes the raw tame residue one. -/
 theorem raw_eq_one_of_ord_eq_zero (ctx : Context p K k) (a b : Kˣ)
     (ha : ctx.ord (Additive.ofMul a) = 0)
