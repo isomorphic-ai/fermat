@@ -1,5 +1,146 @@
 # Credit-ladder findings
 
+## 2026-08-06 — TAME-SYMBOLS verification: Stage 1 is green
+
+- The direct compiler checks are green for `TameSymbol.lean`,
+  `SelmerEigenspace.lean`, `TamePlacePairing.lean`, and the rewritten selected
+  `TateBridge.lean`.  The generic linking audit builds at 8,536 jobs, the
+  generic credit/source-literal audit at 8,589 jobs, and the selected
+  conductor-59 audit at 8,635 jobs.  The unchanged nine-target conservation
+  command completes all 8,709 jobs.
+- Every hand-written public theorem in the three new generic namespaces has a
+  proof-value dependency guard, and the exhaustive namespace scans admit only
+  `propext`, `Classical.choice`, and `Quot.sound`.  The generic source scanner
+  now includes all three filenames and still rejects any code-token occurrence
+  of the selected numeral.  Searches found no `sorry`, `admit`, new axiom,
+  unconditional (7a), endpoint, or transformer.  The full build reports only
+  the pre-existing capacity/ported-Selmer diagnostics plus two informational
+  `ring_nf` suggestions in the explicit integer-exponent normalization.
+- The prediction was correct that the finite-residue decoding and angular
+  component would be W1's API seam, that Steinberg was downstream-deferrable
+  but still provable behind a precise one-minus realization, and that W2's
+  carrier was already Mathlib's Selmer subgroup while its action and reflected
+  duality were not inferred.  The W3 prediction needed one important
+  correction: Mathlib supplies valuations divisible by `p`, not literal
+  valuation-zero representatives.  Quotient descent repaired that mismatch
+  and made the result stronger—the old tame support and bank hypotheses could
+  be deleted rather than merely repackaged in a residual constructor.
+
+## 2026-08-06 — TAME-SYMBOLS discovery: the single wild column deletes the bank premise
+
+- On the two literal empty-support Selmer eigenspaces, every height-one
+  valuation is zero modulo `p`.  W1's descended tame symbol therefore vanishes
+  at every tame place without choosing valuation-zero representatives.  A
+  `WildLocalInterface` containing only the bilinear, `#`-adjoint reading at
+  the distinguished wild place consequently constructs the complete
+  `PlaceIndexedLocalPairing` as one `Finsupp.single` column.  Finite support,
+  the auxiliary row, and every other away row are then theorems.
+- Compiler-driven surgery showed that four old inputs were no longer honest:
+  `TransverseDetector.outside_two_readings`, the whole
+  `AuxiliaryFoldOrthogonalityGuard`, the auxiliary/other fields of
+  `BankSilenceAudit`, and the master theorem's `hBank` premise.  They have
+  been removed at their definitions.  `bank_silences_other_places` now
+  constructs the audit, retaining the actual conductor-59 bank receipts while
+  deriving its local verdicts from the pairing support proved by the tame
+  realization.
+- This does not turn a bank receipt into a localization theorem.
+  `LocalOrthogonalityGuard` remains in the generic API for any row on which it
+  genuinely binds; the selected single-wild-column model simply has no
+  remaining away row requiring one.  The conditional (7a) theorem still
+  requires the 59-local reading and its adjoint law, global reciprocity,
+  detector existence, and the unit-valued gauge comparison.
+
+## 2026-08-06 — TAME-SYMBOLS discovery: the eigenspace carrier is literal, the duality is not
+
+- `CommonActionStage.Selmer` was already definitionally the additive wrapper
+  of Mathlib's empty-support `IsDedekindDomain.selmerGroup`.  The new
+  `SelmerChi` and `DOmegaSelmerChiStar` are simultaneous-character submodule
+  subtypes of that exact carrier, and their named maps expose the Selmer
+  subtype and ambient `Kˣ/(Kˣ)^p` class without an equivalence or provider.
+- The actual `Delta` representation is still arithmetic input.  The reflected
+  eigenspace also does not definitionally become the contravariant
+  `CharacterModule`; `ReflectedDualCharacterGlue` names precisely the missing
+  additive equivalence and `InvolutiveBase.hash omega` action law.  Treating
+  either gap as inferred from the carrier would overstate W2.
+- One pinned elaboration seam was library-level rather than mathematical:
+  `Submodule.addCommGroup` exists but is not an inferred instance through the
+  deeply reducible Selmer quotient.  A namespace-owned instance on the
+  literal character eigenspace closes that gap.  The public equivalence
+  `valuationOfNeZeroMod p (mk y) = 1` iff
+  `(p : ℤ) ∣ v.valuationOfNeZero(y)` is another small Mathlib-welcome
+  lemma; it drives both arbitrary and chosen representative receipts.
+
+## 2026-08-06 — TAME-SYMBOLS discovery: Steinberg stops at the angular-component API
+
+- Pinned Mathlib has the finite-field exponent and roots-of-unity machinery
+  needed after reduction, but it has no bundled discrete-valuation angular
+  component with the addition/reduction laws needed to derive the four cases
+  for `a` and `1-a`.  The generic implementation therefore separates the
+  elementary proved lemma saying that those four valuation/residue cases make
+  the raw tame residue one from a named local-realization contract producing
+  the cases for the canonical unit `1-a`.  This is the honest Mathlib-welcome
+  seam; a theorem whose proof merely ignored an extra equation `b = 1-a`
+  would not count as Steinberg.
+- Once that seam is explicit, the remaining relation is cohomology-free:
+  the raw residue is one, the residue character sends one to zero, and the
+  exported theorem has the requested `(a, 1-a) = 0` shape.  The tame support
+  audit does not consume Steinberg; it consumes the stronger quotient-level
+  divisible-valuation silence theorem.
+
+## 2026-08-06 — TAME-SYMBOLS discovery: local equivariance moves the place
+
+- The honest Galois law for a local symbol is
+  `(sigma a, sigma b)_(sigma v) = omega(sigma) * (a, b)_v`.  Hence the
+  existing pointwise adjoint shape
+  `pair_v (A • x) y = pair_v x (A# • y)` follows without a place shift only
+  for a decomposition/stabilizer action at `v`, or after an explicitly
+  reindexed orbit aggregation.  A full global Galois action generally
+  permutes the height-one places.
+- Stage 1 must therefore keep two named levels: moved-place Galois
+  equivariance for the generic tame symbol, and a fixed-place compatibility
+  used to instantiate the existing `InvolutiveBase` adjoint interface.  It
+  would be false to prove the latter by silently rewriting `sigma v = v`.
+
+## 2026-08-06 — TAME-SYMBOLS discovery: quotient descent is the tame support seam
+
+- At the pinned Mathlib API,
+  `IsDedekindDomain.HeightOneSpectrum.selmerGroup` is literally a subgroup of
+  `Kˣ / (Kˣ)^p`.  Its outside-support field says
+  `valuationOfNeZeroMod p x = 1`; equivalently the valuation of a
+  representative is divisible by `p`.  It does **not** choose a representative
+  with valuation exactly zero.  Consequently the tame-place implementation
+  must either descend the explicit bilinear symbol through the Kummer quotient
+  or prove the equivalent silence theorem for two `p`-divisible valuations.
+  Replacing Selmer unramifiedness by an unproved literal `v = 0` would be an
+  invalid carrier shortcut.
+- The same concrete subtype is already present, additively wrapped, as
+  `CommonActionStage.Selmer`; the Stage-1 carrier work is therefore character
+  allocation/eigenspace surgery, not another Selmer provider.  The named glue
+  must retain the ambient quotient value and expose its defining valuation
+  receipt at every place outside the support.
+
+## 2026-08-06 — TAME-SYMBOLS discovery: FLT pairing statement correspondence
+
+- Imperial FLT
+  [PR 1110](https://github.com/ImperialCollegeLondon/FLT/pull/1110)
+  (`KnownIn1980s/LCFT/Pairing.lean`) constructs the
+  abstract cohomological local pairing by currying the evaluation map
+  primal-first, `M -> linHom M^vee ...`.  This is the same argument order as
+  `TatePairing.PlaceIndexedLocalPairing.readings : SelmerChi ->+
+  (DOmegaSelmerChiStar ->+ ...)`.  Our tame realization is the explicit
+  degree-`p`, degree-`(1,1)` Kummer representative of that shape; it does not
+  import or recreate the continuous-cohomology construction.
+- Imperial FLT
+  [PR 1105](https://github.com/ImperialCollegeLondon/FLT/pull/1105)'s
+  Poitou--Tate statement layer also names
+  `localTatePairing`, but presents its local evaluation convention dual-first,
+  `N* x N`, and states exact annihilation of the two unramified local
+  conditions.  `TameSymbol.Context.toAddMonoidHomDualFirst` is the named flip
+  aligning with that convention, while `toAddMonoidHom` retains PR 1110's
+  primal-first order.  The tame both-units theorem proves the away-from-`p`
+  unramified row in the explicit Kummer model; it is not a claim that the
+  still-open wild 59 row or global perfectness has been proved.
+
 ## 2026-08-05 — VENDOR-SELMER verification: full audit green
 
 - The required pre-build process scan found no competing Lean build.  The
