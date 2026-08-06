@@ -19,9 +19,11 @@ additively in `ZMod p`.
 Mathlib currently has the finite-field exponent theorem and the equivalence
 between `ZMod p` and the powers of a primitive root, but no generic angular
 component attached to a discrete valuation.  `Context` is the minimal honest
-interface for that missing construction.  The two small generic results
+interface for that missing construction.  The small generic results
 `powerToRoots` and `SteinbergValuationCases.raw_eq_one` are deliberately
-factored as Mathlib-welcome residue-field lemmas.
+factored as Mathlib-welcome residue-field lemmas.  `SteinbergRealization`
+names the remaining Mathlib gap: proving the valuation/angular-component
+trichotomy for the actual pair `a, 1-a`.
 -/
 import Fermat.Conservation.InvolutiveBase
 import Mathlib.FieldTheory.Finite.Basic
@@ -496,17 +498,38 @@ theorem raw_eq_one {ctx : Context p K k} {a b : Kˣ}
       _ = (-1 : kˣ) ^ (m * m - m) := by simp [sub_eq_add_neg]
       _ = 1 := heven.neg_one_zpow
 
-/-- Steinberg's relation for a nonzero pair `a, 1-a`, once the standard
-valuation/residue trichotomy has been supplied by the local realization. -/
-theorem steinberg (ctx : Context p K k) (a b : Kˣ)
-    (honeSub : (b : K) = 1 - (a : K))
+/-- Any pair satisfying the standard valuation/residue cases has zero tame
+symbol.  This theorem is purely algebraic and makes no claim that `b = 1-a`. -/
+theorem steinberg_of_cases (ctx : Context p K k) (a b : Kˣ)
     (hcases : SteinbergValuationCases ctx a b) :
     ctx.value a b = 0 := by
-  have _honeSub := honeSub
   rw [value, hcases.raw_eq_one]
   exact ctx.residueCharacter_one
 
 end SteinbergValuationCases
+
+/-- The missing local realization behind Steinberg's relation.
+
+For an actual unit `a` for which `1-a` is nonzero, a discrete valuation and
+its angular component put the canonical unit `Units.mk0 (1-a)` into one of
+`SteinbergValuationCases`.  Pinned Mathlib does not yet bundle the angular
+component or prove this one-minus trichotomy, so it remains a named and
+inspectable compatibility seam. -/
+structure SteinbergRealization (ctx : Context p K k) where
+  one_sub_cases : ∀ (a : Kˣ) (hOneSub : 1 - (a : K) ≠ 0),
+    SteinbergValuationCases ctx a (Units.mk0 (1 - (a : K)) hOneSub)
+
+/-- Steinberg's relation for the canonical nonzero pair `a, 1-a`.
+
+Unlike `steinberg_of_cases`, this public surface genuinely uses the field
+relation: the second unit is definitionally `Units.mk0 (1-a)`, and the named
+local realization supplies its valuation/residue cases. -/
+theorem steinberg (ctx : Context p K k)
+    (realization : SteinbergRealization ctx) (a : Kˣ)
+    (hOneSub : 1 - (a : K) ≠ 0) :
+    ctx.value a (Units.mk0 (1 - (a : K)) hOneSub) = 0 :=
+  SteinbergValuationCases.steinberg_of_cases ctx a _
+    (realization.one_sub_cases a hOneSub)
 
 /-! ## Galois equivariance and the adjoint shape -/
 
