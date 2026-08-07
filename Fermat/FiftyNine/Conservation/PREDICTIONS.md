@@ -3,6 +3,33 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-07 — detector-witness and Artin–Hasse fork prediction
+
+- **W1 prediction: 827 admits the requested transverse witness.**  The first
+  conductor-59 certified lamp should supply a concrete dual-leg candidate
+  after the appropriate reflected-character projection.  I expect its
+  divisor to be supported only over `59` and `827`, the both-units law to
+  silence every other tame place, and the surviving 827 coordinates to
+  reduce to executable finite-field power/residue-symbol calculations.  The
+  likely implementation friction is realizing the lamp polynomial as a
+  global Kummer element in the existing seated Selmer carrier, not the
+  residue arithmetic itself.  If that realization fails, the fallback table
+  should expose the failure as a named channel rather than permit a chosen
+  detector interface to stand in for the element.
+- **W2 prediction: `AH-SUFFICES`.**  I expect the campaign's statewise
+  Fermat/gauge inputs to be generated locally by roots of unity, the prime
+  element `1 - zeta`, and cyclotomic units, and I expect the 59-component of
+  the 827 witness to be represented by the same cyclotomic-unit family up to
+  a 59th power.  On that inventory, bilinearity together with the two
+  Artin–Hasse special-value families `(zeta, b)` and `(pi, b)` should
+  determine every required wild reading.  A genuinely general principal
+  unit outside this generated subgroup would overturn the call and force
+  `NEEDS-VOSTOKOV`; it will not be silently abstracted behind a wild pairing
+  oracle.
+- The construction is predicted to inhabit only the witness *modulo its
+  wild 59-reading*.  It will not construct `wild_detector_faithful`, infer
+  unconditional relation (7a), or introduce an endpoint or transformer.
+
 ## 2026-08-07 — cohomological Stokes detector prediction
 
 - The existing shared-detector master should repackage as a linear map
