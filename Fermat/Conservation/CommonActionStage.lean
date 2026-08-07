@@ -763,10 +763,13 @@ theorem openRoute_sq_apply
 representation.  This is a real construction conditional on that withheld
 input; no representation is manufactured here. -/
 def ofArithmeticRepresentation
+    {R : Type uR} [CommRing R] [IsDedekindDomain R]
+    {K : Type uK} [Field K] [Algebra R K] [IsFractionRing R K]
     {Lambda : Type uLambda} [CommRing Lambda]
     {A : Type uA} [Ring A]
     {base : Lambda →+* A} {route chiProjector reflectedProjector : A}
     (representation : LinkingInterfaces.ArithmeticRepresentation
+      (R := R) (K := K)
       (O := O) (Lambda := Lambda) (A := A)
       (SelmerChi := SelmerChi)
       (DOmegaSelmerChiStar := DOmegaSelmerChiStar)
@@ -775,22 +778,25 @@ def ofArithmeticRepresentation
   r := representation.routeChiToReflected
   s := representation.routeReflectedToChi
 
-/-- The full representation, when supplied, identifies `rho(R^2)` with the
-constructible pair of closed endomorphisms. -/
-theorem rho_routeSquared_eq_closed
+/-- The full representation, when supplied, identifies the Selmer action of
+`R^2` with the constructible pair of closed endomorphisms. -/
+theorem selmerAction_routeSquared_eq_closed
+    {R : Type uR} [CommRing R] [IsDedekindDomain R]
+    {K : Type uK} [Field K] [Algebra R K] [IsFractionRing R K]
     {Lambda : Type uLambda} [CommRing Lambda]
     {A : Type uA} [Ring A]
     {base : Lambda →+* A} {route chiProjector reflectedProjector : A}
     (representation : LinkingInterfaces.ArithmeticRepresentation
+      (R := R) (K := K)
       (O := O) (Lambda := Lambda) (A := A)
       (SelmerChi := SelmerChi)
       (DOmegaSelmerChiStar := DOmegaSelmerChiStar)
       base route chiProjector reflectedProjector)
     (x : SelmerChi) (y : DOmegaSelmerChiStar) :
-    representation.rho (route ^ 2) (x, y) =
+    representation.selmerAction (route ^ 2) (x, y) =
       ((ofArithmeticRepresentation representation).closedAtChi x,
         (ofArithmeticRepresentation representation).closedAtReflected y) :=
-  representation.rho_routeSquared x y
+  representation.selmerAction_routeSquared x y
 
 end RouteMaps
 
@@ -1402,6 +1408,8 @@ end Outcome
 section RepresentationWall
 
 variable {p : ℕ} [Fact p.Prime]
+  {R : Type uR} [CommRing R] [IsDedekindDomain R]
+  {K : Type uK} [Field K] [Algebra R K] [IsFractionRing R K]
   {Delta : Type uDelta} [CommGroup Delta] [Fintype Delta]
   [Invertible (Fintype.card Delta : PadicInt p)]
   {SelmerChi : Type uChi} {DOmegaSelmerChiStar : Type uDual}
@@ -1420,6 +1428,7 @@ def reflectedSelmerRhoWall
   obstruction_eq := rfl
   address := Outcome.WallAddress.strictRouteRho
   target := LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
+    (R := R) (K := K)
     (SelmerChi := SelmerChi)
     (DOmegaSelmerChiStar := DOmegaSelmerChiStar) omega chi
 
@@ -1427,8 +1436,9 @@ theorem reflectedSelmerRhoWall_target
     (omega chi : InvolutiveBase.Character (PadicInt p) Delta)
     (m : LinkingInterfaces.ReflectedSelmerPair
       SelmerChi DOmegaSelmerChiStar) :
-    (reflectedSelmerRhoWall omega chi m).target =
+    (reflectedSelmerRhoWall (R := R) (K := K) omega chi m).target =
       LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
+        (R := R) (K := K)
         (SelmerChi := SelmerChi)
         (DOmegaSelmerChiStar := DOmegaSelmerChiStar) omega chi :=
   rfl

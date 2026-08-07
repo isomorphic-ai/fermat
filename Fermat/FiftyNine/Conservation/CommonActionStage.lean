@@ -450,6 +450,7 @@ def StateLinkedIdealPair.strictRouteRhoWall
   address := Outcome.WallAddress.strictRouteRho
   target :=
     Fermat.Conservation.LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
+      (R := NumberField.RingOfIntegers K) (K := K)
       (SelmerChi := SelmerChi)
       (DOmegaSelmerChiStar := DOmegaSelmerChiStar) omega chi
 
@@ -489,6 +490,7 @@ theorem StateLinkedIdealPair.strictRouteRhoWall_target
       (ClassDual := ClassDual)) :
     (StateLinkedIdealPair.strictRouteRhoWall pair omega chi boundary).target =
       Fermat.Conservation.LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
+        (R := NumberField.RingOfIntegers K) (K := K)
         (SelmerChi := SelmerChi)
         (DOmegaSelmerChiStar := DOmegaSelmerChiStar) omega chi :=
   rfl

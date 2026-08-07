@@ -16,6 +16,8 @@ range.  It is not packaged as an annihilator.  The route representation is a
 of the route generator rather than being identified with the identity.
 -/
 import Fermat.Conservation.ClassCarrier
+import Fermat.Conservation.PowerRootExactSequence
+import Fermat.Conservation.PowerRootNaturality
 import Fermat.Conservation.RouteAlgebra
 import Mathlib.NumberTheory.Padics.PadicIntegers
 
@@ -23,7 +25,7 @@ noncomputable section
 
 namespace Fermat.Conservation.LinkingInterfaces
 
-universe uDelta uU uS uClass uBeta uG uLambda uA uO uChi uReflected
+universe uDelta uU uS uClass uBeta uG uLambda uA uO uChi uReflected uR uK
 
 /-! ## Integral Stickelberger guards -/
 
@@ -190,64 +192,134 @@ abbrev ReflectedSelmerPair
 
 section ArithmeticRepresentation
 
-variable {O : Type uO} [CommRing O]
+variable {R : Type uR} [CommRing R] [IsDedekindDomain R]
+  {K : Type uK} [Field K] [Algebra R K] [IsFractionRing R K]
+  {n : ℕ} [Fact (0 < n)]
+  {O : Type uO} [CommRing O]
   {Lambda : Type uLambda} [CommRing Lambda]
   {A : Type uA} [Ring A]
   {SelmerChi : Type uChi} {DOmegaSelmerChiStar : Type uReflected}
   [AddCommGroup SelmerChi] [Module O SelmerChi]
   [AddCommGroup DOmegaSelmerChiStar] [Module O DOmegaSelmerChiStar]
 
-/-- Interface for the campaign's next arithmetic summit.  It lists the
-expected diagonal base action, the off-diagonal route action, and the two
-character projectors.  Providing a value of this structure is the withheld
-arithmetic theorem; this module provides no value.
+/-- Endomorphisms of the actual principal-ideal arrow.  An element contains
+actions on `Kˣ` and on nonzero fractional ideals together with the commuting
+principal-arrow square. -/
+abbrev PrincipalIdealArrowEnd :=
+  PowerRootNaturality.ArrowMorphism
+    (PowerRootExactSequence.principalIdealArrow (R := R) (K := K))
+    (PowerRootExactSequence.principalIdealArrow (R := R) (K := K))
 
-The map is a ring representation because the current strict route API does
-not impose an `O`-algebra structure.  Its target consists of `O`-linear
-endomorphisms, so the scalar-linearity demanded by the arithmetic action is
-still explicit. -/
+/-- Interface for the campaign's next arithmetic summit.
+
+`rho` is now literally a multiplicative action on the principal-ideal arrow,
+not an action guessed on the class group.  Because every value of `rho` is a
+commuting arrow morphism, the generic PowerRoot theorem forces its root and
+obstruction squares to commute.  The separate `selmerAction` retains the
+expected diagonal base action, off-diagonal route action, and character
+projectors.  Connecting its character legs to the induced action on the full
+Selmer middle remains the named character-allocation service upstream.
+
+Providing a value of this structure is the withheld arithmetic theorem; this
+module provides no value.
+
+The Selmer map is a ring representation because the current strict route API
+does not impose an `O`-algebra structure.  The principal-arrow action is a
+monoid representation: its carriers are multiplicative groups, and no false
+additive structure on `Kˣ` or on fractional ideals is asserted. -/
 structure ArithmeticRepresentation
     (base : Lambda →+* A)
     (route chiProjector reflectedProjector : A) where
-  rho : A →+* Module.End O
+  rho : A →* PrincipalIdealArrowEnd (R := R) (K := K)
+  selmerAction : A →+* Module.End O
     (ReflectedSelmerPair SelmerChi DOmegaSelmerChiStar)
   chiBaseAction : Lambda →+* Module.End O SelmerChi
   reflectedBaseAction : Lambda →+* Module.End O DOmegaSelmerChiStar
-  rho_base : ∀ a x y,
-    rho (base a) (x, y) =
+  selmerAction_base : ∀ a x y,
+    selmerAction (base a) (x, y) =
       (chiBaseAction a x, reflectedBaseAction a y)
   routeChiToReflected : SelmerChi →ₗ[O] DOmegaSelmerChiStar
   routeReflectedToChi : DOmegaSelmerChiStar →ₗ[O] SelmerChi
-  rho_route : ∀ x y,
-    rho route (x, y) =
+  selmerAction_route : ∀ x y,
+    selmerAction route (x, y) =
       (routeReflectedToChi y, routeChiToReflected x)
-  rho_chiProjector : ∀ x y,
-    rho chiProjector (x, y) = (x, 0)
-  rho_reflectedProjector : ∀ x y,
-    rho reflectedProjector (x, y) = (0, y)
+  selmerAction_chiProjector : ∀ x y,
+    selmerAction chiProjector (x, y) = (x, 0)
+  selmerAction_reflectedProjector : ∀ x y,
+    selmerAction reflectedProjector (x, y) = (0, y)
 
 namespace ArithmeticRepresentation
 
 variable {base : Lambda →+* A}
   {route chiProjector reflectedProjector : A}
   (representation : ArithmeticRepresentation
+    (R := R) (K := K)
     (O := O) (Lambda := Lambda) (A := A)
     (SelmerChi := SelmerChi)
     (DOmegaSelmerChiStar := DOmegaSelmerChiStar)
     base route chiProjector reflectedProjector)
 
-/-- The closed-route action forced by the representation laws.  It is the
-two route composites; it is not asserted to be the identity. -/
-theorem rho_routeSquared (x : SelmerChi) (y : DOmegaSelmerChiStar) :
-    representation.rho (route ^ 2) (x, y) =
+/-- Every value of `rho` preserves the actual principal-ideal arrow. -/
+theorem rho_preserves_principal_arrow (a : A) (x : Kˣ) :
+    (representation.rho a).targetMap
+        (PowerRootExactSequence.principalIdealArrow (R := R) (K := K) x) =
+      PowerRootExactSequence.principalIdealArrow (R := R) (K := K)
+        ((representation.rho a).sourceMap x) :=
+  (representation.rho a).preserves_arrow x
+
+/-- The canonical power root commutes with the arrow action `rho`. -/
+theorem rho_root_square (a : A)
+    (x : PowerRoot.divisibleElements
+      (PowerRootExactSequence.principalIdealArrow (R := R) (K := K)) n) :
+    PowerRoot.root
+        (PowerRootExactSequence.principalIdealArrow (R := R) (K := K)) n
+        (PowerRootExactSequence.principalIdealFactorization
+          (R := R) (K := K))
+        ((representation.rho a).mapDivisibleElements n x) =
+      (representation.rho a).targetMap
+        (PowerRoot.root
+          (PowerRootExactSequence.principalIdealArrow (R := R) (K := K)) n
+          (PowerRootExactSequence.principalIdealFactorization
+            (R := R) (K := K)) x) :=
+  (representation.rho a).root_natural
+    (PowerRootExactSequence.principalIdealFactorization (R := R) (K := K))
+    (PowerRootExactSequence.principalIdealFactorization (R := R) (K := K)) x
+
+/-- The obstruction square is forced by `rho`'s equivariance on the actual
+principal-ideal arrow. -/
+theorem rho_powerRoot_square (a : A)
+    (x : PowerRoot.divisibleClasses
+      (PowerRootExactSequence.principalIdealArrow (R := R) (K := K)) n) :
+    PowerRoot.obstruction
+        (f := PowerRootExactSequence.principalIdealArrow (R := R) (K := K))
+        (n := n)
+        (PowerRootExactSequence.principalIdealFactorization
+          (R := R) (K := K))
+        ((representation.rho a).mapDivisibleClasses n x) =
+      (representation.rho a).mapCokernel
+        (PowerRoot.obstruction
+          (f := PowerRootExactSequence.principalIdealArrow (R := R) (K := K))
+          (n := n)
+          (PowerRootExactSequence.principalIdealFactorization
+            (R := R) (K := K)) x) :=
+  (representation.rho a).obstruction_natural
+    (PowerRootExactSequence.principalIdealFactorization (R := R) (K := K))
+    (PowerRootExactSequence.principalIdealFactorization (R := R) (K := K)) x
+
+/-- The closed-route Selmer action forced by the representation laws.  It is
+the two route composites; it is not asserted to be the identity. -/
+theorem selmerAction_routeSquared
+    (x : SelmerChi) (y : DOmegaSelmerChiStar) :
+    representation.selmerAction (route ^ 2) (x, y) =
       (representation.routeReflectedToChi
           (representation.routeChiToReflected x),
         representation.routeChiToReflected
           (representation.routeReflectedToChi y)) := by
   rw [map_pow]
-  change representation.rho route
-      (representation.rho route (x, y)) = _
-  rw [representation.rho_route, representation.rho_route]
+  change representation.selmerAction route
+      (representation.selmerAction route (x, y)) = _
+  rw [representation.selmerAction_route,
+    representation.selmerAction_route]
 
 end ArithmeticRepresentation
 
@@ -260,6 +332,7 @@ strict route algebra `Lambda[R; sharp]`. -/
 abbrev StrictRouteArithmeticRepresentation
     (chiProjector reflectedProjector : Lambda) :=
   ArithmeticRepresentation
+    (R := R) (K := K)
     (O := O) (Lambda := Lambda) (A := RouteAlgebra.Route Lambda)
     (SelmerChi := SelmerChi)
     (DOmegaSelmerChiStar := DOmegaSelmerChiStar)
@@ -275,6 +348,7 @@ def WithheldStrictRouteArithmeticRepresentation
     (chiProjector reflectedProjector : Lambda) : Prop :=
   Nonempty
     (StrictRouteArithmeticRepresentation
+      (R := R) (K := K)
       (O := O) (Lambda := Lambda)
       (SelmerChi := SelmerChi)
       (DOmegaSelmerChiStar := DOmegaSelmerChiStar)
@@ -282,21 +356,23 @@ def WithheldStrictRouteArithmeticRepresentation
 
 /-- On any eventual strict-route representation, the named central closed
 route acts by the two return composites. -/
-theorem StrictRouteArithmeticRepresentation.rho_closedRoute
+theorem StrictRouteArithmeticRepresentation.selmerAction_closedRoute
     {chiProjector reflectedProjector : Lambda}
     (representation : StrictRouteArithmeticRepresentation
+      (R := R) (K := K)
       (O := O) (Lambda := Lambda)
       (SelmerChi := SelmerChi)
       (DOmegaSelmerChiStar := DOmegaSelmerChiStar)
       chiProjector reflectedProjector)
     (x : SelmerChi) (y : DOmegaSelmerChiStar) :
-    representation.rho (RouteAlgebra.closedRoute (Lambda := Lambda)) (x, y) =
+    representation.selmerAction
+        (RouteAlgebra.closedRoute (Lambda := Lambda)) (x, y) =
       (representation.routeReflectedToChi
           (representation.routeChiToReflected x),
         representation.routeChiToReflected
           (representation.routeReflectedToChi y)) := by
   simpa only [RouteAlgebra.closedRoute] using
-    representation.rho_routeSquared x y
+    representation.selmerAction_routeSquared x y
 
 end StrictRoute
 
@@ -305,6 +381,8 @@ end ArithmeticRepresentation
 section TeichmullerRepresentationTarget
 
 variable {p : ℕ} [Fact p.Prime]
+  {R : Type uR} [CommRing R] [IsDedekindDomain R]
+  {K : Type uK} [Field K] [Algebra R K] [IsFractionRing R K]
   {Delta : Type uDelta} [CommGroup Delta] [Fintype Delta]
   [Invertible (Fintype.card Delta : PadicInt p)]
   {SelmerChi : Type uChi} {DOmegaSelmerChiStar : Type uReflected}
@@ -321,6 +399,7 @@ def ReflectedSelmerArithmeticRepresentationTarget
   letI : RouteAlgebra.HasSharp (IntegralPadicGroupAlgebra p Delta) :=
     RouteAlgebra.teichmullerSharp omega
   exact WithheldStrictRouteArithmeticRepresentation
+    (R := R) (K := K)
     (O := PadicInt p) (Lambda := IntegralPadicGroupAlgebra p Delta)
     (SelmerChi := SelmerChi)
     (DOmegaSelmerChiStar := DOmegaSelmerChiStar)
