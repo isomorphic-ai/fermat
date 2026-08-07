@@ -180,6 +180,24 @@ one explicit quotient type argument required by Lean 4.31; and omission of
 unrelated pre-existing upstream proof-engineering changes.  No theorem
 statement or proof strategy is changed.
 
+The pin also contains `selmerGroup S p` for arbitrary support `S`; only the
+vendored unit/class exact sequence above is specialized to empty support.
+Commit `1d0c3e4` uses that existing carrier directly at the places over 827.
+Its proved
+`SelmerEigenspace.supportValuation_ker_eq_range_emptySupportInclusion`
+identifies the localization kernel with the embedded empty-support group.
+It does **not** identify the image of supported valuation.  The named
+incoming `FiniteSupportSelmerLocalizationSequence` must add an obstruction
+arrow and `Function.Exact relaxedValuation obstruction`; a requested local
+q-vector lifts only after a proof that its obstruction vanishes, not by an
+assumed surjectivity theorem.  A separate incoming
+`FiniteSupportSelmerSUnitClassSequence` must supply the S-unit/S-class arrows,
+their correctly placed injection, kernel/range, and surjection statements,
+and comparison squares.  At this snapshot `~/Mathlib` branch
+`finite-s-selmer` has no finite-support implementation or new vendorable
+provenance, so these names are interfaces only; commit and SHA provenance
+will be recorded when that branch is ready.
+
 | Declarations/checklist item | Status, before → after | Final account |
 | --- | --- | --- |
 | `PowerRoot.root`, `root_mul`, `root_shift`, `obstruction`, `obstruction_ker`, `obstruction_range` | ABSENT at the pin → LITERAL (provenance-pinned generator) | The route-neutral generator constructs the unique root and its cokernel obstruction; representative shift, multiplicativity, kernel, and range are proved generically. |
@@ -189,7 +207,7 @@ statement or proof strategy is changed.
 | `CommonActionStage.WithheldSelmerClassSequenceRealization` | Named SEAM proposition → THEOREM | `selmerClassProjection` is the additive `toClass` restricted to `ClassPTorsion`; middle exactness and surjectivity use the two vendored theorems. |
 | Selected `StrictRouteBoundary.sequence` | Supplied field → LITERAL specialization | The field is removed; `kummerBinding` is tied directly to the canonical realization at `p = 59`. |
 | Selected allocated Selmer obstruction | Supplied value plus equality → DERIVED when the character pair/allocation is supplied | `StrictRouteBoundary.selmerObstruction` is definitionally `allocatedSelmerObstruction` from the guarded exact pair, both directional class allocations, and roots `0,1`; it is no longer separately stored. |
-| Both Kummer character allocations | ABSENT → SEAM (first remaining item at a fixed reflected pair) | No `KummerPairedBinding.chi`/`.chiStar` producer or selected character projector exists.  For one supplied `ReflectedExactFilteredPair`, `CharacterDualAllocationTarget` asks for those allocations, the separate reflected-dual allocation, and readbacks preserving the actual roots; it does not quantify over every possible carrier. |
+| Both Kummer character allocations | ABSENT → SEAM (first remaining item at a fixed reflected pair) | The q-relaxed carrier now has a genuine generic `characterProjectorAt`, but the arithmetic `Delta` representation and a source whose projected q-localization is nonzero are not constructed.  For one supplied `ReflectedExactFilteredPair`, `CharacterDualAllocationTarget` still asks for the allocations and readbacks preserving the actual roots; it does not quantify over every possible carrier. |
 | Omega-dual laws, both integral guards, both beta compatibilities | ABSENT → SEAM (downstream checklist) | The structures state the required equivalences/action laws, integral ideal plus sharp law, and state/conversion equalities, but the selected cone has no producer.  Supplying a reflected pair to inspect the earlier character seam already supplies that pair's omega-dual laws; it is a parameter of the conditional result, not an unconditional construction. |
 | Selected typed outcome | Unconditional `selmerClassExactness` localized wall → fixed-pair `characterDualAllocation` localized wall | The obsolete exactness wall is removed.  The character wall and typed result are conditional on one supplied reflected exact pair, because the selected cone names no concrete character carrier.  The later `strictRouteRhoWall` remains valid only behind a complete `StrictRouteBoundary`. |
 | `LinkingInterfaces.ArithmeticRepresentation.rho` | Pair/class action → principal-arrow action | `rho` is a monoid action by equivariant endomorphisms of the actual principal-ideal arrow, so its root and obstruction squares are forced by generic naturality.  The route action on the reflected Selmer pair remains separately named `selmerAction`; the summit does not infer it from a class shadow. |
@@ -197,7 +215,7 @@ statement or proof strategy is changed.
 | `bocksteinPowerRootReceiptObservation` | Depth correction erased implicitly → NAMED OBSERVATION | The formal integral lift records `r₀ + 58 r₁ = (r₀ - r₁) + 59 r₁`; reduction kills the `59 r₁` receipt by the proved first-layer torsion law.  No nonzero arithmetic Bockstein, depth theorem, or two-2s transport is asserted. |
 | Local Tate pairing and adjoint law | ABSENT → INTERFACE | `TatePairing.PlaceIndexedLocalPairing` retains the local readings as a place-indexed `Finsupp` and states `pair_v (a • x) y = pair_v x (a# • y)` using the existing `InvolutiveBase.hash`; no arithmetic pairing value is manufactured. |
 | Global reciprocity and conservation tunnel | ABSENT → INTERFACE law / PROVEN wiring | `TatePairing.GlobalReciprocityLaw` is the class-field-theory interface.  From that law, `PlaceLedger.toLedger`, `toVacuumTransfer`, and `reciprocity_L1_conservation` compile its zero sum through `Ledger`, `Transfer`, and `IsoConserveBridge`. |
-| Selected relation-(7a) arithmetic inputs | Unnamed missing producer → STOKES KERNEL EXPOSED / EXPLICIT WITNESS CARRIER AUDITED | The constructed away rows plus reciprocity still prove `Lambda x = 0`, and `wild_detector_faithful` remains the final nondegeneracy frontier.  The witness audit now proves that the current empty-support reflected Selmer leg cannot realize the nonzero 827 residue coordinate: a q-relaxed dual carrier and character allocation are earlier construction obligations, not consequences of faithfulness. |
+| Selected relation-(7a) arithmetic inputs | Unnamed missing producer → STOKES KERNEL EXPOSED / Q-RELAXED WITNESS WALL TYPED | The arbitrary-support carrier, reflected-character projector, supported valuation, and nonzero 827 capacity readout now compile.  The old empty-support contradiction no longer applies at q.  `ReflectedQRelaxedLocalizationLift827` is the exact uninhabited global-lift/source wall, followed by `SelectedTameComparison`; neither is a consequence of faithfulness. |
 | Conditional Tate master implication | ABSENT → PROVEN (conditional), now factored through Stokes | `Lambda_apply_eq_zero_of_reciprocity` kills the complete wild detector functional.  Evaluating it at the shared detector and using the existing gauge comparison yields the same conditional `VandiverSevenA 0 1`.  This is not an unconditional proof of (7a). |
 
 ## N59 assembly summary
@@ -212,7 +230,7 @@ statement or proof strategy is changed.
 | Selected fold and principalization consumers | ABSENT → LITERAL (Transfer), conditional on supplied (7a) | Derived (7d) and odd-torsion netting are accounted; only the missing producer is a seam. |
 | Selected common-action stage | Selmer exactness SEAM → character-allocation SEAM at a fixed reflected pair | The vendored sequence and its additive realization are unconditional.  Once a reflected pair is supplied, the typed gauge attempt retains the class obstruction at the first missing character service; the selected cone itself does not manufacture that pair, and rho remains a later conditional wall. |
 | Selected PowerRoot cube test | Unclassified comparison → TYPED OUTCOME 4 | Generic localization naturality is proved, but the actual `r₀,r₁` arise from distinct allocated root inputs and the selected comparison is wild reflected-dual Tate data.  Stage 3 therefore retains the wild route rather than replacing it with a generic defect. |
-| Selected Tate route to (7a) | Unnamed Lemma-I seam → STOKES KERNEL plus a typed witness-construction obstruction | The complete detector `Lambda` is the existing 59-local pairing family.  Tame/away vanishing and reciprocity prove `Lambda x = 0`; `wild_detector_faithful : ker Lambda = 0` remains the final nondegeneracy interface.  Before one explicit detector can witness it, `DetectorWitness827` shows that the dual local condition must be relaxed at q and connected to the clean nonzero 827 residue functional.  The wild formula inventory is `NEEDS-VOSTOKOV`. |
+| Selected Tate route to (7a) | Unnamed Lemma-I seam → STOKES KERNEL plus a typed finite-S lifting obstruction | The complete detector `Lambda` is the existing 59-local pairing family.  Tame/away vanishing and reciprocity prove `Lambda x = 0`; `wild_detector_faithful : ker Lambda = 0` remains the final nondegeneracy interface.  `DetectorWitness827` now supplies the q-relaxed carrier/projector and clean nonzero 827 readout, but no source with nonzero projected q-localization.  The incoming finite-S sequence must test the desired local vector against its obstruction; it is not assumed surjective.  The wild formula inventory is `NEEDS-VOSTOKOV`. |
 | FermatState.StockCreditTransformer | ABSENT → SEAM | No state-linked positive successor transaction is constructed. |
 
 The guarded transformer probes remain evidence of type boundaries, not
@@ -298,7 +316,7 @@ marked explicitly below.
 | Component | Status | Exact boundary |
 | --- | --- | --- |
 | `TatePairing.character_mul_reflectedCharacter` and finite-support projections | **PROVEN** | The existing `#` machinery proves `chi * chi* = omega`, and the `Finsupp` carrier proves that every displayed family of local readings has finite support. |
-| `TameSymbol.Context`, its explicit symbol, and the two seated Selmer legs | **PROVEN**, relative to named local realization data | `TameSymbol` constructs the degree-`p` symbol in `ZMod p` and proves bilinearity, antisymmetry, Steinberg, moved-place/fixed-place equivariance, both-units silence, `p`-divisible-valuation silence, and Kummer-quotient descent.  `SelmerEigenspace.SelmerChi` and `DOmegaSelmerChiStar` are literal eigenspaces in Mathlib's empty-support `selmerGroup`; the angular component/primitive-root context, the actual `Delta` representation, and the reflected character-dual equivalence remain named realization seams rather than providers. |
+| `TameSymbol.Context`, its explicit symbol, and the two seated Selmer legs | **PROVEN**, relative to named local realization data | `TameSymbol` constructs the degree-`p` symbol in `ZMod p` and proves bilinearity, antisymmetry, Steinberg, moved-place/fixed-place equivariance, both-units silence, `p`-divisible-valuation silence, and Kummer-quotient descent.  The original `SelmerChi` and `DOmegaSelmerChiStar` remain literal empty-support eigenspaces.  `SelmerCarrierAt`, `characterEigenspaceAt`, and `characterProjectorAt` now generalize the carrier/eigen/projector algebra to arbitrary support without changing those seated legs.  The angular-component/primitive-root context and arithmetic `Delta` representation remain named realization seams. |
 | `TamePlacePairing.WildLocalInterface.toPlaceIndexedLocalPairing` and `Seated.Realization.ofWild` | **PROVEN zero on the empty-support tame rows** / **NOT an explicit two-place detector pairing** | The only supplied local reading is one bilinear, `#`-adjoint value at the distinguished wild place, and the complete `Finsupp` family is constructed as that single column.  On the literal empty-support Selmer eigenspaces, Mathlib's valuation receipt makes every tame row zero.  This is a correct realization of those local conditions, but it cannot also realize a nonzero q-relaxed detector coordinate. |
 | `H_FLT`, `pair_59`, and `Lambda` | **PROVEN definitions** | `H_FLT` is honestly the selected primal Selmer carrier, and `Lambda : H_FLT →+ (DOmegaSelmerChiStar →+ ZMod 59)` is definitionally the existing wild reading.  `Lambda_apply` identifies evaluation with `pairAt` at the distinguished place.  This does not manufacture a map from the Selmer carrier to `AllocatedClass K`; `GaugeComparison` remains that explicit seating boundary. |
 | `TatePairing.GlobalReciprocityLaw` | **INTERFACE** | The global sum-zero theorem is the missing class-field-theory input. |
@@ -307,8 +325,9 @@ marked explicitly below.
 | `wild_detector_faithful` | **SINGLE FRONTIER INTERFACE** | The exact target is `(Lambda wild).ker = ⊥`: the wild detector family separates the remaining potential.  Poitou--Tate nondegeneracy is its natural arithmetic source.  If `H_FLT` has finrank one, `wild_detector_faithful_of_finrank_one` proves that one nonzero transverse reading suffices.  No inhabitant is asserted. |
 | `gauge_eq_local_tate_pairing` | **INTERFACE** | One selected detector and a unit must identify its 59-local reading with the computed difference gauge and reflect zero scalar reading back to zero of that retained class-group gauge. |
 | `transverse_detector_exists` | **ABSTRACT PRE-WITNESS INTERFACE** | The existing proposition packages an arbitrary dual value, a lamp action, and a place label, but its single-wild-column pairing forces the q-reading to zero and it contains no global Kummer representative or q-relaxed local condition.  It remains sufficient for the old conditional implication, but is not the explicit Stage-2 witness requested here. |
-| `DetectorWitness827.TransverseDetectorWitness` | **HONEST TARGET / SEATED ANALOGUE PROVED UNINHABITED** | The generic structure retains the q-relaxed Kummer class, reflected eigenlaw, two-place valuation support, computed q-readings, both-units silence, and nonzero transversality while omitting the wild value.  The clean 827 calculation gives reading `48`, but `EmptySupportTransverseDetectorWitness.not_nonempty` derives zero on the current seated carrier.  A q-relaxed, Delta-stable reflected Selmer carrier is the exact repair; every generation-chain fallback otherwise repeats the same carrier failure. |
-| `ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov` | **PROVEN COVERAGE VERDICT: `NEEDS-VOSTOKOV`** | `zeta`, `1-zeta`, and generated cyclotomic units have explicit provenance.  The chosen statewise Selmer lift and detector component have no proved decomposition in their span, so the two special Artin--Hasse families do not cover the campaign's actual typed inputs.  This is a missing-decomposition verdict, not a theorem of nonmembership. |
+| `DetectorWitness827` q-relaxed repair | **CARRIER/PROJECTOR/READOUT PROVEN; WITNESS UNINHABITED AT A NEW WALL** | `QRelaxedSelmerCarrier827` is Mathlib's actual Selmer group supported at all places over 827.  `qRelaxedReflectedProjector827` lands in the reflected eigenspace, and `localizationResidueReadout827` compares its supported valuation with the actual first capacity functional of value `48`.  Thus the old empty-support no-go dissolves at q.  `ReflectedQRelaxedLocalizationLift827` still requires a global source with nonzero projected q-coordinate and a representative supported over 59 and 827; `SelectedTameComparison` then identifies the actual tame reading with the computed readout.  Neither structure is inhabited. |
+| Finite-S kernel and incoming localization sequence | **KERNEL PROVEN / IMAGE-COKERNEL INTERFACE NOT ASSUMED** | `supportValuation_ker_eq_range_emptySupportInclusion` proves exactly the kernel of supported valuation at the existing pin.  The named incoming `FiniteSupportSelmerLocalizationSequence` must place an obstruction after localization and prove exactness; a target q-vector lifts only after its obstruction is zero.  `FiniteSupportSelmerSUnitClassSequence` separately records the S-unit/S-class bookkeeping and comparison squares.  The external `finite-s-selmer` branch has no vendorable implementation/provenance at this snapshot, and no valuation-surjectivity shortcut is used. |
+| `ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov` | **PROVEN COVERAGE VERDICT: `NEEDS-VOSTOKOV`; PRECISE EXIT INTERFACE NAMED** | `zeta`, `1-zeta`, and generated cyclotomic units have explicit provenance.  `NormalizedStateFactorArtinHasseDecomposition hζ S hz` would give explicit Kummer-class coefficient decompositions of both normalized state factors into `zetaUnit`, nonzero `fixedDenominator`, and every `generatedUnit`; a one-sided proof also needs conjugation stability to obtain the other row.  This factor statement alone does not seat the chosen statewise Selmer preimage or the selected detector lift, nor provide their local Hilbert-symbol comparison.  The current verdict is missing-decomposition, not nonmembership. |
 | Capacity, bounded Sinnott, funded flow/repayment, and the statewise (7d) fold | **PROVEN** | These are genuine selected bank receipts and are retained in the place-by-place audit rather than redescribed as local theorems. |
 | `LocalOrthogonalityGuard` | **RETAINED where it binds; not needed for a proved tame row** | The generic guard remains available and explicit.  Stage 1 does not turn a bank receipt into a localization theorem: instead it computes the actual tame symbol on the seated quotient classes.  In the selected single-wild-column model there is consequently no remaining away row on which an orthogonality guard binds. |
 | `bank_silences_other_places` | **PROVEN** | The audit contains the already proved capacity, bounded-Sinnott, plus-class-number, deep-flow, repayment, and (7d) receipts.  Its auxiliary and every other non-59 verdict now follow from the constructed single support, whose tame realization is justified by the two Selmer valuation receipts; the former auxiliary/other orthogonality fields have been removed at their source. |
@@ -316,15 +335,18 @@ marked explicitly below.
 
 Thus conservation has already done its job: tame cancellation plus
 reciprocity proves that the selected potential lies in the Stokes detector's
-kernel.  The final frontier is still the nondegeneracy theorem
-`ker Lambda = 0`, not a second conservation identity.  Stage 2 has now made
-one prerequisite to exhibiting that nondegeneracy concrete: the current
-empty-support dual leg cannot carry a nonzero tame q-coordinate, even though
-the 827 residue functional itself is nonzero.  A q-relaxed reflected Selmer
-carrier, its character projector, and its localization law must be built
-before the lamp can furnish an explicit global detector.  At the remaining
-wild place the present generator inventory requires the general Vostokov
-budget unless the two opaque Kummer inputs are explicitly decomposed.
+kernel.  The final arithmetic frontier is still nondegeneracy of that
+detector, not a second conservation identity.  Stage 2 now has the literal
+q-relaxed carrier, reflected projector, localization coordinate, and
+nonzero 827 comparison coefficient.  Its next wall is concrete: produce a
+`ReflectedQRelaxedLocalizationLift827` by showing that the desired local
+vector lies in the kernel of the incoming finite-S obstruction, then supply
+`SelectedTameComparison`.  The old every-place valuation-zero argument no
+longer applies at q, but exactness does not make localization automatically
+surjective.  At the remaining wild place the present generator inventory
+requires the general Vostokov budget unless the normalized factors are
+decomposed as named above and the actual selected inputs are seated in those
+decompositions.
 
 The public Tate result remains an implication, not a new producer of the
 wild local reading, reciprocity, detector, faithfulness, or gauge-comparison
