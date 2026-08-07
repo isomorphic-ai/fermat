@@ -156,6 +156,7 @@ open Fermat.Conservation
 #check InvolutiveBase.reflectedCharacter
 #check InvolutiveBase.characterIdempotent
 #check InvolutiveBase.characterIdempotent_isIdempotent
+#check InvolutiveBase.groupElement_mul_characterIdempotent
 #check InvolutiveBase.hash_characterIdempotent
 #check InvolutiveBase.hash_trivialCharacterIdempotent
 #check InvolutiveBase.plusProjector
@@ -380,6 +381,41 @@ open Fermat.Conservation
 #check SelmerEigenspace.ReflectedDualCharacterGlue
 #check SelmerEigenspace.ReflectedDualCharacterGlue.carrierDualEquiv_smul
 #check SelmerEigenspace.ReflectedSelmerPair
+
+/-! ### Arbitrary-support Selmer-eigenspace surface -/
+
+#check SelmerEigenspace.SelmerCarrierAt
+#check SelmerEigenspace.SelmerDeltaRepresentationAt
+#check SelmerEigenspace.characterEigenspaceAt
+#check SelmerEigenspace.instCharacterEigenspaceAtAddCommGroup
+#check SelmerEigenspace.mem_characterEigenspaceAt_iff
+#check SelmerEigenspace.characterIdempotent_action_mem_characterEigenspaceAt
+#check SelmerEigenspace.characterProjectorAt
+#check SelmerEigenspace.characterProjectorAt_apply
+#check SelmerEigenspace.characterProjectorAt_idempotent
+#check SelmerEigenspace.SelmerChiAt
+#check SelmerEigenspace.SelmerChiStarAt
+#check SelmerEigenspace.characterEigenspaceRepresentationAt
+#check SelmerEigenspace.instCharacterEigenspaceAtGroupAlgebraModule
+#check SelmerEigenspace.toSupportedCarrier
+#check SelmerEigenspace.toConcreteSelmerAt
+#check SelmerEigenspace.toKummerQuotientAt
+#check SelmerEigenspace.toKummerClassAt
+#check SelmerEigenspace.toKummerClassAt_apply
+#check SelmerEigenspace.quotientRepresentativeAt
+#check SelmerEigenspace.quotientRepresentativeAt_mk
+#check SelmerEigenspace.valuationOfNeZeroMod_eq_one_of_not_mem
+#check SelmerEigenspace.quotientRepresentativeAt_valuation_dvd_of_not_mem
+#check SelmerEigenspace.supportValuation
+#check SelmerEigenspace.supportValuationAt
+#check SelmerEigenspace.supportValuation_apply
+#check SelmerEigenspace.emptySupportInclusion
+#check SelmerEigenspace.supportValuation_emptySupportInclusion_eq_zero
+#check SelmerEigenspace.supportValuation_ker_eq_range_emptySupportInclusion
+#check SelmerEigenspace.eigenspaceSupportValuation
+#check SelmerEigenspace.eigenspaceSupportValuationAt
+#check SelmerEigenspace.eigenspaceSupportValuation_apply
+#check SelmerEigenspace.DOmegaSelmerChiStarAt
 
 /-! ## Tame place-indexed realization surface -/
 
@@ -644,6 +680,8 @@ open Fermat.Conservation
   InvolutiveBase.reflectionPairing
 #guard_depends_on InvolutiveBase.characterIdempotent_isIdempotent,
   InvolutiveBase.groupAverage_isIdempotent
+#guard_depends_on InvolutiveBase.groupElement_mul_characterIdempotent,
+  InvolutiveBase.characterIdempotent
 #guard_depends_on InvolutiveBase.hash_characterIdempotent,
   InvolutiveBase.reflectedCharacter
 #guard_depends_on InvolutiveBase.hash_trivialCharacterIdempotent,
@@ -929,6 +967,41 @@ open Fermat.Conservation
 #guard_depends_on
   SelmerEigenspace.ReflectedDualCharacterGlue.carrierDualEquiv_smul,
   SelmerEigenspace.ReflectedDualCharacterGlue.omegaTwistedAction
+
+/-! ### Arbitrary-support Selmer-eigenspace proof-value wiring -/
+
+#guard_depends_on SelmerEigenspace.mem_characterEigenspaceAt_iff,
+  SelmerEigenspace.characterEigenspaceAt
+#guard_depends_on
+  SelmerEigenspace.characterIdempotent_action_mem_characterEigenspaceAt,
+  InvolutiveBase.groupElement_mul_characterIdempotent
+#guard_depends_on SelmerEigenspace.characterProjectorAt,
+  SelmerEigenspace.characterIdempotent_action_mem_characterEigenspaceAt
+#guard_depends_on SelmerEigenspace.characterProjectorAt_apply,
+  SelmerEigenspace.characterProjectorAt
+#guard_depends_on SelmerEigenspace.characterProjectorAt_idempotent,
+  InvolutiveBase.characterIdempotent_isIdempotent
+#guard_depends_on SelmerEigenspace.characterEigenspaceRepresentationAt,
+  SelmerEigenspace.mem_characterEigenspaceAt_iff
+#guard_depends_on SelmerEigenspace.toKummerClassAt_apply,
+  SelmerEigenspace.toKummerClassAt
+#guard_depends_on SelmerEigenspace.quotientRepresentativeAt_mk,
+  QuotientGroup.out_eq'
+#guard_depends_on SelmerEigenspace.valuationOfNeZeroMod_eq_one_of_not_mem,
+  SelmerEigenspace.toConcreteSelmerAt
+#guard_depends_on
+  SelmerEigenspace.quotientRepresentativeAt_valuation_dvd_of_not_mem,
+  SelmerEigenspace.valuationOfNeZeroMod_eq_one_of_not_mem
+#guard_depends_on SelmerEigenspace.supportValuation_apply,
+  SelmerEigenspace.supportValuation
+#guard_depends_on
+  SelmerEigenspace.supportValuation_emptySupportInclusion_eq_zero,
+  SelmerEigenspace.emptySupportInclusion
+#guard_depends_on
+  SelmerEigenspace.supportValuation_ker_eq_range_emptySupportInclusion,
+  SelmerEigenspace.supportValuation_emptySupportInclusion_eq_zero
+#guard_depends_on SelmerEigenspace.eigenspaceSupportValuation_apply,
+  SelmerEigenspace.eigenspaceSupportValuation
 
 /-! ## Tame place-indexed realization proof-value wiring -/
 

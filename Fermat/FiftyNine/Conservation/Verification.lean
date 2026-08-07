@@ -623,10 +623,11 @@ remain interfaces; the bank audit and every away row are now proved. -/
   Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.away_reading_eq_zero,
   Fermat.Conservation.TamePlacePairing.WildLocalInterface.pairAt_eq_zero_of_ne
 
-/-! The nominated 827 lamp has a checked nonzero finite readout, but the
-current seated dual is an empty-support Selmer eigenspace.  The detector
-audit therefore exposes the honest q-relaxed target and proves that no
-empty-support inhabitant can realize its transverse coordinate. -/
+/-! The nominated 827 lamp has a checked nonzero finite readout.  The old
+empty-support no-go remains audited as a regression, while the repaired
+surface now exposes Mathlib's literal q-relaxed carrier, its genuine
+character projector, the capacity-functional comparison, and the exact
+localization-lift interface still awaiting an arithmetic inhabitant. -/
 
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.firstLedgerNode
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827
@@ -635,6 +636,33 @@ empty-support inhabitant can realize its transverse coordinate. -/
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeResidue827_eq
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq_root_pow_reading
+#check Fermat.FiftyNine.Conservation.CapacityCertificate.reductionHom_generatedUnit_eq_edgeResidue
+#check Fermat.FiftyNine.Conservation.CapacityCertificate.residueFunctional_generatedUnit_eq
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver59
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.mem_placesOver827_iff
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver827_finite
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.QRelaxedSelmerCarrier827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.QRelaxedSelmerDeltaRepresentation827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.QRelaxedReflectedDual827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstResidueFunctional827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstResidueFunctional827_generatedUnit
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedReflectedProjector827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.qLocalizationCoordinate827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampScale827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_apply
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_eq_mul_residueFunctional
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_ne_zero
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.candidate
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.candidate_eigenlaw
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.computedQReading
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.computedQReading_ne_zero
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.primalRepresentative
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.outside_reading_eq_zero_of_both_units
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.SelectedTameComparison
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.selected_tame_reading_ne_zero
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.TransverseDetectorWitness
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.TransverseDetectorWitness.outside_tame_reading_eq_zero
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.Place
@@ -665,6 +693,45 @@ empty-support inhabitant can realize its transverse coordinate. -/
   Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq_root_pow_reading,
   Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver827_finite,
+  IsDedekindDomain.primesOver_finite
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstResidueFunctional827_generatedUnit,
+  Fermat.FiftyNine.Conservation.CapacityCertificate.residueFunctional_generatedUnit_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedReflectedProjector827,
+  Fermat.Conservation.SelmerEigenspace.characterProjectorAt
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.qLocalizationCoordinate827,
+  Fermat.Conservation.SelmerEigenspace.eigenspaceSupportValuationAt
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_apply,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_eq_mul_residueFunctional,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstResidueFunctional827_generatedUnit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_ne_zero,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.candidate,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedReflectedProjector827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.candidate_eigenlaw,
+  Fermat.Conservation.SelmerEigenspace.mem_characterEigenspaceAt_iff
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.computedQReading,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.computedQReading_ne_zero,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.outside_reading_eq_zero_of_both_units,
+  Fermat.Conservation.TameSymbol.Context.both_units_silence
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.selected_tame_reading_ne_zero,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.computedQReading_ne_zero
+#guard_depends_on
   Fermat.FiftyNine.Conservation.DetectorWitness827.TransverseDetectorWitness.outside_tame_reading_eq_zero,
   Fermat.Conservation.TameSymbol.Context.both_units_silence
 #guard_depends_on
@@ -691,8 +758,24 @@ empty-support inhabitant can realize its transverse coordinate. -/
 
 /-! The wild-place inventory records exactly which campaign inputs have an
 exposed cyclotomic-generator decomposition.  The two actual pairing inputs
-do not, so the conservative formula budget is `NEEDS-VOSTOKOV`. -/
+do not, so the conservative formula budget is `NEEDS-VOSTOKOV`.  The named
+discharge interface asks for explicit Kummer-class coefficient expansions
+of both normalized state factors without asserting that they exist. -/
 
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.fieldKummerClass
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.integralUnitKummerClass
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.integralNonzeroKummerClass
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.zetaKummerClass
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.fixedDenominatorKummerClass
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.generatedUnitKummerClass
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.artinHasseKummerSubgroup
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.normalizedPlusKummerClass
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.normalizedMinusKummerClass
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition.mem
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.plus_mem
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.minus_mem
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.WildClassKind
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.hasArtinHasseDecomposition
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.WildFormulaBudget
@@ -700,6 +783,15 @@ do not, so the conservative formula budget is `NEEDS-VOSTOKOV`. -/
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignInventory
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov
 
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition.mem,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.artinHasseKummerSubgroup
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.plus_mem,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition.mem
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.minus_mem,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition.mem
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov,
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.formulaBudget
