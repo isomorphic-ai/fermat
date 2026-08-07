@@ -6,7 +6,12 @@ Authors: Fabian Franz, Fable
 # Character eigenspaces on Mathlib's Selmer carrier
 
 This file seats the two Selmer types used by the conservation stage on
-Mathlib's actual unramified Selmer subgroup.  The full carrier is literally
+Mathlib's actual Selmer subgroups.  For arbitrary support `S`, the carrier is
+literally
+
+`Additive (IsDedekindDomain.selmerGroup (S := S) (n := p))`.
+
+The original full carrier remains the specialization
 
 `Additive (IsDedekindDomain.selmerGroup (S := ∅) (n := p))`,
 
@@ -44,10 +49,21 @@ noncomputable section
 namespace Fermat.Conservation.SelmerEigenspace
 
 open Fermat.Conservation.LinkingInterfaces
+open Fermat.Conservation.InvolutiveBase
 
 universe uR uK uDelta
 
-/-! ## The concrete carrier and its coefficient actions -/
+/-! ## The concrete carriers and their coefficient actions -/
+
+/-- Mathlib's Selmer subgroup at arbitrary support, only changed to additive
+notation.  No finiteness hypothesis on `S` is needed for the carrier itself. -/
+abbrev SelmerCarrierAt (R : Type uR) (K : Type uK)
+    [CommRing R] [IsDedekindDomain R] [Field K]
+    [Algebra R K] [IsFractionRing R K]
+    (S : Set (IsDedekindDomain.HeightOneSpectrum R)) (p : ℕ) :=
+  Additive
+    (IsDedekindDomain.selmerGroup
+      (R := R) (K := K) (S := S) (n := p))
 
 /-- Mathlib's empty-support Selmer subgroup, only changed to additive
 notation.  Unfolding this abbreviation exposes the literal
@@ -55,10 +71,8 @@ notation.  Unfolding this abbreviation exposes the literal
 abbrev SelmerCarrier (R : Type uR) (K : Type uK)
     [CommRing R] [IsDedekindDomain R] [Field K]
     [Algebra R K] [IsFractionRing R K] (p : ℕ) :=
-  Additive
-    (IsDedekindDomain.selmerGroup
-      (R := R) (K := K)
-      (S := (∅ : Set (IsDedekindDomain.HeightOneSpectrum R))) (n := p))
+  SelmerCarrierAt R K
+    (∅ : Set (IsDedekindDomain.HeightOneSpectrum R)) p
 
 /-- The new spelling is definitionally the carrier already used by
 `CommonActionStage`; this is the first carrier-glue receipt. -/
@@ -75,9 +89,11 @@ variable {R : Type uR} [CommRing R] [IsDedekindDomain R]
   {K : Type uK} [Field K] [Algebra R K] [IsFractionRing R K]
   {p : ℕ}
 
-/-- Every element of the concrete Kummer quotient, hence every Selmer
-element, is killed by `p`. -/
-theorem p_nsmul_eq_zero (x : SelmerCarrier R K p) : p • x = 0 := by
+/-- Every element of the concrete Kummer quotient, hence every supported
+Selmer element, is killed by `p`.  The proof is independent of support. -/
+theorem p_nsmul_eq_zero
+    {S : Set (IsDedekindDomain.HeightOneSpectrum R)}
+    (x : SelmerCarrierAt R K S p) : p • x = 0 := by
   apply Additive.toMul.injective
   change (Additive.toMul x) ^ p = 1
   apply Subtype.ext
@@ -87,20 +103,25 @@ theorem p_nsmul_eq_zero (x : SelmerCarrier R K p) : p • x = 0 := by
   rw [← hy]
   exact (QuotientGroup.eq_one_iff (y ^ p)).mpr ⟨y, rfl⟩
 
-/-- The canonical `ZMod p`-module structure on the actual Selmer subtype. -/
-instance instModuleZMod : Module (ZMod p) (SelmerCarrier R K p) :=
-  AddCommGroup.zmodModule (n := p) (G := SelmerCarrier R K p)
+/-- The canonical `ZMod p`-module structure on every actual supported Selmer
+subtype. -/
+instance instModuleZMod
+    {S : Set (IsDedekindDomain.HeightOneSpectrum R)} :
+    Module (ZMod p) (SelmerCarrierAt R K S p) :=
+  AddCommGroup.zmodModule (n := p) (G := SelmerCarrierAt R K S p)
     p_nsmul_eq_zero
 
 /-- The integral p-adic coefficient action factors through reduction modulo
 `p`, as it must on a group killed by `p`. -/
-instance instModulePadicInt [Fact p.Prime] :
-    Module (PadicInt p) (SelmerCarrier R K p) :=
-  Module.compHom (SelmerCarrier R K p) PadicInt.toZMod
+instance instModulePadicInt
+    {S : Set (IsDedekindDomain.HeightOneSpectrum R)} [Fact p.Prime] :
+    Module (PadicInt p) (SelmerCarrierAt R K S p) :=
+  Module.compHom (SelmerCarrierAt R K S p) PadicInt.toZMod
 
 @[simp]
 theorem padicInt_smul_eq_toZMod_smul [Fact p.Prime]
-    (a : PadicInt p) (x : SelmerCarrier R K p) :
+    {S : Set (IsDedekindDomain.HeightOneSpectrum R)}
+    (a : PadicInt p) (x : SelmerCarrierAt R K S p) :
     a • x = PadicInt.toZMod a • x :=
   rfl
 
@@ -492,6 +513,403 @@ theorem exists_representative_valuation_dvd
     quotientRepresentative_valuation_dvd v x⟩
 
 end Eigenspaces
+
+/-! ## Character eigenspaces at arbitrary support
+
+This is the support-parametric form of the machinery above.  It is kept
+separate from the empty-support names so the established conservation stage
+continues to elaborate definitionally unchanged while the reflected detector
+leg can be relaxed at a finite set of auxiliary places.
+-/
+
+section SupportedEigenspaces
+
+variable {R : Type uR} [CommRing R] [IsDedekindDomain R]
+  {K : Type uK} [Field K] [Algebra R K] [IsFractionRing R K]
+  {p : ℕ} [Fact p.Prime]
+  {Delta : Type uDelta} [CommGroup Delta]
+  {S : Set (IsDedekindDomain.HeightOneSpectrum R)}
+
+/-- A supplied `Delta` action on Mathlib's literal `S`-relaxed Selmer
+subgroup.  Supplying this representation includes the assertion that the
+chosen support is stable; no Galois action is manufactured here. -/
+abbrev SelmerDeltaRepresentationAt
+    (S : Set (IsDedekindDomain.HeightOneSpectrum R)) :=
+  Representation (PadicInt p) Delta (SelmerCarrierAt R K S p)
+
+/-- The simultaneous character eigenspace inside the actual supported Selmer
+carrier. -/
+def characterEigenspaceAt
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : InvolutiveBase.Character (PadicInt p) Delta) :
+    Submodule (PadicInt p) (SelmerCarrierAt R K S p) :=
+  characterEigenspaceGeneric
+    (A := PadicInt p) (G := Delta) (M := SelmerCarrierAt R K S p) rho eta
+
+instance instCharacterEigenspaceAtAddCommGroup
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : InvolutiveBase.Character (PadicInt p) Delta) :
+    AddCommGroup (characterEigenspaceAt rho eta) :=
+  @Submodule.addCommGroup
+    (PadicInt p) (SelmerCarrierAt R K S p) inferInstance inferInstance
+      (instModulePadicInt (R := R) (K := K) (p := p) (S := S))
+      (characterEigenspaceAt rho eta)
+
+@[simp]
+theorem mem_characterEigenspaceAt_iff
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : InvolutiveBase.Character (PadicInt p) Delta)
+    (x : SelmerCarrierAt R K S p) :
+    x ∈ characterEigenspaceAt rho eta ↔
+      ∀ delta : Delta,
+        rho delta x = (eta delta : PadicInt p) • x :=
+  Iff.rfl
+
+/-! ### The genuine supported character projector -/
+
+section CharacterProjectorAt
+
+variable [Fintype Delta]
+  [Invertible (Fintype.card Delta : PadicInt p)]
+
+/-- The character idempotent sends every supported Selmer class into the
+corresponding simultaneous eigenspace. -/
+theorem characterIdempotent_action_mem_characterEigenspaceAt
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : Character (PadicInt p) Delta)
+    (x : SelmerCarrierAt R K S p) :
+    rho.asAlgebraHom (characterIdempotent eta) x ∈
+      characterEigenspaceAt rho eta := by
+  rw [mem_characterEigenspaceAt_iff]
+  intro delta
+  calc
+    rho delta (rho.asAlgebraHom (characterIdempotent eta) x) =
+        rho.asAlgebraHom (MonoidAlgebra.of (PadicInt p) Delta delta)
+          (rho.asAlgebraHom (characterIdempotent eta) x) := by
+      rw [Representation.asAlgebraHom_of]
+    _ = rho.asAlgebraHom
+          (MonoidAlgebra.of (PadicInt p) Delta delta *
+            characterIdempotent eta) x := by
+      rw [map_mul]
+      rfl
+    _ = rho.asAlgebraHom
+          ((eta delta : PadicInt p) • characterIdempotent eta) x := by
+      rw [groupElement_mul_characterIdempotent]
+    _ = (eta delta : PadicInt p) •
+          rho.asAlgebraHom (characterIdempotent eta) x := by
+      rw [map_smul]
+      rfl
+
+/-- The Delta-stable character projector on the literal supported carrier. -/
+noncomputable def characterProjectorAt
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : Character (PadicInt p) Delta) :
+    SelmerCarrierAt R K S p →ₗ[PadicInt p]
+      characterEigenspaceAt rho eta :=
+  LinearMap.codRestrict (characterEigenspaceAt rho eta)
+    (rho.asAlgebraHom (characterIdempotent eta))
+    (characterIdempotent_action_mem_characterEigenspaceAt rho eta)
+
+@[simp]
+theorem characterProjectorAt_apply
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : Character (PadicInt p) Delta)
+    (x : SelmerCarrierAt R K S p) :
+    (characterProjectorAt rho eta x : SelmerCarrierAt R K S p) =
+      rho.asAlgebraHom (characterIdempotent eta) x :=
+  rfl
+
+/-- Applying the supported character projector twice changes nothing. -/
+theorem characterProjectorAt_idempotent
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : Character (PadicInt p) Delta)
+    (x : SelmerCarrierAt R K S p) :
+    characterProjectorAt rho eta (characterProjectorAt rho eta x).1 =
+      characterProjectorAt rho eta x := by
+  apply Subtype.ext
+  change rho.asAlgebraHom (characterIdempotent eta)
+      (rho.asAlgebraHom (characterIdempotent eta) x) =
+    rho.asAlgebraHom (characterIdempotent eta) x
+  rw [← Module.End.mul_apply, ← map_mul,
+    isIdempotentElem_iff.mp (characterIdempotent_isIdempotent eta)]
+
+end CharacterProjectorAt
+
+/-- The supported `eta`-eigenspace. -/
+abbrev SelmerChiAt
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : InvolutiveBase.Character (PadicInt p) Delta) :=
+  characterEigenspaceAt rho eta
+
+/-- The supported reflected-character eigenspace. -/
+abbrev SelmerChiStarAt
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (omega chi : InvolutiveBase.Character (PadicInt p) Delta) :=
+  characterEigenspaceAt rho (InvolutiveBase.reflectedCharacter omega chi)
+
+/-- The supplied action restricts to every supported character eigenspace.
+Commutativity of `Delta`, rather than empty support, is the load-bearing
+hypothesis. -/
+def characterEigenspaceRepresentationAt
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : InvolutiveBase.Character (PadicInt p) Delta) :
+    Representation (PadicInt p) Delta (characterEigenspaceAt rho eta) where
+  toFun delta :=
+    { toFun := fun x => ⟨rho delta x.1, by
+        rw [mem_characterEigenspaceAt_iff]
+        intro epsilon
+        calc
+          rho epsilon (rho delta x.1) = rho (epsilon * delta) x.1 := by
+            simp only [map_mul, Module.End.mul_apply]
+          _ = rho (delta * epsilon) x.1 := by rw [mul_comm]
+          _ = rho delta (rho epsilon x.1) := by
+            simp only [map_mul, Module.End.mul_apply]
+          _ = rho delta ((eta epsilon : PadicInt p) • x.1) := by
+            rw [(mem_characterEigenspaceAt_iff rho eta x.1).mp
+              x.property epsilon]
+          _ = (eta epsilon : PadicInt p) • rho delta x.1 :=
+            map_smul (rho delta) _ _⟩
+      map_add' := by
+        intro x y
+        apply Subtype.ext
+        exact map_add (rho delta) x.1 y.1
+      map_smul' := by
+        intro a x
+        apply Subtype.ext
+        exact map_smul (rho delta) a x.1 }
+  map_one' := by
+    apply LinearMap.ext
+    intro x
+    apply Subtype.ext
+    exact congrArg (fun f => f x.1) (map_one rho)
+  map_mul' delta epsilon := by
+    apply LinearMap.ext
+    intro x
+    apply Subtype.ext
+    exact congrArg (fun f => f x.1) (map_mul rho delta epsilon)
+
+noncomputable instance instCharacterEigenspaceAtGroupAlgebraModule
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : InvolutiveBase.Character (PadicInt p) Delta) :
+    Module (InvolutiveBase.GroupAlgebra (PadicInt p) Delta)
+      (characterEigenspaceAt rho eta) :=
+  Module.compHom (characterEigenspaceAt rho eta)
+    (characterEigenspaceRepresentationAt rho eta).asAlgebraHom.toRingHom
+
+/-- Forget the supported eigenspace predicate. -/
+def toSupportedCarrier
+    {rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S}
+    {eta : InvolutiveBase.Character (PadicInt p) Delta} :
+    SelmerChiAt rho eta →ₗ[PadicInt p] SelmerCarrierAt R K S p :=
+  (characterEigenspaceAt rho eta).subtype
+
+/-- Remove the additive tag and expose Mathlib's literal supported Selmer
+subtype. -/
+def toConcreteSelmerAt
+    {rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S}
+    {eta : InvolutiveBase.Character (PadicInt p) Delta}
+    (x : SelmerChiAt rho eta) :
+    IsDedekindDomain.selmerGroup
+      (R := R) (K := K) (S := S) (n := p) :=
+  Additive.toMul x.1
+
+/-- Forget the supported Selmer predicate and expose the ambient Kummer
+quotient. -/
+def toKummerQuotientAt
+    {rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S}
+    {eta : InvolutiveBase.Character (PadicInt p) Delta}
+    (x : SelmerChiAt rho eta) :
+    Kˣ ⧸ (powMonoidHom p : Kˣ →* Kˣ).range :=
+  (toConcreteSelmerAt x).1
+
+/-- The supported eigenspace inclusion into the additive Kummer quotient. -/
+def toKummerClassAt
+    {rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S}
+    {eta : InvolutiveBase.Character (PadicInt p) Delta} :
+    SelmerChiAt rho eta →+
+      Additive (Kˣ ⧸ (powMonoidHom p : Kˣ →* Kˣ).range) :=
+  (MonoidHom.toAdditive
+    (IsDedekindDomain.selmerGroup
+      (R := R) (K := K) (S := S) (n := p)).subtype).comp
+    (characterEigenspaceAt rho eta).subtype.toAddMonoidHom
+
+@[simp]
+theorem toKummerClassAt_apply
+    {rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S}
+    {eta : InvolutiveBase.Character (PadicInt p) Delta}
+    (x : SelmerChiAt rho eta) :
+    toKummerClassAt x = Additive.ofMul (toKummerQuotientAt x) :=
+  rfl
+
+/-- A canonical representative of a supported Kummer class.  Choosing the
+representative is support-independent; only its valuation receipts depend on
+whether a place lies outside `S`. -/
+noncomputable def quotientRepresentativeAt
+    {rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S}
+    {eta : InvolutiveBase.Character (PadicInt p) Delta}
+    (x : SelmerChiAt rho eta) : Kˣ :=
+  (toKummerQuotientAt x).out
+
+theorem quotientRepresentativeAt_mk
+    {rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S}
+    {eta : InvolutiveBase.Character (PadicInt p) Delta}
+    (x : SelmerChiAt rho eta) :
+    (quotientRepresentativeAt x :
+      Kˣ ⧸ (powMonoidHom p : Kˣ →* Kˣ).range) =
+        toKummerQuotientAt x :=
+  QuotientGroup.out_eq' (toKummerQuotientAt x)
+
+/-- Supported Selmer membership gives valuation one modulo `p` precisely
+away from the relaxed support. -/
+theorem valuationOfNeZeroMod_eq_one_of_not_mem
+    {rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S}
+    {eta : InvolutiveBase.Character (PadicInt p) Delta}
+    (v : IsDedekindDomain.HeightOneSpectrum R) (hv : v ∉ S)
+    (x : SelmerChiAt rho eta) :
+    v.valuationOfNeZeroMod p (toKummerQuotientAt x) = 1 :=
+  (toConcreteSelmerAt x).property v hv
+
+/-- Hence every chosen representative has `p`-divisible valuation away
+from the relaxed support.  No receipt is asserted on `S`. -/
+theorem quotientRepresentativeAt_valuation_dvd_of_not_mem
+    {rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S}
+    {eta : InvolutiveBase.Character (PadicInt p) Delta}
+    (v : IsDedekindDomain.HeightOneSpectrum R) (hv : v ∉ S)
+    (x : SelmerChiAt rho eta) :
+    (p : ℤ) ∣
+      (v.valuationOfNeZero (quotientRepresentativeAt x)).toAdd := by
+  apply (valuationOfNeZeroMod_mk_eq_one_iff_dvd v
+    (quotientRepresentativeAt x)).mp
+  rw [quotientRepresentativeAt_mk]
+  exact valuationOfNeZeroMod_eq_one_of_not_mem v hv x
+
+/-- Mathlib's supported Selmer valuation, in additive coordinates.  This is
+the canonical localization map on the relaxed carrier, not a supplied local
+functional. -/
+def supportValuation :
+    SelmerCarrierAt R K S p →+ (S → ZMod p) :=
+  AddMonoidHom.pi fun v =>
+    MonoidHom.toAdditive <|
+      (Pi.evalMonoidHom (fun _ : S => Multiplicative (ZMod p)) v).comp
+        (IsDedekindDomain.selmerGroup.valuation
+          (R := R) (K := K) (S := S) (n := p))
+
+/-- One coordinate of supported Selmer localization. -/
+def supportValuationAt (v : S) :
+    SelmerCarrierAt R K S p →+ ZMod p :=
+  MonoidHom.toAdditive <|
+    (Pi.evalMonoidHom (fun _ : S => Multiplicative (ZMod p)) v).comp
+      (IsDedekindDomain.selmerGroup.valuation
+        (R := R) (K := K) (S := S) (n := p))
+
+@[simp]
+theorem supportValuation_apply
+    (x : SelmerCarrierAt R K S p) (v : S) :
+    supportValuation x v = supportValuationAt v x :=
+  rfl
+
+/-- The canonical inclusion of empty-support Selmer classes into the
+`S`-relaxed carrier. -/
+def emptySupportInclusion :
+    SelmerCarrier R K p →+ SelmerCarrierAt R K S p :=
+  MonoidHom.toAdditive <|
+    Subgroup.inclusion <|
+      IsDedekindDomain.selmerGroup.monotone
+        (R := R) (K := K) (n := p) (Set.empty_subset S)
+
+/-- Empty-support classes have zero localization in every newly relaxed
+coordinate. -/
+theorem supportValuation_emptySupportInclusion_eq_zero
+    (x : SelmerCarrier R K p) :
+    supportValuation (emptySupportInclusion (S := S) x) = 0 := by
+  ext v
+  change Multiplicative.toAdd
+      (v.1.valuationOfNeZeroMod p (Additive.toMul x).1) = 0
+  exact congrArg Multiplicative.toAdd
+    ((Additive.toMul x).property v.1 (Set.notMem_empty v.1))
+
+/-- Additive spelling of Mathlib's `selmerGroup.valuation_ker_eq`: the
+kernel of finite-support localization is exactly the image of the original
+empty-support carrier.  This settles the kernel bookkeeping at the current
+pin; it says nothing about the localization image or cokernel. -/
+theorem supportValuation_ker_eq_range_emptySupportInclusion :
+    AddMonoidHom.ker (supportValuation (R := R) (K := K) (p := p) (S := S)) =
+      AddMonoidHom.range (emptySupportInclusion
+        (R := R) (K := K) (p := p) (S := S)) := by
+  ext x
+  constructor
+  · intro hx
+    rw [AddMonoidHom.mem_ker] at hx
+    let y : SelmerCarrier R K p := Additive.ofMul
+      ⟨(Additive.toMul x).1, by
+        intro v _
+        by_cases hv : v ∈ S
+        · have hcoord := congrFun hx ⟨v, hv⟩
+          change Multiplicative.toAdd
+              (v.valuationOfNeZeroMod p (Additive.toMul x).1) = 0 at hcoord
+          exact Multiplicative.toAdd.injective hcoord
+        · exact (Additive.toMul x).property v hv⟩
+    exact ⟨y, rfl⟩
+  · rintro ⟨y, rfl⟩
+    rw [AddMonoidHom.mem_ker]
+    exact supportValuation_emptySupportInclusion_eq_zero y
+
+/-- Localization restricted to one supported character eigenspace. -/
+def eigenspaceSupportValuation
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : InvolutiveBase.Character (PadicInt p) Delta) :
+    SelmerChiAt rho eta →+ (S → ZMod p) :=
+  supportValuation.comp
+    (characterEigenspaceAt rho eta).subtype.toAddMonoidHom
+
+/-- One localization coordinate on a supported character eigenspace. -/
+def eigenspaceSupportValuationAt
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : InvolutiveBase.Character (PadicInt p) Delta)
+    (v : S) : SelmerChiAt rho eta →+ ZMod p :=
+  supportValuationAt v |>.comp
+    (characterEigenspaceAt rho eta).subtype.toAddMonoidHom
+
+@[simp]
+theorem eigenspaceSupportValuation_apply
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : InvolutiveBase.Character (PadicInt p) Delta)
+    (x : SelmerChiAt rho eta) (v : S) :
+    eigenspaceSupportValuation rho eta x v =
+      eigenspaceSupportValuationAt rho eta v x :=
+  rfl
+
+/-- The stage's q-relaxed reflected dual spelling. -/
+abbrev DOmegaSelmerChiStarAt
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (omega chi : InvolutiveBase.Character (PadicInt p) Delta) :=
+  SelmerChiStarAt rho omega chi
+
+end SupportedEigenspaces
 
 /-! ## The reflected eigenspace and its explicit duality gap -/
 

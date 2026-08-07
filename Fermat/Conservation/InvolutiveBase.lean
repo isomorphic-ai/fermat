@@ -230,6 +230,42 @@ theorem characterIdempotent_isIdempotent (chi : Character O Delta) :
     (isIdempotentElem_iff.mp
       (groupAverage_isIdempotent (O := O) (Delta := Delta)))
 
+/-- A group element acts on the standard character idempotent through the
+corresponding character value.  This is the algebraic identity that turns
+the idempotent into an actual eigenspace projector. -/
+@[simp]
+theorem groupElement_mul_characterIdempotent
+    (chi : Character O Delta) (g : Delta) :
+    MonoidAlgebra.of O Delta g * characterIdempotent chi =
+      (chi g : O) • characterIdempotent chi := by
+  simp only [characterIdempotent, Algebra.mul_smul_comm, Finset.mul_sum,
+    MonoidAlgebra.of_apply, MonoidAlgebra.single_mul_single]
+  rw [smul_smul, mul_comm (chi g : O) (⅟(Fintype.card Delta : O)),
+    ← smul_smul]
+  apply congrArg (⅟(Fintype.card Delta : O) • ·)
+  calc
+    ∑ x : Delta, MonoidAlgebra.single (g * x) (1 * ↑(chi x)⁻¹) =
+        ∑ x : Delta, (chi g : O) •
+          MonoidAlgebra.single (g * x) (↑((chi (g * x))⁻¹) : O) := by
+      apply Finset.sum_congr rfl
+      intro x _
+      simp only [MonoidAlgebra.smul_single, one_mul]
+      apply congrArg (MonoidAlgebra.single (R := O) (M := Delta) (g * x))
+      change (↑((chi x)⁻¹) : O) =
+        (↑(chi g * (chi (g * x))⁻¹) : O)
+      exact congrArg Units.val (by simp [mul_comm])
+    _ = (chi g : O) •
+        ∑ x : Delta,
+          MonoidAlgebra.single (g * x) (↑((chi (g * x))⁻¹) : O) := by
+      rw [Finset.smul_sum]
+    _ = (chi g : O) •
+        ∑ x : Delta, MonoidAlgebra.single x (↑((chi x)⁻¹) : O) := by
+      apply congrArg ((chi g : O) • ·)
+      set f : Delta → GroupAlgebra O Delta := fun y =>
+        MonoidAlgebra.single y (↑((chi y)⁻¹) : O)
+      change ∑ x : Delta, f (g * x) = ∑ x : Delta, f x
+      rw [Function.Bijective.sum_comp (Group.mulLeft_bijective g) _]
+
 /-- The Teichmuller involution exchanges the `chi` and `chi*` idempotents. -/
 theorem hash_characterIdempotent (omega chi : Character O Delta) :
     hash omega (characterIdempotent chi) =

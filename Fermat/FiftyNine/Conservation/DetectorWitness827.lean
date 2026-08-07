@@ -28,7 +28,7 @@ transverse.
 import Fermat.Conservation.TamePlacePairing
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 
-open scoped nonZeroDivisors
+open scoped nonZeroDivisors NumberField
 
 noncomputable section
 
@@ -80,6 +80,289 @@ theorem firstEdgeSymbol827_eq_root_pow_reading :
     CapacityCertificate.edgeResidue firstLedgerNode firstLedgerNode ^ (2 * 7) =
       Credit.attestationRoot ^ firstLampReading827.val := by
   decide +kernel +revert
+
+/-! ## The actual q-relaxed carrier and the capacity comparison -/
+
+universe uRelaxedK uRelaxedDelta
+
+/-- The height-one places of the cyclotomic integer ring lying over the
+auxiliary rational prime `827`.  This is the literal support passed to
+Mathlib's `selmerGroup`; it is not a decorative place label. -/
+def placesOver827 (K : Type uRelaxedK) [Field K] [NumberField K] :
+    Set (IsDedekindDomain.HeightOneSpectrum (𝓞 K)) :=
+  {v | Ideal.span ({(Credit.attestationPrime : ℤ)} : Set ℤ) =
+    v.asIdeal.under ℤ}
+
+/-- The distinguished wild places over 59, used only in the literal
+two-rational-prime representative-support statement. -/
+def placesOver59 (K : Type uRelaxedK) [Field K] [NumberField K] :
+    Set (IsDedekindDomain.HeightOneSpectrum (𝓞 K)) :=
+  {v | Ideal.span ({(59 : ℤ)} : Set ℤ) = v.asIdeal.under ℤ}
+
+@[simp]
+theorem mem_placesOver827_iff
+    {K : Type uRelaxedK} [Field K] [NumberField K]
+    (v : IsDedekindDomain.HeightOneSpectrum (𝓞 K)) :
+    v ∈ placesOver827 K ↔
+      Ideal.span ({(Credit.attestationPrime : ℤ)} : Set ℤ) =
+        v.asIdeal.under ℤ :=
+  Iff.rfl
+
+/-- The auxiliary support is genuinely finite. -/
+theorem placesOver827_finite
+    (K : Type uRelaxedK) [Field K] [NumberField K] :
+    (placesOver827 K).Finite := by
+  let qIdeal : Ideal ℤ :=
+    Ideal.span ({(Credit.attestationPrime : ℤ)} : Set ℤ)
+  have himage :
+      IsDedekindDomain.HeightOneSpectrum.asIdeal '' placesOver827 K ⊆
+        qIdeal.primesOver (𝓞 K) := by
+    rintro I ⟨v, hv, rfl⟩
+    exact ⟨v.isPrime, ⟨hv⟩⟩
+  apply Set.Finite.of_finite_image
+    ((IsDedekindDomain.primesOver_finite qIdeal (𝓞 K)).subset himage)
+  intro v _ w _ hvw
+  exact IsDedekindDomain.HeightOneSpectrum.ext_iff.mpr hvw
+
+/-- Mathlib's q-relaxed Selmer carrier at all places over 827. -/
+abbrev QRelaxedSelmerCarrier827
+    (K : Type uRelaxedK) [Field K] [NumberField K] :=
+  SelmerEigenspace.SelmerCarrierAt (𝓞 K) K (placesOver827 K) 59
+
+/-- A supplied Delta action on the literal q-relaxed carrier.  Its type
+encodes support stability; constructing the arithmetic Galois action remains
+separate from the carrier definition. -/
+abbrev QRelaxedSelmerDeltaRepresentation827
+    (K : Type uRelaxedK) [Field K] [NumberField K]
+    (Delta : Type uRelaxedDelta) [CommGroup Delta] :=
+  SelmerEigenspace.SelmerDeltaRepresentationAt
+    (R := 𝓞 K) (K := K) (p := 59) (Delta := Delta) (placesOver827 K)
+
+/-- The reflected-character projector target on the q-relaxed carrier. -/
+abbrev QRelaxedReflectedDual827
+    {K : Type uRelaxedK} [Field K] [NumberField K]
+    {Delta : Type uRelaxedDelta} [CommGroup Delta]
+    (rhoQ : QRelaxedSelmerDeltaRepresentation827 K Delta)
+    (omega chi : InvolutiveBase.Character (PadicInt 59) Delta) :=
+  SelmerEigenspace.DOmegaSelmerChiStarAt rhoQ omega chi
+
+variable {K59 : Type uRelaxedK} [Field K59] [NumberField K59]
+  [IsCyclotomicExtension {59} ℚ K59]
+
+local instance : Module ℤ (CapacityCertificate.UnitLattice K59) :=
+  @AddCommGroup.toIntModule
+    (CapacityCertificate.UnitLattice K59) inferInstance
+
+/-- The first capacity row as an actual functional on the Dirichlet unit
+lattice. -/
+noncomputable def firstResidueFunctional827
+    (hζ : IsPrimitiveRoot (ζ : K59) 59) :
+    CapacityCertificate.UnitLattice K59 →ₗ[ℤ] ZMod 59 :=
+  CapacityCertificate.residueFunctional hζ firstLedgerNode
+
+/-- Evaluating the actual first capacity functional on the actual first
+generated unit gives the lamp coordinate used by the detector. -/
+theorem firstResidueFunctional827_generatedUnit
+    (hζ : IsPrimitiveRoot (ζ : K59) 59) :
+    firstResidueFunctional827 hζ
+        (CapacityCertificate.unitClass
+          (Credit.generatedUnit hζ firstLedgerNode : (𝓞 K59)ˣ)) =
+      firstLampReading827 := by
+  exact CapacityCertificate.residueFunctional_generatedUnit_eq
+    hζ firstLedgerNode firstLedgerNode
+
+section RelaxedProjectorAndLocalization
+
+variable {K : Type uRelaxedK} [Field K] [NumberField K]
+  {Delta : Type uRelaxedDelta} [CommGroup Delta] [Fintype Delta]
+  [Invertible (Fintype.card Delta : PadicInt 59)]
+  (rhoQ : QRelaxedSelmerDeltaRepresentation827 K Delta)
+  (omega chi : InvolutiveBase.Character (PadicInt 59) Delta)
+
+/-- The genuine reflected-character idempotent on the q-relaxed carrier. -/
+noncomputable def qRelaxedReflectedProjector827 :
+    QRelaxedSelmerCarrier827 K →ₗ[PadicInt 59]
+      QRelaxedReflectedDual827 rhoQ omega chi :=
+  SelmerEigenspace.characterProjectorAt rhoQ
+    (InvolutiveBase.reflectedCharacter omega chi)
+
+/-- One selected 827-coordinate of Mathlib's supported Selmer valuation. -/
+def qLocalizationCoordinate827
+    (v827 : {v // v ∈ placesOver827 K}) :
+    QRelaxedReflectedDual827 rhoQ omega chi →+ ZMod 59 :=
+  SelmerEigenspace.eigenspaceSupportValuationAt rhoQ
+    (InvolutiveBase.reflectedCharacter omega chi) v827
+
+/-- Multiplication by the actual first capacity-functional value. -/
+def firstLampScale827 : ZMod 59 →+ ZMod 59 where
+  toFun m := m * firstLampReading827
+  map_zero' := by simp
+  map_add' := by intros; ring
+
+/-- The comparison readout obtained by multiplying the selected q-valuation
+by the explicit first residue functional.  Equality with an actual local tame
+pairing is a separate local-realization statement below. -/
+def localizationResidueReadout827
+    (v827 : {v // v ∈ placesOver827 K}) :
+    QRelaxedReflectedDual827 rhoQ omega chi →+ ZMod 59 :=
+  firstLampScale827.comp (qLocalizationCoordinate827 rhoQ omega chi v827)
+
+omit [Fintype Delta]
+  [Invertible (Fintype.card Delta : PadicInt 59)] in
+@[simp]
+theorem localizationResidueReadout827_apply
+    (v827 : {v // v ∈ placesOver827 K})
+    (y : QRelaxedReflectedDual827 rhoQ omega chi) :
+    localizationResidueReadout827 rhoQ omega chi v827 y =
+      qLocalizationCoordinate827 rhoQ omega chi v827 y *
+        firstLampReading827 :=
+  rfl
+
+omit [Fintype Delta]
+  [Invertible (Fintype.card Delta : PadicInt 59)] in
+/-- The comparison coefficient is literally the capacity functional
+evaluated on the first generated unit. -/
+theorem localizationResidueReadout827_eq_mul_residueFunctional
+    [IsCyclotomicExtension {59} ℚ K]
+    (hζ : IsPrimitiveRoot (ζ : K) 59)
+    (v827 : {v // v ∈ placesOver827 K})
+    (y : QRelaxedReflectedDual827 rhoQ omega chi) :
+    localizationResidueReadout827 rhoQ omega chi v827 y =
+      qLocalizationCoordinate827 rhoQ omega chi v827 y *
+        firstResidueFunctional827 hζ
+          (CapacityCertificate.unitClass
+            (Credit.generatedUnit hζ firstLedgerNode : (𝓞 K)ˣ)) := by
+  rw [firstResidueFunctional827_generatedUnit]
+  rfl
+
+omit [Fintype Delta]
+  [Invertible (Fintype.card Delta : PadicInt 59)] in
+/-- A nonzero selected q-valuation gives a nonzero computed 827 readout. -/
+theorem localizationResidueReadout827_ne_zero
+    (v827 : {v // v ∈ placesOver827 K})
+    (y : QRelaxedReflectedDual827 rhoQ omega chi)
+    (hy : qLocalizationCoordinate827 rhoQ omega chi v827 y ≠ 0) :
+    localizationResidueReadout827 rhoQ omega chi v827 y ≠ 0 := by
+  rw [localizationResidueReadout827_apply]
+  exact mul_ne_zero hy firstLampReading827_ne_zero
+
+/-- **The first new typed obligation after q-relaxation.**
+
+The candidate is produced by the actual character projector, has a nonzero
+coordinate under Mathlib's supported valuation, and retains a representative
+whose literal divisor is supported over 59 and 827.  The arbitrary-support
+carrier and projector do not construct an inhabitant of this structure. -/
+structure ReflectedQRelaxedLocalizationLift827 where
+  source : QRelaxedSelmerCarrier827 K
+  selectedPlace : {v // v ∈ placesOver827 K}
+  selectedLocalization_ne_zero :
+    qLocalizationCoordinate827 rhoQ omega chi selectedPlace
+        (qRelaxedReflectedProjector827 rhoQ omega chi source) ≠ 0
+  candidateRepresentative : Kˣ
+  candidate_represents :
+    (candidateRepresentative :
+      Kˣ ⧸ (powMonoidHom 59 : Kˣ →* Kˣ).range) =
+      SelmerEigenspace.toKummerQuotientAt
+        (qRelaxedReflectedProjector827 rhoQ omega chi source)
+  representative_support : ∀ v,
+    v ∉ placesOver59 K → v ∉ placesOver827 K →
+      (v.valuationOfNeZero candidateRepresentative).toAdd = 0
+
+namespace ReflectedQRelaxedLocalizationLift827
+
+variable {rhoQ omega chi}
+
+/-- The projected candidate, named for downstream witness construction. -/
+noncomputable def candidate
+    (lift : ReflectedQRelaxedLocalizationLift827 rhoQ omega chi) :
+    QRelaxedReflectedDual827 rhoQ omega chi :=
+  qRelaxedReflectedProjector827 rhoQ omega chi lift.source
+
+/-- Eigenspace membership is constructed, not stored as a field. -/
+theorem candidate_eigenlaw
+    (lift : ReflectedQRelaxedLocalizationLift827 rhoQ omega chi)
+    (delta : Delta) :
+    rhoQ delta lift.candidate.1 =
+      (InvolutiveBase.reflectedCharacter omega chi delta : PadicInt 59) •
+        lift.candidate.1 :=
+  (SelmerEigenspace.mem_characterEigenspaceAt_iff rhoQ
+    (InvolutiveBase.reflectedCharacter omega chi) lift.candidate.1).mp
+      lift.candidate.property delta
+
+/-- The computed capacity readout attached to the lifted candidate. -/
+def computedQReading
+    (lift : ReflectedQRelaxedLocalizationLift827 rhoQ omega chi) : ZMod 59 :=
+  localizationResidueReadout827 rhoQ omega chi lift.selectedPlace lift.candidate
+
+theorem computedQReading_ne_zero
+    (lift : ReflectedQRelaxedLocalizationLift827 rhoQ omega chi) :
+    lift.computedQReading ≠ 0 :=
+  localizationResidueReadout827_ne_zero rhoQ omega chi
+    lift.selectedPlace lift.candidate lift.selectedLocalization_ne_zero
+
+/-- The first generated circular unit, embedded into the cyclotomic field,
+is the primal representative tested by the capacity row. -/
+noncomputable def primalRepresentative
+    [IsCyclotomicExtension {59} ℚ K]
+    (hζ : IsPrimitiveRoot (ζ : K) 59) : Kˣ :=
+  Units.map (algebraMap (𝓞 K) K)
+    (Credit.generatedUnit hζ firstLedgerNode : (𝓞 K)ˣ)
+
+/-- Outside the two rational primes 59 and 827, the literal support receipt
+and the fact that the primal entry is a global unit feed the existing
+both-units law directly. -/
+theorem outside_reading_eq_zero_of_both_units
+    [IsCyclotomicExtension {59} ℚ K]
+    (hζ : IsPrimitiveRoot (ζ : K) 59)
+    (lift : ReflectedQRelaxedLocalizationLift827 rhoQ omega chi)
+    {k : Type*} [Fintype k] [Field k]
+    (v : IsDedekindDomain.HeightOneSpectrum (𝓞 K))
+    (ctx : TameSymbol.Context 59 K k)
+    (ord_eq_valuation : ∀ a,
+      ctx.ord (Additive.ofMul a) = (v.valuationOfNeZero a).toAdd)
+    (hp : v ∉ placesOver59 K) (hq : v ∉ placesOver827 K) :
+    ctx.value (primalRepresentative hζ) lift.candidateRepresentative = 0 := by
+  apply ctx.both_units_silence
+  · rw [ord_eq_valuation]
+    exact congrArg Multiplicative.toAdd
+      (v.valuation_of_unit_eq
+        (Credit.generatedUnit hζ firstLedgerNode : (𝓞 K)ˣ))
+  · rw [ord_eq_valuation]
+    exact lift.representative_support v hp hq
+
+/-- The remaining local realization interface at the selected q-place.
+It identifies the explicit tame symbol with the already constructed
+localization/residue-functional comparison; it neither chooses the global
+lift nor hides the angular-component construction. -/
+structure SelectedTameComparison
+    [IsCyclotomicExtension {59} ℚ K]
+    (hζ : IsPrimitiveRoot (ζ : K) 59)
+    (lift : ReflectedQRelaxedLocalizationLift827 rhoQ omega chi)
+    (k : Type*) [Fintype k] [Field k]
+    (ctx : TameSymbol.Context 59 K k) : Prop where
+  ord_eq_valuation : ∀ a,
+    ctx.ord (Additive.ofMul a) =
+      (lift.selectedPlace.1.valuationOfNeZero a).toAdd
+  reading_eq_computed :
+    ctx.value (primalRepresentative hζ) lift.candidateRepresentative =
+      lift.computedQReading
+
+/-- Once the named local comparison is supplied, the selected actual tame
+reading is nonzero and equals the capacity-functional readout. -/
+theorem selected_tame_reading_ne_zero
+    [IsCyclotomicExtension {59} ℚ K]
+    (hζ : IsPrimitiveRoot (ζ : K) 59)
+    (lift : ReflectedQRelaxedLocalizationLift827 rhoQ omega chi)
+    {k : Type*} [Fintype k] [Field k]
+    (ctx : TameSymbol.Context 59 K k)
+    (comparison : SelectedTameComparison hζ lift k ctx) :
+    ctx.value (primalRepresentative hζ) lift.candidateRepresentative ≠ 0 := by
+  rw [comparison.reading_eq_computed]
+  exact lift.computedQReading_ne_zero
+
+end ReflectedQRelaxedLocalizationLift827
+
+end RelaxedProjectorAndLocalization
 
 /-! ## The honest q-relaxed target, with the wild value omitted -/
 

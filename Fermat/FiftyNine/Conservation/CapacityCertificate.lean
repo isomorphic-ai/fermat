@@ -335,6 +335,14 @@ private theorem reductionHom_generatedUnit (j i : LedgerNode) :
     exponentCycle_point, exponentCycle_point]
   rfl
 
+/-- Public comparison between the actual generated cyclotomic unit and the
+finite residue used by the capacity matrix.  Detector localization consumes
+this theorem; the matrix is not treated as an unrelated table. -/
+theorem reductionHom_generatedUnit_eq_edgeResidue (j i : LedgerNode) :
+    reductionHom hζ j (generatedUnit hζ i : (𝓞 K)ˣ) =
+      edgeResidue j i :=
+  reductionHom_generatedUnit hζ j i
+
 /-- The CM norm kills full-field torsion and squares every real unit. -/
 noncomputable def realNorm : (𝓞 K)ˣ →* (𝓞 K)ˣ where
   toFun u := u * NumberField.IsCMField.unitsComplexConj K u
@@ -488,6 +496,13 @@ private theorem residueFunctional_generatedUnit (j i : LedgerNode) :
   change correctedCharacter hζ j
     (Additive.ofMul (generatedUnit hζ i : (𝓞 K)ˣ)) = _
   exact correctedCharacter_generatedUnit hζ j i
+
+/-- Public residue-functional comparison for every generated matrix entry. -/
+theorem residueFunctional_generatedUnit_eq (j i : LedgerNode) :
+    residueFunctional hζ j
+        (unitClass (generatedUnit hζ i : (𝓞 K)ˣ)) =
+      generatedMatrix j i :=
+  residueFunctional_generatedUnit hζ j i
 
 /-- Evaluation of lattice vectors by residue functionals. -/
 def evaluationMatrix (u : LedgerNode → UnitLattice K)
