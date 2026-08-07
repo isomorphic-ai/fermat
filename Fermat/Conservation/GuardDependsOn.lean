@@ -68,4 +68,35 @@ elab "#guard_depends_on " source:ident ", " identity:ident : command => do
     throwError
       "no transitive value-dependency path from {sourceName} to {identityName}; declaration types are intentionally ignored"
 
+/-- The equivalence constructors which could package a middle object as a
+product.  The no-splitting audit intentionally treats every one of these as
+forbidden when `Prod` occurs in the same public declaration type. -/
+private def equivalenceTypeNames : Array Name :=
+  #[Name.mkSimple "Equiv", Name.mkSimple "MulEquiv",
+    Name.mkSimple "AddEquiv", Name.mkSimple "LinearEquiv"]
+
+/--
+`#guard_no_product_equiv_types_prefix Namespace` fails when a declaration
+under `Namespace` has a type mentioning both a product and an equivalence.
+
+This is the type-level companion to `#guard_depends_on`: it audits consumed
+interfaces rather than proof values.  The power-root cone uses it to make the
+no-Selmer-splitting rule mechanical.  Its deliberately conservative scope is
+appropriate there: the public exact-sequence API has no legitimate reason to
+return or accept any equivalence with a product.
+-/
+elab "#guard_no_product_equiv_types_prefix " p:ident : command => do
+  let env ← getEnv
+  let auditedPrefix := p.getId
+  let declarations :=
+    env.constants.toList
+      |>.filter fun entry => auditedPrefix.isPrefixOf entry.1
+  for (declaration, info) in declarations do
+    let used := info.type.getUsedConstants
+    let mentionsProduct := used.contains ``Prod
+    let mentionsEquivalence := equivalenceTypeNames.any used.contains
+    if mentionsProduct && mentionsEquivalence then
+      throwError
+        "{declaration} exposes or consumes an equivalence with a product; the audited exact-sequence cone must retain its unsplit middle"
+
 end Fermat.Conservation.GuardDependsOn
