@@ -15,6 +15,11 @@ permits neutral rerouting between stock and credit.
 Transfers compose.  Over `ℕ`, a positive transfer strictly lowers the sum of
 the stock and credit columns; an iterable path of positive transfers therefore
 supplies exactly the `hstep` consumed by the existing conservation floor.
+
+In the seven-axis reading, structure supplies the admissible routes, focus
+supplies their analytic weights, alignment links the accounts, and agency
+executes the movement.  `Transfer` spans those four roles; focus, rather than
+the transaction carrier itself, is axis 3.
 -/
 import Fermat.Conservation.Floor
 import Fermat.Conservation.Ledger

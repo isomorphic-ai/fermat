@@ -197,8 +197,8 @@ statement or proof strategy is changed.
 | `bocksteinPowerRootReceiptObservation` | Depth correction erased implicitly → NAMED OBSERVATION | The formal integral lift records `r₀ + 58 r₁ = (r₀ - r₁) + 59 r₁`; reduction kills the `59 r₁` receipt by the proved first-layer torsion law.  No nonzero arithmetic Bockstein, depth theorem, or two-2s transport is asserted. |
 | Local Tate pairing and adjoint law | ABSENT → INTERFACE | `TatePairing.PlaceIndexedLocalPairing` retains the local readings as a place-indexed `Finsupp` and states `pair_v (a • x) y = pair_v x (a# • y)` using the existing `InvolutiveBase.hash`; no arithmetic pairing value is manufactured. |
 | Global reciprocity and conservation tunnel | ABSENT → INTERFACE law / PROVEN wiring | `TatePairing.GlobalReciprocityLaw` is the class-field-theory interface.  From that law, `PlaceLedger.toLedger`, `toVacuumTransfer`, and `reciprocity_L1_conservation` compile its zero sum through `Ledger`, `Transfer`, and `IsoConserveBridge`. |
-| Selected relation-(7a) arithmetic inputs | Unnamed missing producer → THREE NAMED INTERFACES | `gauge_eq_local_tate_pairing`, `transverse_detector_exists`, and `bank_silences_other_places` are typed, falsifiable targets.  The selected bank receipts used by the audit are proved, but their localization and placewise orthogonality guards are not. |
-| Conditional Tate master implication | ABSENT → PROVEN (conditional) | The pairing laws plus exactly the three named arithmetic hypotheses force the difference gauge to vanish; `differenceGauge_eq_zero_iff_vandiverSevenA` then yields `VandiverSevenA 0 1`.  This is not an unconditional proof of (7a). |
+| Selected relation-(7a) arithmetic inputs | Unnamed missing producer → STOKES KERNEL EXPOSED / ONE NONDEGENERACY FRONTIER | The existing gauge comparison and detector-existence interfaces seat the selected Selmer class against the class-group difference gauge.  The constructed away rows plus reciprocity now prove `Lambda x = 0`; the new single frontier `wild_detector_faithful` says `ker Lambda = 0`.  The Selmer/class seating remains explicit and is not inferred from faithfulness. |
+| Conditional Tate master implication | ABSENT → PROVEN (conditional), now factored through Stokes | `Lambda_apply_eq_zero_of_reciprocity` kills the complete wild detector functional.  Evaluating it at the shared detector and using the existing gauge comparison yields the same conditional `VandiverSevenA 0 1`.  This is not an unconditional proof of (7a). |
 
 ## N59 assembly summary
 
@@ -212,7 +212,7 @@ statement or proof strategy is changed.
 | Selected fold and principalization consumers | ABSENT → LITERAL (Transfer), conditional on supplied (7a) | Derived (7d) and odd-torsion netting are accounted; only the missing producer is a seam. |
 | Selected common-action stage | Selmer exactness SEAM → character-allocation SEAM at a fixed reflected pair | The vendored sequence and its additive realization are unconditional.  Once a reflected pair is supplied, the typed gauge attempt retains the class obstruction at the first missing character service; the selected cone itself does not manufacture that pair, and rho remains a later conditional wall. |
 | Selected PowerRoot cube test | Unclassified comparison → TYPED OUTCOME 4 | Generic localization naturality is proved, but the actual `r₀,r₁` arise from distinct allocated root inputs and the selected comparison is wild reflected-dual Tate data.  Stage 3 therefore retains the wild route rather than replacing it with a generic defect. |
-| Selected Tate route to (7a) | Unnamed Lemma-I seam → PROVEN conditional implication over three INTERFACES | The compiled route consumes `gauge_eq_local_tate_pairing`, `transverse_detector_exists`, and `bank_silences_other_places`; it concludes (7a) only under all three, with no endpoint or transformer. |
+| Selected Tate route to (7a) | Unnamed Lemma-I seam → STOKES KERNEL plus one faithfulness frontier | The complete detector `Lambda` is the existing 59-local pairing family.  Tame/away vanishing and reciprocity prove `Lambda x = 0`; `wild_detector_faithful : ker Lambda = 0` is the remaining nondegeneracy interface.  The older conditional (7a) theorem still consumes the explicit Selmer/class gauge comparison, with no endpoint or transformer. |
 | FermatState.StockCreditTransformer | ABSENT → SEAM | No state-linked positive successor transaction is constructed. |
 
 The guarded transformer probes remain evidence of type boundaries, not
@@ -286,29 +286,41 @@ classes to vanish on degenerate carriers.  Its retained difference-gauge
 value is the open (7a) class `r₀ + 58 • r₁`; it is neither a proof that the
 corner ideal is the unit ideal nor a named nonunit common factor.
 
-### 2. Lemma I / relation (7a): the conditional Tate route
+### 2. Lemma I / relation (7a): nondegeneracy of the Stokes detector
 
 The current seam is no longer an unnamed request for a class-group
-transaction.  It is the following compiled route with every boundary marked
-explicitly.
+transaction or a request to find another conservation law.  Reciprocity is
+already the Stokes law: after the tame faces vanish, it puts the remaining
+difference-mode potential in the kernel of the wild detector.  The frontier
+is to prove that this detector is nondegenerate.  Every carrier boundary is
+marked explicitly below.
 
 | Component | Status | Exact boundary |
 | --- | --- | --- |
 | `TatePairing.character_mul_reflectedCharacter` and finite-support projections | **PROVEN** | The existing `#` machinery proves `chi * chi* = omega`, and the `Finsupp` carrier proves that every displayed family of local readings has finite support. |
 | `TameSymbol.Context`, its explicit symbol, and the two seated Selmer legs | **PROVEN**, relative to named local realization data | `TameSymbol` constructs the degree-`p` symbol in `ZMod p` and proves bilinearity, antisymmetry, Steinberg, moved-place/fixed-place equivariance, both-units silence, `p`-divisible-valuation silence, and Kummer-quotient descent.  `SelmerEigenspace.SelmerChi` and `DOmegaSelmerChiStar` are literal eigenspaces in Mathlib's empty-support `selmerGroup`; the angular component/primitive-root context, the actual `Delta` representation, and the reflected character-dual equivalence remain named realization seams rather than providers. |
 | `TamePlacePairing.WildLocalInterface.toPlaceIndexedLocalPairing` and `Seated.Realization.ofWild` | **PROVEN at tame places** / **INTERFACE at the place above 59** | The only supplied local reading is one bilinear, `#`-adjoint value at the distinguished wild place.  The complete `Finsupp` family is constructed as that single column.  On the literal seated Selmer eigenspaces, Mathlib's `valuationOfNeZeroMod = 1` receipt becomes `p`-divisibility, so every tame row is proved equal to the explicit quotient-level symbol and is zero.  No tame reading or finite-support field remains supplied. |
+| `H_FLT`, `pair_59`, and `Lambda` | **PROVEN definitions** | `H_FLT` is honestly the selected primal Selmer carrier, and `Lambda : H_FLT →+ (DOmegaSelmerChiStar →+ ZMod 59)` is definitionally the existing wild reading.  `Lambda_apply` identifies evaluation with `pairAt` at the distinguished place.  This does not manufacture a map from the Selmer carrier to `AllocatedClass K`; `GaugeComparison` remains that explicit seating boundary. |
 | `TatePairing.GlobalReciprocityLaw` | **INTERFACE** | The global sum-zero theorem is the missing class-field-theory input. |
 | `PlaceLedger.toLedger`, `PlaceLedger.toVacuumTransfer`, and `GlobalReciprocityLaw.reciprocity_L1_conservation` | **PROVEN** | Once reciprocity is supplied, the place-indexed sum is literally carried through `Ledger`, a zero-spent `Transfer`, and the `IsoConserveBridge` L1 identity. |
+| `Lambda_apply_eq_zero_of_reciprocity` | **PROVEN Stokes theorem**, conditional only on the named reciprocity law | Every non-wild column is zero by the constructed single support.  Applying reciprocity for every reflected-dual detector proves the functional equality `Lambda x = 0`, not merely one scalar coordinate. |
+| `wild_detector_faithful` | **SINGLE FRONTIER INTERFACE** | The exact target is `(Lambda wild).ker = ⊥`: the wild detector family separates the remaining potential.  Poitou--Tate nondegeneracy is its natural arithmetic source.  If `H_FLT` has finrank one, `wild_detector_faithful_of_finrank_one` proves that one nonzero transverse reading suffices.  No inhabitant is asserted. |
 | `gauge_eq_local_tate_pairing` | **INTERFACE** | One selected detector and a unit must identify its 59-local reading with the computed difference gauge and reflect zero scalar reading back to zero of that retained class-group gauge. |
 | `transverse_detector_exists` | **INTERFACE** | Poitou--Tate must construct one global detector with the lamp-selected auxiliary place `q`.  Its reading support is no longer a detector premise: the constructed pairing already has only the distinguished wild column.  The same detector witness is consumed by the gauge comparison and the proved audit. |
 | Capacity, bounded Sinnott, funded flow/repayment, and the statewise (7d) fold | **PROVEN** | These are genuine selected bank receipts and are retained in the place-by-place audit rather than redescribed as local theorems. |
 | `LocalOrthogonalityGuard` | **RETAINED where it binds; not needed for a proved tame row** | The generic guard remains available and explicit.  Stage 1 does not turn a bank receipt into a localization theorem: instead it computes the actual tame symbol on the seated quotient classes.  In the selected single-wild-column model there is consequently no remaining away row on which an orthogonality guard binds. |
 | `bank_silences_other_places` | **PROVEN** | The audit contains the already proved capacity, bounded-Sinnott, plus-class-number, deep-flow, repayment, and (7d) receipts.  Its auxiliary and every other non-59 verdict now follow from the constructed single support, whose tame realization is justified by the two Selmer valuation receipts; the former auxiliary/other orthogonality fields have been removed at their source. |
-| Conditional master implication | **PROVEN** | Given the one 59-local interface, global reciprocity, detector existence, and the unit-valued gauge comparison, the proof constructs the bank audit internally, kills every non-59 column, uses reciprocity to kill the 59-column, and applies `differenceGauge_eq_zero_iff_vandiverSevenA` to obtain exactly `pair.ledger.VandiverSevenA 0 1`.  There is no `hBank` premise. |
+| Conditional master implication | **PROVEN** | Given the one 59-local interface, global reciprocity, detector existence, and the unit-valued gauge comparison, the proof first obtains `Lambda x = 0` from the Stokes theorem, evaluates it at the shared detector, and applies `differenceGauge_eq_zero_iff_vandiverSevenA` to obtain exactly `pair.ledger.VandiverSevenA 0 1`.  There is no `hBank` premise. |
 
-Thus the public result is an implication, not a new producer of the wild
-local reading, reciprocity, detector, or gauge-comparison inputs.  There is
-no unconditional
+Thus conservation has already done its job: tame cancellation plus
+reciprocity proves that the selected potential lies in the Stokes detector's
+kernel.  The frontier is the nondegeneracy theorem `ker Lambda = 0`, not a
+second conservation identity.  The public result remains an implication,
+not a new producer of the wild local reading, reciprocity, detector,
+faithfulness, or gauge-comparison inputs.  In particular, detector
+faithfulness lives on `SelmerChi`, while relation (7a) lives in
+`AllocatedClass K`; the existing zero-reflecting gauge comparison is still
+required to cross that typed boundary.  There is no unconditional
 `StateLinkedIdealPair.vandiverSevenA`, no unconditional (7a) transaction,
 and no endpoint or transformer in this route.
 
@@ -435,9 +447,11 @@ there using the plus-class-number coprimality, and extends back to identify
 the norm with the product of the two conjugate ideals.  This is not an
 internal transfer between the two class accounts.  The swap-quotient
 computation by itself neither requires nor excludes a lamp or Stickelberger
-third view for the open difference-mode (7a); such a transverse route needs
-the missing common arithmetic representation and remains a named interface,
-not a theorem.
+third view for the open difference-mode (7a).  The existing pairing packages
+all such transverse readings as `Lambda`; the precise frontier is now
+nondegeneracy of this Stokes detector on the remaining potential, together
+with the still-explicit Selmer/class seating.  Neither is asserted as a
+theorem.
 
 There are also two unrelated readings of the numeral two which must not be
 conflated.  `DepthCertificate.depthTwoCertificate` measures Bernoulli

@@ -1,5 +1,37 @@
 # N59 conservation findings
 
+## 2026-08-07 — COHOMOLOGY-LEDGER discovery: reciprocity is Stokes; faithfulness is the frontier
+
+- The honest remaining-potential carrier on the existing Tate surface is the
+  primal `SelmerChi`, not `AllocatedClass K`.  The wild interface already
+  exposes exactly the detector map
+  `SelmerChi →+ (DOmegaSelmerChiStar →+ ZMod 59)`, so `H_FLT`, `pair_59`, and
+  `Lambda` introduce no parallel pairing or invented dual carrier.
+- The single-wild-column construction makes every away reading zero for
+  every reflected-dual detector.  Global reciprocity therefore proves the
+  functional equality `Lambda x = 0`.  This is the arithmetic Stokes reading:
+  tame faces cancel and the remaining wild face carries zero net flux.
+- The single new frontier is `wild_detector_faithful`, stated literally as
+  `(Lambda wild).ker = ⊥`.  It is not inhabited in the repository;
+  Poitou--Tate nondegeneracy is its natural source.  Over a one-dimensional
+  `ZMod 59` potential, one nonzero transverse reading is enough to prove the
+  full kernel statement.
+- Detector faithfulness and the selected class-group zero-reflection law are
+  distinct typed obligations.  Faithfulness kills an `x : SelmerChi`; the
+  relation-(7a) gauge lives in `AllocatedClass K`.  Because the current cone
+  has no homomorphism from the former to the latter, the existing
+  `GaugeComparison.reflects_selected_zero` remains explicit.  Consequently
+  the Stokes factorization produces no unconditional (7a), endpoint, or
+  transformer.
+- Fabian's axis-3 correction is documentation-only: structure supplies
+  admissible routes, focus supplies their analytic weights, alignment links
+  accounts, and agency executes movement.  `Transfer` spans those roles;
+  focus itself is axis 3.
+- Process scans found no competing Lean/Lake build before verification.  The
+  targeted `TateBridge` and selected `Verification` builds are green; their
+  only diagnostics are the pre-existing `CapacityCertificate` warnings and
+  `TameSymbol` informational output.
+
 ## 2026-08-06 — TATE-BRIDGE discovery: the bank reaches the audit, not localization
 
 - The required process scans found no competing Lean/Lake build.  Direct

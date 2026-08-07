@@ -18,6 +18,7 @@ global reciprocity remain explicit interfaces.  No unconditional relation
 import Fermat.Conservation.TamePlacePairing
 import Fermat.FiftyNine.Conservation.CommonActionStage
 import Fermat.FiftyNine.Conservation.Instance
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 
 open scoped nonZeroDivisors NumberField
 
@@ -70,6 +71,159 @@ reading at the distinguished place above `59`. -/
 abbrev WildLocalInterface (distinguishedPlace : Place) :=
   TamePlacePairing.WildLocalInterface 59 Delta omega chi Place
     SelmerChi DOmegaSelmerChiStar distinguishedPlace
+
+/-! ## The cohomological Stokes detector -/
+
+/-- The remaining Fermat potential carrier exposed by the existing pairing
+surface.  In the conditional master theorem the selected `x : H_FLT` is
+seated against the class-group difference gauge by `GaugeComparison`; this
+abbreviation does not manufacture a map from the Selmer carrier to
+`AllocatedClass K`. -/
+abbrev H_FLT (M : Type uSelmer) := M
+
+/-- The honest additive detector dual exposed by the reflected Selmer leg.
+No identification with a larger algebraic or Pontryagin dual is asserted. -/
+abbrev WildDetectorDual (D : Type uDual) [AddCommGroup D] :=
+  D →+ ZMod 59
+
+/-- The distinguished conductor-59 pairing, curried as the complete family
+of wild detector readings. -/
+def pair_59
+    {distinguishedPlace : Place}
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace) :
+    H_FLT SelmerChi →+ WildDetectorDual DOmegaSelmerChiStar :=
+  wild.reading
+
+/-- The Stokes detector on the remaining difference-mode potential. -/
+def Lambda
+    {distinguishedPlace : Place}
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace) :
+    H_FLT SelmerChi →+ WildDetectorDual DOmegaSelmerChiStar :=
+  pair_59 wild
+
+omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
+/-- Evaluation of `Lambda` is exactly the existing pairing at the
+distinguished place above 59. -/
+@[simp] theorem Lambda_apply
+    {distinguishedPlace : Place}
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (x : H_FLT SelmerChi) (y : DOmegaSelmerChiStar) :
+    Lambda wild x y =
+      wild.toPlaceIndexedLocalPairing.pairAt distinguishedPlace x y :=
+  (wild.pairAt_distinguished x y).symm
+
+omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
+/-- **PROVEN arithmetic Stokes theorem.**  The complete pairing was built
+with only its wild column: every tame/away boundary reading is zero.  Global
+reciprocity therefore says that the wild face carries zero net flux, i.e.
+`Lambda x = 0` as a functional on every reflected-dual detector. -/
+theorem Lambda_apply_eq_zero_of_reciprocity
+    {distinguishedPlace : Place}
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (reciprocity : TatePairing.GlobalReciprocityLaw
+      wild.toPlaceIndexedLocalPairing)
+    (x : H_FLT SelmerChi) :
+    Lambda wild x = 0 := by
+  ext y
+  rw [Lambda_apply]
+  exact reciprocity.pairAt_eq_zero_of_other_places
+    distinguishedPlace x y
+      (fun v hv => wild.pairAt_eq_zero_of_ne hv x y)
+
+/-- **SINGLE FRONTIER INTERFACE.**  The wild detector family separates the
+remaining potential exactly when its kernel is zero.  Poitou--Tate
+nondegeneracy is the natural arithmetic source of this statement; no value of
+the interface is supplied here.
+
+When `H_FLT` has finrank one, the theorem
+`wild_detector_faithful_of_finrank_one` below reduces this family-level
+condition to one transverse detector with a nonzero reading. -/
+def wild_detector_faithful
+    {distinguishedPlace : Place}
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace) : Prop :=
+  (Lambda wild).ker = ⊥
+
+omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
+/-- Faithfulness consumes a zero detector reading and kills the underlying
+potential.  It does not by itself identify that Selmer potential with the
+class-group relation-(7a) gauge. -/
+theorem eq_zero_of_wild_detector_faithful
+    {distinguishedPlace : Place}
+    {wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace}
+    (faithful : wild_detector_faithful wild)
+    {x : H_FLT SelmerChi} (hx : Lambda wild x = 0) :
+    x = 0 := by
+  have hinjective : Function.Injective (Lambda wild) :=
+    (AddMonoidHom.ker_eq_bot_iff (Lambda wild)).mp faithful
+  apply hinjective
+  simpa using hx
+
+omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
+/-- Stokes vanishing followed by the single faithfulness frontier kills the
+selected potential.  The separate `GaugeComparison` remains necessary before
+this can be read as a statement about the class-group difference gauge. -/
+theorem potential_eq_zero_of_stokes_and_faithful
+    {distinguishedPlace : Place}
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (reciprocity : TatePairing.GlobalReciprocityLaw
+      wild.toPlaceIndexedLocalPairing)
+    (faithful : wild_detector_faithful wild)
+    (x : H_FLT SelmerChi) :
+    x = 0 :=
+  eq_zero_of_wild_detector_faithful faithful
+    (Lambda_apply_eq_zero_of_reciprocity wild reciprocity x)
+
+omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
+/-- In a one-dimensional remaining potential, one nonzero transverse
+reading makes the complete wild detector family faithful.  This is the
+dimension-one reduction promised by the frontier description: every class is
+a scalar multiple of the class seen by that one detector. -/
+theorem wild_detector_faithful_of_finrank_one
+    {distinguishedPlace : Place}
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    [Module (ZMod 59) SelmerChi]
+    (hDim : Module.finrank (ZMod 59) (H_FLT SelmerChi) = 1)
+    {x₀ : H_FLT SelmerChi} {y₀ : DOmegaSelmerChiStar}
+    (htransverse : Lambda wild x₀ y₀ ≠ 0) :
+    wild_detector_faithful wild := by
+  rw [wild_detector_faithful,
+    AddMonoidHom.ker_eq_bot_iff]
+  intro a b hab
+  have hx₀ : x₀ ≠ 0 := by
+    intro hx
+    subst x₀
+    exact htransverse (by simp)
+  have hLambdaX₀ : Lambda wild x₀ ≠ 0 := by
+    intro hx
+    apply htransverse
+    have hxy := DFunLike.congr_fun hx y₀
+    simpa using hxy
+  have habZero : Lambda wild (a - b) = 0 := by
+    rw [map_sub, hab, sub_self]
+  obtain ⟨c, hc⟩ :=
+    exists_smul_eq_of_finrank_eq_one hDim hx₀ (a - b)
+  have hcLambda : c • Lambda wild x₀ = 0 := by
+    rw [← ZMod.map_smul (Lambda wild) c x₀, hc, habZero]
+  have hcZero : c = 0 :=
+    (smul_eq_zero.mp hcLambda).resolve_right hLambdaX₀
+  apply sub_eq_zero.mp
+  rw [← hc, hcZero, zero_smul]
 
 /-! ## The selected supporter-prime lamp -/
 
@@ -445,17 +599,14 @@ theorem vandiverSevenA_of_tate_bridge
   change Nonempty (GaugeComparison pair distinguishedPlace wild
     placePrime x d detector) at hGauge
   rcases hGauge with ⟨comparison⟩
-  let audit := bank_silences_other_places pair distinguishedPlace wild
-    placePrime x d hDetector
-  have hother : ∀ v, v ≠ distinguishedPlace →
-      wild.toPlaceIndexedLocalPairing.pairAt v x detector.detector = 0 := by
-    intro v hv
-    exact audit.away_reading_eq_zero v hv
+  have hLambda : Lambda wild x = 0 :=
+    Lambda_apply_eq_zero_of_reciprocity wild reciprocity x
   have hlocal :
       wild.toPlaceIndexedLocalPairing.pairAt
         distinguishedPlace x detector.detector = 0 :=
-    reciprocity.pairAt_eq_zero_of_other_places
-      distinguishedPlace x detector.detector hother
+    by
+      rw [← Lambda_apply]
+      exact DFunLike.congr_fun hLambda detector.detector
   have hgauge := comparison.gauge_eq_zero_of_local_reading_eq_zero hlocal
   exact
     (CommonActionStage.StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA
