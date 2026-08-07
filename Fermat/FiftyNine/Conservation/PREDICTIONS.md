@@ -3,6 +3,31 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-07 — cohomological Stokes detector prediction
+
+- The existing shared-detector master should repackage as a linear map
+  `Lambda` on the remaining difference-mode potential, with evaluation
+  given by the already-seated conductor-59 pairing.  I expect the main type
+  friction to be choosing the honest dual carrier: the pairing API is
+  additive and finite-support-valued, while the stage carrier may expose the
+  candidate only through a selected gauge/readout.
+- Tame vanishing plus global reciprocity should prove `Lambda x = 0` for the
+  master theorem's selected class without proving `x = 0`.  The sole new
+  frontier must therefore be the explicit injectivity statement
+  `ker Lambda = 0`, naturally supplied by Poitou--Tate nondegeneracy.  No
+  unconditional (7a) will be inferred from the kernel statement unless that
+  frontier hypothesis is supplied.
+- If the remaining potential has finrank one, one nonzero transverse
+  functional should suffice; I expect this to be recorded as a generic
+  dimension-reduction theorem or precise docstring, depending on how much
+  finite-dimensional structure the existing stage exposes.
+- `BOUNDARY-MAP.md` should consequently stop asking for another conservation
+  law and name nondegeneracy of the Stokes detector as the frontier.  The
+  axis-3 correction will touch docstrings only: structure supplies routes,
+  focus supplies analytic weights, and transfer spans structure, focus,
+  alignment, and agency.  No refactor, endpoint, transformer, or
+  unconditional relation (7a) is predicted.
+
 ## 2026-08-06 — Tate bridge prediction
 
 - Of the three named arithmetic targets, `bank_silences_other_places` is

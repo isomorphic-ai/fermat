@@ -546,3 +546,44 @@ Stage-1 Lean source.
   should likewise gain a constructor whose tame fields are derived and whose
   59-local orthogonality input remains explicit.  Global reciprocity,
   unconditional (7a), an endpoint, and a transformer remain out of scope.
+
+## COHOMOLOGY-LEDGER prediction — 2026-08-07
+
+Recorded after reading `COHOM-TASK.md` and the collaboration protocol, and
+before editing or compiling the cohomology implementation.
+
+- **W1 executable cell.**  The range--kernel inclusion forced by
+  `dNext.comp dPrev = 0` should make `H = Z / B` executable without choosing
+  a complement.  The finrank equation should be a composition of quotient
+  finrank and rank--nullity.  I expect the resulting `Ledger ℕ` value to need
+  an explicit reassociation/rewrite proof: its four columns will reduce
+  definitionally, but the conservation field itself is unlikely to be
+  `rfl`.  Transport through `IsoConserveBridge.toColumns` should then be
+  definitional at the column level and theorem-driven at L1.
+- **W2 canonical filtration.**  The primary object should retain the chain
+  `0 ≤ B ≤ Z ≤ C` and the two quotient sequences, with no section,
+  retraction, complement, or product equivalence.  Mathlib quotient
+  representatives are the predicted resistance: the map `Z → Z/B` is
+  canonical, while spelling its kernel/range and the identification
+  `C/Z ≃ range dNext` may require explicit subtype and quotient lifts.
+  `finrank` should be the first easy observer.  Finite length and
+  `p`-cardinality valuation will be added only where the available exactness
+  APIs make them honest consequences rather than new premises.
+- **W2 generic invariant.**  I expect the generic ledger identity to need
+  only two additivity equations, one for each short exact sequence.  It
+  should therefore be stated independently of vector spaces; the exact
+  filtration supplies the equations, the K0-style ledger combines them,
+  and each numeric observer is a progressively lossier specialization.
+- **W3 priority prediction.**  Exact forms vanish on cycles should land as
+  direct evaluation of `dNext.comp dPrev = 0`.  Finite Euler--Poincare should
+  land by summing the local finrank ledgers and cancelling adjacent boundary
+  ranks.  Homotopy invariance is predicted to land if maps and homotopies are
+  represented at the same explicit cell level; otherwise its honest stopping
+  point will be the quotient well-definedness obligation.  Short-exact-
+  sequence Euler additivity is the most budget-sensitive item and will be
+  attempted only after the first three are complete and green.
+- **Audit prediction.**  The existing declaration-type no-splitting scanner
+  should extend cleanly to the new cohomology namespace.  Proof-dependency,
+  forbidden endpoint/transformer/unconditional-(7a), generic-literal, and
+  standard-axiom guards should remain green without adding a splitting
+  witness or an arithmetic hypothesis.
