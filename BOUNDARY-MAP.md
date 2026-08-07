@@ -160,29 +160,41 @@ The conditional permit declarations are LITERAL even though their (7a)
 argument is a seam premise.  Only production of that premise from the
 canonical state belongs to the frontier.
 
-## Vendored Selmer class sequence and common-action boundary
+## Vendored PowerRoot cube and common-action boundary
 
-The sequence port is sourced from
+The generic obstruction and its Selmer integration are sourced from
 [`fabianx-ai/mathlib4` pull request 1](https://github.com/fabianx-ai/mathlib4/pull/1),
-head commit `6c01b3a6a13de72eabd868ca50d743f43888af92`.  Its sole source file,
-`Mathlib/RingTheory/DedekindDomain/SelmerGroup.lean`, has SHA-256
-`37d78b8e5b3f9b757d1eb8b33286680501820aba250644a407e36381ee34c4d2`.
-`Fermat/Conservation/SelmerSequence.lean` records the complete port delta:
-ordinary imports and omitted module export-control commands; repeated
-file-local notation/options; the pinned names `MonoidHom.restrict` and
-`Set.mem_setOf_eq`; and omission of an unrelated four-line, API-neutral
-change in the pre-existing upstream valuation proof.  No theorem statement
-or proof strategy is changed.
+generator commit `4ea7450c8a5844417866addb7fba766275a1945a` and integration/head
+commit `889be7a3fee66e6630d25332a501409fa35d8590`.
+`Mathlib/GroupTheory/PowerRootObstruction.lean` is byte-identical at those
+two commits and has SHA-256
+`44c80744a6c74bf4793cb45c7289f54512b43e6326c0ef46aac308f9cfb31d25`.
+The integrated `Mathlib/RingTheory/DedekindDomain/SelmerGroup.lean` has
+SHA-256
+`a6fb493fdaf8686eed654b4b0f7abe84ef14d4198304ef4dcf9f8160c8afd2f6`.
+`Fermat/Conservation/PowerRootObstruction.lean` and
+`Fermat/Conservation/SelmerSequence.lean` record their complete compatibility
+deltas: ordinary imports and omitted module export-control commands; the
+pinned `MonoidHom.restrict` spelling; repeated file-local notation/options;
+one explicit quotient type argument required by Lean 4.31; and omission of
+unrelated pre-existing upstream proof-engineering changes.  No theorem
+statement or proof strategy is changed.
 
 | Declarations/checklist item | Status, before → after | Final account |
 | --- | --- | --- |
-| `IsDedekindDomain.selmerGroup.toClass`, `toClass_ker`, `toClass_range` | ABSENT at the pin → LITERAL (vendored theorem surface) | The explicit root-ideal class map has kernel equal to `fromUnitLift.range` and range equal to the class-group power-map kernel. |
+| `PowerRoot.root`, `root_mul`, `root_shift`, `obstruction`, `obstruction_ker`, `obstruction_range` | ABSENT at the pin → LITERAL (provenance-pinned generator) | The route-neutral generator constructs the unique root and its cokernel obstruction; representative shift, multiplicativity, kernel, and range are proved generically. |
+| `PowerRootExactSequence.principalIdealComplex` and `principalIdealExtensionClass` | ABSENT → LITERAL, unsplit | The actual arrow `Kˣ → (FractionalIdeal R⁰ K)ˣ` is a two-term complex.  Its `pi₁` is canonically `Rˣ`, its `pi₀` is canonically `ClassGroup R`, and the Selmer middle retains the exact unit/class extension without a product equivalence.  A declaration-type audit mechanically rejects any public product-splitting equivalence. |
+| `IsDedekindDomain.selmerGroup.toClass`, `toClass_ker`, `toClass_range` | Hand-written root-ideal implementation → LITERAL generic derivation | `toClass` is now the instantiated `PowerRoot.obstruction`; its kernel is `fromUnitLift.range` and its range is the class-group power-map kernel. |
+| `PowerRootNaturality` Delta, reflection, and localization faces | ABSENT → PROVEN generically / NAMED INTERFACE where carriers are absent | Every commuting arrow square transports roots and obstructions; `root_mul` and `root_shift` are exposed as the multiplication and representative-change engines.  Delta basis actions and reflected equivalences are typed, while localization names the missing local carrier and its exact square law. |
 | `CommonActionStage.WithheldSelmerClassSequenceRealization` | Named SEAM proposition → THEOREM | `selmerClassProjection` is the additive `toClass` restricted to `ClassPTorsion`; middle exactness and surjectivity use the two vendored theorems. |
 | Selected `StrictRouteBoundary.sequence` | Supplied field → LITERAL specialization | The field is removed; `kummerBinding` is tied directly to the canonical realization at `p = 59`. |
 | Selected allocated Selmer obstruction | Supplied value plus equality → DERIVED when the character pair/allocation is supplied | `StrictRouteBoundary.selmerObstruction` is definitionally `allocatedSelmerObstruction` from the guarded exact pair, both directional class allocations, and roots `0,1`; it is no longer separately stored. |
 | Both Kummer character allocations | ABSENT → SEAM (first remaining item at a fixed reflected pair) | No `KummerPairedBinding.chi`/`.chiStar` producer or selected character projector exists.  For one supplied `ReflectedExactFilteredPair`, `CharacterDualAllocationTarget` asks for those allocations, the separate reflected-dual allocation, and readbacks preserving the actual roots; it does not quantify over every possible carrier. |
 | Omega-dual laws, both integral guards, both beta compatibilities | ABSENT → SEAM (downstream checklist) | The structures state the required equivalences/action laws, integral ideal plus sharp law, and state/conversion equalities, but the selected cone has no producer.  Supplying a reflected pair to inspect the earlier character seam already supplies that pair's omega-dual laws; it is a parameter of the conditional result, not an unconditional construction. |
 | Selected typed outcome | Unconditional `selmerClassExactness` localized wall → fixed-pair `characterDualAllocation` localized wall | The obsolete exactness wall is removed.  The character wall and typed result are conditional on one supplied reflected exact pair, because the selected cone names no concrete character carrier.  The later `strictRouteRhoWall` remains valid only behind a complete `StrictRouteBoundary`. |
+| `LinkingInterfaces.ArithmeticRepresentation.rho` | Pair/class action → principal-arrow action | `rho` is a monoid action by equivariant endomorphisms of the actual principal-ideal arrow, so its root and obstruction squares are forced by generic naturality.  The route action on the reflected Selmer pair remains separately named `selmerAction`; the summit does not infer it from a class shadow. |
+| `GaugeAsNaturalityDefect59.gaugeNaturalityOutcome59` | Four candidates → **OUTCOME 4** | The two routes of a genuine PowerRoot localization face start from one divisible class and commute.  The implemented selected readings instead retain distinct ledger sources `0` and `1`, while the comparison route is the reflected-dual wild Tate reading.  Thus the constructed selected route is not that same-input naturality defect.  This is a source-provenance result, not a universal claim that unrelated scalar values cannot coincide. |
+| `bocksteinPowerRootReceiptObservation` | Depth correction erased implicitly → NAMED OBSERVATION | The formal integral lift records `r₀ + 58 r₁ = (r₀ - r₁) + 59 r₁`; reduction kills the `59 r₁` receipt by the proved first-layer torsion law.  No nonzero arithmetic Bockstein, depth theorem, or two-2s transport is asserted. |
 | Local Tate pairing and adjoint law | ABSENT → INTERFACE | `TatePairing.PlaceIndexedLocalPairing` retains the local readings as a place-indexed `Finsupp` and states `pair_v (a • x) y = pair_v x (a# • y)` using the existing `InvolutiveBase.hash`; no arithmetic pairing value is manufactured. |
 | Global reciprocity and conservation tunnel | ABSENT → INTERFACE law / PROVEN wiring | `TatePairing.GlobalReciprocityLaw` is the class-field-theory interface.  From that law, `PlaceLedger.toLedger`, `toVacuumTransfer`, and `reciprocity_L1_conservation` compile its zero sum through `Ledger`, `Transfer`, and `IsoConserveBridge`. |
 | Selected relation-(7a) arithmetic inputs | Unnamed missing producer → THREE NAMED INTERFACES | `gauge_eq_local_tate_pairing`, `transverse_detector_exists`, and `bank_silences_other_places` are typed, falsifiable targets.  The selected bank receipts used by the audit are proved, but their localization and placewise orthogonality guards are not. |
@@ -199,6 +211,7 @@ or proof strategy is changed.
 | Selected gauge quotient | Transfer-ABSENT → LITERAL (Ledger/Transfer) | The full matrix debit is transferred to conversion with stock fixed. |
 | Selected fold and principalization consumers | ABSENT → LITERAL (Transfer), conditional on supplied (7a) | Derived (7d) and odd-torsion netting are accounted; only the missing producer is a seam. |
 | Selected common-action stage | Selmer exactness SEAM → character-allocation SEAM at a fixed reflected pair | The vendored sequence and its additive realization are unconditional.  Once a reflected pair is supplied, the typed gauge attempt retains the class obstruction at the first missing character service; the selected cone itself does not manufacture that pair, and rho remains a later conditional wall. |
+| Selected PowerRoot cube test | Unclassified comparison → TYPED OUTCOME 4 | Generic localization naturality is proved, but the actual `r₀,r₁` arise from distinct allocated root inputs and the selected comparison is wild reflected-dual Tate data.  Stage 3 therefore retains the wild route rather than replacing it with a generic defect. |
 | Selected Tate route to (7a) | Unnamed Lemma-I seam → PROVEN conditional implication over three INTERFACES | The compiled route consumes `gauge_eq_local_tate_pairing`, `transverse_detector_exists`, and `bank_silences_other_places`; it concludes (7a) only under all three, with no endpoint or transformer. |
 | FermatState.StockCreditTransformer | ABSENT → SEAM | No state-linked positive successor transaction is constructed. |
 
@@ -225,22 +238,29 @@ LITERAL row:
 - Credit Verification covers C1, C2, both C3 views, accountFlow, Bernoulli
   depth, generic gauge quotient, relative-norm fold, class-zero transfer, and
   odd-torsion consumers.
-- LinkingVerification covers the generic place-indexed pairing surface, the
+- LinkingVerification covers the provenance-pinned PowerRoot generator, the
+  unsplit principal-ideal extension, all three naturality faces, the stronger
+  principal-arrow `rho`, the generic place-indexed pairing surface, the
   arithmetic adjoint law, and the compiled reciprocity passage through the
   `Ledger`/`Transfer`/`IsoConserveBridge` tunnel.
 - N59 Verification covers every selected receipt field, conductor-59 flow
   and depth, funded row mapping, selected repayment, selected quotient,
-  selected (7d), the three named Tate targets, their conditional master
-  implication, and the consumers conditional on supplied (7a).
+  selected (7d), the four-way gauge classification and outcome-4 evidence,
+  the named Bockstein-receipt observation, the three named Tate targets,
+  their conditional master implication, and the consumers conditional on
+  supplied (7a).
 
 The selected-prime literal scan includes Transfer.lean, Heis.lean,
 AreaTransfer.lean, Interaction.lean, ClassCarrier.lean,
-TransverseAnnihilator.lean, TatePairing.lean, and the generic credit, drain,
-and Kummer source cone.  It now includes SelmerSequence.lean as well.
-LinkingVerification checks and dependency-guards every new
-sequence/realization and pairing declaration and freezes the standard axiom
-trio; N59 Verification guards the exact (7a) gauge reading, the relocalized
-selected wall, the derived allocated lift, and the conditional Tate route.
+TransverseAnnihilator.lean, TatePairing.lean, the generic credit, drain, and
+Kummer source cone, and now `PowerRootObstruction.lean`,
+`PowerRootExactSequence.lean`, `PowerRootNaturality.lean`, and
+`SelmerSequence.lean`.  LinkingVerification checks and dependency-guards the
+new generator, unsplit sequence, cube faces, representation, realization,
+and pairing declarations and freezes the standard axiom trio; N59
+Verification also guards the selected four-way classification, exact gauge
+reading, named depth observation, relocalized wall, derived allocated lift,
+and conditional Tate route.
 Forbidden declaration/module guards continue to exclude the classical
 irregular, regular, ladder, transport, and endpoint cones.
 
@@ -298,7 +318,12 @@ mod-59 layer.  If the class detected by relation (7a) lives deeper in a
 `ZMod (59 ^ n)`-valued reading (or equivalent integral lift).  Reducing too
 early identifies `58` with `-1` and discards the `+59` correction instead of
 routing it through the bank.  The conditional master theorem therefore does
-not certify that mod 59 is the final arithmetic depth.
+not certify that mod 59 is the final arithmetic depth.  The named
+`BocksteinPowerRootReceiptObservation` now retains this exact correction as
+the formal integral term `59 • r₁`, proves only that its first-layer
+reduction vanishes, and marks the possible depth/Bockstein interpretation as
+an observation.  Its `TwoTwosCorrespondenceStatus` remains explicitly open:
+no map connects Bernoulli depth two to critical interaction period two.
 
 #### Historical AreaTransfer obstruction (2026-08-04)
 
