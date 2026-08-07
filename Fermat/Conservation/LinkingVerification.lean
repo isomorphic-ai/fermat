@@ -449,9 +449,48 @@ open Fermat.Conservation
 
 /-! ## Vendored Selmer class-sequence surface -/
 
+#check IsDedekindDomain.selmerGroup.fractionalIdealFactorization
+#check IsDedekindDomain.selmerGroup.fractionalIdealFactorization_apply
 #check IsDedekindDomain.selmerGroup.toClass
 #check IsDedekindDomain.selmerGroup.toClass_ker
 #check IsDedekindDomain.selmerGroup.toClass_range
+#check IsDedekindDomain.selmerGroup.DivisorAway
+#check IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway
+#check IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway_apply
+#check IsDedekindDomain.selmerGroup.principalDivisorAway
+#check IsDedekindDomain.selmerGroup.principalDivisorAway_apply
+#check IsDedekindDomain.selmerGroup.eq_divisibleClasses
+#check IsDedekindDomain.selmerGroup.equivDivisibleClasses
+#check IsDedekindDomain.selmerGroup.principalDivisorAway_ker
+#check IsDedekindDomain.selmerGroup.sUnitEquivPrincipalDivisorAwayKer
+#check IsDedekindDomain.selmerGroup.sUnitClassesEquivPrincipalDivisorAwayKer
+#check IsDedekindDomain.selmerGroup.sUnitClassesEquivIntegerUnits
+#check IsDedekindDomain.selmerGroup.fromSUnitLift
+#check IsDedekindDomain.selmerGroup.fromSIntegerUnitLift
+#check IsDedekindDomain.selmerGroup.fromSUnitLift_injective
+#check IsDedekindDomain.selmerGroup.fromSIntegerUnitLift_injective
+#check IsDedekindDomain.selmerGroup.obstructionTarget
+#check IsDedekindDomain.selmerGroup.toSClass
+#check IsDedekindDomain.selmerGroup.toSClass_ker
+#check IsDedekindDomain.selmerGroup.toSClass_ker_integerUnits
+#check IsDedekindDomain.selmerGroup.toSClass_range
+#check IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway_surjective
+#check IsDedekindDomain.selmerGroup.classGroupToObstructionTarget
+#check IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_mk
+#check IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_surjective
+#check IsDedekindDomain.selmerGroup.invertedPrimeClasses
+#check IsDedekindDomain.selmerGroup.primeClass
+#check IsDedekindDomain.selmerGroup.classesOfPrimesIn
+#check IsDedekindDomain.selmerGroup.SClassGroup
+#check IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_primeClass
+#check IsDedekindDomain.selmerGroup.invertedPrimeClasses_eq_classesOfPrimesIn
+#check IsDedekindDomain.selmerGroup.obstructionTargetEquivSClassGroup
+#check IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_empty_injective
+#check IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup
+#check IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_toSClass
+#check IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_comp_toSClass
+#check IsDedekindDomain.selmerGroup.toSClass_empty_ker_eq_toClass_ker
+#check IsDedekindDomain.selmerGroup.map_toSClass_empty_range_eq_toClass_range
 
 /-! ## Common-action stage surface -/
 
@@ -1052,6 +1091,63 @@ open Fermat.Conservation
   TamePlacePairing.Seated.Realization.outside_two_readings_of_residual,
   TamePlacePairing.Seated.Realization.outsideTwoTameBookkeeping
 
+/-! ## Vendored finite-S Selmer proof-value wiring -/
+
+#guard_depends_on IsDedekindDomain.selmerGroup.eq_divisibleClasses,
+  PowerRoot.Factorization.mk_mem_divisibleClasses_iff
+#guard_depends_on IsDedekindDomain.selmerGroup.principalDivisorAway_ker,
+  IsDedekindDomain.selmerGroup.principalDivisorAway_apply
+#guard_depends_on IsDedekindDomain.selmerGroup.fromSUnitLift_injective,
+  PowerRoot.fromKernel_injective
+#guard_depends_on IsDedekindDomain.selmerGroup.fromSIntegerUnitLift_injective,
+  IsDedekindDomain.selmerGroup.fromSUnitLift_injective
+#guard_depends_on IsDedekindDomain.selmerGroup.toSClass_ker,
+  PowerRoot.obstruction_ker
+#guard_depends_on IsDedekindDomain.selmerGroup.toSClass_ker,
+  IsDedekindDomain.selmerGroup.toSClass
+#guard_depends_on IsDedekindDomain.selmerGroup.toSClass_ker_integerUnits,
+  IsDedekindDomain.selmerGroup.toSClass_ker
+#guard_depends_on IsDedekindDomain.selmerGroup.toSClass_range,
+  PowerRoot.obstruction_range
+#guard_depends_on IsDedekindDomain.selmerGroup.toSClass_range,
+  IsDedekindDomain.selmerGroup.toSClass
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway_surjective,
+  IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway_apply
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_surjective,
+  IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway_surjective
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_primeClass,
+  IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_mk
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.invertedPrimeClasses_eq_classesOfPrimesIn,
+  IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_primeClass
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.obstructionTargetEquivSClassGroup,
+  IsDedekindDomain.selmerGroup.invertedPrimeClasses_eq_classesOfPrimesIn
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.obstructionTargetEquivSClassGroup,
+  IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_surjective
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_empty_injective,
+  IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_mk
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup,
+  IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_empty_injective
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_toSClass,
+  PowerRoot.obstruction_toDivisibleClasses
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_comp_toSClass,
+  IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_toSClass
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.toSClass_empty_ker_eq_toClass_ker,
+  IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_comp_toSClass
+#guard_depends_on
+  IsDedekindDomain.selmerGroup.map_toSClass_empty_range_eq_toClass_range,
+  IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_comp_toSClass
+
 /-! ## Common-action proof-value wiring -/
 
 #guard_depends_on IsDedekindDomain.selmerGroup.toClass,
@@ -1212,6 +1308,150 @@ info: 'IsDedekindDomain.selmerGroup.toClass_range' depends on axioms: [propext, 
 #print axioms IsDedekindDomain.selmerGroup.toClass_range
 
 /--
+info: 'IsDedekindDomain.selmerGroup.fractionalIdealFactorization_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.fractionalIdealFactorization_apply
+
+/--
+info: 'IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway_apply
+
+/--
+info: 'IsDedekindDomain.selmerGroup.principalDivisorAway_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.principalDivisorAway_apply
+
+/--
+info: 'IsDedekindDomain.selmerGroup.eq_divisibleClasses' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.eq_divisibleClasses
+
+/--
+info: 'IsDedekindDomain.selmerGroup.principalDivisorAway_ker' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.principalDivisorAway_ker
+
+/--
+info: 'IsDedekindDomain.selmerGroup.fromSUnitLift_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.fromSUnitLift_injective
+
+/--
+info: 'IsDedekindDomain.selmerGroup.fromSIntegerUnitLift_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.fromSIntegerUnitLift_injective
+
+/--
+info: 'IsDedekindDomain.selmerGroup.toSClass_ker' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.toSClass_ker
+
+/--
+info: 'IsDedekindDomain.selmerGroup.toSClass_ker_integerUnits' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.toSClass_ker_integerUnits
+
+/--
+info: 'IsDedekindDomain.selmerGroup.toSClass_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.toSClass_range
+
+/--
+info: 'IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway_surjective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.fractionalIdealToDivisorAway_surjective
+
+/--
+info: 'IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_mk' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_mk
+
+/--
+info: 'IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_surjective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_surjective
+
+/--
+info: 'IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_primeClass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_primeClass
+
+/--
+info: 'IsDedekindDomain.selmerGroup.invertedPrimeClasses_eq_classesOfPrimesIn' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.invertedPrimeClasses_eq_classesOfPrimesIn
+
+/--
+info: 'IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_empty_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.classGroupToObstructionTarget_empty_injective
+
+/--
+info: 'IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_toSClass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_toSClass
+
+/--
+info: 'IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_comp_toSClass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.obstructionTargetEmptyEquivClassGroup_comp_toSClass
+
+/--
+info: 'IsDedekindDomain.selmerGroup.toSClass_empty_ker_eq_toClass_ker' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.toSClass_empty_ker_eq_toClass_ker
+
+/--
+info: 'IsDedekindDomain.selmerGroup.map_toSClass_empty_range_eq_toClass_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms IsDedekindDomain.selmerGroup.map_toSClass_empty_range_eq_toClass_range
+
+/--
 info: 'Fermat.Conservation.CommonActionStage.WithheldSelmerClassSequenceRealization' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
@@ -1251,6 +1491,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.SwapQuotient
 #guard_standard_axioms_prefix Fermat.Conservation.TransverseAnnihilator.CornerService
 #guard_standard_axioms_prefix PowerRoot
+#guard_standard_axioms_prefix IsDedekindDomain.selmerGroup
 #guard_standard_axioms_prefix Fermat.Conservation.PowerRootExactSequence
 #guard_standard_axioms_prefix Fermat.Conservation.PowerRootNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.LinkingInterfaces

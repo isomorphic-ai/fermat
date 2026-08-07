@@ -642,7 +642,12 @@ localization-lift interface still awaiting an arithmetic inhabitant. -/
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver59
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.mem_placesOver827_iff
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver827_finite
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.detectorSupport827
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.QRelaxedSelmerCarrier827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.QRelaxedSClassTarget827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.exists_qRelaxedSource_of_sClass_torsion
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedSourceOfSClassTorsion827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.toSClass_qRelaxedSourceOfSClassTorsion827
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.QRelaxedSelmerDeltaRepresentation827
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.QRelaxedReflectedDual827
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.firstResidueFunctional827
@@ -654,7 +659,12 @@ localization-lift interface still awaiting an arithmetic inhabitant. -/
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_apply
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_eq_mul_residueFunctional
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_ne_zero
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.projectedCandidateAtDetectorSupport827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.projectedCandidateSClassObstruction827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.projectedCandidateSClassObstruction827_pow_eq_one
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.ofSource_of_sClassObstruction_eq_one
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.ofSClassTorsion_of_projected_obstruction_eq_one
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.candidate
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.candidate_eigenlaw
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.computedQReading
@@ -696,6 +706,24 @@ localization-lift interface still awaiting an arithmetic inhabitant. -/
   Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver827_finite,
   IsDedekindDomain.primesOver_finite
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.detectorSupport827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.detectorSupport827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.QRelaxedSClassTarget827,
+  IsDedekindDomain.selmerGroup.obstructionTarget
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.exists_qRelaxedSource_of_sClass_torsion,
+  IsDedekindDomain.selmerGroup.toSClass_range
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedSourceOfSClassTorsion827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.exists_qRelaxedSource_of_sClass_torsion
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.toSClass_qRelaxedSourceOfSClassTorsion827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.exists_qRelaxedSource_of_sClass_torsion
+#guard_depends_on
   Fermat.FiftyNine.Conservation.DetectorWitness827.firstResidueFunctional827_generatedUnit,
   Fermat.FiftyNine.Conservation.CapacityCertificate.residueFunctional_generatedUnit_eq
 #guard_depends_on
@@ -713,6 +741,33 @@ localization-lift interface still awaiting an arithmetic inhabitant. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.DetectorWitness827.localizationResidueReadout827_ne_zero,
   Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.projectedCandidateAtDetectorSupport827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedReflectedProjector827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.projectedCandidateAtDetectorSupport827,
+  IsDedekindDomain.selmerGroup.monotone
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.projectedCandidateSClassObstruction827,
+  IsDedekindDomain.selmerGroup.toSClass
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.projectedCandidateSClassObstruction827_pow_eq_one,
+  IsDedekindDomain.selmerGroup.toSClass_range
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.ofSource_of_sClassObstruction_eq_one,
+  IsDedekindDomain.selmerGroup.toSClass_ker
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.ofSource_of_sClassObstruction_eq_one,
+  IsDedekindDomain.selmerGroup.fromSUnitLift
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.ofSource_of_sClassObstruction_eq_one,
+  Set.unit_valuation_eq_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.ofSClassTorsion_of_projected_obstruction_eq_one,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedSourceOfSClassTorsion827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.ofSClassTorsion_of_projected_obstruction_eq_one,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.ofSource_of_sClassObstruction_eq_one
 #guard_depends_on
   Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.candidate,
   Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedReflectedProjector827

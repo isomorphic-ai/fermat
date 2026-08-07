@@ -24,8 +24,16 @@ shows that this structure cannot be inhabited with the current empty-support
 dual leg.  A construction needs a dual Selmer condition relaxed at the
 auxiliary places; replacing the missing class by a zero reading would not be
 transverse.
+
+The q-relaxed section uses the vendored finite-`S` sequence in both
+directions.  Its range theorem globalizes an S-class torsion element, and its
+kernel theorem constructs a literal two-prime S-unit representative once the
+projected obstruction is trivial.  The remaining typed gap is a source with
+nonzero projected q-coordinate whose two-prime obstruction is the identity,
+not merely 59-torsion.
 -/
 import Fermat.Conservation.TamePlacePairing
+import Fermat.Conservation.SelmerSequence
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 
 open scoped nonZeroDivisors NumberField
@@ -41,6 +49,7 @@ open Fermat.Conservation.TamePlacePairing
 /-! ## The executable 827 lamp readout -/
 
 local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
+local instance : Fact (0 < 59) := ⟨by norm_num⟩
 local instance : Fact (Nat.Prime Credit.attestationPrime) :=
   ⟨Credit.attestationPrime_isPrime⟩
 
@@ -124,10 +133,56 @@ theorem placesOver827_finite
   intro v _ w _ hvw
   exact IsDedekindDomain.HeightOneSpectrum.ext_iff.mpr hvw
 
+/-- The literal two-prime support allowed for a transverse detector
+representative. -/
+def detectorSupport827 (K : Type uRelaxedK) [Field K] [NumberField K] :
+    Set (IsDedekindDomain.HeightOneSpectrum (𝓞 K)) :=
+  placesOver59 K ∪ placesOver827 K
+
 /-- Mathlib's q-relaxed Selmer carrier at all places over 827. -/
 abbrev QRelaxedSelmerCarrier827
     (K : Type uRelaxedK) [Field K] [NumberField K] :=
   SelmerEigenspace.SelmerCarrierAt (𝓞 K) K (placesOver827 K) 59
+
+/-- The away-from-827 class obstruction target in the vendored finite-`S`
+sequence. -/
+abbrev QRelaxedSClassTarget827
+    (K : Type uRelaxedK) [Field K] [NumberField K] :=
+  IsDedekindDomain.selmerGroup.obstructionTarget
+    (R := 𝓞 K) (K := K) (placesOver827 K)
+
+/-- Surjectivity of the vendored finite-`S` class leg: every 59-torsion
+away-from-827 class has a genuine q-relaxed global Selmer preimage. -/
+theorem exists_qRelaxedSource_of_sClass_torsion
+    {K : Type uRelaxedK} [Field K] [NumberField K]
+    (c : QRelaxedSClassTarget827 K) (hc : c ^ 59 = 1) :
+    ∃ source : QRelaxedSelmerCarrier827 K,
+      IsDedekindDomain.selmerGroup.toSClass
+          (R := 𝓞 K) (K := K) (n := 59) (placesOver827 K)
+            (Additive.toMul source) = c := by
+  have hker : c ∈
+      (powMonoidHom 59 : QRelaxedSClassTarget827 K →*
+        QRelaxedSClassTarget827 K).ker :=
+    hc
+  rw [← IsDedekindDomain.selmerGroup.toSClass_range
+    (R := 𝓞 K) (K := K) (n := 59)] at hker
+  obtain ⟨source, hsource⟩ := hker
+  exact ⟨Additive.ofMul source, hsource⟩
+
+/-- One global q-relaxed source selected from the finite-`S` surjection. -/
+noncomputable def qRelaxedSourceOfSClassTorsion827
+    {K : Type uRelaxedK} [Field K] [NumberField K]
+    (c : QRelaxedSClassTarget827 K) (hc : c ^ 59 = 1) :
+    QRelaxedSelmerCarrier827 K :=
+  Classical.choose (exists_qRelaxedSource_of_sClass_torsion c hc)
+
+theorem toSClass_qRelaxedSourceOfSClassTorsion827
+    {K : Type uRelaxedK} [Field K] [NumberField K]
+    (c : QRelaxedSClassTarget827 K) (hc : c ^ 59 = 1) :
+    IsDedekindDomain.selmerGroup.toSClass
+        (R := 𝓞 K) (K := K) (n := 59) (placesOver827 K)
+          (Additive.toMul (qRelaxedSourceOfSClassTorsion827 c hc)) = c :=
+  Classical.choose_spec (exists_qRelaxedSource_of_sClass_torsion c hc)
 
 /-- A supplied Delta action on the literal q-relaxed carrier.  Its type
 encodes support stability; constructing the arithmetic Galois action remains
@@ -246,6 +301,43 @@ theorem localizationResidueReadout827_ne_zero
   rw [localizationResidueReadout827_apply]
   exact mul_ne_zero hy firstLampReading827_ne_zero
 
+/-- Regard the projected q-relaxed candidate as a Selmer class relaxed at
+both rational primes allowed in the final representative support. -/
+noncomputable def projectedCandidateAtDetectorSupport827
+    (source : QRelaxedSelmerCarrier827 K) :
+    IsDedekindDomain.selmerGroup
+      (R := 𝓞 K) (K := K) (S := detectorSupport827 K) (n := 59) :=
+  Subgroup.inclusion
+    (IsDedekindDomain.selmerGroup.monotone
+      (show placesOver827 K ⊆ detectorSupport827 K from Set.subset_union_right))
+    (Additive.toMul (qRelaxedReflectedProjector827 rhoQ omega chi source).1)
+
+/-- The finite-`S` class obstruction of the actual projected candidate,
+computed after enlarging its support from q to the two primes allowed for a
+transverse representative. -/
+noncomputable def projectedCandidateSClassObstruction827
+    (source : QRelaxedSelmerCarrier827 K) :
+    IsDedekindDomain.selmerGroup.obstructionTarget
+      (R := 𝓞 K) (K := K) (detectorSupport827 K) :=
+  IsDedekindDomain.selmerGroup.toSClass
+    (R := 𝓞 K) (K := K) (n := 59) (detectorSupport827 K)
+      (projectedCandidateAtDetectorSupport827 rhoQ omega chi source)
+
+/-- The vendored finite-`S` range theorem proves that every projected
+candidate obstruction is 59-torsion.  The lift needs the stronger statement
+that this particular torsion class is the identity. -/
+theorem projectedCandidateSClassObstruction827_pow_eq_one
+    (source : QRelaxedSelmerCarrier827 K) :
+    projectedCandidateSClassObstruction827 rhoQ omega chi source ^ 59 = 1 := by
+  have hmem :
+      projectedCandidateSClassObstruction827 rhoQ omega chi source ∈
+        (IsDedekindDomain.selmerGroup.toSClass
+          (R := 𝓞 K) (K := K) (n := 59) (detectorSupport827 K)).range :=
+    ⟨projectedCandidateAtDetectorSupport827 rhoQ omega chi source, rfl⟩
+  rw [IsDedekindDomain.selmerGroup.toSClass_range
+    (R := 𝓞 K) (K := K) (n := 59)] at hmem
+  exact MonoidHom.mem_ker.mp hmem
+
 /-- **The first new typed obligation after q-relaxation.**
 
 The candidate is produced by the actual character projector, has a nonzero
@@ -271,6 +363,80 @@ structure ReflectedQRelaxedLocalizationLift827 where
 namespace ReflectedQRelaxedLocalizationLift827
 
 variable {rhoQ omega chi}
+
+/-- The finite-`S` kernel theorem supplies the matching representative once
+the projected candidate's two-prime S-class obstruction is trivial.  This
+constructor reduces the lift to the joint existence of a source and selected
+place with nonzero q-coordinate and identity, rather than merely 59-torsion,
+of this obstruction. -/
+noncomputable def ofSource_of_sClassObstruction_eq_one
+    (source : QRelaxedSelmerCarrier827 K)
+    (selectedPlace : {v // v ∈ placesOver827 K})
+    (hcoord :
+      qLocalizationCoordinate827 rhoQ omega chi selectedPlace
+          (qRelaxedReflectedProjector827 rhoQ omega chi source) ≠ 0)
+    (hobs :
+      projectedCandidateSClassObstruction827 rhoQ omega chi source = 1) :
+    ReflectedQRelaxedLocalizationLift827 rhoQ omega chi := by
+  have hker :
+      projectedCandidateAtDetectorSupport827 rhoQ omega chi source ∈
+        (IsDedekindDomain.selmerGroup.toSClass
+          (R := 𝓞 K) (K := K) (n := 59) (detectorSupport827 K)).ker := by
+    exact hobs
+  rw [IsDedekindDomain.selmerGroup.toSClass_ker
+    (R := 𝓞 K) (K := K)] at hker
+  let q := Classical.choose hker
+  have hq := Classical.choose_spec hker
+  let u : (detectorSupport827 K).unit K := q.out
+  have hu : QuotientGroup.mk u = q := QuotientGroup.out_eq' q
+  have hqu :
+      IsDedekindDomain.selmerGroup.fromSUnitLift
+          (R := 𝓞 K) (K := K) (n := 59) (detectorSupport827 K)
+            (QuotientGroup.mk u) =
+        projectedCandidateAtDetectorSupport827 rhoQ omega chi source := by
+    rw [hu]
+    exact hq
+  refine
+    { source := source
+      selectedPlace := selectedPlace
+      selectedLocalization_ne_zero := hcoord
+      candidateRepresentative := (u : Kˣ)
+      candidate_represents := ?_
+      representative_support := ?_ }
+  · exact congr_arg Subtype.val hqu
+  · intro v hp hq'
+    have hv : v ∉ detectorSupport827 K := by
+      intro hv
+      rcases hv with hv | hv
+      · exact hp hv
+      · exact hq' hv
+    have hzero :
+        (v.valuationOfNeZero (u : Kˣ)).toAdd = 0 ↔
+          v.valuation K (u : Kˣ) = 1 := by
+      rw [← v.valuationOfNeZero_eq (u : Kˣ), ← WithZero.coe_one,
+        WithZero.coe_inj]
+      rfl
+    exact hzero.mpr
+      (Set.unit_valuation_eq_one (detectorSupport827 K) K u hv)
+
+/-- A sufficient combined finite-`S` route.  The range theorem first chooses
+a global preimage of a 59-torsion away-from-827 class; the kernel theorem then
+supplies the literal two-prime representative after projection.  Since the
+preimage is chosen noncomputably, this constructor does not characterize all
+possible good preimages. -/
+noncomputable def ofSClassTorsion_of_projected_obstruction_eq_one
+    (c : QRelaxedSClassTarget827 K) (hc : c ^ 59 = 1)
+    (selectedPlace : {v // v ∈ placesOver827 K})
+    (hcoord :
+      qLocalizationCoordinate827 rhoQ omega chi selectedPlace
+          (qRelaxedReflectedProjector827 rhoQ omega chi
+            (qRelaxedSourceOfSClassTorsion827 c hc)) ≠ 0)
+    (hobs :
+      projectedCandidateSClassObstruction827 rhoQ omega chi
+          (qRelaxedSourceOfSClassTorsion827 c hc) = 1) :
+    ReflectedQRelaxedLocalizationLift827 rhoQ omega chi :=
+  ofSource_of_sClassObstruction_eq_one
+    (qRelaxedSourceOfSClassTorsion827 c hc) selectedPlace hcoord hobs
 
 /-- The projected candidate, named for downstream witness construction. -/
 noncomputable def candidate
