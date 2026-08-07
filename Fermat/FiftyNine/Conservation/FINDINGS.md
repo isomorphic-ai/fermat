@@ -74,6 +74,17 @@
   those seating/localization equalities and the completed local
   Hilbert/Artin--Hasse comparison remain separate.  Consequently the current
   formula verdict stays `NEEDS-VOSTOKOV`.
+- Prediction result: the carrier/projector/readout forecast was confirmed,
+  but the committed guess that the relaxed witness would already inhabit was
+  not.  The compiler exposed the global lift/obstruction and local comparison
+  walls above.  In particular, the prediction's shorthand "localization
+  surjectivity" was too strong; exactness only turns a proved
+  obstruction-zero receipt into a lift.
+- Verification at commit `6288ba6` is green: the focused detector,
+  Artin--Hasse, linking/no-splitting, and N59 verification targets compile,
+  and the authoritative nine-target conservation audit completes all 8717
+  jobs.  Only pre-existing `CapacityCertificate` linter warnings and
+  `TameSymbol` tactic suggestions are replayed.
 - This discovery creates no unconditional relation (7a), exponent-59
   endpoint, or stock-credit transformer.
 
