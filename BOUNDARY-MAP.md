@@ -162,16 +162,22 @@ canonical state belongs to the frontier.
 
 ## Vendored PowerRoot cube and common-action boundary
 
-The generic obstruction and its Selmer integration are sourced from
-[`fabianx-ai/mathlib4` pull request 1](https://github.com/fabianx-ai/mathlib4/pull/1),
-generator commit `4ea7450c8a5844417866addb7fba766275a1945a` and integration/head
-commit `889be7a3fee66e6630d25332a501409fa35d8590`.
+The generic obstruction and its empty-support and finite-`S` Selmer
+integrations are sourced from the fork pull-request series
+[`fabianx-ai/mathlib4` PR 1](https://github.com/fabianx-ai/mathlib4/pull/1)
+and [PR 2](https://github.com/fabianx-ai/mathlib4/pull/2).  The generator
+commit is `4ea7450c8a5844417866addb7fba766275a1945a`, the empty-support
+integration commit is `889be7a3fee66e6630d25332a501409fa35d8590`, and the
+finite-`S` source is branch `finite-s-selmer` at
+`9ec933d5176915dc6996c0f4660c858529582b51`.
 `Mathlib/GroupTheory/PowerRootObstruction.lean` is byte-identical at those
 two commits and has SHA-256
 `44c80744a6c74bf4793cb45c7289f54512b43e6326c0ef46aac308f9cfb31d25`.
 The integrated `Mathlib/RingTheory/DedekindDomain/SelmerGroup.lean` has
-SHA-256
-`a6fb493fdaf8686eed654b4b0f7abe84ef14d4198304ef4dcf9f8160c8afd2f6`.
+SHA-256 `a6fb493fdaf8686eed654b4b0f7abe84ef14d4198304ef4dcf9f8160c8afd2f6`
+at the empty-support commit and
+`9810a9311a0833042b5ec1d9e5e7a930cdefb30e85adcbc5c785e8e382eb7307`
+at the finite-`S` commit.
 `Fermat/Conservation/PowerRootObstruction.lean` and
 `Fermat/Conservation/SelmerSequence.lean` record their complete compatibility
 deltas: ordinary imports and omitted module export-control commands; the
@@ -180,29 +186,29 @@ one explicit quotient type argument required by Lean 4.31; and omission of
 unrelated pre-existing upstream proof-engineering changes.  No theorem
 statement or proof strategy is changed.
 
-The pin also contains `selmerGroup S p` for arbitrary support `S`; only the
-vendored unit/class exact sequence above is specialized to empty support.
-Commit `1d0c3e4` uses that existing carrier directly at the places over 827.
-Its proved
+Commit `4df4dea` vendors the finite-`S` sequence into the route-neutral core.
+It supplies the S-unit injection, the finite-`S` class obstruction, its
+kernel and range, and the identification of the generic obstruction target
+with the S-class group.  Commit `1d0c3e4` already used the pin's arbitrary
+support carrier directly at the places over 827.  Its proved
 `SelmerEigenspace.supportValuation_ker_eq_range_emptySupportInclusion`
 identifies the localization kernel with the embedded empty-support group.
-It does **not** identify the image of supported valuation.  The named
-incoming `FiniteSupportSelmerLocalizationSequence` must add an obstruction
-arrow and `Function.Exact relaxedValuation obstruction`; a requested local
-q-vector lifts only after a proof that its obstruction vanishes, not by an
-assumed surjectivity theorem.  A separate incoming
-`FiniteSupportSelmerSUnitClassSequence` must supply the S-unit/S-class arrows,
-their correctly placed injection, kernel/range, and surjection statements,
-and comparison squares.  At this snapshot `~/Mathlib` branch
-`finite-s-selmer` has no finite-support implementation or new vendorable
-provenance, so these names are interfaces only; commit and SHA provenance
-will be recorded when that branch is ready.
+It still does **not** identify the image of supported valuation.  The new
+`toSClass_range` globalizes every chosen 59-torsion S-class, but controls no
+selected q-coordinate or reflected projection.  For the actual projected
+candidate it proves only that the two-prime obstruction is 59-torsion.
+`toSClass_ker` supplies a matching S-unit representative once that particular
+obstruction is the identity.  Thus the current finite-`S` construction is
+reduced to the joint existence of a source and selected place with a nonzero
+reflected q-coordinate and identity, not merely 59-torsion, of the projected
+two-prime obstruction.
 
 | Declarations/checklist item | Status, before → after | Final account |
 | --- | --- | --- |
 | `PowerRoot.root`, `root_mul`, `root_shift`, `obstruction`, `obstruction_ker`, `obstruction_range` | ABSENT at the pin → LITERAL (provenance-pinned generator) | The route-neutral generator constructs the unique root and its cokernel obstruction; representative shift, multiplicativity, kernel, and range are proved generically. |
 | `PowerRootExactSequence.principalIdealComplex` and `principalIdealExtensionClass` | ABSENT → LITERAL, unsplit | The actual arrow `Kˣ → (FractionalIdeal R⁰ K)ˣ` is a two-term complex.  Its `pi₁` is canonically `Rˣ`, its `pi₀` is canonically `ClassGroup R`, and the Selmer middle retains the exact unit/class extension without a product equivalence.  A declaration-type audit mechanically rejects any public product-splitting equivalence. |
 | `IsDedekindDomain.selmerGroup.toClass`, `toClass_ker`, `toClass_range` | Hand-written root-ideal implementation → LITERAL generic derivation | `toClass` is now the instantiated `PowerRoot.obstruction`; its kernel is `fromUnitLift.range` and its range is the class-group power-map kernel. |
+| Finite-`S` `fromSUnitLift`, `toSClass`, `toSClass_ker`, `toSClass_range`, and `obstructionTargetEquivSClassGroup` | External incoming interface → LITERAL provenance-pinned sequence | The range theorem globalizes every chosen 59-torsion S-class; the kernel theorem produces a matching S-unit representative when the obstruction is the identity.  Neither theorem asserts surjectivity onto supported valuation coordinates. |
 | `PowerRootNaturality` Delta, reflection, and localization faces | ABSENT → PROVEN generically / NAMED INTERFACE where carriers are absent | Every commuting arrow square transports roots and obstructions; `root_mul` and `root_shift` are exposed as the multiplication and representative-change engines.  Delta basis actions and reflected equivalences are typed, while localization names the missing local carrier and its exact square law. |
 | `CommonActionStage.WithheldSelmerClassSequenceRealization` | Named SEAM proposition → THEOREM | `selmerClassProjection` is the additive `toClass` restricted to `ClassPTorsion`; middle exactness and surjectivity use the two vendored theorems. |
 | Selected `StrictRouteBoundary.sequence` | Supplied field → LITERAL specialization | The field is removed; `kummerBinding` is tied directly to the canonical realization at `p = 59`. |
@@ -215,7 +221,7 @@ will be recorded when that branch is ready.
 | `bocksteinPowerRootReceiptObservation` | Depth correction erased implicitly → NAMED OBSERVATION | The formal integral lift records `r₀ + 58 r₁ = (r₀ - r₁) + 59 r₁`; reduction kills the `59 r₁` receipt by the proved first-layer torsion law.  No nonzero arithmetic Bockstein, depth theorem, or two-2s transport is asserted. |
 | Local Tate pairing and adjoint law | ABSENT → INTERFACE | `TatePairing.PlaceIndexedLocalPairing` retains the local readings as a place-indexed `Finsupp` and states `pair_v (a • x) y = pair_v x (a# • y)` using the existing `InvolutiveBase.hash`; no arithmetic pairing value is manufactured. |
 | Global reciprocity and conservation tunnel | ABSENT → INTERFACE law / PROVEN wiring | `TatePairing.GlobalReciprocityLaw` is the class-field-theory interface.  From that law, `PlaceLedger.toLedger`, `toVacuumTransfer`, and `reciprocity_L1_conservation` compile its zero sum through `Ledger`, `Transfer`, and `IsoConserveBridge`. |
-| Selected relation-(7a) arithmetic inputs | Unnamed missing producer → STOKES KERNEL EXPOSED / Q-RELAXED WITNESS WALL TYPED | The arbitrary-support carrier, reflected-character projector, supported valuation, and nonzero 827 capacity readout now compile.  The old empty-support contradiction no longer applies at q.  `ReflectedQRelaxedLocalizationLift827` is the exact uninhabited global-lift/source wall, followed by `SelectedTameComparison`; neither is a consequence of faithfulness. |
+| Selected relation-(7a) arithmetic inputs | Q-relaxed witness wall typed → finite-`S` globalization and representative legs proven; two joint lift hypotheses remain | `exists_qRelaxedSource_of_sClass_torsion` constructs a relaxed global source from every chosen 59-torsion S-class.  `projectedCandidateSClassObstruction827_pow_eq_one` proves the projected two-prime obstruction is 59-torsion, and `ofSource_of_sClassObstruction_eq_one` extracts the matching S-unit representative when it is the identity.  No source is proved to have a nonzero reflected selected q-coordinate, and no projected obstruction is proved equal to `1`. |
 | Conditional Tate master implication | ABSENT → PROVEN (conditional), now factored through Stokes | `Lambda_apply_eq_zero_of_reciprocity` kills the complete wild detector functional.  Evaluating it at the shared detector and using the existing gauge comparison yields the same conditional `VandiverSevenA 0 1`.  This is not an unconditional proof of (7a). |
 
 ## N59 assembly summary
@@ -230,7 +236,7 @@ will be recorded when that branch is ready.
 | Selected fold and principalization consumers | ABSENT → LITERAL (Transfer), conditional on supplied (7a) | Derived (7d) and odd-torsion netting are accounted; only the missing producer is a seam. |
 | Selected common-action stage | Selmer exactness SEAM → character-allocation SEAM at a fixed reflected pair | The vendored sequence and its additive realization are unconditional.  Once a reflected pair is supplied, the typed gauge attempt retains the class obstruction at the first missing character service; the selected cone itself does not manufacture that pair, and rho remains a later conditional wall. |
 | Selected PowerRoot cube test | Unclassified comparison → TYPED OUTCOME 4 | Generic localization naturality is proved, but the actual `r₀,r₁` arise from distinct allocated root inputs and the selected comparison is wild reflected-dual Tate data.  Stage 3 therefore retains the wild route rather than replacing it with a generic defect. |
-| Selected Tate route to (7a) | Unnamed Lemma-I seam → STOKES KERNEL plus a typed finite-S lifting obstruction | The complete detector `Lambda` is the existing 59-local pairing family.  Tame/away vanishing and reciprocity prove `Lambda x = 0`; `wild_detector_faithful : ker Lambda = 0` remains the final nondegeneracy interface.  `DetectorWitness827` now supplies the q-relaxed carrier/projector and clean nonzero 827 readout, but no source with nonzero projected q-localization.  The incoming finite-S sequence must test the desired local vector against its obstruction; it is not assumed surjective.  The wild formula inventory is `NEEDS-VOSTOKOV`. |
+| Selected Tate route to (7a) | Typed finite-`S` lifting obstruction → global range and representative kernel discharged conditionally; coordinate and identity legs remain | The vendored range theorem supplies global relaxed preimages of chosen 59-torsion S-classes.  The kernel theorem supplies literal two-prime representatives after obstruction identity.  The lift still requires `hcoord` and `hobs`; consequently `SelectedTameComparison` was not attempted.  The old wild detector, reciprocity, faithfulness, and gauge boundaries remain unchanged. |
 | FermatState.StockCreditTransformer | ABSENT → SEAM | No state-linked positive successor transaction is constructed. |
 
 The guarded transformer probes remain evidence of type boundaries, not
@@ -324,9 +330,10 @@ marked explicitly below.
 | `Lambda_apply_eq_zero_of_reciprocity` | **PROVEN Stokes theorem**, conditional only on the named reciprocity law | Every non-wild column is zero by the constructed single support.  Applying reciprocity for every reflected-dual detector proves the functional equality `Lambda x = 0`, not merely one scalar coordinate. |
 | `wild_detector_faithful` | **SINGLE FRONTIER INTERFACE** | The exact target is `(Lambda wild).ker = ⊥`: the wild detector family separates the remaining potential.  Poitou--Tate nondegeneracy is its natural arithmetic source.  If `H_FLT` has finrank one, `wild_detector_faithful_of_finrank_one` proves that one nonzero transverse reading suffices.  No inhabitant is asserted. |
 | `gauge_eq_local_tate_pairing` | **INTERFACE** | One selected detector and a unit must identify its 59-local reading with the computed difference gauge and reflect zero scalar reading back to zero of that retained class-group gauge. |
-| `transverse_detector_exists` | **ABSTRACT PRE-WITNESS INTERFACE** | The existing proposition packages an arbitrary dual value, a lamp action, and a place label, but its single-wild-column pairing forces the q-reading to zero and it contains no global Kummer representative or q-relaxed local condition.  It remains sufficient for the old conditional implication, but is not the explicit Stage-2 witness requested here. |
-| `DetectorWitness827` q-relaxed repair | **CARRIER/PROJECTOR/READOUT PROVEN; WITNESS UNINHABITED AT A NEW WALL** | `QRelaxedSelmerCarrier827` is Mathlib's actual Selmer group supported at all places over 827.  `qRelaxedReflectedProjector827` lands in the reflected eigenspace, and `localizationResidueReadout827` compares its supported valuation with the actual first capacity functional of value `48`.  Thus the old empty-support no-go dissolves at q.  `ReflectedQRelaxedLocalizationLift827` still requires a global source with nonzero projected q-coordinate and a representative supported over 59 and 827; `SelectedTameComparison` then identifies the actual tame reading with the computed readout.  Neither structure is inhabited. |
-| Finite-S kernel and incoming localization sequence | **KERNEL PROVEN / IMAGE-COKERNEL INTERFACE NOT ASSUMED** | `supportValuation_ker_eq_range_emptySupportInclusion` proves exactly the kernel of supported valuation at the existing pin.  The named incoming `FiniteSupportSelmerLocalizationSequence` must place an obstruction after localization and prove exactness; a target q-vector lifts only after its obstruction is zero.  `FiniteSupportSelmerSUnitClassSequence` separately records the S-unit/S-class bookkeeping and comparison squares.  The external `finite-s-selmer` branch has no vendorable implementation/provenance at this snapshot, and no valuation-surjectivity shortcut is used. |
+| `transverse_detector_exists` | **ABSTRACT PRE-WITNESS / Q-RELAXED SEATING MISMATCH** | The proposition still packages a detector in the old empty-support reflected dual together with a lamp action and realization.  The finite-`S` data lives in `QRelaxedReflectedDual827`; there is no seating map into the old wild dual, and the single-wild-column pairing has no nonzero q-coordinate.  Thus this interface remains sufficient only for the old conditional implication, not an inhabited Stage-2 witness. |
+| `DetectorWitness827` finite-`S` lift attempt | **GLOBAL RANGE PROVEN; REPRESENTATIVE KERNEL PROVEN; NO LIFT INHABITANT CONSTRUCTED** | `exists_qRelaxedSource_of_sClass_torsion` globalizes every chosen 59-torsion S-class.  `projectedCandidateSClassObstruction827_pow_eq_one` proves only torsion of the projected obstruction.  `ofSource_of_sClassObstruction_eq_one` uses the kernel theorem to extract an S-unit representative supported over 59 and 827.  Its unproved joint hypotheses are `hcoord`, a nonzero selected coordinate after the reflected projector, and `hobs`, equality of the projected two-prime obstruction with `1`.  The range-based chosen-source constructor is sufficient, not a converse characterization. |
+| `SelectedTameComparison` | **SUBSEQUENT LOCAL WALL; NOT ATTEMPTED** | Its tame-symbol/capacity comparison remains downstream of an actual `ReflectedQRelaxedLocalizationLift827`.  Since no lift inhabitant was obtained, this session did not attempt to construct the selected angular-component/local-context comparison. |
+| Supported valuation versus finite-`S` class sequence | **VALUATION KERNEL PROVEN / S-CLASS SEQUENCE PROVEN / COMPARISON ABSENT** | `supportValuation_ker_eq_range_emptySupportInclusion` proves the kernel of supported valuation.  The vendored `toSClass` sequence proves S-unit exactness and S-class torsion surjectivity.  No arrow identifies the image of `supportValuation`, and no Delta-equivariant comparison sends the capacity-selected q-vector through `toSClass`; no valuation-surjectivity shortcut is used. |
 | `ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov` | **PROVEN COVERAGE VERDICT: `NEEDS-VOSTOKOV`; PRECISE EXIT INTERFACE NAMED** | `zeta`, `1-zeta`, and generated cyclotomic units have explicit provenance.  `NormalizedStateFactorArtinHasseDecomposition hζ S hz` would give explicit Kummer-class coefficient decompositions of both normalized state factors into `zetaUnit`, nonzero `fixedDenominator`, and every `generatedUnit`; a one-sided proof also needs conjugation stability to obtain the other row.  This factor statement alone does not seat the chosen statewise Selmer preimage or the selected detector lift, nor provide their local Hilbert-symbol comparison.  The current verdict is missing-decomposition, not nonmembership. |
 | Capacity, bounded Sinnott, funded flow/repayment, and the statewise (7d) fold | **PROVEN** | These are genuine selected bank receipts and are retained in the place-by-place audit rather than redescribed as local theorems. |
 | `LocalOrthogonalityGuard` | **RETAINED where it binds; not needed for a proved tame row** | The generic guard remains available and explicit.  Stage 1 does not turn a bank receipt into a localization theorem: instead it computes the actual tame symbol on the seated quotient classes.  In the selected single-wild-column model there is consequently no remaining away row on which an orthogonality guard binds. |
@@ -337,16 +344,25 @@ Thus conservation has already done its job: tame cancellation plus
 reciprocity proves that the selected potential lies in the Stokes detector's
 kernel.  The final arithmetic frontier is still nondegeneracy of that
 detector, not a second conservation identity.  Stage 2 now has the literal
-q-relaxed carrier, reflected projector, localization coordinate, and
-nonzero 827 comparison coefficient.  Its next wall is concrete: produce a
-`ReflectedQRelaxedLocalizationLift827` by showing that the desired local
-vector lies in the kernel of the incoming finite-S obstruction, then supply
-`SelectedTameComparison`.  The old every-place valuation-zero argument no
-longer applies at q, but exactness does not make localization automatically
-surjective.  At the remaining wild place the present generator inventory
-requires the general Vostokov budget unless the normalized factors are
-decomposed as named above and the actual selected inputs are seated in those
-decompositions.
+q-relaxed carrier, reflected projector, localization coordinate, nonzero 827
+comparison coefficient, and the vendored finite-`S` class sequence.  Its
+range leg globalizes a chosen 59-torsion S-class, while its kernel leg
+completely discharges the matching-representative fields after obstruction
+identity.  The current constructor is reduced to the joint existence of a
+source and selected place for which the reflected projection has nonzero
+selected q-coordinate and the projected candidate's two-prime S-class
+obstruction is the identity.  Torsion of the latter is proved but strictly
+weaker; the range theorem's opaque chosen preimage does not control either
+projected property.
+
+Because no `ReflectedQRelaxedLocalizationLift827` inhabitant was obtained,
+`SelectedTameComparison` remains unattempted.  Even after that comparison,
+`transverse_detector_exists` still uses the old empty-support wild dual; a
+q-relaxed-to-wild seating map or corresponding refactor remains necessary
+before the honest detector can enter the conditional Tate bridge.  At the
+remaining wild place the present generator inventory requires the general
+Vostokov budget unless the normalized factors are decomposed as named above
+and the actual selected inputs are seated in those decompositions.
 
 The public Tate result remains an implication, not a new producer of the
 wild local reading, reciprocity, detector, faithfulness, or gauge-comparison

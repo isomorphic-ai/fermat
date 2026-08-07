@@ -1,5 +1,66 @@
 # N59 conservation findings
 
+## 2026-08-08 — FINITE-S LIFT discovery: the representative leg closes, but torsion is not identity
+
+- W1 vendors the finite-`S` Selmer class sequence from Mathlib branch
+  `finite-s-selmer`, commit
+  `9ec933d5176915dc6996c0f4660c858529582b51`, into the route-neutral
+  `Fermat.Conservation.SelmerSequence` at commit `4df4dea`.  The source is
+  `Mathlib/RingTheory/DedekindDomain/SelmerGroup.lean`, SHA-256
+  `9810a9311a0833042b5ec1d9e5e7a930cdefb30e85adcbc5c785e8e382eb7307`,
+  and descends through fork PRs
+  `https://github.com/fabianx-ai/mathlib4/pull/1` and
+  `https://github.com/fabianx-ai/mathlib4/pull/2`.  The finite-`S` branch is
+  local and has no invented third PR.  A normalized comparison differs only
+  by the documented module/export-control omissions; the finite-`S`
+  declaration statements and proof bodies are otherwise copied verbatim.
+- The outgoing sequence leg now compiles all the way to a global class:
+  `exists_qRelaxedSource_of_sClass_torsion` uses `toSClass_range` to lift
+  every 59-torsion away-from-827 class to the literal q-relaxed Selmer
+  carrier.  This is surjectivity onto S-class torsion, not surjectivity of
+  `supportValuation` or of one selected q-coordinate.  The named
+  `qRelaxedSourceOfSClassTorsion827` is an opaque `Classical.choose`
+  preimage, so its combined constructor is a sufficient route rather than a
+  characterization of every potentially good preimage.
+- The incoming/kernel leg closes the representative half of the named lift.
+  The projected candidate is included into the literal two-prime support
+  `detectorSupport827 = placesOver59 ∪ placesOver827`.
+  `projectedCandidateSClassObstruction827_pow_eq_one` proves that its
+  finite-`S` obstruction is 59-torsion.  If that obstruction is actually the
+  identity, `ofSource_of_sClassObstruction_eq_one` rewrites with
+  `toSClass_ker`, extracts a two-prime S-unit, and uses its underlying field
+  element as a representative.  Its Kummer quotient equality is the actual
+  `fromSUnitLift` equality, and the S-unit valuation law proves literal
+  support over 59 and 827.  Thus representative matching is no longer an
+  interface.
+- No `ReflectedQRelaxedLocalizationLift827` inhabitant was constructed.
+  The current finite-`S` constructor's compiler-localized inputs are visible:
+  (1) a global source whose image under the supplied reflected projector has
+  a nonzero selected q-coordinate, and (2) identity of that projected
+  candidate's two-prime S-class obstruction.  The sequence proves only
+  59-torsion for (2).  For (1), `rhoQ` is still an arbitrary supplied
+  representation, with no theorem making the projector, `toSClass`, or the
+  q-coordinate equivariant.  The checked capacity row proves the nonzero
+  scale `48`, but no declaration identifies the kernel of its `reductionHom`
+  with a selected height-one place or turns that residue functional into a
+  global divisor coordinate.
+- The committed positive session prediction is therefore falsified.  Since
+  no `ReflectedQRelaxedLocalizationLift827` was constructed, W3 was
+  not entered: `SelectedTameComparison` remains the subsequent local wall,
+  the honest q-relaxed witness is not re-seated in the old single-wild-column
+  `transverse_detector_exists`, and the wild 59-coordinate is not yet the
+  sole remaining premise.
+- This discovery creates no unconditional relation (7a), exponent-59
+  endpoint, or transformer, and it introduces no splitting of the Selmer
+  extension.
+- Verification is green.  Focused builds completed for the vendored
+  `SelmerSequence` (2,463 jobs), `DetectorWitness827` (8,547 jobs),
+  `LinkingVerification` (8,540 jobs), and the credit/capacity leaves (8,608
+  jobs).  The authoritative nine-target verification completed all 8,717
+  jobs, including the exhaustive standard-axiom guards and both no-splitting
+  audits.  Output contained only the pre-existing `CapacityCertificate`
+  linter warnings and replayed `TameSymbol` tactic suggestions.
+
 ## 2026-08-07 — Q-RELAXED DETECTOR discovery: the 827 no-go dissolves, and the next wall is localization exactness
 
 - W1's repair compiles at commit `1d0c3e4`.  The carrier is now literally
