@@ -3,6 +3,33 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-07 — q-relaxed reflected-carrier repair prediction
+
+- **Committed guess: the relaxed 827 witness inhabits modulo its wild
+  59-coordinate.**  Replacing the reflected dual's empty-support Selmer
+  carrier by Mathlib's existing finite-support carrier at the places over
+  `q = 827` should remove exactly the theorem that forced its q-valuation to
+  vanish.  I expect the Delta action to preserve this support, the reflected
+  character projector to generalize without new arithmetic input, and the
+  first capacity-matrix coordinate to compare with a nonzero q-reading.
+- The likely compiler friction is not the finite calculation but the global
+  lift behind that reading.  If the arbitrary-`S` carrier does not by itself
+  construct a class mapping to the selected q-local residue row, the next
+  honest obstruction should be the missing finite-`S` localization
+  surjectivity together with its kernel/cokernel bookkeeping.  That result is
+  being developed separately on Mathlib branch `finite-s-selmer`; this
+  session will name its exact incoming interface and will not assume it.
+- Empty support is predicted to have been load-bearing only for the global
+  valuation-zero receipt and the tame-zero specialization derived from it,
+  not for the character algebra, quotient action, projector, or both-units
+  law.  Every actual dependency found during generalization will be recorded
+  explicitly in `FINDINGS.md`.
+- This prediction claims no wild 59-reading, detector faithfulness,
+  unconditional relation (7a), endpoint, or transformer.  The Vostokov
+  middle path will be stated only as the exact decomposition interface that
+  would reduce the two normalized state factors to the existing
+  Artin--Hasse generators.
+
 ## 2026-08-07 — detector-witness and Artin–Hasse fork prediction
 
 - **W1 prediction: 827 admits the requested transverse witness.**  The first
