@@ -11,9 +11,16 @@ distinguished place above `59`; the complete `Finsupp` pairing is constructed
 as its single supported column.  Consequently every tame/non-distinguished
 row is a theorem, not a local-orthogonality premise.
 
-Poitou--Tate detector existence, the comparison with the selected gauge, and
-global reciprocity remain explicit interfaces.  No unconditional relation
-(7a), endpoint, or transformer is asserted here.
+The detector proposition below is the pre-Stage-2 abstract interface used by
+the conditional implication.  It is not yet an explicit Poitou--Tate witness:
+the generic dual carrier has no global Kummer representative, and this
+single-wild-column pairing forces its auxiliary reading to zero.  The
+separate `DetectorWitness827` audit states the honest q-relaxed target and
+proves why the current empty-support seated instance cannot inhabit it.
+
+The comparison with the selected gauge and global reciprocity remain explicit
+interfaces.  No unconditional relation (7a), endpoint, or transformer is
+asserted here.
 -/
 import Fermat.Conservation.TamePlacePairing
 import Fermat.FiftyNine.Conservation.CommonActionStage
@@ -249,14 +256,15 @@ def toLampTransverse (action : SelectedLampAction d) :
 
 end SelectedLampAction
 
-/-! ## W2.2: one global detector; support is already constructed -/
+/-! ## The pre-Stage-2 abstract detector interface -/
 
-/-- A Poitou--Tate detector with one lamp-selected place above 827.
+/-- An abstract dual value with one lamp-selected place above 827.
 
 There is no support field: `wild.toPlaceIndexedLocalPairing` has only the
 distinguished column by construction.  In particular, the auxiliary tame
-reading is already zero even though the lamp is used to construct the global
-detector.  Detector existence itself remains an arithmetic interface. -/
+reading is already zero.  Thus this structure is sufficient to index the
+existing conditional theorem, but it does not assert a q-relaxed global
+Kummer class or compute a transverse 827 coordinate. -/
 structure TransverseDetector
     (distinguishedPlace : Place)
     (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
@@ -333,9 +341,11 @@ theorem outside_reading_eq_zero
 
 end TransverseDetector
 
-/-- **INTERFACE — W2.2.** Poitou--Tate supplies a global detector after one
-auxiliary lamp place is relaxed.  Pairing support is not part of this target:
-it is already the single distinguished column. -/
+/-- **ABSTRACT INTERFACE — not the Stage-2 witness.**  This proposition is
+retained for the compiled conditional route.  An explicit Poitou--Tate
+construction must instead inhabit the q-relaxed target audited in
+`DetectorWitness827`; the current single-column pairing has no auxiliary
+coordinate to realize. -/
 def transverse_detector_exists
     (distinguishedPlace : Place)
     (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)

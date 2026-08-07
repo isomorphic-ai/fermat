@@ -1,5 +1,101 @@
 # N59 conservation findings
 
+## 2026-08-07 — DETECTOR-WITNESS discovery: 827 is live, but the seated dual is not q-relaxed
+
+- The finite 827 lamp itself passes.  The clean generated capacity matrix has
+  first coordinate `48 : ZMod 59`; its underlying edge residue is `105 :
+  ZMod 827`, and `105^14 = 803 = 671^48`.  Thus 827 supplies a concrete,
+  nonzero, computable power-residue functional rather than a decorative
+  supporter-prime label.
+- The campaign's actual seated carrier makes that coordinate impossible to
+  realize.  Both `TamePlacePairing.Seated.Primal` and
+  `Seated.ReflectedDual` are character eigenspaces in Mathlib's
+  **empty-support** Selmer group.  Consequently
+  `SelmerEigenspace.valuationOfNeZeroMod_eq_one` gives valuation zero modulo
+  `p` at every height-one place on both legs, and
+  `Seated.Realization.pairAt_eq_zero_at_tame_place` applies the descended
+  both-units law to prove every tame reading zero—including every place over
+  827.
+- `DetectorWitness827.TransverseDetectorWitness` states the honest target
+  modulo the wild value: it retains a q-relaxed Kummer-class map, the
+  reflected eigenlaw, representative support contained over `p` and `q`,
+  computed q-readings, their both-units silence elsewhere, and a nonzero
+  auxiliary coordinate.  The seated specialization
+  `EmptySupportTransverseDetectorWitness.not_nonempty` proves that the
+  corresponding target is uninhabited for the current empty-support dual.
+  It is a theorem about the real carrier, not a standalone mock pairing.
+- Three candidate routes therefore fail for distinct, recorded reasons.
+  A local uniformizer over 827 has the wanted nonzero valuation/readout but
+  is not an element of the current empty-support dual condition.  An element
+  of the current reflected dual has the right type/eigenlaw but its 827
+  reading is forced to zero.  The older `TateBridge.TransverseDetector`
+  cannot bridge the two: it is generic over an arbitrary `DOmegaSelmerChiStar`
+  and its pairing is definitionally a single 59-supported `Finsupp`, so it
+  contains neither a q-relaxed Kummer class nor an 827 computation.
+- The generation-chain fallbacks `11579`, `23159`, `463181`, and `12042707`
+  are witnessless for the same structural reason.  The no-go theorem is
+  generic in the auxiliary prime and uses only tameness, so changing the
+  lamp cannot change the empty-support valuation receipt.  Trying the next
+  prime would be a **q-relaxed-character-allocation livelock channel**, not
+  new arithmetic evidence.
+- W1's committed positive prediction is therefore falsified.  The exact
+  repair is a reflected Selmer carrier whose local condition is relaxed at
+  the places over q, together with its Delta-stable right-character
+  projector and localization/comparison to the explicit residue
+  functional.  Only after that construction can Poitou--Tate supply or test
+  the missing wild 59-coordinate.  No zero candidate is presented as
+  transverse, and `wild_detector_faithful` remains uninhabited.
+
+## 2026-08-07 — ARTIN–HASSE fork discovery: NEEDS-VOSTOKOV
+
+- The advertised Artin–Hasse subgroup has three explicit generator kinds in
+  the clean cone.  `StateFactorPair.zetaUnit` is the selected root of unity;
+  `fixedDenominator = zeta - 1` is an associate of `1 - zeta`; and
+  `Credit.generatedUnit hζ i` is an edge ratio of `realOrbitNode`, ultimately
+  built from geometric cyclotomic units.  These are the only inventory rows
+  with construction-level cyclotomic provenance.
+- The state-dependent factors are not proved to lie in that subgroup.
+  `normalizedPlusFactor` and `normalizedMinusFactor` have factor equations,
+  nonzeroness, conjugacy up to `-zeta⁻¹`, and ideal 59th-power identities,
+  but no theorem makes either factor a unit at the 59-place or decomposes its
+  local Kummer class into `zeta`, `1-zeta`, and generated cyclotomic units.
+- The actual statewise Selmer input loses even that element-level candidate.
+  `allocatedSelmerObstruction` calls `ExactFilteredPair.liftClassPair`, a
+  `Classical.choose` preimage under the surjective class projection;
+  `StrictRouteBoundary.selmerObstruction` is this chosen pair.  After seating,
+  `SelmerEigenspace.quotientRepresentative` supplies only its quotient
+  equality and divisible-valuation receipts.  `GaugeComparison` relates an
+  independently supplied `x : SelmerChi` to the class gauge only through a
+  scalar reading law; it supplies no equality of Kummer representatives.
+- The detector row is equally unrestricted:
+  `TateBridge.TransverseDetector.detector : DOmegaSelmerChiStar`, and its lamp
+  realization proves only polynomial annihilation.  W1 found neither a
+  reflected projector nor a theorem putting its 59-component in the
+  advertised subgroup.  The prime-to-59 capacity of `generatedSubledger`
+  does not close this gap: that subgroup consists of real units, while the
+  pairing inputs are arbitrary Selmer Kummer classes not shown to arise from
+  those units.
+- Therefore the committed `AH-SUFFICES` prediction is falsified.  The actual
+  inventory contains two opaque/general Kummer inputs, and
+  `WildLocalInterface` exposes only an abstract bilinear sharp-adjoint
+  reading, not a completed-field Hilbert-symbol realization.  The honest
+  formula budget is **NEEDS-VOSTOKOV**.  Reversing the verdict requires
+  explicit 59-local quotient equalities decomposing both actual inputs into
+  the advertised generators; no such membership proof is invented.
+- `ArtinHasseInventory.lean` records the fork as a conservative coverage
+  computation.  It asserts neither mathematical nonmembership nor an
+  Artin–Hasse special value.  Because the verdict is not `AH-SUFFICES`, no
+  laws-only special-formula interface was begun.
+- Process scans found no competing Lean/Lake build.  The two new audit
+  modules build at 8,548 jobs, the selected conductor-59 verification leaf
+  at 8,641, and the explicit no-splitting verification at 8,540.  The exact
+  nine-target command is green at 8,717/8,717 jobs: the previous 8,715-job
+  graph plus precisely these two modules.  All new theorem guards and
+  namespace-wide scans retain only `propext`, `Classical.choice`, and
+  `Quot.sound` (the closed inventory verdict uses no axioms); diagnostics
+  are the pre-existing `CapacityCertificate` warnings and `TameSymbol`
+  informational output.
+
 ## 2026-08-07 — COHOMOLOGY-LEDGER discovery: reciprocity is Stokes; faithfulness is the frontier
 
 - The honest remaining-potential carrier on the existing Tate surface is the

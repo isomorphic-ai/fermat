@@ -30,6 +30,8 @@ import Fermat.FiftyNine.Conservation.StateFactorPair
 import Fermat.FiftyNine.Conservation.StateFactorConjugation
 import Fermat.FiftyNine.Conservation.CommonActionStage
 import Fermat.FiftyNine.Conservation.TateBridge
+import Fermat.FiftyNine.Conservation.DetectorWitness827
+import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
@@ -621,6 +623,192 @@ remain interfaces; the bank audit and every away row are now proved. -/
   Fermat.FiftyNine.Conservation.TateBridge.BankSilenceAudit.away_reading_eq_zero,
   Fermat.Conservation.TamePlacePairing.WildLocalInterface.pairAt_eq_zero_of_ne
 
+/-! The nominated 827 lamp has a checked nonzero finite readout, but the
+current seated dual is an empty-support Selmer eigenspace.  The detector
+audit therefore exposes the honest q-relaxed target and proves that no
+empty-support inhabitant can realize its transverse coordinate. -/
+
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstLedgerNode
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_eq
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_ne_zero
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeResidue827_eq
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq_root_pow_reading
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.TransverseDetectorWitness
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.TransverseDetectorWitness.outside_tame_reading_eq_zero
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.Place
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.Primal
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.ReflectedDual
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.Pairing
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.candidate_eigenlaw
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.candidate_valuation_dvd
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.reading_eq_zero_at_every_tame_auxiliary
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.auxiliaryReading_eq_zero
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.not_nonempty
+#check Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.firstLampReading827_not_realized_by_seated_pairing
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_eq,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_ne_zero,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeResidue827_eq,
+  Fermat.FiftyNine.Conservation.CapacityCertificate.edgeResidue
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq,
+  Fermat.FiftyNine.Conservation.CapacityCertificate.edgeResidue
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq_root_pow_reading,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.TransverseDetectorWitness.outside_tame_reading_eq_zero,
+  Fermat.Conservation.TameSymbol.Context.both_units_silence
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.candidate_eigenlaw,
+  Fermat.Conservation.SelmerEigenspace.mem_characterEigenspace_iff
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.candidate_valuation_dvd,
+  Fermat.Conservation.SelmerEigenspace.quotientRepresentative_valuation_dvd
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.reading_eq_zero_at_every_tame_auxiliary,
+  Fermat.Conservation.TamePlacePairing.Seated.Realization.pairAt_eq_zero_at_tame_place
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.auxiliaryReading_eq_zero,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.reading_eq_zero_at_every_tame_auxiliary
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.not_nonempty,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.auxiliaryReading_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.firstLampReading827_not_realized_by_seated_pairing,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.reading_eq_zero_at_every_tame_auxiliary
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.firstLampReading827_not_realized_by_seated_pairing,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_ne_zero
+
+/-! The wild-place inventory records exactly which campaign inputs have an
+exposed cyclotomic-generator decomposition.  The two actual pairing inputs
+do not, so the conservative formula budget is `NEEDS-VOSTOKOV`. -/
+
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.WildClassKind
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.hasArtinHasseDecomposition
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.WildFormulaBudget
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.formulaBudget
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignInventory
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.formulaBudget
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignInventory
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_eq
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeResidue827_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeResidue827_eq
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq_root_pow_reading' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.firstEdgeSymbol827_eq_root_pow_reading
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.TransverseDetectorWitness.outside_tame_reading_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.TransverseDetectorWitness.outside_tame_reading_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.candidate_eigenlaw' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.candidate_eigenlaw
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.candidate_valuation_dvd' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.candidate_valuation_dvd
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.reading_eq_zero_at_every_tame_auxiliary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.reading_eq_zero_at_every_tame_auxiliary
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.auxiliaryReading_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.auxiliaryReading_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.not_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.EmptySupportTransverseDetectorWitness.not_nonempty
+
+/--
+info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.firstLampReading827_not_realized_by_seated_pairing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.firstLampReading827_not_realized_by_seated_pairing
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov' does not depend on any axioms
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov
+
 /-! W3 is a compiled conditional theorem, not an unconditional producer.
 Its proof consumes reciprocity, the chosen detector, and the gauge
 zero-reflection law.  Its local-vanishing step now factors through the
@@ -998,6 +1186,8 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CommonActionStage
 #guard_standard_axioms_prefix Fermat.Conservation.TatePairing
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TateBridge
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DetectorWitness827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
