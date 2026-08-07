@@ -1,6 +1,7 @@
 import Fermat.Basic
 import Fermat.Cases
 import Fermat.Classical
+import Fermat.Conservation.CohomologyLedger
 import Fermat.Eleven.Cyclotomic
 import Fermat.Eleven.SevenFold
 import Fermat.FiftyNine.GenericProof

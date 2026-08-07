@@ -11,6 +11,7 @@ standard-axiom boundary.  In particular, strict-route perfect return is
 refuted upstream and is obtained only through the explicit swap quotient map.
 -/
 import Fermat.Conservation.GuardDependsOn
+import Fermat.Conservation.CohomologyLedger
 import Fermat.Conservation.CommonActionStage
 import Fermat.Conservation.LinkingInterfaces
 import Fermat.Conservation.PowerRootObstruction
@@ -1185,8 +1186,13 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.TameSymbol
 #guard_standard_axioms_prefix Fermat.Conservation.SelmerEigenspace
 #guard_standard_axioms_prefix Fermat.Conservation.TamePlacePairing
+#guard_standard_axioms_prefix Fermat.Conservation.CohomologyExactCell
+#guard_standard_axioms_prefix Fermat.Conservation.IsoConserveBridge.cohomologyBalancedStep
+#guard_standard_axioms_prefix Fermat.Conservation.IsoConserveBridge.cohomology_L1_conservation
 
-/-! The PowerRoot extension must stay exact without exposing or consuming a
-chosen equivalence between its Selmer middle and a product of its ends. -/
+/-! The PowerRoot extension and cohomology filtration must stay exact without
+exposing or consuming a chosen equivalence between either middle object and a
+product of its ends. -/
 
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PowerRootExactSequence
+#audit_no_product_equiv_types_prefix Fermat.Conservation.CohomologyExactCell

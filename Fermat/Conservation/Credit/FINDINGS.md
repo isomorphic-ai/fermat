@@ -1,5 +1,52 @@
 # Credit-ladder findings
 
+## 2026-08-07 — COHOMOLOGY-LEDGER W3 discovery
+
+- All four budget-ordered W3 targets compiled.  A dual cycle is expressed as
+  a functional whose composite with `dPrev` vanishes, so exact-form period
+  vanishing remains generic over a division ring without incorrectly asking
+  for a left scalar action on the dual of a noncommutative module.
+- `EulerPoincareProfile` exposes each boundary value once as outgoing flow and
+  once as the next degree's incoming flow.  Mathlib's finite alternating-sum
+  cancellation theorem then proves the internal-transfer identity first and
+  `chi(C) = chi(H)` second.
+- Explicit cell maps descend through `Z/BInZ`.  The homotopy equation
+  `f - g = d h + h d` sends a cycle difference into the target boundary
+  submodule, which is exactly the quotient equality needed for equal induced
+  maps on `H`.  Degreewise exact additivity also sums to Euler additivity
+  without selecting any splitting.
+- The cheap third observer landed as well: over `ZMod p`, `v_p (Nat.card M)`
+  reduces to finrank and therefore inherits the generic exact-filtration
+  ledger.  The finite-length observer uses the exact-sequence length theorem
+  directly.
+- The targeted module, dependency audit, generic selected-prime scan,
+  standard-axiom prefix audit, and mechanical no-product-equivalence audit
+  are green.  No section, complement, retraction, or splitting was added.
+
+## 2026-08-07 — COHOMOLOGY-LEDGER W1/W2 discovery
+
+- The executable cell compiles with the predicted single quotient adapter.
+  Ambient `B = range dPrev` is a submodule of `C`, so the literal quotient
+  must use `BInZ = B.comap Z.subtype` inside the cycle subtype.  Mathlib's
+  canonical `comapSubtypeEquivOfLe` identifies its finrank with `B`; no
+  complement, section, retraction, or product equivalence is selected.
+- Both filtration rows are consequently kernel/range normalization.  The
+  first uses `B → Z → Z/BInZ`; the second uses `Z → C → range dNext`.
+  Their injectivity, exactness, and surjectivity fields are compiled from the
+  square-zero law and the canonical inclusion, quotient, and range-restricted
+  maps.
+- The finrank ledger is propositional, not definitional, exactly as predicted:
+  its stock, credit, converted, and total projections are all `rfl`, while
+  conservation composes quotient finrank with rank--nullity.  Sorting raw
+  cochains into those columns is an actual `Transfer ℕ`, and the resulting L1
+  equality is already carried through `IsoConserveBridge`.
+- The generic invariant theorem needs only the additivity equations of the
+  two unsplit rows.  It now produces a literal `Ledger A` for any additive
+  finite-dimensional observer; finrank, module length, and finite-field
+  cardinality valuation are the compiled observations.  This makes the
+  documented information-loss order literal: exact filtration, then K0
+  ledger, then numeric ledger.
+
 ## 2026-08-06 — TAME-SYMBOLS verification: Stage 1 is green
 
 - The direct compiler checks are green for `TameSymbol.lean`,

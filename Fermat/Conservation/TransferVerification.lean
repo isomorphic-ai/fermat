@@ -13,7 +13,7 @@ import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.Interaction
 import Fermat.Conservation.ClassCarrier
 import Fermat.Conservation.TransverseAnnihilator
-import Fermat.Conservation.IsoConserveBridge
+import Fermat.Conservation.CohomologyLedger
 
 open Fermat.Conservation
 
@@ -35,6 +35,93 @@ open Fermat.Conservation
 #check IsoConserveBridge.toPayloadBalancedStep
 #check IsoConserveBridge.ofPayloadBalancedStep
 #check IsoConserveBridge.KummerNoether.schedulerStep_instantiates_transfer
+
+/-! ## Cohomology as the third IsoConserve tunnel instance -/
+
+#check CohomologyExactCell
+#check CohomologyExactCell.dPrev
+#check CohomologyExactCell.dNext
+#check CohomologyExactCell.d_squared
+#check CohomologyExactCell.B
+#check CohomologyExactCell.Z
+#check CohomologyExactCell.BInZ
+#check CohomologyExactCell.H
+#check CohomologyExactCell.Bout
+#check CohomologyExactCell.canonical_filtration
+#check CohomologyExactCell.IsDualCycle
+#check CohomologyExactCell.exact_form_vanishes_on_dual_cycle
+#check CohomologyExactCell.LinearShortExactSequence
+#check CohomologyExactCell.boundaryCycleCohomologySequence
+#check CohomologyExactCell.cycleCochainOutgoingSequence
+#check CohomologyExactCell.finrank_cell_ledger
+#check CohomologyExactCell.finrankLedger
+#check CohomologyExactCell.finrankTransfer
+#check CohomologyExactCell.AdditiveInvariant
+#check CohomologyExactCell.invariant_ledger_identity
+#check CohomologyExactCell.invariantLedger
+#check CohomologyExactCell.finrankInvariant
+#check CohomologyExactCell.lengthInvariant
+#check CohomologyExactCell.padicValNat_natCard_eq_finrank
+#check CohomologyExactCell.padicCardinalityInvariant
+#check CohomologyExactCell.EulerPoincareProfile
+#check CohomologyExactCell.EulerPoincareProfile.internal_transfers_cancel
+#check CohomologyExactCell.EulerPoincareProfile.eulerPoincare
+#check CohomologyExactCell.CellMap
+#check CohomologyExactCell.CellMap.onCohomology
+#check CohomologyExactCell.CellHomotopy
+#check CohomologyExactCell.CellHomotopy.onCohomology_eq
+#check CohomologyExactCell.shortExactEulerAdditivity
+#check IsoConserveBridge.cohomologyBalancedStep
+#check IsoConserveBridge.cohomology_L1_conservation
+
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.B_le_Z,
+  LinearMap.range_le_ker_iff
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.boundaryCycleCohomologySequence,
+  Submodule.ker_mkQ
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.cycleCochainOutgoingSequence,
+  LinearMap.ker_rangeRestrict
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.finrank_cell_ledger,
+  Fermat.Conservation.CohomologyExactCell.finrank_B_add_finrank_H
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.finrank_cell_ledger,
+  LinearMap.finrank_range_add_finrank_ker
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.finrankLedger,
+  Fermat.Conservation.CohomologyExactCell.finrank_cell_ledger
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.finrankTransfer,
+  Fermat.Conservation.CohomologyExactCell.finrank_cell_ledger
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.invariant_ledger_identity,
+  Fermat.Conservation.CohomologyExactCell.AdditiveInvariant.additive
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.invariantLedger,
+  Fermat.Conservation.CohomologyExactCell.invariant_ledger_identity
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.lengthInvariant,
+  Module.length_eq_add_of_exact
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.padicCardinalityInvariant,
+  Fermat.Conservation.CohomologyExactCell.padicValNat_natCard_eq_finrank
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.EulerPoincareProfile.internal_transfers_cancel,
+  Fin.sum_neg_one_pow_eq_zero
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.EulerPoincareProfile.eulerPoincare,
+  Fermat.Conservation.CohomologyExactCell.EulerPoincareProfile.internal_transfers_cancel
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.CellMap.onCohomology,
+  Fermat.Conservation.CohomologyExactCell.CellMap.maps_boundaries
+#guard_depends_on
+  Fermat.Conservation.CohomologyExactCell.CellHomotopy.onCohomology_eq,
+  Fermat.Conservation.CohomologyExactCell.CellHomotopy.middle_difference
+#guard_depends_on
+  Fermat.Conservation.IsoConserveBridge.cohomology_L1_conservation,
+  Fermat.Conservation.IsoConserveBridge.transfer_L1_conservation
 
 /-! The interaction layer exposes the complete two-account flow bound, the
 class carrier retains every receipt above its deliberately lossy projection,
