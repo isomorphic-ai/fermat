@@ -30,6 +30,7 @@ import Fermat.FiftyNine.Conservation.StateFactorPair
 import Fermat.FiftyNine.Conservation.StateFactorConjugation
 import Fermat.FiftyNine.Conservation.CommonActionStage
 import Fermat.FiftyNine.Conservation.TateBridge
+import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
 /-! ## Ledger-literal gate -/
@@ -611,6 +612,106 @@ the existing exact relation-(7a) vanishing theorem. -/
   Fermat.FiftyNine.Conservation.TateBridge.mu_59_to_the_n_risk,
   Fermat.FiftyNine.Conservation.TateBridge.Mu59ToTheNRisk.mk
 
+/-! ## Decisive PowerRoot-localization test and retained depth observation -/
+
+/-! The selected readings expose their two allocated sources, while the
+generic candidate face keeps both orders of localization on one input.  The
+four-constructor result selects the genuinely implemented fourth route. -/
+
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.r0
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.r1
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedGauge
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.SelectedAllocatedReadings
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedAllocatedReadings
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedAllocatedReadings_sources_ne
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.PowerRootLocalizationSide
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.ReadingProvenance
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.powerRootR0Candidate
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.powerRootR1Candidate
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.powerRootLocalizationDefect
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.SameInputPowerRootLocalizationFace
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.sameInputPowerRootLocalizationFace
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.LocalPowerRootClassShadowTrivialization
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.r0Provenance
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.r1Provenance
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeComparisonProvenance
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.SameInputPowerRootIdentification
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.noSameInputPowerRootIdentification
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.DirectPowerRootNaturalityOutcome
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.GlobalReciprocityTwoCell
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.ReciprocityNaturalityOutcome
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.ReflectedDualLocalizationCarrier
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.ReflectedDualCarrierOutcome
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.DifferentObstructionOutcome
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.GaugeNaturalityOutcome
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeNaturalityOutcome59
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedGauge_eq_difference
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.globalReciprocityTwoCellOfLaw
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.GaugeComparisonRoute
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeComparisonRoute
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.routeOfGaugeComparison
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeComparisonNotLocalAfterLocalize
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeComparisonNotLocalizeAfterGlobal
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.IntegralGaugeLift
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.integralR0
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.integralR1
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.bocksteinPowerRootReceipt
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.TwoTwosCorrespondenceStatus
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.BocksteinPowerRootReceiptObservation
+#check Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.bocksteinPowerRootReceiptObservation
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedAllocatedReadings,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.r0
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedAllocatedReadings,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.r1
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedAllocatedReadings_sources_ne,
+  zero_ne_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.sameInputPowerRootLocalizationFace,
+  Fermat.Conservation.PowerRootNaturality.LocalizationInterface.obstruction_square
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.noSameInputPowerRootIdentification,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.SameInputPowerRootIdentification.shared_selected_input
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeNaturalityOutcome59,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedAllocatedReadings_sources_ne
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeNaturalityOutcome59,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.noSameInputPowerRootIdentification
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedGauge_eq_difference,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_reading
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.globalReciprocityTwoCellOfLaw,
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.sum_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeComparisonRoute,
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.pairing_eq_gauge
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.routeOfGaugeComparison,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeComparisonRoute
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeComparisonNotLocalAfterLocalize,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.routeOfGaugeComparison
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.gaugeComparisonNotLocalizeAfterGlobal,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.routeOfGaugeComparison
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.bocksteinPowerRootReceiptObservation,
+  Fermat.Conservation.KummerDrain.AllocatedFactorLedger.rootClass_torsion
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.bocksteinPowerRootReceiptObservation,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.selectedGauge_eq_difference
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.bocksteinPowerRootReceiptObservation,
+  Fermat.Conservation.CommonActionStage.differenceGauge
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.bocksteinPowerRootReceiptObservation,
+  Fermat.FiftyNine.Conservation.TateBridge.mu_59_to_the_n_risk
+
 /--
 info: 'Fermat.FiftyNine.Conservation.TateBridge.StateLinkedIdealPair.vandiverSevenA_of_tate_bridge' depends on axioms: [propext,
  Classical.choice,
@@ -859,6 +960,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CommonActionStage
 #guard_standard_axioms_prefix Fermat.Conservation.TatePairing
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TateBridge
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
 /--

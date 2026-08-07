@@ -13,6 +13,9 @@ refuted upstream and is obtained only through the explicit swap quotient map.
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.CommonActionStage
 import Fermat.Conservation.LinkingInterfaces
+import Fermat.Conservation.PowerRootObstruction
+import Fermat.Conservation.PowerRootExactSequence
+import Fermat.Conservation.PowerRootNaturality
 import Fermat.Conservation.SelmerSequence
 import Fermat.Conservation.SelmerEigenspace
 import Fermat.Conservation.SwapQuotient
@@ -22,6 +25,123 @@ import Fermat.Conservation.TameSymbol
 import Fermat.Conservation.TransverseAnnihilator
 
 open Fermat.Conservation
+
+/-! ## Vendored PowerRoot generator surface -/
+
+#check PowerRoot.Factorization
+#check PowerRoot.Factorization.isMulTorsionFree
+#check PowerRoot.powerSubgroup
+#check PowerRoot.mem_powerSubgroup
+#check PowerRoot.mapOnPowerQuotients
+#check PowerRoot.mapOnPowerQuotients_mk
+#check PowerRoot.divisibleElements
+#check PowerRoot.divisibleClasses
+#check PowerRoot.Factorization.mem_powerSubgroup_iff
+#check PowerRoot.Factorization.mk_mem_divisibleClasses_iff
+#check PowerRoot.Factorization.mem_divisibleElements_iff
+#check PowerRoot.toDivisibleClasses
+#check PowerRoot.toDivisibleClasses_apply
+#check PowerRoot.toDivisibleClasses_surjective
+#check PowerRoot.exists_root
+#check PowerRoot.root
+#check PowerRoot.root_power
+#check PowerRoot.root_eq_of_pow_eq
+#check PowerRoot.root_one
+#check PowerRoot.root_mul
+#check PowerRoot.shift
+#check PowerRoot.coe_shift
+#check PowerRoot.root_shift
+#check PowerRoot.rootHom
+#check PowerRoot.rootHom_apply
+#check PowerRoot.fromKernel
+#check PowerRoot.fromKernel_mk
+#check PowerRoot.fromKernel_injective
+#check PowerRoot.obstruction
+#check PowerRoot.obstruction_toDivisibleClasses
+#check PowerRoot.obstruction_ker
+#check PowerRoot.obstruction_range
+
+/-! ## Principal-ideal complex and unsplit extension surface -/
+
+#check PowerRootExactSequence.TwoTermComplex
+#check PowerRootExactSequence.TwoTermComplex.PiOne
+#check PowerRootExactSequence.TwoTermComplex.PiZero
+#check PowerRootExactSequence.principalIdealArrow
+#check PowerRootExactSequence.principalIdealComplex
+#check PowerRootExactSequence.PrincipalIdealPiOne
+#check PowerRootExactSequence.PrincipalIdealPiZero
+#check PowerRootExactSequence.principalIdealFactorization
+#check PowerRootExactSequence.unitsToPiOne
+#check PowerRootExactSequence.unitsEquivPiOne
+#check PowerRootExactSequence.piOneEquivUnits
+#check PowerRootExactSequence.piZeroEquivClassGroup
+#check PowerRootExactSequence.UnitPowerClasses
+#check PowerRootExactSequence.ClassPowerTorsion
+#check PowerRootExactSequence.SelmerMiddle
+#check PowerRootExactSequence.unitReceipt
+#check PowerRootExactSequence.componentShadow
+#check PowerRootExactSequence.UnsplitExtensionClass
+#check PowerRootExactSequence.principalIdealExtensionClass
+#check PowerRootExactSequence.unitReceipt_injective
+#check PowerRootExactSequence.componentShadow_ker
+#check PowerRootExactSequence.componentShadow_surjective
+#check PowerRootExactSequence.componentShadow_unitReceipt
+
+/-! ## PowerRoot cube naturality surface -/
+
+#check PowerRootNaturality.ArrowMorphism
+#check PowerRootNaturality.ArrowMorphism.ext
+#check PowerRootNaturality.ArrowMorphism.identity
+#check PowerRootNaturality.ArrowMorphism.comp
+#check PowerRootNaturality.ArrowMorphism.identity_sourceMap_apply
+#check PowerRootNaturality.ArrowMorphism.identity_targetMap_apply
+#check PowerRootNaturality.ArrowMorphism.comp_sourceMap_apply
+#check PowerRootNaturality.ArrowMorphism.comp_targetMap_apply
+#check PowerRootNaturality.ArrowMorphism.endomorphismMonoid
+#check PowerRootNaturality.ArrowMorphism.one_sourceMap_apply
+#check PowerRootNaturality.ArrowMorphism.one_targetMap_apply
+#check PowerRootNaturality.ArrowMorphism.mul_sourceMap_apply
+#check PowerRootNaturality.ArrowMorphism.mul_targetMap_apply
+#check PowerRootNaturality.ArrowMorphism.mul_eq_comp
+#check PowerRootNaturality.ArrowMorphism.mapOnPowerQuotients_natural
+#check PowerRootNaturality.ArrowMorphism.mapDivisibleElements
+#check PowerRootNaturality.ArrowMorphism.mapDivisibleElements_apply
+#check PowerRootNaturality.ArrowMorphism.mapDivisibleClasses
+#check PowerRootNaturality.ArrowMorphism.mapDivisibleClasses_apply_coe
+#check PowerRootNaturality.ArrowMorphism.mapDivisibleClasses_toDivisibleClasses
+#check PowerRootNaturality.ArrowMorphism.mapCokernel
+#check PowerRootNaturality.ArrowMorphism.mapCokernel_mk
+#check PowerRootNaturality.ArrowMorphism.root_natural
+#check PowerRootNaturality.ArrowMorphism.root_mul_natural
+#check PowerRootNaturality.ArrowMorphism.mapDivisibleElements_shift
+#check PowerRootNaturality.ArrowMorphism.root_shift_natural
+#check PowerRootNaturality.ArrowMorphism.obstruction_natural
+#check PowerRootNaturality.GroupRingEquivariance
+#check PowerRootNaturality.GroupRingEquivariance.arrowMorphism
+#check PowerRootNaturality.GroupRingEquivariance.arrowMorphism_one
+#check PowerRootNaturality.GroupRingEquivariance.arrowMorphism_mul
+#check PowerRootNaturality.GroupRingEquivariance.action
+#check PowerRootNaturality.GroupRingEquivariance.action_apply
+#check PowerRootNaturality.GroupRingEquivariance.actOnDivisibleClasses
+#check PowerRootNaturality.GroupRingEquivariance.actOnCokernel
+#check PowerRootNaturality.GroupRingEquivariance.root_equivariant
+#check PowerRootNaturality.GroupRingEquivariance.obstruction_equivariant
+#check PowerRootNaturality.ReflectionInterface
+#check PowerRootNaturality.ReflectionInterface.toArrowMorphism
+#check PowerRootNaturality.ReflectionInterface.symmArrowMorphism
+#check PowerRootNaturality.ReflectionInterface.reflectDivisibleClasses
+#check PowerRootNaturality.ReflectionInterface.reflectCokernel
+#check PowerRootNaturality.ReflectionInterface.root_reflection
+#check PowerRootNaturality.ReflectionInterface.obstruction_reflection
+#check PowerRootNaturality.LocalizationInterface
+#check PowerRootNaturality.LocalizationInterface.toArrowMorphism
+#check PowerRootNaturality.LocalizationInterface.localizeDivisibleClasses
+#check PowerRootNaturality.LocalizationInterface.localizeCokernel
+#check PowerRootNaturality.LocalizationInterface.ObstructionSquareLaw
+#check PowerRootNaturality.LocalizationInterface.localObstructionAfterLocalization
+#check PowerRootNaturality.LocalizationInterface.localizationAfterGlobalObstruction
+#check PowerRootNaturality.LocalizationInterface.obstruction_square
+#check PowerRootNaturality.LocalizationInterface.powerRootObstructionSquareLaw
 
 /-! ## Public linking surface -/
 
@@ -124,7 +244,14 @@ open Fermat.Conservation
 #check LinkingInterfaces.FilteredStickelbergerCarrier.smul_mem_unitRange
 #check LinkingInterfaces.FilteredStickelbergerCarrier.classProjection_smul_eq_zero
 #check LinkingInterfaces.FilteredStickelbergerCarrier.conversionReceipt
+#check LinkingInterfaces.PrincipalIdealArrowEnd
+#check LinkingInterfaces.ArithmeticRepresentation
+#check LinkingInterfaces.ArithmeticRepresentation.rho_preserves_principal_arrow
+#check LinkingInterfaces.ArithmeticRepresentation.rho_root_square
+#check LinkingInterfaces.ArithmeticRepresentation.rho_powerRoot_square
+#check LinkingInterfaces.ArithmeticRepresentation.selmerAction_routeSquared
 #check LinkingInterfaces.StrictRouteArithmeticRepresentation
+#check LinkingInterfaces.StrictRouteArithmeticRepresentation.selmerAction_closedRoute
 #check LinkingInterfaces.WithheldStrictRouteArithmeticRepresentation
 #check LinkingInterfaces.ReflectedSelmerArithmeticRepresentationTarget
 
@@ -340,7 +467,7 @@ open Fermat.Conservation
 #check CommonActionStage.RouteMaps.openRoute_apply
 #check CommonActionStage.RouteMaps.openRoute_sq_apply
 #check CommonActionStage.RouteMaps.ofArithmeticRepresentation
-#check CommonActionStage.RouteMaps.rho_routeSquared_eq_closed
+#check CommonActionStage.RouteMaps.selmerAction_routeSquared_eq_closed
 #check CommonActionStage.reflectionCycleCorner
 #check CommonActionStage.reflectionCycleCorner_eq
 #check CommonActionStage.StrictReflectionCycleReceipt
@@ -390,6 +517,125 @@ open Fermat.Conservation
 #check CommonActionStage.reflectedSelmerRhoWall_target
 
 /-! ## Proof-value wiring -/
+
+/-! ### Vendored PowerRoot generator wiring -/
+
+#guard_depends_on PowerRoot.Factorization.isMulTorsionFree,
+  MulEquiv.toMonoidHom
+#guard_depends_on PowerRoot.mem_powerSubgroup,
+  powMonoidHom_apply
+#guard_depends_on PowerRoot.mapOnPowerQuotients_mk,
+  PowerRoot.mapOnPowerQuotients
+#guard_depends_on PowerRoot.Factorization.mem_powerSubgroup_iff,
+  Int.ediv_mul_cancel
+#guard_depends_on PowerRoot.Factorization.mk_mem_divisibleClasses_iff,
+  PowerRoot.Factorization.mem_powerSubgroup_iff
+#guard_depends_on PowerRoot.Factorization.mem_divisibleElements_iff,
+  PowerRoot.Factorization.mem_powerSubgroup_iff
+#guard_depends_on PowerRoot.toDivisibleClasses_apply,
+  PowerRoot.toDivisibleClasses
+#guard_depends_on PowerRoot.toDivisibleClasses_surjective,
+  QuotientGroup.out_eq'
+#guard_depends_on PowerRoot.exists_root,
+  PowerRoot.mem_powerSubgroup
+#guard_depends_on PowerRoot.root_power,
+  PowerRoot.Factorization.mem_powerSubgroup_iff
+#guard_depends_on PowerRoot.root_eq_of_pow_eq,
+  PowerRoot.root_power
+#guard_depends_on PowerRoot.root_one,
+  PowerRoot.root_eq_of_pow_eq
+#guard_depends_on PowerRoot.root_mul,
+  PowerRoot.root_eq_of_pow_eq
+#guard_depends_on PowerRoot.coe_shift,
+  PowerRoot.shift
+#guard_depends_on PowerRoot.root_shift,
+  PowerRoot.root_eq_of_pow_eq
+#guard_depends_on PowerRoot.rootHom_apply,
+  PowerRoot.rootHom
+#guard_depends_on PowerRoot.fromKernel_mk,
+  PowerRoot.fromKernel
+#guard_depends_on PowerRoot.fromKernel_injective,
+  PowerRoot.Factorization.isMulTorsionFree
+#guard_depends_on PowerRoot.obstruction_toDivisibleClasses,
+  PowerRoot.obstruction
+#guard_depends_on PowerRoot.obstruction_ker,
+  PowerRoot.obstruction_toDivisibleClasses
+#guard_depends_on PowerRoot.obstruction_range,
+  PowerRoot.obstruction_toDivisibleClasses
+
+/-! ### Principal-ideal unsplit extension wiring -/
+
+#guard_depends_on PowerRootExactSequence.unitReceipt_injective,
+  PowerRootExactSequence.principalIdealExtensionClass
+#guard_depends_on PowerRootExactSequence.componentShadow_ker,
+  PowerRootExactSequence.principalIdealExtensionClass
+#guard_depends_on PowerRootExactSequence.componentShadow_surjective,
+  PowerRootExactSequence.principalIdealExtensionClass
+#guard_depends_on PowerRootExactSequence.componentShadow_unitReceipt,
+  PowerRootExactSequence.componentShadow_ker
+
+/-! ### PowerRoot naturality wiring -/
+
+#guard_depends_on PowerRootNaturality.ArrowMorphism.ext,
+  PowerRootNaturality.ArrowMorphism.rec
+#guard_depends_on PowerRootNaturality.ArrowMorphism.identity_sourceMap_apply,
+  PowerRootNaturality.ArrowMorphism.identity
+#guard_depends_on PowerRootNaturality.ArrowMorphism.identity_targetMap_apply,
+  PowerRootNaturality.ArrowMorphism.identity
+#guard_depends_on PowerRootNaturality.ArrowMorphism.comp_sourceMap_apply,
+  PowerRootNaturality.ArrowMorphism.comp
+#guard_depends_on PowerRootNaturality.ArrowMorphism.comp_targetMap_apply,
+  PowerRootNaturality.ArrowMorphism.comp
+#guard_depends_on PowerRootNaturality.ArrowMorphism.one_sourceMap_apply,
+  PowerRootNaturality.ArrowMorphism.identity
+#guard_depends_on PowerRootNaturality.ArrowMorphism.one_targetMap_apply,
+  PowerRootNaturality.ArrowMorphism.identity
+#guard_depends_on PowerRootNaturality.ArrowMorphism.mul_sourceMap_apply,
+  PowerRootNaturality.ArrowMorphism.endomorphismMonoid
+#guard_depends_on PowerRootNaturality.ArrowMorphism.mul_targetMap_apply,
+  PowerRootNaturality.ArrowMorphism.endomorphismMonoid
+#guard_depends_on PowerRootNaturality.ArrowMorphism.mul_eq_comp,
+  PowerRootNaturality.ArrowMorphism.comp
+#guard_depends_on PowerRootNaturality.ArrowMorphism.mapOnPowerQuotients_natural,
+  PowerRootNaturality.ArrowMorphism.preserves_arrow
+#guard_depends_on PowerRootNaturality.ArrowMorphism.mapDivisibleElements_apply,
+  PowerRootNaturality.ArrowMorphism.mapDivisibleElements
+#guard_depends_on PowerRootNaturality.ArrowMorphism.mapDivisibleClasses_apply_coe,
+  PowerRootNaturality.ArrowMorphism.mapDivisibleClasses
+#guard_depends_on
+  PowerRootNaturality.ArrowMorphism.mapDivisibleClasses_toDivisibleClasses,
+  PowerRootNaturality.ArrowMorphism.mapDivisibleClasses
+#guard_depends_on PowerRootNaturality.ArrowMorphism.mapCokernel_mk,
+  PowerRootNaturality.ArrowMorphism.mapCokernel
+#guard_depends_on PowerRootNaturality.ArrowMorphism.root_natural,
+  PowerRoot.root_eq_of_pow_eq
+#guard_depends_on PowerRootNaturality.ArrowMorphism.root_mul_natural,
+  PowerRoot.root_mul
+#guard_depends_on PowerRootNaturality.ArrowMorphism.mapDivisibleElements_shift,
+  map_pow
+#guard_depends_on PowerRootNaturality.ArrowMorphism.root_shift_natural,
+  PowerRoot.root_shift
+#guard_depends_on PowerRootNaturality.ArrowMorphism.obstruction_natural,
+  PowerRoot.obstruction_toDivisibleClasses
+#guard_depends_on PowerRootNaturality.GroupRingEquivariance.arrowMorphism_one,
+  PowerRootNaturality.ArrowMorphism.ext
+#guard_depends_on PowerRootNaturality.GroupRingEquivariance.arrowMorphism_mul,
+  PowerRootNaturality.ArrowMorphism.ext
+#guard_depends_on PowerRootNaturality.GroupRingEquivariance.action_apply,
+  PowerRootNaturality.GroupRingEquivariance.action
+#guard_depends_on PowerRootNaturality.GroupRingEquivariance.root_equivariant,
+  PowerRootNaturality.ArrowMorphism.root_natural
+#guard_depends_on PowerRootNaturality.GroupRingEquivariance.obstruction_equivariant,
+  PowerRootNaturality.ArrowMorphism.obstruction_natural
+#guard_depends_on PowerRootNaturality.ReflectionInterface.root_reflection,
+  PowerRootNaturality.ArrowMorphism.root_natural
+#guard_depends_on PowerRootNaturality.ReflectionInterface.obstruction_reflection,
+  PowerRootNaturality.ArrowMorphism.obstruction_natural
+#guard_depends_on PowerRootNaturality.LocalizationInterface.obstruction_square,
+  PowerRootNaturality.ArrowMorphism.obstruction_natural
+#guard_depends_on
+  PowerRootNaturality.LocalizationInterface.powerRootObstructionSquareLaw,
+  PowerRootNaturality.LocalizationInterface.obstruction_square
 
 #guard_depends_on InvolutiveBase.hash_hash,
   InvolutiveBase.hashHom_comp_self
@@ -493,11 +739,20 @@ open Fermat.Conservation
   LinkingInterfaces.FilteredStickelbergerCarrier.conversionReceipt_source_eq,
   ClassCarrier.PrincipalizationReceipt.source_eq
 #guard_depends_on
-  LinkingInterfaces.ArithmeticRepresentation.rho_routeSquared,
-  LinkingInterfaces.ArithmeticRepresentation.rho_route
+  LinkingInterfaces.ArithmeticRepresentation.rho_preserves_principal_arrow,
+  PowerRootNaturality.ArrowMorphism.preserves_arrow
 #guard_depends_on
-  LinkingInterfaces.StrictRouteArithmeticRepresentation.rho_closedRoute,
-  LinkingInterfaces.ArithmeticRepresentation.rho_routeSquared
+  LinkingInterfaces.ArithmeticRepresentation.rho_root_square,
+  PowerRootNaturality.ArrowMorphism.root_natural
+#guard_depends_on
+  LinkingInterfaces.ArithmeticRepresentation.rho_powerRoot_square,
+  PowerRootNaturality.ArrowMorphism.obstruction_natural
+#guard_depends_on
+  LinkingInterfaces.ArithmeticRepresentation.selmerAction_routeSquared,
+  LinkingInterfaces.ArithmeticRepresentation.selmerAction_route
+#guard_depends_on
+  LinkingInterfaces.StrictRouteArithmeticRepresentation.selmerAction_closedRoute,
+  LinkingInterfaces.ArithmeticRepresentation.selmerAction_routeSquared
 
 /-! ## Tate pairing proof-value wiring -/
 
@@ -725,8 +980,14 @@ open Fermat.Conservation
 
 /-! ## Common-action proof-value wiring -/
 
+#guard_depends_on IsDedekindDomain.selmerGroup.toClass,
+  PowerRoot.obstruction
+#guard_depends_on IsDedekindDomain.selmerGroup.toClass_ker,
+  PowerRoot.obstruction_ker
 #guard_depends_on IsDedekindDomain.selmerGroup.toClass_ker,
   IsDedekindDomain.selmerGroup.toClass
+#guard_depends_on IsDedekindDomain.selmerGroup.toClass_range,
+  PowerRoot.obstruction_range
 #guard_depends_on IsDedekindDomain.selmerGroup.toClass_range,
   IsDedekindDomain.selmerGroup.toClass
 #guard_depends_on CommonActionStage.selmerClassProjection,
@@ -793,8 +1054,8 @@ open Fermat.Conservation
   CommonActionStage.RouteMaps.openRoute_apply
 #guard_depends_on CommonActionStage.RouteMaps.ofArithmeticRepresentation,
   LinkingInterfaces.ArithmeticRepresentation.routeChiToReflected
-#guard_depends_on CommonActionStage.RouteMaps.rho_routeSquared_eq_closed,
-  LinkingInterfaces.ArithmeticRepresentation.rho_routeSquared
+#guard_depends_on CommonActionStage.RouteMaps.selmerAction_routeSquared_eq_closed,
+  LinkingInterfaces.ArithmeticRepresentation.selmerAction_routeSquared
 #guard_depends_on CommonActionStage.reflectionCycleCorner_eq,
   CommonActionStage.reflectionCycleCorner
 #guard_depends_on CommonActionStage.reflectionCycleCorner_eq,
@@ -915,9 +1176,17 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.RouteAlgebra
 #guard_standard_axioms_prefix Fermat.Conservation.SwapQuotient
 #guard_standard_axioms_prefix Fermat.Conservation.TransverseAnnihilator.CornerService
+#guard_standard_axioms_prefix PowerRoot
+#guard_standard_axioms_prefix Fermat.Conservation.PowerRootExactSequence
+#guard_standard_axioms_prefix Fermat.Conservation.PowerRootNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.LinkingInterfaces
 #guard_standard_axioms_prefix Fermat.Conservation.CommonActionStage
 #guard_standard_axioms_prefix Fermat.Conservation.TatePairing
 #guard_standard_axioms_prefix Fermat.Conservation.TameSymbol
 #guard_standard_axioms_prefix Fermat.Conservation.SelmerEigenspace
 #guard_standard_axioms_prefix Fermat.Conservation.TamePlacePairing
+
+/-! The PowerRoot extension must stay exact without exposing or consuming a
+chosen equivalence between its Selmer middle and a product of its ends. -/
+
+#audit_no_product_equiv_types_prefix Fermat.Conservation.PowerRootExactSequence
