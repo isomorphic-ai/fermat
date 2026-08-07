@@ -3,6 +3,30 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-08 — finite-S 827 lift prediction
+
+- **Committed guess: `ReflectedQRelaxedLocalizationLift827` inhabits this
+  session.**  The finite-S Selmer class sequence at Mathlib commit
+  `9ec933d517` should turn the selected 827 divisor coordinate into an honest
+  global relaxed class: its S-class-torsion surjection should supply the
+  global class leg, while its kernel description should identify the
+  representative ambiguity with the S-unit leg.  I expect matching the
+  quotient representative to be formal once those maps are ported.
+- The likely bite point is proving that the chosen class has a nonzero
+  coordinate after the reflected-character projector, rather than merely
+  producing some element of the relaxed Selmer group.  The checked first
+  capacity row and 827 lamp arithmetic are predicted to discharge that
+  point without a new chosen localization-surjectivity interface.  If they
+  do not, the honest obstruction should be the precise divisor/class-map
+  condition on the selected q-basis vector, not a generic claim that the
+  global lift is difficult.
+- If the lift inhabits, `SelectedTameComparison` is predicted to compile from
+  the same representative/localization compatibility plus the existing
+  capacity readout.  The reassembled transverse witness should then remain
+  conditional only at the wild 59-coordinate.  This predicts no
+  unconditional relation (7a), endpoint, or transformer, and preserves the
+  no-splitting guard.
+
 ## 2026-08-07 — q-relaxed reflected-carrier repair prediction
 
 - **Committed guess: the relaxed 827 witness inhabits modulo its wild
