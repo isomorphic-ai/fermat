@@ -76,7 +76,7 @@ private def equivalenceTypeNames : Array Name :=
     Name.mkSimple "AddEquiv", Name.mkSimple "LinearEquiv"]
 
 /--
-`#guard_no_product_equiv_types_prefix Namespace` fails when a declaration
+`#audit_no_product_equiv_types_prefix Namespace` fails when a declaration
 under `Namespace` has a type mentioning both a product and an equivalence.
 
 This is the type-level companion to `#guard_depends_on`: it audits consumed
@@ -85,7 +85,7 @@ no-Selmer-splitting rule mechanical.  Its deliberately conservative scope is
 appropriate there: the public exact-sequence API has no legitimate reason to
 return or accept any equivalence with a product.
 -/
-elab "#guard_no_product_equiv_types_prefix " p:ident : command => do
+elab "#audit_no_product_equiv_types_prefix " p:ident : command => do
   let env ← getEnv
   let auditedPrefix := p.getId
   let declarations :=

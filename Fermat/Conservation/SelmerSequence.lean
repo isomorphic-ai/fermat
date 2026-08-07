@@ -3,15 +3,20 @@ Copyright (c) 2022 David Kurniadi Angdinata. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: David Kurniadi Angdinata, Fabian Franz
 
-# Vendored Selmer unit-class sequence
+# Vendored generic derivation of the Selmer unit-class sequence
 
-This is a faithful port of the empty-support Selmer unit-class sequence from:
+This is a faithful port of the generic power-root derivation of the
+empty-support Selmer unit-class sequence from our Mathlib branch
+`power-root-obstruction`:
 
 * pull request: `https://github.com/fabianx-ai/mathlib4/pull/1`;
-* source commit: `6c01b3a6a13de72eabd868ca50d743f43888af92`;
+* generator introduction commit:
+  `4ea7450c8a5844417866addb7fba766275a1945a`;
+* integration/source commit:
+  `889be7a3fee66e6630d25332a501409fa35d8590`;
 * source file: `Mathlib/RingTheory/DedekindDomain/SelmerGroup.lean`;
 * source-file SHA-256:
-  `37d78b8e5b3f9b757d1eb8b33286680501820aba250644a407e36381ee34c4d2`.
+  `a6fb493fdaf8686eed654b4b0f7abe84ef14d4198304ef4dcf9f8160c8afd2f6`.
 
 The source uses Mathlib's module-system surface on Lean 4.33.0-rc2 (`module`,
 `public import`, `@[expose] public section`, and `@[no_expose]`). Fermat pins
@@ -39,13 +44,19 @@ The complete delta in the vendored additions is:
 3. the source file's two file-local notations and `quotPrecheck` option are
    repeated because they do not cross an import boundary;
 4. only the requested additions are copied: the two private valuation helpers
-   used by the sequence and the block from `preSelmer` through
-   `toClass_range`. Existing pinned `SelmerGroup` material and upstream
-   documentation/import reordering are not duplicated;
-5. the source's `MonoidHom.domRestrict` is written under its name at the pin,
-   `MonoidHom.restrict`;
-6. the source's `Set.mem_ofPred_eq` is written under its name at the pin,
-   `Set.mem_setOf_eq`.
+   used by the sequence and the generic integration block from
+   `fractionalIdealExponents` through `toClass_range`. Existing pinned
+   `SelmerGroup` material and upstream documentation/import reordering are not
+   duplicated;
+5. the upstream import of `Mathlib.GroupTheory.PowerRootObstruction` is
+   redirected to the provenance-pinned route-neutral copy
+   `Fermat.Conservation.PowerRootObstruction`;
+6. the otherwise file-private `fractionalIdealFactorization` is exported so
+   the cube can name exactly the geometry used by this obstruction square,
+   rather than constructing a second, propositionally equivalent geometry;
+7. the source's result-type ascription on the quotient `powMonoidHom` is
+   replaced by an explicit `(α := ...)` argument. Lean 4.31 otherwise chooses
+   incompatible `Monoid` instance paths before learning the quotient type.
 
 There are no declaration, statement, or proof-body improvements. Apart from
 the compatibility and standalone-file deltas listed above, the vendored
@@ -55,6 +66,7 @@ declarations are copied verbatim.
 import Mathlib.RingTheory.ClassGroup.Basic
 import Mathlib.RingTheory.DedekindDomain.Factorization
 import Mathlib.RingTheory.DedekindDomain.SelmerGroup
+import Fermat.Conservation.PowerRootObstruction
 
 set_option quotPrecheck false
 local notation K "/" n => Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range
@@ -106,277 +118,236 @@ local notation K "⟮" S "," n "⟯" => @selmerGroup _ _ _ K _ _ _ S n
 
 namespace selmerGroup
 
-private abbrev preSelmer : Subgroup Kˣ :=
-  K⟮(∅ : Set <| HeightOneSpectrum R), n⟯.comap
-    (QuotientGroup.mk' (powMonoidHom n : Kˣ →* Kˣ).range)
+private def fractionalIdealExponents (I : (FractionalIdeal R⁰ K)ˣ) :
+    HeightOneSpectrum R →₀ ℤ :=
+  Finsupp.ofSupportFinite (fun v ↦ FractionalIdeal.count K v (I : FractionalIdeal R⁰ K))
+    (by
+      simpa only [Function.support] using Filter.eventually_cofinite.mp
+        (FractionalIdeal.finite_factors (I : FractionalIdeal R⁰ K)))
 
-private def preSelmerToSelmer : preSelmer (R := R) (K := K) (n := n) →*
-    K⟮(∅ : Set <| HeightOneSpectrum R), n⟯ :=
-  ((QuotientGroup.mk' (powMonoidHom n : Kˣ →* Kˣ).range).restrict
-    (preSelmer (R := R) (K := K) (n := n))).codRestrict _ fun x ↦ x.property
+private theorem fractionalIdealExponents_apply (I : (FractionalIdeal R⁰ K)ˣ)
+    (v : HeightOneSpectrum R) :
+    fractionalIdealExponents (R := R) (K := K) I v =
+      FractionalIdeal.count K v (I : FractionalIdeal R⁰ K) :=
+  rfl
 
-private theorem preSelmerToSelmer_surjective :
-    Function.Surjective (preSelmerToSelmer (R := R) (K := K) (n := n)) := by
-  intro x
-  let y : Kˣ := x.1.out
-  have hy : QuotientGroup.mk y = x.1 := QuotientGroup.out_eq' x.1
-  refine ⟨⟨y, ?_⟩, ?_⟩
-  · change QuotientGroup.mk y ∈ K⟮(∅ : Set <| HeightOneSpectrum R), n⟯
-    rw [hy]
-    exact x.property
-  · exact Subtype.ext hy
-
-private def rootIdeal (n : ℕ) (x : Kˣ) : FractionalIdeal R⁰ K :=
-  ∏ᶠ v : HeightOneSpectrum R, (v.asIdeal : FractionalIdeal R⁰ K) ^
-    Int.ediv (FractionalIdeal.count K v (FractionalIdeal.spanSingleton R⁰ (x : K))) n
-
-private theorem rootIdeal_ne_zero (n : ℕ) (x : Kˣ) : rootIdeal (R := R) n x ≠ 0 := by
-  apply finprod_ne_zero
-  intro v
+private theorem fractionalIdealProduct_ne_zero (e : HeightOneSpectrum R →₀ ℤ) :
+    e.prod (fun v z ↦ (v.asIdeal : FractionalIdeal R⁰ K) ^ z) ≠ 0 := by
+  rw [Finsupp.prod_ne_zero_iff]
+  intro v _
   exact zpow_ne_zero _ (FractionalIdeal.coeIdeal_ne_zero.mpr v.ne_bot)
 
-private theorem count_dvd (x : preSelmer (R := R) (K := K) (n := n))
+private def fractionalIdealOfExponents (e : HeightOneSpectrum R →₀ ℤ) :
+    (FractionalIdeal R⁰ K)ˣ :=
+  Units.mk0 (e.prod (fun v z ↦ (v.asIdeal : FractionalIdeal R⁰ K) ^ z))
+    (fractionalIdealProduct_ne_zero (R := R) (K := K) e)
+
+/-- The factorization of nonzero fractional ideals by their height-one prime exponents. -/
+def fractionalIdealFactorization :
+    PowerRoot.Factorization (FractionalIdeal R⁰ K)ˣ (HeightOneSpectrum R) where
+  toFun I := Multiplicative.ofAdd (fractionalIdealExponents (R := R) (K := K) I)
+  invFun e := fractionalIdealOfExponents (R := R) (K := K) e.toAdd
+  left_inv I := by
+    apply Units.ext
+    change (fractionalIdealExponents (R := R) (K := K) I).prod
+      (fun v z ↦ (v.asIdeal : FractionalIdeal R⁰ K) ^ z) = I
+    rw [← FractionalIdeal.finprod_heightOneSpectrum_factorization' K
+        (fractionalIdealProduct_ne_zero (R := R) (K := K)
+          (fractionalIdealExponents (R := R) (K := K) I)),
+      ← FractionalIdeal.finprod_heightOneSpectrum_factorization' K I.ne_zero]
+    apply finprod_congr
+    intro v
+    rw [FractionalIdeal.count_finsuppProd, fractionalIdealExponents_apply]
+  right_inv e := by
+    apply Multiplicative.toAdd.injective
+    ext v
+    change fractionalIdealExponents (R := R) (K := K)
+      (fractionalIdealOfExponents (R := R) (K := K) e.toAdd) v = e.toAdd v
+    rw [fractionalIdealExponents_apply]
+    exact FractionalIdeal.count_finsuppProd K v e.toAdd
+  map_mul' I J := by
+    apply Multiplicative.toAdd.injective
+    ext v
+    change FractionalIdeal.count K v ((I * J : (FractionalIdeal R⁰ K)ˣ) :
+        FractionalIdeal R⁰ K) =
+      FractionalIdeal.count K v (I : FractionalIdeal R⁰ K) +
+        FractionalIdeal.count K v (J : FractionalIdeal R⁰ K)
+    simpa only [Units.val_mul] using FractionalIdeal.count_mul K v I.ne_zero J.ne_zero
+
+private theorem fractionalIdealFactorization_apply (I : (FractionalIdeal R⁰ K)ˣ)
     (v : HeightOneSpectrum R) :
-    (n : ℤ) ∣ FractionalIdeal.count K v
-      (FractionalIdeal.spanSingleton R⁰ ((x : Kˣ) : K)) := by
-  rw [v.count_spanSingleton]
-  have hx : v.valuationOfNeZeroMod n (QuotientGroup.mk (x : Kˣ)) = 1 :=
-    x.property v (Set.notMem_empty v)
-  exact Int.dvd_neg.mpr ((v.valuation_mod_eq_one_iff n (x : Kˣ)).mp hx)
+    (fractionalIdealFactorization (R := R) (K := K) I).toAdd v =
+      FractionalIdeal.count K v (I : FractionalIdeal R⁰ K) :=
+  fractionalIdealExponents_apply I v
 
-private theorem rootIdeal_hasFiniteMulSupport (n : ℕ) (x : Kˣ) :
-    Function.HasFiniteMulSupport fun v : HeightOneSpectrum R ↦
-      (v.asIdeal : FractionalIdeal R⁰ K) ^
-        Int.ediv (FractionalIdeal.count K v
-          (FractionalIdeal.spanSingleton R⁰ (x : K))) n := by
-  have he : ∀ᶠ v : HeightOneSpectrum R in Filter.cofinite,
-      Int.ediv (FractionalIdeal.count K v
-        (FractionalIdeal.spanSingleton R⁰ (x : K))) n = 0 :=
-    (FractionalIdeal.finite_factors (FractionalIdeal.spanSingleton R⁰ (x : K))).mono
-      fun _ h ↦ by rw [h]; exact Int.zero_ediv _
-  refine (Filter.eventually_cofinite.mp he).subset ?_
-  intro v hv
-  simp only [Set.mem_setOf_eq, Function.mem_mulSupport] at hv ⊢
-  contrapose! hv
-  simp [hv]
+private theorem mk_mem_divisibleClasses_iff (x : Kˣ) :
+    (QuotientGroup.mk x : K / n) ∈
+        PowerRoot.divisibleClasses (toPrincipalIdeal R K) n ↔
+      ∀ v : HeightOneSpectrum R, v.valuationOfNeZeroMod n (QuotientGroup.mk x) = 1 := by
+  rw [(fractionalIdealFactorization (R := R) (K := K)).mk_mem_divisibleClasses_iff]
+  simp only [fractionalIdealFactorization_apply, coe_toPrincipalIdeal]
+  constructor
+  · intro hx v
+    apply (v.valuation_mod_eq_one_iff n x).mpr
+    exact Int.dvd_neg.mp (v.count_spanSingleton x ▸ hx v)
+  · intro hx v
+    rw [v.count_spanSingleton]
+    exact Int.dvd_neg.mpr ((v.valuation_mod_eq_one_iff n x).mp (hx v))
 
-private theorem rootIdeal_one : rootIdeal (R := R) n (1 : Kˣ) = 1 := by
-  rw [rootIdeal]
-  simp only [Units.val_one, FractionalIdeal.spanSingleton_one, FractionalIdeal.count_one]
-  rw [show Int.ediv 0 (n : ℤ) = 0 from Int.zero_ediv _]
-  simp
+private theorem selmerGroup_empty_eq_divisibleClasses :
+    K⟮(∅ : Set <| HeightOneSpectrum R), n⟯ =
+      PowerRoot.divisibleClasses (toPrincipalIdeal R K) n := by
+  ext q
+  induction q using QuotientGroup.induction_on with
+  | _ x =>
+    rw [mk_mem_divisibleClasses_iff (R := R) (K := K) (n := n)]
+    constructor
+    · intro hx v
+      exact hx v (Set.notMem_empty v)
+    · intro hx v _
+      exact hx v
 
-private theorem rootIdeal_mul (x y : preSelmer (R := R) (K := K) (n := n)) :
-    rootIdeal (R := R) n (x * y : Kˣ) =
-      rootIdeal (R := R) n x * rootIdeal (R := R) n y := by
-  rw [rootIdeal, rootIdeal, rootIdeal,
-    ← finprod_mul_distrib
-      (rootIdeal_hasFiniteMulSupport (R := R) (K := K) n (x : Kˣ))
-      (rootIdeal_hasFiniteMulSupport (R := R) (K := K) n (y : Kˣ))]
-  apply finprod_congr
-  intro v
-  rw [← zpow_add₀ (FractionalIdeal.coeIdeal_ne_zero.mpr v.ne_bot)]
-  congr 1
-  rw [show FractionalIdeal.spanSingleton R⁰ ((((x : Kˣ) * (y : Kˣ)) : Kˣ) : K) =
-      FractionalIdeal.spanSingleton R⁰ ((x : Kˣ) : K) *
-        FractionalIdeal.spanSingleton R⁰ ((y : Kˣ) : K) by simp]
-  rw [FractionalIdeal.count_mul]
-  · exact Int.add_ediv_of_dvd_left (count_dvd x v)
-  · exact FractionalIdeal.spanSingleton_ne_zero_iff.mpr (x : Kˣ).ne_zero
-  · exact FractionalIdeal.spanSingleton_ne_zero_iff.mpr (y : Kˣ).ne_zero
-
-private def rootIdealHom : preSelmer (R := R) (K := K) (n := n) →*
-    (FractionalIdeal R⁰ K)ˣ where
-  toFun x := Units.mk0 (rootIdeal (R := R) n (x : Kˣ)) (rootIdeal_ne_zero n (x : Kˣ))
-  map_one' := Units.ext rootIdeal_one
-  map_mul' x y := Units.ext (rootIdeal_mul x y)
-
-private def preToClass : preSelmer (R := R) (K := K) (n := n) →* ClassGroup R :=
-  (ClassGroup.mk K).comp (rootIdealHom (R := R) (K := K) (n := n))
-
-private theorem rootIdeal_pow [hn : Fact <| 0 < n] (y : Kˣ) :
-    rootIdeal (R := R) n (y ^ n) = FractionalIdeal.spanSingleton R⁰ (y : K) := by
-  rw [rootIdeal, ← FractionalIdeal.finprod_heightOneSpectrum_factorization' K
-    (FractionalIdeal.spanSingleton_ne_zero_iff.mpr y.ne_zero)]
-  apply finprod_congr
-  intro v
-  congr 1
-  simp only [Units.val_pow_eq_pow_val, ← FractionalIdeal.spanSingleton_pow,
-    FractionalIdeal.count_pow]
-  exact Int.mul_ediv_cancel_left _ (Int.natCast_ne_zero.mpr (Nat.ne_of_gt hn.out))
-
-private theorem rootIdeal_pow_eq (x : preSelmer (R := R) (K := K) (n := n)) :
-    rootIdeal (R := R) n (x : Kˣ) ^ n =
-      FractionalIdeal.spanSingleton R⁰ ((x : Kˣ) : K) := by
-  rw [rootIdeal, finprod_pow
-    (rootIdeal_hasFiniteMulSupport (R := R) (K := K) n (x : Kˣ)) n]
-  conv_rhs => rw [← FractionalIdeal.finprod_heightOneSpectrum_factorization' K
-    (FractionalIdeal.spanSingleton_ne_zero_iff.mpr (x : Kˣ).ne_zero)]
-  apply finprod_congr
-  intro v
-  rw [← zpow_natCast, ← zpow_mul]
-  congr 1
-  exact Int.ediv_mul_cancel (count_dvd x v)
-
-private theorem preSelmerToSelmer_ker_le [Fact <| 0 < n] :
-    (preSelmerToSelmer (R := R) (K := K) (n := n)).ker ≤
-      (preToClass (R := R) (K := K) (n := n)).ker := by
-  intro x hx
-  rw [MonoidHom.mem_ker] at hx ⊢
-  have hx' : QuotientGroup.mk (x : Kˣ) = (1 : K / n) := congr_arg Subtype.val hx
-  obtain ⟨y, hy⟩ := (QuotientGroup.eq_one_iff (x : Kˣ)).mp hx'
-  change ClassGroup.mk K (Units.mk0 (rootIdeal (R := R) n (x : Kˣ))
-    (rootIdeal_ne_zero n (x : Kˣ))) = 1
-  rw [ClassGroup.mk_eq_one_iff]
-  change (rootIdeal (R := R) n (x : Kˣ) : Submodule R K).IsPrincipal
-  have hxy : (x : Kˣ) = y ^ n := by simpa only [powMonoidHom_apply] using hy.symm
-  have hroot : rootIdeal (R := R) n (x : Kˣ) =
-      FractionalIdeal.spanSingleton R⁰ (y : K) := by
-    rw [hxy, rootIdeal_pow]
-  rw [hroot]
-  exact (FractionalIdeal.isPrincipal_iff _).mpr ⟨(y : K), rfl⟩
+private def selmerEquivDivisibleClasses :
+    K⟮(∅ : Set <| HeightOneSpectrum R), n⟯ ≃*
+      PowerRoot.divisibleClasses (toPrincipalIdeal R K) n :=
+  MulEquiv.subgroupCongr (selmerGroup_empty_eq_divisibleClasses (R := R) (K := K) (n := n))
 
 /-- The class of the `n`-th root ideal associated to an element of `K⟮∅, n⟯`. -/
 def toClass [Fact <| 0 < n] :
     K⟮(∅ : Set <| HeightOneSpectrum R), n⟯ →* ClassGroup R :=
-  (preSelmerToSelmer (R := R) (K := K) (n := n)).liftOfSurjective
-    (preSelmerToSelmer_surjective (R := R) (K := K) (n := n))
-      ⟨preToClass (R := R) (K := K) (n := n), preSelmerToSelmer_ker_le⟩
+  (ClassGroup.equiv K).symm.toMonoidHom.comp <|
+    (PowerRoot.obstruction (f := toPrincipalIdeal R K) (n := n)
+      (fractionalIdealFactorization (R := R) (K := K))).comp
+        (selmerEquivDivisibleClasses (R := R) (K := K) (n := n)).toMonoidHom
 
-@[simp]
-private theorem toClass_apply [Fact <| 0 < n]
-    (x : preSelmer (R := R) (K := K) (n := n)) :
-    toClass (R := R) (K := K) (n := n) (preSelmerToSelmer x) = preToClass x := by
-  simp [toClass]
+private def unitsToPrincipalKernel : Rˣ →* (toPrincipalIdeal R K).ker where
+  toFun u := ⟨Units.map (algebraMap R K : R →* K) u, by
+    apply Units.ext
+    rw [coe_toPrincipalIdeal, Units.val_one, ← FractionalIdeal.spanSingleton_one,
+      FractionalIdeal.spanSingleton_eq_spanSingleton]
+    exact ⟨u⁻¹, by simp [Units.smul_def, Algebra.smul_def]⟩⟩
+  map_one' := by ext; simp
+  map_mul' _ _ := by ext; simp
 
-private theorem fromUnitLift_mk [Fact <| 0 < n] (u : Rˣ) :
-    fromUnitLift (R := R) (K := K) (n := n) (QuotientGroup.mk u) =
-      fromUnit (K := K) (n := n) u := rfl
-
-private def preFromUnit (u : Rˣ) : preSelmer (R := R) (K := K) (n := n) :=
-  ⟨Units.map (algebraMap R K : R →* K) u, fun v _ ↦ v.valuation_of_unit_mod_eq n u⟩
-
-private theorem preSelmerToSelmer_preFromUnit (u : Rˣ) :
-    preSelmerToSelmer (preFromUnit (K := K) (n := n) u) =
-      fromUnit (K := K) (n := n) u := rfl
-
-private theorem rootIdeal_fromUnit (u : Rˣ) :
-    rootIdeal (R := R) n (Units.map (algebraMap R K : R →* K) u) = 1 := by
-  rw [rootIdeal]
-  have hc : ∀ v : HeightOneSpectrum R, FractionalIdeal.count K v
-      (FractionalIdeal.spanSingleton R⁰
-        (Units.map (algebraMap R K : R →* K) u : K)) = 0 := by
-    intro v
-    rw [v.count_spanSingleton]
-    simp [v.valuation_of_unit_eq]
-  simp only [hc]
-  rw [show Int.ediv 0 (n : ℤ) = 0 from Int.zero_ediv _]
-  simp
-
-private theorem toClass_fromUnit [Fact <| 0 < n] (u : Rˣ) :
-    toClass (R := R) (K := K) (n := n) (fromUnit (K := K) (n := n) u) = 1 := by
-  rw [← preSelmerToSelmer_preFromUnit, toClass_apply]
-  change ClassGroup.mk K
-    (rootIdealHom (R := R) (K := K) (n := n) (preFromUnit (K := K) (n := n) u)) = 1
-  rw [← map_one (ClassGroup.mk K)]
-  congr 1
+private theorem unitsToPrincipalKernel_surjective :
+    Function.Surjective (unitsToPrincipalKernel (R := R) (K := K)) := by
+  intro x
+  have hspan : FractionalIdeal.spanSingleton R⁰ ((x : Kˣ) : K) =
+      FractionalIdeal.spanSingleton R⁰ (1 : K) := by
+    rw [FractionalIdeal.spanSingleton_one]
+    simpa only [coe_toPrincipalIdeal, Units.val_one] using congr_arg Units.val x.property
+  obtain ⟨u, hu⟩ := FractionalIdeal.spanSingleton_eq_spanSingleton.mp hspan
+  refine ⟨u⁻¹, Subtype.ext ?_⟩
+  change Units.map (algebraMap R K : R →* K) u⁻¹ = (x : Kˣ)
+  rw [show Units.map (algebraMap R K : R →* K) u⁻¹ =
+      (Units.map (algebraMap R K : R →* K) u)⁻¹ by simp]
   apply Units.ext
-  exact rootIdeal_fromUnit u
+  apply Units.inv_eq_of_mul_eq_one_right
+  rw [Units.coe_map]
+  change (algebraMap R K) (u : R) * ((x : Kˣ) : K) = 1
+  simpa only [Units.smul_def, Algebra.smul_def] using hu
+
+private theorem unitsToPrincipalKernel_injective :
+    Function.Injective (unitsToPrincipalKernel (R := R) (K := K)) := by
+  intro u v huv
+  apply Units.map_injective (FaithfulSMul.algebraMap_injective R K)
+  exact congr_arg Subtype.val huv
+
+private def unitsEquivPrincipalKernel : Rˣ ≃* (toPrincipalIdeal R K).ker :=
+  MulEquiv.ofBijective (unitsToPrincipalKernel (R := R) (K := K))
+    ⟨unitsToPrincipalKernel_injective (R := R) (K := K),
+      unitsToPrincipalKernel_surjective (R := R) (K := K)⟩
+
+private def unitsToPrincipalKernelOnPowerQuotients :
+    (R / n) →* ((toPrincipalIdeal R K).ker ⧸
+      PowerRoot.powerSubgroup (toPrincipalIdeal R K).ker n) :=
+  PowerRoot.mapOnPowerQuotients
+    (unitsEquivPrincipalKernel (R := R) (K := K)).toMonoidHom n
+
+private theorem unitsToPrincipalKernelOnPowerQuotients_surjective :
+    Function.Surjective (unitsToPrincipalKernelOnPowerQuotients
+      (R := R) (K := K) (n := n)) := by
+  intro q
+  induction q using QuotientGroup.induction_on with
+  | _ x =>
+    obtain ⟨u, rfl⟩ := (unitsEquivPrincipalKernel (R := R) (K := K)).surjective x
+    exact ⟨QuotientGroup.mk u, PowerRoot.mapOnPowerQuotients_mk _ _ _⟩
+
+private def fromPrincipalKernel :
+    ((toPrincipalIdeal R K).ker ⧸
+      PowerRoot.powerSubgroup (toPrincipalIdeal R K).ker n) →*
+        K⟮(∅ : Set <| HeightOneSpectrum R), n⟯ :=
+  (selmerEquivDivisibleClasses (R := R) (K := K) (n := n)).symm.toMonoidHom.comp
+    (PowerRoot.fromKernel (toPrincipalIdeal R K) n)
+
+private theorem fromPrincipalKernel_comp [Fact <| 0 < n] :
+    (fromPrincipalKernel (R := R) (K := K) (n := n)).comp
+        (unitsToPrincipalKernelOnPowerQuotients (R := R) (K := K) (n := n)) =
+      fromUnitLift (R := R) (K := K) (n := n) := by
+  ext u
+  rfl
+
+private theorem fromPrincipalKernel_range [Fact <| 0 < n] :
+    (fromPrincipalKernel (R := R) (K := K) (n := n)).range =
+      (fromUnitLift (R := R) (K := K) (n := n)).range := by
+  rw [← fromPrincipalKernel_comp (R := R) (K := K) (n := n), MonoidHom.range_comp,
+    MonoidHom.range_eq_top_of_surjective _
+      (unitsToPrincipalKernelOnPowerQuotients_surjective (R := R) (K := K) (n := n)),
+    ← MonoidHom.range_eq_map]
 
 /-- The kernel of `toClass` is the range of the unit classes in `K⟮∅, n⟯`. -/
 theorem toClass_ker [Fact <| 0 < n] :
     (toClass (R := R) (K := K) (n := n)).ker =
       (fromUnitLift (R := R) (K := K) (n := n)).range := by
-  ext a
+  rw [← fromPrincipalKernel_range (R := R) (K := K) (n := n), toClass]
+  calc
+    _ = ((PowerRoot.obstruction (f := toPrincipalIdeal R K) (n := n)
+          (fractionalIdealFactorization (R := R) (K := K))).comp
+            (selmerEquivDivisibleClasses (R := R) (K := K) (n := n)).toMonoidHom).ker :=
+      MonoidHom.ker_mulEquiv_comp _ (ClassGroup.equiv K).symm
+    _ = Subgroup.map
+        (selmerEquivDivisibleClasses (R := R) (K := K) (n := n)).symm.toMonoidHom
+          (PowerRoot.obstruction (f := toPrincipalIdeal R K) (n := n)
+            (fractionalIdealFactorization (R := R) (K := K))).ker :=
+      MonoidHom.ker_comp_mulEquiv _
+        (selmerEquivDivisibleClasses (R := R) (K := K) (n := n))
+    _ = _ := by
+      rw [PowerRoot.obstruction_ker (f := toPrincipalIdeal R K) (n := n),
+        MonoidHom.map_range]
+      rfl
+
+private theorem classGroupEquiv_map_power_ker :
+    (powMonoidHom
+      (α := (FractionalIdeal R⁰ K)ˣ ⧸ (toPrincipalIdeal R K).range) n).ker.map
+          (ClassGroup.equiv K).symm.toMonoidHom =
+      (powMonoidHom n : ClassGroup R →* ClassGroup R).ker := by
+  ext c
   constructor
-  · intro ha
-    obtain ⟨x, rfl⟩ := preSelmerToSelmer_surjective (R := R) (K := K) (n := n) a
-    rw [MonoidHom.mem_ker, toClass_apply] at ha
-    change ClassGroup.mk K (rootIdealHom (R := R) (K := K) (n := n) x) = 1 at ha
-    have hp := ClassGroup.mk_eq_one_iff.mp ha
-    change (rootIdeal (R := R) n (x : Kˣ) : Submodule R K).IsPrincipal at hp
-    obtain ⟨y, hyJ⟩ := (FractionalIdeal.isPrincipal_iff _).mp hp
-    have hy : y ≠ 0 := by
-      rintro rfl
-      apply rootIdeal_ne_zero (R := R) (K := K) n (x : Kˣ)
-      simpa only [FractionalIdeal.spanSingleton_zero] using hyJ
-    have hspan : FractionalIdeal.spanSingleton R⁰ (y ^ n) =
-        FractionalIdeal.spanSingleton R⁰ ((x : Kˣ) : K) := by
-      rw [← FractionalIdeal.spanSingleton_pow, ← hyJ, rootIdeal_pow_eq x]
-    obtain ⟨u, hu⟩ := FractionalIdeal.spanSingleton_eq_spanSingleton.mp hspan
-    refine ⟨QuotientGroup.mk u, ?_⟩
-    rw [fromUnitLift_mk]
-    apply Subtype.ext
-    apply (QuotientGroup.mk'_eq_mk' (powMonoidHom n : Kˣ →* Kˣ).range).mpr
-    refine ⟨(Units.mk0 y hy) ^ n, ⟨Units.mk0 y hy, rfl⟩, ?_⟩
-    rw [Units.smul_def, Algebra.smul_def] at hu
-    apply Units.ext
-    simp only [Units.val_mul, Units.coe_map, RingHom.toMonoidHom_eq_coe,
-      Units.val_pow_eq_pow_val, Units.val_mk0]
-    convert hu <;> rfl
-  · rintro ⟨q, rfl⟩
-    rw [MonoidHom.mem_ker]
-    induction q using QuotientGroup.induction_on with
-    | _ u => rw [fromUnitLift_mk, toClass_fromUnit]
+  · rintro ⟨d, hd, rfl⟩
+    change d ^ n = 1 at hd
+    change ((ClassGroup.equiv K).symm d) ^ n = 1
+    rw [← map_pow, hd, map_one]
+  · intro hc
+    refine ⟨ClassGroup.equiv K c, ?_, (ClassGroup.equiv K).symm_apply_apply c⟩
+    change c ^ n = 1 at hc
+    change (ClassGroup.equiv K c) ^ n = 1
+    rw [← map_pow, hc, map_one]
 
 /-- The range of `toClass` is the subgroup of `n`-torsion ideal classes. -/
 theorem toClass_range [hn : Fact <| 0 < n] :
     (toClass (R := R) (K := K) (n := n)).range =
       (powMonoidHom n : ClassGroup R →* ClassGroup R).ker := by
-  apply le_antisymm
-  · rintro _ ⟨a, rfl⟩
-    rw [MonoidHom.mem_ker, powMonoidHom_apply]
-    obtain ⟨x, rfl⟩ := preSelmerToSelmer_surjective (R := R) (K := K) (n := n) a
-    rw [toClass_apply]
-    change (ClassGroup.mk K (rootIdealHom (R := R) (K := K) (n := n) x)) ^ n = 1
-    rw [← map_pow, ClassGroup.mk_eq_one_iff]
-    change ((rootIdeal (R := R) n (x : Kˣ) ^ n : FractionalIdeal R⁰ K) :
-      Submodule R K).IsPrincipal
-    rw [rootIdeal_pow_eq x]
-    exact (FractionalIdeal.isPrincipal_iff _).mpr ⟨((x : Kˣ) : K), rfl⟩
-  · intro c hc
-    revert hc
-    refine ClassGroup.induction K ?_ c
-    intro I hI
-    rw [MonoidHom.mem_ker, powMonoidHom_apply] at hI
-    have hIpow : ClassGroup.mk K (I ^ n) = 1 := by
-      simpa only [map_pow] using hI
-    have hp := ClassGroup.mk_eq_one_iff.mp hIpow
-    change (((I : FractionalIdeal R⁰ K) ^ n : FractionalIdeal R⁰ K) :
-      Submodule R K).IsPrincipal at hp
-    obtain ⟨x, hxI⟩ :=
-      (FractionalIdeal.isPrincipal_iff ((I : FractionalIdeal R⁰ K) ^ n)).mp hp
-    change (I : FractionalIdeal R⁰ K) ^ n = FractionalIdeal.spanSingleton R⁰ x at hxI
-    have hx : x ≠ 0 := by
-      rintro rfl
-      apply pow_ne_zero n I.ne_zero
-      simpa only [FractionalIdeal.spanSingleton_zero] using hxI
-    let y : Kˣ := Units.mk0 x hx
-    have hy : y ∈ preSelmer (R := R) (K := K) (n := n) := by
-      intro v _
-      apply (v.valuation_mod_eq_one_iff n y).mpr
-      apply Int.dvd_neg.mp
-      rw [← v.count_spanSingleton]
-      change (n : ℤ) ∣ FractionalIdeal.count K v (FractionalIdeal.spanSingleton R⁰ x)
-      rw [← hxI, FractionalIdeal.count_pow]
-      exact dvd_mul_right (n : ℤ) (FractionalIdeal.count K v (I : FractionalIdeal R⁰ K))
-    let z : preSelmer (R := R) (K := K) (n := n) := ⟨y, hy⟩
-    refine ⟨preSelmerToSelmer z, ?_⟩
-    rw [toClass_apply]
-    change ClassGroup.mk K (rootIdealHom (R := R) (K := K) (n := n) z) =
-      ClassGroup.mk K I
-    congr 1
-    apply Units.ext
-    change rootIdeal (R := R) n y = (I : FractionalIdeal R⁰ K)
-    rw [rootIdeal, ← FractionalIdeal.finprod_heightOneSpectrum_factorization' K I.ne_zero]
-    apply finprod_congr
-    intro v
-    congr 1
-    change Int.ediv (FractionalIdeal.count K v (FractionalIdeal.spanSingleton R⁰ x)) n =
-      FractionalIdeal.count K v (I : FractionalIdeal R⁰ K)
-    rw [← hxI, FractionalIdeal.count_pow]
-    exact Int.mul_ediv_cancel_left _
-      (Int.natCast_ne_zero.mpr (Nat.ne_of_gt hn.out))
+  rw [toClass,
+    MonoidHom.range_comp (ClassGroup.equiv K).symm.toMonoidHom,
+    MonoidHom.range_comp (PowerRoot.obstruction (f := toPrincipalIdeal R K) (n := n)
+      (fractionalIdealFactorization (R := R) (K := K))),
+    MonoidHom.range_eq_top_of_surjective
+      (selmerEquivDivisibleClasses (R := R) (K := K) (n := n)).toMonoidHom
+        (selmerEquivDivisibleClasses (R := R) (K := K) (n := n)).surjective,
+    ← MonoidHom.range_eq_map (PowerRoot.obstruction (f := toPrincipalIdeal R K) (n := n)
+      (fractionalIdealFactorization (R := R) (K := K))),
+    PowerRoot.obstruction_range (f := toPrincipalIdeal R K) (n := n),
+    classGroupEquiv_map_power_ker]
 
 end selmerGroup
 
