@@ -3,6 +3,34 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-09 — transversality prediction
+
+- **Committed guess: the split-orbit Fourier theorem alone decides
+  `FIXED`.**  Since `827 ≡ 1 (mod 59)`, its 58 places form the regular
+  Galois orbit.  In the position/character Fourier dictionary, a nonzero
+  pure-character vector has a nonzero coordinate at every place, whereas a
+  delta at the pointed place contains every frequency.  I therefore expect
+  the reflected-character localization together with silence at the other
+  57 places to force the pointed coordinate to vanish.  Equivalently, the
+  selected reading should lie in the dual pullback from the lawful
+  class/nonpointed constraint map, so the `GaugeSteering827` branch is
+  `FIXED` without a determinant computation.
+- The precise falsifier is a seating failure: if the current reflected
+  projector does not make the full 58-place localization vector a genuine
+  pure-character vector for the regular orbit action, Fourier support cannot
+  be applied to the pointed kernel condition.  In that case W1 should stop
+  at the exact missing equivariance/identification interface rather than
+  infer `FIXED` from a suggestive basis analogy.
+- **Committed conserved-bit prediction: primal steering gain is zero and
+  reflected-dual obstruction gain is one.**  The pointed Tate five-term
+  balance should send the unique one-dimensional local quotient to the
+  reflected dual Selmer obstruction.  Thus the pre-compiled class-dual
+  pullback future, not the gauge-48 receipted lift, should activate if W1--W3
+  type as predicted.
+- This prediction creates no unconditional relation (7a), exponent-59
+  endpoint, transformer, or Selmer splitting.  W4 remains gated on clean W1,
+  W2, and W3 implementations.
+
 ## 2026-08-08 — finite-S 827 lift prediction
 
 - **Committed guess: `ReflectedQRelaxedLocalizationLift827` inhabits this
