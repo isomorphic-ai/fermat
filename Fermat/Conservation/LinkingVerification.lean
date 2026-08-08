@@ -19,6 +19,7 @@ import Fermat.Conservation.PowerRootExactSequence
 import Fermat.Conservation.PowerRootNaturality
 import Fermat.Conservation.SelmerSequence
 import Fermat.Conservation.SelmerEigenspace
+import Fermat.Conservation.SteeringFiber
 import Fermat.Conservation.SwapQuotient
 import Fermat.Conservation.TatePairing
 import Fermat.Conservation.TamePlacePairing
@@ -26,6 +27,38 @@ import Fermat.Conservation.TameSymbol
 import Fermat.Conservation.TransverseAnnihilator
 
 open Fermat.Conservation
+
+/-! ## Silent-fiber steering surface -/
+
+#check SteeringFiber.SurjectiveLinearMap
+#check SteeringFiber.K_T
+#check SteeringFiber.CompatibleLift
+#check SteeringFiber.readingDirections
+#check SteeringFiber.attainableReadings
+#check SteeringFiber.readingCoset
+#check SteeringFiber.reachableReadings
+#check SteeringFiber.CanPrescribeCoordinate
+#check SteeringFiber.canPrescribeCoordinate_iff
+#check SteeringFiber.FixedAttention
+#check SteeringFiber.readingDirections_eq_bot_iff_fixed
+#check SteeringFiber.jointObservation
+#check SteeringFiber.exists_jointDual_of_fixed
+#check SteeringFiber.rhoDual
+#check SteeringFiber.rhoDual_pullback_of_silence
+#check SteeringFiber.reading_preimage_independent
+#check SteeringFiber.TransverseDirection
+#check SteeringFiber.readingDirections_eq_top_of_transverse
+#check SteeringFiber.steeringAmount
+#check SteeringFiber.focusedPoint
+#check SteeringFiber.FocusedLift
+#check SteeringFiber.focusedLift
+#check SteeringFiber.focusedLift_point
+#check SteeringFiber.canPrescribeCoordinate_of_transverse
+#check SteeringFiber.fixed_or_steerable
+
+#guard_depends_on SteeringFiber.exists_jointDual_of_fixed,
+  LinearMap.range_dualMap_eq_dualAnnihilator_ker
+#guard_depends_on SteeringFiber.focusedLift, SteeringFiber.focusedPoint
 
 /-! ## Vendored PowerRoot generator surface -/
 
@@ -1501,6 +1534,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.SelmerEigenspace
 #guard_standard_axioms_prefix Fermat.Conservation.TamePlacePairing
 #guard_standard_axioms_prefix Fermat.Conservation.CohomologyExactCell
+#guard_standard_axioms_prefix Fermat.Conservation.SteeringFiber
 #guard_standard_axioms_prefix Fermat.Conservation.IsoConserveBridge.cohomologyBalancedStep
 #guard_standard_axioms_prefix Fermat.Conservation.IsoConserveBridge.cohomology_L1_conservation
 
@@ -1510,3 +1544,4 @@ product of its ends. -/
 
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PowerRootExactSequence
 #audit_no_product_equiv_types_prefix Fermat.Conservation.CohomologyExactCell
+#audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber

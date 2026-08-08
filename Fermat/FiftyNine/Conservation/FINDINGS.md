@@ -1,5 +1,37 @@
 # N59 conservation findings
 
+## 2026-08-08 — FOCUS W1 discovery: the decisive invariant is the silent class fiber
+
+- The committed W2 prediction is **steerable at 827**.  It remains a
+  prediction until the selected kernel image is computed; W1 neither assumes
+  nor manufactures that arithmetic fact.
+- `Fermat.Conservation.SteeringFiber` is route-neutral and contains no
+  probability.  For a surjective linear class projection `rho`, silence map
+  `T`, pointed functional `lambda`, and one compatible lift `x0`, its compiled
+  `reachableReadings` theorem identifies the complete attainable set with
+  the affine coset `lambda x0 + lambda(ker rho ∩ ker T)`.  The coordinate
+  prescription theorem is exactly membership in that coset.
+- The fixed/steerable dichotomy is literal.  Fixed attention is equivalent
+  to the reading-direction image being bottom.  In that branch `lambda`
+  factors through the dual of the **joint** observation `(rho,T)`; seating
+  its silence output at zero gives `rhoDual`, whose pullback agrees with
+  `lambda` on every silent lift and proves preimage independence.  Claiming a
+  global factorization through `rho` alone would have been too strong:
+  vanishing on `ker rho ∩ ker T` controls only the silence-compatible
+  slice.
+- A transverse `k` makes the reading-direction image top over the coordinate
+  field.  The compiled focused point is
+  `x_a = x0 + ((a - lambda x0) / lambda k) • k`; its structure stores class
+  preservation, silence preservation, and the exact target reading as three
+  fields, and every scalar is reachable.
+- This construction selects one direction inside one already selected
+  fiber.  It exposes no section, retraction, complement, or product
+  equivalence.  The explicit no-product-equivalence audit for the new
+  namespace is green, as are the exhaustive standard-axiom guard and the
+  selected-prime literal scan.  Focused builds completed for
+  `SteeringFiber`, `LinkingVerification` (8,541 jobs), and the generic credit
+  verification (8,589 jobs).
+
 ## 2026-08-08 — FINITE-S LIFT discovery: the representative leg closes, but torsion is not identity
 
 - W1 vendors the finite-`S` Selmer class sequence from Mathlib branch

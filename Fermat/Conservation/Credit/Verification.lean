@@ -1255,7 +1255,8 @@ private partial def selectedPrimeTokenLines
 drain, Kummer factor-ledger, Transfer, Heisenberg payload, interaction,
 receipted class-carrier, transverse-annihilator, involutive-base,
 route-algebra, swap-quotient, PowerRoot generator, exact-sequence,
-cohomology-ledger, naturality, linking-interface, common-action-stage, and final
+cohomology-ledger, steering-fiber, naturality, linking-interface,
+common-action-stage, and final
 linking-verification modules, rejecting the campaign's selected prime numeral
 `59` when it occurs as a standalone code token.  Campaign prose in comments
 and strings is deliberately ignored. -/
@@ -1282,7 +1283,7 @@ elab "#guard_no_selected_prime_literal" : command => do
         "PowerRootNaturality.lean",
         "CommonActionStage.lean", "TameSymbol.lean",
         "SelmerEigenspace.lean", "TamePlacePairing.lean",
-        "CohomologyLedger.lean",
+        "CohomologyLedger.lean", "SteeringFiber.lean",
         "LinkingVerification.lean"] do
     let path := conservationDirectory / System.FilePath.mk filename
     let source ← liftIO <| IO.FS.readFile path
