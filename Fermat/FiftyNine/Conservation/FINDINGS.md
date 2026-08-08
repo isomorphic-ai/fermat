@@ -1,5 +1,54 @@
 # N59 conservation findings
 
+## 2026-08-08 — FOCUS W2 discovery: the 827 branch needs one pointed kernel-image computation
+
+- The committed prediction was **steerable at 827**.  The present session
+  does not confirm it: the truthful W2 result is **undecidable with the
+  currently compiled machinery**.  This is a coverage verdict, not a claim
+  that the mathematical branch has no answer.
+- `GaugeSteering827` instantiates W1 over `ZMod 59` on the literal
+  `QRelaxedSelmerCarrier827`.  Its surjective `rho` is the range restriction
+  of the finite-`S` class obstruction **after** the reflected projector.
+  Reusing the pre-projector `toSClass` marginal would have repeated the
+  failed lift by forgetting the correlation.  `T` collects every
+  nonpointed 827 localization after projection, and `lambda` is the selected
+  827 coordinate; away-from-827 silence already belongs to the supported
+  Selmer condition.
+- The exact missing kernel computation is compiled as
+  `transverseDirection_iff_exists_pointedKernel`: find a q-relaxed source
+  whose projected two-prime S-class obstruction is `1`, whose localization
+  is zero at every other place over 827, and whose selected localization is
+  nonzero.  Equivalently, decide whether
+  `lambda(ker rho ∩ ker T)` is bottom or top.  `toSClass_ker` computes the
+  finite-`S` class kernel and
+  `supportValuation_ker_eq_range_emptySupportInclusion` computes the full
+  localization kernel, but no theorem computes the selected coordinate on
+  this intersection.  No supplied `rhoQ`, selected arithmetic height-one
+  place, or reduction-map/place comparison closes that calculation either.
+- The nonzero capacity scale `48` is retained literally:
+  `gaugeReading827_ne_zero_iff` proves that the capacity gauge and the
+  pointed localization have the same branch.  Both possible future
+  outcomes are compiled.  A transverse receipt focuses the zero compatible
+  lift to coordinate `1`, preserves class and nonpointed silence, discharges
+  the former joint `hcoord`/`hobs` wall through
+  `ofSource_of_sClassObstruction_eq_one`, and returns gauge output exactly
+  `firstLampReading827 = 48`.  A fixed receipt instead supplies the
+  `rhoDual` pullback and proves the scaled gauge preimage-independent on the
+  silent class fiber.
+- Because neither arithmetic branch receipt is present, no actual
+  `ReflectedQRelaxedLocalizationLift827` inhabitant is produced,
+  `SelectedTameComparison` remains downstream, and the q-relaxed-to-wild
+  seating mismatch is unchanged.  Per Fabian's gate, W3
+  `AttentionCoupling.lean`, tame comparison, and witness assembly were not
+  entered.
+- This discovery creates no unconditional relation (7a), exponent-59
+  endpoint, or transformer, and selects no Selmer splitting.  The standalone
+  W2 file and selected verification target are green (8,643 jobs); the new
+  namespace passes the exhaustive standard-axiom trio and explicit
+  no-product-equivalence audit.  The authoritative nine-target verification
+  is green at 8,719/8,719 jobs, with only the pre-existing capacity linter
+  warnings and tame-symbol tactic suggestions.
+
 ## 2026-08-08 — FOCUS W1 discovery: the decisive invariant is the silent class fiber
 
 - The committed W2 prediction is **steerable at 827**.  It remains a

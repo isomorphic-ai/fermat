@@ -31,6 +31,7 @@ import Fermat.FiftyNine.Conservation.StateFactorConjugation
 import Fermat.FiftyNine.Conservation.CommonActionStage
 import Fermat.FiftyNine.Conservation.TateBridge
 import Fermat.FiftyNine.Conservation.DetectorWitness827
+import Fermat.FiftyNine.Conservation.GaugeSteering827
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
@@ -811,6 +812,71 @@ localization-lift interface still awaiting an arithmetic inhabitant. -/
   Fermat.FiftyNine.Conservation.DetectorWitness827.Seated.firstLampReading827_not_realized_by_seated_pairing,
   Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_ne_zero
 
+/-! The FOCUS invariant is instantiated on the post-projector finite-`S`
+class fiber.  Its selected outcome is a typed missing kernel computation,
+not an invented fixed or transverse receipt. -/
+
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.projectedClassObstructionAddHom827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.ProjectedClassRange827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.projectedClassRange827_nsmul_eq_zero
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.relaxedClassProjection827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.NonpointedPlace827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.NonpointedReadings827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.pointedCoordinate827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.tameSilence827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.gaugeReading827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.gaugeReading827_ne_zero_iff
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.relaxedClassProjection827_eq_zero_iff
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.tameSilence827_eq_zero_iff
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.transverseDirection_iff_exists_pointedKernel
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.pointedKernel_logical_dichotomy
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.zeroCompatibleLift827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.focusedUnitLift827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.localizationLiftOfTransverse827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.SteerableGaugeReceipt827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.steerableGaugeReceipt827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.fixedPointedClassReadout827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.fixedPointedReadout_pullback
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.fixedGauge_preimage_independent
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.KernelComputationKind
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.hasKernelComputation
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.Pointed827BranchStatus
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.currentKernelInventory
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.kernelInventoryComplete
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.current_kernelInventory_incomplete
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.current_branchStatus_eq_undecidable
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.projectedClassObstructionAddHom827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.projectedCandidateSClassObstruction827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.relaxedClassProjection827,
+  AddMonoidHom.rangeRestrict
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.pointedCoordinate827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.qLocalizationCoordinate827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.gaugeReading827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampScale827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.transverseDirection_iff_exists_pointedKernel,
+  Fermat.FiftyNine.Conservation.GaugeSteering827.relaxedClassProjection827_eq_zero_iff
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.transverseDirection_iff_exists_pointedKernel,
+  Fermat.FiftyNine.Conservation.GaugeSteering827.tameSilence827_eq_zero_iff
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.focusedUnitLift827,
+  Fermat.Conservation.SteeringFiber.focusedLift
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.localizationLiftOfTransverse827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.ofSource_of_sClassObstruction_eq_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.steerableGaugeReceipt827,
+  Fermat.FiftyNine.Conservation.GaugeSteering827.localizationLiftOfTransverse827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.fixedPointedReadout_pullback,
+  Fermat.Conservation.SteeringFiber.rhoDual_pullback_of_silence
+
 /-! The wild-place inventory records exactly which campaign inputs have an
 exposed cyclotomic-generator decomposition.  The two actual pairing inputs
 do not, so the conservative formula budget is `NEEDS-VOSTOKOV`.  The named
@@ -1334,9 +1400,12 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.TatePairing
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TateBridge
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DetectorWitness827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
+
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 
 /--
 info: 'Fermat.FiftyNine.Conservation.Instance.gauge_cycle_eq_exponentCycle' depends on axioms: [propext,
