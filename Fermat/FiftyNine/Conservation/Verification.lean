@@ -32,6 +32,7 @@ import Fermat.FiftyNine.Conservation.CommonActionStage
 import Fermat.FiftyNine.Conservation.TateBridge
 import Fermat.FiftyNine.Conservation.DetectorWitness827
 import Fermat.FiftyNine.Conservation.GaugeSteering827
+import Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
@@ -877,6 +878,49 @@ not an invented fixed or transverse receipt. -/
   Fermat.FiftyNine.Conservation.GaugeSteering827.fixedPointedReadout_pullback,
   Fermat.Conservation.SteeringFiber.rhoDual_pullback_of_silence
 
+/-! The TRANSVERSALITY W1 audit proves that the 827 places are one regular
+58-element orbit and checks the complete position/character Fourier
+dictionary.  The final `FIXED` implication is intentionally conditional on
+the named action/localization seating law: the abstract supplied
+representation does not currently produce an inhabitant. -/
+
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.attestationPrime_mod_fiftyNine
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.primesOver827_ncard_eq_fiftyEight
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.placesOver827_ncard_eq_fiftyEight
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.placeOrbitEquiv827
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.indexedPlaceOrbitEquiv827
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.characterBasis
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.characterBasis_fourier_sum
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fourierCoefficient_positionBasis
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fourierCoefficient_positionBasis_ne_zero
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.pureCharacter_support_eq_univ
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.pureCharacter_not_support_singleton
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.pureCharacter_pointed_silence
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.QLocalizationEquivariance827
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.projectedLocalization_isPureCharacter
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.pointedCoordinate827_eq_selectedCharacterComponent
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fixedAttention_of_fourierSeating
+#check Fermat.FiftyNine.Conservation.SplitPrimeFourier827.no_transverseDirection_of_fourierSeating
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.primesOver827_ncard_eq_fiftyEight,
+  Ideal.ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.placeOrbitEquiv827,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.galEquivPrimesOver827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.characterBasis_fourier_sum,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fourier_reconstruction
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fourierCoefficient_positionBasis_ne_zero,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fourierCoefficient_positionBasis
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fixedAttention_of_fourierSeating,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.pureCharacter_pointed_silence
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.no_transverseDirection_of_fourierSeating,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fixedAttention_of_fourierSeating
+
 /-! The wild-place inventory records exactly which campaign inputs have an
 exposed cyclotomic-generator decomposition.  The two actual pairing inputs
 do not, so the conservative formula budget is `NEEDS-VOSTOKOV`.  The named
@@ -1401,11 +1445,13 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TateBridge
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DetectorWitness827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 
 /--
 info: 'Fermat.FiftyNine.Conservation.Instance.gauge_cycle_eq_exponentCycle' depends on axioms: [propext,

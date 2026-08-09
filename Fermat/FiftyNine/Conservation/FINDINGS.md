@@ -1,5 +1,41 @@
 # N59 conservation findings
 
+## 2026-08-09 — TRANSVERSALITY W1 discovery: Fourier says FIXED exactly after the missing seating law
+
+- The arithmetic orbit is now literal.  Since `827 % 59 = 1`, the
+  ramification index and inertia degree at `(827)` are both one; the
+  cyclotomic fundamental identity gives exactly 58 primes above 827.
+  Galois transitivity together with the equal cardinalities upgrades the
+  orbit map to an equivalence, and the places are reindexed by
+  `GaloisIndex59 = (ZMod 59)ˣ`.  This is a regular place orbit, not a Selmer
+  splitting.
+- The position/character dictionary is compiled over `ZMod 59`:
+  character functions form a basis, the explicit normalized Fourier sum
+  reconstructs every vector, and the basis coordinate is the stated
+  Fourier coefficient.  A position delta has a nonzero coefficient in
+  every character frequency.  Conversely, every nonzero pure-character
+  vector has full support, so it cannot have support at exactly one of the
+  58 places.  Point evaluation is the selected Fourier coefficient times
+  the selected character value.
+- The committed guess that Fourier alone would decide **FIXED** met its
+  stated falsifier.  `rhoQ` remains an abstract supplied representation;
+  the compiled API does not connect its action, the reflected projector,
+  and supported localization to the arithmetic permutation of the 827
+  places.  `QLocalizationEquivariance827` names precisely that missing
+  contragredient seating law.  From an inhabitant, the projected
+  localization is proved to be a pure reflected-character mode, nonpointed
+  silence forces pointed silence, `FixedAttention` follows, and the
+  transverse future is excluded.  No inhabitant is asserted, so the
+  unconditional `GaugeSteering827` verdict remains `undecidable`.
+- This Fourier obstruction is the likely typed content of the seating
+  mismatch, but it does not by itself identify the later
+  q-relaxed-to-wild comparison: that comparison remains a distinct missing
+  realization step.  No relation (7a), endpoint, transformer, class/Selmer
+  splitting, or branch receipt is introduced.  W1 and its verification
+  guards compile cleanly; the selected target is green at 8,550 jobs and the
+  aggregate verification target is green at 8,644/8,644 jobs, with only the
+  pre-existing capacity warnings and tame-symbol suggestions.
+
 ## 2026-08-08 — FOCUS W2 discovery: the 827 branch needs one pointed kernel-image computation
 
 - The committed prediction was **steerable at 827**.  The present session
