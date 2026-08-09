@@ -1,5 +1,45 @@
 # N59 conservation findings
 
+## 2026-08-09 — TRANSVERSALITY W3 discovery: Poitou–Tate conserves the pointed dimension
+
+- The strict and relaxed conditions are now literal submodules of the same
+  q-relaxed carrier.  With `G` the joint projected-class/nonpointed-silence
+  observation and `λ` the pointed coordinate, the strict observation is
+  `F = (G,λ)`.  Hence the first leg
+  `ker F → ker G → Q₈₂₇` is exact by compiled linear algebra; no
+  class-field-theory input or Selmer splitting is used there.
+- `PoitouTateFiveTerm` names the genuine arithmetic continuation
+  `ker F → ker G → Q₈₂₇ → Sel(F*)ᵛ → Sel(G*)ᵛ`.
+  The reflected inclusion is contravariant, the connecting arrow is the
+  transpose of reflected localization, and terminal surjectivity is derived
+  from injectivity of that inclusion.  The two middle exactness laws are the
+  explicit class-field-theory interface.  Neither the finite-`S` class
+  sequence nor `GlobalReciprocityLaw` supplies them in the present cone.
+- The available arithmetic maps are seated as far as their types permit.
+  The primal localization is definitionally
+  `pointedConormalRestriction827`; the reflected carrier is the actual
+  q-relaxed reflected-character eigenspace; and its selected supported
+  valuation supplies the reflected localization.  The connecting map
+  evaluates as that localization coordinate times the local coordinate.
+  The reflected eigenspace's missing `ZMod 59` module instance is derived
+  from its inherited exponent-59 law, not postulated.
+- Exactness at the one-dimensional local line proves the dimension balance
+  `primalSteeringGain + reflectedDualObstructionGain = 1`.  The two possible
+  allocations are then derived: primal gain one is exactly the existing
+  transverse future, and reflected-dual gain one is exactly the existing
+  fixed future.  Thus the old bit is the zero/nonzero shadow of the conormal
+  and rank coordinates, not parallel branch data.
+- The committed landing prediction is conditionally confirmed:
+  `QLocalizationEquivariance827` from W1 plus an inhabitant of the pointed
+  Poitou–Tate interface forces reflected-dual gain one.  Neither interface
+  currently has a producer, so this is not an unconditional 827 verdict and
+  does not activate either future.  No (7a), endpoint, transformer, or
+  selected Selmer complement is introduced.
+- The standalone W3 target is green at 8,552/8,552 jobs and the aggregate
+  N59 verification is green at 8,647/8,647 jobs.  The new namespace passes
+  the standard-axiom and no-product-equivalence audits; only the pre-existing
+  capacity warnings and tame-symbol suggestions remain.
+
 ## 2026-08-09 — TRANSVERSALITY W2 discovery: the old bit is the shadow of a conormal coordinate
 
 - `FocusConormal` now retains the class

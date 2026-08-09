@@ -34,6 +34,7 @@ import Fermat.FiftyNine.Conservation.TateBridge
 import Fermat.FiftyNine.Conservation.DetectorWitness827
 import Fermat.FiftyNine.Conservation.GaugeSteering827
 import Fermat.FiftyNine.Conservation.SplitPrimeFourier827
+import Fermat.FiftyNine.Conservation.PointedTateIncidence
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
@@ -936,6 +937,61 @@ representation does not currently produce an inhabitant. -/
   Fermat.FiftyNine.Conservation.SplitPrimeFourier827.no_transverseDirection_of_fourierSeating,
   Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fixedAttention_of_fourierSeating
 
+/-! TRANSVERSALITY W3 keeps the strict and relaxed conditions on the same
+module, names the class-field-theory five-term continuation, and derives the
+one-dimensional conserved-bit balance.  The 827 boundary is literally the
+transpose of the seated reflected localization coordinate. -/
+
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.strictObservation
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedConditions
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.focusConditions
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm.connecting
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm.fiveTerm_exact
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm.dimension_balance
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm.conserved_bit
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm.landing_alternatives
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.relaxedObservation827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.strictObservation827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.pointedConditions827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedPointedLocalization827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.ReflectedG827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedGToF827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedCoordinatePairing827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.connecting_apply
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.conserved_bit
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.conormalClass_eq_zero_iff_primalGain_eq_zero
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.reflectedGain_eq_one_iff_fixed
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.primalGain_eq_one_iff_transverse
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.compiled_future_alternatives
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedGain_eq_one_of_fourierSeating
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.focusConditions,
+  Fermat.Conservation.FocusConormal.conormalRestriction
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm.dimension_balance,
+  LinearMap.finrank_range_add_finrank_ker
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.pointedConditions827,
+  Fermat.FiftyNine.Conservation.GaugeSteering827.pointedConormalRestriction827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedPointedLocalization827,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.qLocalizationCoordinate827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.conserved_bit,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm.conserved_bit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.conormalClass_eq_zero_iff_primalGain_eq_zero,
+  Fermat.FiftyNine.Conservation.GaugeSteering827.pointedConormalClass827_eq_zero_iff_fixed
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.compiled_future_alternatives,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm.landing_alternatives
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedGain_eq_one_of_fourierSeating,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fixedAttention_of_fourierSeating
+
 /-! The wild-place inventory records exactly which campaign inputs have an
 exposed cyclotomic-generator decomposition.  The two actual pairing inputs
 do not, so the conservative formula budget is `NEEDS-VOSTOKOV`.  The named
@@ -1464,12 +1520,14 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DetectorWitness827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
 #audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer
