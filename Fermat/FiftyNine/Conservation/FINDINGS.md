@@ -1,5 +1,35 @@
 # N59 conservation findings
 
+## 2026-08-09 — TRANSVERSALITY W4 verdict: conditional FIXED, unconditional typed stop
+
+- W1--W3 are clean, so W4 was entered.  The Fourier instrument is first in
+  the evaluation order, but its verdict remains conditional: the existing
+  representation does not inhabit `QLocalizationEquivariance827`.  The W3
+  Poitou--Tate interface is likewise uninhabited and cannot be used as a
+  substitute branch oracle.
+- Given the Fourier seating law, the retained pointed conormal class is zero,
+  the fixed class-dual readout pulls back to the pointed coordinate on the
+  silent fiber, the scaled gauge is independent of the chosen silent
+  representative, and no transverse direction can exist.  This is the
+  primitive theorem of the precompiled fixed future; no parallel Boolean is
+  introduced.
+- Given the pointed Poitou--Tate incidence as well, the conserved
+  one-dimensional local rank lands entirely in the reflected dual:
+  reflected-dual obstruction gain is one and primal steering gain is zero.
+  Thus the conditional verdict is **FIXED**, exactly as the Fourier support
+  theorem predicts.
+- Neither named arithmetic premise has a producer in the current cone.
+  Therefore the unconditional result is an honest typed stop: no determinant
+  or Plücker value is asserted unconditionally, neither future is activated,
+  and no gauge-48 lift, relation (7a), endpoint, transformer, or Selmer
+  splitting is constructed.
+- The authoritative nine-target verification and the separate
+  `LinkingVerification` no-splitting leaf are green together at 8,724/8,724
+  jobs.  W4 has direct declaration/dependency checks, standard-axiom and
+  no-product-equivalence audits, and the generic selected-prime source scan
+  now includes `FocusConormal.lean` and `ExteriorTransfer.lean`.  Only the
+  pre-existing capacity lint warnings and tame-symbol suggestions remain.
+
 ## 2026-08-09 — TRANSVERSALITY W3 discovery: Poitou–Tate conserves the pointed dimension
 
 - The strict and relaxed conditions are now literal submodules of the same

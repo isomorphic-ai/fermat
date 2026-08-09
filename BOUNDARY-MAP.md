@@ -221,7 +221,10 @@ two-prime obstruction.
 | `bocksteinPowerRootReceiptObservation` | Depth correction erased implicitly → NAMED OBSERVATION | The formal integral lift records `r₀ + 58 r₁ = (r₀ - r₁) + 59 r₁`; reduction kills the `59 r₁` receipt by the proved first-layer torsion law.  No nonzero arithmetic Bockstein, depth theorem, or two-2s transport is asserted. |
 | Local Tate pairing and adjoint law | ABSENT → INTERFACE | `TatePairing.PlaceIndexedLocalPairing` retains the local readings as a place-indexed `Finsupp` and states `pair_v (a • x) y = pair_v x (a# • y)` using the existing `InvolutiveBase.hash`; no arithmetic pairing value is manufactured. |
 | Global reciprocity and conservation tunnel | ABSENT → INTERFACE law / PROVEN wiring | `TatePairing.GlobalReciprocityLaw` is the class-field-theory interface.  From that law, `PlaceLedger.toLedger`, `toVacuumTransfer`, and `reciprocity_L1_conservation` compile its zero sum through `Ledger`, `Transfer`, and `IsoConserveBridge`. |
-| Selected relation-(7a) arithmetic inputs | Finite-`S` legs proven → FOCUS silent-fiber invariant instantiated; pointed branch undecidable | `GaugeSteering827` range-restricts the post-projector finite-`S` obstruction as `rho`, collects all nonpointed q-localizations as `T`, and uses the selected q-coordinate as `lambda`.  `transverseDirection_iff_exists_pointedKernel` proves that the steerable branch is exactly a trivial projected S-class with every nonpointed q-coordinate zero and the pointed coordinate nonzero.  The class-kernel and full-localization-kernel theorems do not compute this intersection image.  Conditional steerability constructs the old lift and gauge output `48`; conditional fixedness gives the dual pullback.  Neither receipt is present. |
+| `SplitPrimeFourier827` | ABSENT → PROVEN Fourier geometry / NAMED seating interface | The 58 places above 827 form one regular Galois orbit.  A position delta contains every frequency, while a nonzero pure-character vector has full positional support.  Thus `QLocalizationEquivariance827` implies `FixedAttention`; the seating law has no producer, so Fourier gives no unconditional verdict. |
+| `FocusConormal` and `ExteriorTransfer` | Boolean branch → RETAINED conormal and Plücker coordinates | The pointed class is `[lambda]` in the cokernel of the dual constraint map, equivalently `lambda` restricted to the lawful kernel.  It is zero exactly in the fixed branch.  For an independent frame spanning the constraint image, the exterior coordinate vanishes exactly when fixed and is nonzero exactly when the augmented observation gains rank one.  The old dichotomy is derived, never parallel. |
+| `PointedTateIncidence827` | Unnamed bit → PROVEN five-term shape / CLASS-FIELD-THEORY INTERFACE | The strict observation `F = (G,lambda)` and relaxed observation `G` live on the same q-relaxed carrier, and the first exact leg is proved formally.  The actual reflected localization and reversed inclusion are seated, while the two Poitou--Tate exactness laws remain the fields of `PointedTateIncidence827`.  Any inhabitant proves `primalSteeringGain + reflectedDualObstructionGain = 1`; primal gain one is exactly transverse and reflected gain one is exactly fixed. |
+| Selected relation-(7a) future | Pointed branch unexplained → dimension-accounted but unlanded | W1 seating together with W3 incidence forces reflected-dual gain one and hence FIXED.  Neither interface is inhabited, so neither the gauge-48 lift nor the fixed class-dual pullback is activated unconditionally; the current branch remains undecided. |
 | Conditional Tate master implication | ABSENT → PROVEN (conditional), now factored through Stokes | `Lambda_apply_eq_zero_of_reciprocity` kills the complete wild detector functional.  Evaluating it at the shared detector and using the existing gauge comparison yields the same conditional `VandiverSevenA 0 1`.  This is not an unconditional proof of (7a). |
 
 ## N59 assembly summary
@@ -236,12 +239,21 @@ two-prime obstruction.
 | Selected fold and principalization consumers | ABSENT → LITERAL (Transfer), conditional on supplied (7a) | Derived (7d) and odd-torsion netting are accounted; only the missing producer is a seam. |
 | Selected common-action stage | Selmer exactness SEAM → character-allocation SEAM at a fixed reflected pair | The vendored sequence and its additive realization are unconditional.  Once a reflected pair is supplied, the typed gauge attempt retains the class obstruction at the first missing character service; the selected cone itself does not manufacture that pair, and rho remains a later conditional wall. |
 | Selected PowerRoot cube test | Unclassified comparison → TYPED OUTCOME 4 | Generic localization naturality is proved, but the actual `r₀,r₁` arise from distinct allocated root inputs and the selected comparison is wild reflected-dual Tate data.  Stage 3 therefore retains the wild route rather than replacing it with a generic defect. |
-| Selected Tate route to (7a) | Global range and representative kernel proven → joint coordinate/silence kernel image isolated | W1 proves the generic reachable-reading coset and fixed/steerable dichotomy without a splitting.  W2 shows that one transverse direction would focus the zero class to coordinate `1` and discharge both old `hcoord` and `hobs` premises, while a fixed receipt would reformulate the detector through `rhoDual`.  Current machinery proves neither branch, so `SelectedTameComparison` and the old wild detector, reciprocity, faithfulness, and gauge boundaries remain unchanged. |
+| Selected Tate route to (7a) | Joint kernel bit isolated → conormal/Fourier/Poitou--Tate coordinate typed; no landing | `GaugeSteering827` retains the conormal class, `SplitPrimeFourier827` conditionally forces it to zero, and `PointedTateIncidence827` conserves the one-dimensional local rank between the primal and reflected-dual gains.  The Fourier seating and Poitou--Tate incidence have no producers, so no precompiled future activates and every later tame/wild comparison remains conditional. |
 | FermatState.StockCreditTransformer | ABSENT → SEAM | No state-linked positive successor transaction is constructed. |
 
 The guarded transformer probes remain evidence of type boundaries, not
 substitutes for the missing constructions.  The forbidden exponent-59
 endpoint declarations remain absent.
+
+## TRANSVERSALITY W1--W4 verdict
+
+| Work package | Compiled result | Remaining boundary |
+| --- | --- | --- |
+| W1: split-prime Fourier geometry | 827 splits into one regular orbit of 58 places; position and character bases are Fourier dual; a delta contains every frequency and a nonzero pure character has full support. | The action of `rhoQ`, reflected projection, and supported localization is not connected to the place permutation action.  `QLocalizationEquivariance827` is the exact missing seating law. |
+| W2: focus conormal and exterior transfer | The conormal class, its restriction to the lawful kernel, the Plücker coordinate, and augmented-rank gain are compiled.  Fixed/transverse is their zero/nonzero shadow. | No arithmetic theorem computes the retained 827 class; no complement or Selmer splitting is selected. |
+| W3: pointed Tate incidence | The strict-to-relaxed first leg, actual primal/reflected maps, five-term interface, dimension balance, and both rank allocations compile. | The two middle exactness laws in `PointedTateIncidence827` are the named class-field-theory input and have no producer in the current cone. |
+| W4: branch activation | From W1 seating, Fourier conditionally activates the fixed class-dual pullback and excludes a transverse direction.  With W3 incidence as well, the conserved bit lands in reflected-dual obstruction: primal gain zero, reflected gain one. | **Honest typed stop:** neither premise is inhabited, so there is no unconditional determinant/rank verdict, gauge-48 receipt, class-dual receipt, relation (7a), endpoint, or transformer. |
 
 ## Literal gate inventory
 
@@ -265,30 +277,38 @@ LITERAL row:
 - LinkingVerification covers the provenance-pinned PowerRoot generator, the
   unsplit principal-ideal extension, all three naturality faces, the stronger
   principal-arrow `rho`, the generic place-indexed pairing surface, the
-  arithmetic adjoint law, the generic unsplit steering invariant, and the
+  arithmetic adjoint law, the generic unsplit steering invariant,
+  `FocusConormal`, `ExteriorTransfer`, and the
   compiled reciprocity passage through the
   `Ledger`/`Transfer`/`IsoConserveBridge` tunnel.
 - N59 Verification covers every selected receipt field, conductor-59 flow
   and depth, funded row mapping, selected repayment, selected quotient,
   selected (7d), the four-way gauge classification and outcome-4 evidence,
   the named Bockstein-receipt observation, the three named Tate targets, the
-  post-projector FOCUS fiber instance and its undecidable pointed-kernel
-  verdict, their conditional master implication, and the consumers
-  conditional on supplied (7a).
+  post-projector FOCUS fiber instance, the split-prime Fourier orbit and
+  conditional fixed landing, the pointed Poitou--Tate maps and conserved-bit
+  theorem, the gated W4 activation and honest typed stop, their conditional
+  master implication, and the consumers conditional on supplied (7a).
 
 The selected-prime literal scan includes Transfer.lean, Heis.lean,
 AreaTransfer.lean, Interaction.lean, ClassCarrier.lean,
 TransverseAnnihilator.lean, TatePairing.lean, the generic credit, drain, and
 Kummer source cone, and now `PowerRootObstruction.lean`,
 `PowerRootExactSequence.lean`, `PowerRootNaturality.lean`, and
-`SelmerSequence.lean`, together with `SteeringFiber.lean`.
+`SelmerSequence.lean`, together with `SteeringFiber.lean`,
+`FocusConormal.lean`, and `ExteriorTransfer.lean`.
 LinkingVerification checks and dependency-guards the
 new generator, unsplit sequence, cube faces, representation, realization,
-pairing declarations, and generic steering invariant, and freezes the
+pairing declarations, generic steering invariant, conormal and exterior
+coordinates, and freezes the
 standard axiom trio; N59 Verification also guards the selected four-way
 classification, exact gauge reading, named depth observation, relocalized
-wall, FOCUS kernel instance, derived allocated lift, and conditional Tate
-route.
+wall, FOCUS kernel instance, Fourier landing, pointed incidence balance,
+derived allocated lift, and conditional Tate route.  Its import, dependency,
+standard-axiom, and no-product guards cover `SplitPrimeFourier827.lean`,
+`PointedTateIncidence.lean`, and `TransversalityVerdict827.lean`; those
+selected-prime files are deliberately not part of the generic numeral-ban
+scan.
 Forbidden declaration/module guards continue to exclude the classical
 irregular, regular, ladder, transport, and endpoint cones.
 
@@ -332,11 +352,15 @@ marked explicitly below.
 | `TatePairing.GlobalReciprocityLaw` | **INTERFACE** | The global sum-zero theorem is the missing class-field-theory input. |
 | `PlaceLedger.toLedger`, `PlaceLedger.toVacuumTransfer`, and `GlobalReciprocityLaw.reciprocity_L1_conservation` | **PROVEN** | Once reciprocity is supplied, the place-indexed sum is literally carried through `Ledger`, a zero-spent `Transfer`, and the `IsoConserveBridge` L1 identity. |
 | `Lambda_apply_eq_zero_of_reciprocity` | **PROVEN Stokes theorem**, conditional only on the named reciprocity law | Every non-wild column is zero by the constructed single support.  Applying reciprocity for every reflected-dual detector proves the functional equality `Lambda x = 0`, not merely one scalar coordinate. |
-| `wild_detector_faithful` | **SINGLE FRONTIER INTERFACE** | The exact target is `(Lambda wild).ker = ⊥`: the wild detector family separates the remaining potential.  Poitou--Tate nondegeneracy is its natural arithmetic source.  If `H_FLT` has finrank one, `wild_detector_faithful_of_finrank_one` proves that one nonzero transverse reading suffices.  No inhabitant is asserted. |
+| `wild_detector_faithful` | **SINGLE FRONTIER INTERFACE** | The exact target is `(Lambda wild).ker = ⊥`: the wild detector family separates the remaining potential.  Poitou--Tate nondegeneracy is its natural arithmetic source.  If `H_FLT` has finrank one, `wild_detector_faithful_of_finrank_one` proves that one nonzero transverse reading suffices.  The new pointed Poitou--Tate interface concerns the q-relaxed selected local line; it does not prove faithfulness of this old empty-support wild detector.  No inhabitant is asserted. |
 | `gauge_eq_local_tate_pairing` | **INTERFACE** | One selected detector and a unit must identify its 59-local reading with the computed difference gauge and reflect zero scalar reading back to zero of that retained class-group gauge. |
 | `transverse_detector_exists` | **ABSTRACT PRE-WITNESS / Q-RELAXED SEATING MISMATCH** | The proposition still packages a detector in the old empty-support reflected dual together with a lamp action and realization.  The finite-`S` data lives in `QRelaxedReflectedDual827`; there is no seating map into the old wild dual, and the single-wild-column pairing has no nonzero q-coordinate.  Thus this interface remains sufficient only for the old conditional implication, not an inhabited Stage-2 witness. |
 | `DetectorWitness827` finite-`S` lift attempt | **GLOBAL RANGE PROVEN; REPRESENTATIVE KERNEL PROVEN; NO LIFT INHABITANT CONSTRUCTED** | `exists_qRelaxedSource_of_sClass_torsion` globalizes every chosen 59-torsion S-class.  `projectedCandidateSClassObstruction827_pow_eq_one` proves only torsion of the projected obstruction.  `ofSource_of_sClassObstruction_eq_one` uses the kernel theorem to extract an S-unit representative supported over 59 and 827.  Its unproved joint hypotheses are `hcoord`, a nonzero selected coordinate after the reflected projector, and `hobs`, equality of the projected two-prime obstruction with `1`.  The range-based chosen-source constructor is sufficient, not a converse characterization. |
 | `GaugeSteering827` FOCUS instance | **PROVEN INSTANTIATION / BRANCH UNDECIDABLE WITH PRESENT MACHINERY** | The post-projector class obstruction is bundled as a surjective `ZMod 59` map by restricting to its range; this is not a section.  Nonpointed q-localizations form the silence map and the selected q-localization is the reading.  The exact missing computation is `lambda(ker rho ∩ ker T)`: no current theorem proves it bottom or supplies a nonzero element.  Both conditional consequences compile, and multiplication by the checked nonzero scale `48` preserves the branch. |
+| `SplitPrimeFourier827` | **PROVEN FOURIER VERDICT / UNINHABITED SEATING LAW** | Splitting, orbit size 58, Fourier reconstruction, delta-all-frequency, and pure-character full support are proved.  `QLocalizationEquivariance827` is the exact missing action/localization comparison.  Given it, the verdict is FIXED; without it, no branch is selected. |
+| `FocusConormal` and `ExteriorTransfer` | **PROVEN RETAINED COORDINATES** | Fixedness, transverse direction, dual pullback, Plücker vanishing, and augmented-rank gain are equivalent projections of the retained conormal/exterior data.  No complement or Selmer splitting is selected. |
+| `PointedTateIncidence827` | **MAPS SEATED; POITOU--TATE EXACTNESS INTERFACE UNINHABITED** | The primal restriction is literally `pointedConormalRestriction827`; the reflected boundary is the transpose of the actual q-relaxed reflected localization.  The conserved bit and both compiled rank allocations are proved from an incidence inhabitant.  Neither exactness field is supplied by the finite-`S` sequence or `GlobalReciprocityLaw`. |
+| W4 branch activation | **NONE UNCONDITIONALLY; FIXED CONDITIONALLY** | `reflectedGain_eq_one_of_fourierSeating` proves the conditional FIXED landing from both named interfaces.  Since neither has a producer, no fixed or steerable receipt is constructed, and no lift, pullback primitive, relation (7a), endpoint, or transformer is activated unconditionally. |
 | `SelectedTameComparison` | **SUBSEQUENT LOCAL WALL; NOT ATTEMPTED** | Its tame-symbol/capacity comparison remains downstream of an actual `ReflectedQRelaxedLocalizationLift827`.  Since no lift inhabitant was obtained, this session did not attempt to construct the selected angular-component/local-context comparison. |
 | Supported valuation versus finite-`S` class sequence | **BOTH MARGINAL KERNELS PROVEN / THEIR POINTED INTERSECTION IMAGE UNCOMPUTED** | `supportValuation_ker_eq_range_emptySupportInclusion` proves the kernel of full supported valuation.  The vendored `toSClass_ker` proves the finite-`S` class kernel.  `GaugeSteering827` now couples them at the correct post-projector source, but no theorem computes the selected valuation on the class-kernel/nonpointed-silence intersection; no valuation-surjectivity shortcut is used. |
 | `ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov` | **PROVEN COVERAGE VERDICT: `NEEDS-VOSTOKOV`; PRECISE EXIT INTERFACE NAMED** | `zeta`, `1-zeta`, and generated cyclotomic units have explicit provenance.  `NormalizedStateFactorArtinHasseDecomposition hζ S hz` would give explicit Kummer-class coefficient decompositions of both normalized state factors into `zetaUnit`, nonzero `fixedDenominator`, and every `generatedUnit`; a one-sided proof also needs conjugation stability to obtain the other row.  This factor statement alone does not seat the chosen statewise Selmer preimage or the selected detector lift, nor provide their local Hilbert-symbol comparison.  The current verdict is missing-decomposition, not nonmembership. |
@@ -345,38 +369,29 @@ marked explicitly below.
 | `bank_silences_other_places` | **PROVEN** | The audit contains the already proved capacity, bounded-Sinnott, plus-class-number, deep-flow, repayment, and (7d) receipts.  Its auxiliary and every other non-59 verdict now follow from the constructed single support, whose tame realization is justified by the two Selmer valuation receipts; the former auxiliary/other orthogonality fields have been removed at their source. |
 | Conditional master implication | **PROVEN** | Given the one 59-local interface, global reciprocity, detector existence, and the unit-valued gauge comparison, the proof first obtains `Lambda x = 0` from the Stokes theorem, evaluates it at the shared detector, and applies `differenceGauge_eq_zero_iff_vandiverSevenA` to obtain exactly `pair.ledger.VandiverSevenA 0 1`.  There is no `hBank` premise. |
 
-Thus conservation has already done its job: tame cancellation plus
-reciprocity proves that the selected potential lies in the Stokes detector's
-kernel.  The final arithmetic frontier is still nondegeneracy of that
-detector, not a second conservation identity.  Stage 2 now has the literal
-q-relaxed carrier, reflected projector, localization coordinate, nonzero 827
-comparison coefficient, the vendored finite-`S` class sequence, and the
-generic FOCUS fiber theorem.  The range and kernel legs still control only
-their marginals.  The decisive coupled question is now literal: does the
-selected coordinate vanish on the kernel of the post-projector class
-obstruction intersected with nonpointed localization silence?  A nonzero
-direction there would focus the zero source to coordinate one and
-automatically discharge the former coordinate and obstruction-identity
-premises; vanishing there would make the detector a dual pullback from the
-projected class.  Neither arithmetic receipt is present, so the W2 branch
-remains undecidable with current machinery.
+The former unexplained pointed bit now has three equivalent instruments.  The
+conormal class retains the selected functional modulo lawful constraints; the
+exterior coordinate records its zero/nonzero value as a Plücker/rank
+certificate; and the pointed Poitou--Tate sequence conserves the
+one-dimensional local rank between primal steering and reflected-dual
+obstruction.  None chooses a splitting.
 
-Because no `ReflectedQRelaxedLocalizationLift827` inhabitant was obtained,
-`SelectedTameComparison` remains unattempted.  Even after that comparison,
-`transverse_detector_exists` still uses the old empty-support wild dual; a
-q-relaxed-to-wild seating map or corresponding refactor remains necessary
-before the honest detector can enter the conditional Tate bridge.  At the
-remaining wild place the present generator inventory requires the general
-Vostokov budget unless the normalized factors are decomposed as named above
-and the actual selected inputs are seated in those decompositions.
-The FOCUS gate therefore prevents entry into `AttentionCoupling`, tame
-comparison, or witness assembly in this session.
+Fourier determines the orientation only after the named contragredient
+seating law: a projected pure-character localization cannot be supported at
+one place, so nonpointed silence forces pointed silence and hence FIXED.
+Given in addition `PointedTateIncidence827`, the conserved dimension lands
+entirely in the reflected dual.  Both hypotheses remain explicit and
+uninhabited.  Therefore W4 reaches an honest typed stop: the unconditional
+branch status remains undecided and neither precompiled future is activated.
 
-The public Tate result remains an implication, not a new producer of the
-wild local reading, reciprocity, detector, faithfulness, or gauge-comparison
-inputs.  In particular, detector faithfulness lives on `SelmerChi`, while
-relation (7a) lives in `AllocatedClass K`; the existing zero-reflecting gauge
-comparison is still required to cross that typed boundary.  There is no
+The remaining interfaces are exact.  At the transversality layer they are an
+arithmetic producer for `rhoQ`, `QLocalizationEquivariance827`, and the two
+exactness laws of `PointedTateIncidence827`.  Downstream remain
+`SelectedTameComparison`, a q-relaxed-to-wild seating map or refactor,
+`GlobalReciprocityLaw`, `wild_detector_faithful`, and
+`gauge_eq_local_tate_pairing`.  These are distinct boundaries: pointed
+Poitou--Tate incidence does not manufacture wild reciprocity, detector
+faithfulness, or the Selmer/class gauge comparison.  There is no
 unconditional `StateLinkedIdealPair.vandiverSevenA`, no unconditional (7a)
 transaction, and no endpoint or transformer in this route.
 

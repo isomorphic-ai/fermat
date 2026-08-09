@@ -1284,6 +1284,7 @@ elab "#guard_no_selected_prime_literal" : command => do
         "CommonActionStage.lean", "TameSymbol.lean",
         "SelmerEigenspace.lean", "TamePlacePairing.lean",
         "CohomologyLedger.lean", "SteeringFiber.lean",
+        "FocusConormal.lean", "ExteriorTransfer.lean",
         "LinkingVerification.lean"] do
     let path := conservationDirectory / System.FilePath.mk filename
     let source ← liftIO <| IO.FS.readFile path

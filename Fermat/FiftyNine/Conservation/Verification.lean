@@ -35,6 +35,7 @@ import Fermat.FiftyNine.Conservation.DetectorWitness827
 import Fermat.FiftyNine.Conservation.GaugeSteering827
 import Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 import Fermat.FiftyNine.Conservation.PointedTateIncidence
+import Fermat.FiftyNine.Conservation.TransversalityVerdict827
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
@@ -992,6 +993,37 @@ transpose of the seated reflected localization coordinate. -/
   Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedGain_eq_one_of_fourierSeating,
   Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fixedAttention_of_fourierSeating
 
+/-! W4 activates only the conditional fixed future justified by the W1
+seating premise.  There is deliberately no closed branch theorem because
+the seating and Poitou--Tate interfaces remain uninhabited. -/
+
+#check Fermat.FiftyNine.Conservation.TransversalityVerdict827.pointedConormalClass_eq_zero_of_fourierSeating
+#check Fermat.FiftyNine.Conservation.TransversalityVerdict827.fixedPointedClassReadoutOfFourierSeating827
+#check Fermat.FiftyNine.Conservation.TransversalityVerdict827.fixedPointedReadoutOfFourierSeating_pullback
+#check Fermat.FiftyNine.Conservation.TransversalityVerdict827.fixedGauge_preimage_independent_of_fourierSeating
+#check Fermat.FiftyNine.Conservation.TransversalityVerdict827.reflectedDualObstructionGain_eq_one_of_seating
+#check Fermat.FiftyNine.Conservation.TransversalityVerdict827.fixedGainAllocation_of_seating
+#check Fermat.FiftyNine.Conservation.TransversalityVerdict827.no_transverseDirection_of_seating
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TransversalityVerdict827.pointedConormalClass_eq_zero_of_fourierSeating,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fixedAttention_of_fourierSeating
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TransversalityVerdict827.fixedPointedReadoutOfFourierSeating_pullback,
+  Fermat.FiftyNine.Conservation.GaugeSteering827.fixedPointedReadout_pullback
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TransversalityVerdict827.reflectedDualObstructionGain_eq_one_of_seating,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedGain_eq_one_of_fourierSeating
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TransversalityVerdict827.fixedGainAllocation_of_seating,
+  Fermat.FiftyNine.Conservation.TransversalityVerdict827.reflectedDualObstructionGain_eq_one_of_seating
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TransversalityVerdict827.fixedGainAllocation_of_seating,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.conserved_bit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TransversalityVerdict827.no_transverseDirection_of_seating,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.no_transverseDirection_of_fourierSeating
+
 /-! The wild-place inventory records exactly which campaign inputs have an
 exposed cyclotomic-generator decomposition.  The two actual pairing inputs
 do not, so the conservative formula budget is `NEEDS-VOSTOKOV`.  The named
@@ -1521,6 +1553,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
@@ -1528,6 +1561,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
 #audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer
