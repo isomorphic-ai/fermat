@@ -1,5 +1,40 @@
 # N59 conservation findings
 
+## 2026-08-09 — TRANSVERSALITY W2 discovery: the old bit is the shadow of a conormal coordinate
+
+- `FocusConormal` now retains the class
+  `[λ] ∈ Vᵛ / range(Fᵛ)` and its equivalent restriction
+  `a_F(λ) = λ|ker(F)`.  The compiled zero tests say that this class
+  vanishes exactly when `λ` lies in `range(Fᵛ)`, exactly when its
+  restriction to `ker F` vanishes, and exactly when a dual pullback through
+  `F` exists.  The canonical quotient–kernel-dual equivalence is kept at the
+  generic `F` boundary; no section or primal product splitting is selected.
+- `SteeringFiber` no longer presents its branch as independent primitive
+  data.  Fixed attention is class zero, a transverse direction is class
+  nonzero, the joint-dual factorization is derived from class zero, and the
+  old dichotomy is obtained by projecting the conormal class through its
+  zero/nonzero alternatives.  The 827 instance now exposes the literal
+  `pointedConormalClass827` and its restriction, so later arithmetic can
+  target the retained coordinate rather than re-create a Boolean.
+- `ExteriorTransfer` extends `AreaTransfer` by one exterior degree.  For an
+  independent constraint frame `f₁,…,fᵣ` spanning `range(Fᵛ)`, its
+  Plücker coordinate is
+  `f₁ ∧ ⋯ ∧ fᵣ ∧ λ`.  It is zero exactly when the conormal
+  class vanishes, while nonzero is equivalent to the literal augmented map
+  `(F,λ)` gaining one rank.  Independence is essential: a redundant
+  spanning list would make the base wedge zero and erase the certificate.
+- This structural upgrade does not decide the arithmetic 827 class.  W1's
+  named action/localization seating law is still uninhabited, and no
+  Poitou–Tate incidence input has yet been supplied.  Consequently neither
+  pre-compiled future is activated in W2.  There is no unconditional (7a),
+  endpoint, transformer, or Selmer splitting.
+- The shared linking verification is green at 8,543/8,543 jobs and the N59
+  aggregate is green at 8,646/8,646 jobs.  The standard-axiom and
+  no-product-equivalence audits remain enabled.  In particular, the audit
+  rejected a redundant specialization whose displayed type mentioned the
+  product-valued joint observation; removing that display while retaining
+  the generic canonical equivalence kept the no-splitting boundary literal.
+
 ## 2026-08-09 — TRANSVERSALITY W1 discovery: Fourier says FIXED exactly after the missing seating law
 
 - The arithmetic orbit is now literal.  Since `827 % 59 = 1`, the

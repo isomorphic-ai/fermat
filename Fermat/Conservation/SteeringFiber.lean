@@ -27,6 +27,7 @@ of `rho`, a complement to its kernel, or an equivalence of `V` with a
 product.  In the fixed branch only the observable factors through the joint
 map `(rho, T)`.  No primal decomposition is exposed or consumed.
 -/
+import Fermat.Conservation.FocusConormal
 import Mathlib.LinearAlgebra.Basis.VectorSpace
 import Mathlib.LinearAlgebra.Dual.Lemmas
 import Mathlib.LinearAlgebra.Prod
@@ -189,6 +190,95 @@ theorem ker_jointObservation
     (jointObservation rho T).ker = K_T rho T := by
   exact LinearMap.ker_prod _ _
 
+/-! ## The retained conormal coordinate
+
+The fixed/steerable branch below is the zero/nonzero projection of this
+class.  It is not an independent Boolean primitive. -/
+
+/-- The literal cokernel of the dual joint observation. -/
+abbrev FocusConormalCokernel
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W) :=
+  FocusConormal.CokernelDual (jointObservation rho T)
+
+/-- The conormal class of the pointed functional on the silent class fiber. -/
+def focusConormalClass
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W)
+    (lambda : Module.Dual K V) : FocusConormalCokernel rho T :=
+  FocusConormal.conormalClass (jointObservation rho T) lambda
+
+/-- The same class as the literal restriction `lambda|K_T`. -/
+def focusConormalRestriction
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W) :
+    Module.Dual K V →ₗ[K] Module.Dual K (K_T rho T) :=
+  (K_T rho T).dualRestrict
+
+/-- Fixed attention is exactly vanishing of the retained conormal class. -/
+theorem focusConormalClass_eq_zero_iff_fixed
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W)
+    (lambda : Module.Dual K V) :
+    focusConormalClass rho T lambda = 0 ↔ FixedAttention rho T lambda := by
+  rw [focusConormalClass,
+    FocusConormal.conormalClass_eq_zero_iff_mem_range_dualMap,
+    LinearMap.range_dualMap_eq_dualAnnihilator_ker,
+    ker_jointObservation]
+  constructor
+  · intro h k hk
+    rw [LinearMap.mem_ker]
+    exact (Submodule.mem_dualAnnihilator lambda).mp h k hk
+  · intro fixed
+    rw [Submodule.mem_dualAnnihilator]
+    intro k hk
+    exact LinearMap.mem_ker.mp (fixed hk)
+
+/-- The restriction and quotient presentations carry the same zero test. -/
+theorem focusConormalRestriction_eq_zero_iff_fixed
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W)
+    (lambda : Module.Dual K V) :
+    focusConormalRestriction rho T lambda = 0 ↔
+      FixedAttention rho T lambda := by
+  constructor
+  · intro h k hk
+    rw [LinearMap.mem_ker]
+    have hvalue := LinearMap.congr_fun h ⟨k, hk⟩
+    simpa [focusConormalRestriction] using hvalue
+  · intro fixed
+    apply LinearMap.ext
+    intro k
+    simp only [focusConormalRestriction, Submodule.dualRestrict_apply,
+      LinearMap.zero_apply]
+    exact LinearMap.mem_ker.mp (fixed k.property)
+
+/-- Nonvanishing of the quotient class is nonvanishing of the retained
+restriction, with no extra branch datum. -/
+theorem focusConormalClass_ne_zero_iff_restriction_ne_zero
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W)
+    (lambda : Module.Dual K V) :
+    focusConormalClass rho T lambda ≠ 0 ↔
+      focusConormalRestriction rho T lambda ≠ 0 := by
+  exact not_congr <|
+    (focusConormalClass_eq_zero_iff_fixed rho T lambda).trans
+      (focusConormalRestriction_eq_zero_iff_fixed rho T lambda).symm
+
+/-- Fixed attention is equivalently membership in the image of `Fᵛ`. -/
+theorem mem_range_jointObservation_dualMap_iff_fixed
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W)
+    (lambda : Module.Dual K V) :
+    lambda ∈ LinearMap.range (jointObservation rho T).dualMap ↔
+      FixedAttention rho T lambda := by
+  rw [← FocusConormal.conormalClass_eq_zero_iff_mem_range_dualMap,
+    ← focusConormalClass_eq_zero_iff_fixed]
+  rfl
+
+/-- The old factorization witness is now obtained from vanishing of the
+retained conormal class. -/
+theorem focusConormalClass_eq_zero_iff_exists_jointDual
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W)
+    (lambda : Module.Dual K V) :
+    focusConormalClass rho T lambda = 0 ↔
+      ∃ phi : Module.Dual K (H × W),
+        phi.comp (jointObservation rho T) = lambda := by
+  exact FocusConormal.conormalClass_eq_zero_iff_exists_dual_pullback _ _
+
 /-- In the fixed branch, the pointed functional is the pullback of a dual
 observable on the joint `(class, silence)` output. -/
 theorem exists_jointDual_of_fixed
@@ -196,12 +286,8 @@ theorem exists_jointDual_of_fixed
     (lambda : V →ₗ[K] K) (fixed : FixedAttention rho T lambda) :
     ∃ phi : Module.Dual K (H × W),
       phi.comp (jointObservation rho T) = lambda := by
-  have hlambda : lambda ∈ (jointObservation rho T).ker.dualAnnihilator := by
-    rw [Submodule.mem_dualAnnihilator]
-    intro k hk
-    exact LinearMap.mem_ker.mp (fixed (ker_jointObservation rho T ▸ hk))
-  rw [← LinearMap.range_dualMap_eq_dualAnnihilator_ker] at hlambda
-  exact hlambda
+  apply (focusConormalClass_eq_zero_iff_exists_jointDual rho T lambda).mp
+  exact (focusConormalClass_eq_zero_iff_fixed rho T lambda).mpr fixed
 
 /-- One chosen joint dual witness.  Choice is confined to the observable;
 it does not select a lift or a section of `rho`. -/
@@ -254,6 +340,45 @@ structure TransverseDirection
   direction : V
   direction_mem : direction ∈ K_T rho T
   reading_ne_zero : lambda direction ≠ 0
+
+/-- A nonzero conormal restriction is exactly a transverse direction in the
+silent class fiber. -/
+theorem focusConormalRestriction_ne_zero_iff_transverse
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W)
+    (lambda : Module.Dual K V) :
+    focusConormalRestriction rho T lambda ≠ 0 ↔
+      Nonempty (TransverseDirection rho T lambda) := by
+  constructor
+  · intro hrestriction
+    have hexists : ∃ k : K_T rho T,
+        focusConormalRestriction rho T lambda k ≠ 0 := by
+      by_contra h
+      push Not at h
+      apply hrestriction
+      ext k
+      simpa using h k
+    obtain ⟨k, hk⟩ := hexists
+    exact ⟨
+      { direction := k.1
+        direction_mem := k.2
+        reading_ne_zero := by
+          simpa [focusConormalRestriction] using hk }⟩
+  · rintro ⟨k⟩ hrestriction
+    have hvalue := LinearMap.congr_fun hrestriction
+      ⟨k.direction, k.direction_mem⟩
+    apply k.reading_ne_zero
+    simpa [focusConormalRestriction] using hvalue
+
+/-- The retained conormal class is nonzero exactly in the old steerable
+branch.  Thus the branch proposition is a projection of the class, not a
+parallel primitive. -/
+theorem focusConormalClass_ne_zero_iff_transverse
+    (rho : SurjectiveLinearMap K V H) (T : V →ₗ[K] W)
+    (lambda : Module.Dual K V) :
+    focusConormalClass rho T lambda ≠ 0 ↔
+      Nonempty (TransverseDirection rho T lambda) :=
+  (focusConormalClass_ne_zero_iff_restriction_ne_zero rho T lambda).trans
+    (focusConormalRestriction_ne_zero_iff_transverse rho T lambda)
 
 /-- A transverse reading makes `lambda(K_T)` the whole one-dimensional
 coordinate field. -/
@@ -345,16 +470,13 @@ theorem fixed_or_steerable
     (lambda : V →ₗ[K] K) :
     FixedAttention rho T lambda ∨
       Nonempty (TransverseDirection rho T lambda) := by
-  classical
-  by_cases fixed : FixedAttention rho T lambda
-  · exact Or.inl fixed
-  · right
-    rw [FixedAttention, SetLike.not_le_iff_exists] at fixed
-    obtain ⟨k, hk, hlambda⟩ := fixed
-    exact ⟨
-      { direction := k
-        direction_mem := hk
-        reading_ne_zero := by
-          simpa [LinearMap.mem_ker] using hlambda }⟩
+  rcases FocusConormal.conormalClass_zero_or_nonzero
+      (jointObservation rho T) lambda with hclass | hclass
+  · exact Or.inl <|
+      (focusConormalClass_eq_zero_iff_fixed rho T lambda).mp hclass
+  · exact Or.inr <|
+      (focusConormalRestriction_ne_zero_iff_transverse rho T lambda).mp <|
+        (focusConormalClass_ne_zero_iff_restriction_ne_zero rho T lambda).mp
+          hclass
 
 end Fermat.Conservation.SteeringFiber

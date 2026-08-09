@@ -232,6 +232,60 @@ theorem tameSilence827_eq_zero_iff
     funext v
     exact h v
 
+/-! ## The retained pointed conormal class -/
+
+/-- The quotient carrier of the pointed functional modulo the dual image of
+the joint `(relaxed class, nonpointed localization)` constraint. -/
+abbrev PointedConormalCokernel827
+    (selectedPlace : {v // v ∈ placesOver827 K}) :=
+  FocusConormalCokernel
+    (relaxedClassProjection827 rhoQ omega chi)
+    (tameSilence827 rhoQ omega chi selectedPlace)
+
+/-- The actual pointed conormal coordinate.  Its old Boolean branch is only
+the zero/nonzero shadow recorded below. -/
+def pointedConormalClass827
+    (selectedPlace : {v // v ∈ placesOver827 K}) :
+    PointedConormalCokernel827 rhoQ omega chi selectedPlace :=
+  focusConormalClass
+    (relaxedClassProjection827 rhoQ omega chi)
+    (tameSilence827 rhoQ omega chi selectedPlace)
+    (pointedCoordinate827 rhoQ omega chi selectedPlace)
+
+/-- The restriction presentation of the same pointed conormal coordinate. -/
+def pointedConormalRestriction827
+    (selectedPlace : {v // v ∈ placesOver827 K}) :
+    Module.Dual (ZMod 59)
+      (K_T
+        (relaxedClassProjection827 rhoQ omega chi)
+        (tameSilence827 rhoQ omega chi selectedPlace)) :=
+  focusConormalRestriction
+    (relaxedClassProjection827 rhoQ omega chi)
+    (tameSilence827 rhoQ omega chi selectedPlace)
+    (pointedCoordinate827 rhoQ omega chi selectedPlace)
+
+/-- The pointed condition is fixed exactly when its retained class vanishes. -/
+theorem pointedConormalClass827_eq_zero_iff_fixed
+    (selectedPlace : {v // v ∈ placesOver827 K}) :
+    pointedConormalClass827 rhoQ omega chi selectedPlace = 0 ↔
+      FixedAttention
+        (relaxedClassProjection827 rhoQ omega chi)
+        (tameSilence827 rhoQ omega chi selectedPlace)
+        (pointedCoordinate827 rhoQ omega chi selectedPlace) :=
+  focusConormalClass_eq_zero_iff_fixed _ _ _
+
+/-- Nonvanishing of the pointed class is precisely the existence of a
+transverse direction. -/
+theorem pointedConormalClass827_ne_zero_iff_transverse
+    (selectedPlace : {v // v ∈ placesOver827 K}) :
+    pointedConormalClass827 rhoQ omega chi selectedPlace ≠ 0 ↔
+      Nonempty
+        (TransverseDirection
+          (relaxedClassProjection827 rhoQ omega chi)
+          (tameSilence827 rhoQ omega chi selectedPlace)
+          (pointedCoordinate827 rhoQ omega chi selectedPlace)) :=
+  focusConormalClass_ne_zero_iff_transverse _ _ _
+
 /-- The exact missing kernel computation, expanded without affine language.
 It asks for a pure pointed q-direction with trivial projected finite-`S`
 class and every nonpointed q-coordinate silent. -/

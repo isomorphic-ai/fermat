@@ -19,6 +19,7 @@ wall only behind evidence for every earlier seam.
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.Ledger
 import Fermat.Conservation.Transfer
+import Fermat.Conservation.ExteriorTransfer
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 import Fermat.FiftyNine.Conservation.BoundedSinnott
@@ -829,6 +830,11 @@ not an invented fixed or transverse receipt. -/
 #check Fermat.FiftyNine.Conservation.GaugeSteering827.gaugeReading827_ne_zero_iff
 #check Fermat.FiftyNine.Conservation.GaugeSteering827.relaxedClassProjection827_eq_zero_iff
 #check Fermat.FiftyNine.Conservation.GaugeSteering827.tameSilence827_eq_zero_iff
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.PointedConormalCokernel827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.pointedConormalClass827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.pointedConormalRestriction827
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.pointedConormalClass827_eq_zero_iff_fixed
+#check Fermat.FiftyNine.Conservation.GaugeSteering827.pointedConormalClass827_ne_zero_iff_transverse
 #check Fermat.FiftyNine.Conservation.GaugeSteering827.transverseDirection_iff_exists_pointedKernel
 #check Fermat.FiftyNine.Conservation.GaugeSteering827.pointedKernel_logical_dichotomy
 #check Fermat.FiftyNine.Conservation.GaugeSteering827.zeroCompatibleLift827
@@ -859,6 +865,15 @@ not an invented fixed or transverse receipt. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.GaugeSteering827.gaugeReading827,
   Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampScale827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.pointedConormalClass827,
+  Fermat.Conservation.SteeringFiber.focusConormalClass
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.pointedConormalClass827_eq_zero_iff_fixed,
+  Fermat.Conservation.SteeringFiber.focusConormalClass_eq_zero_iff_fixed
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.pointedConormalClass827_ne_zero_iff_transverse,
+  Fermat.Conservation.SteeringFiber.focusConormalClass_ne_zero_iff_transverse
 #guard_depends_on
   Fermat.FiftyNine.Conservation.GaugeSteering827.transverseDirection_iff_exists_pointedKernel,
   Fermat.FiftyNine.Conservation.GaugeSteering827.relaxedClassProjection827_eq_zero_iff
@@ -1443,6 +1458,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CommonActionStage
 #guard_standard_axioms_prefix Fermat.Conservation.TatePairing
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TateBridge
+#guard_standard_axioms_prefix Fermat.Conservation.FocusConormal
+#guard_standard_axioms_prefix Fermat.Conservation.SteeringFiber
+#guard_standard_axioms_prefix Fermat.Conservation.ExteriorTransfer
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DetectorWitness827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
@@ -1452,6 +1470,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
+#audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
+#audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
+#audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer
 
 /--
 info: 'Fermat.FiftyNine.Conservation.Instance.gauge_cycle_eq_exponentCycle' depends on axioms: [propext,

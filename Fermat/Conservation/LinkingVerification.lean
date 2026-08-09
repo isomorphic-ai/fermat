@@ -13,6 +13,7 @@ refuted upstream and is obtained only through the explicit swap quotient map.
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.CohomologyLedger
 import Fermat.Conservation.CommonActionStage
+import Fermat.Conservation.ExteriorTransfer
 import Fermat.Conservation.LinkingInterfaces
 import Fermat.Conservation.PowerRootObstruction
 import Fermat.Conservation.PowerRootExactSequence
@@ -42,11 +43,29 @@ open Fermat.Conservation
 #check SteeringFiber.FixedAttention
 #check SteeringFiber.readingDirections_eq_bot_iff_fixed
 #check SteeringFiber.jointObservation
+#check FocusConormal.CokernelDual
+#check FocusConormal.conormalClassMap
+#check FocusConormal.conormalClass
+#check FocusConormal.conormalRestriction
+#check FocusConormal.cokernelDualEquivKernelDual
+#check FocusConormal.cokernelDualEquivKernelDual_apply
+#check FocusConormal.conormalClass_eq_zero_iff_mem_range_dualMap
+#check FocusConormal.conormalClass_eq_zero_iff_restriction_eq_zero
+#check FocusConormal.conormalClass_eq_zero_iff_ker_le
+#check FocusConormal.conormalClass_eq_zero_iff_exists_dual_pullback
+#check SteeringFiber.FocusConormalCokernel
+#check SteeringFiber.focusConormalClass
+#check SteeringFiber.focusConormalRestriction
+#check SteeringFiber.focusConormalClass_eq_zero_iff_fixed
+#check SteeringFiber.focusConormalRestriction_eq_zero_iff_fixed
+#check SteeringFiber.focusConormalClass_ne_zero_iff_restriction_ne_zero
+#check SteeringFiber.focusConormalClass_ne_zero_iff_transverse
 #check SteeringFiber.exists_jointDual_of_fixed
 #check SteeringFiber.rhoDual
 #check SteeringFiber.rhoDual_pullback_of_silence
 #check SteeringFiber.reading_preimage_independent
 #check SteeringFiber.TransverseDirection
+#check SteeringFiber.focusConormalRestriction_ne_zero_iff_transverse
 #check SteeringFiber.readingDirections_eq_top_of_transverse
 #check SteeringFiber.steeringAmount
 #check SteeringFiber.focusedPoint
@@ -56,9 +75,42 @@ open Fermat.Conservation
 #check SteeringFiber.canPrescribeCoordinate_of_transverse
 #check SteeringFiber.fixed_or_steerable
 
+#check ExteriorTransfer.iMulti_eq_zero_iff_not_linearIndependent
+#check ExteriorTransfer.focusWedge
+#check ExteriorTransfer.constraintMap
+#check ExteriorTransfer.augmentedMap
+#check ExteriorTransfer.range_dualMap_augmentedMap
+#check ExteriorTransfer.focusWedge_eq_zero_iff_conormalClass_eq_zero
+#check ExteriorTransfer.focusWedge_ne_zero_iff_augmentedMap_rank_gain
+#check Fermat.Conservation.ExteriorTransfer
+#check ExteriorTransfer.areaProjection
+#check ExteriorTransfer.plueckerCoordinate
+#check ExteriorTransfer.plueckerCoordinate_eq_zero_iff_fixed
+#check ExteriorTransfer.plueckerCoordinate_ne_zero_iff_rank_gain
+#check ExteriorTransfer.focusWedge_joint_eq_zero_iff_fixed
+#check ExteriorTransfer.focusWedge_joint_ne_zero_iff_transverse
+
 #guard_depends_on SteeringFiber.exists_jointDual_of_fixed,
-  LinearMap.range_dualMap_eq_dualAnnihilator_ker
+  SteeringFiber.focusConormalClass_eq_zero_iff_exists_jointDual
+#guard_depends_on SteeringFiber.fixed_or_steerable,
+  FocusConormal.conormalClass_zero_or_nonzero
 #guard_depends_on SteeringFiber.focusedLift, SteeringFiber.focusedPoint
+#guard_depends_on FocusConormal.cokernelDualEquivKernelDual_apply,
+  Subspace.quotAnnihilatorEquiv
+#guard_depends_on FocusConormal.conormalClass_eq_zero_iff_mem_range_dualMap,
+  Submodule.Quotient.mk_eq_zero
+#guard_depends_on SteeringFiber.focusConormalClass_eq_zero_iff_fixed,
+  FocusConormal.conormalClass_eq_zero_iff_mem_range_dualMap
+#guard_depends_on SteeringFiber.focusConormalClass_ne_zero_iff_transverse,
+  SteeringFiber.focusConormalRestriction_ne_zero_iff_transverse
+#guard_depends_on ExteriorTransfer.focusWedge_eq_zero_iff_conormalClass_eq_zero,
+  ExteriorTransfer.focusWedge_eq_zero_iff_mem_span
+#guard_depends_on ExteriorTransfer.focusWedge_ne_zero_iff_augmentedMap_rank_gain,
+  ExteriorTransfer.finrank_range_augmentedMap_eq_covectorRank_snoc
+#guard_depends_on ExteriorTransfer.plueckerCoordinate_eq_zero_iff_fixed,
+  FocusConormal.conormalClass_eq_zero_iff_ker_le
+#guard_depends_on ExteriorTransfer.focusWedge_joint_ne_zero_iff_transverse,
+  SteeringFiber.focusConormalRestriction_ne_zero_iff_transverse
 
 /-! ## Vendored PowerRoot generator surface -/
 
@@ -1534,7 +1586,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.SelmerEigenspace
 #guard_standard_axioms_prefix Fermat.Conservation.TamePlacePairing
 #guard_standard_axioms_prefix Fermat.Conservation.CohomologyExactCell
+#guard_standard_axioms_prefix Fermat.Conservation.FocusConormal
 #guard_standard_axioms_prefix Fermat.Conservation.SteeringFiber
+#guard_standard_axioms_prefix Fermat.Conservation.ExteriorTransfer
 #guard_standard_axioms_prefix Fermat.Conservation.IsoConserveBridge.cohomologyBalancedStep
 #guard_standard_axioms_prefix Fermat.Conservation.IsoConserveBridge.cohomology_L1_conservation
 
@@ -1544,4 +1598,6 @@ product of its ends. -/
 
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PowerRootExactSequence
 #audit_no_product_equiv_types_prefix Fermat.Conservation.CohomologyExactCell
+#audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
+#audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer
