@@ -1,45 +1,59 @@
 # N59 conservation findings
 
-## 2026-08-13 — Ulam W0 discovery: a real reflected functional, on the wrong carrier
+## 2026-08-13 — Ulam W0 discovery: STOP fires at the reflected witness
 
-- The committed STOP guess was too pessimistic in its literal form.  W4
-  does not expose only the allocation `(0, 1)`: its already-seated map
-  `reflectedCoordinatePairing827` makes
-  `(reflectedCoordinatePairing827 …).flip 1` an actual functional on
-  `QRelaxedReflectedDual827`.  `connecting_apply` identifies its evaluation
-  with the selected 827 localization.  This functional comes from the
-  incidence map itself, not from a dimension count.
-- The carrier audit nevertheless keeps W0 red.  The W4 functional has type
-  `Module.Dual (ZMod 59) (QRelaxedReflectedDual827 …)`, whereas
-  `pair_59 wild h_F` has type
-  `DOmegaSelmerChiStar →+ ZMod 59` on the empty-support reflected Selmer
-  carrier.  The conditional fixed class readout lives on a third carrier,
-  `ProjectedClassRange827`.  No existing map or equivalence identifies
-  these carriers while preserving localization and the Tate reading.
-  DetectorWitness827's tame no-go makes silently treating the q-relaxed
-  and empty-support carriers as equal especially unsound.
+- The committed STOP guess is confirmed after checking variance, not merely
+  declaration names.  W4 does expose the genuine localization covector
+  `reflectedBoundaryFunctional827 : QRelaxedReflectedDual827 … →ₗ ZMod 59`,
+  obtained from the incidence map rather than from allocation `(0, 1)`.
+  But the task requires an actual reflected class
+  `y* : QRelaxedReflectedDual827 …`, or equivalently the induced functional
+  `H_FLT →+ ZMod 59`, `x ↦ ⟨x,y*⟩`.  The localization covector has the wrong
+  variance and selects no such class.  It cannot be relabeled as `y*`, and
+  its normalization cannot be conflated with a Tate-pairing value.
+- The typed W1 obstruction is now explicit and uninhabited.
+  `ReflectedWildCarrierExtension827` asks for the existing wild pairing to
+  extend to the q-relaxed reflected carrier, compatibly with an injective
+  equivariant map from the old carrier.  Given that extension,
+  `NormalizedReflectedClass827` asks for a class `yStar` whose selected 827
+  localization is one; only then does `yStarPairingFunctional` construct the
+  correctly variant map `x ↦ ⟨x,yStar⟩` on `H_FLT`.  No extension or
+  normalized class is constructed.  Thus W0 is red, STOP fires, and Lane 1
+  remains closed.
 - The real relation-(7a) gauge is also more weakly typed than the campaign
   shorthand suggests.  `differenceGauge` is an additive, class-valued map
   on `AllocatedClass K × AllocatedClass K`.  Its selected value is exactly
   the `r₀ + 58 r₁` word, and its zero test is already equivalent in both
   directions to `VandiverSevenA 0 1`.  Only a supplied
   `GaugeComparison.readout : AllocatedClass K →+ ZMod 59` scalarizes that
-  selected word; the cone has no scalar `gauge_7a : H_FLT →ₗ ZMod 59`
-  from which the advertised quotient could yet be instantiated.
-- The required fixed-pullback algebra is already present.  `SteeringFiber`
-  proves the joint pullback, its silent-slice `rhoDual` specialization, and
-  preimage independence.  The pure quotient law is the direct composition
-  of `FocusConormal.conormalClass_eq_zero_iff_restriction_eq_zero` and
-  `FocusConormal.conormalClass_eq_zero_iff_exists_dual_pullback`; W0 should
-  export and dependency-guard that bridge rather than prove new duality.
-- Consequently Lane 1 remains gated even though the literal STOP condition
-  does not fire.  W1 needs either a q-relaxed wild pairing whose `pair_59`
-  readout equals the reflected boundary functional (up to the intended
-  unit), or an explicit carrier map/equivalence with that compatibility.
-  A normalized vector presentation would additionally require a
-  `yStar : QRelaxedReflectedDual827 …` with selected 827 localization `1`;
-  that normalization is distinct from, and does not imply, vanishing of
-  the local pairing with the Fermat class.
+  selected word.  `SevenAGaugeSeating` therefore chooses a whole linear
+  extension `gauge_7a : H_FLT →ₗ ZMod 59`, not merely its value at `h_F`;
+  no canonical inhabitant is currently produced.
+- The required pullback algebra was already present.  `SteeringFiber` proves
+  the joint pullback, its silent-slice `rhoDual` specialization, and preimage
+  independence.  The pure kernel/pullback iff is now exported by composing
+  the two existing `FocusConormal` iff theorems; no new duality argument was
+  introduced.  The generic quotient construction proves
+  `finrank (H_FLT / ker gauge_7a) ≤ 1` and descends any supplied functional
+  satisfying `ker gauge_7a ≤ ker lambda`.
+- The two kernel directions must not be confused.  Query-level faithfulness
+  says `ker Lambda ≤ ker gauge_7a`; descent of a scalar wild functional to
+  `Q_7a` requires `ker gauge_7a ≤ ker lambda_wild`.  Equality or unit
+  proportionality would give both, but the present cone supplies neither.
+  Thus the generic descent theorem is green while the requested W4/FIXED
+  specialization is still unseated.
+- The exact relation-(7a) frontier is now three arithmetic producers:
+  exact-pair tame silence away from 59 including 827, actual global
+  reciprocity for that pair, and a one-dimensional equivariant unit
+  comparison between `gauge_7a` and `lambda_wild`.  Global
+  `ker Lambda = 0` remains only a sufficient historical route.  W0 remains
+  red and Lane 1 stays closed; no `y*`, normalization, pairing vanishing,
+  relation (7a), endpoint, or transformer is constructed.
+- The named standalone `LinkingVerification`/`UlamTypeFreeze` cones are green
+  together at 8,642/8,642 jobs, and the authoritative N59 verification is
+  green at 8,649/8,649 jobs.  The direct dependency guards, standard-axiom
+  audits, and no-product-equivalence audits pass.  Only the pre-existing
+  capacity lints and tame-symbol suggestions remain.
 
 ## 2026-08-09 — TRANSVERSALITY W4 verdict: conditional FIXED, unconditional typed stop
 
