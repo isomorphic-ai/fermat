@@ -1281,11 +1281,10 @@ interfaces; the only relation-(7a) endpoint is conditional. -/
   Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_readout_interfaces,
   Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
 
-/-! The wild-place inventory records exactly which campaign inputs have an
-exposed cyclotomic-generator decomposition.  The two actual pairing inputs
-do not, so the conservative formula budget is `NEEDS-VOSTOKOV`.  The named
-discharge interface asks for explicit Kummer-class coefficient expansions
-of both normalized state factors without asserting that they exist. -/
+/-! V1 now records covered-factor/residual-factor decompositions explicitly.
+The normalized plus and minus factors have zero residual once their named
+coefficient interface is supplied.  The exact campaign residual remains the
+two actual pairing inputs because neither is seated as a normalized factor. -/
 
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.fieldKummerClass
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.integralUnitKummerClass
@@ -1298,14 +1297,33 @@ of both normalized state factors without asserting that they exist. -/
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.normalizedMinusKummerClass
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition.mem
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition.zero
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.ofCovered
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.residualOnly
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.toArtinHasseKummerDecomposition
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.ofCovered_residual
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.residualOnly_residual
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.plus_mem
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.minus_mem
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.plusFactorDecomposition
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.minusFactorDecomposition
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.plus_residual_eq_zero
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.minus_residual_eq_zero
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.CampaignArtinHasseFactorDecomposition
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.CampaignArtinHasseFactorDecomposition.residualOnly
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.CampaignArtinHasseFactorDecomposition.statewiseDecompositionOfResidualEqZero
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.CampaignArtinHasseFactorDecomposition.detectorDecompositionOfResidualEqZero
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.WildClassKind
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.hasArtinHasseDecomposition
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.WildFormulaBudget
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.formulaBudget
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignInventory
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.residualInventory
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignResidualInventory
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignResidualInventory_eq
+#check Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignResidualInventory_length
 #check Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov
 
 #guard_depends_on
@@ -1317,6 +1335,27 @@ of both normalized state factors without asserting that they exist. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.minus_mem,
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition.mem
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.ofCovered_residual,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.ofCovered
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.residualOnly_residual,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.residualOnly
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.plus_residual_eq_zero,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.plusFactorDecomposition
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.minus_residual_eq_zero,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.NormalizedStateFactorArtinHasseDecomposition.minusFactorDecomposition
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignResidualInventory_eq,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignResidualInventory
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignResidualInventory_eq,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.hasArtinHasseDecomposition
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignResidualInventory_length,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignResidualInventory_eq
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov,
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.formulaBudget
@@ -1824,6 +1863,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.UlamTypeFreeze
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.UlamReadout827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
 #audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer

@@ -1,5 +1,38 @@
 # N59 conservation findings
 
+## 2026-08-13 — Vostokov V1 discovery: two actual inputs survive coverage
+
+- The cheap FactorDecomposition middle path does **not** empty the wild
+  formula residual.  `NormalizedStateFactorArtinHasseDecomposition` gives
+  explicit coefficient expansions of the concrete normalized plus and minus
+  Kummer classes, and these now export `ArtinHasseFactorDecomposition`s with
+  residual exactly zero.  But neither concrete class is an entry in the
+  campaign provenance inventory.
+- `campaignResidualInventory_eq` computes the exact residual, in campaign
+  order, as `[statewiseSelmerLift, transverseDetectorComponent]`; its length
+  is two.  The former is a classically chosen preimage through the paired
+  Selmer class projection.  The latter is unrestricted in the abstract
+  transverse-detector carrier.  No tracked theorem seats either value as a
+  normalized factor plus an Artin--Hasse-covered factor.
+- `ArtinHasseFactorDecomposition` records the multiplicative factorization in
+  additive Kummer coordinates: an explicitly covered factor, an explicit
+  retained residual, coefficient data for the covered factor, and exact
+  reconstruction.  Its `residualOnly` constructor makes the honest default
+  visible; it does not declare an unknown factor covered.  A zero residual
+  converts back to a genuine `ArtinHasseKummerDecomposition`.
+- `CampaignArtinHasseFactorDecomposition` extends the normalized-factor
+  interface and is indexed by the literal statewise and detector Kummer
+  classes.  It factors both uncovered inputs without permitting a caller to
+  substitute unrelated classes.  Its conservative constructor retains each
+  entire input as residual; either residual can be discharged only by an
+  explicit zero proof, which then reconstructs the corresponding coefficient
+  expansion.
+- Therefore V2 must operate on two residual provenance kinds, not the one
+  predicted before inspection.  The historical `NEEDS-VOSTOKOV` theorem
+  remains correct as a coverage verdict.  No series machinery was built
+  during V1, and no pairing value, carrier equivalence, reciprocity law, or
+  relation-(7a) conclusion was introduced.
+
 ## 2026-08-13 — Ulam W1 discovery: the fiber closes; the arithmetic seams stay typed
 
 - The first committed guess was too pessimistic after the full incidence

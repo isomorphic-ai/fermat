@@ -163,6 +163,93 @@ theorem ArtinHasseKummerDecomposition.mem
       (H.zsmul_mem hdenominator d.denominatorCoefficient))
     hsum
 
+/-- Zero has the empty Artin--Hasse expansion.  This is the covered factor
+used when a campaign input is left entirely in the residual. -/
+def ArtinHasseKummerDecomposition.zero
+    (hζ : IsPrimitiveRoot ζ 59) :
+    ArtinHasseKummerDecomposition hζ 0 where
+  zetaCoefficient := 0
+  denominatorCoefficient := 0
+  generatedCoefficient := 0
+  decomposition := by simp
+
+/-- An additive Kummer-class spelling of "covered factor times residual
+factor".  Addition here is multiplication of field representatives modulo
+59th powers.  The covered factor carries explicit Artin--Hasse coefficients;
+the residual is retained as data and is never declared silent. -/
+structure ArtinHasseFactorDecomposition
+    (hζ : IsPrimitiveRoot ζ 59)
+    (x : TameSymbol.KummerClass 59 K) where
+  covered : TameSymbol.KummerClass 59 K
+  residual : TameSymbol.KummerClass 59 K
+  coveredDecomposition : ArtinHasseKummerDecomposition hζ covered
+  reconstruction : x = covered + residual
+
+namespace ArtinHasseFactorDecomposition
+
+/-- A fully covered class has zero residual. -/
+def ofCovered
+    {hζ : IsPrimitiveRoot ζ 59}
+    {x : TameSymbol.KummerClass 59 K}
+    (d : ArtinHasseKummerDecomposition hζ x) :
+    ArtinHasseFactorDecomposition hζ x where
+  covered := x
+  residual := 0
+  coveredDecomposition := d
+  reconstruction := (add_zero x).symm
+
+/-- With no seating information, the honest factorization retains the whole
+class as residual and uses the covered identity factor. -/
+def residualOnly
+    (hζ : IsPrimitiveRoot ζ 59)
+    (x : TameSymbol.KummerClass 59 K) :
+    ArtinHasseFactorDecomposition hζ x where
+  covered := 0
+  residual := x
+  coveredDecomposition := ArtinHasseKummerDecomposition.zero hζ
+  reconstruction := (zero_add x).symm
+
+/-- A factorization whose explicit residual is zero recovers a genuine
+Artin--Hasse coefficient expansion of the original class. -/
+def toArtinHasseKummerDecomposition
+    {hζ : IsPrimitiveRoot ζ 59}
+    {x : TameSymbol.KummerClass 59 K}
+    (d : ArtinHasseFactorDecomposition hζ x)
+    (hresidual : d.residual = 0) :
+    ArtinHasseKummerDecomposition hζ x where
+  zetaCoefficient := d.coveredDecomposition.zetaCoefficient
+  denominatorCoefficient := d.coveredDecomposition.denominatorCoefficient
+  generatedCoefficient := d.coveredDecomposition.generatedCoefficient
+  decomposition := by
+    calc
+      x = d.covered + d.residual := d.reconstruction
+      _ = d.covered := by
+        rw [hresidual]
+        exact add_zero d.covered
+      _ = d.coveredDecomposition.zetaCoefficient • zetaKummerClass hζ +
+          d.coveredDecomposition.denominatorCoefficient •
+            fixedDenominatorKummerClass hζ +
+          ∑ i, d.coveredDecomposition.generatedCoefficient i •
+            generatedUnitKummerClass hζ i :=
+        d.coveredDecomposition.decomposition
+
+@[simp]
+theorem ofCovered_residual
+    {hζ : IsPrimitiveRoot ζ 59}
+    {x : TameSymbol.KummerClass 59 K}
+    (d : ArtinHasseKummerDecomposition hζ x) :
+    (ofCovered d).residual = 0 :=
+  rfl
+
+@[simp]
+theorem residualOnly_residual
+    (hζ : IsPrimitiveRoot ζ 59)
+    (x : TameSymbol.KummerClass 59 K) :
+    (residualOnly hζ x).residual = x :=
+  rfl
+
+end ArtinHasseFactorDecomposition
+
 /-- **Named `NEEDS-VOSTOKOV` discharge interface.**  Supplying explicit
 Artin--Hasse expansions for both normalized state factors is sufficient to
 replace a general Vostokov formula for those two factor classes.  It does
@@ -189,6 +276,101 @@ theorem NormalizedStateFactorArtinHasseDecomposition.minus_mem
     (d : NormalizedStateFactorArtinHasseDecomposition hζ S hz) :
     normalizedMinusKummerClass hζ S hz ∈ artinHasseKummerSubgroup hζ :=
   d.minus.mem
+
+/-- The normalized plus factor, viewed through the middle path, has an
+explicitly trivial residual. -/
+def NormalizedStateFactorArtinHasseDecomposition.plusFactorDecomposition
+    {hζ : IsPrimitiveRoot ζ 59}
+    {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
+    (d : NormalizedStateFactorArtinHasseDecomposition hζ S hz) :
+    ArtinHasseFactorDecomposition hζ
+      (normalizedPlusKummerClass hζ S hz) :=
+  ArtinHasseFactorDecomposition.ofCovered d.plus
+
+/-- The normalized minus factor, viewed through the middle path, has an
+explicitly trivial residual. -/
+def NormalizedStateFactorArtinHasseDecomposition.minusFactorDecomposition
+    {hζ : IsPrimitiveRoot ζ 59}
+    {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
+    (d : NormalizedStateFactorArtinHasseDecomposition hζ S hz) :
+    ArtinHasseFactorDecomposition hζ
+      (normalizedMinusKummerClass hζ S hz) :=
+  ArtinHasseFactorDecomposition.ofCovered d.minus
+
+@[simp]
+theorem NormalizedStateFactorArtinHasseDecomposition.plus_residual_eq_zero
+    {hζ : IsPrimitiveRoot ζ 59}
+    {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
+    (d : NormalizedStateFactorArtinHasseDecomposition hζ S hz) :
+    d.plusFactorDecomposition.residual = 0 :=
+  rfl
+
+@[simp]
+theorem NormalizedStateFactorArtinHasseDecomposition.minus_residual_eq_zero
+    {hζ : IsPrimitiveRoot ζ 59}
+    {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
+    (d : NormalizedStateFactorArtinHasseDecomposition hζ S hz) :
+    d.minusFactorDecomposition.residual = 0 :=
+  rfl
+
+/-- Evidence-level V1 extension indexed by the two literal Kummer classes
+which enter the campaign pairing.  Indexing prevents an unrelated class from
+being stored and later reported as the statewise lift or detector.  The
+inherited normalized factors are fully covered; the two actual inputs retain
+their explicit residual factors. -/
+structure CampaignArtinHasseFactorDecomposition
+    (hζ : IsPrimitiveRoot ζ 59)
+    (S : PrimitiveSecondCaseSolution) (hz : (59 : ℤ) ∣ S.z)
+    (statewiseClass detectorClass : TameSymbol.KummerClass 59 K)
+    extends NormalizedStateFactorArtinHasseDecomposition hζ S hz where
+  statewiseSelmerLift :
+    ArtinHasseFactorDecomposition hζ statewiseClass
+  transverseDetectorComponent :
+    ArtinHasseFactorDecomposition hζ detectorClass
+
+namespace CampaignArtinHasseFactorDecomposition
+
+/-- The conservative V1 constructor: once the normalized middle path is
+supplied, both actual inputs are decomposed with identity covered factor and
+their complete literal Kummer classes retained as residuals. -/
+def residualOnly
+    {hζ : IsPrimitiveRoot ζ 59}
+    {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
+    (normalized : NormalizedStateFactorArtinHasseDecomposition hζ S hz)
+    (statewiseClass detectorClass : TameSymbol.KummerClass 59 K) :
+    CampaignArtinHasseFactorDecomposition hζ S hz
+      statewiseClass detectorClass where
+  toNormalizedStateFactorArtinHasseDecomposition := normalized
+  statewiseSelmerLift :=
+    ArtinHasseFactorDecomposition.residualOnly hζ statewiseClass
+  transverseDetectorComponent :=
+    ArtinHasseFactorDecomposition.residualOnly hζ detectorClass
+
+/-- A zero statewise residual is exactly enough to recover explicit
+Artin--Hasse coefficients for the indexed statewise input. -/
+def statewiseDecompositionOfResidualEqZero
+    {hζ : IsPrimitiveRoot ζ 59}
+    {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
+    {statewiseClass detectorClass : TameSymbol.KummerClass 59 K}
+    (d : CampaignArtinHasseFactorDecomposition hζ S hz
+      statewiseClass detectorClass)
+    (hresidual : d.statewiseSelmerLift.residual = 0) :
+    ArtinHasseKummerDecomposition hζ statewiseClass :=
+  d.statewiseSelmerLift.toArtinHasseKummerDecomposition hresidual
+
+/-- A zero detector residual is exactly enough to recover explicit
+Artin--Hasse coefficients for the indexed detector input. -/
+def detectorDecompositionOfResidualEqZero
+    {hζ : IsPrimitiveRoot ζ 59}
+    {S : PrimitiveSecondCaseSolution} {hz : (59 : ℤ) ∣ S.z}
+    {statewiseClass detectorClass : TameSymbol.KummerClass 59 K}
+    (d : CampaignArtinHasseFactorDecomposition hζ S hz
+      statewiseClass detectorClass)
+    (hresidual : d.transverseDetectorComponent.residual = 0) :
+    ArtinHasseKummerDecomposition hζ detectorClass :=
+  d.transverseDetectorComponent.toArtinHasseKummerDecomposition hresidual
+
+end CampaignArtinHasseFactorDecomposition
 
 /-- Provenance classes relevant to the conductor-59 wild-symbol budget. -/
 inductive WildClassKind
@@ -227,6 +409,30 @@ the two opaque values actually entering the wild pairing. -/
 def campaignInventory : List WildClassKind :=
   [.rootOfUnity, .oneSubRoot, .cyclotomicUnit,
     .statewiseSelmerLift, .transverseDetectorComponent]
+
+/-- The inputs not discharged by the currently exposed Artin--Hasse
+decompositions, kept in campaign order. -/
+def residualInventory (inventory : List WildClassKind) : List WildClassKind :=
+  inventory.filter fun kind => !(hasArtinHasseDecomposition kind)
+
+/-- The exact V1 residual for the selected campaign. -/
+def campaignResidualInventory : List WildClassKind :=
+  residualInventory campaignInventory
+
+/-- **V1 coverage result.**  Extending the normalized-factor middle path
+does make both normalized residuals trivial, but there is no tracked seating
+of either actual pairing input as one of those factors.  Consequently the
+two actual inputs, and only those inputs, remain in the coverage residual. -/
+theorem campaignResidualInventory_eq :
+    campaignResidualInventory =
+      [.statewiseSelmerLift, .transverseDetectorComponent] := by
+  rfl
+
+/-- The V1 residual has exactly two provenance kinds. -/
+theorem campaignResidualInventory_length :
+    campaignResidualInventory.length = 2 := by
+  rw [campaignResidualInventory_eq]
+  rfl
 
 /-- **Stage-3 fork verdict: `NEEDS-VOSTOKOV`.**  The verdict is a coverage
 audit of available decompositions, not an invented non-membership theorem. -/
