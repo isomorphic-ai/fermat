@@ -3,6 +3,25 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-13 — Vostokov wild-reading prediction
+
+- **Committed guess: the V1 coverage upgrade does not close.**  I expect the
+  existing Artin--Hasse families to absorb the normalized state-factor part
+  of the campaign inventory, but not every factor introduced by the relaxed
+  827 carrier.  I will test this by extending the named
+  `NormalizedStateFactorArtinHasseDecomposition` middle path before building
+  any residue or series machinery.
+- **Committed guess: exactly one `WildClassKind` residual remains.**  My guess
+  is that the uncovered class is the genuinely relaxed 827-local factor,
+  while the root-of-unity, prime-element, cyclotomic-unit, and normalized
+  state-factor classes reduce to already banked Artin--Hasse coverage.
+- **Committed guess: V3 ends this session at a strictly smaller named
+  arithmetic core.**  I expect the inclusion, additivity, adjoint assembly,
+  and old-carrier agreement to become a constructor theorem, with the one
+  residual symbol/localization producer left as the only named input.  This
+  predicts neither a fabricated pairing value nor an unconditional 7a
+  endpoint.
+
 ## 2026-08-13 — Ulam W1 readout-ledger prediction
 
 - **Committed guess: `reflectedBoundaryFunctional827 ≠ 0` needs one new
