@@ -20,6 +20,7 @@ import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.Ledger
 import Fermat.Conservation.Transfer
 import Fermat.Conservation.ExteriorTransfer
+import Fermat.Conservation.WildKummerPairing
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 import Fermat.FiftyNine.Conservation.BoundedSinnott
@@ -39,6 +40,8 @@ import Fermat.FiftyNine.Conservation.TransversalityVerdict827
 import Fermat.FiftyNine.Conservation.UlamTypeFreeze
 import Fermat.FiftyNine.Conservation.UlamReadout827
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
+import Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
+import Fermat.FiftyNine.Conservation.VostokovLocalization59
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
@@ -1363,6 +1366,170 @@ two actual pairing inputs because neither is seated as a normalized factor. -/
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov,
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignInventory
 
+/-! V2 supplies only the generic algebraic descent surface for a total
+Kummer pairing.  V3 then reduces the concrete seated localization producer
+to one representative pairing, one canonical-inclusion landing receipt, and
+old-reading calibration.  The Artin--Hasse coefficient and four-term
+factorization theorems connect V1's exact residual to that total pairing. -/
+
+/-! ### Generic wild Kummer pairing core -/
+
+#check Fermat.Conservation.WildKummerPairing.RepresentativePairing
+#check Fermat.Conservation.WildKummerPairing.Pairing
+#check Fermat.Conservation.WildKummerPairing.classOfUnit
+#check Fermat.Conservation.WildKummerPairing.classOfUnit_apply
+#check Fermat.Conservation.WildKummerPairing.Pairing.onRepresentatives
+#check Fermat.Conservation.WildKummerPairing.Pairing.onRepresentatives_apply
+#check Fermat.Conservation.WildKummerPairing.IsPPowerSilent
+#check Fermat.Conservation.WildKummerPairing.isPPowerSilent
+#check Fermat.Conservation.WildKummerPairing.IsKummerDescent
+#check Fermat.Conservation.WildKummerPairing.RepresentativePairing.descend
+#check Fermat.Conservation.WildKummerPairing.RepresentativePairing.descend_classOfUnit_classOfUnit
+#check Fermat.Conservation.WildKummerPairing.RepresentativePairing.isKummerDescent_descend
+#check Fermat.Conservation.WildKummerPairing.Core
+#check Fermat.Conservation.WildKummerPairing.Core.ofRepresentative
+#check Fermat.Conservation.WildKummerPairing.Core.ofRepresentative_pairing_apply
+#check Fermat.Conservation.WildKummerPairing.Core.pairing_classOfUnit_classOfUnit
+#check Fermat.Conservation.WildKummerPairing.IsGaloisEquivariant
+#check Fermat.Conservation.WildKummerPairing.GaloisData
+#check Fermat.Conservation.WildKummerPairing.GaloisData.action_adjoint
+#check Fermat.Conservation.WildKummerPairing.IsArtinHasseCalibrated
+
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.classOfUnit_apply,
+  Fermat.Conservation.WildKummerPairing.classOfUnit
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.Pairing.onRepresentatives_apply,
+  Fermat.Conservation.WildKummerPairing.Pairing.onRepresentatives
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.isPPowerSilent,
+  ZModModule.char_nsmul_eq_zero
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.RepresentativePairing.descend_classOfUnit_classOfUnit,
+  Fermat.Conservation.WildKummerPairing.RepresentativePairing.descend
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.RepresentativePairing.isKummerDescent_descend,
+  Fermat.Conservation.WildKummerPairing.RepresentativePairing.descend_classOfUnit_classOfUnit
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.Core.ofRepresentative_pairing_apply,
+  Fermat.Conservation.WildKummerPairing.Core.ofRepresentative
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.Core.pairing_classOfUnit_classOfUnit,
+  Fermat.Conservation.WildKummerPairing.Core.descent
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.GaloisData.action_adjoint,
+  Fermat.Conservation.WildKummerPairing.GaloisData.equivariant
+
+/-! ### Canonical empty-support reflected inclusion -/
+
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic_injective
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.EmptySupportEigenspaceLanding
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.EmptySupportActionCompatibility
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.EmptySupportActionCompatibility.toEigenspaceLanding
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusionPadic
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusionPadic_apply
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusionPadic_intertwines
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion_apply
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion_injective
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerQuotientAt_emptySupportEigenspaceInclusion
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerClassAt_emptySupportEigenspaceInclusion
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.ReflectedEmptySupportLanding827
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.EmptySupportActionCompatibility827
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.EmptySupportActionCompatibility827.toReflectedLanding
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.oldReflectedToQRelaxed827
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.oldReflectedToQRelaxed827_injective
+#check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerClassAt_oldReflectedToQRelaxed827
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic_injective,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusionPadic_apply,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusionPadic
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusionPadic_intertwines,
+  Fermat.Conservation.SelmerEigenspace.mem_characterEigenspaceAt_iff
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion_apply,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion_injective,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerQuotientAt_emptySupportEigenspaceInclusion,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerClassAt_emptySupportEigenspaceInclusion,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.oldReflectedToQRelaxed827_injective,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerClassAt_oldReflectedToQRelaxed827,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerClassAt_emptySupportEigenspaceInclusion
+
+/-! ### Strict 59/827 arithmetic core and constructor -/
+
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.OldPrimal59
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.OldReflectedDual59
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.OldWildInterface59
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.wildKummerCore
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.readingAt59
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.readingAt59_apply
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.adjoint_law
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.pairing_artinHasseExpansion_left
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.pairing_artinHasseExpansion_right
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.pairing_campaignFactorDecomposition
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.agrees_with_old
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.toReflectedWildLocalizationAt59
+#check Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.nonempty_reflectedWildLocalizationAt59
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.wildKummerCore,
+  Fermat.Conservation.WildKummerPairing.Core.ofRepresentative
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.readingAt59,
+  Fermat.Conservation.SelmerEigenspace.toKummerClassAt
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.readingAt59_apply,
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.readingAt59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.adjoint_law,
+  Fermat.Conservation.InvolutiveBase.hash_apply_single
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.adjoint_law,
+  MonoidAlgebra.induction_linear
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.pairing_artinHasseExpansion_left,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition.decomposition
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.pairing_artinHasseExpansion_right,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseKummerDecomposition.decomposition
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.pairing_campaignFactorDecomposition,
+  Fermat.FiftyNine.Conservation.ArtinHasseInventory.ArtinHasseFactorDecomposition.reconstruction
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.agrees_with_old,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerClassAt_oldReflectedToQRelaxed827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.agrees_with_old,
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.old_calibration
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.toReflectedWildLocalizationAt59,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.oldReflectedToQRelaxed827_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.toReflectedWildLocalizationAt59,
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.adjoint_law
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.toReflectedWildLocalizationAt59,
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.agrees_with_old
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.nonempty_reflectedWildLocalizationAt59,
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.toReflectedWildLocalizationAt59
+
 /--
 info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_eq' depends on axioms: [propext,
  Classical.choice,
@@ -1854,6 +2021,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.UlamTypeFreeze
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.UlamReadout827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
+#guard_standard_axioms_prefix Fermat.Conservation.WildKummerPairing
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
@@ -1864,6 +2034,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.UlamTypeFreeze
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.UlamReadout827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
+#audit_no_product_equiv_types_prefix Fermat.Conservation.WildKummerPairing
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
 #audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer

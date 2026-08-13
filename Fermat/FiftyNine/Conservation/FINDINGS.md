@@ -33,6 +33,83 @@
   during V1, and no pairing value, carrier equivalence, reciprocity law, or
   relation-(7a) conclusion was introduced.
 
+## 2026-08-13 — Vostokov V2--V3 discovery: localization reduces to three arithmetic fields
+
+- The route-neutral V2 layer now has an actual algebraic descent, not a
+  postulated quotient map.  `WildKummerPairing.RepresentativePairing p K` is
+  bilinear on the additive wrappers of `Kˣ`; bilinearity formally kills
+  `p`-th powers in both inputs, and `RepresentativePairing.descend` lifts it
+  through both Kummer quotients.  `WildKummerPairing.Core.ofRepresentative`
+  packages the descended total pairing with its representative-level
+  receipt.  The generic `GaloisData.action_adjoint` and
+  `IsArtinHasseCalibrated` predicates remain available when a later formula
+  supplies the corresponding action or numerical bank.
+- V1 is connected to this total pairing by compiled equations.
+  `pairing_artinHasseExpansion_left` and `_right` expand a covered input into
+  the root-of-unity, denominator, and generated-unit families, while
+  `pairing_campaignFactorDecomposition` expands the literal
+  statewise/detector value into the four covered-covered,
+  covered-residual, residual-covered, and residual-residual terms.  Thus the
+  exact two-kind residual
+  `[statewiseSelmerLift, transverseDetectorComponent]` is an input to V2,
+  not merely an inventory label.
+- The pinned library audit found useful separate pieces (including Witt
+  vectors and formal Laurent-series coefficient/derivative operations), but
+  no assembled completed 59-adic Laurent-series carrier with the required
+  Frobenius-defect logarithm.  Consequently this session proves no explicit
+  Brueckner--Vostokov residue formula and no identification of such a formula
+  with the 59-Hilbert symbol.  The representative pairing remains genuine
+  arithmetic input rather than a fabricated value.
+- V3's strict-to-relaxed map is now canonical once one proposition is
+  supplied.  `ReflectedEmptySupportLanding827` says only that the ordinary
+  empty-support inclusion lands in the reflected q-relaxed eigenspace.
+  From it, `oldReflectedToQRelaxed827` is promoted to an
+  `IntegralPadicGroupAlgebra`-linear map, its injectivity is proved, and
+  `toKummerClassAt_oldReflectedToQRelaxed827` proves that it exposes exactly
+  the old Kummer class.  No equivalence, section, complement, or splitting is
+  chosen.
+- `ReflectedWildKummerCoreAt59` is the strict reduced hole.  It has exactly
+  three fields: a representative bilinear pairing, the landing proposition,
+  and calibration of the descended pairing against `wild.reading` on the old
+  seated carriers.  `toReflectedWildLocalizationAt59` constructs all four
+  fields of `ReflectedWildLocalizationAt59`, and
+  `nonempty_reflectedWildLocalizationAt59` records the implication in
+  proposition form.  No inhabitant of the three-field core is claimed.
+- The assembled `readingAt59` is the descended total Kummer pairing composed
+  with the literal `toKummerClass` and `toKummerClassAt` maps.  Its full
+  `hash omega` adjoint law follows formally from the `chi` and
+  `omega * chi⁻¹` eigenspace laws and bilinearity; it is not evidence that
+  a Vostokov formula has been proved Galois-equivariant.  Likewise
+  `old_calibration` is calibration against the already existing old wild
+  reading, not numerical Artin--Hasse calibration: the tracked tree contains
+  no bank of Artin--Hasse symbol values to cite.  Steinberg, norm-residue/norm
+  silence, and reciprocity laws were deliberately not added; none is needed
+  by this constructor, and reciprocity remains its separate downstream
+  interface.
+- Supplying the three-field core now discharges W1 step 4: the inclusion,
+  injectivity, q-relaxed reading, adjoint law, old-carrier agreement, and
+  Kummer bridge are all constructed.  The cascade is still conditional.
+  `QLocalizationEquivariance827` plus `PointedTateIncidence827` discharge
+  boundary nonvanishing and give `Nonempty NormalizedReflectedFiber827`, but
+  neither is inhabited here.  Step 5 still needs
+  `SelectedWildLawfulness827` at a selected carrier (and the endpoint's
+  uniform factorization uses `WildLawfulness827`).  The relation-(7a) lane
+  still needs `ClassValuedSevenAGaugeSeating`, the endpoint-relevant
+  direction `WildProcessesAtLeastSevenA` (`ker Lambda ≤ ker G`), global
+  reciprocity, and a normalized-fiber member.  The reverse direction
+  `WildUsesNothingBeyondSevenA` (`ker G ≤ ker Lambda`) is additionally
+  required only for kernel equality and the processed-range equivalence
+  `im G ≃ im Lambda`; it is not smuggled into the endpoint.  None of these
+  interfaces is produced by the Vostokov reduction, so no unconditional
+  relation (7a), fiber collapse, reciprocity theorem, endpoint, or
+  transformer follows.
+- The three standalone implementation targets and the authoritative
+  `Verification` cone are green together at 8,654/8,654 jobs.  Direct
+  dependency guards cover every new public theorem, and the three new
+  namespaces pass the standard-axiom and no-product-equivalence audits.
+  Source scans find no `axiom`/`sorry`, forbidden-route import, or
+  comparison-lane scalar in the new modules.
+
 ## 2026-08-13 — Ulam W1 discovery: the fiber closes; the arithmetic seams stay typed
 
 - The first committed guess was too pessimistic after the full incidence
@@ -44,13 +121,13 @@
   interface or privileged reflected class is needed.  The resulting public
   carrier is the whole normalized affine fiber, and its W0 witness adapter
   is local to an explicitly supplied fiber member.
-- Step 4 is the first irreducible arithmetic producer missing from the
-  tracked tree.  The ambient empty-support inclusion is only additive, not
-  the required integral-group-algebra map, and no actual 59-local
-  wild/Vostokov reading on the q-relaxed reflected carrier is banked.
-  `ReflectedWildLocalizationAt59` names exactly those two localization
-  outputs and constructs `ReflectedWildCarrierExtension827` from them.  It
-  has no inhabitant here and uses no extension from a complement.
+- At the W1 audit, step 4 was the first irreducible arithmetic producer.
+  The later Vostokov entry above has now reduced it to the three fields of
+  `ReflectedWildKummerCoreAt59`: the canonical integral-group-algebra map and
+  its injectivity are derived from the landing field, and the descended
+  representative pairing supplies the q-relaxed reading.  Neither that core
+  nor `ReflectedWildLocalizationAt59` has an unconditional inhabitant, and no
+  extension from a complement is used.
 - The step-5 inclusion is likewise undecided, not disproved.  No tracked
   theorem compares the selected 827 boundary kernel with the wild reading
   at `h_F`.  `SelectedWildLawfulness827` names the inclusion, while its
@@ -116,24 +193,21 @@
   `H_FLT →+ ZMod 59`, `x ↦ ⟨x,y*⟩`.  The localization covector has the wrong
   variance and selects no such class.  It cannot be relabeled as `y*`, and
   its normalization cannot be conflated with a Tate-pairing value.
-- The typed W1 obstruction is now explicit and uninhabited.
-  `ReflectedWildCarrierExtension827` asks for the existing wild pairing to
-  extend to the q-relaxed reflected carrier, compatibly with an injective
-  equivariant map from the old carrier.  Given that extension,
-  `NormalizedReflectedClass827` asks for a class `yStar` whose selected 827
-  localization is one; only then does `yStarPairingFunctional` construct the
-  correctly variant map `x ↦ ⟨x,yStar⟩` on `H_FLT`.  No extension or
-  normalized class is constructed.  Thus W0 is red, STOP fires, and Lane 1
-  remains closed.
-- The real relation-(7a) gauge is also more weakly typed than the campaign
-  shorthand suggests.  `differenceGauge` is an additive, class-valued map
-  on `AllocatedClass K × AllocatedClass K`.  Its selected value is exactly
-  the `r₀ + 58 r₁` word, and its zero test is already equivalent in both
-  directions to `VandiverSevenA 0 1`.  Only a supplied
-  `GaugeComparison.readout : AllocatedClass K →+ ZMod 59` scalarizes that
-  selected word.  `SevenAGaugeSeating` therefore chooses a whole linear
-  extension `gauge_7a : H_FLT →ₗ ZMod 59`, not merely its value at `h_F`;
-  no canonical inhabitant is currently produced.
+- The later Vostokov pass has reduced the typed W1 obstruction without
+  inhabiting it.  A `ReflectedWildKummerCoreAt59` now constructs the
+  `ReflectedWildCarrierExtension827` through the canonical landed inclusion
+  and descended Kummer pairing.  Its three arithmetic fields remain
+  uninhabited.  A member of the whole `NormalizedReflectedFiber827`, rather
+  than a globally chosen privileged class, supplies the correctly variant
+  input to the conditional endpoint.  The fiber is nonempty only under the
+  still-uninhabited incidence and Fourier-seating interfaces.  Thus W0 is
+  still red, STOP fires, and Lane 1 remains closed.
+- The real relation-(7a) gauge is class-valued.  Its selected value is exactly
+  the `r₀ + 58 r₁` word, and its zero test is equivalent in both directions to
+  `VandiverSevenA 0 1`.  `ClassValuedSevenAGaugeSeating` asks for a whole
+  `ClassPTorsion (𝓞 K) 59`-valued linear map on `H_FLT` with that selected
+  value; no canonical inhabitant is produced and no scalarization is used as
+  the invariant.
 - The required pullback algebra was already present.  `SteeringFiber` proves
   the joint pullback, its silent-slice `rhoDual` specialization, and preimage
   independence.  The pure kernel/pullback iff is now exported by composing
@@ -141,19 +215,19 @@
   introduced.  The generic quotient construction proves
   `finrank (H_FLT / ker gauge_7a) ≤ 1` and descends any supplied functional
   satisfying `ker gauge_7a ≤ ker lambda`.
-- The two kernel directions must not be confused.  Query-level faithfulness
-  says `ker Lambda ≤ ker gauge_7a`; descent of a scalar wild functional to
-  `Q_7a` requires `ker gauge_7a ≤ ker lambda_wild`.  Equality or unit
-  proportionality would give both, but the present cone supplies neither.
-  Thus the generic descent theorem is green while the requested W4/FIXED
-  specialization is still unseated.
-- The exact relation-(7a) frontier is now three arithmetic producers:
-  exact-pair tame silence away from 59 including 827, actual global
-  reciprocity for that pair, and a one-dimensional equivariant unit
-  comparison between `gauge_7a` and `lambda_wild`.  Global
-  `ker Lambda = 0` remains only a sufficient historical route.  W0 remains
-  red and Lane 1 stays closed; no `y*`, normalization, pairing vanishing,
-  relation (7a), endpoint, or transformer is constructed.
+- The two kernel directions must not be confused.  The endpoint consumes
+  `WildProcessesAtLeastSevenA`, namely `ker Lambda ≤ ker G`.  The reverse
+  `WildUsesNothingBeyondSevenA`, namely `ker G ≤ ker Lambda`, is required
+  only for equality and the canonical processed-range equivalence
+  `im G ≃ im Lambda`.  The present cone supplies neither.
+- After the localization reduction, the exact relation-(7a) frontier is the
+  three-field Kummer core, wild lawfulness, class-valued gauge seating, the
+  applicable kernel comparison, actual global reciprocity, and a member of
+  the conditionally nonempty normalized fiber.  The place-indexed interface
+  already has single wild support.  Global `ker Lambda = 0` remains only a
+  historical sufficient route.  W0 remains red and Lane 1 stays closed; no
+  unconditional pairing vanishing, relation (7a), endpoint, or transformer
+  is constructed.
 - The named standalone `LinkingVerification`/`UlamTypeFreeze` cones are green
   together at 8,642/8,642 jobs, and the authoritative N59 verification is
   green at 8,649/8,649 jobs.  The direct dependency guards, standard-axiom
