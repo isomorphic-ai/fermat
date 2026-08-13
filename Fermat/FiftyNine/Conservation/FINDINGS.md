@@ -1,5 +1,56 @@
 # N59 conservation findings
 
+## 2026-08-13 — Ulam W1 discovery: the fiber closes; the arithmetic seams stay typed
+
+- The first committed guess was too pessimistic after the full incidence
+  audit.  Conditional on the already-named `PointedTateIncidence827` and
+  `QLocalizationEquivariance827` inputs, the banked reflected gain is one.
+  If the boundary functional were zero, the connecting map would be zero
+  and that gain would be zero.  Thus `reflectedBoundaryFunctional827 ≠ 0`
+  closes from those existing interfaces; no additional nonvanishing
+  interface or privileged reflected class is needed.  The resulting public
+  carrier is the whole normalized affine fiber, and its W0 witness adapter
+  is local to an explicitly supplied fiber member.
+- Step 4 is the first irreducible arithmetic producer missing from the
+  tracked tree.  The ambient empty-support inclusion is only additive, not
+  the required integral-group-algebra map, and no actual 59-local
+  wild/Vostokov reading on the q-relaxed reflected carrier is banked.
+  `ReflectedWildLocalizationAt59` names exactly those two localization
+  outputs and constructs `ReflectedWildCarrierExtension827` from them.  It
+  has no inhabitant here and uses no extension from a complement.
+- The step-5 inclusion is likewise undecided, not disproved.  No tracked
+  theorem compares the selected 827 boundary kernel with the wild reading
+  at `h_F`.  `SelectedWildLawfulness827` names the inclusion, while its
+  literal negation is proved equivalent to a retained
+  `SteerableWildDirection827`: a boundary-silent direction with nonzero wild
+  reading.  The selected and bilinear rank-one factorizations compile only
+  in the lawful branch, through `ReadoutLedger`.
+- The genuine relation-(7a) gauge now lands in
+  `ClassPTorsion (𝓞 K) 59`, not through W0's arbitrary scalar readout.  Its
+  selected value is the real difference of the two allocated root classes,
+  and zero is exactly the banked `VandiverSevenA` relation.  The two kernel
+  directions are separate named interfaces.  Supplying both produces the
+  canonical processed-range equivalence `im G ≃ im Λ` and its application
+  law; scalar proportionality is not used as the invariant.
+- The third committed guess is confirmed at the correctly typed carrier:
+  59 kills every value of `G` and therefore every point of `im G`, so
+  `58[J] = -[J]` is valid there.  In a deeper carrier the correction remains
+  `c + r₁`, and the first-layer decomposition is routed through the existing
+  `BocksteinPowerRootReceiptObservation`; mod-59 zero does not delete the
+  deeper object.
+- Steps 9 and 10 remain typed seams only.  The former asks for global
+  reciprocity on the exact localized pairing (whose tame silence is already
+  built into `WildLocalInterface`); the latter exposes the still-conserved
+  `ker G` as the source of a future class-to-unit-to-root route.  The sole
+  endpoint theorem is conditional on localization, lawfulness, the consumed
+  kernel comparison, reciprocity, and an arbitrary normalized-fiber member.
+  It proves only relation (7a), never that `h_F`, Selmer, or `ker G` vanishes.
+- The standalone W1 instance and authoritative N59 verification cones are
+  green at 8,643/8,643 and 8,651/8,651 jobs respectively.  Every public W1
+  theorem has a direct dependency guard; the generic and instance namespaces
+  pass the standard-axiom and no-product-equivalence audits.  Only existing
+  linter warnings in the imported cone remain.
+
 ## 2026-08-13 — Ulam W1 pre-build audit: the two-readout row is already banked
 
 - `FocusConormal.conormalClass_eq_zero_iff_ker_le` already identifies the
