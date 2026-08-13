@@ -1,5 +1,26 @@
 # N59 conservation findings
 
+## 2026-08-13 — Ulam W1 pre-build audit: the two-readout row is already banked
+
+- `FocusConormal.conormalClass_eq_zero_iff_ker_le` already identifies the
+  zero retained class of a second scalar readout `g` with
+  `ker f ≤ ker g`.  Its companion pullback theorem already identifies the
+  same condition with factorization through `f`.  These are the invariant
+  fixed laws required by `ReadoutLedger`; they must be exported through
+  bridges, not reproved.
+- `SteeringFiber.readingDirections` is literally the image of a readout on
+  `K_T`, and `readingDirections_eq_bot_iff_fixed` already proves that this
+  image is bottom exactly when the restriction vanishes.  Specializing its
+  surjective class map to `f.rangeRestrict` and its silence map to zero makes
+  `K_T = ker f`; this is exactly the W1 row
+  `ker f ∩ ker g → ker f → g(ker f)`.  The new module will record this
+  specialization with direct dependency guards.
+- Neither audited file supplies the equal-kernel equivalence between
+  `range f` and `range g`, the normalized affine fiber, or the selected-row
+  rank-one coefficient.  Those are genuine additions, but their fixedness
+  and fiber-independence proofs can and will consume the existing conormal
+  and steering laws.  No complement or splitting is needed.
+
 ## 2026-08-13 — Ulam W0 discovery: STOP fires at the reflected witness
 
 - The committed STOP guess is confirmed after checking variance, not merely
