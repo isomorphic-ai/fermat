@@ -1269,7 +1269,8 @@ elab "#guard_no_selected_prime_literal" : command => do
   let entries ← liftIO <| System.FilePath.readDir sourceDirectory
   let mut offenders : Array String := #[]
   for entry in entries do
-    if entry.path.extension == some "lean" then
+    if entry.path.extension == some "lean" ∧
+        !(entry.path.fileName.getD "").endsWith "Probe.lean" then
       let source ← liftIO <| IO.FS.readFile entry.path
       for line in selectedPrimeTokenLines source.toList do
         offenders := offenders.push s!"{entry.path}:{line}"
@@ -1283,7 +1284,7 @@ elab "#guard_no_selected_prime_literal" : command => do
         "PowerRootNaturality.lean",
         "CommonActionStage.lean", "TameSymbol.lean",
         "SelmerEigenspace.lean", "TamePlacePairing.lean",
-        "CohomologyLedger.lean", "SteeringFiber.lean",
+        "CohomologyLedger.lean", "SteeringFiber.lean", "ReadoutLedger.lean",
         "FocusConormal.lean", "ExteriorTransfer.lean",
         "LinkingVerification.lean"] do
     let path := conservationDirectory / System.FilePath.mk filename

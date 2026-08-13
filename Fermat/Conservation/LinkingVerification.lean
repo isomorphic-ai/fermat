@@ -18,6 +18,7 @@ import Fermat.Conservation.LinkingInterfaces
 import Fermat.Conservation.PowerRootObstruction
 import Fermat.Conservation.PowerRootExactSequence
 import Fermat.Conservation.PowerRootNaturality
+import Fermat.Conservation.ReadoutLedger
 import Fermat.Conservation.SelmerSequence
 import Fermat.Conservation.SelmerEigenspace
 import Fermat.Conservation.SteeringFiber
@@ -137,6 +138,65 @@ open Fermat.Conservation
   FocusConormal.conormalClass_eq_zero_iff_ker_le
 #guard_depends_on ExteriorTransfer.focusWedge_joint_ne_zero_iff_transverse,
   SteeringFiber.focusConormalRestriction_ne_zero_iff_transverse
+
+/-! ## Conserved readout ledger surface -/
+
+#check ReadoutLedger.unknown
+#check ReadoutLedger.processed
+#check ReadoutLedger.unknownInclusion
+#check ReadoutLedger.processedProjection
+#check ReadoutLedger.conservedReadout_exactSequence
+#check ReadoutLedger.finrank_unknown_add_processed
+#check ReadoutLedger.secondUnknown
+#check ReadoutLedger.restrictedSecondReadout
+#check ReadoutLedger.newProcessed
+#check ReadoutLedger.secondReadout_exactSequence
+#check ReadoutLedger.secondUnknown_eq_steeringFiber
+#check ReadoutLedger.secondUnknown_eq_ker_jointObservation
+#check ReadoutLedger.Fixed
+#check ReadoutLedger.fixed_iff_newProcessed_eq_bot
+#check ReadoutLedger.fixed_iff_newProcessed_eq_bot_via_steeringFiber
+#check ReadoutLedger.fixed_iff_conormalClass_eq_zero
+#check ReadoutLedger.fixed_iff_exists_pullback
+#check ReadoutLedger.SameUnknown
+#check ReadoutLedger.sameUnknown_iff_ker_eq
+#check ReadoutLedger.processedRangeEquiv
+#check ReadoutLedger.processedRangeEquiv_apply
+#check ReadoutLedger.sameUnknown_iff_existsUnique_processedRangeEquiv
+#check ReadoutLedger.NormalizedFiber
+#check ReadoutLedger.normalizedFiber_nonempty
+#check ReadoutLedger.normalizedFiberSet_eq_affineKernelCoset
+#check ReadoutLedger.eq_of_readout_eq
+#check ReadoutLedger.existsUnique_rankOneFactorization
+#check ReadoutLedger.existsUnique_bilinearRankOneFactorization
+#check ReadoutLedger.sameUnknown_iff_existsUnique_unitProportionality
+
+#guard_depends_on ReadoutLedger.exact_unknownInclusion_processedProjection,
+  LinearMap.ker_rangeRestrict
+#guard_depends_on ReadoutLedger.processedProjection_surjective,
+  LinearMap.surjective_rangeRestrict
+#guard_depends_on ReadoutLedger.finrank_unknown_add_processed,
+  LinearMap.finrank_range_add_finrank_ker
+#guard_depends_on ReadoutLedger.secondUnknown_eq_ker_jointObservation,
+  SteeringFiber.ker_jointObservation
+#guard_depends_on ReadoutLedger.fixed_iff_newProcessed_eq_bot_via_steeringFiber,
+  SteeringFiber.readingDirections_eq_bot_iff_fixed
+#guard_depends_on ReadoutLedger.fixed_iff_conormalClass_eq_zero,
+  FocusConormal.conormalClass_eq_zero_iff_ker_le
+#guard_depends_on ReadoutLedger.fixed_iff_exists_pullback,
+  FocusConormal.conormalClass_eq_zero_iff_exists_dual_pullback
+#guard_depends_on ReadoutLedger.processedRangeEquiv,
+  LinearMap.quotKerEquivRange
+#guard_depends_on ReadoutLedger.processedRangeEquiv,
+  Submodule.quotEquivOfEq
+#guard_depends_on ReadoutLedger.eq_of_readout_eq,
+  SteeringFiber.scalarQuestionDual_preimage_independent
+#guard_depends_on ReadoutLedger.existsUnique_rankOneFactorization,
+  FocusConormal.conormalClass_eq_zero_iff_ker_le
+#guard_depends_on ReadoutLedger.existsUnique_rankOneFactorization,
+  FocusConormal.conormalClass_eq_zero_iff_exists_dual_pullback
+#guard_depends_on ReadoutLedger.existsUnique_bilinearRankOneFactorization,
+  ReadoutLedger.existsUnique_rankOneFactorization
 
 /-! ## Vendored PowerRoot generator surface -/
 
@@ -1618,6 +1678,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.FocusConormal
 #guard_standard_axioms_prefix Fermat.Conservation.SteeringFiber
 #guard_standard_axioms_prefix Fermat.Conservation.ExteriorTransfer
+#guard_standard_axioms_prefix Fermat.Conservation.ReadoutLedger
 #guard_standard_axioms_prefix Fermat.Conservation.IsoConserveBridge.cohomologyBalancedStep
 #guard_standard_axioms_prefix Fermat.Conservation.IsoConserveBridge.cohomology_L1_conservation
 
@@ -1630,3 +1691,4 @@ product of its ends. -/
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
 #audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer
+#audit_no_product_equiv_types_prefix Fermat.Conservation.ReadoutLedger
