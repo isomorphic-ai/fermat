@@ -1104,6 +1104,14 @@ def differenceGauge : (Class × Class) →+ Class where
       (x.1 - x.2) + (y.1 - y.2)
     abel
 
+/-- The actual class-valued relation-(7a) gauge has no affine offset: its
+vacuum reading is zero.  This is the strongest unconditional linearity
+statement available before a scalar `ZMod p` seating is supplied. -/
+@[simp]
+theorem differenceGauge_vacuum :
+    differenceGauge Class (0 : Class × Class) = 0 :=
+  map_zero (differenceGauge Class)
+
 /-- The proved (7d) fold as a proof-bearing class-shadow corner receipt.  Its
 operator is `1 + classSwap`; it is not mislabeled as the strict closed word
 `C^r - 1`, whose action still requires arithmetic transport. -/

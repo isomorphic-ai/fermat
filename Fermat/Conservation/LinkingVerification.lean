@@ -61,9 +61,17 @@ open Fermat.Conservation
 #check SteeringFiber.focusConormalClass_ne_zero_iff_restriction_ne_zero
 #check SteeringFiber.focusConormalClass_ne_zero_iff_transverse
 #check SteeringFiber.exists_jointDual_of_fixed
+#check SteeringFiber.jointDual_pullback
 #check SteeringFiber.rhoDual
 #check SteeringFiber.rhoDual_pullback_of_silence
 #check SteeringFiber.reading_preimage_independent
+#check SteeringFiber.kerRestriction_eq_zero_iff_exists_pullback
+#check SteeringFiber.ScalarQuestionQuotient
+#check SteeringFiber.scalarQuestionProjection
+#check SteeringFiber.scalarQuestionQuotient_finrank_le_one
+#check SteeringFiber.scalarQuestionDual
+#check SteeringFiber.scalarQuestionDual_pullback
+#check SteeringFiber.scalarQuestionDual_preimage_independent
 #check SteeringFiber.TransverseDirection
 #check SteeringFiber.focusConormalRestriction_ne_zero_iff_transverse
 #check SteeringFiber.readingDirections_eq_top_of_transverse
@@ -92,6 +100,24 @@ open Fermat.Conservation
 
 #guard_depends_on SteeringFiber.exists_jointDual_of_fixed,
   SteeringFiber.focusConormalClass_eq_zero_iff_exists_jointDual
+#guard_depends_on SteeringFiber.jointDual_pullback,
+  SteeringFiber.exists_jointDual_of_fixed
+#guard_depends_on SteeringFiber.rhoDual_pullback_of_silence,
+  SteeringFiber.jointDual_pullback
+#guard_depends_on SteeringFiber.reading_preimage_independent,
+  SteeringFiber.rhoDual_pullback_of_silence
+#guard_depends_on SteeringFiber.kerRestriction_eq_zero_iff_exists_pullback,
+  FocusConormal.conormalClass_eq_zero_iff_restriction_eq_zero
+#guard_depends_on SteeringFiber.kerRestriction_eq_zero_iff_exists_pullback,
+  FocusConormal.conormalClass_eq_zero_iff_exists_dual_pullback
+#guard_depends_on SteeringFiber.scalarQuestionQuotient_finrank_le_one,
+  LinearMap.quotKerEquivRange
+#guard_depends_on SteeringFiber.scalarQuestionQuotient_finrank_le_one,
+  Submodule.finrank_le
+#guard_depends_on SteeringFiber.scalarQuestionDual_pullback,
+  SteeringFiber.rhoDual_pullback_of_silence
+#guard_depends_on SteeringFiber.scalarQuestionDual_preimage_independent,
+  SteeringFiber.reading_preimage_independent
 #guard_depends_on SteeringFiber.fixed_or_steerable,
   FocusConormal.conormalClass_zero_or_nonzero
 #guard_depends_on SteeringFiber.focusedLift, SteeringFiber.focusedPoint
@@ -651,6 +677,7 @@ open Fermat.Conservation
 #check CommonActionStage.ClassActionCorner
 #check CommonActionStage.sevenDClassCornerElement
 #check CommonActionStage.differenceGauge
+#check CommonActionStage.differenceGauge_vacuum
 #check CommonActionStage.sevenDClassShadowReceipt
 #check CommonActionStage.allocatedRootSource
 #check CommonActionStage.allocatedRootState
@@ -1334,6 +1361,8 @@ open Fermat.Conservation
   CommonActionStage.classSwap
 #guard_depends_on CommonActionStage.sevenDClassCornerElement,
   CommonActionStage.sevenDClassOperator
+#guard_depends_on CommonActionStage.differenceGauge_vacuum,
+  CommonActionStage.differenceGauge
 #guard_depends_on CommonActionStage.sevenDClassShadowReceipt,
   CommonActionStage.sevenDClassCornerElement
 #guard_depends_on CommonActionStage.allocatedRootState,

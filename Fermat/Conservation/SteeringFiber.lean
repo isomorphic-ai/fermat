@@ -331,6 +331,83 @@ theorem reading_preimage_independent
   rw [← rhoDual_pullback_of_silence rho T lambda fixed x hx,
     ← rhoDual_pullback_of_silence rho T lambda fixed y hy, hrho]
 
+/-! ## Kernel quotients of scalar questions -/
+
+/-- The existing conormal laws already give the fixed pullback criterion:
+vanishing of a functional on `ker rho` is equivalent to being a pullback
+from the quotient carrier.  This is an export bridge, not a second duality
+argument. -/
+theorem kerRestriction_eq_zero_iff_exists_pullback
+    (rho : SurjectiveLinearMap K V H) (lambda : Module.Dual K V) :
+    rho.toLinearMap.ker.dualRestrict lambda = 0 ↔
+      ∃ lambdaBar : Module.Dual K H,
+        lambdaBar.comp rho.toLinearMap = lambda :=
+  (FocusConormal.conormalClass_eq_zero_iff_restriction_eq_zero
+      rho.toLinearMap lambda).symm.trans
+    (FocusConormal.conormalClass_eq_zero_iff_exists_dual_pullback
+      rho.toLinearMap lambda)
+
+/-- The carrier of precisely the information visible to one scalar
+functional.  Its kernel is retained as the quotient relation, not erased. -/
+abbrev ScalarQuestionQuotient (gauge : V →ₗ[K] K) :=
+  V ⧸ gauge.ker
+
+/-- The canonical quotient projection, packaged for the already-proved
+`SteeringFiber` pullback laws. -/
+noncomputable def scalarQuestionProjection (gauge : V →ₗ[K] K) :
+    SurjectiveLinearMap K V (ScalarQuestionQuotient gauge) where
+  toLinearMap := gauge.ker.mkQ
+  surjective := Submodule.mkQ_surjective gauge.ker
+
+/-- **Detector budget.**  A scalar question has quotient dimension at most
+one.  This is rank--nullity through the canonical quotient/range
+equivalence; it has no topological content and assumes no bound on `V`. -/
+theorem scalarQuestionQuotient_finrank_le_one (gauge : V →ₗ[K] K) :
+    Module.finrank K (ScalarQuestionQuotient gauge) ≤ 1 := by
+  rw [LinearEquiv.finrank_eq (LinearMap.quotKerEquivRange gauge)]
+  simpa using (Submodule.finrank_le (LinearMap.range gauge))
+
+/-- A functional which vanishes on the gauge kernel, descended through the
+actual kernel quotient by the existing silent-fiber pullback construction. -/
+noncomputable def scalarQuestionDual
+    (gauge : V →ₗ[K] K) (lambda : Module.Dual K V)
+    (fixed : gauge.ker ≤ lambda.ker) :
+    Module.Dual K (ScalarQuestionQuotient gauge) :=
+  rhoDual (scalarQuestionProjection gauge) (0 : V →ₗ[K] K) lambda (by
+    intro x hx
+    apply fixed
+    simpa [K_T, scalarQuestionProjection] using hx.1)
+
+/-- The descended functional pulls back to the original functional on every
+representative. -/
+theorem scalarQuestionDual_pullback
+    (gauge : V →ₗ[K] K) (lambda : Module.Dual K V)
+    (fixed : gauge.ker ≤ lambda.ker) (x : V) :
+    scalarQuestionDual gauge lambda fixed (gauge.ker.mkQ x) = lambda x := by
+  simpa [scalarQuestionDual, scalarQuestionProjection] using
+    (rhoDual_pullback_of_silence
+      (scalarQuestionProjection gauge) (0 : V →ₗ[K] K) lambda
+      (by
+        intro z hz
+        apply fixed
+        simpa [K_T, scalarQuestionProjection] using hz.1)
+      x (by rfl))
+
+/-- The descended readout is representative-independent, exported through
+the existing fixed-fiber theorem rather than reproved from quotient syntax. -/
+theorem scalarQuestionDual_preimage_independent
+    (gauge : V →ₗ[K] K) (lambda : Module.Dual K V)
+    (fixed : gauge.ker ≤ lambda.ker) {x y : V}
+    (hxy : gauge.ker.mkQ x = gauge.ker.mkQ y) :
+    lambda x = lambda y := by
+  exact reading_preimage_independent
+    (scalarQuestionProjection gauge) (0 : V →ₗ[K] K) lambda
+    (by
+      intro z hz
+      apply fixed
+      simpa [K_T, scalarQuestionProjection] using hz.1)
+    hxy (by rfl) (by rfl)
+
 /-! ## The steerable branch -/
 
 /-- One transverse direction inside a silent class fiber. -/
