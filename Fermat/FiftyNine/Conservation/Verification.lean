@@ -37,6 +37,7 @@ import Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 import Fermat.FiftyNine.Conservation.PointedTateIncidence
 import Fermat.FiftyNine.Conservation.TransversalityVerdict827
 import Fermat.FiftyNine.Conservation.UlamTypeFreeze
+import Fermat.FiftyNine.Conservation.UlamReadout827
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
@@ -1119,6 +1120,167 @@ No inhabitant, pairing vanishing, or comparison equality is asserted. -/
   Fermat.FiftyNine.Conservation.UlamTypeFreeze.NormalizedReflectedClass827.yStar_localization_eq_one,
   Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedBoundaryFunctional827_apply
 
+/-! Ulam W1 keeps the whole normalized 827 fiber, constructs the W0 extension
+only from an explicit localization-at-59 producer, and processes the wild and
+class-valued readouts through their kernels.  Steps 9 and 10 remain typed
+interfaces; the only relation-(7a) endpoint is conditional. -/
+
+/-! ### Steps 1--3: nonzero boundary, exact coordinate, conserved fiber -/
+
+#check Fermat.FiftyNine.Conservation.UlamReadout827.reflectedBoundaryFunctional827_ne_zero
+#check Fermat.FiftyNine.Conservation.UlamReadout827.reflectedBoundaryFunctional827_eq_reflectedPointedLocalization827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.reflectedBoundaryFunctional827_eq_qLocalizationCoordinate827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.NormalizedReflectedFiber827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.normalizedReflectedFiber827_nonempty
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.reflectedBoundaryFunctional827_ne_zero,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedGain_eq_one_of_fourierSeating
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.reflectedBoundaryFunctional827_eq_reflectedPointedLocalization827,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedBoundaryFunctional827_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.reflectedBoundaryFunctional827_eq_qLocalizationCoordinate827,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedBoundaryFunctional827_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.normalizedReflectedFiber827_nonempty,
+  Fermat.Conservation.ReadoutLedger.normalizedFiber_nonempty
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.normalizedReflectedFiber827_nonempty,
+  Fermat.FiftyNine.Conservation.UlamReadout827.reflectedBoundaryFunctional827_ne_zero
+
+/-! ### Step 4: localization-at-59 producer -/
+
+#check Fermat.FiftyNine.Conservation.UlamReadout827.ReflectedWildLocalizationAt59
+#check Fermat.FiftyNine.Conservation.UlamReadout827.ReflectedWildLocalizationAt59.agrees_with_old
+#check Fermat.FiftyNine.Conservation.UlamReadout827.ReflectedWildLocalizationAt59.toWildLocalInterface
+#check Fermat.FiftyNine.Conservation.UlamReadout827.ReflectedWildLocalizationAt59.toReflectedWildCarrierExtension827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.ReflectedWildLocalizationAt59.toReflectedWildCarrierExtension827_reading
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.ReflectedWildLocalizationAt59.toReflectedWildCarrierExtension827_reading,
+  Fermat.FiftyNine.Conservation.UlamReadout827.ReflectedWildLocalizationAt59.toReflectedWildCarrierExtension827
+
+/-! ### Step 5: lawful or retained STEERABLE row -/
+
+#check Fermat.FiftyNine.Conservation.UlamReadout827.selectedWildFunctional827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.SelectedWildLawfulness827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.SelectedWildLawfulness827.ker_boundary_le_ker_wild
+#check Fermat.FiftyNine.Conservation.UlamReadout827.SteerableWildDirection827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.not_lawful_iff_steerableWildDirection
+#check Fermat.FiftyNine.Conservation.UlamReadout827.selectedWild_newProcessed_eq_bot
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.not_lawful_iff_steerableWildDirection,
+  SetLike.not_le_iff_exists
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedWild_newProcessed_eq_bot,
+  Fermat.Conservation.ReadoutLedger.fixed_iff_newProcessed_eq_bot
+
+/-! ### Step 6: canonical rank-one factorization -/
+
+#check Fermat.FiftyNine.Conservation.UlamReadout827.existsUnique_selectedWildFactorization
+#check Fermat.FiftyNine.Conservation.UlamReadout827.WildLawfulness827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.WildLawfulness827.ker_boundary_le_ker_wild
+#check Fermat.FiftyNine.Conservation.UlamReadout827.qRelaxedWildBilinear827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.wildCoefficient827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.qRelaxedWild_factorization
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.existsUnique_selectedWildFactorization,
+  Fermat.Conservation.ReadoutLedger.existsUnique_rankOneFactorization
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.qRelaxedWild_factorization,
+  Fermat.Conservation.ReadoutLedger.existsUnique_bilinearRankOneFactorization
+
+/-! ### Step 7: genuine class-valued gauge and processed-range invariant -/
+
+#check Fermat.FiftyNine.Conservation.UlamReadout827.SevenAGaugeCarrier59
+#check Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59
+#check Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_value
+#check Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#check Fermat.FiftyNine.Conservation.UlamReadout827.ClassValuedSevenAGaugeSeating
+#check Fermat.FiftyNine.Conservation.UlamReadout827.ClassValuedSevenAGaugeSeating.gauge_at_fermat
+#check Fermat.FiftyNine.Conservation.UlamReadout827.WildProcessesAtLeastSevenA
+#check Fermat.FiftyNine.Conservation.UlamReadout827.WildProcessesAtLeastSevenA.ker_wild_le_ker_gauge
+#check Fermat.FiftyNine.Conservation.UlamReadout827.WildUsesNothingBeyondSevenA
+#check Fermat.FiftyNine.Conservation.UlamReadout827.WildUsesNothingBeyondSevenA.ker_gauge_le_ker_wild
+#check Fermat.FiftyNine.Conservation.UlamReadout827.gaugeKernel_eq_wildKernel
+#check Fermat.FiftyNine.Conservation.UlamReadout827.gaugeProcessedRangeEquiv827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.gaugeProcessedRangeEquiv827_apply
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_value,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.gaugeKernel_eq_wildKernel,
+  Fermat.FiftyNine.Conservation.UlamReadout827.WildProcessesAtLeastSevenA.ker_wild_le_ker_gauge
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.gaugeKernel_eq_wildKernel,
+  Fermat.FiftyNine.Conservation.UlamReadout827.WildUsesNothingBeyondSevenA.ker_gauge_le_ker_wild
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.gaugeProcessedRangeEquiv827_apply,
+  Fermat.Conservation.ReadoutLedger.processedRangeEquiv_apply
+
+/-! ### Step 8: actual 59-torsion depth -/
+
+#check Fermat.FiftyNine.Conservation.UlamReadout827.fiftyNine_nsmul_gauge_eq_zero
+#check Fermat.FiftyNine.Conservation.UlamReadout827.fiftyNine_nsmul_gaugeRange_eq_zero
+#check Fermat.FiftyNine.Conservation.UlamReadout827.fiftyEight_nsmul_eq_neg_in_gaugeCarrier
+#check Fermat.FiftyNine.Conservation.UlamReadout827.bocksteinDepthDecomposition827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.deeperGauge_nextLayerPotential
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.fiftyNine_nsmul_gauge_eq_zero,
+  AddSubgroup.torsionBy.nsmul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.fiftyNine_nsmul_gaugeRange_eq_zero,
+  AddSubgroup.torsionBy.nsmul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.fiftyEight_nsmul_eq_neg_in_gaugeCarrier,
+  AddSubgroup.torsionBy.nsmul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.bocksteinDepthDecomposition827,
+  Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59.bocksteinPowerRootReceiptObservation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.deeperGauge_nextLayerPotential,
+  nsmul_add
+
+/-! ### Steps 9--10: typed seams, then the conditional endpoint -/
+
+#check Fermat.FiftyNine.Conservation.UlamReadout827.TameSilenceReciprocity827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.TameSilenceReciprocity827.globalReciprocity
+#check Fermat.FiftyNine.Conservation.UlamReadout827.SurvivingKernelRoute827
+#check Fermat.FiftyNine.Conservation.UlamReadout827.SurvivingKernelRoute827.survivingToClass
+#check Fermat.FiftyNine.Conservation.UlamReadout827.SurvivingKernelRoute827.classToUnit
+#check Fermat.FiftyNine.Conservation.UlamReadout827.SurvivingKernelRoute827.unitToRoot
+#check Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_readout_interfaces
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_readout_interfaces,
+  Fermat.FiftyNine.Conservation.TateBridge.Lambda_apply_eq_zero_of_reciprocity
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_readout_interfaces,
+  Fermat.FiftyNine.Conservation.UlamReadout827.ReflectedWildLocalizationAt59.toReflectedWildCarrierExtension827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_readout_interfaces,
+  Fermat.FiftyNine.Conservation.UlamReadout827.TameSilenceReciprocity827.globalReciprocity
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_readout_interfaces,
+  Fermat.FiftyNine.Conservation.UlamReadout827.qRelaxedWild_factorization
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_readout_interfaces,
+  Fermat.FiftyNine.Conservation.UlamReadout827.WildProcessesAtLeastSevenA.ker_wild_le_ker_gauge
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_readout_interfaces,
+  Fermat.FiftyNine.Conservation.UlamReadout827.ClassValuedSevenAGaugeSeating.gauge_at_fermat
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_readout_interfaces,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+
 /-! The wild-place inventory records exactly which campaign inputs have an
 exposed cyclotomic-generator decomposition.  The two actual pairing inputs
 do not, so the conservative formula budget is `NEEDS-VOSTOKOV`.  The named
@@ -1644,12 +1806,14 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.FocusConormal
 #guard_standard_axioms_prefix Fermat.Conservation.SteeringFiber
 #guard_standard_axioms_prefix Fermat.Conservation.ExteriorTransfer
+#guard_standard_axioms_prefix Fermat.Conservation.ReadoutLedger
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DetectorWitness827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.UlamTypeFreeze
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.UlamReadout827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
@@ -1659,9 +1823,11 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.UlamTypeFreeze
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.UlamReadout827
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
 #audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer
+#audit_no_product_equiv_types_prefix Fermat.Conservation.ReadoutLedger
 
 /--
 info: 'Fermat.FiftyNine.Conservation.Instance.gauge_cycle_eq_exponentCycle' depends on axioms: [propext,
