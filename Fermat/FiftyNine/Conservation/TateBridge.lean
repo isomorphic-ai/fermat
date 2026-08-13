@@ -23,6 +23,7 @@ interfaces.  No unconditional relation (7a), endpoint, or transformer is
 asserted here.
 -/
 import Fermat.Conservation.TamePlacePairing
+import Fermat.Conservation.SteeringFiber
 import Fermat.FiftyNine.Conservation.CommonActionStage
 import Fermat.FiftyNine.Conservation.Instance
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
@@ -39,6 +40,7 @@ open Fermat.Conservation.LinkingInterfaces
 open Fermat.Conservation.TatePairing
 open Fermat.Conservation.TamePlacePairing
 open Fermat.Conservation.TransverseAnnihilator
+open Fermat.Conservation.SteeringFiber
 open Fermat.FiftyNine.Conservation.FermatState
 open Fermat.FiftyNine.Conservation.StateFactorPair
 
@@ -112,6 +114,59 @@ def Lambda
     H_FLT SelmerChi →+ WildDetectorDual DOmegaSelmerChiStar :=
   pair_59 wild
 
+/-! ## The scalar question quotient -/
+
+/-- The relation-(7a) information visible to a supplied scalar gauge.  The
+present cone does not yet construct such a gauge on `H_FLT`; keeping it as
+an argument makes that seating boundary explicit. -/
+abbrev Q_7a [Module (ZMod 59) SelmerChi]
+    (gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59) :=
+  ScalarQuestionQuotient gauge
+
+/-- Every scalar relation-(7a) gauge has zero vacuum offset. -/
+@[simp]
+theorem sevenAGauge_vacuum [Module (ZMod 59) SelmerChi]
+    (gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59) :
+    gauge 0 = 0 :=
+  map_zero gauge
+
+/-- **ULAM DETECTOR BUDGET.**  The claim-relevant quotient has dimension at
+most one even when the ambient Selmer carrier has arbitrary dimension. -/
+theorem Q_7a_finrank_le_one [Module (ZMod 59) SelmerChi]
+    (gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59) :
+    Module.finrank (ZMod 59) (Q_7a gauge) ≤ 1 :=
+  scalarQuestionQuotient_finrank_le_one gauge
+
+/-- A functional on `H_FLT`, descended through the gauge quotient under the
+exact required kernel inclusion.  The current cone does not yet identify
+W4's fixed readout with such a functional on `H_FLT`. -/
+noncomputable def descendedFunctionalOnQ_7a [Module (ZMod 59) SelmerChi]
+    (gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59)
+    (lambda : Module.Dual (ZMod 59) (H_FLT SelmerChi))
+    (descends : gauge.ker ≤ lambda.ker) :
+    Module.Dual (ZMod 59) (Q_7a gauge) :=
+  scalarQuestionDual gauge lambda descends
+
+/-- Pullback of the descended functional is the original reading. -/
+theorem descendedFunctionalOnQ_7a_pullback [Module (ZMod 59) SelmerChi]
+    (gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59)
+    (lambda : Module.Dual (ZMod 59) (H_FLT SelmerChi))
+    (descends : gauge.ker ≤ lambda.ker) (x : H_FLT SelmerChi) :
+    descendedFunctionalOnQ_7a gauge lambda descends (gauge.ker.mkQ x) =
+      lambda x :=
+  scalarQuestionDual_pullback gauge lambda descends x
+
+/-- The descended quotient readout does not depend on the chosen
+representative. -/
+theorem descendedFunctionalOnQ_7a_preimage_independent
+    [Module (ZMod 59) SelmerChi]
+    (gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59)
+    (lambda : Module.Dual (ZMod 59) (H_FLT SelmerChi))
+    (descends : gauge.ker ≤ lambda.ker) {x y : H_FLT SelmerChi}
+    (hxy : gauge.ker.mkQ x = gauge.ker.mkQ y) :
+    lambda x = lambda y :=
+  scalarQuestionDual_preimage_independent gauge lambda descends hxy
+
 omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
 /-- Evaluation of `Lambda` is exactly the existing pairing at the
 distinguished place above 59. -/
@@ -145,10 +200,12 @@ theorem Lambda_apply_eq_zero_of_reciprocity
     distinguishedPlace x y
       (fun v hv => wild.pairAt_eq_zero_of_ne hv x y)
 
-/-- **SINGLE FRONTIER INTERFACE.**  The wild detector family separates the
-remaining potential exactly when its kernel is zero.  Poitou--Tate
-nondegeneracy is the natural arithmetic source of this statement; no value of
-the interface is supplied here.
+/-- **RETAINED GLOBAL SUFFICIENT INTERFACE.**  The wild detector family
+separates the entire remaining potential exactly when its kernel is zero.
+This is sufficient for relation (7a), but it is not necessary: the weaker
+query-level condition `wild_detector_faithful_on_Q_7a` below only asks that
+zero wild reading imply zero gauge.  No value of either interface is
+supplied here.
 
 When `H_FLT` has finrank one, the theorem
 `wild_detector_faithful_of_finrank_one` below reduces this family-level
@@ -159,6 +216,19 @@ def wild_detector_faithful
       (Place := Place) (SelmerChi := SelmerChi)
       (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace) : Prop :=
   (Lambda wild).ker = ⊥
+
+/-- **QUERY-LEVEL FRONTIER.**  The wild detector is faithful on the
+relation-(7a) quotient exactly in the only direction consumed downstream:
+a zero wild functional forces the scalar gauge to vanish.  This retains the
+whole ambient kernel of the gauge. -/
+def wild_detector_faithful_on_Q_7a
+    {distinguishedPlace : Place}
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    [Module (ZMod 59) SelmerChi]
+    (gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59) : Prop :=
+  ∀ x : H_FLT SelmerChi, Lambda wild x = 0 → gauge x = 0
 
 omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
 /-- Faithfulness consumes a zero detector reading and kills the underlying
@@ -178,9 +248,42 @@ theorem eq_zero_of_wild_detector_faithful
   simpa using hx
 
 omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
-/-- Stokes vanishing followed by the single faithfulness frontier kills the
-selected potential.  The separate `GaugeComparison` remains necessary before
-this can be read as a statement about the class-group difference gauge. -/
+/-- Global detector faithfulness is a retained sufficient conversion into
+query-level faithfulness; the converse is neither required nor asserted. -/
+theorem wild_detector_faithful_on_Q_7a_of_global
+    {distinguishedPlace : Place}
+    {wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace}
+    [Module (ZMod 59) SelmerChi]
+    {gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59}
+    (faithful : wild_detector_faithful wild) :
+    wild_detector_faithful_on_Q_7a wild gauge := by
+  intro x hx
+  have hx0 : x = 0 := eq_zero_of_wild_detector_faithful faithful hx
+  subst x
+  exact map_zero gauge
+
+omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
+/-- Quotient-form sibling of `eq_zero_of_wild_detector_faithful`: only the
+claim-relevant scalar gauge is killed; the ambient potential is retained. -/
+theorem gauge_eq_zero_of_wild_detector_faithful_on_Q_7a
+    {distinguishedPlace : Place}
+    {wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace}
+    [Module (ZMod 59) SelmerChi]
+    {gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59}
+    (faithful : wild_detector_faithful_on_Q_7a wild gauge)
+    {x : H_FLT SelmerChi} (hx : Lambda wild x = 0) :
+    gauge x = 0 :=
+  faithful x hx
+
+omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
+/-- Stokes vanishing followed by the retained global faithfulness condition
+kills the selected potential.  This is an older sufficient route, not the
+query-level frontier.  The separate `GaugeComparison` remains necessary
+before the result can be read as a class-group difference-gauge statement. -/
 theorem potential_eq_zero_of_stokes_and_faithful
     {distinguishedPlace : Place}
     (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
@@ -195,10 +298,29 @@ theorem potential_eq_zero_of_stokes_and_faithful
     (Lambda_apply_eq_zero_of_reciprocity wild reciprocity x)
 
 omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
-/-- In a one-dimensional remaining potential, one nonzero transverse
-reading makes the complete wild detector family faithful.  This is the
-dimension-one reduction promised by the frontier description: every class is
-a scalar multiple of the class seen by that one detector. -/
+/-- Quotient-form sibling of `potential_eq_zero_of_stokes_and_faithful`:
+reciprocity kills the relation-(7a) question without erasing the gauge
+kernel or demanding global injectivity of the detector family. -/
+theorem gauge_eq_zero_of_stokes_and_faithful_on_Q_7a
+    {distinguishedPlace : Place}
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (reciprocity : TatePairing.GlobalReciprocityLaw
+      wild.toPlaceIndexedLocalPairing)
+    [Module (ZMod 59) SelmerChi]
+    (gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59)
+    (faithful : wild_detector_faithful_on_Q_7a wild gauge)
+    (x : H_FLT SelmerChi) :
+    gauge x = 0 :=
+  gauge_eq_zero_of_wild_detector_faithful_on_Q_7a faithful
+    (Lambda_apply_eq_zero_of_reciprocity wild reciprocity x)
+
+omit [Module (Polynomial (ZMod 59)) DOmegaSelmerChiStar] in
+/-- In a one-dimensional *ambient* remaining potential, one nonzero
+transverse reading makes the complete wild detector family faithful.  This
+retained sufficient theorem assumes `finrank H_FLT = 1`; the Ulam bound
+`finrank Q_7a ≤ 1` does not supply that premise. -/
 theorem wild_detector_faithful_of_finrank_one
     {distinguishedPlace : Place}
     (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
@@ -447,7 +569,98 @@ theorem gauge_eq_zero_of_local_reading_eq_zero
   rw [CommonActionStage.StateLinkedIdealPair.differenceGauge_reading]
   exact comparison.scalarGauge_eq_zero_of_local_reading_eq_zero hlocal
 
+/-- The scalarized selected gauge vanishes exactly when relation (7a)
+holds.  The reverse implication uses only additivity of the supplied
+readout; no detector injectivity is involved. -/
+theorem scalarGauge_eq_zero_iff_vandiverSevenA
+    (comparison : GaugeComparison pair distinguishedPlace wild
+      placePrime x d detector) :
+    comparison.readout
+        (pair.ledger.rootClass 0 + 58 • pair.ledger.rootClass 1) = 0 ↔
+      pair.ledger.VandiverSevenA 0 1 := by
+  constructor
+  · intro hscalar
+    apply
+      (CommonActionStage.StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA
+        pair).mp
+    apply comparison.reflects_selected_zero
+    rw [CommonActionStage.StateLinkedIdealPair.differenceGauge_reading]
+    exact hscalar
+  · intro hsevenA
+    have hgauge :=
+      (CommonActionStage.StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA
+        pair).mpr hsevenA
+    rw [← CommonActionStage.StateLinkedIdealPair.differenceGauge_reading,
+      hgauge, map_zero]
+
+/-- The supplied unit-valued Tate comparison is an exact zero test for
+relation (7a), in both directions. -/
+theorem local_reading_eq_zero_iff_vandiverSevenA
+    (comparison : GaugeComparison pair distinguishedPlace wild
+      placePrime x d detector) :
+    wild.toPlaceIndexedLocalPairing.pairAt
+        distinguishedPlace x detector.detector = 0 ↔
+      pair.ledger.VandiverSevenA 0 1 := by
+  constructor
+  · intro hlocal
+    exact comparison.scalarGauge_eq_zero_iff_vandiverSevenA.mp
+      (comparison.scalarGauge_eq_zero_of_local_reading_eq_zero hlocal)
+  · intro hsevenA
+    have hscalar :=
+      comparison.scalarGauge_eq_zero_iff_vandiverSevenA.mpr hsevenA
+    rw [comparison.pairing_eq_gauge, hscalar, mul_zero]
+
 end GaugeComparison
+
+/-! ## The missing scalar seating on the actual Fermat potential -/
+
+/-- A chosen linear extension of the scalar relation-(7a) gauge to the real
+`H_FLT` carrier, together with its value on the selected Fermat class.
+Constraining one value does not make the extension or its kernel canonical;
+an arithmetic producer must supply the whole map before `Q_7a` is fixed.  No
+inhabitant is constructed here. -/
+structure SevenAGaugeSeating
+    (pair : StateLinkedIdealPair hζ S hz)
+    (distinguishedPlace : Place)
+    (wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+      (Place := Place) (SelmerChi := SelmerChi)
+      (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace)
+    (placePrime : Place → ℕ)
+    (x : SelmerChi) (d : LampMode)
+    (detector : TransverseDetector distinguishedPlace wild placePrime x d)
+    (comparison : GaugeComparison pair distinguishedPlace wild
+      placePrime x d detector)
+    [Module (ZMod 59) SelmerChi] where
+  gauge : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59
+  gauge_at_fermat :
+    gauge x = comparison.readout
+      (pair.ledger.rootClass 0 + 58 • pair.ledger.rootClass 1)
+
+namespace SevenAGaugeSeating
+
+variable
+  {pair : StateLinkedIdealPair hζ S hz}
+  {distinguishedPlace : Place}
+  {wild : WildLocalInterface (Delta := Delta) (omega := omega) (chi := chi)
+    (Place := Place) (SelmerChi := SelmerChi)
+    (DOmegaSelmerChiStar := DOmegaSelmerChiStar) distinguishedPlace}
+  {placePrime : Place → ℕ}
+  {x : SelmerChi} {d : LampMode}
+  {detector : TransverseDetector distinguishedPlace wild placePrime x d}
+  {comparison : GaugeComparison pair distinguishedPlace wild
+    placePrime x d detector}
+  [Module (ZMod 59) SelmerChi]
+
+/-- Once the missing scalar seating is supplied, its Fermat value has the
+exact relation-(7a) zero test. -/
+theorem gauge_eq_zero_iff_vandiverSevenA
+    (seating : SevenAGaugeSeating pair distinguishedPlace wild
+      placePrime x d detector comparison) :
+    seating.gauge x = 0 ↔ pair.ledger.VandiverSevenA 0 1 := by
+  rw [seating.gauge_at_fermat,
+    comparison.scalarGauge_eq_zero_iff_vandiverSevenA]
+
+end SevenAGaugeSeating
 
 /-- **INTERFACE — W2.1.** The one detector selected by the named transverse
 target admits a unit-valued comparison between its 59-local reading and the

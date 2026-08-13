@@ -351,6 +351,26 @@ noncomputable def reflectedCoordinatePairing827 :
   (LinearMap.mul (ZMod 59) (ZMod 59)).comp
     (reflectedPointedLocalization827 rhoQ omega chi selectedPlace)
 
+/-- The actual reflected boundary functional already present beneath the
+W4 rank count.  It is the transpose of the seated 827 pairing evaluated at
+the normalized local coordinate `1`; it is not chosen from a dimension. -/
+noncomputable def reflectedBoundaryFunctional827 :
+    Module.Dual (ZMod 59)
+      (QRelaxedReflectedDual827 rhoQ omega chi) :=
+  (reflectedCoordinatePairing827 rhoQ omega chi selectedPlace).flip 1
+
+omit [Fintype Delta]
+  [Invertible (Fintype.card Delta : PadicInt 59)] in
+/-- The boundary functional reads exactly the selected 827 localization.
+This normalization statement says nothing about a Tate pairing with a
+Fermat class. -/
+@[simp]
+theorem reflectedBoundaryFunctional827_apply
+    (y : QRelaxedReflectedDual827 rhoQ omega chi) :
+    reflectedBoundaryFunctional827 rhoQ omega chi selectedPlace y =
+      reflectedPointedLocalization827 rhoQ omega chi selectedPlace y := by
+  simp [reflectedBoundaryFunctional827, reflectedCoordinatePairing827]
+
 /-- **CLASS-FIELD-THEORY INPUT AT 827.**  This is the exact five-term
 incidence with every available primal and reflected localization map fixed
 to its seated implementation.  Only its Poitou--Tate exactness laws are

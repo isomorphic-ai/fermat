@@ -36,6 +36,7 @@ import Fermat.FiftyNine.Conservation.GaugeSteering827
 import Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 import Fermat.FiftyNine.Conservation.PointedTateIncidence
 import Fermat.FiftyNine.Conservation.TransversalityVerdict827
+import Fermat.FiftyNine.Conservation.UlamTypeFreeze
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
@@ -507,11 +508,21 @@ remain interfaces; the bank audit and every away row are now proved. -/
 #check Fermat.FiftyNine.Conservation.TateBridge.WildDetectorDual
 #check Fermat.FiftyNine.Conservation.TateBridge.pair_59
 #check Fermat.FiftyNine.Conservation.TateBridge.Lambda
+#check Fermat.FiftyNine.Conservation.TateBridge.Q_7a
+#check Fermat.FiftyNine.Conservation.TateBridge.sevenAGauge_vacuum
+#check Fermat.FiftyNine.Conservation.TateBridge.Q_7a_finrank_le_one
+#check Fermat.FiftyNine.Conservation.TateBridge.descendedFunctionalOnQ_7a
+#check Fermat.FiftyNine.Conservation.TateBridge.descendedFunctionalOnQ_7a_pullback
+#check Fermat.FiftyNine.Conservation.TateBridge.descendedFunctionalOnQ_7a_preimage_independent
 #check Fermat.FiftyNine.Conservation.TateBridge.Lambda_apply
 #check Fermat.FiftyNine.Conservation.TateBridge.Lambda_apply_eq_zero_of_reciprocity
 #check Fermat.FiftyNine.Conservation.TateBridge.wild_detector_faithful
+#check Fermat.FiftyNine.Conservation.TateBridge.wild_detector_faithful_on_Q_7a
 #check Fermat.FiftyNine.Conservation.TateBridge.eq_zero_of_wild_detector_faithful
+#check Fermat.FiftyNine.Conservation.TateBridge.wild_detector_faithful_on_Q_7a_of_global
+#check Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_zero_of_wild_detector_faithful_on_Q_7a
 #check Fermat.FiftyNine.Conservation.TateBridge.potential_eq_zero_of_stokes_and_faithful
+#check Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_zero_of_stokes_and_faithful_on_Q_7a
 #check Fermat.FiftyNine.Conservation.TateBridge.wild_detector_faithful_of_finrank_one
 #check Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction
 #check Fermat.FiftyNine.Conservation.TateBridge.SelectedLampAction.toLampTransverse
@@ -524,6 +535,10 @@ remain interfaces; the bank audit and every away row are now proved. -/
 #check Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison
 #check Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_of_local_reading_eq_zero
 #check Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.gauge_eq_zero_of_local_reading_eq_zero
+#check Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_iff_vandiverSevenA
+#check Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.local_reading_eq_zero_iff_vandiverSevenA
+#check Fermat.FiftyNine.Conservation.TateBridge.SevenAGaugeSeating
+#check Fermat.FiftyNine.Conservation.TateBridge.SevenAGaugeSeating.gauge_eq_zero_iff_vandiverSevenA
 #check Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_local_tate_pairing
 #check Fermat.FiftyNine.Conservation.TateBridge.N59BankReceipts
 #check Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts
@@ -540,6 +555,18 @@ remain interfaces; the bank audit and every away row are now proved. -/
   Fermat.FiftyNine.Conservation.TateBridge.Lambda,
   Fermat.FiftyNine.Conservation.TateBridge.pair_59
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.sevenAGauge_vacuum,
+  map_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.Q_7a_finrank_le_one,
+  Fermat.Conservation.SteeringFiber.scalarQuestionQuotient_finrank_le_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.descendedFunctionalOnQ_7a_pullback,
+  Fermat.Conservation.SteeringFiber.scalarQuestionDual_pullback
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.descendedFunctionalOnQ_7a_preimage_independent,
+  Fermat.Conservation.SteeringFiber.scalarQuestionDual_preimage_independent
+#guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.Lambda_apply,
   Fermat.Conservation.TamePlacePairing.WildLocalInterface.pairAt_distinguished
 #guard_depends_on
@@ -555,11 +582,23 @@ remain interfaces; the bank audit and every away row are now proved. -/
   Fermat.FiftyNine.Conservation.TateBridge.eq_zero_of_wild_detector_faithful,
   Fermat.FiftyNine.Conservation.TateBridge.wild_detector_faithful
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.wild_detector_faithful_on_Q_7a_of_global,
+  Fermat.FiftyNine.Conservation.TateBridge.eq_zero_of_wild_detector_faithful
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_zero_of_wild_detector_faithful_on_Q_7a,
+  Fermat.FiftyNine.Conservation.TateBridge.wild_detector_faithful_on_Q_7a
+#guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.potential_eq_zero_of_stokes_and_faithful,
   Fermat.FiftyNine.Conservation.TateBridge.Lambda_apply_eq_zero_of_reciprocity
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.potential_eq_zero_of_stokes_and_faithful,
   Fermat.FiftyNine.Conservation.TateBridge.eq_zero_of_wild_detector_faithful
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_zero_of_stokes_and_faithful_on_Q_7a,
+  Fermat.FiftyNine.Conservation.TateBridge.Lambda_apply_eq_zero_of_reciprocity
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_zero_of_stokes_and_faithful_on_Q_7a,
+  Fermat.FiftyNine.Conservation.TateBridge.gauge_eq_zero_of_wild_detector_faithful_on_Q_7a
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.wild_detector_faithful_of_finrank_one,
   exists_smul_eq_of_finrank_eq_one
@@ -599,6 +638,24 @@ remain interfaces; the bank audit and every away row are now proved. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.gauge_eq_zero_of_local_reading_eq_zero,
   Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_of_local_reading_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_iff_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.reflects_selected_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_iff_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.CommonActionStage.StateLinkedIdealPair.differenceGauge_eq_zero_iff_vandiverSevenA
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.local_reading_eq_zero_iff_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.pairing_eq_gauge
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.local_reading_eq_zero_iff_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_iff_vandiverSevenA
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.SevenAGaugeSeating.gauge_eq_zero_iff_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.TateBridge.SevenAGaugeSeating.gauge_at_fermat
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TateBridge.SevenAGaugeSeating.gauge_eq_zero_iff_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.TateBridge.GaugeComparison.scalarGauge_eq_zero_iff_vandiverSevenA
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TateBridge.n59BankReceipts,
@@ -894,6 +951,9 @@ not an invented fixed or transverse receipt. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.GaugeSteering827.fixedPointedReadout_pullback,
   Fermat.Conservation.SteeringFiber.rhoDual_pullback_of_silence
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GaugeSteering827.fixedGauge_preimage_independent,
+  Fermat.Conservation.SteeringFiber.reading_preimage_independent
 
 /-! The TRANSVERSALITY W1 audit proves that the 827 places are one regular
 58-element orbit and checks the complete position/character Fourier
@@ -959,6 +1019,8 @@ transpose of the seated reflected localization coordinate. -/
 #check Fermat.FiftyNine.Conservation.PointedTateIncidence.ReflectedG827
 #check Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedGToF827
 #check Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedCoordinatePairing827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedBoundaryFunctional827
+#check Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedBoundaryFunctional827_apply
 #check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827
 #check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.connecting_apply
 #check Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.conserved_bit
@@ -980,6 +1042,15 @@ transpose of the seated reflected localization coordinate. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedPointedLocalization827,
   Fermat.FiftyNine.Conservation.DetectorWitness827.qLocalizationCoordinate827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedBoundaryFunctional827_apply,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedCoordinatePairing827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedBoundaryFunctional827_apply,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedPointedLocalization827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.connecting_apply,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedCoordinatePairing827
 #guard_depends_on
   Fermat.FiftyNine.Conservation.PointedTateIncidence.PointedTateIncidence827.conserved_bit,
   Fermat.FiftyNine.Conservation.PointedTateIncidence.PoitouTateFiveTerm.conserved_bit
@@ -1012,6 +1083,9 @@ the seating and Poitou--Tate interfaces remain uninhabited. -/
   Fermat.FiftyNine.Conservation.TransversalityVerdict827.fixedPointedReadoutOfFourierSeating_pullback,
   Fermat.FiftyNine.Conservation.GaugeSteering827.fixedPointedReadout_pullback
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.TransversalityVerdict827.fixedGauge_preimage_independent_of_fourierSeating,
+  Fermat.FiftyNine.Conservation.GaugeSteering827.fixedGauge_preimage_independent
+#guard_depends_on
   Fermat.FiftyNine.Conservation.TransversalityVerdict827.reflectedDualObstructionGain_eq_one_of_seating,
   Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedGain_eq_one_of_fourierSeating
 #guard_depends_on
@@ -1023,6 +1097,27 @@ the seating and Poitou--Tate interfaces remain uninhabited. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.TransversalityVerdict827.no_transverseDirection_of_seating,
   Fermat.FiftyNine.Conservation.SplitPrimeFourier827.no_transverseDirection_of_fourierSeating
+
+/-! Ulam W0 exposes the actual localization covector and freezes the missing
+q-relaxed pairing extension plus normalized reflected-class shape.  The 827
+normalization and Fermat Tate-pairing values remain deliberately distinct.
+No inhabitant, pairing vanishing, or comparison equality is asserted. -/
+
+#check Fermat.FiftyNine.Conservation.UlamTypeFreeze.ReflectedWildCarrierExtension827
+#check Fermat.FiftyNine.Conservation.UlamTypeFreeze.ReflectedWildCarrierExtension827.qRelaxedWild_reading_oldToQRelaxed
+#check Fermat.FiftyNine.Conservation.UlamTypeFreeze.NormalizedReflectedClass827
+#check Fermat.FiftyNine.Conservation.UlamTypeFreeze.NormalizedReflectedClass827.yStar_localization_eq_one
+#check Fermat.FiftyNine.Conservation.UlamTypeFreeze.NormalizedReflectedClass827.yStarPairingFunctional
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamTypeFreeze.ReflectedWildCarrierExtension827.qRelaxedWild_reading_oldToQRelaxed,
+  Fermat.FiftyNine.Conservation.UlamTypeFreeze.ReflectedWildCarrierExtension827.reading_compatibility
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamTypeFreeze.NormalizedReflectedClass827.yStar_localization_eq_one,
+  Fermat.FiftyNine.Conservation.UlamTypeFreeze.NormalizedReflectedClass827.normalization
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UlamTypeFreeze.NormalizedReflectedClass827.yStar_localization_eq_one,
+  Fermat.FiftyNine.Conservation.PointedTateIncidence.reflectedBoundaryFunctional827_apply
 
 /-! The wild-place inventory records exactly which campaign inputs have an
 exposed cyclotomic-generator decomposition.  The two actual pairing inputs
@@ -1554,6 +1649,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.UlamTypeFreeze
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
@@ -1562,6 +1658,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.UlamTypeFreeze
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
 #audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer
