@@ -3,6 +3,36 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-13 — Ulam W0 type-freeze prediction
+
+- **Committed guess: the STOP condition fires.**  I expect the current W4
+  verdict surface to expose the allocation `(0, 1)`, fixedness, and
+  preimage-independence laws, but no term inhabiting an actual reflected
+  dual class or scalar-valued functional `y*`.  If that is what the type
+  audit finds, W0 should stop with a typed obstruction probe naming the
+  missing carrier and its required pullback/normalization laws; Lane 1 must
+  not manufacture that term from the dimension count.
+- The carrier identity is predicted to fight at the semantic seam between
+  the concrete `ZMod 59` gauge/local Tate reading and W4's generic
+  steering/fixed-readout carrier.  I expect the scalar codomain itself to
+  match after specialization, while the reflected bit is represented only
+  by a proposition or allocation coordinate rather than by an element of
+  the Tate dual carrier.  A dimension equality will therefore not close the
+  identification.
+- The existing `SteeringFiber` pullback law is predicted to be sufficient
+  for the descent theorem: specialize it to `ker gauge_7a`, export its real
+  dependency with `#guard_depends_on`, and use the standard quotient/range
+  equivalence for the detector-budget bound.  I do not expect a second
+  duality proof; at most a quotient-specialized bridge lemma should be
+  needed to align the existing theorem's types with `Q_7a`.
+- Gauge linearity and the consumed implication from gauge vanishing to
+  relation (7a) are predicted to already be definitionally nearby.  The
+  converse, if absent, should require a theorem identifying the ledger
+  proposition with exactly the same two-coordinate scalar equation, not
+  detector injectivity.  Quotient-form consumer siblings should need only
+  the comparison implication `wildReading h_F = 0 → gauge_7a h_F = 0`;
+  the ambient kernel remains deliberately present.
+
 ## 2026-08-09 — transversality prediction
 
 - **Committed guess: the split-orbit Fourier theorem alone decides
