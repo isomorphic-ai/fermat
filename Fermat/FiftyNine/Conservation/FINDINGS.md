@@ -1,5 +1,46 @@
 # N59 conservation findings
 
+## 2026-08-13 — Ulam W0 discovery: a real reflected functional, on the wrong carrier
+
+- The committed STOP guess was too pessimistic in its literal form.  W4
+  does not expose only the allocation `(0, 1)`: its already-seated map
+  `reflectedCoordinatePairing827` makes
+  `(reflectedCoordinatePairing827 …).flip 1` an actual functional on
+  `QRelaxedReflectedDual827`.  `connecting_apply` identifies its evaluation
+  with the selected 827 localization.  This functional comes from the
+  incidence map itself, not from a dimension count.
+- The carrier audit nevertheless keeps W0 red.  The W4 functional has type
+  `Module.Dual (ZMod 59) (QRelaxedReflectedDual827 …)`, whereas
+  `pair_59 wild h_F` has type
+  `DOmegaSelmerChiStar →+ ZMod 59` on the empty-support reflected Selmer
+  carrier.  The conditional fixed class readout lives on a third carrier,
+  `ProjectedClassRange827`.  No existing map or equivalence identifies
+  these carriers while preserving localization and the Tate reading.
+  DetectorWitness827's tame no-go makes silently treating the q-relaxed
+  and empty-support carriers as equal especially unsound.
+- The real relation-(7a) gauge is also more weakly typed than the campaign
+  shorthand suggests.  `differenceGauge` is an additive, class-valued map
+  on `AllocatedClass K × AllocatedClass K`.  Its selected value is exactly
+  the `r₀ + 58 r₁` word, and its zero test is already equivalent in both
+  directions to `VandiverSevenA 0 1`.  Only a supplied
+  `GaugeComparison.readout : AllocatedClass K →+ ZMod 59` scalarizes that
+  selected word; the cone has no scalar `gauge_7a : H_FLT →ₗ ZMod 59`
+  from which the advertised quotient could yet be instantiated.
+- The required fixed-pullback algebra is already present.  `SteeringFiber`
+  proves the joint pullback, its silent-slice `rhoDual` specialization, and
+  preimage independence.  The pure quotient law is the direct composition
+  of `FocusConormal.conormalClass_eq_zero_iff_restriction_eq_zero` and
+  `FocusConormal.conormalClass_eq_zero_iff_exists_dual_pullback`; W0 should
+  export and dependency-guard that bridge rather than prove new duality.
+- Consequently Lane 1 remains gated even though the literal STOP condition
+  does not fire.  W1 needs either a q-relaxed wild pairing whose `pair_59`
+  readout equals the reflected boundary functional (up to the intended
+  unit), or an explicit carrier map/equivalence with that compatibility.
+  A normalized vector presentation would additionally require a
+  `yStar : QRelaxedReflectedDual827 …` with selected 827 localization `1`;
+  that normalization is distinct from, and does not imply, vanishing of
+  the local pairing with the Fermat class.
+
 ## 2026-08-09 — TRANSVERSALITY W4 verdict: conditional FIXED, unconditional typed stop
 
 - W1--W3 are clean, so W4 was entered.  The Fourier instrument is first in
