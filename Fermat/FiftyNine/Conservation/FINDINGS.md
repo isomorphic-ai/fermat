@@ -23,6 +23,13 @@
   fabricated value.  `KummerTateLocalization59` installs it in the real
   59-local core while keeping landing and old-reading calibration as separate
   theorem inputs.
+- `LocalKummerH1` now constructs the actual discrete absolute-Galois Kummer
+  map from the power quotient.  Its chosen-root cocycle, multiplicativity,
+  and quotient descent are all proved by explicit coboundaries.
+  `KummerOrientation` turns a supplied primitive root into an equivariant
+  `mu_n ≃ ZMod n` representation isomorphism and hence the required
+  oriented left `H¹` map.  These close the discrete algebraic Kummer-map seam;
+  comparison with continuous local cohomology remains separate.
 - `CyclotomicSelmerAction59` constructs the common ambient cyclotomic action,
   transports places, proves stability of the full set above 827, restricts
   the action to strict and supported Selmer carriers, and proves their
@@ -31,7 +38,7 @@
   prime-ideal multiplicities.  Package B is therefore discharged for the
   canonical actions, including the reflected strict-to-827 landing.
 - No localization or relation-(7a) premise is thereby claimed discharged.
-  The actual continuous Kummer maps, normalized `H²` invariant and Hilbert
+  The continuous-cohomology comparison, normalized `H²` invariant and Hilbert
   comparison, independent old-reading calibration, Poitou--Tate global
   reflected lift, lawfulness, gauge seating, kernel
   comparison, reciprocity, and normalized-fiber member remain distinct.

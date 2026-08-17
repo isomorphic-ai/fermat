@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-17
 **Repository:** `~/fermat`, branch `credit-flow`
-**Implementation checkpoint:** `eda5109`
+**Implementation checkpoint:** `27c82ec`
 **Audience:** the theory goblin deciding the next mathematical lemma, not the
 Lean engineer packaging it
 
@@ -32,6 +32,14 @@ The following parts are now kernel-checked:
   `H² -> k` invariant.
 - `CohomologicalKummerPairing` assembles two actual Kummer maps and that
   invariant into `WildKummerPairing.Pairing`.
+- `LocalKummerH1` constructs the discrete absolute-Galois Kummer map
+  `Fˣ/(Fˣ)^n -> H¹(G_F, μ_n)`: chosen roots define the cocycles, and
+  explicit coboundaries prove both root-choice independence and
+  multiplicativity before descent through the power quotient.
+- `KummerOrientation` uses a supplied primitive `n`-th root in `F` to prove
+  that absolute Galois fixes `μ_n`, constructs an equivariant representation
+  isomorphism `μ_n ≃ ZMod n`, and transports the actual Kummer class to the
+  trivial left coefficient line.
 - `ReflectedWildKummerCoreAt59` is now quotient-first.  It stores that
   pairing directly; representative formulas are optional constructors or
   comparison charts.
@@ -46,9 +54,10 @@ The following parts are now kernel-checked:
 
 The remaining arithmetic is sharply typed and must not be conflated:
 
-1. Construct the **continuous** local Kummer maps for the absolute local
-   Galois group, including the chosen `zeta_59` orientation converting the
-   left `mu_59` class to the trivial `F_59` coefficient line.
+1. Relate the now-constructed **discrete** absolute-Galois Kummer maps and
+   chosen-`zeta_59` orientation to continuous local Galois cohomology.  The
+   algebraic maps themselves are no longer missing; the topology/comparison
+   theorem is.
 2. Construct and normalize `H²(F, mu_59) -> F_59`, and prove its cup readout
    is the local Hilbert symbol with the fixed sign convention.
 3. Prove the independent comparison with the existing old wild reading.

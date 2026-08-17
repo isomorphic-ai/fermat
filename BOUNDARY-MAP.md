@@ -22,7 +22,7 @@ separate and must not be collapsed into one provider:
 | Kummer quotient localization | LITERAL | `LocalKummerTransport.map` and pairing pullback compile with identity/composition laws. |
 | Low-degree cup algebra | LITERAL (discrete group cohomology) | The cocycle formula, coboundary descent, `H¹ -> H²` map, and bilinearity compile.  Transfer to continuous local Galois cohomology is not yet built. |
 | Scalar local readout | LITERAL adapter / SEAM arithmetic | Composition with an actual `H² -> ZMod 59` map compiles; construction and normalization of the local invariant and Hilbert-symbol comparison remain open. |
-| Local Kummer maps | SEAM | Construct the continuous right `mu_59` Kummer map and the oriented left `F_59` map, including the chosen root-of-unity identification. |
+| Local Kummer maps | LITERAL (discrete) / SEAM topology | `LocalKummerH1.map` constructs the power-quotient map to discrete absolute-Galois `H¹`; `KummerOrientation.leftKummerMap` constructs the chosen-root oriented left map through an equivariant representation isomorphism.  Comparison with continuous local Galois cohomology remains open. |
 | 59 quotient consumer | LITERAL adapter | `ReflectedWildKummerCoreAt59` stores the quotient pairing directly; `KummerTateLocalization59` installs the cohomological assembly. |
 | Strict/827-supported actions | LITERAL | `cyclotomicValuationCovariance59` proves valuation naturality from ideal multiplicity transport; the common action, both restrictions, intertwining inclusion, and reflected landing are canonical. |
 | Old-reading calibration | SEAM theorem | Calibration remains independent; no reading is defined from the other. |
