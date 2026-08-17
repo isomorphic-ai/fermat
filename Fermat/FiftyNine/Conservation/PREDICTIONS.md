@@ -3,6 +3,27 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-17 — Vostokov two-shape core prediction
+
+- **Committed C1 guess: the two shapes have unequal but narrowly bounded
+  coverage.**  I expect `statewiseSelmerLift` to reduce entirely to the
+  banked `artinHasseKummerSubgroup` after exposing its already-fixed
+  denominator and generated-unit factors.  I expect
+  `transverseDetectorComponent` to be the sole genuine escape, but only as
+  an Artin--Hasse-covered class times one explicit zeta/prime-element
+  extension rather than an arbitrary principal-unit class.  The shape audit,
+  not this guess, will decide both claims before any formula is attempted.
+- **Committed tier guess: tier (b) is cheapest sufficient.**  I expect the
+  banked special values alone to underdetermine the one transverse extension,
+  while the classical Artin--Hasse formulas for `(ζ, u)` and `(π, u)`,
+  specialized to these two representatives, close it without Iwasawa or
+  general Vostokov--Brückner series machinery.
+- **Committed session guess: `ReflectedWildKummerCoreAt59` inhabits.**  I
+  predict that the representative pairing, reflected empty-support landing,
+  and theorem-level calibration to `wild.reading` all compile this session.
+  This predicts no unconditional relation (7a), no reciprocity theorem, no
+  kernel erasure, and no fiber collapse.
+
 ## 2026-08-13 — Vostokov wild-reading prediction
 
 - **Committed guess: the V1 coverage upgrade does not close.**  I expect the
