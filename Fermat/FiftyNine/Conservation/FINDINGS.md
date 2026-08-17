@@ -1,5 +1,30 @@
 # N59 conservation findings
 
+## 2026-08-17 — Vostokov C2 tier-(c) audit: total coordinates must retain valuation and torsion
+
+- The available completed logarithm is a principal-unit instrument, not by
+  itself a total coordinate on `Kˣ`.  The pinned cyclotomic stack proves that
+  the distinguished uniformizer has nonzero normalized lambda valuation
+  (`lambdaPiFieldUnit_valuation`), while its same-prime finite logarithm
+  vanishes on the cyclotomic torsion direction
+  (`samePrimeFiniteLog_zetaPowSubOne_eq_zero`).  Normalizing every element to
+  a principal unit and then keeping only that logarithm would therefore lose
+  precisely the valuation/torsion data that can contribute cross-terms to a
+  total wild pairing.
+- Tier (c) is **not refuted**.  Its cheapest honest algebraic boundary is a
+  trace-product representative built from total additive coordinates on all
+  of `Additive Kˣ`; those coordinates may internally combine the Iwasawa
+  norm-lift derivative, valuation, torsion, and principal-unit logarithm, but
+  the generic constructor must not identify a bare logarithm with that total
+  package.  Full tier-(d) Vostokov--Brueckner series machinery therefore
+  remains forbidden.
+- The missing arithmetic realization is now exact: construct the total
+  norm-coherent coordinates (including normalization without data loss),
+  prove their trace-product is the Hilbert/wild symbol, and compare that
+  independently defined symbol with `wild.reading`.  The comparison cannot
+  follow from the interface's bilinearity and adjoint law alone, so it stays
+  a theorem-level calibration rather than a definition.
+
 ## 2026-08-17 — Vostokov C2/C3 discovery: the requested core is universal, not two-shape
 
 - `ReflectedWildKummerCoreAt59.representative` is a total bilinear map on
