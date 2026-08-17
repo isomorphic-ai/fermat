@@ -38,6 +38,7 @@ noncomputable section
 namespace Fermat.Conservation.ContinuousKummerH1
 
 open CategoryTheory
+open CategoryTheory.Limits
 open groupCohomology
 open Fermat.Conservation.LocalKummerH1
 
@@ -310,6 +311,65 @@ theorem homogeneousOneCochain_eq_d_principalZeroCochain
   apply ContinuousMap.ext
   intro h
   exact homogeneousOneCochain_eq_d_principalZeroCochain_apply R G A c m hc g h
+
+/- Mathlib's cycles object is categorical rather than definitionally the
+concrete kernel.  Comparing the two kernel limit cones gives a small,
+stable injectivity receipt for reading equality back through `iCycles`.
+Keeping this theorem separate avoids unfolding the full homogeneous
+complex in every later boundary calculation. -/
+set_option maxHeartbeats 800000 in
+theorem homogeneousOneICycles_injective :
+    Function.Injective
+      (((((ContinuousCohomology.homogeneousCochains R G).obj A).iCycles 1).hom)) := by
+  let C := (ContinuousCohomology.homogeneousCochains R G).obj A
+  let d := C.d 1 2
+  let e : TopModuleCat.ker d ≅ C.cycles 1 :=
+    IsLimit.conePointUniqueUpToIso
+      (TopModuleCat.isLimitKer d) (C.cyclesIsKernel 1 2 (by simp))
+  have he : e.inv ≫ TopModuleCat.kerι d = C.iCycles 1 := by
+    exact IsLimit.conePointUniqueUpToIso_inv_comp _ _
+      WalkingParallelPair.zero
+  intro x y hxy
+  have hxy' : e.inv.hom x = e.inv.hom y := by
+    apply Subtype.ext
+    have hmap :
+        (TopModuleCat.kerι d).hom (e.inv.hom x) =
+          (TopModuleCat.kerι d).hom (e.inv.hom y) := by
+      simpa only [← ConcreteCategory.comp_apply, he] using hxy
+    exact hmap
+  have h := congrArg e.hom.hom hxy'
+  simpa [← ConcreteCategory.comp_apply] using h
+
+set_option backward.isDefEq.respectTransparency false in
+set_option maxHeartbeats 800000 in
+/-- The categorical cycle associated to a principal crossed homomorphism
+is exactly the cycle induced by its degree-zero boundary. -/
+theorem homogeneousOneCycle_eq_toCycles_principal
+    (c : ContinuousCrossedHom R G A) (m : A.V)
+    (hc : ∀ g, c.1 g = (A.ρ g).hom m - m) :
+    homogeneousOneCycle A c.1 c.2 =
+      ((((ContinuousCohomology.homogeneousCochains R G).obj A).toCycles 0 1).hom
+        (principalZeroCochain R G A c m hc)) := by
+  let C := (ContinuousCohomology.homogeneousCochains R G).obj A
+  apply homogeneousOneICycles_injective R G A
+  rw [← ConcreteCategory.comp_apply, C.toCycles_i 0 1]
+  simp only [homogeneousOneCycle, ← ConcreteCategory.comp_apply,
+    HomologicalComplex.liftCycles_i]
+  exact homogeneousOneCochain_eq_d_principalZeroCochain R G A c m hc
+
+set_option backward.isDefEq.respectTransparency false in
+set_option maxHeartbeats 800000 in
+/-- Principal continuous crossed homomorphisms represent zero in genuine
+continuous degree-one cohomology. -/
+theorem homogeneousOneClass_eq_zero_of_principal
+    (c : ContinuousCrossedHom R G A) (m : A.V)
+    (hc : ∀ g, c.1 g = (A.ρ g).hom m - m) :
+    homogeneousOneClass A c.1 c.2 = 0 := by
+  let C := (ContinuousCohomology.homogeneousCochains R G).obj A
+  unfold homogeneousOneClass
+  rw [homogeneousOneCycle_eq_toCycles_principal R G A c m hc]
+  rw [← ConcreteCategory.comp_apply, C.toCycles_comp_homologyπ 0 1]
+  rfl
 
 end ContinuousCrossedHom
 
