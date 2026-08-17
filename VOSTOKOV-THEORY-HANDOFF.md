@@ -1,12 +1,76 @@
-# Vostokov tier-(c) theory handoff
+# Kummer--Tate / former Vostokov tier-(c) theory handoff
 
 **Date:** 2026-08-17
 **Repository:** `~/fermat`, branch `credit-flow`
-**Implementation checkpoint:** `29fdbe9`
+**Implementation checkpoint:** `160a598`
 **Audience:** the theory goblin deciding the next mathematical lemma, not the
 Lean engineer packaging it
 
-## The short version
+## 2026-08-17 Kummer--Tate update (current route)
+
+The earlier tier-(c) logarithmic recommendation below is now historical
+context, not the foundational implementation plan.  The current route keeps
+the complete local Kummer classes and uses their cohomological interaction:
+
+```text
+global Kummer class
+  -> localization into the local Kummer quotient
+  -> left/right H¹ Kummer maps
+  -> oriented cup product in H²
+  -> normalized local invariant / discrete logarithm
+  -> ZMod 59 reading
+```
+
+The following parts are now kernel-checked:
+
+- `LocalKummerTransport` maps Kummer quotients functorially along a field map
+  and pulls a local quotient pairing back to global classes.
+- `KummerTateCup` proves the explicit low-degree cup cochain is a cocycle,
+  proves right-coboundary independence, descends through Mathlib's actual
+  `H¹` quotient, and bundles the result bilinearly.
+- `KummerTateReadout` composes cup product with an actual supplied linear
+  `H² -> k` invariant.
+- `CohomologicalKummerPairing` assembles two actual Kummer maps and that
+  invariant into `WildKummerPairing.Pairing`.
+- `ReflectedWildKummerCoreAt59` is now quotient-first.  It stores that
+  pairing directly; representative formulas are optional constructors or
+  comparison charts.
+- `KummerTateLocalization59` feeds the cohomological pairing into the real
+  59-local consumer while retaining landing and calibration as separate
+  theorem inputs.
+- `CyclotomicSelmerAction59` constructs the common ambient cyclotomic action,
+  its strict and 827-supported restrictions, and the intertwining inclusion,
+  conditional on one explicitly named valuation-covariance proposition.
+
+The remaining arithmetic is sharply typed and must not be conflated:
+
+1. Construct the **continuous** local Kummer maps for the absolute local
+   Galois group, including the chosen `zeta_59` orientation converting the
+   left `mu_59` class to the trivial `F_59` coefficient line.
+2. Construct and normalize `H²(F, mu_59) -> F_59`, and prove its cup readout
+   is the local Hilbert symbol with the fixed sign convention.
+3. Prove the height-one valuation covariance law used by the canonical
+   strict/827-supported actions.
+4. Prove the independent comparison with the existing old wild reading.
+5. Separately, use Poitou--Tate exactness for the required global reflected
+   lift.  Local duality does not fabricate that class.
+
+The current `KummerTateCup` layer uses Mathlib's discrete low-degree group
+cohomology.  It validates the algebraic cup/descent mechanism, but it is not
+yet a declaration of continuous local Galois cohomology.  That topology seam
+must remain visible.
+
+Dimension precision: the two local degree-one spaces are 60-dimensional
+perfect dual partners in the stated 59-adic situation.  Their direct sum has
+the canonical hyperbolic/symplectic form.  Calling either individual
+60-dimensional space symplectic requires an additional self-identification
+and alternating-form choice.
+
+The Iwasawa trace-product material below remains useful as a later coordinate
+comparison on the 58-dimensional analytic layer.  It is no longer the
+foundational object and must not erase the valuation or torsion directions.
+
+## Historical tier-(c) short version
 
 The Lean algebra is no longer the obstruction.
 
@@ -58,15 +122,16 @@ readout wants that reading not only on the old strict reflected Selmer
 carrier, but on the carrier whose local condition is relaxed at the places
 over 827.
 
-The compiled target is:
+At checkpoint `29fdbe9`, the compiled target was representative-first.  The
+current target has since been migrated to:
 
 ```lean
 structure ReflectedWildKummerCoreAt59 ... where
-  representative : WildKummerPairing.RepresentativePairing 59 K
+  pairing : WildKummerPairing.Pairing 59 K
   landing : ReflectedEmptySupportLanding827 rho rhoQ omega chi
   old_calibration : ∀ x : OldPrimal59 rho chi,
       ∀ y : OldReflectedDual59 rho omega chi,
-    representative.descend (toKummerClass x) (toKummerClass y) =
+    pairing (toKummerClass x) (toKummerClass y) =
       wild.reading x y
 ```
 

@@ -1,5 +1,40 @@
 # N59 conservation findings
 
+## 2026-08-17 — Kummer--Tate route: quotient-first core and algebraic cup spine
+
+- `ReflectedWildKummerCoreAt59` is now quotient-first: its arithmetic field
+  is a total `WildKummerPairing.Pairing 59 K` on Kummer classes.  The actual
+  downstream localization, shape audit, and Iwasawa comparison adapter were
+  rebuilt after this dependency surgery.  The Iwasawa representative formula
+  remains a valid way to descend a pairing, but is no longer the foundational
+  interface.
+- `LocalKummerTransport` constructs the induced map on Kummer quotients along
+  a field homomorphism and proves identity/composition laws.  A local quotient
+  pairing therefore pulls back canonically to the global Kummer carrier.
+- `KummerTateCup` implements the oriented inhomogeneous cochain
+  `f(sigma) * sigma(g(tau))`, proves the two-cocycle law, proves that a right
+  coboundary cups to a two-coboundary, and descends through Mathlib's actual
+  `H¹` quotient to a bilinear `H²`-valued cup product.  This is presently the
+  discrete group-cohomology algebra; continuous local Galois cohomology is
+  still a visible topology seam.
+- `KummerTateReadout` and `CohomologicalKummerPairing` compose that cup product
+  with an actual supplied linear local invariant and two actual Kummer maps,
+  producing the quotient-level wild pairing without a provider structure or
+  fabricated value.  `KummerTateLocalization59` installs it in the real
+  59-local core while keeping landing and old-reading calibration as separate
+  theorem inputs.
+- `CyclotomicSelmerAction59` constructs the common ambient cyclotomic action,
+  transports places, proves stability of the full set above 827, restricts
+  the action to strict and supported Selmer carriers, and proves their
+  inclusion intertwines.  Its only remaining Package-B arithmetic input is
+  the named proposition `CyclotomicValuationCovariance59`, spelling
+  `ord_v(sigma q) = ord_(sigma⁻¹ v)(q)` modulo 59.
+- No localization or relation-(7a) premise is thereby claimed discharged.
+  The actual continuous Kummer maps, normalized `H²` invariant and Hilbert
+  comparison, valuation covariance, independent old-reading calibration,
+  Poitou--Tate global reflected lift, lawfulness, gauge seating, kernel
+  comparison, reciprocity, and normalized-fiber member remain distinct.
+
 ## 2026-08-17 — Vostokov C2/C3 result: tier-(c) is reduced, not inhabited
 
 - `IwasawaTracePairing.TotalAugmentedCoordinates` now defines a genuine

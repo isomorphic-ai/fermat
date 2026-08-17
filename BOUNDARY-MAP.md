@@ -12,6 +12,26 @@ Every classified row is LITERAL except the following named seams.
 No Lemma-I proof, stock-credit transformer inhabitant, higher-layer transport
 inhabitant, or exponent-59 endpoint is constructed here.
 
+## 2026-08-17 Kummer--Tate boundary delta
+
+The 59 wild-local route is now quotient-first.  The following boundaries are
+separate and must not be collapsed into one provider:
+
+| Layer | Current status | Exact remaining seam |
+| --- | --- | --- |
+| Kummer quotient localization | LITERAL | `LocalKummerTransport.map` and pairing pullback compile with identity/composition laws. |
+| Low-degree cup algebra | LITERAL (discrete group cohomology) | The cocycle formula, coboundary descent, `H¹ -> H²` map, and bilinearity compile.  Transfer to continuous local Galois cohomology is not yet built. |
+| Scalar local readout | LITERAL adapter / SEAM arithmetic | Composition with an actual `H² -> ZMod 59` map compiles; construction and normalization of the local invariant and Hilbert-symbol comparison remain open. |
+| Local Kummer maps | SEAM | Construct the continuous right `mu_59` Kummer map and the oriented left `F_59` map, including the chosen root-of-unity identification. |
+| 59 quotient consumer | LITERAL adapter | `ReflectedWildKummerCoreAt59` stores the quotient pairing directly; `KummerTateLocalization59` installs the cohomological assembly. |
+| Strict/827-supported actions | LITERAL conditional restriction / SEAM naturality | The common action, support stability, restrictions, and intertwining inclusion compile conditional on `CyclotomicValuationCovariance59`. |
+| Old-reading calibration | SEAM theorem | Calibration remains independent; no reading is defined from the other. |
+| Global reflected class | SEAM | Poitou--Tate exactness must produce the required global relaxed lift; local duality alone does not. |
+
+Consequently localization and relation (7a) remain conditional.  The new
+code shrinks and types the work queue; it does not manufacture the arithmetic
+maps, reciprocity law, global class, gauge comparison, or endpoint.
+
 ## Mechanical rule
 
 - LITERAL means the implementation value transitively consumes
