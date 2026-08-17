@@ -43,6 +43,28 @@ abbrev AbsoluteGalois := Field.absoluteGaloisGroup K
 /-- The `n`-th roots of unity in the chosen algebraic closure. -/
 abbrev KummerRoots := rootsOfUnity n (AlgebraicClosure K)
 
+/- Scoped discrete coefficient topology on the finite roots-of-unity
+carrier.  Keeping this instance scoped avoids competing with any future
+intrinsic topology on roots of unity. -/
+namespace KummerRootsDiscrete
+
+scoped instance : TopologicalSpace (KummerRoots n K) := ⊥
+scoped instance : DiscreteTopology (KummerRoots n K) := ⟨rfl⟩
+
+end KummerRootsDiscrete
+
+/-- The natural action on the chosen algebraic closure.  As for units below,
+this must be stated explicitly because `AbsoluteGalois` is a named definition
+rather than the syntactic `AlgEquiv` type used by the generic instance. -/
+instance absoluteGaloisFieldAction :
+    MulDistribMulAction (AbsoluteGalois K) (AlgebraicClosure K) where
+  smul σ x :=
+    (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from σ) x
+  one_smul _ := rfl
+  mul_smul _ _ _ := rfl
+  smul_mul σ x y := σ.map_mul x y
+  smul_one σ := σ.map_one
+
 /-- The natural action on algebraic-closure units.  This instance is stated
 explicitly because `Field.absoluteGaloisGroup` is a named definition rather
 than the syntactic `AlgEquiv` type expected by Mathlib's generic instance. -/
@@ -61,6 +83,13 @@ instance absoluteGaloisUnitsAction :
   smul_one σ := by
     apply Units.ext
     exact (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from σ).map_one
+
+@[simp]
+theorem coe_absoluteGalois_smul_unit
+    (σ : AbsoluteGalois K) (a : (AlgebraicClosure K)ˣ) :
+    ((σ • a : (AlgebraicClosure K)ˣ) : AlgebraicClosure K) =
+      σ • (a : AlgebraicClosure K) :=
+  rfl
 
 /-- The absolute Galois action on roots of unity, obtained by restricting its
 action on the units of the algebraic closure. -/
@@ -179,7 +208,7 @@ private theorem smul_baseUnit (σ : AbsoluteGalois K) (a : Kˣ) :
   exact σ.commutes (a : K)
 
 /-- The representative Kummer cocycle value `σ(√[n]{a}) / √[n]{a}`. -/
-private def cocycleValue (a : Kˣ) (σ : AbsoluteGalois K) : KummerRoots n K :=
+def cocycleValue (a : Kˣ) (σ : AbsoluteGalois K) : KummerRoots n K :=
   ⟨σ • rootUnit n K a / rootUnit n K a, by
     rw [mem_rootsOfUnity, div_pow, ← smul_pow', rootUnit_pow,
       smul_baseUnit]
@@ -208,6 +237,65 @@ private theorem cocycleValue_isCocycle (a : Kˣ) :
   intro σ τ
   apply Additive.toMul.injective
   exact cocycleValue_isMulCocycle n K a σ τ
+
+open scoped KummerRootsDiscrete Pointwise
+
+/-- The chosen-root Kummer cocycle is locally constant, hence continuous,
+for the Krull topology on the absolute Galois group and the discrete topology
+on `μ_n`.
+
+Indeed, every nonempty fiber is a left coset of the stabilizer of the chosen
+algebraic root.  That stabilizer is open because the algebraic closure is an
+integral extension of the base field.  This is only a continuity theorem for
+the concrete cocycle; it does not manufacture a comparison with continuous
+group cohomology. -/
+theorem continuous_cocycleValue (a : Kˣ) :
+    Continuous (cocycleValue n K a) := by
+  rw [continuous_discrete_rng]
+  intro zeta
+  by_cases hfiber : ∃ τ, cocycleValue n K a τ = zeta
+  · obtain ⟨τ, hτ⟩ := hfiber
+    let r : (AlgebraicClosure K)ˣ := rootUnit n K a
+    have hopen :
+        IsOpen (MulAction.stabilizer (AbsoluteGalois K)
+          (r : AlgebraicClosure K) : Set (AbsoluteGalois K)) :=
+      by
+        convert stabilizer_isOpen_of_isIntegral
+          (K := K) (L := AlgebraicClosure K) r using 1
+    have hfiber_eq :
+        cocycleValue n K a ⁻¹' {zeta} =
+          τ • (MulAction.stabilizer (AbsoluteGalois K)
+            (r : AlgebraicClosure K) : Set (AbsoluteGalois K)) := by
+      ext σ
+      rw [Set.mem_preimage, Set.mem_singleton_iff, ← hτ,
+        mem_leftCoset_iff, SetLike.mem_coe, MulAction.mem_stabilizer_iff]
+      constructor
+      · intro heq
+        have hunit : σ • r = τ • r := by
+          apply div_left_injective
+          exact congrArg Subtype.val heq
+        have hval : σ • (r : AlgebraicClosure K) =
+            τ • (r : AlgebraicClosure K) := by
+          simpa only [coe_absoluteGalois_smul_unit] using
+            congrArg Units.val hunit
+        rw [mul_smul, inv_smul_eq_iff]
+        exact hval
+      · intro hfix
+        rw [mul_smul, inv_smul_eq_iff] at hfix
+        apply Subtype.ext
+        change σ • r / r = τ • r / r
+        rw [div_left_inj]
+        apply Units.ext
+        simpa only [coe_absoluteGalois_smul_unit] using hfix
+    rw [hfiber_eq]
+    exact hopen.leftCoset τ
+  · have hfiber_eq : cocycleValue n K a ⁻¹' {zeta} = ∅ := by
+      apply Set.eq_empty_iff_forall_notMem.mpr
+      intro σ hσ
+      apply hfiber
+      exact ⟨σ, by simpa using hσ⟩
+    rw [hfiber_eq]
+    exact isOpen_empty
 
 /-- The chosen-root cocycle representing the Kummer class of `a`. -/
 def cocycle (a : Kˣ) : cocycles₁ (rootsRepresentation n K) :=
