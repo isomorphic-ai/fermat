@@ -156,6 +156,77 @@ noncomputable def homogeneousOneClass
 
 end Homogeneous
 
+/-! ## Linear infrastructure for continuous crossed homomorphisms -/
+
+section CrossedHomLinear
+
+variable (R G : Type*) [CommRing R] [TopologicalSpace R]
+  [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+  (A : Action (TopModuleCat R) G)
+
+/-- Continuous crossed homomorphisms for the action `A`, as a submodule of
+continuous maps.  Bundling the crossed law this way makes the passage to
+continuous `H¹` visibly additive and `R`-linear. -/
+def ContinuousCrossedHom : Submodule R C(G, A.V) where
+  carrier := { c | ∀ g h, c (g * h) = c g + (A.ρ g).hom (c h) }
+  zero_mem' := by simp
+  add_mem' := by
+    intro c d hc hd g h
+    change ∀ g h, c (g * h) = c g + (A.ρ g).hom (c h) at hc
+    change ∀ g h, d (g * h) = d g + (A.ρ g).hom (d h) at hd
+    rw [ContinuousMap.add_apply, ContinuousMap.add_apply,
+      ContinuousMap.add_apply, hc, hd, map_add]
+    abel
+  smul_mem' := by
+    intro r c hc g h
+    change ∀ g h, c (g * h) = c g + (A.ρ g).hom (c h) at hc
+    rw [ContinuousMap.smul_apply, ContinuousMap.smul_apply,
+      ContinuousMap.smul_apply, hc, map_smul, smul_add]
+
+namespace ContinuousCrossedHom
+
+/-- Homogenization is linear on continuous crossed homomorphisms. -/
+def homogeneousOneLinear :
+    ContinuousCrossedHom R G A →ₗ[R]
+      ((ContinuousCohomology.homogeneousCochains R G).obj A).X 1 where
+  toFun c := homogeneousOneCochain A c.1 c.2
+  map_add' c d := by
+    apply Subtype.ext
+    apply ContinuousMap.ext
+    intro g
+    apply ContinuousMap.ext
+    intro h
+    change (c.1 h + d.1 h) - (c.1 g + d.1 g) =
+      (c.1 h - c.1 g) + (d.1 h - d.1 g)
+    abel
+  map_smul' r c := by
+    apply Subtype.ext
+    apply ContinuousMap.ext
+    intro g
+    apply ContinuousMap.ext
+    intro h
+    change r • c.1 h - r • c.1 g = r • (c.1 h - c.1 g)
+    rw [smul_sub]
+
+/-- The linear homogenization map, with its image bundled in the concrete
+kernel of the degree-one differential. -/
+def homogeneousOneKernelLinear :
+    ContinuousCrossedHom R G A →ₗ[R]
+      ((((ContinuousCohomology.homogeneousCochains R G).obj A).d 1 2).hom.ker) where
+  toFun c :=
+    ⟨homogeneousOneCochain A c.1 c.2,
+      homogeneousOneCochain_isCycle A c.1 c.2⟩
+  map_add' c d := by
+    apply Subtype.ext
+    exact (homogeneousOneLinear R G A).map_add c d
+  map_smul' r c := by
+    apply Subtype.ext
+    exact (homogeneousOneLinear R G A).map_smul r c
+
+end ContinuousCrossedHom
+
+end CrossedHomLinear
+
 /-! ## The absolute-Galois roots-of-unity representation -/
 
 variable (n : ℕ) (K : Type) [Field K] [NeZero n]
