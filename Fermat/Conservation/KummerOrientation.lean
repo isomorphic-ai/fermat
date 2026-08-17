@@ -136,6 +136,35 @@ theorem orientH1_H1pi
           (H1π (rootsRepresentation n F) c) = _
   rw [groupCohomology.H1π_comp_map_apply]
 
+/-- Functoriality in the coefficient representation transports degree-two
+cohomology through the same chosen-root orientation.  This only removes the
+`mu_n`/`ZMod n` coordinate bookkeeping: it does not construct or normalize a
+local invariant on `H²`. -/
+def orientH2
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n) :
+    H2 (rootsRepresentation n F) →ₗ[ZMod n]
+      H2 (KummerTateCup.trivialLine
+        (k := ZMod n) (G := AbsoluteGalois F)) :=
+  (groupCohomology.map (MonoidHom.id (AbsoluteGalois F))
+      (rootsRepresentationEquivTrivial n F zeta hzeta).hom 2).hom
+
+/-- Readback of the degree-two orientation on a concrete two-cocycle. -/
+@[simp]
+theorem orientH2_H2pi
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n)
+    (c : cocycles₂ (rootsRepresentation n F)) :
+    orientH2 n F zeta hzeta (H2π (rootsRepresentation n F) c) =
+      H2π (KummerTateCup.trivialLine
+          (k := ZMod n) (G := AbsoluteGalois F))
+        (groupCohomology.mapCocycles₂
+          (MonoidHom.id (AbsoluteGalois F))
+          (rootsRepresentationEquivTrivial n F zeta hzeta).hom c) := by
+  change
+    (groupCohomology.map (MonoidHom.id (AbsoluteGalois F))
+        (rootsRepresentationEquivTrivial n F zeta hzeta).hom 2)
+          (H2π (rootsRepresentation n F) c) = _
+  rw [groupCohomology.H2π_comp_map_apply]
+
 /-- The ordinary Kummer map followed by the honest chosen-root orientation.
 This is the additive left Kummer map used by the oriented cup product. -/
 def leftKummerMap
