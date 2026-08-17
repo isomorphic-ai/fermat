@@ -1,5 +1,38 @@
 # N59 conservation findings
 
+## 2026-08-17 — Vostokov C1 discovery: the residual labels are not term-level shapes
+
+- The committed prediction that the two residual shapes reduce to the
+  Artin--Hasse bank plus one small `zeta`/uniformizer extension is falsified
+  by the tracked types.  The bank already contains both
+  `zetaKummerClass` and `fixedDenominatorKummerClass` (`zeta - 1`), so those
+  classes cannot be the advertised extension outside the bank.
+- `campaignResidualInventory_eq` computes a provenance list from a Boolean
+  classifier.  It does not bind its two labels to the literal Kummer classes
+  consumed by V3.  At that boundary the left input is an arbitrary
+  `x : OldPrimal59` and the right input is an arbitrary
+  `y : QRelaxedReflectedDual827`; their exposed classes are exactly
+  `toKummerClass x` and `toKummerClassAt y`.
+- The intended statewise source is even less explicit before seating:
+  `allocatedSelmerObstruction` is `ExactFilteredPair.liftClassPair` of the
+  allocated class pair, and `liftClassPair` is a `Classical.choose` preimage
+  of the class projection.  Its only banked equation is the projection
+  readback.  No theorem identifies this choice with either normalized state
+  factor or with an Artin--Hasse generator combination.
+- Once seated, `quotientRepresentative x` and
+  `quotientRepresentativeAt y` are `QuotientGroup.out` choices.  The
+  available receipts say that they map back to the two literal Kummer
+  classes and have the required Selmer valuation divisibility; they provide
+  no subgroup membership or coefficient decomposition.  Consequently the
+  honest present factorization has covered part zero and retains each whole
+  literal class as residual.
+- This is a coverage/shape result, not a theorem of mathematical
+  nonmembership.  Both inputs escape the current bank interface, and neither
+  has a proved small explicit extension.  Tier (a) is therefore refuted for
+  the actual inputs.  Tier (b)'s `(zeta,u)` and `(pi,u)` hypotheses are not
+  licensed by either representative shape; the next unrefuted tier is (c).
+  Tier (d) remains forbidden until (c) is tested and explicitly refuted.
+
 ## 2026-08-13 — Vostokov V1 discovery: two actual inputs survive coverage
 
 - The cheap FactorDecomposition middle path does **not** empty the wild
