@@ -21,6 +21,7 @@ import Fermat.Conservation.Ledger
 import Fermat.Conservation.Transfer
 import Fermat.Conservation.ExteriorTransfer
 import Fermat.Conservation.WildKummerPairing
+import Fermat.Conservation.IwasawaTracePairing
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 import Fermat.FiftyNine.Conservation.BoundedSinnott
@@ -1473,6 +1474,45 @@ factorization theorems connect V1's exact residual to that total pairing. -/
   Fermat.Conservation.WildKummerPairing.GaloisData.action_adjoint,
   Fermat.Conservation.WildKummerPairing.GaloisData.equivariant
 
+/-! ### Tier-(c) total Iwasawa trace-product reduction -/
+
+#check Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates
+#check Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.representative
+#check Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.representative_apply
+#check Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.toWildKummerCore
+#check Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.toWildKummerCore_representative
+#check Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.toWildKummerCore_pairing_classOfUnit_classOfUnit
+#check Fermat.Conservation.IwasawaTracePairing.ArithmeticSpecification
+#check Fermat.Conservation.IwasawaTracePairing.Realizes
+#check Fermat.Conservation.IwasawaTracePairing.IsComparedOn
+#check Fermat.Conservation.IwasawaTracePairing.Reduction
+#check Fermat.Conservation.IwasawaTracePairing.Reduction.representative
+#check Fermat.Conservation.IwasawaTracePairing.Reduction.toWildKummerCore
+#check Fermat.Conservation.IwasawaTracePairing.Reduction.representative_apply
+#check Fermat.Conservation.IwasawaTracePairing.Reduction.representative_eq_reading
+
+#guard_depends_on
+  Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.representative_apply,
+  Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.representative
+#guard_depends_on
+  Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.toWildKummerCore_representative,
+  Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.toWildKummerCore
+#guard_depends_on
+  Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.toWildKummerCore_pairing_classOfUnit_classOfUnit,
+  Fermat.Conservation.WildKummerPairing.Core.pairing_classOfUnit_classOfUnit
+#guard_depends_on
+  Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.toWildKummerCore_pairing_classOfUnit_classOfUnit,
+  Fermat.Conservation.IwasawaTracePairing.TotalAugmentedCoordinates.representative_apply
+#guard_depends_on
+  Fermat.Conservation.IwasawaTracePairing.Reduction.representative_apply,
+  Fermat.Conservation.IwasawaTracePairing.Reduction.representative
+#guard_depends_on
+  Fermat.Conservation.IwasawaTracePairing.Reduction.representative_eq_reading,
+  Fermat.Conservation.IwasawaTracePairing.Reduction.comparison
+#guard_depends_on
+  Fermat.Conservation.IwasawaTracePairing.Reduction.representative_eq_reading,
+  Fermat.Conservation.IwasawaTracePairing.Reduction.realizes
+
 /-! ### Canonical empty-support reflected inclusion -/
 
 #check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic
@@ -2075,6 +2115,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.UlamReadout827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #guard_standard_axioms_prefix Fermat.Conservation.WildKummerPairing
+#guard_standard_axioms_prefix Fermat.Conservation.IwasawaTracePairing
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
@@ -2088,6 +2129,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.UlamReadout827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #audit_no_product_equiv_types_prefix Fermat.Conservation.WildKummerPairing
+#audit_no_product_equiv_types_prefix Fermat.Conservation.IwasawaTracePairing
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
