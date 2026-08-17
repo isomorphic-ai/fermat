@@ -28,8 +28,26 @@
   and quotient descent are all proved by explicit coboundaries.
   `KummerOrientation` turns a supplied primitive root into an equivariant
   `mu_n ≃ ZMod n` representation isomorphism and hence the required
-  oriented left `H¹` map.  These close the discrete algebraic Kummer-map seam;
-  comparison with continuous local cohomology remains separate.
+  oriented left `H¹` map.  `continuous_cocycleValue` additionally proves that
+  the concrete chosen-root cocycle is continuous for the Krull topology by
+  identifying its nonempty fibers with cosets of an open stabilizer.  The
+  discrete algebraic Kummer-map seam and cocycle-continuity obligation are
+  therefore closed; packaging/comparison in continuous local cohomology
+  remains separate.
+- `KummerOrientation.orientH2` performs the same honest coefficient
+  orientation in degree two.  `DiscreteKummerTatePairing` then closes the
+  generic discrete assembly using the two genuine Kummer maps.
+- A total functional on discrete absolute-Galois `H²` would be stronger than
+  this proof step needs and has no canonical extension from the continuous
+  local invariant.  `KummerCupSpanReadout` therefore retains only the
+  submodule spanned by cups of actual Kummer images and constructs the pairing
+  from a linear readout on that span.
+- `LocalCompletion59` constructs the actual cyclotomic lambda place, proves
+  its ideal is a nonzero prime above `59`, and supplies the completion,
+  embedding, and local primitive root.  `KummerCupSpanLocalization59` pulls
+  the span-restricted local pairing back to the global quotient and installs
+  it in the canonical-action core with landing derived.  Its only new
+  arithmetic inputs are the span readout and independent calibration.
 - `CyclotomicSelmerAction59` constructs the common ambient cyclotomic action,
   transports places, proves stability of the full set above 827, restricts
   the action to strict and supported Selmer carriers, and proves their
@@ -38,8 +56,9 @@
   prime-ideal multiplicities.  Package B is therefore discharged for the
   canonical actions, including the reflected strict-to-827 landing.
 - No localization or relation-(7a) premise is thereby claimed discharged.
-  The continuous-cohomology comparison, normalized `H²` invariant and Hilbert
-  comparison, independent old-reading calibration, Poitou--Tate global
+  The continuous-cohomology comparison, normalized continuous `H²` invariant
+  and Hilbert comparison/factorization through the cup span, independent
+  old-reading calibration, Poitou--Tate global
   reflected lift, lawfulness, gauge seating, kernel
   comparison, reciprocity, and normalized-fiber member remain distinct.
 

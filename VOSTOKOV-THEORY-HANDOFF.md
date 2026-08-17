@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-17
 **Repository:** `~/fermat`, branch `credit-flow`
-**Implementation checkpoint:** `27c82ec`
+**Implementation checkpoint:** `cc18d35`
 **Audience:** the theory goblin deciding the next mathematical lemma, not the
 Lean engineer packaging it
 
@@ -17,7 +17,8 @@ global Kummer class
   -> localization into the local Kummer quotient
   -> left/right H¹ Kummer maps
   -> oriented cup product in H²
-  -> normalized local invariant / discrete logarithm
+  -> readout on the actual Kummer-cup span
+  -> normalized continuous local-invariant comparison
   -> ZMod 59 reading
 ```
 
@@ -36,10 +37,29 @@ The following parts are now kernel-checked:
   `Fˣ/(Fˣ)^n -> H¹(G_F, μ_n)`: chosen roots define the cocycles, and
   explicit coboundaries prove both root-choice independence and
   multiplicativity before descent through the power quotient.
+- `LocalKummerH1.continuous_cocycleValue` proves that this concrete cocycle is
+  continuous for the Krull topology: every nonempty fiber is a coset of the
+  chosen algebraic root's open stabilizer.  Thus continuity of the Kummer
+  cocycle itself is no longer part of the theory request.
 - `KummerOrientation` uses a supplied primitive `n`-th root in `F` to prove
   that absolute Galois fixes `μ_n`, constructs an equivariant representation
   isomorphism `μ_n ≃ ZMod n`, and transports the actual Kummer class to the
-  trivial left coefficient line.
+  trivial left coefficient line.  The same orientation is implemented in
+  degree two.
+- `DiscreteKummerTatePairing` closes the generic discrete assembly using the
+  two genuine Kummer maps; its older total-`H²` readout remains a useful
+  algebraic adapter, not a claim about the canonical continuous invariant.
+- `KummerCupSpanReadout` takes the cheaper sufficient tier: it asks for a
+  linear scalar readout only on the submodule spanned by cups of actual
+  Kummer images, assigning no values to unrelated discrete `H²` classes.
+- `LocalCompletion59` constructs the literal cyclotomic place
+  `lambda = (zeta_59 - 1)`, proves that its ideal is nonzero, prime, and lies
+  over `59`, and supplies its adic completion, embedding, and transported
+  primitive root.
+- `KummerCupSpanLocalization59` installs the span-restricted pairing at that
+  actual lambda completion, pulls it back to global Kummer classes, derives
+  the strict-to-827-supported landing, and constructs the quotient-first core
+  from only the span readout and independent old-reading calibration.
 - `ReflectedWildKummerCoreAt59` is now quotient-first.  It stores that
   pairing directly; representative formulas are optional constructors or
   comparison charts.
@@ -54,12 +74,16 @@ The following parts are now kernel-checked:
 
 The remaining arithmetic is sharply typed and must not be conflated:
 
-1. Relate the now-constructed **discrete** absolute-Galois Kummer maps and
-   chosen-`zeta_59` orientation to continuous local Galois cohomology.  The
-   algebraic maps themselves are no longer missing; the topology/comparison
-   theorem is.
-2. Construct and normalize `H²(F, mu_59) -> F_59`, and prove its cup readout
-   is the local Hilbert symbol with the fixed sign convention.
+1. Package the now-proved continuous Kummer cocycles in continuous local
+   Galois cohomology, and compare that low-degree theory's cup product with
+   the constructed **discrete** absolute-Galois cup and chosen-`zeta_59`
+   orientations.  The concrete cocycle continuity, algebraic maps, and actual
+   lambda completion are no longer missing; the cohomology-level
+   topology/comparison layer is.
+2. Construct and normalize the continuous
+   `H²(G_(K_lambda), mu_59) -> F_59` invariant, prove the cup--Hilbert-symbol
+   comparison with the fixed sign convention, and factor its reading through
+   `LambdaKummerCupSpanReadout59`.
 3. Prove the independent comparison with the existing old wild reading.
 4. Separately, use Poitou--Tate exactness for the required global reflected
    lift.  Local duality does not fabricate that class.
