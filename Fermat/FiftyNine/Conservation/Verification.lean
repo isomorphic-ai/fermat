@@ -44,6 +44,7 @@ import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 import Fermat.FiftyNine.Conservation.VostokovLocalization59
 import Fermat.FiftyNine.Conservation.VostokovShapeAudit59
+import Fermat.FiftyNine.Conservation.IwasawaLocalization59
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
@@ -1623,6 +1624,26 @@ factorization theorems connect V1's exact residual to that total pairing. -/
   Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.nonempty_reflectedWildLocalizationAt59,
   Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.toReflectedWildLocalizationAt59
 
+/-! ### Tier-(c) 59/827 adapter -/
+
+#check Fermat.FiftyNine.Conservation.IwasawaLocalization59.CalibratedReductionAt59
+#check Fermat.FiftyNine.Conservation.IwasawaLocalization59.descend_eq_oldReading
+#check Fermat.FiftyNine.Conservation.IwasawaLocalization59.toReflectedWildKummerCoreAt59
+#check Fermat.FiftyNine.Conservation.IwasawaLocalization59.toReflectedWildLocalizationAt59
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IwasawaLocalization59.descend_eq_oldReading,
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.statewiseRepresentative_readback
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IwasawaLocalization59.descend_eq_oldReading,
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.transverseRepresentative_readback
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IwasawaLocalization59.descend_eq_oldReading,
+  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerClassAt_oldReflectedToQRelaxed827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IwasawaLocalization59.descend_eq_oldReading,
+  Fermat.Conservation.IwasawaTracePairing.Reduction.representative_eq_reading
+
 /--
 info: 'Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampReading827_eq' depends on axioms: [propext,
  Classical.choice,
@@ -2118,6 +2139,8 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.IwasawaTracePairing
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.VostokovShapeAudit59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.IwasawaLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
@@ -2132,6 +2155,8 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.Conservation.IwasawaTracePairing
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.VostokovShapeAudit59
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.IwasawaLocalization59
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
 #audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer
