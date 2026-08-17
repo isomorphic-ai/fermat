@@ -101,6 +101,18 @@ theorem lambdaIdeal59_ne_bot : lambdaIdeal59 K ≠ ⊥ := by
   rw [lambdaIdeal59, ne_eq, Ideal.span_singleton_eq_bot]
   exact (globalPrimitiveRoot59_isPrimitive K).zeta_sub_one_prime'.ne_zero
 
+/-- The lambda ideal is the (unique) cyclotomic prime above `59`; this
+records that the completion below is the wild 59-adic place, not merely an
+arbitrary finite completion. -/
+theorem lambdaIdeal59_liesOver :
+    (lambdaIdeal59 K).LiesOver (Ideal.span {(59 : ℤ)}) := by
+  letI : IsCyclotomicExtension {59 ^ (0 + 1)} ℚ K := by
+    simpa using (inferInstance : IsCyclotomicExtension {59} ℚ K)
+  have hroot :
+      IsPrimitiveRoot (globalPrimitiveRoot59 K) (59 ^ (0 + 1)) := by
+    simpa only [zero_add, pow_one] using globalPrimitiveRoot59_isPrimitive K
+  exact IsCyclotomicExtension.Rat.liesOver_span_zeta_sub_one 59 0 hroot
+
 /-- The actual height-one place `lambda = (zeta_59 - 1)`. -/
 def lambdaPlace59 : IsDedekindDomain.HeightOneSpectrum (𝓞 K) where
   asIdeal := lambdaIdeal59 K
