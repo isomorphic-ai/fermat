@@ -26,13 +26,14 @@
 - `CyclotomicSelmerAction59` constructs the common ambient cyclotomic action,
   transports places, proves stability of the full set above 827, restricts
   the action to strict and supported Selmer carriers, and proves their
-  inclusion intertwines.  Its only remaining Package-B arithmetic input is
-  the named proposition `CyclotomicValuationCovariance59`, spelling
-  `ord_v(sigma q) = ord_(sigma⁻¹ v)(q)` modulo 59.
+  inclusion intertwines.  The theorem `cyclotomicValuationCovariance59`
+  proves `ord_v(sigma q) = ord_(sigma⁻¹ v)(q)` modulo 59 from transport of
+  prime-ideal multiplicities.  Package B is therefore discharged for the
+  canonical actions, including the reflected strict-to-827 landing.
 - No localization or relation-(7a) premise is thereby claimed discharged.
   The actual continuous Kummer maps, normalized `H²` invariant and Hilbert
-  comparison, valuation covariance, independent old-reading calibration,
-  Poitou--Tate global reflected lift, lawfulness, gauge seating, kernel
+  comparison, independent old-reading calibration, Poitou--Tate global
+  reflected lift, lawfulness, gauge seating, kernel
   comparison, reciprocity, and normalized-fiber member remain distinct.
 
 ## 2026-08-17 — Vostokov C2/C3 result: tier-(c) is reduced, not inhabited

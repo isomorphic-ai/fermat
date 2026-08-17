@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-17
 **Repository:** `~/fermat`, branch `credit-flow`
-**Implementation checkpoint:** `160a598`
+**Implementation checkpoint:** `eda5109`
 **Audience:** the theory goblin deciding the next mathematical lemma, not the
 Lean engineer packaging it
 
@@ -36,11 +36,13 @@ The following parts are now kernel-checked:
   pairing directly; representative formulas are optional constructors or
   comparison charts.
 - `KummerTateLocalization59` feeds the cohomological pairing into the real
-  59-local consumer while retaining landing and calibration as separate
-  theorem inputs.
+  59-local consumer.  Its generic adapter retains landing and calibration as
+  separate theorem inputs; its canonical-action specialization derives the
+  landing and retains only calibration.
 - `CyclotomicSelmerAction59` constructs the common ambient cyclotomic action,
   its strict and 827-supported restrictions, and the intertwining inclusion,
-  conditional on one explicitly named valuation-covariance proposition.
+  proves height-one valuation covariance from ideal-multiplicity transport,
+  and derives the reflected landing with no supplied certificate.
 
 The remaining arithmetic is sharply typed and must not be conflated:
 
@@ -49,10 +51,8 @@ The remaining arithmetic is sharply typed and must not be conflated:
    left `mu_59` class to the trivial `F_59` coefficient line.
 2. Construct and normalize `H²(F, mu_59) -> F_59`, and prove its cup readout
    is the local Hilbert symbol with the fixed sign convention.
-3. Prove the height-one valuation covariance law used by the canonical
-   strict/827-supported actions.
-4. Prove the independent comparison with the existing old wild reading.
-5. Separately, use Poitou--Tate exactness for the required global reflected
+3. Prove the independent comparison with the existing old wild reading.
+4. Separately, use Poitou--Tate exactness for the required global reflected
    lift.  Local duality does not fabricate that class.
 
 The current `KummerTateCup` layer uses Mathlib's discrete low-degree group

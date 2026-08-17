@@ -24,7 +24,7 @@ separate and must not be collapsed into one provider:
 | Scalar local readout | LITERAL adapter / SEAM arithmetic | Composition with an actual `H² -> ZMod 59` map compiles; construction and normalization of the local invariant and Hilbert-symbol comparison remain open. |
 | Local Kummer maps | SEAM | Construct the continuous right `mu_59` Kummer map and the oriented left `F_59` map, including the chosen root-of-unity identification. |
 | 59 quotient consumer | LITERAL adapter | `ReflectedWildKummerCoreAt59` stores the quotient pairing directly; `KummerTateLocalization59` installs the cohomological assembly. |
-| Strict/827-supported actions | LITERAL conditional restriction / SEAM naturality | The common action, support stability, restrictions, and intertwining inclusion compile conditional on `CyclotomicValuationCovariance59`. |
+| Strict/827-supported actions | LITERAL | `cyclotomicValuationCovariance59` proves valuation naturality from ideal multiplicity transport; the common action, both restrictions, intertwining inclusion, and reflected landing are canonical. |
 | Old-reading calibration | SEAM theorem | Calibration remains independent; no reading is defined from the other. |
 | Global reflected class | SEAM | Poitou--Tate exactness must produce the required global relaxed lift; local duality alone does not. |
 
