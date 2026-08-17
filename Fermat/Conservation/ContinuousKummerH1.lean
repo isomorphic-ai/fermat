@@ -408,6 +408,70 @@ theorem continuousCocycle_crossed (a : Kˣ) (σ τ : AbsoluteGalois K) :
       σ • continuousCocycleValue n K a τ
   exact continuousCocycleValue_crossed n K a σ τ
 
+/-- The concrete continuous Kummer cocycle, bundled with its crossed law.
+
+This retains the complete roots-of-unity-valued Kummer state; it does not
+split the class into valuation, torsion, and logarithmic coordinates. -/
+def kummerCrossedHom (a : Kˣ) :
+    ContinuousCrossedHom (ZMod n) (AbsoluteGalois K)
+      (rootsTopRepresentation n K) :=
+  ⟨continuousCocycle n K a, continuousCocycle_crossed n K a⟩
+
+@[simp]
+theorem kummerCrossedHom_apply (a : Kˣ) (σ : AbsoluteGalois K) :
+    (kummerCrossedHom n K a).1 σ = continuousCocycle n K a σ :=
+  rfl
+
+/-- The cocycle of the unit representative `1` is principal.
+
+The witness is extracted from the already proved discrete Kummer
+coboundary theorem.  No private chosen root is exposed. -/
+theorem exists_principalWitness_one :
+    ∃ m : (rootsTopRepresentation n K).V,
+      ∀ σ : AbsoluteGalois K,
+        (kummerCrossedHom n K 1).1 σ =
+          ((rootsTopRepresentation n K).ρ σ).hom m - m := by
+  have hmem :
+      (⇑(LocalKummerH1.cocycle n K 1) :
+          AbsoluteGalois K → Additive (KummerRoots n K)) ∈
+        coboundaries₁ (LocalKummerH1.rootsRepresentation n K) :=
+    (H1π_eq_zero_iff (LocalKummerH1.cocycle n K 1)).1 <| by
+      simpa [LocalKummerH1.classOfUnit] using
+        LocalKummerH1.classOfUnit_one n K
+  obtain ⟨m, hm⟩ := isCoboundary₁_of_mem_coboundaries₁ _ hmem
+  refine ⟨m, ?_⟩
+  intro σ
+  exact (hm σ).symm
+
+/-- The failure of the chosen-root cocycle to preserve multiplication on
+the nose is a principal continuous crossed homomorphism.
+
+This extracts the witness from the public discrete multiplicativity proof;
+the private explicit multiplication defect therefore need not become part
+of the public API. -/
+theorem exists_principalWitness_mul_defect (a b : Kˣ) :
+    ∃ m : (rootsTopRepresentation n K).V,
+      ∀ σ : AbsoluteGalois K,
+        (kummerCrossedHom n K (a * b) -
+            (kummerCrossedHom n K a + kummerCrossedHom n K b)).1 σ =
+          ((rootsTopRepresentation n K).ρ σ).hom m - m := by
+  let cab := LocalKummerH1.cocycle n K (a * b)
+  let csum := LocalKummerH1.cocycle n K a +
+    LocalKummerH1.cocycle n K b
+  have heq : H1π (LocalKummerH1.rootsRepresentation n K) cab =
+      H1π (LocalKummerH1.rootsRepresentation n K) csum := by
+    simpa [cab, csum, LocalKummerH1.classOfUnit] using
+      LocalKummerH1.classOfUnit_mul n K a b
+  have hmem :
+      (⇑cab - ⇑csum :
+          AbsoluteGalois K → Additive (KummerRoots n K)) ∈
+        coboundaries₁ (LocalKummerH1.rootsRepresentation n K) :=
+    (H1π_eq_iff cab csum).1 heq
+  obtain ⟨m, hm⟩ := isCoboundary₁_of_mem_coboundaries₁ _ hmem
+  refine ⟨m, ?_⟩
+  intro σ
+  exact (hm σ).symm
+
 /-- Degree-one cochains in the homogeneous continuous Kummer complex. -/
 abbrev ContinuousKummerCochainsOne :=
   ((ContinuousCohomology.homogeneousCochains (ZMod n)
