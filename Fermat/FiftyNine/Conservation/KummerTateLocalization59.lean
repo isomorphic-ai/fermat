@@ -11,6 +11,7 @@ invariant construct the quotient pairing.  The empty-support landing and the
 independent calibration theorem remain visibly separate inputs.
 -/
 import Fermat.Conservation.CohomologicalKummerPairing
+import Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 import Fermat.FiftyNine.Conservation.VostokovLocalization59
 
 open scoped MonoidAlgebra nonZeroDivisors NumberField
@@ -26,6 +27,7 @@ open Fermat.Conservation.LinkingInterfaces
 open Fermat.Conservation.SelmerEigenspace
 open Fermat.Conservation.TameSymbol
 open Fermat.FiftyNine.Conservation.DetectorWitness827
+open Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 open Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 open Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 open Fermat.FiftyNine.Conservation.UlamReadout827
@@ -50,7 +52,7 @@ Kummer--Tate chain and pull it back along localization. -/
 def pairing
     (localization : K →+* F)
     (leftKummer : KummerClass 59 F →+
-      (Additive G →+ ZMod 59))
+      H1 (KummerTateCup.trivialLine (k := ZMod 59) (G := G)))
     (rightKummer : KummerClass 59 F →+ H1 A)
     (localInvariant : H2 A →ₗ[ZMod 59] ZMod 59) :
     WildKummerPairing.Pairing 59 K :=
@@ -60,13 +62,13 @@ def pairing
 theorem pairing_apply
     (localization : K →+* F)
     (leftKummer : KummerClass 59 F →+
-      (Additive G →+ ZMod 59))
+      H1 (KummerTateCup.trivialLine (k := ZMod 59) (G := G)))
     (rightKummer : KummerClass 59 F →+ H1 A)
     (localInvariant : H2 A →ₗ[ZMod 59] ZMod 59)
     (x y : KummerClass 59 K) :
     pairing A localization leftKummer rightKummer localInvariant x y =
       localInvariant
-        (KummerTateCup.orientedCupH1 A
+        (KummerTateCup.orientedCupH1Classes A
           (leftKummer (LocalKummerTransport.map 59 localization x))
           (rightKummer (LocalKummerTransport.map 59 localization y))) :=
   rfl
@@ -79,7 +81,7 @@ the strict carriers, but never defines either reading from the other. -/
 def toReflectedWildKummerCoreAt59
     (localization : K →+* F)
     (leftKummer : KummerClass 59 F →+
-      (Additive G →+ ZMod 59))
+      H1 (KummerTateCup.trivialLine (k := ZMod 59) (G := G)))
     (rightKummer : KummerClass 59 F →+ H1 A)
     (localInvariant : H2 A →ₗ[ZMod 59] ZMod 59)
     (landing : ReflectedEmptySupportLanding827 rho rhoQ omega chi)
@@ -98,7 +100,7 @@ def toReflectedWildKummerCoreAt59
 theorem toReflectedWildKummerCoreAt59_pairing_apply
     (localization : K →+* F)
     (leftKummer : KummerClass 59 F →+
-      (Additive G →+ ZMod 59))
+      H1 (KummerTateCup.trivialLine (k := ZMod 59) (G := G)))
     (rightKummer : KummerClass 59 F →+ H1 A)
     (localInvariant : H2 A →ₗ[ZMod 59] ZMod 59)
     (landing : ReflectedEmptySupportLanding827 rho rhoQ omega chi)
@@ -113,5 +115,40 @@ theorem toReflectedWildKummerCoreAt59_pairing_apply
       hcalibration).pairing x y =
         pairing A localization leftKummer rightKummer localInvariant x y :=
   rfl
+
+/-! ## Canonical-action specialization -/
+
+/-- With the actual cyclotomic actions, the strict-to-827-supported landing
+is no longer an input.  The cohomological arithmetic data and its independent
+old-reading calibration directly construct the real quotient-first core. -/
+def toCanonicalReflectedWildKummerCoreAt59
+    (localization : K →+* F)
+    (leftKummer : KummerClass 59 F →+
+      H1 (KummerTateCup.trivialLine (k := ZMod 59) (G := G)))
+    (rightKummer : KummerClass 59 F →+ H1 A)
+    (localInvariant : H2 A →ₗ[ZMod 59] ZMod 59)
+    (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
+    (distinguishedPlace : IsDedekindDomain.HeightOneSpectrum (𝓞 K))
+    (wild : OldWildInterface59
+      (cyclotomicStrictSelmerRepresentation59 K) omega chi
+      distinguishedPlace)
+    (hcalibration :
+      ∀ x : OldPrimal59 (cyclotomicStrictSelmerRepresentation59 K) chi,
+      ∀ y : OldReflectedDual59
+        (cyclotomicStrictSelmerRepresentation59 K) omega chi,
+        pairing A localization leftKummer rightKummer localInvariant
+            (toKummerClass x) (toKummerClass y) =
+          wild.reading x y) :
+    ReflectedWildKummerCoreAt59
+      (cyclotomicStrictSelmerRepresentation59 K)
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi distinguishedPlace wild :=
+  toReflectedWildKummerCoreAt59 A
+    (cyclotomicStrictSelmerRepresentation59 K)
+    (cyclotomicQRelaxedSelmerRepresentation827 K)
+    omega chi distinguishedPlace wild localization leftKummer rightKummer
+    localInvariant
+    (cyclotomicReflectedEmptySupportLanding827 K omega chi)
+    hcalibration
 
 end Fermat.FiftyNine.Conservation.KummerTateLocalization59
