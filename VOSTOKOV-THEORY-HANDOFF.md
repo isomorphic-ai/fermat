@@ -29,14 +29,18 @@ The following parts are now kernel-checked:
 - `KummerTateCup` proves the explicit low-degree cup cochain is a cocycle,
   proves right-coboundary independence, descends through Mathlib's actual
   `H¹` quotient, and bundles the result bilinearly.
-- `KummerTateReadout` composes cup product with an actual supplied linear
-  `H² -> k` invariant.
-- `CohomologicalKummerPairing` assembles two actual Kummer maps and that
-  invariant into `WildKummerPairing.Pairing`.
+- `KummerTateReadout` composes cup product with a supplied linear
+  `H² -> k` readout.  Calling that map the normalized local invariant still
+  requires the continuous comparison theorem below.
+- `CohomologicalKummerPairing` assembles two supplied Kummer homomorphisms and
+  a supplied linear readout into `WildKummerPairing.Pairing`; the genuine
+  discrete Kummer maps enter at `DiscreteKummerTatePairing` below.
 - `LocalKummerH1` constructs the discrete absolute-Galois Kummer map
   `Fˣ/(Fˣ)^n -> H¹(G_F, μ_n)`: chosen roots define the cocycles, and
-  explicit coboundaries prove both root-choice independence and
-  multiplicativity before descent through the power quotient.
+  an explicit multiplication-defect coboundary proves multiplicativity before
+  descent through the power quotient.  The file does not expose a separate
+  theorem comparing cocycles built from two arbitrary choices of the same
+  root.
 - `LocalKummerH1.continuous_cocycleValue` proves that this concrete cocycle is
   continuous for the Krull topology: every nonempty fiber is a coset of the
   chosen algebraic root's open stabilizer.  Thus continuity of the Kummer
@@ -93,17 +97,40 @@ cohomology.  It validates the algebraic cup/descent mechanism, but it is not
 yet a declaration of continuous local Galois cohomology.  That topology seam
 must remain visible.
 
-Dimension precision: the two local degree-one spaces are 60-dimensional
-perfect dual partners in the stated 59-adic situation.  Their direct sum has
-the canonical hyperbolic/symplectic form.  Calling either individual
-60-dimensional space symplectic requires an additional self-identification
-and alternating-form choice.
+Lean library boundary: the pinned
+`Mathlib/Algebra/Category/ContinuousCohomology/Basic`
+provides the abstract homogeneous continuous-cochain complex,
+`continuousCohomology`, and a degree-zero adapter.  It does not provide
+continuous `H¹`/`H²` aliases, an inhomogeneous-cocycle inlet, a continuous cup
+product, a normalized local invariant, or local
+reciprocity/Hilbert-symbol/Tate-duality theorems.  Those are real
+infrastructure tasks, not missing imports.
+
+Nor does the present adapter prove a filtration, perfect local Tate duality,
+or local `Delta`-equivariance of the cup-span readout.  The downstream
+`hash omega` adjoint law is currently derived formally from the already-seated
+character eigenspaces and bilinearity; it is not a substitute for an ambient
+local equivariance theorem.
+
+Dimension target, not a checked statement about the current discrete Lean
+types: the intended **continuous** local degree-one spaces are
+60-dimensional perfect dual partners in the stated 59-adic situation.  Their
+direct sum has the canonical hyperbolic/symplectic form.  Calling either
+individual 60-dimensional space symplectic requires an additional
+self-identification and alternating-form choice.  No finite-dimensionality or
+perfectness theorem for the repository's discrete `H¹` is asserted.
 
 The Iwasawa trace-product material below remains useful as a later coordinate
 comparison on the 58-dimensional analytic layer.  It is no longer the
 foundational object and must not erase the valuation or torsion directions.
 
 ## Historical tier-(c) short version
+
+Everything from this heading through the historical bottom line records the
+earlier Iwasawa tier-(c) work queue.  It is retained as provenance, but it is
+not the current frontier: the canonical actions are now constructed and the
+current local seam is the cup-span/continuous-invariant comparison described
+above.
 
 The Lean algebra is no longer the obstruction.
 
@@ -692,7 +719,12 @@ later independent seams: lawfulness, gauge seating,
 ker Lambda <= ker G, reciprocity, normalized-fiber member
 ```
 
-## 10. Verification status and relevant commits
+## 10. Historical verification snapshot and relevant commits
+
+This is the verification snapshot of the superseded tier-(c) route.  Its
+target list and job count predate `KummerCupSpanReadout`,
+`LocalCompletion59`, and `KummerCupSpanLocalization59`; they must not be read
+as current guard coverage for those later modules.
 
 The following standalone targets are green on Lean 4.31:
 
@@ -722,7 +754,7 @@ cc5ed25  Add term-level Vostokov shape audit
 bd3a92f  Reconcile the tier-c Vostokov frontier
 ```
 
-## Bottom line
+## Historical bottom line (superseded)
 
 The present gap is not “formalize all of Vostokov.” It is narrower:
 
@@ -732,3 +764,18 @@ The present gap is not “formalize all of Vostokov.” It is narrower:
 
 Once those two packages are supplied, the Lean route from them to the full
 wild localization is already written and checked.
+
+## Current bottom line
+
+The canonical strict/827-supported cyclotomic actions and their support
+inclusion are now constructed.  The local work queue is instead:
+
+> compare the continuous local Kummer cup with the retained discrete cup
+> span, construct and normalize the continuous local invariant and
+> cup--Hilbert-symbol comparison, factor that reading through
+> `LambdaKummerCupSpanReadout59`, and independently calibrate it against the
+> pre-existing old wild reading.
+
+Poitou--Tate production of the required global reflected lift remains a
+separate seam; neither local duality nor the cup-span adapter manufactures
+that class.
