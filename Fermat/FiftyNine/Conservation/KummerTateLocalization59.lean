@@ -6,9 +6,11 @@ Authors: Fabian Franz, Codex
 # Feed the cohomological Kummer--Tate pairing into the 59-local core
 
 This is the instance-layer adapter from the generic cohomological assembly to
-the real 59-local consumer.  Localization, both Kummer maps, and the local
-invariant construct the quotient pairing.  The empty-support landing and the
-independent calibration theorem remain visibly separate inputs.
+the real 59-local consumer.  Localization, both Kummer maps, and a supplied
+linear `H²` readout construct the quotient pairing.  Identifying that readout
+with the normalized continuous local invariant is not part of this adapter.
+The empty-support landing and independent calibration theorem remain visibly
+separate inputs.
 -/
 import Fermat.Conservation.DiscreteKummerTatePairing
 import Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
@@ -50,8 +52,8 @@ variable {K F G : Type}
   (distinguishedPlace : IsDedekindDomain.HeightOneSpectrum (𝓞 K))
   (wild : OldWildInterface59 rho omega chi distinguishedPlace)
 
-/-- Construct the actual quotient-level pairing produced by the local
-Kummer--Tate chain and pull it back along localization. -/
+/-- Construct the quotient-level pairing determined by the supplied local
+Kummer--Tate data and pull it back along localization. -/
 def pairing
     (localization : K →+* F)
     (leftKummer : KummerClass 59 F →+
@@ -83,8 +85,8 @@ global Kummer quotient over `K`.
 
 The primitive root constructs the left orientation, and both Kummer maps are
 the genuine maps from `LocalKummerH1`.  Thus the sole deep local input at this
-boundary is the linear invariant on `H²`; no Kummer map or pairing value is
-supplied independently. -/
+boundary is the linear readout on discrete `H²`; no Kummer map or individual
+pairing value is supplied independently. -/
 def discretePairing
     (localization : K →+* F)
     (zeta : F) (hzeta : IsPrimitiveRoot zeta 59)
@@ -223,9 +225,10 @@ theorem actualCompletionPairing_classOfUnit
 
 /-- Install the cohomological quotient pairing in the real 59-local core.
 
-The final argument is deliberately an independent theorem: it compares the
-canonical cohomological reading with the pre-existing old wild reading on
-the strict carriers, but never defines either reading from the other. -/
+The final argument is deliberately a separate theorem: it compares the
+cohomological pairing obtained from the supplied readout with the pre-existing
+old wild reading on the strict carriers, but this constructor never defines
+either reading from the other. -/
 def toReflectedWildKummerCoreAt59
     (localization : K →+* F)
     (leftKummer : KummerClass 59 F →+
@@ -303,9 +306,9 @@ def toCanonicalReflectedWildKummerCoreAt59
 
 Landing is derived from the common ambient cyclotomic action.  Apart from the
 structural localization map and the already-existing old interface, the
-visible arithmetic inputs are exactly a primitive root, an honest `H²`
-invariant, and an independent theorem calibrating the resulting pairing
-against the old reading. -/
+visible arithmetic inputs are exactly a primitive root, a supplied linear
+readout on discrete `H²`, and a separate theorem calibrating the resulting
+pairing against the old reading. -/
 def toCanonicalDiscreteReflectedWildKummerCoreAt59
     (localization : K →+* F)
     (zeta : F) (hzeta : IsPrimitiveRoot zeta 59)

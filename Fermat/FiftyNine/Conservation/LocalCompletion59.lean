@@ -101,9 +101,9 @@ theorem lambdaIdeal59_ne_bot : lambdaIdeal59 K ≠ ⊥ := by
   rw [lambdaIdeal59, ne_eq, Ideal.span_singleton_eq_bot]
   exact (globalPrimitiveRoot59_isPrimitive K).zeta_sub_one_prime'.ne_zero
 
-/-- The lambda ideal is the (unique) cyclotomic prime above `59`; this
-records that the completion below is the wild 59-adic place, not merely an
-arbitrary finite completion. -/
+/-- The lambda ideal lies over `59`; this records that the completion below is
+at the wild 59-adic place, not merely an arbitrary finite completion.  No
+uniqueness assertion is packaged in this theorem. -/
 theorem lambdaIdeal59_liesOver :
     (lambdaIdeal59 K).LiesOver (Ideal.span {(59 : ℤ)}) := by
   letI : IsCyclotomicExtension {59 ^ (0 + 1)} ℚ K := by
