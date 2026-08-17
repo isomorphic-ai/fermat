@@ -24,6 +24,23 @@ conservation proof.
   This predicts no unconditional relation (7a), no reciprocity theorem, no
   kernel erasure, and no fiber collapse.
 
+### Recorded outcome
+
+- The C1 coverage guess was falsified: both literal inputs are arbitrary
+  quotient classes at the current interface, and neither has a proved small
+  Artin--Hasse extension.  The normalized 827 fiber is moreover proved
+  outside the canonical strict range, without choosing a complement.
+- The tier-(b) guess was falsified twice: its hypotheses are not licensed by
+  the two literal representatives, and the declared core requires a total
+  pairing plus calibration on every old-carrier pair.  Tier (c) is the
+  cheapest unrefuted tier; its total trace-product algebra and exact
+  arithmetic-realization boundary now compile.  Tier (d) was not opened.
+- The session-inhabitation guess was not met.  The new tier-(c) adapter
+  derives the complete core and localization from an independently
+  calibrated total-coordinate reduction plus ambient action compatibility,
+  but neither arithmetic input is inhabited in the current tree.  Thus no
+  localization premise or downstream (7a) premise is reported discharged.
+
 ## 2026-08-13 — Vostokov wild-reading prediction
 
 - **Committed guess: the V1 coverage upgrade does not close.**  I expect the

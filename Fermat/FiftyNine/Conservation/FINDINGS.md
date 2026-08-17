@@ -1,5 +1,38 @@
 # N59 conservation findings
 
+## 2026-08-17 — Vostokov C2/C3 result: tier-(c) is reduced, not inhabited
+
+- `IwasawaTracePairing.TotalAugmentedCoordinates` now defines a genuine
+  total representative pairing by
+  `traceModP (leftCoordinate a * rightCoordinate b)`.  Both additivity laws
+  are proved from the coordinate maps and ring distributivity, and the
+  existing Kummer constructor descends it through both 59th-power
+  quotients.  No pairing value is stored independently of this definition.
+- `ArithmeticSpecification`, `Realizes`, and `Reduction` expose the exact
+  unprocessed tier-(c) arithmetic: a norm-coherent kappa-derivative
+  coordinate, a total valuation/torsion-augmented logarithmic coordinate,
+  the trace/reduction map, and an independent comparison with the target
+  reading.  Their present types record the algebraic signature and
+  comparison boundary; they do not prove norm coherence, construct the
+  augmentation, or identify the trace product with a Hilbert symbol.
+- At 59, `CalibratedReductionAt59` binds that generic reduction to the exact
+  C1 quotient representatives.  `descend_eq_oldReading` proves the required
+  quotient-level calibration from representative comparison and the two
+  readback receipts.  `toReflectedWildKummerCoreAt59` derives landing from
+  `EmptySupportActionCompatibility827`, and the direct localization
+  constructor then fires mechanically.
+- The two required inputs have no producer in the current cone: the
+  representations `rho` and `rhoQ` are arbitrary and no ambient action
+  compatibility is available; `wild` is arbitrary and no independent
+  Iwasawa/Hilbert comparison theorem identifies its reading.  Therefore the
+  strict core remains uninhabited, localization and carrier extension are
+  **not discharged**, and the committed session-inhabitation prediction is
+  not met.
+- Tier (c) remains the cheapest unrefuted tier.  This is an honest reduced
+  theorem boundary permitted by C2's infrastructure clause, not a tier-(d)
+  reduced-series deliverable and not permission to build one.  Relation
+  (7a), reciprocity, `ker G`, and the normalized fiber are unchanged.
+
 ## 2026-08-17 — Vostokov C2 tier-(c) audit: total coordinates must retain valuation and torsion
 
 - The available completed logarithm is a principal-unit instrument, not by
@@ -218,10 +251,10 @@
   carrier is the whole normalized affine fiber, and its W0 witness adapter
   is local to an explicitly supplied fiber member.
 - At the W1 audit, step 4 was the first irreducible arithmetic producer.
-  The later Vostokov entry above has now reduced it to the three fields of
-  `ReflectedWildKummerCoreAt59`: the canonical integral-group-algebra map and
-  its injectivity are derived from the landing field, and the descended
-  representative pairing supplies the q-relaxed reading.  Neither that core
+  The latest tier-(c) entry above has reduced its three-field core further:
+  ambient action compatibility derives the canonical map and landing, while
+  a realized total-coordinate reduction plus independent comparison derives
+  the pairing and quotient calibration.  Neither input, the resulting core,
   nor `ReflectedWildLocalizationAt59` has an unconditional inhabitant, and no
   extension from a complement is used.
 - The step-5 inclusion is likewise undecided, not disproved.  No tracked
