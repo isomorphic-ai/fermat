@@ -251,4 +251,25 @@ theorem orientedCupH1_apply_H1π
       H2π A (orientedCupCocycle A f g) :=
   orientedCupH1Right_H1π A f g
 
+/-- The trivial coefficient line used for the oriented left `H¹` input. -/
+abbrev trivialLine : Rep k G := Rep.trivial k G k
+
+/-- The same cup product with both inputs presented as genuine cohomology
+classes.  Mathlib canonically identifies `H¹` of the trivial coefficient line
+with additive characters of `G`; no choice or quotient representative is
+introduced here. -/
+noncomputable def orientedCupH1Classes :
+    H1 (trivialLine (k := k) (G := G)) →ₗ[k] H1 A →ₗ[k] H2 A :=
+  (orientedCupH1 A).comp
+    (H1IsoOfIsTrivial (trivialLine (k := k) (G := G))).hom.hom
+
+@[simp]
+theorem orientedCupH1Classes_apply
+    (left : H1 (trivialLine (k := k) (G := G))) (right : H1 A) :
+    orientedCupH1Classes A left right =
+      orientedCupH1 A
+        ((H1IsoOfIsTrivial (trivialLine (k := k) (G := G))).hom left)
+        right :=
+  rfl
+
 end Fermat.Conservation.KummerTateCup

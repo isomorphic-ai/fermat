@@ -34,12 +34,13 @@ variable (A : Rep (ZMod p) G)
 cup product, and normalized local invariant. -/
 def localPairing
     (leftKummer : KummerClass p F →+
-      (Additive G →+ ZMod p))
+      H1 (KummerTateCup.trivialLine (k := ZMod p) (G := G)))
     (rightKummer : KummerClass p F →+ H1 A)
     (localInvariant : H2 A →ₗ[ZMod p] ZMod p) :
     WildKummerPairing.Pairing p F where
   toFun x :=
-    (orientedReadout A localInvariant (leftKummer x)).toAddMonoidHom.comp
+    (orientedReadoutClasses A localInvariant
+      (leftKummer x)).toAddMonoidHom.comp
       rightKummer
   map_zero' := by
     ext y
@@ -51,13 +52,14 @@ def localPairing
 @[simp]
 theorem localPairing_apply
     (leftKummer : KummerClass p F →+
-      (Additive G →+ ZMod p))
+      H1 (KummerTateCup.trivialLine (k := ZMod p) (G := G)))
     (rightKummer : KummerClass p F →+ H1 A)
     (localInvariant : H2 A →ₗ[ZMod p] ZMod p)
     (x y : KummerClass p F) :
     localPairing A leftKummer rightKummer localInvariant x y =
       localInvariant
-        (KummerTateCup.orientedCupH1 A (leftKummer x) (rightKummer y)) :=
+        (KummerTateCup.orientedCupH1Classes A
+          (leftKummer x) (rightKummer y)) :=
   rfl
 
 /-- Pull the cohomologically assembled local pairing back to global Kummer
@@ -65,7 +67,7 @@ classes along a field map. -/
 def globalPairing
     (localization : K →+* F)
     (leftKummer : KummerClass p F →+
-      (Additive G →+ ZMod p))
+      H1 (KummerTateCup.trivialLine (k := ZMod p) (G := G)))
     (rightKummer : KummerClass p F →+ H1 A)
     (localInvariant : H2 A →ₗ[ZMod p] ZMod p) :
     WildKummerPairing.Pairing p K :=
@@ -76,13 +78,13 @@ def globalPairing
 theorem globalPairing_apply
     (localization : K →+* F)
     (leftKummer : KummerClass p F →+
-      (Additive G →+ ZMod p))
+      H1 (KummerTateCup.trivialLine (k := ZMod p) (G := G)))
     (rightKummer : KummerClass p F →+ H1 A)
     (localInvariant : H2 A →ₗ[ZMod p] ZMod p)
     (x y : KummerClass p K) :
     globalPairing A localization leftKummer rightKummer localInvariant x y =
       localInvariant
-        (KummerTateCup.orientedCupH1 A
+        (KummerTateCup.orientedCupH1Classes A
           (leftKummer (LocalKummerTransport.map p localization x))
           (rightKummer (LocalKummerTransport.map p localization y))) :=
   rfl
@@ -91,7 +93,7 @@ theorem globalPairing_apply
 theorem globalPairing_classOfUnit
     (localization : K →+* F)
     (leftKummer : KummerClass p F →+
-      (Additive G →+ ZMod p))
+      H1 (KummerTateCup.trivialLine (k := ZMod p) (G := G)))
     (rightKummer : KummerClass p F →+ H1 A)
     (localInvariant : H2 A →ₗ[ZMod p] ZMod p)
     (a b : Kˣ) :

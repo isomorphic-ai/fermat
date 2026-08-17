@@ -107,4 +107,23 @@ theorem orientedReadout_postcomp
       post (orientedReadout A localInvariant f x) :=
   rfl
 
+/-- The scalar readout with both probe and meter presented as genuine `H¹`
+classes.  The left trivial-coefficient class is converted through Mathlib's
+canonical `H¹ ≅ Hom` isomorphism before applying the oriented cup product. -/
+def orientedReadoutClasses (localInvariant : H2 A →ₗ[k] k) :
+    H1 (KummerTateCup.trivialLine (k := k) (G := G)) →ₗ[k]
+      H1 A →ₗ[k] k :=
+  (orientedReadout A localInvariant).comp
+    (H1IsoOfIsTrivial
+      (KummerTateCup.trivialLine (k := k) (G := G))).hom.hom
+
+@[simp]
+theorem orientedReadoutClasses_apply
+    (localInvariant : H2 A →ₗ[k] k)
+    (left : H1 (KummerTateCup.trivialLine (k := k) (G := G)))
+    (right : H1 A) :
+    orientedReadoutClasses A localInvariant left right =
+      localInvariant (KummerTateCup.orientedCupH1Classes A left right) :=
+  rfl
+
 end Fermat.Conservation.KummerTateReadout
