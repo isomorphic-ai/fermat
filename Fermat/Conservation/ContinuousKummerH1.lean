@@ -223,6 +223,94 @@ def homogeneousOneKernelLinear :
     apply Subtype.ext
     exact (homogeneousOneLinear R G A).map_smul r c
 
+/-! ## Principal crossed homomorphisms are homogeneous boundaries -/
+
+/-- If a continuous crossed homomorphism is pointwise principal, adding its
+principal witness produces the corresponding continuous homogeneous
+zero-cochain.  In particular, continuity of the orbit map is derived from
+the already-continuous crossed homomorphism rather than assumed separately. -/
+def principalZeroCochain
+    (c : ContinuousCrossedHom R G A) (m : A.V)
+    (hc : ∀ g, c.1 g = (A.ρ g).hom m - m) :
+    ((ContinuousCohomology.homogeneousCochains R G).obj A).X 0 := by
+  let f : C(G, A.V) := c.1 + ContinuousMap.const G m
+  refine ⟨f, ?_⟩
+  intro k
+  change ((ContinuousCohomology.Iobj (R := R) (G := G) A).ρ k).hom f = f
+  apply ContinuousMap.ext
+  intro g
+  change (A.ρ k).hom (f (k⁻¹ * g)) = f g
+  have hf (x : G) : f x = (A.ρ x).hom m := by
+    change c.1 x + m = (A.ρ x).hom m
+    rw [hc]
+    abel
+  rw [hf, hf, ← ConcreteCategory.comp_apply]
+  change (ConcreteCategory.hom (A.ρ k * A.ρ (k⁻¹ * g))) m =
+    (A.ρ g).hom m
+  rw [← A.ρ.map_mul]
+  simp
+
+set_option backward.isDefEq.respectTransparency false in
+@[simp]
+theorem principalZeroCochain_apply
+    (c : ContinuousCrossedHom R G A) (m : A.V)
+    (hc : ∀ g, c.1 g = (A.ρ g).hom m - m) (g : G) :
+    DFunLike.coe (F := C(G, _))
+      (principalZeroCochain R G A c m hc).1 g = c.1 g + m := by
+  change c.1 g + m = c.1 g + m
+  rfl
+
+set_option backward.isDefEq.respectTransparency false in
+/-- Readback of Mathlib's degree-zero homogeneous differential.  The sign
+convention is `(d⁰ f)(g,h) = f(h) - f(g)`. -/
+theorem homogeneousDifferentialZero_apply
+    (f : ((ContinuousCohomology.homogeneousCochains R G).obj A).X 0)
+    (g h : G) :
+    DFunLike.coe (F := C(G, _))
+      (DFunLike.coe (F := C(G, _))
+        ((((ContinuousCohomology.homogeneousCochains R G).obj A).d 0 1).hom f).1 g) h =
+      DFunLike.coe (F := C(G, _)) f.1 h -
+        DFunLike.coe (F := C(G, _)) f.1 g :=
+  rfl
+
+set_option backward.isDefEq.respectTransparency false in
+/-- Pointwise readback that the homogeneous cochain attached to a principal
+crossed homomorphism is exactly the positive-sign degree-zero boundary. -/
+theorem homogeneousOneCochain_eq_d_principalZeroCochain_apply
+    (c : ContinuousCrossedHom R G A) (m : A.V)
+    (hc : ∀ g, c.1 g = (A.ρ g).hom m - m) (g h : G) :
+    DFunLike.coe (F := C(G, _))
+      (DFunLike.coe (F := C(G, _))
+        (homogeneousOneCochain A c.1 c.2).1 g) h =
+    DFunLike.coe (F := C(G, _))
+      (DFunLike.coe (F := C(G, _))
+        ((((ContinuousCohomology.homogeneousCochains R G).obj A).d 0 1).hom
+          (principalZeroCochain R G A c m hc)).1 g) h := by
+  change c.1 h - c.1 g =
+    DFunLike.coe (F := C(G, _))
+      (DFunLike.coe (F := C(G, _))
+        ((((ContinuousCohomology.homogeneousCochains R G).obj A).d 0 1).hom
+          (principalZeroCochain R G A c m hc)).1 g) h
+  rw [homogeneousDifferentialZero_apply, principalZeroCochain_apply,
+    principalZeroCochain_apply]
+  abel
+
+/-- A principal continuous crossed homomorphism homogenizes to an actual
+degree-zero boundary, with no sign correction. -/
+theorem homogeneousOneCochain_eq_d_principalZeroCochain
+    (c : ContinuousCrossedHom R G A) (m : A.V)
+    (hc : ∀ g, c.1 g = (A.ρ g).hom m - m) :
+    @Eq (((ContinuousCohomology.homogeneousCochains R G).obj A).X 1)
+      (homogeneousOneCochain A c.1 c.2)
+      (((((ContinuousCohomology.homogeneousCochains R G).obj A).d 0 1).hom
+        (principalZeroCochain R G A c m hc))) := by
+  apply Subtype.ext
+  apply ContinuousMap.ext
+  intro g
+  apply ContinuousMap.ext
+  intro h
+  exact homogeneousOneCochain_eq_d_principalZeroCochain_apply R G A c m hc g h
+
 end ContinuousCrossedHom
 
 end CrossedHomLinear
