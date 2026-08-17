@@ -22,6 +22,14 @@ import Fermat.Conservation.Transfer
 import Fermat.Conservation.ExteriorTransfer
 import Fermat.Conservation.WildKummerPairing
 import Fermat.Conservation.IwasawaTracePairing
+import Fermat.Conservation.KummerTateCup
+import Fermat.Conservation.KummerTateReadout
+import Fermat.Conservation.LocalKummerH1
+import Fermat.Conservation.KummerOrientation
+import Fermat.Conservation.DiscreteKummerTatePairing
+import Fermat.Conservation.KummerCupSpanReadout
+import Fermat.Conservation.LocalKummerTransport
+import Fermat.Conservation.CohomologicalKummerPairing
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 import Fermat.FiftyNine.Conservation.BoundedSinnott
@@ -42,9 +50,13 @@ import Fermat.FiftyNine.Conservation.UlamTypeFreeze
 import Fermat.FiftyNine.Conservation.UlamReadout827
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
+import Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
+import Fermat.FiftyNine.Conservation.LocalCompletion59
 import Fermat.FiftyNine.Conservation.VostokovLocalization59
 import Fermat.FiftyNine.Conservation.VostokovShapeAudit59
 import Fermat.FiftyNine.Conservation.IwasawaLocalization59
+import Fermat.FiftyNine.Conservation.KummerTateLocalization59
+import Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
@@ -1435,15 +1447,21 @@ factorization theorems connect V1's exact residual to that total pairing. -/
 #check Fermat.Conservation.WildKummerPairing.classOfUnit_apply
 #check Fermat.Conservation.WildKummerPairing.Pairing.onRepresentatives
 #check Fermat.Conservation.WildKummerPairing.Pairing.onRepresentatives_apply
+#check Fermat.Conservation.WildKummerPairing.classOfUnit_surjective
 #check Fermat.Conservation.WildKummerPairing.IsPPowerSilent
 #check Fermat.Conservation.WildKummerPairing.isPPowerSilent
 #check Fermat.Conservation.WildKummerPairing.IsKummerDescent
 #check Fermat.Conservation.WildKummerPairing.RepresentativePairing.descend
 #check Fermat.Conservation.WildKummerPairing.RepresentativePairing.descend_classOfUnit_classOfUnit
 #check Fermat.Conservation.WildKummerPairing.RepresentativePairing.isKummerDescent_descend
+#check Fermat.Conservation.WildKummerPairing.Pairing.descend_onRepresentatives
+#check Fermat.Conservation.WildKummerPairing.Pairing.descend_onRepresentatives_apply
 #check Fermat.Conservation.WildKummerPairing.Core
 #check Fermat.Conservation.WildKummerPairing.Core.ofRepresentative
 #check Fermat.Conservation.WildKummerPairing.Core.ofRepresentative_pairing_apply
+#check Fermat.Conservation.WildKummerPairing.Core.ofPairing
+#check Fermat.Conservation.WildKummerPairing.Core.ofPairing_pairing_apply
+#check Fermat.Conservation.WildKummerPairing.Core.ofPairing_representative_apply
 #check Fermat.Conservation.WildKummerPairing.Core.pairing_classOfUnit_classOfUnit
 #check Fermat.Conservation.WildKummerPairing.IsGaloisEquivariant
 #check Fermat.Conservation.WildKummerPairing.GaloisData
@@ -1466,14 +1484,330 @@ factorization theorems connect V1's exact residual to that total pairing. -/
   Fermat.Conservation.WildKummerPairing.RepresentativePairing.isKummerDescent_descend,
   Fermat.Conservation.WildKummerPairing.RepresentativePairing.descend_classOfUnit_classOfUnit
 #guard_depends_on
+  Fermat.Conservation.WildKummerPairing.Pairing.descend_onRepresentatives,
+  Fermat.Conservation.WildKummerPairing.classOfUnit_surjective
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.Pairing.descend_onRepresentatives_apply,
+  Fermat.Conservation.WildKummerPairing.Pairing.descend_onRepresentatives
+#guard_depends_on
   Fermat.Conservation.WildKummerPairing.Core.ofRepresentative_pairing_apply,
   Fermat.Conservation.WildKummerPairing.Core.ofRepresentative
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.Core.ofPairing_pairing_apply,
+  Fermat.Conservation.WildKummerPairing.Core.ofPairing
+#guard_depends_on
+  Fermat.Conservation.WildKummerPairing.Core.ofPairing_representative_apply,
+  Fermat.Conservation.WildKummerPairing.Core.ofPairing
 #guard_depends_on
   Fermat.Conservation.WildKummerPairing.Core.pairing_classOfUnit_classOfUnit,
   Fermat.Conservation.WildKummerPairing.Core.descent
 #guard_depends_on
   Fermat.Conservation.WildKummerPairing.GaloisData.action_adjoint,
   Fermat.Conservation.WildKummerPairing.GaloisData.equivariant
+
+/-! ### Discrete Kummer `H¹` and primitive-root orientation
+
+The classical chosen-root cocycle now gives an honest map from the Kummer
+quotient to discrete absolute-Galois `H¹`.  A supplied primitive root then
+orients the roots-of-unity representation into the trivial coefficient line.
+These checks deliberately make no discrete-to-continuous comparison claim. -/
+
+#check Fermat.Conservation.LocalKummerH1.AbsoluteGalois
+#check Fermat.Conservation.LocalKummerH1.KummerRoots
+#check Fermat.Conservation.LocalKummerH1.nsmul_kummerRoots_eq_zero
+#check Fermat.Conservation.LocalKummerH1.rootsRepresentation
+#check Fermat.Conservation.LocalKummerH1.DiscreteKummerH1
+#check Fermat.Conservation.LocalKummerH1.cocycle
+#check Fermat.Conservation.LocalKummerH1.cocycle_apply
+#check Fermat.Conservation.LocalKummerH1.continuous_cocycleValue
+#check Fermat.Conservation.LocalKummerH1.classOfUnit
+#check Fermat.Conservation.LocalKummerH1.classOfUnit_one
+#check Fermat.Conservation.LocalKummerH1.classOfUnit_mul
+#check Fermat.Conservation.LocalKummerH1.representativeMap
+#check Fermat.Conservation.LocalKummerH1.nsmul_discreteKummerH1_eq_zero
+#check Fermat.Conservation.LocalKummerH1.map
+#check Fermat.Conservation.LocalKummerH1.map_classOfUnit
+
+#guard_depends_on
+  Fermat.Conservation.LocalKummerH1.representativeMap,
+  Fermat.Conservation.LocalKummerH1.classOfUnit_one
+#guard_depends_on
+  Fermat.Conservation.LocalKummerH1.continuous_cocycleValue,
+  continuous_discrete_rng
+#guard_depends_on
+  Fermat.Conservation.LocalKummerH1.continuous_cocycleValue,
+  stabilizer_isOpen_of_isIntegral
+#guard_depends_on
+  Fermat.Conservation.LocalKummerH1.representativeMap,
+  Fermat.Conservation.LocalKummerH1.classOfUnit_mul
+#guard_depends_on
+  Fermat.Conservation.LocalKummerH1.map,
+  Fermat.Conservation.LocalKummerH1.representativeMap
+#guard_depends_on
+  Fermat.Conservation.LocalKummerH1.map,
+  Fermat.Conservation.LocalKummerH1.nsmul_discreteKummerH1_eq_zero
+#guard_depends_on
+  Fermat.Conservation.LocalKummerH1.map_classOfUnit,
+  Fermat.Conservation.LocalKummerH1.map
+
+#check Fermat.Conservation.KummerOrientation.primitiveUnit
+#check Fermat.Conservation.KummerOrientation.algebraicPrimitiveUnit
+#check Fermat.Conservation.KummerOrientation.algebraicPrimitiveUnit_isPrimitive
+#check Fermat.Conservation.KummerOrientation.rootsEquivZPowers
+#check Fermat.Conservation.KummerOrientation.coordinateAddEquiv
+#check Fermat.Conservation.KummerOrientation.coordinateLinearEquiv
+#check Fermat.Conservation.KummerOrientation.absoluteGalois_smul_root_eq
+#check Fermat.Conservation.KummerOrientation.rootsRepresentationEquivTrivial
+#check Fermat.Conservation.KummerOrientation.orientH1
+#check Fermat.Conservation.KummerOrientation.orientH1_H1pi
+#check Fermat.Conservation.KummerOrientation.orientH2
+#check Fermat.Conservation.KummerOrientation.orientH2_H2pi
+#check Fermat.Conservation.KummerOrientation.leftKummerMap
+#check Fermat.Conservation.KummerOrientation.leftKummerMap_classOfUnit
+
+#guard_depends_on
+  Fermat.Conservation.KummerOrientation.coordinateLinearEquiv,
+  Fermat.Conservation.KummerOrientation.coordinateAddEquiv
+#guard_depends_on
+  Fermat.Conservation.KummerOrientation.rootsRepresentationEquivTrivial,
+  Fermat.Conservation.KummerOrientation.coordinateLinearEquiv
+#guard_depends_on
+  Fermat.Conservation.KummerOrientation.rootsRepresentationEquivTrivial,
+  Fermat.Conservation.KummerOrientation.absoluteGalois_smul_root_eq
+#guard_depends_on
+  Fermat.Conservation.KummerOrientation.orientH1,
+  Fermat.Conservation.KummerOrientation.rootsRepresentationEquivTrivial
+#guard_depends_on
+  Fermat.Conservation.KummerOrientation.orientH1_H1pi,
+  groupCohomology.H1π_comp_map_apply
+#guard_depends_on
+  Fermat.Conservation.KummerOrientation.orientH2,
+  Fermat.Conservation.KummerOrientation.rootsRepresentationEquivTrivial
+#guard_depends_on
+  Fermat.Conservation.KummerOrientation.orientH2_H2pi,
+  groupCohomology.H2π_comp_map_apply
+#guard_depends_on
+  Fermat.Conservation.KummerOrientation.leftKummerMap,
+  Fermat.Conservation.LocalKummerH1.map
+#guard_depends_on
+  Fermat.Conservation.KummerOrientation.leftKummerMap,
+  Fermat.Conservation.KummerOrientation.orientH1
+
+/-! The discrete assembly now closes without supplied Kummer maps: the
+chosen primitive root orients the genuine left class, the genuine right
+class retains its roots-of-unity coefficients, and only the linear `H²`
+invariant remains an arithmetic input. -/
+
+#check Fermat.Conservation.DiscreteKummerTatePairing.localPairing
+#check Fermat.Conservation.DiscreteKummerTatePairing.localPairing_apply
+#check Fermat.Conservation.DiscreteKummerTatePairing.representativePairing
+#check Fermat.Conservation.DiscreteKummerTatePairing.representativePairing_apply
+#check Fermat.Conservation.DiscreteKummerTatePairing.representativePairing_ofMul
+
+#guard_depends_on
+  Fermat.Conservation.DiscreteKummerTatePairing.localPairing,
+  Fermat.Conservation.CohomologicalKummerPairing.localPairing
+#guard_depends_on
+  Fermat.Conservation.DiscreteKummerTatePairing.localPairing,
+  Fermat.Conservation.KummerOrientation.leftKummerMap
+#guard_depends_on
+  Fermat.Conservation.DiscreteKummerTatePairing.localPairing,
+  Fermat.Conservation.LocalKummerH1.map
+#guard_depends_on
+  Fermat.Conservation.DiscreteKummerTatePairing.localPairing,
+  Fermat.Conservation.KummerTateReadout.orientedReadoutClasses
+#guard_depends_on
+  Fermat.Conservation.DiscreteKummerTatePairing.representativePairing,
+  Fermat.Conservation.WildKummerPairing.Pairing.onRepresentatives
+#guard_depends_on
+  Fermat.Conservation.DiscreteKummerTatePairing.representativePairing_ofMul,
+  Fermat.Conservation.KummerOrientation.orientH1
+#guard_depends_on
+  Fermat.Conservation.DiscreteKummerTatePairing.representativePairing_ofMul,
+  Fermat.Conservation.LocalKummerH1.classOfUnit
+
+/-! ### Oriented low-degree Kummer--Tate construction
+
+These checks cover the concrete cochain cup product, its descent through
+`H¹`, scalar readout through a supplied local invariant, functorial Kummer
+transport, and the resulting quotient-level pairing.  They do not claim an
+arithmetic construction of either Kummer map or of the local invariant. -/
+
+#check Fermat.Conservation.KummerTateCup.orientedCupCochain
+#check Fermat.Conservation.KummerTateCup.orientedCupCochain_mem_cocycles₂
+#check Fermat.Conservation.KummerTateCup.orientedCupCocycle
+#check Fermat.Conservation.KummerTateCup.orientedCupCocycle_apply
+#check Fermat.Conservation.KummerTateCup.orientedCupCocyclesRight
+#check Fermat.Conservation.KummerTateCup.orientedCupCoboundaryPrimitive
+#check Fermat.Conservation.KummerTateCup.orientedCupCochain_d₀₁
+#check Fermat.Conservation.KummerTateCup.orientedCupCocycle_mem_coboundaries₂_of_mem_coboundaries₁
+#check Fermat.Conservation.KummerTateCup.orientedCupToH2
+#check Fermat.Conservation.KummerTateCup.orientedCupToH2_eq_zero_of_mem_coboundaries₁
+#check Fermat.Conservation.KummerTateCup.ker_H1π_le_ker_orientedCupToH2
+#check Fermat.Conservation.KummerTateCup.H1π_hom_surjective
+#check Fermat.Conservation.KummerTateCup.orientedCupH1Right
+#check Fermat.Conservation.KummerTateCup.orientedCupH1Right_H1π
+#check Fermat.Conservation.KummerTateCup.orientedCupH1
+#check Fermat.Conservation.KummerTateCup.orientedCupH1_apply_H1π
+#check Fermat.Conservation.KummerTateCup.trivialLine
+#check Fermat.Conservation.KummerTateCup.orientedCupH1Classes
+#check Fermat.Conservation.KummerTateCup.orientedCupH1Classes_apply
+
+#guard_depends_on
+  Fermat.Conservation.KummerTateCup.orientedCupCocycle,
+  Fermat.Conservation.KummerTateCup.orientedCupCochain_mem_cocycles₂
+#guard_depends_on
+  Fermat.Conservation.KummerTateCup.orientedCupCocycle_mem_coboundaries₂_of_mem_coboundaries₁,
+  Fermat.Conservation.KummerTateCup.orientedCupCochain_d₀₁
+#guard_depends_on
+  Fermat.Conservation.KummerTateCup.orientedCupToH2_eq_zero_of_mem_coboundaries₁,
+  Fermat.Conservation.KummerTateCup.orientedCupCocycle_mem_coboundaries₂_of_mem_coboundaries₁
+#guard_depends_on
+  Fermat.Conservation.KummerTateCup.ker_H1π_le_ker_orientedCupToH2,
+  Fermat.Conservation.KummerTateCup.orientedCupToH2_eq_zero_of_mem_coboundaries₁
+#guard_depends_on
+  Fermat.Conservation.KummerTateCup.orientedCupH1Right,
+  Fermat.Conservation.KummerTateCup.ker_H1π_le_ker_orientedCupToH2
+#guard_depends_on
+  Fermat.Conservation.KummerTateCup.orientedCupH1Right,
+  Fermat.Conservation.KummerTateCup.H1π_hom_surjective
+#guard_depends_on
+  Fermat.Conservation.KummerTateCup.orientedCupH1_apply_H1π,
+  Fermat.Conservation.KummerTateCup.orientedCupH1Right_H1π
+#guard_depends_on
+  Fermat.Conservation.KummerTateCup.orientedCupH1Classes,
+  Fermat.Conservation.KummerTateCup.orientedCupH1
+#guard_depends_on
+  Fermat.Conservation.KummerTateCup.orientedCupH1Classes_apply,
+  Fermat.Conservation.KummerTateCup.orientedCupH1Classes
+
+#check Fermat.Conservation.KummerTateReadout.orientedReadoutRight
+#check Fermat.Conservation.KummerTateReadout.orientedReadoutRight_apply
+#check Fermat.Conservation.KummerTateReadout.orientedReadout
+#check Fermat.Conservation.KummerTateReadout.orientedReadout_apply
+#check Fermat.Conservation.KummerTateReadout.orientedReadout_H1π
+#check Fermat.Conservation.KummerTateReadout.orientedReadout_zero_invariant
+#check Fermat.Conservation.KummerTateReadout.orientedReadout_add_invariant
+#check Fermat.Conservation.KummerTateReadout.orientedReadout_smul_invariant
+#check Fermat.Conservation.KummerTateReadout.orientedReadout_postcomp
+#check Fermat.Conservation.KummerTateReadout.orientedReadoutClasses
+#check Fermat.Conservation.KummerTateReadout.orientedReadoutClasses_apply
+
+#guard_depends_on
+  Fermat.Conservation.KummerTateReadout.orientedReadout,
+  Fermat.Conservation.KummerTateCup.orientedCupH1
+#guard_depends_on
+  Fermat.Conservation.KummerTateReadout.orientedReadout_H1π,
+  Fermat.Conservation.KummerTateCup.orientedCupH1_apply_H1π
+#guard_depends_on
+  Fermat.Conservation.KummerTateReadout.orientedReadoutClasses,
+  Fermat.Conservation.KummerTateReadout.orientedReadout
+-- `orientedReadoutClasses_apply` is proved by `rfl`; its implementation body is
+-- only reflexivity, while the named cup constructor occurs in its type.  Since
+-- dependency guards intentionally ignore declaration types, the signature is
+-- audited by the `#check` above rather than by a spurious value-dependency.
+
+#check Fermat.Conservation.LocalKummerTransport.unitMap
+#check Fermat.Conservation.LocalKummerTransport.unitMap_apply
+#check Fermat.Conservation.LocalKummerTransport.unitMap_powerSubgroup_le
+#check Fermat.Conservation.LocalKummerTransport.mapMul
+#check Fermat.Conservation.LocalKummerTransport.mapMul_mk
+#check Fermat.Conservation.LocalKummerTransport.map
+#check Fermat.Conservation.LocalKummerTransport.map_classOfUnit
+#check Fermat.Conservation.LocalKummerTransport.map_id
+#check Fermat.Conservation.LocalKummerTransport.map_comp
+#check Fermat.Conservation.LocalKummerTransport.Pairing.pullback
+#check Fermat.Conservation.LocalKummerTransport.Pairing.pullback_apply
+#check Fermat.Conservation.LocalKummerTransport.Pairing.pullback_classOfUnit
+#check Fermat.Conservation.LocalKummerTransport.Pairing.pullback_id
+#check Fermat.Conservation.LocalKummerTransport.Pairing.pullback_comp
+
+#guard_depends_on
+  Fermat.Conservation.LocalKummerTransport.mapMul,
+  Fermat.Conservation.LocalKummerTransport.unitMap_powerSubgroup_le
+#guard_depends_on
+  Fermat.Conservation.LocalKummerTransport.map,
+  Fermat.Conservation.LocalKummerTransport.mapMul
+#guard_depends_on
+  Fermat.Conservation.LocalKummerTransport.map_comp,
+  Fermat.Conservation.LocalKummerTransport.map
+#guard_depends_on
+  Fermat.Conservation.LocalKummerTransport.Pairing.pullback,
+  Fermat.Conservation.LocalKummerTransport.map
+#guard_depends_on
+  Fermat.Conservation.LocalKummerTransport.Pairing.pullback_comp,
+  Fermat.Conservation.LocalKummerTransport.map_comp
+
+#check Fermat.Conservation.CohomologicalKummerPairing.localPairing
+#check Fermat.Conservation.CohomologicalKummerPairing.localPairing_apply
+#check Fermat.Conservation.CohomologicalKummerPairing.globalPairing
+#check Fermat.Conservation.CohomologicalKummerPairing.globalPairing_apply
+#check Fermat.Conservation.CohomologicalKummerPairing.globalPairing_classOfUnit
+
+#guard_depends_on
+  Fermat.Conservation.CohomologicalKummerPairing.localPairing,
+  Fermat.Conservation.KummerTateReadout.orientedReadoutClasses
+#guard_depends_on
+  Fermat.Conservation.CohomologicalKummerPairing.globalPairing,
+  Fermat.Conservation.LocalKummerTransport.Pairing.pullback
+-- `globalPairing_apply` is likewise a definitional (`rfl`) readback.  The
+-- constructor dependency is guarded on `globalPairing`; its expanded formula
+-- is checked above without pretending that `rfl` has a value dependency on a
+-- constant appearing only in the theorem statement.
+
+/-! ### Readout restricted to the actual Kummer cup span
+
+The scalar domain is now narrowed from all discrete `H²` to the submodule
+generated by classes actually produced by the two Kummer maps.  This closes
+the algebraic pairing constructor without assigning values to unrelated or
+possibly discontinuous cohomology classes.  It does not identify the span
+readout with the normalized continuous local invariant. -/
+
+#check Fermat.Conservation.KummerCupSpanReadout.cupClass
+#check Fermat.Conservation.KummerCupSpanReadout.cupGenerators
+#check Fermat.Conservation.KummerCupSpanReadout.cupSpan
+#check Fermat.Conservation.KummerCupSpanReadout.cupClass_mem_cupSpan
+#check Fermat.Conservation.KummerCupSpanReadout.cupInSpan
+#check Fermat.Conservation.KummerCupSpanReadout.cupInSpan_coe
+#check Fermat.Conservation.KummerCupSpanReadout.cupInSpan_zero_left
+#check Fermat.Conservation.KummerCupSpanReadout.cupInSpan_zero_right
+#check Fermat.Conservation.KummerCupSpanReadout.cupInSpan_add_left
+#check Fermat.Conservation.KummerCupSpanReadout.cupInSpan_add_right
+#check Fermat.Conservation.KummerCupSpanReadout.SpanReadout
+#check Fermat.Conservation.KummerCupSpanReadout.localPairing
+#check Fermat.Conservation.KummerCupSpanReadout.localPairing_apply
+#check Fermat.Conservation.KummerCupSpanReadout.discreteCupSpan
+#check Fermat.Conservation.KummerCupSpanReadout.discretePairing
+#check Fermat.Conservation.KummerCupSpanReadout.discretePairing_apply
+#check Fermat.Conservation.KummerCupSpanReadout.discretePairing_classOfUnit
+
+#guard_depends_on
+  Fermat.Conservation.KummerCupSpanReadout.cupClass,
+  Fermat.Conservation.KummerTateCup.orientedCupH1Classes
+#guard_depends_on
+  Fermat.Conservation.KummerCupSpanReadout.cupSpan,
+  Fermat.Conservation.KummerCupSpanReadout.cupGenerators
+#guard_depends_on
+  Fermat.Conservation.KummerCupSpanReadout.cupInSpan,
+  Fermat.Conservation.KummerCupSpanReadout.cupClass_mem_cupSpan
+#guard_depends_on
+  Fermat.Conservation.KummerCupSpanReadout.localPairing,
+  Fermat.Conservation.KummerCupSpanReadout.cupInSpan
+#guard_depends_on
+  Fermat.Conservation.KummerCupSpanReadout.localPairing,
+  Fermat.Conservation.KummerCupSpanReadout.cupInSpan_add_left
+#guard_depends_on
+  Fermat.Conservation.KummerCupSpanReadout.localPairing,
+  Fermat.Conservation.KummerCupSpanReadout.cupInSpan_add_right
+#guard_depends_on
+  Fermat.Conservation.KummerCupSpanReadout.discretePairing,
+  Fermat.Conservation.KummerCupSpanReadout.localPairing
+#guard_depends_on
+  Fermat.Conservation.KummerCupSpanReadout.discretePairing,
+  Fermat.Conservation.KummerOrientation.leftKummerMap
+#guard_depends_on
+  Fermat.Conservation.KummerCupSpanReadout.discretePairing,
+  Fermat.Conservation.LocalKummerH1.map
 
 /-! ### Tier-(c) total Iwasawa trace-product reduction -/
 
@@ -1513,6 +1847,151 @@ factorization theorems connect V1's exact residual to that total pairing. -/
 #guard_depends_on
   Fermat.Conservation.IwasawaTracePairing.Reduction.representative_eq_reading,
   Fermat.Conservation.IwasawaTracePairing.Reduction.realizes
+
+/-! ### Actual cyclotomic lambda-adic completion
+
+The local field is now Mathlib's adic completion at the height-one place
+`lambda = (zeta_59 - 1)`.  The localization embedding, primitive root, and
+proof that this place lies above 59 are all constructed.  No invariant or
+reciprocity theorem is introduced by this structural bridge. -/
+
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.LocalField59
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.localization59
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.localization59_apply
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.globalPrimitiveRoot59
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.globalPrimitiveRoot59_isPrimitive
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59_eq
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59_isPrimitive
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59_pow
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaIdeal59
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaIdeal59_isPrime
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaIdeal59_ne_bot
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaIdeal59_liesOver
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaPlace59
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaPlace59_asIdeal
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.LambdaLocalField59
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalization59
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59
+#check Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59_isPrimitive
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localization59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59_isPrimitive,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.globalPrimitiveRoot59_isPrimitive
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59_isPrimitive,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localization59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59_pow,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59_isPrimitive
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaIdeal59_isPrime,
+  IsCyclotomicExtension.Rat.isPrime_span_zeta_sub_one'
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaIdeal59_ne_bot,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.globalPrimitiveRoot59_isPrimitive
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaIdeal59_liesOver,
+  IsCyclotomicExtension.Rat.liesOver_span_zeta_sub_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaPlace59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaIdeal59_isPrime
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaPlace59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaIdeal59_ne_bot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalization59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localization59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59_isPrimitive,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59_isPrimitive
+
+/-! ### Canonical cyclotomic action: Package B discharged
+
+The ambient field, unit, Kummer-quotient, and place actions are constructed
+canonically.  `CyclotomicValuationCovariance59 K` remains the named shape of
+the crucial arithmetic law, and `cyclotomicValuationCovariance59 K` proves
+it.  Consequently the strict action, complete 827-supported action, their
+compatibility, and the reflected landing are all canonical constructions
+with no supplied action, covariance, or landing certificate. -/
+
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicFieldAction59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59_one_apply
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59_mul_apply
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59_maps_powerRange
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicKummerHom59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicKummerHom59_mk
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicKummerHom59_one_apply
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicKummerHom59_mul_apply
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59_asIdeal
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59_under_int
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59_mem_placesOver827_iff
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.CyclotomicValuationCovariance59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicValuationCovariance59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.CyclotomicStableSupport59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStableSupport59_empty
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStableSupport59_placesOver827
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerAddHomAt59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerLinearMapAt59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerRepresentationAt59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStrictSelmerRepresentation59
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicQRelaxedSelmerRepresentation827
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicEmptySupportActionCompatibility827
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicReflectedEmptySupportLanding827
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicKummerHom59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59_maps_powerRange
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicKummerHom59_mul_apply,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59_mul_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59_mem_placesOver827_iff,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59_under_int
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStableSupport59_placesOver827,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59_mem_placesOver827_iff
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicValuationCovariance59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicValuationCovariance59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerLinearMapAt59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerAddHomAt59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerRepresentationAt59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerLinearMapAt59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStrictSelmerRepresentation59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStableSupport59_empty
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStrictSelmerRepresentation59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicValuationCovariance59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicQRelaxedSelmerRepresentation827,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStableSupport59_placesOver827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicQRelaxedSelmerRepresentation827,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicValuationCovariance59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicEmptySupportActionCompatibility827,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStrictSelmerRepresentation59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicEmptySupportActionCompatibility827,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicQRelaxedSelmerRepresentation827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicReflectedEmptySupportLanding827,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicEmptySupportActionCompatibility827
 
 /-! ### Canonical empty-support reflected inclusion -/
 
@@ -1583,7 +2062,7 @@ factorization theorems connect V1's exact residual to that total pairing. -/
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.wildKummerCore,
-  Fermat.Conservation.WildKummerPairing.Core.ofRepresentative
+  Fermat.Conservation.WildKummerPairing.Core.ofPairing
 #guard_depends_on
   Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.readingAt59,
   Fermat.Conservation.SelmerEigenspace.toKummerClassAt
@@ -1623,6 +2102,130 @@ factorization theorems connect V1's exact residual to that total pairing. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.nonempty_reflectedWildLocalizationAt59,
   Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.toReflectedWildLocalizationAt59
+
+/-! ### Cohomological 59-local adapter
+
+This adapter feeds the quotient pairing assembled by localization, the two
+Kummer maps, cup product, and the supplied local invariant into the real
+59-local core.  Its final calibration remains a separate theorem argument;
+the checks below do not manufacture that arithmetic comparison. -/
+
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.pairing
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.pairing_apply
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing_apply
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing_classOfUnit
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.CompletionDiscreteH2Readout59
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.actualCompletionPairing
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.actualCompletionPairing_apply
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.actualCompletionPairing_classOfUnit
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.toReflectedWildKummerCoreAt59
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.toReflectedWildKummerCoreAt59_pairing_apply
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalDiscreteReflectedWildKummerCoreAt59
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalDiscreteReflectedWildKummerCoreAt59_pairing_apply
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.toActualCompletionCanonicalReflectedWildKummerCoreAt59
+#check Fermat.FiftyNine.Conservation.KummerTateLocalization59.toActualCompletionCanonicalReflectedWildKummerCoreAt59_pairing_apply
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.pairing,
+  Fermat.Conservation.CohomologicalKummerPairing.globalPairing
+-- `pairing_apply` is the third definitional readback in this chain, so its
+-- expanded cup formula is a signature audit (`#check`) rather than a
+-- value-dependency claim about its `rfl` proof body.
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing,
+  Fermat.Conservation.DiscreteKummerTatePairing.localPairing
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing,
+  Fermat.Conservation.LocalKummerTransport.Pairing.pullback
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing_apply,
+  Fermat.Conservation.KummerOrientation.leftKummerMap
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing_apply,
+  Fermat.Conservation.LocalKummerH1.map
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing_classOfUnit,
+  Fermat.Conservation.LocalKummerTransport.unitMap
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.actualCompletionPairing,
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.actualCompletionPairing,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localization59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.actualCompletionPairing,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localPrimitiveRoot59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.pairing
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toReflectedWildKummerCoreAt59_pairing_apply,
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toReflectedWildKummerCoreAt59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicReflectedEmptySupportLanding827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toReflectedWildKummerCoreAt59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalDiscreteReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.discretePairing
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalDiscreteReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicReflectedEmptySupportLanding827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalDiscreteReflectedWildKummerCoreAt59_pairing_apply,
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalDiscreteReflectedWildKummerCoreAt59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toActualCompletionCanonicalReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toCanonicalDiscreteReflectedWildKummerCoreAt59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toActualCompletionCanonicalReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.localization59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toActualCompletionCanonicalReflectedWildKummerCoreAt59_pairing_apply,
+  Fermat.FiftyNine.Conservation.KummerTateLocalization59.toActualCompletionCanonicalReflectedWildKummerCoreAt59
+
+/-! ### Span-restricted pairing at the literal lambda place
+
+This is the narrowest compiled local adapter.  Completion, lambda place,
+primitive root, both Kummer maps, quotient pullback, canonical actions, and
+strict-to-relaxed landing are derived.  Its remaining inputs are a linear
+readout on the actual Kummer cup span and an independent old-reading
+calibration; neither continuous comparison nor calibration is fabricated. -/
+
+#check Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.LambdaKummerCupSpan59
+#check Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.LambdaKummerCupSpanReadout59
+#check Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.lambdaLocalPairing
+#check Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.pairing
+#check Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.pairing_apply
+#check Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.pairing_classOfUnit
+#check Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.toCanonicalReflectedWildKummerCoreAt59
+#check Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.toCanonicalReflectedWildKummerCoreAt59_pairing_apply
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.lambdaLocalPairing,
+  Fermat.Conservation.KummerCupSpanReadout.discretePairing
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.lambdaLocalPairing,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.pairing,
+  Fermat.Conservation.LocalKummerTransport.Pairing.pullback
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.pairing,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalization59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.toCanonicalReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.pairing
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.toCanonicalReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicReflectedEmptySupportLanding827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.toCanonicalReflectedWildKummerCoreAt59_pairing_apply,
+  Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59.toCanonicalReflectedWildKummerCoreAt59
 
 /-! ### Tier-(c) 59/827 adapter -/
 
@@ -2137,10 +2740,22 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #guard_standard_axioms_prefix Fermat.Conservation.WildKummerPairing
 #guard_standard_axioms_prefix Fermat.Conservation.IwasawaTracePairing
+#guard_standard_axioms_prefix Fermat.Conservation.KummerTateCup
+#guard_standard_axioms_prefix Fermat.Conservation.KummerTateReadout
+#guard_standard_axioms_prefix Fermat.Conservation.LocalKummerH1
+#guard_standard_axioms_prefix Fermat.Conservation.KummerOrientation
+#guard_standard_axioms_prefix Fermat.Conservation.DiscreteKummerTatePairing
+#guard_standard_axioms_prefix Fermat.Conservation.KummerCupSpanReadout
+#guard_standard_axioms_prefix Fermat.Conservation.LocalKummerTransport
+#guard_standard_axioms_prefix Fermat.Conservation.CohomologicalKummerPairing
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.LocalCompletion59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.VostokovShapeAudit59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.IwasawaLocalization59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.KummerTateLocalization59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
 
@@ -2153,10 +2768,24 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ArtinHasseInventory
 #audit_no_product_equiv_types_prefix Fermat.Conservation.WildKummerPairing
 #audit_no_product_equiv_types_prefix Fermat.Conservation.IwasawaTracePairing
+/- `KummerTateCup` is intentionally outside this exact-sequence guard: its
+degree-two inhomogeneous cochains are functions on `G × G`, and its canonical
+trivial-coefficient conversion genuinely uses Mathlib's `H¹` equivalence. -/
+#audit_no_product_equiv_types_prefix Fermat.Conservation.KummerTateReadout
+#audit_no_product_equiv_types_prefix Fermat.Conservation.LocalKummerH1
+#audit_no_product_equiv_types_prefix Fermat.Conservation.KummerOrientation
+#audit_no_product_equiv_types_prefix Fermat.Conservation.DiscreteKummerTatePairing
+#audit_no_product_equiv_types_prefix Fermat.Conservation.KummerCupSpanReadout
+#audit_no_product_equiv_types_prefix Fermat.Conservation.LocalKummerTransport
+#audit_no_product_equiv_types_prefix Fermat.Conservation.CohomologicalKummerPairing
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.LocalCompletion59
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.VostokovShapeAudit59
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.IwasawaLocalization59
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.KummerTateLocalization59
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
 #audit_no_product_equiv_types_prefix Fermat.Conservation.ExteriorTransfer
