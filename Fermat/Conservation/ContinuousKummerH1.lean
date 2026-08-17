@@ -17,17 +17,16 @@ the degree-one differential.  It then uses the actual cycles object and
 homology projection of `ContinuousCohomology.homogeneousCochains` to produce
 a genuine continuous `H¹` class for each representative unit.
 
-The deliberate boundaries are:
+Compatibility with continuous principal boundaries proves multiplicativity
+of the resulting class and descends it through `Kˣ / (Kˣ)^n` to the
+genuine continuous Kummer map.  The deliberate remaining boundaries are:
 
-* no multiplicativity in the representative unit is asserted;
-* no descent through `Kˣ / (Kˣ)^n` is asserted;
 * no comparison with the discrete class in `LocalKummerH1` is asserted.
 * no continuous cup product, `H²` class, local invariant, Hilbert-symbol
   readout, or global reflected lift is asserted.
 
-Those require further compatibility with continuous coboundaries.  In
-particular, `continuousClassOfUnit` is not advertised as a Kummer map on the
-quotient.
+Those require additional constructions beyond the degree-one quotient
+descent in this file.
 -/
 import Fermat.Conservation.LocalKummerH1
 import Mathlib.Algebra.Category.ContinuousCohomology.Basic
@@ -41,6 +40,7 @@ open CategoryTheory
 open CategoryTheory.Limits
 open groupCohomology
 open Fermat.Conservation.LocalKummerH1
+open Fermat.Conservation.TameSymbol
 
 open scoped LocalKummerH1.KummerRootsDiscrete
 
@@ -373,6 +373,54 @@ theorem homogeneousOneClass_eq_zero_of_principal
 
 end ContinuousCrossedHom
 
+set_option backward.isDefEq.respectTransparency false in
+set_option maxHeartbeats 800000 in
+/-- Addition of continuous crossed homomorphisms is preserved in the
+categorical degree-one cycles object. -/
+theorem homogeneousOneCycle_add
+    (c d : ContinuousCrossedHom R G A) :
+    homogeneousOneCycle A (c + d).1 (c + d).2 =
+      homogeneousOneCycle A c.1 c.2 + homogeneousOneCycle A d.1 d.2 := by
+  apply ContinuousCrossedHom.homogeneousOneICycles_injective R G A
+  simp only [homogeneousOneCycle, ← ConcreteCategory.comp_apply,
+    HomologicalComplex.liftCycles_i, map_add]
+  exact (ContinuousCrossedHom.homogeneousOneLinear R G A).map_add c d
+
+set_option backward.isDefEq.respectTransparency false in
+set_option maxHeartbeats 800000 in
+/-- Addition of continuous crossed homomorphisms is preserved after passage
+to genuine continuous degree-one cohomology. -/
+theorem homogeneousOneClass_add
+    (c d : ContinuousCrossedHom R G A) :
+    homogeneousOneClass A (c + d).1 (c + d).2 =
+      homogeneousOneClass A c.1 c.2 + homogeneousOneClass A d.1 d.2 := by
+  unfold homogeneousOneClass
+  rw [homogeneousOneCycle_add (R := R) (G := G) A c d, map_add]
+
+set_option backward.isDefEq.respectTransparency false in
+set_option maxHeartbeats 800000 in
+/-- Subtraction of continuous crossed homomorphisms is preserved in the
+categorical degree-one cycles object. -/
+theorem homogeneousOneCycle_sub
+    (c d : ContinuousCrossedHom R G A) :
+    homogeneousOneCycle A (c - d).1 (c - d).2 =
+      homogeneousOneCycle A c.1 c.2 - homogeneousOneCycle A d.1 d.2 := by
+  apply ContinuousCrossedHom.homogeneousOneICycles_injective R G A
+  simp only [homogeneousOneCycle, ← ConcreteCategory.comp_apply,
+    HomologicalComplex.liftCycles_i, map_sub]
+  exact (ContinuousCrossedHom.homogeneousOneLinear R G A).map_sub c d
+
+set_option backward.isDefEq.respectTransparency false in
+set_option maxHeartbeats 800000 in
+/-- Subtraction of continuous crossed homomorphisms is preserved after
+passage to genuine continuous degree-one cohomology. -/
+theorem homogeneousOneClass_sub
+    (c d : ContinuousCrossedHom R G A) :
+    homogeneousOneClass A (c - d).1 (c - d).2 =
+      homogeneousOneClass A c.1 c.2 - homogeneousOneClass A d.1 d.2 := by
+  unfold homogeneousOneClass
+  rw [homogeneousOneCycle_sub (R := R) (G := G) A c d, map_sub]
+
 end CrossedHomLinear
 
 /-! ## The absolute-Galois roots-of-unity representation -/
@@ -581,13 +629,94 @@ abbrev ContinuousKummerCohomologyOne :=
 
 /-- The continuous cohomology class of the chosen-root Kummer cocycle.
 
-This is a genuine class in Mathlib's homogeneous continuous complex, but it
-is only attached to a representative unit here.  No quotient descent or
-comparison theorem is part of this declaration. -/
+This is a genuine class in Mathlib's homogeneous continuous complex.  The
+theorems below prove its representative compatibility and descend it to the
+Kummer quotient. -/
 noncomputable def continuousClassOfUnit (a : Kˣ) :
     ContinuousKummerCohomologyOne n K :=
   homogeneousOneClass (rootsTopRepresentation n K)
     (continuousCocycle n K a)
     (continuousCocycle_crossed n K a)
+
+set_option backward.isDefEq.respectTransparency false in
+set_option maxHeartbeats 800000 in
+@[simp]
+theorem continuousClassOfUnit_one :
+    continuousClassOfUnit n K 1 = 0 := by
+  obtain ⟨m, hm⟩ := exists_principalWitness_one n K
+  exact ContinuousCrossedHom.homogeneousOneClass_eq_zero_of_principal
+    (ZMod n) (AbsoluteGalois K) (rootsTopRepresentation n K)
+    (kummerCrossedHom n K 1) m hm
+
+set_option backward.isDefEq.respectTransparency false in
+set_option maxHeartbeats 800000 in
+/-- Multiplication of field units becomes addition of their genuine
+continuous Kummer classes. -/
+theorem continuousClassOfUnit_mul (a b : Kˣ) :
+    continuousClassOfUnit n K (a * b) =
+      continuousClassOfUnit n K a + continuousClassOfUnit n K b := by
+  let defect := kummerCrossedHom n K (a * b) -
+    (kummerCrossedHom n K a + kummerCrossedHom n K b)
+  obtain ⟨m, hm⟩ := exists_principalWitness_mul_defect n K a b
+  have hz : homogeneousOneClass (rootsTopRepresentation n K)
+      defect.1 defect.2 = 0 :=
+    ContinuousCrossedHom.homogeneousOneClass_eq_zero_of_principal
+      (ZMod n) (AbsoluteGalois K) (rootsTopRepresentation n K)
+      defect m hm
+  rw [show homogeneousOneClass (rootsTopRepresentation n K)
+      defect.1 defect.2 =
+        continuousClassOfUnit n K (a * b) -
+          (continuousClassOfUnit n K a + continuousClassOfUnit n K b) by
+      dsimp only [defect, continuousClassOfUnit]
+      rw [homogeneousOneClass_sub, homogeneousOneClass_add]
+      rfl] at hz
+  exact sub_eq_zero.mp hz
+
+/-- Every class in continuous `H¹(G_K, μ_n)` is killed by `n`. -/
+theorem nsmul_continuousKummerH1_eq_zero
+    (x : ContinuousKummerCohomologyOne n K) :
+    n • x = 0 :=
+  ZModModule.char_nsmul_eq_zero n x
+
+/-- The representative continuous Kummer map, on multiplicatively written
+units presented additively. -/
+noncomputable def continuousRepresentativeMap :
+    Additive Kˣ →+ ContinuousKummerCohomologyOne n K where
+  toFun a := continuousClassOfUnit n K a.toMul
+  map_zero' := continuousClassOfUnit_one n K
+  map_add' a b := continuousClassOfUnit_mul n K a.toMul b.toMul
+
+/-- The continuous Kummer class of an `n`-th power vanishes. -/
+theorem continuousClassOfUnit_pow_n (a : Kˣ) :
+    continuousClassOfUnit n K (a ^ n) = 0 := by
+  change continuousRepresentativeMap n K
+    (Additive.ofMul (a ^ n)) = 0
+  rw [ofMul_pow, map_nsmul,
+    nsmul_continuousKummerH1_eq_zero]
+
+private noncomputable def continuousRepresentativeMonoidHom :
+    Kˣ →* Multiplicative (ContinuousKummerCohomologyOne n K) :=
+  AddMonoidHom.toMultiplicative (continuousRepresentativeMap n K)
+
+/-- The continuous absolute-Galois Kummer map, descended through `n`-th
+powers. -/
+noncomputable def continuousMap :
+    KummerClass n K →+ ContinuousKummerCohomologyOne n K :=
+  MonoidHom.toAdditive <|
+    QuotientGroup.lift (powMonoidHom n : Kˣ →* Kˣ).range
+      (continuousRepresentativeMonoidHom n K) fun x hx ↦ by
+        obtain ⟨y, rfl⟩ := hx
+        change Multiplicative.ofAdd
+          (continuousRepresentativeMap n K
+            (n • Additive.ofMul y)) = 1
+        rw [map_nsmul, nsmul_continuousKummerH1_eq_zero]
+        rfl
+
+@[simp]
+theorem continuousMap_classOfUnit (a : Kˣ) :
+    continuousMap n K (Additive.ofMul
+      (QuotientGroup.mk' (powMonoidHom n : Kˣ →* Kˣ).range a)) =
+      continuousClassOfUnit n K a := by
+  rfl
 
 end Fermat.Conservation.ContinuousKummerH1
