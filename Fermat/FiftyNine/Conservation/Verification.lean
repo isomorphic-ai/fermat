@@ -42,6 +42,7 @@ import Fermat.FiftyNine.Conservation.UlamReadout827
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 import Fermat.FiftyNine.Conservation.VostokovLocalization59
+import Fermat.FiftyNine.Conservation.VostokovShapeAudit59
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
 
@@ -1365,6 +1366,58 @@ two actual pairing inputs because neither is seated as a normalized factor. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaign_formulaBudget_eq_needsVostokov,
   Fermat.FiftyNine.Conservation.ArtinHasseInventory.campaignInventory
+
+/-! The C1 audit binds V3's two literal input maps to their chosen quotient
+representatives, retains both whole classes as honest residuals, and proves
+that the normalized q-relaxed fiber does not lie in the canonical strict
+range.  It makes no Artin--Hasse nonmembership claim and constructs no
+splitting. -/
+
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.statewiseKummerClass
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.transverseKummerClass
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.statewiseRepresentative
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.transverseRepresentative
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.statewiseRepresentative_readback
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.transverseRepresentative_readback
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly_statewise_covered
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly_statewise_residual
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly_transverse_covered
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly_transverse_residual
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.readingAt59_exact_inputs
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.qLocalizationCoordinate827_oldReflected_eq_zero
+#check Fermat.FiftyNine.Conservation.VostokovShapeAudit59.normalizedFiber_not_mem_range_oldReflected
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.statewiseRepresentative_readback,
+  Fermat.Conservation.SelmerEigenspace.quotientRepresentative_mk
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.transverseRepresentative_readback,
+  Fermat.Conservation.SelmerEigenspace.quotientRepresentativeAt_mk
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly_statewise_covered,
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly_statewise_residual,
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly_transverse_covered,
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly_transverse_residual,
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.inputResidualOnly
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.readingAt59_exact_inputs,
+  Fermat.FiftyNine.Conservation.VostokovLocalization59.ReflectedWildKummerCoreAt59.readingAt59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.qLocalizationCoordinate827_oldReflected_eq_zero,
+  Fermat.Conservation.SelmerEigenspace.supportValuation_emptySupportInclusion_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.normalizedFiber_not_mem_range_oldReflected,
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.qLocalizationCoordinate827_oldReflected_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.VostokovShapeAudit59.normalizedFiber_not_mem_range_oldReflected,
+  Fermat.FiftyNine.Conservation.UlamReadout827.reflectedBoundaryFunctional827_eq_qLocalizationCoordinate827
 
 /-! V2 supplies only the generic algebraic descent surface for a total
 Kummer pairing.  V3 then reduces the concrete seated localization producer
