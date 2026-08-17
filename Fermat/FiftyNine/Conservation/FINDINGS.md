@@ -1,5 +1,43 @@
 # N59 conservation findings
 
+## 2026-08-17 — Vostokov C2/C3 discovery: the requested core is universal, not two-shape
+
+- `ReflectedWildKummerCoreAt59.representative` is a total bilinear map on
+  every pair of nonzero field representatives.  More decisively,
+  `old_calibration` quantifies over **all** `OldPrimal59` and
+  `OldReflectedDual59` values.  Neither field is indexed by the one campaign
+  statewise lift or one normalized detector.  No span or generation theorem
+  reduces either whole old eigenspace image to the two provenance labels.
+- Consequently a formula specialized to two selected representatives cannot
+  inhabit the current core, even if those two values were computed
+  perfectly.  This independently refutes tier (b) as sufficient for the
+  declared target.  The next tier must supply a genuine total/local pairing,
+  or a narrower formula core must carry a constructor proving how its domain
+  covers every value demanded by `old_calibration`; weakening bilinearity or
+  silently changing the quantifiers is not allowed.
+- The other two fields are not formal consequences of the supplied
+  parameters.  Both `rho` and `rhoQ` are arbitrary representation values.
+  The only existing producer for `ReflectedEmptySupportLanding827` consumes
+  `EmptySupportActionCompatibility827`, and no inhabitant of that
+  compatibility is in the tree.  Projecting after inclusion would lose the
+  required injectivity/Kummer-class identity and would amount to the refused
+  splitting shortcut.
+- Likewise `wild` is an arbitrary `WildLocalInterface`: its laws are
+  bilinearity and the sharp-adjoint identity, with no identification as a
+  Hilbert or norm-residue symbol.  A formula cannot be proved equal to every
+  such supplied reading from those laws.  Defining the formula from
+  `wild.reading` would reverse the required calibration and violate
+  "calibration is never a definition."  An actual arithmetic realization of
+  `wild`, followed by a comparison theorem, is indispensable.
+- The pinned local stack contains a valuation completion, the cyclotomic
+  uniformizer, formal Artin--Hasse series, and a completed logarithm on an
+  already-normalized principal-unit domain.  It does not currently expose
+  the Iwasawa tower norm lift, the kappa-derivative coordinate, a global
+  Kummer-class-to-principal-unit normalization, or their trace-product
+  identification with a Hilbert symbol.  Tier (c) is therefore the cheapest
+  formula tier still under test; these are its first concrete construction
+  obligations, not permission to jump to tier (d).
+
 ## 2026-08-17 — Vostokov C1 discovery: the residual labels are not term-level shapes
 
 - The committed prediction that the two residual shapes reduce to the
