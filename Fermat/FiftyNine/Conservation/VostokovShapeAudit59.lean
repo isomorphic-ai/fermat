@@ -186,14 +186,14 @@ omit [IsCyclotomicExtension {59} ℚ K]
   [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)] in
 /-- Evaluation of the V3 reading exposes exactly the two audited classes;
 no normalized-factor substitution occurs between the carrier and the
-representative pairing. -/
+quotient pairing. -/
 theorem readingAt59_exact_inputs
     (core : ReflectedWildKummerCoreAt59 rho rhoQ omega chi
       distinguishedPlace wild)
     (x : OldPrimal59 rho chi)
     (y : QRelaxedReflectedDual827 rhoQ omega chi) :
     core.readingAt59 x y =
-      core.representative.descend
+      core.pairing
         (statewiseKummerClass rho chi x)
         (transverseKummerClass rhoQ omega chi y) :=
   rfl

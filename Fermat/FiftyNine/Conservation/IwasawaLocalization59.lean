@@ -122,7 +122,7 @@ def toReflectedWildKummerCoreAt59
       distinguishedPlace wild compatibility) :
     ReflectedWildKummerCoreAt59 rho rhoQ omega chi
       distinguishedPlace wild where
-  representative := reduction.representative
+  pairing := reduction.representative.descend
   landing := EmptySupportActionCompatibility827.toReflectedLanding
     rho rhoQ omega chi compatibility
   old_calibration := descend_eq_oldReading rho rhoQ omega chi

@@ -6,17 +6,15 @@ Authors: Fabian Franz, Codex
 # Reduce the 59-local Ulam producer to a wild Kummer pairing core
 
 This module proves the requested constructor reduction.  Its arithmetic
-input is a representative-level Kummer pairing, the minimal receipt that the
+input is a quotient-level Kummer pairing, the minimal receipt that the
 canonical empty-support inclusion lands in the q-relaxed reflected
 eigenspace, and calibration against the existing old wild reading.
 
-The quotient-level symbol is derived by canonical descent.  Its full
-integral group-algebra adjoint law is formal on the two fixed character
-eigenspaces, so no extra adjoint field is retained.  The representative
-pairing is the strictly smaller named arithmetic frontier: this file does not
-construct a 59-adic completion/localization map or identify the input with a
-Vostokov residue formula or Hilbert symbol.  It makes no Steinberg,
-norm-residue, or reciprocity claim.
+Its full integral group-algebra adjoint law is formal on the two fixed
+character eigenspaces, so no extra adjoint field is retained.  Constructing
+the quotient pairing from localization, Kummer maps, cup product, and the
+normalized local invariant is the named arithmetic frontier: this file makes
+no Steinberg, norm-residue, or reciprocity claim.
 -/
 import Fermat.Conservation.WildKummerPairing
 import Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
@@ -69,19 +67,18 @@ abbrev OldWildInterface59
 
 /-- **STRICT WILD-LOCALIZATION ARITHMETIC CORE.**
 
-Only a representative pairing is stored; its total Kummer pairing and
-descent receipt are constructed by `WildKummerPairing.Core.ofRepresentative`.
-The adjoint law is not a field: it follows formally from the `chi` and
-`omega * chi⁻¹` eigenlaws.  Producing this pairing from completed 59-adic
-Laurent-series calculus remains the named arithmetic task. -/
+The arithmetic object is stored directly on Kummer classes.  The adjoint law
+is not a field: it follows formally from the `chi` and `omega * chi⁻¹`
+eigenlaws.  A representative formula may still construct or calibrate this
+pairing, but it is no longer the foundational interface. -/
 structure ReflectedWildKummerCoreAt59
     (distinguishedPlace : IsDedekindDomain.HeightOneSpectrum (𝓞 K))
     (wild : OldWildInterface59 rho omega chi distinguishedPlace) where
-  representative : WildKummerPairing.RepresentativePairing 59 K
+  pairing : WildKummerPairing.Pairing 59 K
   landing : ReflectedEmptySupportLanding827 rho rhoQ omega chi
   old_calibration : ∀ x : OldPrimal59 rho chi,
       ∀ y : OldReflectedDual59 rho omega chi,
-    representative.descend (toKummerClass x) (toKummerClass y) =
+    pairing (toKummerClass x) (toKummerClass y) =
       wild.reading x y
 
 namespace ReflectedWildKummerCoreAt59
@@ -90,13 +87,12 @@ variable {rho rhoQ omega chi}
   {distinguishedPlace : IsDedekindDomain.HeightOneSpectrum (𝓞 K)}
   {wild : OldWildInterface59 rho omega chi distinguishedPlace}
 
-/-- The total wild Kummer core canonically descended from the stored
-representative formula. -/
+/-- The total wild Kummer core backed by the stored quotient pairing. -/
 def wildKummerCore
     (core : ReflectedWildKummerCoreAt59 rho rhoQ omega chi
       distinguishedPlace wild) :
     WildKummerPairing.Core 59 K :=
-  WildKummerPairing.Core.ofRepresentative core.representative
+  WildKummerPairing.Core.ofPairing core.pairing
 
 /-- The q-relaxed reading obtained by evaluating the descended Kummer symbol
 on the literal seated Kummer-class maps. -/
@@ -118,7 +114,7 @@ theorem readingAt59_apply
     (x : OldPrimal59 rho chi)
     (y : QRelaxedReflectedDual827 rhoQ omega chi) :
     core.readingAt59 x y =
-      core.representative.descend (toKummerClass x) (toKummerClassAt y) :=
+      core.pairing (toKummerClass x) (toKummerClassAt y) :=
   rfl
 
 /-! ### The formal character adjoint law -/
@@ -196,16 +192,16 @@ private theorem single_adjoint_law
       core.readingAt59 x
         (InvolutiveBase.hash omega (MonoidAlgebra.single delta c) • y) := by
   rw [single_smul_oldPrimal, hash_single_smul_qRelaxedReflected]
-  change core.representative.descend
+  change core.pairing
       (toKummerClass ((c * (chi delta : PadicInt 59)) • x))
       (toKummerClassAt y) =
-    core.representative.descend (toKummerClass x)
+    core.pairing (toKummerClass x)
       (toKummerClassAt ((c * (chi delta : PadicInt 59)) • y))
-  change core.representative.descend
+  change core.pairing
       ((PadicInt.toZMod (c * (chi delta : PadicInt 59))).val •
         toKummerClass x)
       (toKummerClassAt y) =
-    core.representative.descend (toKummerClass x)
+    core.pairing (toKummerClass x)
       ((PadicInt.toZMod (c * (chi delta : PadicInt 59))).val •
         toKummerClassAt y)
   rw [map_nsmul, map_nsmul, AddMonoidHom.nsmul_apply]
