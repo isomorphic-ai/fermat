@@ -65,6 +65,15 @@ theorem classOfUnit_apply (a : Kˣ) :
       Additive.ofMul (QuotientGroup.mk' _ a) :=
   rfl
 
+omit [Fact p.Prime] in
+/-- Every Kummer class has a nonzero representative. -/
+theorem classOfUnit_surjective :
+    Function.Surjective (classOfUnit p K) := by
+  intro x
+  refine ⟨Additive.ofMul (Additive.toMul x).out, ?_⟩
+  apply Additive.ext
+  exact QuotientGroup.out_eq' (Additive.toMul x)
+
 /-- Pull a quotient-level pairing back to nonzero representatives. -/
 def Pairing.onRepresentatives (pairing : Pairing p K) :
     RepresentativePairing p K where
@@ -222,6 +231,34 @@ theorem isKummerDescent_descend
 
 end RepresentativePairing
 
+namespace Pairing
+
+/-- Descending the representative pullback of a quotient-level pairing
+recovers the original pairing.
+
+This is the quotient-first adapter: a construction naturally defined on
+Kummer classes can pass through representative-biased consumers without a
+new arithmetic comparison theorem. -/
+@[simp]
+theorem descend_onRepresentatives (pairing : Pairing p K) :
+    pairing.onRepresentatives.descend = pairing := by
+  apply AddMonoidHom.ext
+  intro x
+  obtain ⟨a, rfl⟩ := classOfUnit_surjective (p := p) (K := K) x
+  apply AddMonoidHom.ext
+  intro y
+  obtain ⟨b, rfl⟩ := classOfUnit_surjective (p := p) (K := K) y
+  rfl
+
+/-- Pointwise form of `descend_onRepresentatives`. -/
+@[simp]
+theorem descend_onRepresentatives_apply (pairing : Pairing p K)
+    (x y : KummerClass p K) :
+    pairing.onRepresentatives.descend x y = pairing x y := by
+  rw [pairing.descend_onRepresentatives]
+
+end Pairing
+
 /-- Constructor-facing arithmetic core for a total wild Kummer pairing.
 
 An inhabitant must provide a representative-level definition, a total
@@ -242,11 +279,44 @@ def ofRepresentative (representative : RepresentativePairing p K) : Core p K whe
   pairing := representative.descend
   descent := representative.isKummerDescent_descend
 
+/-- Package a quotient-level pairing by pulling it back to representatives.
+
+Unlike `ofRepresentative`, this constructor preserves the supplied quotient
+pairing definitionally.  Its representative field is only the canonical
+readback along `classOfUnit`. -/
+def ofPairing (pairing : Pairing p K) : Core p K where
+  representative := pairing.onRepresentatives
+  pairing := pairing
+  descent := fun _ _ ↦ rfl
+
 @[simp]
 theorem ofRepresentative_pairing_apply
     (representative : RepresentativePairing p K) (x y : KummerClass p K) :
     (ofRepresentative representative).pairing x y =
       representative.descend x y :=
+  rfl
+
+@[simp]
+theorem ofPairing_pairing_apply
+    (pairing : Pairing p K) (x y : KummerClass p K) :
+    (ofPairing pairing).pairing x y = pairing x y :=
+  rfl
+
+@[simp]
+theorem ofPairing_representative_apply
+    (pairing : Pairing p K) (a b : Additive Kˣ) :
+    (ofPairing pairing).representative a b =
+      pairing (classOfUnit p K a) (classOfUnit p K b) :=
+  rfl
+
+@[simp]
+theorem ofPairing_pairing (pairing : Pairing p K) :
+    (ofPairing pairing).pairing = pairing :=
+  rfl
+
+@[simp]
+theorem ofPairing_representative (pairing : Pairing p K) :
+    (ofPairing pairing).representative = pairing.onRepresentatives :=
   rfl
 
 @[simp]
