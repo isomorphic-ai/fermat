@@ -576,8 +576,13 @@ selected relation-(7a) class.  The map is surjective, and its kernel is
 exactly the range of the genuine global-unit inclusion.  Consequently a
 scalar Selmer reading factors through this class gauge by a unique class
 readout if and only if it kills every global-unit class.  This does not
-manufacture an Artin map: it isolates the remaining Kummer--Artin theorem as
-the concrete unit-silence statement for the complete 827-orbit reading.
+manufacture an Artin map.  `StrictTameOrbitClassFactorization827` now builds
+the relevant scalar reading itself as the literal sum of all 58 genuine,
+globally-root-oriented tame rows above 827, and specializes the equivalence
+to that concrete functional.  The remaining Kummer--Artin theorem is exactly
+its global-unit silence.  Global reciprocity alone only gives the balanced
+identity `wild + tameOrbit = 0`; it does not erase the tame orbit or prove
+that unit-silence obligation.
 
 There is now, however, a separate completed state-to-history route at the
 same exponent.  `FermatStateTakagiSevenA59` proves the Takagi relation for the
