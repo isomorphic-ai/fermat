@@ -7,16 +7,17 @@ Authors: Fabian Franz, Codex
 
 This non-imported leaf audits the actual prime-parametric action, the
 canonical strict-to-supported inclusion, the unit and class naturality maps,
-finite-orbit ledgers and their route-neutral reciprocity algebra, the residue
-Fourier dictionary, complementary-wave pairing compression, full-orbit
-reciprocity transport, and cyclotomic localization covariance.  It records the
-intended implementation dependencies and checks every declaration in the
-audited namespaces against the standard axiom budget and the project's public
-no-product-equivalence rule.
+finite-orbit and pointed ledgers and their route-neutral reciprocity algebra,
+the residue Fourier dictionary, complementary-wave pairing compression,
+full-orbit reciprocity transport, and cyclotomic localization covariance.  It
+records the intended implementation dependencies and checks every declaration
+in the audited namespaces against the standard axiom budget and the project's
+public no-product-equivalence rule.
 -/
 import Fermat.Conservation.FiniteOrbitLedger
 import Fermat.Conservation.FiniteOrbitLedgerReciprocity
 import Fermat.Conservation.GuardDependsOn
+import Fermat.Conservation.PointedFiniteOrbitLedger
 import Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 import Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 import Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
@@ -78,6 +79,15 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
 #check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_support_subset_range
 #check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum
+
+/-! ## Public inventory: pointed finite-orbit ledgers -/
+
+#check Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger
+#check Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_apply_distinguished
+#check Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_apply_orbit
+#check Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_apply_eq_zero_of_ne_of_not_mem_range
+#check Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_support_subset_insert_range
+#check Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_sum
 
 /-! ## Public inventory: finite-orbit ledgers under supplied reciprocity -/
 
@@ -226,6 +236,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #print axioms Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply
 #print axioms Fermat.Conservation.FiniteOrbitLedger.orbitLedger_support_subset_range
 #print axioms Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum
+#print axioms Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_apply_distinguished
+#print axioms Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_support_subset_insert_range
+#print axioms Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_sum
 #print axioms Fermat.Conservation.FiniteOrbitLedgerReciprocity.ledger_ne_zero_of_sum_ne_zero
 #print axioms Fermat.Conservation.FiniteOrbitLedgerReciprocity.readings_eq_single_add_orbitLedger
 #print axioms Fermat.Conservation.FiniteOrbitLedgerReciprocity.pairAt_eq_zero_of_globalReciprocity_of_orbitLedger_sum_eq_zero
@@ -251,6 +264,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.FiniteOrbitLedger
+#guard_standard_axioms_prefix Fermat.Conservation.PointedFiniteOrbitLedger
 #guard_standard_axioms_prefix Fermat.Conservation.FiniteOrbitLedgerReciprocity
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeResidueFourier
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeFourierPairingCompression
@@ -262,6 +276,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FiniteOrbitLedger
+#audit_no_product_equiv_types_prefix Fermat.Conservation.PointedFiniteOrbitLedger
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FiniteOrbitLedgerReciprocity
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeResidueFourier
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeFourierPairingCompression
@@ -307,6 +322,25 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_depends_on
   Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum,
   Fermat.Conservation.FiniteOrbitLedger.orbitLedger
+
+#guard_depends_on
+  Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger
+#guard_depends_on
+  Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_apply_distinguished,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
+#guard_depends_on
+  Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_apply_orbit,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply
+#guard_depends_on
+  Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_apply_eq_zero_of_ne_of_not_mem_range,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
+#guard_depends_on
+  Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_support_subset_insert_range,
+  Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_apply_eq_zero_of_ne_of_not_mem_range
+#guard_depends_on
+  Fermat.Conservation.PointedFiniteOrbitLedger.pointedOrbitLedger_sum,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum
 
 #guard_depends_on
   Fermat.Conservation.FiniteOrbitLedgerReciprocity.orbitLedger_ne_zero_of_value_ne_zero,
