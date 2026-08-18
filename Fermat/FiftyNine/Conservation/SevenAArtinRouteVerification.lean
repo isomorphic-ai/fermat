@@ -15,6 +15,10 @@ This non-imported executable audit leaf covers only the newly exposed route:
 * W1's two retained degree-one factors are reached exactly by localizing
   explicit global Kummer representatives, including the normalized value-one
   reading of their transported cup;
+* W2 is now a concrete `ZMod 59`-linear lambda-plus-827 localization map
+  from the actual reflected q-relaxed Selmer carrier to the product of the
+  roots-valued lambda `H¹` seat and all 58 supported-valuation coordinates;
+  its prescribed W1+W3 fiber is defined without asserting an inhabitant;
 * the normalized wild and complete `827` boundaries are literal linear maps
   on one genuine seated primal Selmer space; under `GlobalReciprocityLaw`
   they are exact negatives, have equal kernels, and lie in one explicit
@@ -38,7 +42,13 @@ This non-imported executable audit leaf covers only the newly exposed route:
 * independently, every genuine tame row of the Fermat-factor strict class is
   factored through its representative-independent residue wave, so the full
   normalized orbit is exactly the negative mode-44 Fourier coefficient; the
-  direction `7A -> coefficient = 0` is unconditional.
+  direction `7A -> coefficient = 0` is unconditional;
+* W5 now proves that the normalized 58-row profile determines both the
+  complete strict tame functional and any factorizing class readout,
+  independently of the chosen point of the normalized reflected fiber;
+  moreover the readout/Fourier identity holds for every strict Selmer input,
+  so the mode-44 coefficient descends through the genuine class gauge and
+  vanishes unconditionally on its kernel.
 * the allocated plus root is now unconditionally fixed by the complete odd
   class projector: genuine class-map naturality identifies cyclotomic `-1`
   with the allocated minus root, and relation 7D makes that root the negative
@@ -52,11 +62,17 @@ Hom-space and common-line comparison now exist on the real seated Selmer
 space: for one reflected carrier, `GlobalReciprocityLaw` gives literal map
 equality `wild = -orbit`, kernel equality, and common-line membership.
 Three inputs are still honest seams: reciprocity itself is not yet produced;
-the normalized `827` fiber is not yet proved to have W1's prescribed lambda
-reflected localization; and neither boundary is yet proved nonzero on the
-actual seated primal test space.  Thus the rank-one unit comparison is exact
-once seated nonvanishing is supplied, but it is not an unconditional
-Poitou--Tate lift.
+the concrete W1+W3 localization fiber is not yet proved nonempty; and neither
+boundary is yet proved nonzero on the actual seated primal test space.  The
+W2 boundary is now exact and machine-readable:
+
+`Nonempty W1W3CompatibleFiber827`
+
+is equivalent to existence of a point in the already retained normalized W3
+fiber whose actual lambda localization is W1's prescribed reflected class.
+The equivalence does not prove that such a point exists.  Thus the rank-one
+unit comparison is exact once seated nonvanishing is supplied, but it is not
+an unconditional Poitou--Tate lift.
 
 Within W7, pointwise faithfulness of the produced readout is now displayed
 as one concrete mode-44 Fourier zero-reflection statement for the actual
@@ -90,6 +106,7 @@ import Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59
 import Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59
 import Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59
 import Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827
+import Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827
 import Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827
 
 /-! ## Public route inventory -/
@@ -136,6 +153,27 @@ relaxed carrier.  This is not yet a simultaneous wild/tame PT lift. -/
 #check Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.normalizedReflectedFiber827_relaxedOrbitValuation_eq_profile
 #check Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.normalizedReflectedFiber827_relaxedOrbitValuation_isPureCharacter
 #check Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.exists_relaxedCarrier827_realizing_normalizedFullOrbitEigenprofile
+
+/-! W2 is now exposed as one actual lambda-plus-827 localization map and
+its literal W1+W3 fiber.  The two nonemptiness equivalences state the exact
+remaining lift problem; neither one asserts that the fiber is inhabited. -/
+
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.LambdaOrbitLocalizationTarget827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.lambdaReflectedLocalization827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.fullOrbitValuationLocalization827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.lambdaOrbitLocalization827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.lambdaOrbitLocalizationLinear827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3LocalizationTarget827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.W1W3CompatibleFiber827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_lambda
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_fullOrbit
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_orbitCoordinate
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_toNormalizedReflectedFiber827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_of_normalizedReflectedFiber827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_wildBoundary_eq_receiptCup
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_orbitBoundary_eq_strict
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff
+#check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff_exists_normalized_lambda
 
 /-! W4's completed algebraic implication.  The arithmetic same-line
 producer remains intentionally outside this theorem. -/
@@ -292,6 +330,18 @@ easy implication from relation 7A is already unconditional. -/
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fiftyNine_dvd_valuation_strictKummerRepresentative59
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+
+/-! W5 is now representative-independent at both the normalized reflected
+fiber and class-gauge levels.  These are all-input statements: the generic
+readout/Fourier identity is not specialized to the Fermat-selected class,
+and only the zero-reflection converse remains open. -/
+
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_of_normalizedProfile
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_eq_of_normalizedProfile
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_of_classGaugeMap59_eq
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero
+
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_selectedClassGauge59_eq_neg_fourierCoefficient
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_pointwiseFaithful_iff_fourierCoefficient_zero_implies_selectedClassGauge59_eq_zero
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_selectedClassGauge59_eq_zero
@@ -528,6 +578,33 @@ info: 'Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.existsUnique
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.existsUnique_unit_wild_eq_smul_orbit_of_reciprocity
 
+/-! The concrete W2 map and both exact formulations of its unresolved
+nonemptiness boundary use only Lean's standard quotient/classical axioms. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.lambdaOrbitLocalizationLinear827' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.lambdaOrbitLocalizationLinear827
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff_exists_normalized_lambda' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff_exists_normalized_lambda
+
 /--
 info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.context59_residueCharacter_angularComponent_eq_of_kummer_mk_eq' depends on axioms: [propext,
  Classical.choice,
@@ -551,6 +628,49 @@ info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictT
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+
+/-! The W5 representative-independence, generic readout/Fourier identity,
+and descent through the actual class gauge also have standard dependencies. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_of_normalizedProfile' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_of_normalizedProfile
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_eq_of_normalizedProfile' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_eq_of_normalizedProfile
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_classGaugeMap59_eq_neg_fourierCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_of_classGaugeMap59_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_of_classGaugeMap59_eq
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero
 
 /--
 info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA' depends on axioms: [propext,
@@ -692,6 +812,37 @@ exact readback theorem. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.exists_relaxedCarrier827_realizing_normalizedFullOrbitEigenprofile,
   Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.normalizedReflectedFiber827_relaxedOrbitValuation_eq_profile
+
+/-! The concrete W2 product map consumes both actual localization legs.
+Its sharp nonemptiness equivalence is built in both directions from the
+combined fiber and the retained normalized W3 fiber; it does not construct
+either side.  Any hypothetical inhabitant then feeds the genuine common
+Hom-space maps. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.lambdaOrbitLocalizationLinear827,
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.lambdaReflectedLocalization827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.lambdaOrbitLocalizationLinear827,
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.fullOrbitValuationLocalization827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_toNormalizedReflectedFiber827,
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_orbitCoordinate
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_of_normalizedReflectedFiber827,
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.normalizedReflectedFiber827_relaxedOrbitValuation_eq_profile
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff_exists_normalized_lambda,
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_toNormalizedReflectedFiber827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff_exists_normalized_lambda,
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_of_normalizedReflectedFiber827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_wildBoundary_eq_receiptCup,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_receipt_cup_of_localizes
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_orbitBoundary_eq_strict,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedOrbitBoundaryFunctional827_eq_strictTameOrbitFunctional827
 
 /-! The combined W3/unit-silence receipt really composes realization,
 arbitrary-unit cancellation, and quotient readout construction. -/
@@ -865,6 +1016,38 @@ and proves the unconditional `7A -> coefficient = 0` direction. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour,
   Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.powerCharacter59_fortyFour_inv
+
+/-! W5 removes dependence on a chosen normalized-fiber representative,
+then identifies the produced class readout with the same Fourier coefficient
+on every strict input.  The two descent consequences really consume the
+internally constructed normalized profile/readout rather than a supplied
+class-function certificate. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_of_normalizedProfile,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_eq_of_normalizedProfile,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_of_normalizedProfile
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_eq_of_normalizedProfile,
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeSeating59.fermatFactorClassGaugeMap59_surjective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_classGaugeMap59_eq_neg_fourierCoefficient,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_of_classGaugeMap59_eq,
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_of_classGaugeMap59_eq,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero,
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+
 #guard_depends_on
   Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA,
   Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_selectedClassGauge59_eq_zero
