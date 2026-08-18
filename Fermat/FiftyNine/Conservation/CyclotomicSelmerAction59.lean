@@ -218,27 +218,22 @@ noncomputable abbrev cyclotomicQRelaxedSelmerRepresentation827 :
     (cyclotomicStableSupport59_placesOver827 K)
 
 /-- The strict and 827-relaxed actions agree along the canonical support
-inclusion, because both are restrictions of the same ambient quotient map. -/
+inclusion, by specialization of the prime-generic compatibility theorem. -/
 def cyclotomicEmptySupportActionCompatibility827 :
     EmptySupportActionCompatibility
       (cyclotomicStrictSelmerRepresentation59 K)
-      (cyclotomicQRelaxedSelmerRepresentation827 K) where
-  inclusion_intertwines := by
-    intro sigma x
-    apply Additive.toMul.injective
-    apply Subtype.ext
-    rfl
+      (cyclotomicQRelaxedSelmerRepresentation827 K) :=
+  cyclotomicEmptySupportActionCompatibilityAt 59 K (placesOver827 K)
+    (cyclotomicStableSupport59_placesOver827 K)
 
 /-- The canonical reflected strict-to-827-supported landing for every pair
-of characters. -/
+of characters, specialized from the prime-generic reflected landing. -/
 def cyclotomicReflectedEmptySupportLanding827
     (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59) :
     ReflectedEmptySupportLanding827
       (cyclotomicStrictSelmerRepresentation59 K)
       (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi :=
-  EmptySupportActionCompatibility827.toReflectedLanding
-    (cyclotomicStrictSelmerRepresentation59 K)
-    (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi
-    (cyclotomicEmptySupportActionCompatibility827 K)
+  cyclotomicReflectedEmptySupportLandingAt 59 K (placesOver827 K)
+    (cyclotomicStableSupport59_placesOver827 K) omega chi
 
 end Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59

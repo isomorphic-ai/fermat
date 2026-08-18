@@ -3304,9 +3304,14 @@ reciprocity theorem is introduced by this structural bridge. -/
 
 The ambient field, unit, Kummer-quotient, place, valuation, and supported
 Selmer actions are the transparent `p = 59` specializations of the
-prime-generic construction.  Only the complete 827 support, its compatible
-restriction, and the reflected landing remain local to this campaign.  No
-action, covariance, or landing certificate is supplied by a caller. -/
+prime-generic construction.  Compatibility of the canonical strict inclusion
+with every stable supported action, and its reflected landing, are now generic
+as well.  Only the complete 827 support, its stability proof, and the selected
+specialization names remain local to this campaign.  No action, covariance,
+or landing certificate is supplied by a caller. -/
+
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt
 
 #check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicFieldAction59
 #check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59
@@ -3368,16 +3373,41 @@ action, covariance, or landing certificate is supplied by a caller. -/
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicQRelaxedSelmerRepresentation827,
   Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerRepresentationAt
 #guard_depends_on
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicEmptySupportActionCompatibility827,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStrictSelmerRepresentation59
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerAddHomAt
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicEmptySupportActionCompatibility827,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicQRelaxedSelmerRepresentation827
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicReflectedEmptySupportLanding827,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicEmptySupportActionCompatibility827
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt
 
 /-! ### Canonical empty-support reflected inclusion -/
+
+The general inclusion, compatibility, eigenspace restriction, injectivity,
+and Kummer readbacks now live in the prime-generic module.  The established
+names below are thin `p = 59` wrappers; only the final six declarations bind
+that spine to the reflected 827 vocabulary. -/
+
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic_injective
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.EmptySupportEigenspaceLanding
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.EmptySupportActionCompatibility
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.EmptySupportActionCompatibility.toEigenspaceLanding
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_apply
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_intertwines
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_apply
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_injective
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerQuotientAt_emptySupportEigenspaceInclusion
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerClassAt_emptySupportEigenspaceInclusion
 
 #check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic
 #check Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic_injective
@@ -3401,25 +3431,52 @@ action, covariance, or landing certificate is supplied by a caller. -/
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic_injective,
-  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic_injective
 #guard_depends_on
   Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusionPadic_apply,
-  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusionPadic
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_apply
 #guard_depends_on
   Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusionPadic_intertwines,
-  Fermat.Conservation.SelmerEigenspace.mem_characterEigenspaceAt_iff
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_intertwines
 #guard_depends_on
   Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion_apply,
-  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_apply
 #guard_depends_on
   Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion_injective,
-  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportInclusionPadic_injective
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_injective
 #guard_depends_on
   Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerQuotientAt_emptySupportEigenspaceInclusion,
-  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerQuotientAt_emptySupportEigenspaceInclusion
 #guard_depends_on
   Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.toKummerClassAt_emptySupportEigenspaceInclusion,
-  Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerClassAt_emptySupportEigenspaceInclusion
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic_injective,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.EmptySupportActionCompatibility.toEigenspaceLanding,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_apply,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_intertwines,
+  Fermat.Conservation.SelmerEigenspace.mem_characterEigenspaceAt_iff
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_intertwines
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_apply,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_injective,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic_injective
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerQuotientAt_emptySupportEigenspaceInclusion,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerClassAt_emptySupportEigenspaceInclusion,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion
 #guard_depends_on
   Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.oldReflectedToQRelaxed827_injective,
   Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827.emptySupportEigenspaceInclusion_injective

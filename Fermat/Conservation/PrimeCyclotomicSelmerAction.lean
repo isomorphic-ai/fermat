@@ -13,8 +13,10 @@ The action is built from the canonical cyclotomic Galois equivalence.  In
 particular, no action or covariance certificate is supplied by a caller.
 The empty-support specialization is the genuine
 strict Selmer representation used by the unit and class naturality maps.
+Its canonical inclusion into every stable supported carrier intertwines the
+two actions and therefore restricts to every reflected character eigenspace.
 -/
-import Fermat.Conservation.SelmerEigenspace
+import Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion
 import KummerCriterion.UnitQuotient.DeltaAction
 import Mathlib.GroupTheory.GroupAction.Quotient
 
@@ -24,6 +26,7 @@ noncomputable section
 
 namespace Fermat.Conservation.PrimeCyclotomicSelmerAction
 
+open Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion
 open Fermat.Conservation.SelmerEigenspace
 
 set_option maxRecDepth 10000
@@ -408,5 +411,38 @@ noncomputable def cyclotomicStrictSelmerRepresentation :
       (Delta := KummerCriterion.CyclotomicUnitDelta p) :=
   cyclotomicSelmerRepresentationAt p K ∅
     (cyclotomicStableSupport_empty p K)
+
+/-! ## Naturality of the canonical strict-to-supported inclusion -/
+
+/-- For every stable support, the strict and supported cyclotomic actions
+agree along Mathlib's canonical empty-support inclusion.  Both actions are
+restrictions of the same ambient Kummer quotient map, so no compatibility
+certificate is supplied by a caller. -/
+def cyclotomicEmptySupportActionCompatibilityAt
+    (S : Set (IsDedekindDomain.HeightOneSpectrum (𝓞 K)))
+    (hS : CyclotomicStableSupport p K S) :
+    EmptySupportActionCompatibility
+      (cyclotomicStrictSelmerRepresentation p K)
+      (cyclotomicSelmerRepresentationAt p K S hS) where
+  inclusion_intertwines := by
+    intro sigma x
+    apply Additive.toMul.injective
+    apply Subtype.ext
+    rfl
+
+/-- The canonical strict-to-supported inclusion lands in every reflected
+character eigenspace for the two canonical cyclotomic actions. -/
+def cyclotomicReflectedEmptySupportLandingAt
+    (S : Set (IsDedekindDomain.HeightOneSpectrum (𝓞 K)))
+    (hS : CyclotomicStableSupport p K S)
+    (omega chi : Fermat.Conservation.InvolutiveBase.Character
+      (PadicInt p) (KummerCriterion.CyclotomicUnitDelta p)) :
+    EmptySupportEigenspaceLanding
+      (cyclotomicStrictSelmerRepresentation p K)
+      (cyclotomicSelmerRepresentationAt p K S hS)
+      (Fermat.Conservation.InvolutiveBase.reflectedCharacter omega chi) :=
+  EmptySupportActionCompatibility.toEigenspaceLanding
+    (cyclotomicEmptySupportActionCompatibilityAt p K S hS)
+    (Fermat.Conservation.InvolutiveBase.reflectedCharacter omega chi)
 
 end Fermat.Conservation.PrimeCyclotomicSelmerAction
