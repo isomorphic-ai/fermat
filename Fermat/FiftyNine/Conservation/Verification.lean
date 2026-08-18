@@ -1740,6 +1740,7 @@ the complete orbit sum, and omitted nonwild places agree with the canonical
 local tame symbol rather than being silenced by representation alone. -/
 
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_injective
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_orbit
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_eq_zero_of_not_over827
@@ -1749,23 +1750,29 @@ local tame symbol rather than being silenced by representation alone. -/
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.canonicalTameValue_eq_actualTameLedger827_of_outside_support
 
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_injective,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.indexedPlaceOrbitEquiv827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger
+#guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827,
   Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.actualTameOrbitValue827
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_orbit,
-  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_orbit,
-  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.indexedPlaceOrbitEquiv827
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_injective
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_eq_zero_of_not_over827,
-  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_support_subset_placesOver827,
-  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_eq_zero_of_not_over827
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_support_subset_range
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_sum_eq_orbit_sum,
-  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedger827.wild_add_actualTameLedger827_sum_eq_zero_iff,
   Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_sum_eq_orbit_sum
@@ -2293,11 +2300,26 @@ genuine cancellation among live local entries. -/
   Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameOrbitValue827_eq_mul_actual,
   Fermat.FiftyNine.Conservation.CanonicalTameLedger827.actualTameOrbitValue827_eq_inv_mul_canonical
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameLedger827,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger
+#guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameLedger827_apply_orbit,
-  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.indexedPlaceOrbitEquiv827
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameLedger827_apply_orbit,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameLedger827_apply_eq_zero_of_not_over827,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameValue_eq_canonicalLedger_of_outside_support,
   Fermat.FiftyNine.Conservation.CyclotomicTameContext59.value_firstGenerated_candidate_eq_zero_outside_support
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameValue_eq_canonicalLedger_of_outside_support,
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameLedger827_apply_eq_zero_of_not_over827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameLedger827_sum_eq_weighted_actual,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameLedger827_sum_eq_weighted_actual,
   Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameOrbitValue827_eq_mul_actual

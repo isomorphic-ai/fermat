@@ -17,6 +17,7 @@ unweighted, Fourier sum. This module proves only that exact normalization
 and support statement; it does not assume or package global reciprocity.
 -/
 import Fermat.Conservation.TameSymbolTransport
+import Fermat.Conservation.FiniteOrbitLedger
 import Fermat.FiftyNine.Conservation.ActualTameLedger827
 
 open scoped BigOperators NumberField
@@ -350,9 +351,9 @@ noncomputable def canonicalTameLedger827
     (lift : ReflectedQRelaxedLocalizationLift827
       (LocalReduction827.rhoQ827 (K := K)) omega chi) :
     Place K →₀ ZMod 59 :=
-  ∑ tau : GaloisIndex59,
-    Finsupp.single (tameOrbitPlace827 (K := K) tau)
-      (canonicalTameOrbitValue827 (K := K) omega chi lift tau)
+  FiniteOrbitLedger.orbitLedger
+    (tameOrbitPlace827 (K := K))
+    (canonicalTameOrbitValue827 (K := K) omega chi lift)
 
 @[simp]
 theorem canonicalTameLedger827_apply_orbit
@@ -362,22 +363,10 @@ theorem canonicalTameLedger827_apply_orbit
     canonicalTameLedger827 (K := K) omega chi lift
         (tameOrbitPlace827 (K := K) tau) =
       canonicalTameOrbitValue827 (K := K) omega chi lift tau := by
-  classical
-  change (∑ sigma : GaloisIndex59,
-      Finsupp.single (tameOrbitPlace827 (K := K) sigma)
-        (canonicalTameOrbitValue827 (K := K) omega chi lift sigma))
-      (tameOrbitPlace827 (K := K) tau) = _
-  rw [Finset.sum_apply']
-  rw [Finset.sum_eq_single tau]
-  · simp
-  · intro sigma _ hsigma
-    rw [Finsupp.single_eq_of_ne]
-    intro hplace
-    apply hsigma
-    apply (indexedPlaceOrbitEquiv827 K
-      (tameOrbitBasePlace827 (K := K))).injective
-    exact Subtype.ext hplace.symm
-  · simp
+  exact FiniteOrbitLedger.orbitLedger_apply
+    (tameOrbitPlace827 (K := K))
+    (canonicalTameOrbitValue827 (K := K) omega chi lift)
+    (tameOrbitPlace827_injective (K := K)) tau
 
 /-- Every canonical ledger row outside the actual set of places over 827 is
 zero. -/
@@ -386,19 +375,10 @@ theorem canonicalTameLedger827_apply_eq_zero_of_not_over827
       (LocalReduction827.rhoQ827 (K := K)) omega chi)
     (v : Place K) (hv : v ∉ placesOver827 K) :
     canonicalTameLedger827 (K := K) omega chi lift v = 0 := by
-  classical
-  change (∑ tau : GaloisIndex59,
-      Finsupp.single (tameOrbitPlace827 (K := K) tau)
-        (canonicalTameOrbitValue827 (K := K) omega chi lift tau)) v = 0
-  rw [Finset.sum_apply']
-  apply Finset.sum_eq_zero
-  intro tau _
-  rw [Finsupp.single_eq_of_ne]
-  intro hplace
-  apply hv
-  rw [hplace]
-  exact (indexedPlaceOrbitEquiv827 K
-    (tameOrbitBasePlace827 (K := K)) tau).2
+  apply FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
+  rintro ⟨tau, rfl⟩
+  exact hv ((indexedPlaceOrbitEquiv827 K
+    (tameOrbitBasePlace827 (K := K)) tau).2)
 
 /-- At every omitted nonwild place, the canonical local Hilbert symbol is
 exactly the zero entry of the globally normalized ledger. -/
@@ -427,24 +407,7 @@ theorem canonicalTameLedger827_sum_eq_weighted_actual
         (fun _ value ↦ value) =
       ∑ tau : GaloisIndex59, (tau : ZMod 59) *
         actualTameOrbitValue827 (K := K) omega chi lift tau := by
-  classical
-  let value : GaloisIndex59 → ZMod 59 :=
-    fun tau ↦ canonicalTameOrbitValue827 (K := K) omega chi lift tau
-  let place : GaloisIndex59 → Place K :=
-    fun tau ↦ tameOrbitPlace827 (K := K) tau
-  have hsum (s : Finset GaloisIndex59) :
-      (∑ tau ∈ s, Finsupp.single (place tau) (value tau)).sum
-          (fun _ entry ↦ entry) = ∑ tau ∈ s, value tau := by
-    induction s using Finset.induction_on with
-    | empty => simp
-    | @insert tau s htau ih =>
-        rw [Finset.sum_insert htau, Finset.sum_insert htau,
-          Finsupp.sum_add_index' (fun _ ↦ rfl) (fun _ _ _ ↦ rfl),
-          Finsupp.sum_single_index (by rfl), ih]
-  change (∑ tau : GaloisIndex59,
-      Finsupp.single (place tau) (value tau)).sum
-        (fun _ entry ↦ entry) = _
-  rw [hsum (Finset.univ : Finset GaloisIndex59)]
+  rw [canonicalTameLedger827, FiniteOrbitLedger.orbitLedger_sum]
   apply Finset.sum_congr rfl
   intro tau _
   exact canonicalTameOrbitValue827_eq_mul_actual

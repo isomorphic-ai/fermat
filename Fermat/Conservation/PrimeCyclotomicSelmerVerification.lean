@@ -7,12 +7,13 @@ Authors: Fabian Franz, Codex
 
 This non-imported leaf audits the actual prime-parametric action, the
 canonical strict-to-supported inclusion, the unit and class naturality maps,
-the residue Fourier dictionary, complementary-wave pairing compression,
-full-orbit reciprocity transport, and cyclotomic localization covariance.  It
-records the intended implementation dependencies and checks every declaration
-in the audited namespaces against the standard axiom budget and the project's
-public no-product-equivalence rule.
+finite-orbit ledgers, the residue Fourier dictionary, complementary-wave
+pairing compression, full-orbit reciprocity transport, and cyclotomic
+localization covariance.  It records the intended implementation dependencies
+and checks every declaration in the audited namespaces against the standard
+axiom budget and the project's public no-product-equivalence rule.
 -/
+import Fermat.Conservation.FiniteOrbitLedger
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 import Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
@@ -67,6 +68,14 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicStrictSelmerRepresentation
 #check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt
 #check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt
+
+/-! ## Public inventory: coefficient-generic finite-orbit ledgers -/
+
+#check Fermat.Conservation.FiniteOrbitLedger.orbitLedger
+#check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply
+#check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
+#check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_support_subset_range
+#check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum
 
 /-! ## Public inventory: residue Fourier analysis -/
 
@@ -202,6 +211,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #print axioms Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionLinearMap_characterProjector
 #print axioms Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerIdealClass_cyclotomic
 #print axioms Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassLinearMap_characterProjector
+#print axioms Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply
+#print axioms Fermat.Conservation.FiniteOrbitLedger.orbitLedger_support_subset_range
+#print axioms Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum
 #print axioms Fermat.Conservation.PrimeResidueFourier.fourier_reconstruction
 #print axioms Fermat.Conservation.PrimeResidueFourier.pureCharacter_pointed_silence
 #print axioms Fermat.Conservation.PrimeResidueFourier.reducedCharacterAt_apply
@@ -223,6 +235,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicSelmerAction
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
+#guard_standard_axioms_prefix Fermat.Conservation.FiniteOrbitLedger
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeResidueFourier
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeFourierPairingCompression
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeFullOrbitReciprocity
@@ -232,6 +245,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicSelmerAction
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
+#audit_no_product_equiv_types_prefix Fermat.Conservation.FiniteOrbitLedger
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeResidueFourier
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeFourierPairingCompression
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeFullOrbitReciprocity
@@ -260,6 +274,22 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_depends_on
   Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt,
   Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt
+
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger,
+  Finsupp.single
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_support_subset_range,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger
 
 #guard_depends_on
   Fermat.Conservation.PrimeResidueFourier.fourier_reconstruction,

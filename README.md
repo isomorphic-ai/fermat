@@ -321,6 +321,17 @@ corresponding `*59` files preserve the older public API as transparent
 specializations; only support at `827` and the solution-dependent Fermat
 endpoints remain in those adapters.
 
+`FiniteOrbitLedger` is the coefficient-generic finite placement layer.  For
+any finite index type, arbitrary place type, and additive commutative-monoid
+coefficients, it seats each supplied value in a `Finsupp` row at its supplied
+place.  The index orientation is preserved literally: no inversion or weight
+is inserted.  An injective place map gives exact indexed readback; without
+injectivity, coincident rows add while the total ledger sum still recovers the
+complete indexed sum.  Values outside the map's range vanish, so the actual
+finite support is contained in that range, but support equality is not claimed
+because supplied coefficients may be zero.  This module introduces neither
+character weights nor any local or global reciprocity assertion.
+
 `PrimeResidueFourier` supplies the residue-field Fourier dictionary for every
 prime `p`: character functions and orthogonality, normalized Fourier
 coordinates and reconstruction, the character basis, pure-mode support and

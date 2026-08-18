@@ -1,3 +1,4 @@
+import Fermat.Conservation.FiniteOrbitLedger
 import Fermat.FiftyNine.Conservation.CyclotomicTameContext59
 import Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827
 
@@ -59,6 +60,15 @@ noncomputable abbrev tameOrbitPlace827 (tau : GaloisIndex59) :
     Fermat.FiftyNine.Conservation.CyclotomicTameContext59.Place K :=
   (indexedPlaceOrbitEquiv827 K (tameOrbitBasePlace827 (K := K)) tau).1
 
+omit [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)] in
+/-- Distinct canonical orbit coordinates name distinct height-one places. -/
+theorem tameOrbitPlace827_injective :
+    Function.Injective (tameOrbitPlace827 (K := K)) := by
+  intro tau sigma hplace
+  apply (indexedPlaceOrbitEquiv827 K
+    (tameOrbitBasePlace827 (K := K))).injective
+  exact Subtype.ext hplace
+
 /-- The finite fixed-root coordinate ledger: its retained entries are the
 already constructed local symbols, seated at the corresponding height-one
 places. -/
@@ -66,9 +76,9 @@ noncomputable def actualTameLedger827
     (lift : ReflectedQRelaxedLocalizationLift827
       (rhoQ827 (K := K)) omega chi) :
     Fermat.FiftyNine.Conservation.CyclotomicTameContext59.Place K →₀ ZMod 59 :=
-  ∑ tau : GaloisIndex59,
-    Finsupp.single (tameOrbitPlace827 (K := K) tau)
-      (actualTameOrbitValue827 (K := K) omega chi lift tau)
+  FiniteOrbitLedger.orbitLedger
+    (tameOrbitPlace827 (K := K))
+    (actualTameOrbitValue827 (K := K) omega chi lift)
 
 /-- Restriction to the explicit orbit recovers the corresponding actual
 tame-symbol value, with no comparison premise. -/
@@ -80,22 +90,10 @@ theorem actualTameLedger827_apply_orbit
     actualTameLedger827 (K := K) omega chi lift
         (tameOrbitPlace827 (K := K) tau) =
       actualTameOrbitValue827 (K := K) omega chi lift tau := by
-  classical
-  change (∑ sigma : GaloisIndex59,
-      Finsupp.single (tameOrbitPlace827 (K := K) sigma)
-        (actualTameOrbitValue827 (K := K) omega chi lift sigma))
-      (tameOrbitPlace827 (K := K) tau) = _
-  rw [Finset.sum_apply']
-  rw [Finset.sum_eq_single tau]
-  · simp
-  · intro sigma _ hsigma
-    rw [Finsupp.single_eq_of_ne]
-    intro hplace
-    apply hsigma
-    apply (indexedPlaceOrbitEquiv827 K
-      (tameOrbitBasePlace827 (K := K))).injective
-    exact Subtype.ext hplace.symm
-  · simp
+  exact FiniteOrbitLedger.orbitLedger_apply
+    (tameOrbitPlace827 (K := K))
+    (actualTameOrbitValue827 (K := K) omega chi lift)
+    (tameOrbitPlace827_injective (K := K)) tau
 
 /-- Every ledger row outside the actual set of places over 827 is zero. -/
 theorem actualTameLedger827_apply_eq_zero_of_not_over827
@@ -104,19 +102,10 @@ theorem actualTameLedger827_apply_eq_zero_of_not_over827
     (v : Fermat.FiftyNine.Conservation.CyclotomicTameContext59.Place K)
     (hv : v ∉ placesOver827 K) :
     actualTameLedger827 (K := K) omega chi lift v = 0 := by
-  classical
-  change (∑ tau : GaloisIndex59,
-      Finsupp.single (tameOrbitPlace827 (K := K) tau)
-        (actualTameOrbitValue827 (K := K) omega chi lift tau)) v = 0
-  rw [Finset.sum_apply']
-  apply Finset.sum_eq_zero
-  intro tau _
-  rw [Finsupp.single_eq_of_ne]
-  intro hplace
-  apply hv
-  rw [hplace]
-  exact (indexedPlaceOrbitEquiv827 K
-    (tameOrbitBasePlace827 (K := K)) tau).2
+  apply FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
+  rintro ⟨tau, rfl⟩
+  exact hv ((indexedPlaceOrbitEquiv827 K
+    (tameOrbitBasePlace827 (K := K)) tau).2)
 
 /-- The support of the finite ledger is contained in the genuine set of
 height-one places above 827. -/
@@ -126,10 +115,13 @@ theorem actualTameLedger827_support_subset_placesOver827
     ↑(actualTameLedger827 (K := K) omega chi lift).support ⊆
       placesOver827 K := by
   intro v hv
-  by_contra hout
-  exact (Finsupp.mem_support_iff.mp hv)
-    (actualTameLedger827_apply_eq_zero_of_not_over827
-      (K := K) omega chi lift v hout)
+  have hvRange : v ∈ Set.range (tameOrbitPlace827 (K := K)) :=
+    FiniteOrbitLedger.orbitLedger_support_subset_range
+      (tameOrbitPlace827 (K := K))
+      (actualTameOrbitValue827 (K := K) omega chi lift) hv
+  obtain ⟨tau, rfl⟩ := hvRange
+  exact (indexedPlaceOrbitEquiv827 K
+    (tameOrbitBasePlace827 (K := K)) tau).2
 
 /-- Aggregating the finite fixed-root height-one ledger is definitionally the
 complete unweighted explicit tame-orbit sum. -/
@@ -140,26 +132,9 @@ theorem actualTameLedger827_sum_eq_orbit_sum
         (fun _ value ↦ value) =
       ∑ tau : GaloisIndex59,
         actualTameOrbitValue827 (K := K) omega chi lift tau := by
-  classical
-  let value : GaloisIndex59 → ZMod 59 :=
-    fun tau ↦ actualTameOrbitValue827 (K := K) omega chi lift tau
-  let place : GaloisIndex59 →
-      Fermat.FiftyNine.Conservation.CyclotomicTameContext59.Place K :=
-    fun tau ↦ tameOrbitPlace827 (K := K) tau
-  have hsum (s : Finset GaloisIndex59) :
-      (∑ tau ∈ s, Finsupp.single (place tau) (value tau)).sum
-          (fun _ entry ↦ entry) =
-        ∑ tau ∈ s, value tau := by
-    induction s using Finset.induction_on with
-    | empty => simp
-    | @insert tau s htau ih =>
-        rw [Finset.sum_insert htau, Finset.sum_insert htau,
-          Finsupp.sum_add_index' (fun _ ↦ rfl) (fun _ _ _ ↦ rfl),
-          Finsupp.sum_single_index (by rfl), ih]
-  change (∑ tau : GaloisIndex59,
-      Finsupp.single (place tau) (value tau)).sum
-        (fun _ entry ↦ entry) = ∑ tau : GaloisIndex59, value tau
-  simpa using hsum (Finset.univ : Finset GaloisIndex59)
+  exact FiniteOrbitLedger.orbitLedger_sum
+    (tameOrbitPlace827 (K := K))
+    (actualTameOrbitValue827 (K := K) omega chi lift)
 
 /-- Adding an arbitrary proposed wild scalar to the fixed-root ledger is
 equivalent to adding it to the unweighted explicit 827-orbit sum.  This is
