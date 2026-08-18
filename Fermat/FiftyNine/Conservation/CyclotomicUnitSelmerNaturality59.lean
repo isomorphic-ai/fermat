@@ -3,19 +3,14 @@ Copyright (c) 2026 Fabian Franz. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Fabian Franz, Codex
 
-# Cyclotomic naturality of global-unit Selmer lifts at 59
+# The 59-adapter for cyclotomic unit--Selmer naturality
 
-The cyclotomic action on the ring of integers preserves global units and
-59th powers.  It therefore descends to the actual group of global units
-modulo 59th powers.  This file proves that Mathlib's `fromUnitLift` map
-intertwines that descended action with the genuine strict Selmer action.
-
-Thus an equation-(8) coefficient unit remains the coefficient unit of the
-transported Kummer class; no new representative or naturality certificate
-is supplied.
+This file specializes the prime-generic unit action, representation,
+unit-inclusion intertwiner, and character-projector naturality at `p = 59`.
+The only proof bodies retained here are the four equation-(8) state adapters.
 -/
+import Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 import Fermat.FiftyNine.Conservation.FermatStatePrimalUnitProjection59
-import Mathlib.RepresentationTheory.Intertwining
 
 open scoped MonoidAlgebra NumberField nonZeroDivisors
 
@@ -27,6 +22,7 @@ set_option maxHeartbeats 0
 namespace Fermat.FiftyNine.Conservation.CyclotomicUnitSelmerNaturality59
 
 open Fermat.Conservation.CommonActionStage
+open Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 open Fermat.Conservation.SelmerEigenspace
 open Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 open Fermat.FiftyNine.Conservation.SplitPrimeFourier827
@@ -37,197 +33,97 @@ local instance : Fact (0 < 59) := ⟨by norm_num⟩
 variable (K : Type*) [Field K] [NumberField K]
   [IsCyclotomicExtension {59} ℚ K]
 
-/-! ## The descended action on global units modulo 59th powers -/
+/-! ## The prime-generic unit action specialized at 59 -/
 
 /-- The cyclotomic ring automorphism, restricted to global units. -/
-noncomputable def cyclotomicRingUnitMulEquiv59
-    (sigma : GaloisIndex59) :
-    (NumberField.RingOfIntegers K)ˣ ≃*
-      (NumberField.RingOfIntegers K)ˣ :=
-  Units.mapEquiv
-    (KummerCriterion.cyclotomicRingOfIntegersEquiv
-      (p := 59) K sigma).toMulEquiv
+noncomputable abbrev cyclotomicRingUnitMulEquiv59
+    (sigma : GaloisIndex59) : (𝓞 K)ˣ ≃* (𝓞 K)ˣ :=
+  cyclotomicRingUnitMulEquiv 59 K sigma
 
 /-- Cyclotomic transport carries the subgroup of 59th powers onto itself. -/
 theorem cyclotomicRingUnitMulEquiv59_powRange
     (sigma : GaloisIndex59) :
     Subgroup.map (cyclotomicRingUnitMulEquiv59 K sigma)
-        (powMonoidHom 59 :
-          (NumberField.RingOfIntegers K)ˣ →*
-            (NumberField.RingOfIntegers K)ˣ).range =
-      (powMonoidHom 59 :
-        (NumberField.RingOfIntegers K)ˣ →*
-          (NumberField.RingOfIntegers K)ˣ).range := by
-  ext u
-  constructor
-  · rintro ⟨v, ⟨w, rfl⟩, rfl⟩
-    exact ⟨cyclotomicRingUnitMulEquiv59 K sigma w, by simp⟩
-  · rintro ⟨w, rfl⟩
-    refine ⟨(cyclotomicRingUnitMulEquiv59 K sigma).symm w ^ 59,
-      ⟨(cyclotomicRingUnitMulEquiv59 K sigma).symm w, rfl⟩, ?_⟩
-    simp
+        (powMonoidHom 59 : (𝓞 K)ˣ →* (𝓞 K)ˣ).range =
+      (powMonoidHom 59 : (𝓞 K)ˣ →* (𝓞 K)ˣ).range :=
+  cyclotomicRingUnitMulEquiv_powRange 59 K sigma
 
 /-- The induced multiplicative automorphism of global units modulo 59th
 powers. -/
-noncomputable def cyclotomicUnitModPMulEquiv59
+noncomputable abbrev cyclotomicUnitModPMulEquiv59
     (sigma : GaloisIndex59) :
-    ((NumberField.RingOfIntegers K)ˣ ⧸
-      (powMonoidHom 59 :
-        (NumberField.RingOfIntegers K)ˣ →*
-          (NumberField.RingOfIntegers K)ˣ).range) ≃*
-    ((NumberField.RingOfIntegers K)ˣ ⧸
-      (powMonoidHom 59 :
-        (NumberField.RingOfIntegers K)ˣ →*
-          (NumberField.RingOfIntegers K)ˣ).range) :=
-  QuotientGroup.congr _ _ (cyclotomicRingUnitMulEquiv59 K sigma)
-    (cyclotomicRingUnitMulEquiv59_powRange K sigma)
+    ((𝓞 K)ˣ ⧸ (powMonoidHom 59 : (𝓞 K)ˣ →* (𝓞 K)ˣ).range) ≃*
+      ((𝓞 K)ˣ ⧸ (powMonoidHom 59 : (𝓞 K)ˣ →* (𝓞 K)ˣ).range) :=
+  cyclotomicUnitModPMulEquiv 59 K sigma
 
 /-- Computation of the quotient action on a represented global unit. -/
 @[simp]
 theorem cyclotomicUnitModPMulEquiv59_mk
-    (sigma : GaloisIndex59)
-    (u : (NumberField.RingOfIntegers K)ˣ) :
+    (sigma : GaloisIndex59) (u : (𝓞 K)ˣ) :
     cyclotomicUnitModPMulEquiv59 K sigma (QuotientGroup.mk u) =
-      QuotientGroup.mk (cyclotomicRingUnitMulEquiv59 K sigma u) := by
-  exact QuotientGroup.quotientMulEquivOfEq_mk
-    (cyclotomicRingUnitMulEquiv59_powRange K sigma) _
+      QuotientGroup.mk (cyclotomicRingUnitMulEquiv59 K sigma u) :=
+  cyclotomicUnitModPMulEquiv_mk 59 K sigma u
 
 /-- The same descended automorphism in the additive notation used by the
 unit--Selmer exact sequence. -/
-noncomputable def cyclotomicUnitModPAddEquiv59
+noncomputable abbrev cyclotomicUnitModPAddEquiv59
     (sigma : GaloisIndex59) :
-    UnitModP (NumberField.RingOfIntegers K) 59 ≃+
-      UnitModP (NumberField.RingOfIntegers K) 59 :=
-  (cyclotomicUnitModPMulEquiv59 K sigma).toAdditive
+    UnitModP (𝓞 K) 59 ≃+ UnitModP (𝓞 K) 59 :=
+  cyclotomicUnitModPAddEquiv 59 K sigma
 
 /-- The descended action at the identity is the identity. -/
 @[simp]
 theorem cyclotomicUnitModPAddEquiv59_one_apply
-    (u : UnitModP (NumberField.RingOfIntegers K) 59) :
-    cyclotomicUnitModPAddEquiv59 K 1 u = u := by
-  obtain ⟨epsilon, hepsilon⟩ := QuotientGroup.mk'_surjective
-    (powMonoidHom 59 :
-      (NumberField.RingOfIntegers K)ˣ →*
-        (NumberField.RingOfIntegers K)ˣ).range (Additive.toMul u)
-  have hu : u = Additive.ofMul (QuotientGroup.mk epsilon) := by
-    apply Additive.toMul.injective
-    exact hepsilon.symm
-  rw [hu]
-  apply Additive.toMul.injective
-  change cyclotomicUnitModPMulEquiv59 K 1 (QuotientGroup.mk epsilon) =
-    QuotientGroup.mk epsilon
-  rw [cyclotomicUnitModPMulEquiv59_mk]
-  apply congrArg QuotientGroup.mk
-  apply Units.ext
-  change KummerCriterion.cyclotomicRingOfIntegersEquiv
-      (p := 59) K 1 (epsilon : NumberField.RingOfIntegers K) = epsilon
-  exact KummerCriterion.cyclotomicRingOfIntegersEquiv_one_apply
-    (p := 59) (K := K) epsilon
+    (u : UnitModP (𝓞 K) 59) :
+    cyclotomicUnitModPAddEquiv59 K 1 u = u :=
+  cyclotomicUnitModPAddEquiv_one_apply 59 K u
 
 /-- Multiplication in the Galois index acts by composition, in the same
 order as the strict Selmer representation. -/
 theorem cyclotomicUnitModPAddEquiv59_mul_apply
     (sigma tau : GaloisIndex59)
-    (u : UnitModP (NumberField.RingOfIntegers K) 59) :
+    (u : UnitModP (𝓞 K) 59) :
     cyclotomicUnitModPAddEquiv59 K (sigma * tau) u =
       cyclotomicUnitModPAddEquiv59 K sigma
-        (cyclotomicUnitModPAddEquiv59 K tau u) := by
-  obtain ⟨epsilon, hepsilon⟩ := QuotientGroup.mk'_surjective
-    (powMonoidHom 59 :
-      (NumberField.RingOfIntegers K)ˣ →*
-        (NumberField.RingOfIntegers K)ˣ).range (Additive.toMul u)
-  have hu : u = Additive.ofMul (QuotientGroup.mk epsilon) := by
-    apply Additive.toMul.injective
-    exact hepsilon.symm
-  rw [hu]
-  apply Additive.toMul.injective
-  change cyclotomicUnitModPMulEquiv59 K (sigma * tau)
-      (QuotientGroup.mk epsilon) =
-    cyclotomicUnitModPMulEquiv59 K sigma
-      (cyclotomicUnitModPMulEquiv59 K tau (QuotientGroup.mk epsilon))
-  rw [cyclotomicUnitModPMulEquiv59_mk,
-    cyclotomicUnitModPMulEquiv59_mk,
-    cyclotomicUnitModPMulEquiv59_mk]
-  apply congrArg QuotientGroup.mk
-  apply Units.ext
-  change KummerCriterion.cyclotomicRingOfIntegersEquiv
-      (p := 59) K (sigma * tau)
-        (epsilon : NumberField.RingOfIntegers K) =
-    KummerCriterion.cyclotomicRingOfIntegersEquiv (p := 59) K sigma
-      (KummerCriterion.cyclotomicRingOfIntegersEquiv (p := 59) K tau
-        (epsilon : NumberField.RingOfIntegers K))
-  exact KummerCriterion.cyclotomicRingOfIntegersEquiv_mul_apply
-    (p := 59) (K := K) sigma tau epsilon
+        (cyclotomicUnitModPAddEquiv59 K tau u) :=
+  cyclotomicUnitModPAddEquiv_mul_apply 59 K sigma tau u
 
 /-! ## The genuine representation on unit classes -/
 
 omit [NumberField K] [IsCyclotomicExtension {59} ℚ K] in
 /-- Global units modulo 59th powers are killed by 59. -/
 theorem unitModP59_nsmul_eq_zero
-    (u : UnitModP (NumberField.RingOfIntegers K) 59) :
-    59 • u = 0 := by
-  obtain ⟨epsilon, hepsilon⟩ := QuotientGroup.mk'_surjective
-    (powMonoidHom 59 :
-      (NumberField.RingOfIntegers K)ˣ →*
-        (NumberField.RingOfIntegers K)ˣ).range (Additive.toMul u)
-  have hu : u = Additive.ofMul (QuotientGroup.mk epsilon) := by
-    apply Additive.toMul.injective
-    exact hepsilon.symm
-  rw [hu]
-  apply Additive.toMul.injective
-  change ((QuotientGroup.mk epsilon :
-      (NumberField.RingOfIntegers K)ˣ ⧸
-        (powMonoidHom 59 :
-          (NumberField.RingOfIntegers K)ˣ →*
-            (NumberField.RingOfIntegers K)ˣ).range) ^ 59) = 1
-  rw [← QuotientGroup.mk_pow]
-  exact (QuotientGroup.eq_one_iff _).2 ⟨epsilon, rfl⟩
+    (u : UnitModP (𝓞 K) 59) : 59 • u = 0 :=
+  unitModP_nsmul_eq_zero 59 K u
 
 local instance instUnitModP59ModuleZMod :
-    Module (ZMod 59) (UnitModP (NumberField.RingOfIntegers K) 59) :=
-  AddCommGroup.zmodModule (unitModP59_nsmul_eq_zero K)
+    Module (ZMod 59) (UnitModP (𝓞 K) 59) :=
+  instUnitModPModuleZMod 59 K
 
 local instance instUnitModP59ModulePadicInt :
-    Module (PadicInt 59) (UnitModP (NumberField.RingOfIntegers K) 59) :=
-  Module.compHom _ PadicInt.toZMod
+    Module (PadicInt 59) (UnitModP (𝓞 K) 59) :=
+  instUnitModPModulePadicInt 59 K
 
 /-- One cyclotomic automorphism as an additive homomorphism of unit
 classes. -/
-noncomputable def cyclotomicUnitModPAddHom59
+noncomputable abbrev cyclotomicUnitModPAddHom59
     (sigma : GaloisIndex59) :
-    UnitModP (NumberField.RingOfIntegers K) 59 →+
-      UnitModP (NumberField.RingOfIntegers K) 59 :=
-  (cyclotomicUnitModPAddEquiv59 K sigma).toAddMonoidHom
+    UnitModP (𝓞 K) 59 →+ UnitModP (𝓞 K) 59 :=
+  cyclotomicUnitModPAddHom 59 K sigma
 
 /-- The descended unit-class action is linear over integral 59-adic
 coefficients. -/
-noncomputable def cyclotomicUnitModPLinearMap59
+noncomputable abbrev cyclotomicUnitModPLinearMap59
     (sigma : GaloisIndex59) :
-    UnitModP (NumberField.RingOfIntegers K) 59 →ₗ[PadicInt 59]
-      UnitModP (NumberField.RingOfIntegers K) 59 where
-  toFun := cyclotomicUnitModPAddHom59 K sigma
-  map_add' := map_add _
-  map_smul' a u := by
-    change cyclotomicUnitModPAddHom59 K sigma
-        (PadicInt.toZMod a • u) =
-      PadicInt.toZMod a • cyclotomicUnitModPAddHom59 K sigma u
-    exact ZMod.map_smul (cyclotomicUnitModPAddHom59 K sigma)
-      (PadicInt.toZMod a) u
+    UnitModP (𝓞 K) 59 →ₗ[PadicInt 59] UnitModP (𝓞 K) 59 :=
+  cyclotomicUnitModPLinearMap 59 K sigma
 
 /-- The genuine cyclotomic representation on global units modulo 59th
 powers. -/
-noncomputable def cyclotomicUnitModPRepresentation59 :
+noncomputable abbrev cyclotomicUnitModPRepresentation59 :
     Representation (PadicInt 59) GaloisIndex59
-      (UnitModP (NumberField.RingOfIntegers K) 59) where
-  toFun sigma := cyclotomicUnitModPLinearMap59 K sigma
-  map_one' := by
-    apply LinearMap.ext
-    intro u
-    exact cyclotomicUnitModPAddEquiv59_one_apply K u
-  map_mul' sigma tau := by
-    apply LinearMap.ext
-    intro u
-    exact cyclotomicUnitModPAddEquiv59_mul_apply K sigma tau u
+      (UnitModP (𝓞 K) 59) :=
+  cyclotomicUnitModPRepresentation 59 K
 
 /-! ## Naturality of the actual unit lift -/
 
@@ -235,96 +131,47 @@ noncomputable def cyclotomicUnitModPRepresentation59 :
 embedding it and then applying the cyclotomic field automorphism. -/
 theorem cyclotomicRingUnitMulEquiv59_map_algebraMap
     (sigma : GaloisIndex59)
-    (epsilon : (NumberField.RingOfIntegers K)ˣ) :
-    Units.map (algebraMap (NumberField.RingOfIntegers K) K)
+    (epsilon : (𝓞 K)ˣ) :
+    Units.map (algebraMap (𝓞 K) K)
         (cyclotomicRingUnitMulEquiv59 K sigma epsilon) =
       cyclotomicUnitEquiv59 K sigma
-        (Units.map (algebraMap (NumberField.RingOfIntegers K) K)
-          epsilon) := by
-  apply Units.ext
-  change ((KummerCriterion.cyclotomicSigmaOfUnit
-      (p := 59) K sigma •
-        (epsilon : NumberField.RingOfIntegers K)) : K) =
-    KummerCriterion.cyclotomicSigmaOfUnit (p := 59) K sigma
-      ((epsilon : NumberField.RingOfIntegers K) : K)
-  exact algebraMap.coe_smul'
-    (KummerCriterion.cyclotomicSigmaOfUnit (p := 59) K sigma)
-    (epsilon : NumberField.RingOfIntegers K) K
+        (Units.map (algebraMap (𝓞 K) K) epsilon) :=
+  cyclotomicRingUnitMulEquiv_map_algebraMap 59 K sigma epsilon
 
 /-- Mathlib's genuine units-to-Selmer map commutes with each cyclotomic
 automorphism.  The equality is on the actual strict Selmer subtype, not only
 on its ambient Kummer quotient. -/
 theorem unitInclusion_cyclotomicUnitModPAddEquiv59
     (sigma : GaloisIndex59)
-    (u : UnitModP (NumberField.RingOfIntegers K) 59) :
-    unitInclusion
-        (R := NumberField.RingOfIntegers K) (K := K) (p := 59)
+    (u : UnitModP (𝓞 K) 59) :
+    unitInclusion (R := 𝓞 K) (K := K) (p := 59)
         (cyclotomicUnitModPAddEquiv59 K sigma u) =
       cyclotomicStrictSelmerRepresentation59 K sigma
-        (unitInclusion
-          (R := NumberField.RingOfIntegers K) (K := K) (p := 59) u) := by
-  obtain ⟨epsilon, hepsilon⟩ := QuotientGroup.mk'_surjective
-    (powMonoidHom 59 :
-      (NumberField.RingOfIntegers K)ˣ →*
-        (NumberField.RingOfIntegers K)ˣ).range (Additive.toMul u)
-  have hu : u = Additive.ofMul (QuotientGroup.mk epsilon) := by
-    apply Additive.toMul.injective
-    exact hepsilon.symm
-  rw [hu]
-  apply Additive.toMul.injective
-  apply Subtype.ext
-  change QuotientGroup.mk
-      (Units.map (algebraMap (NumberField.RingOfIntegers K) K)
-        (cyclotomicRingUnitMulEquiv59 K sigma epsilon)) =
-    cyclotomicKummerHom59 K sigma
-      (QuotientGroup.mk
-        (Units.map (algebraMap (NumberField.RingOfIntegers K) K)
-          epsilon))
-  rw [cyclotomicRingUnitMulEquiv59_map_algebraMap]
-  rfl
+        (unitInclusion (R := 𝓞 K) (K := K) (p := 59) u) :=
+  unitInclusion_cyclotomicUnitModPAddEquiv 59 K sigma u
 
 /-- Mathlib's unit inclusion, upgraded to a linear map over integral
 59-adic coefficients. -/
-noncomputable def unitInclusionLinearMap59 :
-    UnitModP (NumberField.RingOfIntegers K) 59 →ₗ[PadicInt 59]
-      SelmerCarrier (NumberField.RingOfIntegers K) K 59 where
-  toFun := unitInclusion
-    (R := NumberField.RingOfIntegers K) (K := K) (p := 59)
-  map_add' := map_add _
-  map_smul' a u := by
-    change unitInclusion
-        (R := NumberField.RingOfIntegers K) (K := K) (p := 59)
-        (PadicInt.toZMod a • u) =
-      PadicInt.toZMod a •
-        unitInclusion
-          (R := NumberField.RingOfIntegers K) (K := K) (p := 59) u
-    exact ZMod.map_smul
-      (unitInclusion
-        (R := NumberField.RingOfIntegers K) (K := K) (p := 59))
-      (PadicInt.toZMod a) u
+noncomputable abbrev unitInclusionLinearMap59 :
+    UnitModP (𝓞 K) 59 →ₗ[PadicInt 59] SelmerCarrier (𝓞 K) K 59 :=
+  unitInclusionLinearMap 59 K
 
 /-- The linear unit inclusion intertwines the genuine unit-class and strict
 Selmer representations. -/
-noncomputable def unitInclusionIntertwiner59 :
+noncomputable abbrev unitInclusionIntertwiner59 :
     Representation.IntertwiningMap
       (cyclotomicUnitModPRepresentation59 K)
       (cyclotomicStrictSelmerRepresentation59 K) :=
-  (unitInclusionLinearMap59 K).intertwiningMap_of_isIntertwiningMap
-    (cyclotomicUnitModPRepresentation59 K)
-    (cyclotomicStrictSelmerRepresentation59 K) <| by
-      intro sigma u
-      exact unitInclusion_cyclotomicUnitModPAddEquiv59 K sigma u
+  unitInclusionIntertwiner 59 K
 
 /-- The character-idempotent action on actual global units modulo 59th
 powers. -/
-noncomputable def cyclotomicUnitProjector59
+noncomputable abbrev cyclotomicUnitProjector59
     [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
     (eta : Fermat.Conservation.InvolutiveBase.Character
       (PadicInt 59) GaloisIndex59) :
-    UnitModP (NumberField.RingOfIntegers K) 59 →ₗ[PadicInt 59]
-      UnitModP (NumberField.RingOfIntegers K) 59 :=
-  (cyclotomicUnitModPRepresentation59 K).asAlgebraHom
-    (Fermat.Conservation.InvolutiveBase.characterIdempotent eta)
+    UnitModP (𝓞 K) 59 →ₗ[PadicInt 59] UnitModP (𝓞 K) 59 :=
+  cyclotomicUnitProjector 59 K eta
 
 /-- Strong projector naturality: including a projected global-unit class
 is exactly the strict-Selmer character projection of its included class. -/
@@ -332,25 +179,12 @@ theorem unitInclusionLinearMap59_characterProjector
     [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
     (eta : Fermat.Conservation.InvolutiveBase.Character
       (PadicInt 59) GaloisIndex59)
-    (u : UnitModP (NumberField.RingOfIntegers K) 59) :
+    (u : UnitModP (𝓞 K) 59) :
     unitInclusionLinearMap59 K (cyclotomicUnitProjector59 K eta u) =
       (characterProjectorAt
         (cyclotomicStrictSelmerRepresentation59 K) eta
-        (unitInclusion
-          (R := NumberField.RingOfIntegers K) (K := K) (p := 59) u)).1 := by
-  change unitInclusionLinearMap59 K
-      ((cyclotomicUnitModPRepresentation59 K).asAlgebraHom
-        (Fermat.Conservation.InvolutiveBase.characterIdempotent eta) u) =
-    (cyclotomicStrictSelmerRepresentation59 K).asAlgebraHom
-      (Fermat.Conservation.InvolutiveBase.characterIdempotent eta)
-      (unitInclusionLinearMap59 K u)
-  let F :=
-    (Representation.IntertwiningMap.equivLinearMapAsModule
-      (cyclotomicUnitModPRepresentation59 K)
-      (cyclotomicStrictSelmerRepresentation59 K))
-      (unitInclusionIntertwiner59 K)
-  exact F.map_smul
-    (Fermat.Conservation.InvolutiveBase.characterIdempotent eta) u
+        (unitInclusion (R := 𝓞 K) (K := K) (p := 59) u)).1 :=
+  unitInclusionLinearMap_characterProjector 59 K eta u
 
 /-! ## Equation-(8) coefficient units under the actual action -/
 

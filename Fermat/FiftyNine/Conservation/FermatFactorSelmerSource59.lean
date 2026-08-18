@@ -20,6 +20,7 @@ construct the genuine solution-dependent seated inputs and expose exact
 readbacks for the next reciprocity step.
 -/
 import Fermat.Conservation.IdealPowerSelmer
+import Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 import Fermat.FiftyNine.Conservation.CanonicalIrregularMode827
 import Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 import Fermat.FiftyNine.Conservation.StateFactorPair
@@ -140,12 +141,11 @@ theorem fermatMinusStrictSelmer59_localCondition
 /-- The class-group obstruction map on the literal strict Selmer carrier,
 written additively so that its output lives in the same carrier as the
 allocated factor ledger. -/
-noncomputable def strictSelmerIdealClass59 :
+noncomputable abbrev strictSelmerIdealClass59 :
     SelmerCarrier (NumberField.RingOfIntegers K) K 59 →+
       Additive (ClassGroup (NumberField.RingOfIntegers K)) :=
-  MonoidHom.toAdditive <|
-    IsDedekindDomain.selmerGroup.toClass
-      (R := NumberField.RingOfIntegers K) (K := K) (n := 59)
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerIdealClass
+    59 K
 
 /-- The class obstruction of the genuine plus-factor Selmer source is
 literally the class of the plus ideal allocated by the Fermat factorization. -/
