@@ -1,5 +1,46 @@
 # N59 conservation findings
 
+## 2026-08-18 — Carry class reduces local H² survival to an exact cyclic-lift obstruction
+
+- `CyclicCarryH2Class59` constructs the standard base-59 carry cocycle and
+  proves directly that it is a nonzero class in Mathlib's actual continuous
+  `H²(C59, F59)`.  The discrete nonboundary proof is read by a generator-sum
+  functional; the discrete-to-continuous comparison is explicit.
+- `ContinuousHomogeneousPullback59` pulls low-degree homogeneous continuous
+  cochains and cycles along a continuous group homomorphism.  For a character
+  `chi : G -> C59`, `ContinuousCarryLiftObstruction59` now proves both
+  directions constructively:
+  the pulled carry cycle is a boundary exactly when `chi` admits a continuous
+  lift to `C59²`.  A boundary primitive corrects the standard section into a
+  lift; conversely a lift supplies an explicit homogeneous boundary
+  primitive.  Thus nonboundary is exactly `NoContinuousLift chi`, not merely
+  implied by it.
+- `KummerCyclicQuotient59` turns any specified non-59th-power radicand in a
+  field containing `mu_59` into its concrete Kummer splitting field, cyclic
+  Galois equivalence, surjective continuous absolute-Galois character, and
+  associated quotient.  The lambda-uniformizer specialization now reuses
+  this generic constructor.
+- Valuation alone does not establish non-liftability.  In particular, the
+  canonical bare radicand `zeta_59 - 1` has an elementary norm identity which
+  warns that its Kummer extension can embed in a cyclic degree-59² extension.
+  `TwistedLambdaKummerQuotient59` therefore specifies instead
+  `a_59 = 60 * (zeta_59 - 1)`.  Lean proves its exact lambda valuation, that it
+  is not a 59th power, irreducibility of `X^59 - a_59`, and the resulting
+  surjective continuous `C59` character.
+- `OrientedCarryH2Class59` losslessly changes the pulled carry class from the
+  trivial coefficient line to the roots-of-unity coefficient representation.
+  `TwistedLambdaCarryH2Class59` specializes this to the exact lambda-local
+  `H²(mu_59)` target used by `lambdaLocalH2Pairing`; from an explicit no-lift
+  proof it derives a nonzero roots-valued class and a noncanonical linear
+  readout taking value one.  It does not call that readout the normalized
+  local invariant.
+- The remaining local arithmetic is now sharply split into three honest
+  comparisons: prove the Artin--Hasse special value for the unit twist and
+  Albert's norm/lift criterion; identify the resulting carry/Bockstein class
+  with the canonical Kummer cup; and compare the eventual normalized local
+  invariant with the desired Hilbert/wild reading.  No provider, fabricated
+  value, or new axiom discharges any of these seams.
+
 ## 2026-08-18 — Continuous Kummer--Tate cup and lambda specialization are compiled
 
 - The repository now contains a genuine continuous Alexander--Whitney cup
