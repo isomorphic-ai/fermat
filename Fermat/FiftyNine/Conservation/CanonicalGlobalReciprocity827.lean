@@ -17,6 +17,7 @@ manufactured here.  In the canonical `(59,44)` seat the already proved tame
 cancellation then forces the distinguished reading to vanish.
 -/
 import Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827
+import Fermat.FiftyNine.Conservation.LocalCompletion59
 import Fermat.Conservation.TatePairing
 
 open scoped NumberField
@@ -37,13 +38,14 @@ open Fermat.FiftyNine.Conservation.CyclotomicTameContext59
 open Fermat.FiftyNine.Conservation.DetectorWitness827
 open Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827
 open Fermat.FiftyNine.Conservation.LocalReduction827
+open Fermat.FiftyNine.Conservation.LocalCompletion59
 open Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 
 local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
 
 universe uChi uDual
 
-variable {K : Type*} [Field K] [NumberField K]
+variable {K : Type} [Field K] [NumberField K]
   [IsCyclotomicExtension {59} ℚ K]
   [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
   {SelmerChi : Type uChi} {DOmegaSelmerChiStar : Type uDual}
@@ -55,6 +57,25 @@ variable {K : Type*} [Field K] [NumberField K]
   {pairing : PlaceIndexedLocalPairing 59 GaloisIndex59
     canonicalTeichmullerCharacter59 irregularCharacter59
     (Place K) SelmerChi DOmegaSelmerChiStar}
+
+omit [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)] in
+/-- The actual wild cyclotomic place above 59 is not one of the auxiliary
+places above 827. -/
+theorem lambdaPlace59_not_mem_placesOver827 :
+    lambdaPlace59 K ∉ placesOver827 K := by
+  intro h827
+  have h59 : Ideal.span ({(59 : ℤ)} : Set ℤ) =
+      (lambdaPlace59 K).asIdeal.under ℤ :=
+    (lambdaIdeal59_liesOver K).over
+  have heq : Ideal.span ({(59 : ℤ)} : Set ℤ) =
+      Ideal.span ({(Credit.attestationPrime : ℤ)} : Set ℤ) :=
+    h59.trans h827.symm
+  have hmem : (59 : ℤ) ∈
+      Ideal.span ({(Credit.attestationPrime : ℤ)} : Set ℤ) := by
+    rw [← heq]
+    exact Ideal.subset_span (by simp)
+  rw [Ideal.mem_span_singleton] at hmem
+  norm_num [Credit.attestationPrime] at hmem
 
 /-- Pointwise local comparison identifies the pairing's complete retained
 ledger with one distinguished wild entry plus the canonical 827 tame
@@ -171,5 +192,25 @@ theorem pairAt_distinguished_eq_zero_of_globalReciprocity827
   rw [canonicalTameLedger827_canonical_irregular_sum_eq_zero,
     add_zero] at hbalance
   exact hbalance
+
+/-- The same endpoint at the repository's concrete wild place
+`lambda = (zeta_59 - 1)`.  Its disjointness from the complete 827 orbit is
+proved above and is no longer an input. -/
+theorem pairAt_lambdaPlace59_eq_zero_of_globalReciprocity827
+    (reciprocity : GlobalReciprocityLaw pairing)
+    (lift : ReflectedQRelaxedLocalizationLift827
+      (LocalReduction827.rhoQ827 (K := K)) canonicalTeichmullerCharacter59
+        irregularCharacter59)
+    (x : SelmerChi) (y : DOmegaSelmerChiStar)
+    (horbit : ∀ tau : GaloisIndex59,
+      pairing.pairAt (tameOrbitPlace827 (K := K) tau) x y =
+        canonicalTameOrbitValue827 (K := K)
+          canonicalTeichmullerCharacter59 irregularCharacter59 lift tau)
+    (houtside : ∀ v : Place K, v ≠ lambdaPlace59 K →
+      v ∉ placesOver827 K → pairing.pairAt v x y = 0) :
+    pairing.pairAt (lambdaPlace59 K) x y = 0 :=
+  pairAt_distinguished_eq_zero_of_globalReciprocity827
+    (pairing := pairing) reciprocity lift (lambdaPlace59 K)
+      (lambdaPlace59_not_mem_placesOver827 (K := K)) x y horbit houtside
 
 end Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827
