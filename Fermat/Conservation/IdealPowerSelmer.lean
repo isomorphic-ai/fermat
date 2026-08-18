@@ -133,6 +133,56 @@ theorem emptySelmerClassOfIdealPower_valuation
   (emptySelmerClassOfIdealPower (K := K) q hq I hpow).property v
     (Set.notMem_empty v)
 
+/-! ## Explicit unit lifts -/
+
+/-- If an ideal-power representative is already written as a unit times an
+`n`th power, its literal Selmer class is Mathlib's unit lift of that
+coefficient unit modulo `n`th powers.  This is the computational form of
+exactness needed after an equation-(8) principalization: the power factor
+dies in the Kummer quotient, while the coefficient is retained. -/
+theorem emptySelmerClassOfIdealPower_eq_fromUnitLift_of_eq_unit_mul_pow
+    {n : ℕ} [Fact n.Prime] [Fact (0 < n)]
+    (q : R) (hq : q ≠ 0) (I : Ideal R)
+    (hpow : I ^ n = Ideal.span {q})
+    (epsilon : Rˣ) (rho : R)
+    (heq : q = epsilon * rho ^ n) :
+    emptySelmerClassOfIdealPower (K := K) q hq I hpow =
+      IsDedekindDomain.selmerGroup.fromUnitLift
+        (R := R) (K := K) (n := n) (QuotientGroup.mk epsilon) := by
+  have hrho : rho ≠ 0 := by
+    intro hrho
+    apply hq
+    rw [heq, hrho,
+      zero_pow ((Fact.out : Nat.Prime n).ne_zero), mul_zero]
+  apply Subtype.ext
+  change QuotientGroup.mk (integralFieldUnit (K := K) q hq) = _
+  have hunit :
+      integralFieldUnit (K := K) q hq =
+        Units.map (algebraMap R K).toMonoidHom epsilon *
+          integralFieldUnit (K := K) rho hrho ^ n := by
+    apply Units.ext
+    change algebraMap R K q =
+      algebraMap R K (epsilon : R) * (algebraMap R K rho) ^ n
+    rw [heq, map_mul, map_pow]
+  rw [hunit, QuotientGroup.mk_mul, QuotientGroup.mk_pow]
+  have hrhoPow :
+      (QuotientGroup.mk (integralFieldUnit (K := K) rho hrho) :
+          Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range) ^ n = 1 := by
+    rw [← QuotientGroup.mk_pow]
+    apply (QuotientGroup.eq_one_iff _).2
+    exact ⟨integralFieldUnit (K := K) rho hrho, rfl⟩
+  rw [hrhoPow]
+  calc
+    (QuotientGroup.mk
+        (Units.map (algebraMap R K).toMonoidHom epsilon) :
+        Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range) * 1 =
+      QuotientGroup.mk
+        (Units.map (algebraMap R K).toMonoidHom epsilon) := mul_one _
+    _ =
+        (IsDedekindDomain.selmerGroup.fromUnitLift
+          (R := R) (K := K) (n := n) (QuotientGroup.mk epsilon)).1 := by
+      rfl
+
 /-! ## Class-group readback -/
 
 omit [IsDedekindDomain R] in
