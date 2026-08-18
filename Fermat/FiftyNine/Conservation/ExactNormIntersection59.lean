@@ -123,4 +123,45 @@ theorem not_mem_twistedLambdaNormUnits59_range_iff_criticalCoefficient59_ne_zero
   not_congr
     (mem_twistedLambdaNormUnits59_range_iff_criticalCoefficient59_eq_zero K u)
 
+/-- A nonzero field norm equation is exactly membership in the unit norm
+image.  This removes the unit-packaging mismatch faced by statewise
+producers, which naturally return an element of the extension. -/
+theorem exists_norm_eq_iff_mem_twistedLambdaNormUnits59_range
+    (u : (F59 K)ˣ) :
+    (∃ beta : E59 K, Algebra.norm (F59 K) beta = (u : F59 K)) ↔
+      u ∈ (twistedLambdaNormUnits59 K).range := by
+  constructor
+  · rintro ⟨beta, hbeta⟩
+    have hbeta0 : beta ≠ 0 := by
+      apply (Algebra.norm_ne_zero_iff
+        (R := F59 K) (S := E59 K)).mp
+      rw [hbeta]
+      exact Units.ne_zero u
+    let betaUnit : (E59 K)ˣ := Units.mk0 beta hbeta0
+    refine ⟨betaUnit, ?_⟩
+    apply Units.ext
+    exact hbeta
+  · rintro ⟨beta, hbeta⟩
+    refine ⟨(beta : E59 K), ?_⟩
+    exact congrArg Units.val hbeta
+
+/-- Direct field-equation form of the one-coefficient norm criterion. -/
+theorem exists_norm_eq_iff_criticalCoefficient59_eq_zero
+    (u : U59 K) :
+    (∃ beta : E59 K,
+        Algebra.norm (F59 K) beta = ((u : (F59 K)ˣ) : F59 K)) ↔
+      criticalCoefficient59 K u = 0 :=
+  (exists_norm_eq_iff_mem_twistedLambdaNormUnits59_range K
+      (u : (F59 K)ˣ)).trans
+    (mem_twistedLambdaNormUnits59_range_iff_criticalCoefficient59_eq_zero K u)
+
+/-- A nonzero critical coefficient is exactly the obstruction to every
+possible extension element having the requested norm. -/
+theorem not_exists_norm_eq_iff_criticalCoefficient59_ne_zero
+    (u : U59 K) :
+    (¬ ∃ beta : E59 K,
+        Algebra.norm (F59 K) beta = ((u : (F59 K)ˣ) : F59 K)) ↔
+      criticalCoefficient59 K u ≠ 0 :=
+  not_congr (exists_norm_eq_iff_criticalCoefficient59_eq_zero K u)
+
 end Fermat.FiftyNine.Conservation.ExactNormIntersection59
