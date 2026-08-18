@@ -675,6 +675,18 @@ FourierCoefficient₄₄ (residueWave x) = 0
 Thus the class readout itself is now canonical; proving that it is faithful
 on the needed class (or on the chi=15 line) remains arithmetic work.
 
+`KummerFrobeniusRead827` gives this canonical readout a genuine local
+arithmetic meaning.  In the universal residue Kummer algebra
+`ZMod 827[T]/(T^59-u)`, literal residue Frobenius sends the Kummer root to
+`u^14 * T`, since `827 = 59 * 14 + 1`.  The stored residue-character
+coordinate is proved to be exactly the exponent of that multiplier, then
+transported through the actual residue-field equivalences at every one of
+the 58 places above 827.  Consequently the canonical class readout pulls
+back to the negative mode-44 Fourier coefficient of the genuine
+residue-Frobenius exponent wave.  This is the local Kummer--Frobenius half of
+W5; it does not construct a global ray-class Artin map, prove global
+reciprocity, or establish faithfulness of the resulting class readout.
+
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
 classes to exactly the retained W1 `H¹` factors, recovers the W1 `H²` cup and
@@ -705,7 +717,22 @@ W1.reflected - lambdaLocalization(y₀)
 lies in the range of lambda localization restricted to the kernel of all 58
 orbit-valuation coordinates.  A lambda-plus-827 Poitou--Tate theorem must
 still prove precisely that range membership; no point is hidden in the
-definition.  The nonzero ambient W1 cup also has not yet been shown nonzero
+definition.  `LambdaOrbitAffineCokernel827` records the same condition as a
+literal cokernel class and proves it independent of the chosen W3
+basepoint.  `CanonicalW1LambdaObstruction827` exposes that class without a
+publicly selected lift, and `CanonicalW1LambdaBoundary827` evaluates it
+against the complete dual annihilator of the restricted lambda image.  Lean
+proves the exact point-free equivalences
+
+```text
+W1W3CompatibleFiber827 is nonempty
+  <-> canonicalW1LambdaObstruction827 = 0
+  <-> canonicalW1LambdaBoundary827 = 0.
+```
+
+These are the canonical obstruction and all of its scalar boundary charges,
+not a proof that either vanishes.  The nonzero ambient W1 cup also has not
+yet been shown nonzero
 after restriction to the genuine seated primal Selmer space, and
 `GlobalReciprocityLaw` is still
 consumed rather than constructed.  These PT/local-compatibility,
