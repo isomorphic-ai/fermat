@@ -14,12 +14,14 @@ two constructions use the same inverse of Mathlib's `galEquivZMod`; the only
 adapter needed is equality between Mathlib's integral Galois restriction and
 the ring-of-integers equivalence used by the canonical Selmer action.
 
-Then valuation covariance is applied to `sigma⁻¹`.  Its transported place
-is therefore `sigma * selected`, while the reflected eigenspace law scales
-the class by the `sigma⁻¹` reflected eigenvalue.  Reduction modulo 59 gives
-exactly the inverse reflected Fourier character required by
-`QLocalizationEquivariance827`.
+The covariance argument itself now lives in the prime-generic
+`PrimeCyclotomicLocalizationEquivariance` module.  It applies valuation
+covariance to `sigma⁻¹`, so the transported place is `sigma * selected` while
+the eigenspace law contributes the inverse reduced character.  This file
+retains only the arithmetic orbit-orientation proof and the transparent
+specialization to the existing `QLocalizationEquivariance827` API.
 -/
+import Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 import Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 import Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 
@@ -30,6 +32,7 @@ noncomputable section
 namespace Fermat.FiftyNine.Conservation.CyclotomicLocalizationEquivariance827
 
 open Fermat.Conservation
+open Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 open Fermat.Conservation.SelmerEigenspace
 open Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 open Fermat.FiftyNine.Conservation.DetectorWitness827
@@ -98,6 +101,16 @@ theorem indexedPlaceOrbitEquiv827_eq_cyclotomicPlaceEquiv59
         (p := 59) K sigma).toRingHom selected.1.asIdeal
   rw [galRestrict_eq_cyclotomicRingOfIntegersEquiv59]
 
+/-- The regular 827-place orbit is the prime-generic support-orbit map after
+specializing its stable support to the places above 827. -/
+theorem indexedPlaceOrbitEquiv827_eq_cyclotomicSupportOrbitMap
+    (selected : Place827 K) (sigma : GaloisIndex59) :
+    indexedPlaceOrbitEquiv827 K selected sigma =
+      cyclotomicSupportOrbitMap 59 K (placesOver827 K)
+        (cyclotomicStableSupport59_placesOver827 K) selected sigma := by
+  apply Subtype.ext
+  exact indexedPlaceOrbitEquiv827_eq_cyclotomicPlaceEquiv59 K selected sigma
+
 variable [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
 
 set_option maxRecDepth 2000 in
@@ -111,51 +124,13 @@ theorem cyclotomicQLocalizationEquivariance827
       (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi selected := by
   refine ⟨?_⟩
   intro sigma source
-  let eta := InvolutiveBase.reflectedCharacter omega chi
-  let y := qRelaxedReflectedProjector827
-    (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi source
-  have horbit :
-      indexedPlaceOrbitEquiv827 K selected sigma =
-        ⟨cyclotomicPlaceEquiv59 K sigma selected.1,
-          (cyclotomicPlaceEquiv59_mem_placesOver827_iff
-            K sigma selected.1).mpr selected.2⟩ := by
-    apply Subtype.ext
-    exact indexedPlaceOrbitEquiv827_eq_cyclotomicPlaceEquiv59 K selected sigma
-  rw [horbit]
-  have heigen :=
-    (mem_characterEigenspaceAt_iff
-      (cyclotomicQRelaxedSelmerRepresentation827 K) eta y.1).mp
-        y.property sigma⁻¹
-  have hquot := congrArg
-    (fun t : QRelaxedSelmerCarrier827 K ↦ (Additive.toMul t).1) heigen
-  change cyclotomicKummerHom59 K sigma⁻¹ (Additive.toMul y.1).1 =
-      (Additive.toMul ((eta sigma⁻¹ : PadicInt 59) • y.1)).1 at hquot
-  have hcov := cyclotomicValuationCovariance59 K sigma⁻¹ selected.1
-    (Additive.toMul y.1).1
-  simp only [inv_inv] at hcov
-  have hscalar := ZMod.map_smul
-    (supportValuationAt
-      (R := NumberField.RingOfIntegers K) (K := K) (p := 59)
-      (S := placesOver827 K) selected)
-    (PadicInt.toZMod (eta sigma⁻¹ : PadicInt 59)) y.1
-  change
-    Multiplicative.toAdd
-        ((cyclotomicPlaceEquiv59 K sigma selected.1).valuationOfNeZeroMod 59
-          (Additive.toMul y.1).1) = _
-  rw [← hcov, hquot]
-  change supportValuationAt
-      (R := NumberField.RingOfIntegers K) (K := K) (p := 59)
-      (S := placesOver827 K) selected
-        ((eta sigma⁻¹ : PadicInt 59) • y.1) = _
-  rw [padicInt_smul_eq_toZMod_smul, hscalar]
-  change PadicInt.toZMod (eta sigma⁻¹ : PadicInt 59) *
-      supportValuationAt
-        (R := NumberField.RingOfIntegers K) (K := K) (p := 59)
-        (S := placesOver827 K) selected y.1 =
-    (((reducedCharacter59 eta)⁻¹ sigma : (ZMod 59)ˣ) : ZMod 59) *
-      supportValuationAt
-        (R := NumberField.RingOfIntegers K) (K := K) (p := 59)
-        (S := placesOver827 K) selected y.1
-  simp [eta, reducedCharacter59_apply, mul_comm, mul_assoc]
+  rw [indexedPlaceOrbitEquiv827_eq_cyclotomicSupportOrbitMap]
+  change cyclotomicProjectedLocalizationVectorAt 59 K (placesOver827 K)
+      (cyclotomicStableSupport59_placesOver827 K)
+      omega chi selected source sigma = _
+  exact cyclotomicProjectedLocalizationVectorAt_orbit 59 K
+    (placesOver827 K)
+    (cyclotomicStableSupport59_placesOver827 K)
+    omega chi selected source sigma
 
 end Fermat.FiftyNine.Conservation.CyclotomicLocalizationEquivariance827

@@ -6,12 +6,14 @@ Authors: Fabian Franz, Codex
 # Executable audit of the prime-generic cyclotomic Selmer spine
 
 This non-imported leaf audits the actual prime-parametric action, the
-canonical strict-to-supported inclusion, and the unit and class naturality
-maps.  It records the intended implementation dependencies and checks every
-declaration in the four namespaces against the standard axiom budget and the
-project's public no-product-equivalence rule.
+canonical strict-to-supported inclusion, the unit and class naturality maps,
+the residue Fourier dictionary, and cyclotomic localization covariance.  It
+records the intended implementation dependencies and checks every declaration
+in the audited namespaces against the standard axiom budget and the project's
+public no-product-equivalence rule.
 -/
 import Fermat.Conservation.GuardDependsOn
+import Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 import Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 import Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 import Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion
@@ -62,6 +64,49 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicStrictSelmerRepresentation
 #check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt
 #check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt
+
+/-! ## Public inventory: residue Fourier analysis -/
+
+#check Fermat.Conservation.PrimeResidueFourier.characterFunction
+#check Fermat.Conservation.PrimeResidueFourier.characterMonoidHom
+#check Fermat.Conservation.PrimeResidueFourier.characterMonoidHom_apply
+#check Fermat.Conservation.PrimeResidueFourier.characterMonoidHom_injective
+#check Fermat.Conservation.PrimeResidueFourier.characterFunction_apply_ne_zero
+#check Fermat.Conservation.PrimeResidueFourier.IsPureCharacter
+#check Fermat.Conservation.PrimeResidueFourier.pointEvaluation_of_pureCharacter
+#check Fermat.Conservation.PrimeResidueFourier.characterFunction_linearIndependent
+#check Fermat.Conservation.PrimeResidueFourier.enoughRootsForFourier
+#check Fermat.Conservation.PrimeResidueFourier.characterDual_card
+#check Fermat.Conservation.PrimeResidueFourier.sum_characters_apply
+#check Fermat.Conservation.PrimeResidueFourier.character_orthogonality
+#check Fermat.Conservation.PrimeResidueFourier.fourierCoefficient
+#check Fermat.Conservation.PrimeResidueFourier.fourier_reconstruction
+#check Fermat.Conservation.PrimeResidueFourier.fourierCoefficient_positionBasis
+#check Fermat.Conservation.PrimeResidueFourier.fourierCoefficient_positionBasis_ne_zero
+#check Fermat.Conservation.PrimeResidueFourier.characterComponent
+#check Fermat.Conservation.PrimeResidueFourier.characterComponent_apply
+#check Fermat.Conservation.PrimeResidueFourier.characterBasis
+#check Fermat.Conservation.PrimeResidueFourier.characterBasis_apply
+#check Fermat.Conservation.PrimeResidueFourier.characterBasis_fourier_sum
+#check Fermat.Conservation.PrimeResidueFourier.characterBasis_repr_eq_fourierCoefficient
+#check Fermat.Conservation.PrimeResidueFourier.fourierCoefficient_pureCharacter
+#check Fermat.Conservation.PrimeResidueFourier.characterComponent_pureCharacter
+#check Fermat.Conservation.PrimeResidueFourier.characterComponent_eq_self_of_pure
+#check Fermat.Conservation.PrimeResidueFourier.pureCharacter_support_eq_univ
+#check Fermat.Conservation.PrimeResidueFourier.pureCharacter_not_support_singleton
+#check Fermat.Conservation.PrimeResidueFourier.pureCharacter_pointed_silence
+#check Fermat.Conservation.PrimeResidueFourier.reducedCharacterAt
+#check Fermat.Conservation.PrimeResidueFourier.reducedCharacterAt_apply
+
+/-! ## Public inventory: actual cyclotomic localization covariance -/
+
+#check Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicSupportOrbitMap
+#check Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicSupportOrbitMap_coe
+#check Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.eigenspaceSupportValuationAt_cyclotomicSupportOrbitMap
+#check Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt
+#check Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_apply
+#check Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_orbit
+#check Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_isPureCharacter
 
 /-! ## Public inventory: strict-to-supported inclusion -/
 
@@ -132,6 +177,12 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #print axioms Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionLinearMap_characterProjector
 #print axioms Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerIdealClass_cyclotomic
 #print axioms Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassLinearMap_characterProjector
+#print axioms Fermat.Conservation.PrimeResidueFourier.fourier_reconstruction
+#print axioms Fermat.Conservation.PrimeResidueFourier.pureCharacter_pointed_silence
+#print axioms Fermat.Conservation.PrimeResidueFourier.reducedCharacterAt_apply
+#print axioms Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.eigenspaceSupportValuationAt_cyclotomicSupportOrbitMap
+#print axioms Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_orbit
+#print axioms Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_isPureCharacter
 
 /-! ## Exhaustive namespace invariants -/
 
@@ -139,11 +190,15 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicSelmerAction
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
+#guard_standard_axioms_prefix Fermat.Conservation.PrimeResidueFourier
+#guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicSelmerAction
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
+#audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeResidueFourier
+#audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 
 /-! ## Intended implementation spine -/
 
@@ -168,6 +223,26 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_depends_on
   Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt,
   Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt
+
+#guard_depends_on
+  Fermat.Conservation.PrimeResidueFourier.fourier_reconstruction,
+  Fermat.Conservation.PrimeResidueFourier.character_orthogonality
+#guard_depends_on
+  Fermat.Conservation.PrimeResidueFourier.characterBasis_repr_eq_fourierCoefficient,
+  Fermat.Conservation.PrimeResidueFourier.characterBasis_fourier_sum
+#guard_depends_on
+  Fermat.Conservation.PrimeResidueFourier.pureCharacter_pointed_silence,
+  Fermat.Conservation.PrimeResidueFourier.pointEvaluation_of_pureCharacter
+
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.eigenspaceSupportValuationAt_cyclotomicSupportOrbitMap,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicValuationCovariance
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_orbit,
+  Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.eigenspaceSupportValuationAt_cyclotomicSupportOrbitMap
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_isPureCharacter,
+  Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_orbit
 
 #guard_depends_on
   Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic_injective,

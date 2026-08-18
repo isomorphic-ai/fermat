@@ -329,6 +329,15 @@ pointed-silence consequences, and reduction of `p`-adic characters modulo
 specialization, while the splitting and regular place-orbit arithmetic at
 `827` remains correctly campaign-specific.
 
+`PrimeCyclotomicLocalizationEquivariance` then combines the actual
+cyclotomic Selmer representation, its valuation covariance, and the genuine
+character projector.  For arbitrary prime `p` and any cyclotomically stable
+support, it proves that projected localization along the canonical support
+orbit is a single inverse reduced reflected-character mode.  Stability gives
+a canonical orbit map but does not falsely assert that it is an equivalence;
+the regular orbit equivalence above `827` and its orientation remain in the
+thin order-59 adapter.
+
 `PrimeCyclotomicSelmerVerification` is the non-imported executable audit for
 this spine: it inventories the generic API, records its intended dependency
 graph, rejects public product-equivalence shortcuts, and checks every
