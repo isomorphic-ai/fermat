@@ -687,6 +687,24 @@ residue-Frobenius exponent wave.  This is the local Kummer--Frobenius half of
 W5; it does not construct a global ray-class Artin map, prove global
 reciprocity, or establish faithfulness of the resulting class readout.
 
+`LocalKummerFrobeniusFactorization827` bundles Frobenius as an actual
+`ZMod 827`-algebra endomorphism and promotes the comparison to the map-level
+identity
+
+```text
+canonicalModeFortyFourClassReadout827 ∘ fermatFactorClassGaugeMap59
+  = localKummerFrobeniusModeFortyFourLinearMap827.
+```
+
+For every reflected carrier realizing the normalized 58-coordinate profile,
+the same module restricts this identity to the genuine irregular primal
+Poitou--Tate test space: its seated orbit boundary is simultaneously the
+canonical class readout and the Fourier read of the literal Frobenius
+exponent wave.  This supplies the local/profile comparison part of the
+requested W5 equality of maps; producing that carrier with W1's lambda
+coordinate and upgrading local Frobenius to global Artin reciprocity remain
+separate obligations.
+
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
 classes to exactly the retained W1 `H¹` factors, recovers the W1 `H²` cup and
