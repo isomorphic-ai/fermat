@@ -12,6 +12,13 @@ This non-imported executable audit leaf covers only the newly exposed route:
   and the normalized reflected fiber realizes that profile on an actual
   global `827`-relaxed carrier;
 * the W4 algebra turns same-line nonvanishing into a unique unit scalar;
+* W1's two retained degree-one factors are reached exactly by localizing
+  explicit global Kummer representatives, including the normalized value-one
+  reading of their transported cup;
+* the normalized wild and complete `827` boundaries are literal linear maps
+  on one genuine seated primal Selmer space; under `GlobalReciprocityLaw`
+  they are exact negatives, have equal kernels, and lie in one explicit
+  common line, which has rank one as soon as the orbit map is nonzero;
 * the concrete tame-orbit functional factors uniquely through the actual
   class gauge exactly at the global-unit-silence boundary;
 * seated global reciprocity balances that orbit against the lambda row;
@@ -28,6 +35,10 @@ This non-imported executable audit leaf covers only the newly exposed route:
   is proved faithful at the single Fermat-selected class; this faithfulness
   is further reduced to seating in the genuine chi=15 class line,
   one-dimensionality of that line, and readout nonvanishing on it.
+* independently, every genuine tame row of the Fermat-factor strict class is
+  factored through its representative-independent residue wave, so the full
+  normalized orbit is exactly the negative mode-44 Fourier coefficient; the
+  direction `7A -> coefficient = 0` is unconditional.
 * the allocated plus root is now unconditionally fixed by the complete odd
   class projector: genuine class-map naturality identifies cyclotomic `-1`
   with the allocated minus root, and relation 7D makes that root the negative
@@ -36,12 +47,22 @@ This non-imported executable audit leaf covers only the newly exposed route:
   between the complete odd projector and the selected irregular projector,
   both on the allocated plus root and directly on the W7 class gauge.
 
-The checks deliberately keep the remaining lanes separate.  W1 is a local
-cup receipt; no Poitou--Tate theorem yet produces a single global reflected
-class simultaneously carrying its wild coordinate and the realized tame
-profile, and no common-Hom-line theorem yet identifies the two boundary
-functionals.  Within W7, the only visible input is pointwise faithfulness of
-the produced readout, the exact target of the Kummer--Artin comparison.
+The checks deliberately keep the remaining lanes separate.  The common
+Hom-space and common-line comparison now exist on the real seated Selmer
+space: for one reflected carrier, `GlobalReciprocityLaw` gives literal map
+equality `wild = -orbit`, kernel equality, and common-line membership.
+Three inputs are still honest seams: reciprocity itself is not yet produced;
+the normalized `827` fiber is not yet proved to have W1's prescribed lambda
+reflected localization; and neither boundary is yet proved nonzero on the
+actual seated primal test space.  Thus the rank-one unit comparison is exact
+once seated nonvanishing is supplied, but it is not an unconditional
+Poitou--Tate lift.
+
+Within W7, pointwise faithfulness of the produced readout is now displayed
+as one concrete mode-44 Fourier zero-reflection statement for the actual
+Fermat factor.  Its reverse implication is proved unconditionally.  The
+missing forward reflection is the exact target of the Kummer--Artin
+factorization/comparison.
 The odd character seat is proved, but the sharper chi=15 seat is not: its
 remaining arithmetic obligation is precisely that the allocated plus root's
 odd-minus-chi=15 complement vanishes.  Poitou--Tate alone does not supply
@@ -68,6 +89,8 @@ import Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827
 import Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59
 import Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59
 import Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59
+import Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827
+import Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827
 
 /-! ## Public route inventory -/
 
@@ -79,6 +102,18 @@ import Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59
 #check Fermat.FiftyNine.Conservation.TwistedLambdaCupReceipt59.normalized_reading
 #check Fermat.FiftyNine.Conservation.TwistedLambdaCupReceipt59.reading_ne_zero
 #check Fermat.FiftyNine.Conservation.twistedLambdaCupReceipt59
+
+/-! W1's retained factors are reached by exact global-to-local transport.
+The future lambda-plus-827 lift must match the same reflected factor, not
+merely reproduce its scalar reading. -/
+
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.lambdaPrimalFactorOfGlobalKummer59
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.lambdaReflectedFactorOfGlobalKummer59
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.lambdaPrimalFactorOfGlobalTwistedLambda59_eq_receipt
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.lambdaReflectedFactorOfGlobalPrimitive59_eq_receipt
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveCup59_eq_receipt
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveReading59_eq_one
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.normalizedLambdaGlobalPairing59_eq_localized_factor_cup
 
 /-! W3: the full physical 827 orbit and frozen inverse-reflected
 orientation. -/
@@ -107,6 +142,26 @@ producer remains intentionally outside this theorem. -/
 
 #check Fermat.Conservation.existsUnique_unit_smul_of_mem_finrank_one
 #check Fermat.Conservation.eq_zero_of_mem_finrank_one_of_readout_restrict_ne_zero
+
+/-! W4 now lives on the genuine common seated Selmer space.  Under the
+explicit reciprocity hypothesis the two maps are exact negatives, hence
+have the same kernel and occupy one concrete line.  Only reciprocity,
+lambda-plus-827 localization compatibility, and seated nonvanishing remain
+outside these theorems. -/
+
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedOrbitBoundaryFunctional827
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_receipt_cup_of_localizes
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedOrbitBoundaryFunctional827_eq_strictTameOrbitFunctional827
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_add_orbit_eq_zero
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_ker_eq_orbit_ker
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.wildOrbitCommonLine827
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedOrbitBoundaryFunctional827_mem_commonLine
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_mem_commonLine_of_reciprocity
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.wildOrbitCommonLine827_finrank_eq_one
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.existsUnique_unit_wild_eq_smul_orbit_of_reciprocity
+#check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.exists_normalized_wildOrbitBoundaryPair827
 
 /-! The concrete full-orbit class-factorization boundary. -/
 
@@ -224,6 +279,25 @@ only zero reflection at the one Fermat-selected class remains visible. -/
 #check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.existsUnique_classReadout_with_pointwiseW7_of_ringUnit_silence
 #check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_unit_silence
 #check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_ringUnit_silence
+
+/-! The pointwise Artin seam is now a concrete representative-independent
+Fourier statement.  Every genuine tame row factors through the strict
+residue wave; the normalized orbit is exactly negative mode 44, and the
+easy implication from relation 7A is already unconditional. -/
+
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictKummerRepresentative59
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictOrbitResidueWave827
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictKummerRepresentative59_mk
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.context59_residueCharacter_angularComponent_eq_of_kummer_mk_eq
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fiftyNine_dvd_valuation_strictKummerRepresentative59
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_selectedClassGauge59_eq_neg_fourierCoefficient
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_pointwiseFaithful_iff_fourierCoefficient_zero_implies_selectedClassGauge59_eq_zero
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_selectedClassGauge59_eq_zero
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_reflects_zero
+#check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.exists_normalizedFullOrbit_w7_of_fourierCoefficient_faithful
 
 /-! The opaque pointwise premise is now decomposed exactly as in the
 Kummer--Artin strategy: character seating, rank one, and a nonzero readout
@@ -410,6 +484,81 @@ info: 'Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.strict
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_characterLine
+
+/-! Exact W1 transport, common-boundary comparison, and the concrete
+mode-44 boundary remain within Lean's standard quotient/classical axioms. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveReading59_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveReading59_eq_one
+
+/--
+info: 'Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit
+
+/--
+info: 'Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_ker_eq_orbit_ker' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_ker_eq_orbit_ker
+
+/--
+info: 'Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.wildOrbitCommonLine827_finrank_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.wildOrbitCommonLine827_finrank_eq_one
+
+/--
+info: 'Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.existsUnique_unit_wild_eq_smul_orbit_of_reciprocity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.existsUnique_unit_wild_eq_smul_orbit_of_reciprocity
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.context59_residueCharacter_angularComponent_eq_of_kummer_mk_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.context59_residueCharacter_angularComponent_eq_of_kummer_mk_eq
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA
 
 /-! ## Proof-value dependency gates -/
 
@@ -651,3 +800,74 @@ W7 endpoint. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_characterLine,
   Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_pointwiseFaithful
+
+/-! Exact W1 transport uses both global-to-local factor identifications and
+then consumes the retained normalized cup reading. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveCup59_eq_receipt,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.lambdaPrimalFactorOfGlobalTwistedLambda59_eq_receipt
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveCup59_eq_receipt,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.lambdaReflectedFactorOfGlobalPrimitive59_eq_receipt
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveReading59_eq_one,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveCup59_eq_receipt
+
+/-! The real common-space comparison consumes the seated reciprocity law.
+Map equality then drives kernel equality and line membership, while the unit
+comparison consumes both the concrete rank-one line and generic W4 algebra. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_add_orbit_eq_zero,
+  Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827.seatedTameOrbitSum827_eq_neg_normalizedLambda_of_globalReciprocity
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_add_orbit_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_ker_eq_orbit_ker,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_mem_commonLine_of_reciprocity,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.wildOrbitCommonLine827_finrank_eq_one,
+  finrank_span_singleton
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.existsUnique_unit_wild_eq_smul_orbit_of_reciprocity,
+  Fermat.Conservation.existsUnique_unit_smul_of_mem_finrank_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.existsUnique_unit_wild_eq_smul_orbit_of_reciprocity,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.wildOrbitCommonLine827_finrank_eq_one
+
+/-! The concrete W7 boundary really descends through Kummer-representative
+independence, factors every tame row, assembles the exact mode-44 formula,
+and proves the unconditional `7A -> coefficient = 0` direction. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.context59_residueCharacter_angularComponent_eq_of_kummer_mk_eq,
+  QuotientGroup.mk'_eq_mk'
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.context59_residueCharacter_angularComponent_eq_of_kummer_mk_eq,
+  ZModModule.char_nsmul_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.context59_value_eq_ord_mul_residueCharacter_of_dvd_ord_left
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fiftyNine_dvd_valuation_strictKummerRepresentative59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation,
+  Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.relaxedOrbitValuation827_eq_representative
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour,
+  Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.powerCharacter59_fortyFour_inv
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_selectedClassGauge59_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
