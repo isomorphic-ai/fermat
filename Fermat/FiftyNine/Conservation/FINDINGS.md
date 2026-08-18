@@ -1,43 +1,49 @@
 # N59 conservation findings
 
-## 2026-08-18 — Albert forward lift and genuine carry--Kummer cup are compiled
+## 2026-08-18 — Albert equivalence and both normalized scalar endpoints are compiled
 
-- `AlbertCyclicCompatibility59` now connects the concrete Kummer extension
-  directly to the Albert cyclic extension.  From an actual norm witness it
-  constructs a continuous character to `C3481` whose reduction is literally
-  the existing `C59` Kummer character; the lift is automatically surjective.
-  `TwistedLambdaAlbertCriterion59` specializes this result to
-  `60 * (zeta_59 - 1)`.  The converse lift-to-norm implication is not claimed
-  here: its fixed-field construction is separate work.
-- `CompatibleKummerLift59` constructs a compatible `mu_3481` Kummer root and
-  cochain and proves its exact twisted law.  Applying the generic carry/cup
-  bridge therefore identifies the pulled carry with the genuine oriented
-  Kummer cup without a lift hypothesis.
-- `TwistedLambdaKummerCupComparison59` performs the concrete lambda-local
-  specialization.  The splitting-field character is proved equal to the
-  oriented Kummer character of the same radicand, and injectivity of the
-  coefficient-orientation equivalence gives the exact retained-class theorem
-  `twistedLambdaRootsCarryH2Class59_eq_kummerCup` in continuous `H²(mu_59)`.
-  Thus the former carry-versus-canonical-cup comparison seam is closed.
-- The analytic side now reaches a genuine degree-58 local algebra trace.
-  `LocalCyclotomicTrace59`, `TwistedArtinHasseLocalTrace59`, and
-  `TwistedFiniteLogLocalTrace59` identify the normalized finite-log receipt,
-  compute its residue as `-1` modulo 59, and prove it is nonzero.
-  `CompletedLogLocalTrace59` additionally identifies stage 59 of the actual
-  completed logarithm of `60` with that exact receipt.
-- `AdicCompleteValuedInteger59` proves that the inherited valuation topology
-  on the actual local integer ring is exactly its `lambda`-adic topology and
-  that the ring is complete for this filtration.  The canonical
-  `AdicCompletion.ofAlgEquiv` inverse therefore transports the formal Dwork
-  logarithm into the genuine local field.  `CompletedLogTail59` then factors
-  the complete trace exactly as
-  `59 * (normalizedLocalTraceFiniteLog59 + trace y)` with `y` still in the
-  principal `lambda` ideal.  The former formal-versus-valued completion seam
-  is closed.
-- Honest remaining seams are the Albert converse, the integral-trace theorem
-  that `trace y` is divisible by 59 for `y` in `lambda`, and the normalized
-  local-invariant/Hilbert-symbol nonvanishing comparison.  No new axiom,
-  provider, or fabricated scalar is used in the results above.
+- `AlbertCyclicCompatibility59` constructs an exact continuous `C3481` lift
+  of the concrete Kummer character from every primitive-root norm witness.
+  `AlbertCyclicConverse59` now proves the converse: the lift cuts out its
+  degree-3481 fixed field, a `tau^59` eigenvector supplies the successive
+  quotient, and the orbit product telescopes to the required norm.  Thus
+  `concreteKummer_norm_iff_exists_albertCharacter3481` is a genuine
+  equivalence.  Its honest Mathlib scope hypothesis is `[PerfectField F]`,
+  automatic in the intended characteristic-zero local field.
+- `CompatibleKummerLift59` and `TwistedLambdaKummerCupComparison59` identify
+  the pulled carry with the genuine twisted-lambda Kummer cup in actual
+  continuous `H²(mu_59)`.  `ContinuousCarryH2LiftCriterion59` proves that the
+  actual class vanishes exactly when the character lifts to `C3481`, and
+  `TwistedLambdaKummerLiftCriterion59` specializes this equivalence while
+  retaining the already compiled norm-to-vanishing implication.  The final
+  small twisted-lambda specialization of the Albert converse is separate
+  composition work; the generic converse itself is closed.
+- `ContinuousCyclicH2Readout59` constructs the normalized finite-quotient
+  scalarization rather than supplying one as data.  The generator-loop sum
+  kills every continuous boundary, descends through Mathlib's actual
+  continuous homology quotient, sends the carry class to exactly `1`, and
+  admits the explicit scalar-multiple generator as a section.  This is the
+  normalization an eventual inflation/local-invariant comparison must
+  preserve; it is not mislabeled as the local invariant itself.
+- On the analytic side, `AdicCompleteValuedInteger59` identifies the actual
+  local integer topology with its `lambda`-adic topology and proves
+  completeness.  `CompletedLogLocalTrace59` and `CompletedLogTail59` transport
+  the infinite Dwork logarithm into the genuine local field and factor its
+  trace as `59 * (normalizedLocalTraceFiniteLog59 + trace y)` with
+  `y` in the principal `lambda` ideal.
+- `LocalIntegralTrace59` transports the explicit 58-element Dwork basis to
+  the actual integer ring and compares integral and field traces.  Reduction
+  modulo the rational maximal ideal proves that `y in lambda` forces
+  `trace y` to be divisible by 59.  Consequently
+  `CompletedLogTraceNonzero59` proves that the normalized trace of the full
+  infinite completed logarithm is an actual rational local integer with
+  residue `-1`, hence is nonzero.  `CompletedLogResidue59` exposes that
+  canonical `ZMod 59` scalar without choosing a representative.
+- The honest remaining arithmetic seam is now the comparison between these
+  two normalized endpoints: inflation of the finite cyclic `H²` readout to
+  the local absolute-Galois cup class versus the canonical completed-log
+  residue/local invariant.  No new axiom, provider, fabricated scalar, local
+  reciprocity theorem, or Hilbert-symbol identity is used above.
 
 ## 2026-08-18 — Carry class reduces local H² survival to an exact cyclic-lift obstruction
 
