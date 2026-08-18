@@ -1,5 +1,44 @@
 # N59 conservation findings
 
+## 2026-08-18 — Albert forward lift and genuine carry--Kummer cup are compiled
+
+- `AlbertCyclicCompatibility59` now connects the concrete Kummer extension
+  directly to the Albert cyclic extension.  From an actual norm witness it
+  constructs a continuous character to `C3481` whose reduction is literally
+  the existing `C59` Kummer character; the lift is automatically surjective.
+  `TwistedLambdaAlbertCriterion59` specializes this result to
+  `60 * (zeta_59 - 1)`.  The converse lift-to-norm implication is not claimed
+  here: its fixed-field construction is separate work.
+- `CompatibleKummerLift59` constructs a compatible `mu_3481` Kummer root and
+  cochain and proves its exact twisted law.  Applying the generic carry/cup
+  bridge therefore identifies the pulled carry with the genuine oriented
+  Kummer cup without a lift hypothesis.
+- `TwistedLambdaKummerCupComparison59` performs the concrete lambda-local
+  specialization.  The splitting-field character is proved equal to the
+  oriented Kummer character of the same radicand, and injectivity of the
+  coefficient-orientation equivalence gives the exact retained-class theorem
+  `twistedLambdaRootsCarryH2Class59_eq_kummerCup` in continuous `H²(mu_59)`.
+  Thus the former carry-versus-canonical-cup comparison seam is closed.
+- The analytic side now reaches a genuine degree-58 local algebra trace.
+  `LocalCyclotomicTrace59`, `TwistedArtinHasseLocalTrace59`, and
+  `TwistedFiniteLogLocalTrace59` identify the normalized finite-log receipt,
+  compute its residue as `-1` modulo 59, and prove it is nonzero.
+  `CompletedLogLocalTrace59` additionally identifies stage 59 of the actual
+  completed logarithm of `60` with that exact receipt.
+- `AdicCompleteValuedInteger59` proves that the inherited valuation topology
+  on the actual local integer ring is exactly its `lambda`-adic topology and
+  that the ring is complete for this filtration.  The canonical
+  `AdicCompletion.ofAlgEquiv` inverse therefore transports the formal Dwork
+  logarithm into the genuine local field.  `CompletedLogTail59` then factors
+  the complete trace exactly as
+  `59 * (normalizedLocalTraceFiniteLog59 + trace y)` with `y` still in the
+  principal `lambda` ideal.  The former formal-versus-valued completion seam
+  is closed.
+- Honest remaining seams are the Albert converse, the integral-trace theorem
+  that `trace y` is divisible by 59 for `y` in `lambda`, and the normalized
+  local-invariant/Hilbert-symbol nonvanishing comparison.  No new axiom,
+  provider, or fabricated scalar is used in the results above.
+
 ## 2026-08-18 — Carry class reduces local H² survival to an exact cyclic-lift obstruction
 
 - `CyclicCarryH2Class59` constructs the standard base-59 carry cocycle and
