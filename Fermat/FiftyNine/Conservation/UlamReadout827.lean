@@ -449,6 +449,29 @@ structure WildProcessesAtLeastSevenA
     (lambda : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59) : Prop where
   ker_wild_le_ker_gauge : lambda.ker ≤ seating.gauge.ker
 
+omit [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
+  [Module (IntegralPadicGroupAlgebra 59 GaloisIndex59) SelmerChi] in
+/-- If the wild coefficient is the zero map, saying that it processes at
+least the relation-(7a) gauge is exactly saying that the entire class-valued
+gauge map is zero. -/
+theorem wildProcessesAtLeastSevenA_zero_iff
+    {pair : StateLinkedIdealPair hζ S hz} {hF : H_FLT SelmerChi}
+    (seating : ClassValuedSevenAGaugeSeating pair hF) :
+    WildProcessesAtLeastSevenA seating
+        (0 : H_FLT SelmerChi →ₗ[ZMod 59] ZMod 59) ↔
+      seating.gauge = 0 := by
+  constructor
+  · intro processes
+    apply LinearMap.ext
+    intro h
+    exact LinearMap.mem_ker.mp
+      (processes.ker_wild_le_ker_gauge (by simp))
+  · intro hgauge
+    refine ⟨?_⟩
+    intro h _
+    rw [LinearMap.mem_ker, hgauge]
+    rfl
+
 /-- **KERNEL INTERFACE 2.**  The wild coefficient uses nothing beyond the
 relation-(7a) question and therefore descends to `Q_7a`:
 `ker G ≤ ker Λ`. -/
@@ -583,6 +606,53 @@ theorem wildLawfulness827_of_reciprocity
     execution.globalReciprocity h
   have hvalue := congrArg (fun reading ↦ reading y) hfunctional
   simpa [selectedWildFunctional827, Lambda, pair_59] using hvalue
+
+/-- For the one-column global pairing, reciprocity annihilates not only the
+wild reading but also its canonical rank-one coefficient.  This theorem is
+the precise reason that a subsequent `ker Lambda ≤ ker G` premise carries
+the whole assertion that the class-valued gauge vanishes. -/
+theorem wildCoefficient827_eq_zero_of_reciprocity
+    (boundary_ne_zero :
+      reflectedBoundaryFunctional827 rhoQ omega chi selectedPlace ≠ 0)
+    (localization : ReflectedWildLocalizationAt59 rhoQ omega chi
+      distinguishedPlace wild)
+    (execution : TameSilenceReciprocity827 rhoQ omega chi distinguishedPlace
+      wild localization) :
+    wildCoefficient827 rhoQ omega chi selectedPlace distinguishedPlace wild
+        localization.toReflectedWildCarrierExtension827 boundary_ne_zero
+        (wildLawfulness827_of_reciprocity rhoQ omega chi selectedPlace
+          distinguishedPlace wild localization execution) = 0 := by
+  have hexists : ∃ y : QRelaxedReflectedDual827 rhoQ omega chi,
+      reflectedBoundaryFunctional827 rhoQ omega chi selectedPlace y ≠ 0 := by
+    by_contra h
+    push Not at h
+    apply boundary_ne_zero
+    ext y
+    exact h y
+  obtain ⟨y, hy⟩ := hexists
+  apply LinearMap.ext
+  intro h
+  have hreading :
+      localization.toReflectedWildCarrierExtension827.qRelaxedWild.reading
+          h y = 0 := by
+    have hfunctional := Lambda_apply_eq_zero_of_reciprocity
+      localization.toReflectedWildCarrierExtension827.qRelaxedWild
+      execution.globalReciprocity h
+    have hvalue := congrArg (fun reading ↦ reading y) hfunctional
+    simpa [Lambda, pair_59] using hvalue
+  have hfactor := qRelaxedWild_factorization
+    rhoQ omega chi selectedPlace distinguishedPlace wild
+    localization.toReflectedWildCarrierExtension827 boundary_ne_zero
+    (wildLawfulness827_of_reciprocity rhoQ omega chi selectedPlace
+      distinguishedPlace wild localization execution) h y
+  have hproduct :
+      wildCoefficient827 rhoQ omega chi selectedPlace distinguishedPlace wild
+          localization.toReflectedWildCarrierExtension827 boundary_ne_zero
+          (wildLawfulness827_of_reciprocity rhoQ omega chi selectedPlace
+            distinguishedPlace wild localization execution) h *
+        reflectedBoundaryFunctional827 rhoQ omega chi selectedPlace y = 0 :=
+    hfactor.symm.trans hreading
+  exact (mul_eq_zero.mp hproduct).resolve_right hy
 
 /-! ## Step 10: typed surviving-kernel route only -/
 
