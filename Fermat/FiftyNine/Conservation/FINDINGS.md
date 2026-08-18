@@ -15,9 +15,11 @@
   continuous `H²(mu_59)`.  `ContinuousCarryH2LiftCriterion59` proves that the
   actual class vanishes exactly when the character lifts to `C3481`, and
   `TwistedLambdaKummerLiftCriterion59` specializes this equivalence while
-  retaining the already compiled norm-to-vanishing implication.  The final
-  small twisted-lambda specialization of the Albert converse is separate
-  composition work; the generic converse itself is closed.
+  retaining the already compiled norm-to-vanishing implication.
+  `TwistedLambdaKummerNormCriterion59` composes the converse pointwise across
+  the two cyclic-coordinate presentations and proves the final local result:
+  the primitive root is a norm exactly when the genuine twisted-lambda
+  Kummer cup vanishes.  Thus the Albert/norm seam is closed end-to-end.
 - `ContinuousCyclicH2Readout59` constructs the normalized finite-quotient
   scalarization rather than supplying one as data.  The generator-loop sum
   kills every continuous boundary, descends through Mathlib's actual
