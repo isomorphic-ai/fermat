@@ -220,6 +220,61 @@ private theorem cocycleValue_coe (a : Kˣ) (σ : AbsoluteGalois K) :
       σ • rootUnit n K a / rootUnit n K a :=
   rfl
 
+/-- The concrete Kummer cocycle may be evaluated using any chosen root once
+the acting Galois element fixes `μ_n`.
+
+Without the fixed-roots hypothesis, changing the root changes the cocycle by
+a coboundary.  When the base field contains all `n`-th roots of unity, as in
+the oriented Kummer construction, the hypothesis holds and the pointwise
+cocycle value is genuinely independent of the root choice. -/
+theorem cocycleValue_coe_eq_of_root
+    (a : Kˣ) (σ : AbsoluteGalois K)
+    (r : (AlgebraicClosure K)ˣ)
+    (hr : r ^ n =
+      Units.map (algebraMap K (AlgebraicClosure K)).toMonoidHom a)
+    (hfix : ∀ η : KummerRoots n K, σ • η = η) :
+    (cocycleValue n K a σ : (AlgebraicClosure K)ˣ) = σ • r / r := by
+  let η : KummerRoots n K :=
+    ⟨rootUnit n K a / r, by
+      rw [mem_rootsOfUnity, div_pow, rootUnit_pow, hr]
+      simp⟩
+  have hη := congrArg Subtype.val (hfix η)
+  change σ • (rootUnit n K a / r) = rootUnit n K a / r at hη
+  rw [cocycleValue_coe]
+  calc
+    σ • rootUnit n K a / rootUnit n K a =
+        (σ • (rootUnit n K a / r)) * (σ • r) /
+          ((rootUnit n K a / r) * r) := by
+            rw [← smul_mul']
+            congr <;> simp
+    _ = (rootUnit n K a / r) * (σ • r) /
+          ((rootUnit n K a / r) * r) := by rw [hη]
+    _ = σ • r / r := by
+      simp only [div_eq_mul_inv]
+      simp [mul_assoc, mul_comm]
+
+/-- Compatibility of the chosen Kummer cocycles under taking powers of the
+Kummer exponent.  If `σ` fixes `μ_n`, then raising the chosen
+`(n * m)`-Kummer cocycle to the `m`-th power gives the chosen `n`-Kummer
+cocycle pointwise.
+
+The two noncomputably selected roots need not themselves be compatible.
+The preceding root-independence theorem is exactly what removes that choice
+from this statement. -/
+theorem cocycleValue_coe_pow_eq
+    (m : ℕ) [NeZero m] [NeZero (n * m)]
+    (a : Kˣ) (σ : AbsoluteGalois K)
+    (hfix : ∀ η : KummerRoots n K, σ • η = η) :
+    (cocycleValue (n * m) K a σ : (AlgebraicClosure K)ˣ) ^ m =
+      (cocycleValue n K a σ : (AlgebraicClosure K)ˣ) := by
+  have hr : (rootUnit (n * m) K a ^ m) ^ n =
+      Units.map (algebraMap K (AlgebraicClosure K)).toMonoidHom a := by
+    rw [← pow_mul]
+    simpa only [mul_comm m n] using rootUnit_pow (n * m) K a
+  rw [cocycleValue_coe_eq_of_root n K a σ
+    (rootUnit (n * m) K a ^ m) hr hfix]
+  rw [cocycleValue_coe, div_pow, smul_pow']
+
 private theorem cocycleValue_isMulCocycle (a : Kˣ) :
     IsMulCocycle₁ (cocycleValue n K a) := by
   intro σ τ
