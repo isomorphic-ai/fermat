@@ -41,6 +41,8 @@ import Fermat.Conservation.ContinuousKummerTateCup
 #check Fermat.Conservation.ContinuousKummerOrientation.orientH1
 #check Fermat.Conservation.ContinuousKummerOrientation.orientH1Equiv
 #check Fermat.Conservation.ContinuousKummerOrientation.orientH2
+#check Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv
+#check Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv_apply
 #check Fermat.Conservation.ContinuousKummerOrientation.rightKummerMap
 #check Fermat.Conservation.ContinuousKummerOrientation.rightKummerMap_classOfUnit
 #check Fermat.Conservation.ContinuousKummerOrientation.leftKummerMap
@@ -139,6 +141,22 @@ info: 'Fermat.Conservation.ContinuousKummerH1.continuousMap_classOfUnit' depends
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.ContinuousKummerH1.continuousMap_classOfUnit
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv_apply
 
 /--
 info: 'Fermat.Conservation.ContinuousKummerOrientation.leftKummerMap_classOfUnit' depends on axioms: [propext,
