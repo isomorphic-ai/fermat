@@ -12,7 +12,10 @@ This non-imported executable audit leaf covers only the newly exposed route:
 * the W4 algebra turns same-line nonvanishing into a unique unit scalar;
 * the concrete tame-orbit functional factors uniquely through the actual
   class gauge exactly at the global-unit-silence boundary;
-* seated global reciprocity balances that orbit against the lambda row.
+* seated global reciprocity balances that orbit against the lambda row;
+* the inverse-oriented even-plus-primitive Fourier shape has zero mode 43;
+* W7 identifies orbit silence with relation 7A once an explicit injective
+  class readout and its exact factorization are supplied.
 
 The checks deliberately do not claim the still-missing arithmetic inputs:
 same-Hom-line membership, arbitrary-unit orbit silence, a global reflected
@@ -25,6 +28,8 @@ import Fermat.FiftyNine.Conservation.TwistedLambdaCupReceipt59
 import Fermat.FiftyNine.Conservation.NormalizedFullOrbitEigenprofile827
 import Fermat.FiftyNine.Conservation.StrictTameOrbitClassFactorization827
 import Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827
+import Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827
+import Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59
 
 /-! ## Public route inventory -/
 
@@ -70,6 +75,25 @@ the normalized lambda term. -/
 #check Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827.seatedTameOrbitSum827_eq_neg_normalizedLambda_of_globalReciprocity
 #check Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827.seatedTameOrbitSum827_eq_zero_iff_normalizedLambda_eq_zero
 
+/-! The committed finite Fourier half of arbitrary-unit silence.  The
+arithmetic decomposition of an arbitrary unit is deliberately not imported
+or claimed here. -/
+
+#check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseReindex_powerCharacter59_one_eq_fiftySeven
+#check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.powerCharacter59_fortyThree_negOne
+#check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.powerCharacter59_fiftySeven_ne_fortyThree
+#check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseReindex_negOne_invariant
+#check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseReindex_even_add_primitiveRootMode_eq
+#check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero
+
+/-! W7's honest algebraic partial closure.  Readout existence,
+factorization, and injectivity remain explicit theorem arguments. -/
+
+#check Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_eq_zero_iff_classGauge_eq_zero
+#check Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.fermatFactorClassGaugeMap59_fermatFactorSelmerDifference59
+#check Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_selectedClassGauge59_eq_zero
+#check Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA
+
 /-! ## Main endpoint axiom audit -/
 
 /--
@@ -109,6 +133,22 @@ info: 'Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827.seated
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827.seatedTameOrbitSum827_eq_zero_iff_normalizedLambda_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA
 
 /-! ## Proof-value dependency gates -/
 
@@ -157,3 +197,35 @@ criterion, and its zero equivalence consumes that retained balance. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827.seatedTameOrbitSum827_eq_zero_iff_normalizedLambda_eq_zero,
   Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827.seatedTameOrbitSum827_eq_neg_normalizedLambda_of_globalReciprocity
+
+/-! The Fourier-silence endpoint consumes the exact inverse orientation,
+preserved evenness, odd target mode, and separation of modes 57 and 43. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero,
+  Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseReindex_even_add_primitiveRootMode_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero,
+  Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseReindex_negOne_invariant
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero,
+  Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.powerCharacter59_fortyThree_negOne
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero,
+  Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.powerCharacter59_fiftySeven_ne_fortyThree
+
+/-! W7 consumes the concrete class seating, the generic pointwise kernel
+comparison, and the established selected-class characterization of 7A. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.fermatFactorClassGaugeMap59_fermatFactorSelmerDifference59,
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeSeating59.fermatFactorClassGaugeSeating59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_selectedClassGauge59_eq_zero,
+  Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_eq_zero_iff_classGauge_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_selectedClassGauge59_eq_zero,
+  Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.fermatFactorClassGaugeMap59_fermatFactorSelmerDifference59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
