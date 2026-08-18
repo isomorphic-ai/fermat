@@ -21,6 +21,36 @@ namespace Fermat.Conservation.ValuationProductDominant
 variable {F Γ₀ ι : Type*} [Field F]
 variable [LinearOrderedCommMonoidWithZero Γ₀]
 
+/-- If every perturbation has valuation at most `q < 1`, then so does the
+perturbation of their product. -/
+theorem prod_one_add_sub_one_le
+    (v : Valuation F Γ₀) (s : Finset ι) (x : ι → F) (q : Γ₀)
+    (hq1 : q < 1)
+    (hx : ∀ i ∈ s, v (x i) ≤ q) :
+    v ((∏ i ∈ s, (1 + x i)) - 1) ≤ q := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp
+  | @insert i s hi ih =>
+      have hxi : v (x i) ≤ q := hx i (Finset.mem_insert_self i s)
+      have hxs : ∀ j ∈ s, v (x j) ≤ q := by
+        intro j hj
+        exact hx j (Finset.mem_insert_of_mem hj)
+      have hprev := ih hxs
+      let P : F := ∏ j ∈ s, (1 + x j)
+      have hPsub : v (P - 1) ≤ q := by simpa [P] using hprev
+      have hP : v P = 1 := by
+        have hrewrite : P = 1 + (P - 1) := by ring
+        rw [hrewrite]
+        exact v.map_one_add_of_lt (hPsub.trans_lt hq1)
+      have hmul : v (x i * P) ≤ q := by
+        rw [map_mul, hP, mul_one]
+        exact hxi
+      have hid : (1 + x i) * P - 1 = (P - 1) + x i * P := by ring
+      rw [Finset.prod_insert hi]
+      rw [hid]
+      exact v.map_add_le hPsub hmul
+
 /-- If every perturbation is strictly below `q < 1`, so is the perturbation
 of their product. -/
 theorem prod_one_add_sub_one_lt
