@@ -110,6 +110,7 @@ import Fermat.Conservation.ContinuousKummerTateCup
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.scalarTimesRootPairing
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.scalarTimesRootPairing_apply
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.ContinuousKummerCohomologyTwo
+#check Fermat.Conservation.ContinuousKummerTateAlgebra.exists_conditionalNoncanonicalReadout_eq_one
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup_apply
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.kummerCupH1
@@ -319,6 +320,14 @@ info: 'Fermat.Conservation.ContinuousKummerTateAlgebra.scalarTimesRootPairing_ap
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.ContinuousKummerTateAlgebra.scalarTimesRootPairing_apply
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerTateAlgebra.exists_conditionalNoncanonicalReadout_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateAlgebra.exists_conditionalNoncanonicalReadout_eq_one
 
 /--
 info: 'Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup_apply' depends on axioms: [propext,
