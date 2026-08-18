@@ -24,9 +24,18 @@
   scalarization rather than supplying one as data.  The generator-loop sum
   kills every continuous boundary, descends through Mathlib's actual
   continuous homology quotient, sends the carry class to exactly `1`, and
-  admits the explicit scalar-multiple generator as a section.  This is the
-  normalization an eventual inflation/local-invariant comparison must
-  preserve; it is not mislabeled as the local invariant itself.
+  admits the explicit scalar-multiple generator as a section.
+  `ContinuousCyclicH2Equiv59` proves the reverse discrete/continuous boundary
+  transfer and that every class is a unique carry multiple; the readout is
+  therefore a genuine linear equivalence with `ZMod 59`.
+- `ContinuousH2Pullback59` descends cochain precomposition to actual
+  continuous `H²`, and `ContinuousH2PullbackFunctorial59` proves its identity
+  and contravariant-composition laws on every class.  The concrete
+  `TwistedLambdaH2Inflation59` then combines this pullback with inverse
+  coefficient orientation and sends the normalized finite carry literally
+  to the genuine twisted-lambda Kummer cup.  A target readout is normalized
+  precisely by one visible equality of composed linear maps; no value on the
+  cup is installed separately.
 - On the analytic side, `AdicCompleteValuedInteger59` identifies the actual
   local integer topology with its `lambda`-adic topology and proves
   completeness.  `CompletedLogLocalTrace59` and `CompletedLogTail59` transport
@@ -41,11 +50,16 @@
   infinite completed logarithm is an actual rational local integer with
   residue `-1`, hence is nonzero.  `CompletedLogResidue59` exposes that
   canonical `ZMod 59` scalar without choosing a representative.
+  `TwistedLambdaNormalizationSign59` proves the exact orientation receipt:
+  the finite carry readout is the negative of this residue.  Under the one
+  visible normalized-inflation equality, the genuine cup therefore reads as
+  the negative completed-log residue.
 - The honest remaining arithmetic seam is now the comparison between these
-  two normalized endpoints: inflation of the finite cyclic `H²` readout to
-  the local absolute-Galois cup class versus the canonical completed-log
-  residue/local invariant.  No new axiom, provider, fabricated scalar, local
-  reciprocity theorem, or Hilbert-symbol identity is used above.
+  two normalized endpoints: construct the local roots-valued `H²` invariant
+  and prove that its restriction along the explicit inflation is the finite
+  cyclic equivalence, with its Artin--Hasse/completed-log interpretation.
+  No new axiom, provider, fabricated scalar, local reciprocity theorem, or
+  Hilbert-symbol identity is used above.
 
 ## 2026-08-18 — Carry class reduces local H² survival to an exact cyclic-lift obstruction
 
