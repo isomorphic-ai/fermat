@@ -26,7 +26,9 @@ namespace Fermat.FiftyNine.Conservation.FullOrbitReciprocity827
 open Fermat.Conservation
 open Fermat.Conservation.LinkingInterfaces
 open Fermat.Conservation.TatePairing
+open Fermat.FiftyNine.Conservation.DetectorWitness827
 open Fermat.FiftyNine.Conservation.SplitPrimeFourier827
+open Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 open Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
 
 local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
@@ -148,6 +150,93 @@ theorem pairAt_eq_selectedProduct_of_complementaryOrbit
       rw [sum_pointwiseProduct_eq_neg_selected hcard mode
         primal reflected selected hprimal hreflected]
     _ = primal selected * reflected selected := neg_neg _
+
+/-! ## The canonically seated reflected wave -/
+
+universe uK
+
+section CyclotomicReflected
+
+variable {K : Type uK} [Field K] [NumberField K]
+  [IsCyclotomicExtension {59} ℚ K]
+  [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
+  {Place : Type uPlace} {SelmerChi : Type uChi}
+  {DOmegaSelmerChiStar : Type uDual}
+  {omega chi : InvolutiveBase.Character
+    (PadicInt 59) GaloisIndex59}
+  [AddCommGroup SelmerChi]
+  [Module (IntegralPadicGroupAlgebra 59 GaloisIndex59) SelmerChi]
+  [AddCommGroup DOmegaSelmerChiStar]
+  [Module (IntegralPadicGroupAlgebra 59 GaloisIndex59)
+    DOmegaSelmerChiStar]
+  {pairing : PlaceIndexedLocalPairing 59 GaloisIndex59 omega chi Place
+    SelmerChi DOmegaSelmerChiStar}
+
+set_option maxHeartbeats 800000 in
+set_option maxRecDepth 2000 in
+/-- The full-orbit reciprocity theorem with the reflected wave supplied by
+the actual canonical q-relaxed localization.  Only the complementary primal
+wave and its comparison with the local Tate readings remain explicit. -/
+theorem pairAt_eq_selectedProduct_of_cyclotomicReflectedOrbit
+    (reciprocity : GlobalReciprocityLaw pairing)
+    (distinguished : Place)
+    (auxiliaryPlace : GaloisIndex59 → Place)
+    (hinjective : Function.Injective auxiliaryPlace)
+    (hdisjoint : ∀ index, auxiliaryPlace index ≠ distinguished)
+    (x : SelmerChi) (y : DOmegaSelmerChiStar)
+    (houtside : ∀ v, v ≠ distinguished →
+      v ∉ Set.range auxiliaryPlace → pairing.pairAt v x y = 0)
+    (selectedPlace : Place827 K)
+    (source : QRelaxedSelmerCarrier827 K)
+    (primal : GaloisIndex59 → ZMod 59)
+    (selectedIndex : GaloisIndex59)
+    (hprimal : IsPureCharacter
+      (reducedCharacter59
+        (InvolutiveBase.reflectedCharacter omega chi)) primal)
+    (hcomparison : ∀ index,
+      pairing.pairAt (auxiliaryPlace index) x y =
+        primal index *
+          projectedLocalizationVector827
+            (cyclotomicQRelaxedSelmerRepresentation827 K)
+            omega chi selectedPlace source index) :
+    pairing.pairAt distinguished x y =
+      primal selectedIndex *
+        projectedLocalizationVector827
+          (cyclotomicQRelaxedSelmerRepresentation827 K)
+          omega chi selectedPlace source selectedIndex := by
+  let reflected : GaloisIndex59 → ZMod 59 :=
+    projectedLocalizationVector827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi selectedPlace source
+  have hsumComparison :
+      (∑ index : GaloisIndex59,
+          orbitReading pairing auxiliaryPlace x y index) =
+        ∑ index : GaloisIndex59, primal index * reflected index := by
+    apply Finset.sum_congr rfl
+    intro index _
+    simpa only [orbitReading, reflected] using hcomparison index
+  have hcompression :
+      (∑ index : GaloisIndex59, primal index * reflected index) =
+        -(primal selectedIndex * reflected selectedIndex) := by
+    exact cyclotomic_projectedLocalization_product_sum_eq_neg_selected
+      omega chi selectedPlace source primal selectedIndex hprimal
+  calc
+    pairing.pairAt distinguished x y =
+        -∑ index : GaloisIndex59,
+          orbitReading pairing auxiliaryPlace x y index :=
+      pairAt_eq_neg_sum_orbitReading reciprocity distinguished
+        auxiliaryPlace hinjective hdisjoint x y houtside
+    _ = -∑ index : GaloisIndex59,
+        primal index * reflected index := congrArg Neg.neg hsumComparison
+    _ = -(-(primal selectedIndex * reflected selectedIndex)) :=
+      congrArg Neg.neg hcompression
+    _ = primal selectedIndex * reflected selectedIndex := neg_neg _
+    _ = primal selectedIndex *
+        projectedLocalizationVector827
+          (cyclotomicQRelaxedSelmerRepresentation827 K)
+          omega chi selectedPlace source selectedIndex := rfl
+
+end CyclotomicReflected
 
 end GlobalReciprocityLaw
 
