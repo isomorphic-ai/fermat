@@ -135,6 +135,50 @@ theorem fermatMinusStrictSelmer59_localCondition
         (Additive.toMul (fermatMinusStrictSelmer59 pair)).1 = 1 :=
   (Additive.toMul (fermatMinusStrictSelmer59 pair)).2 v (by simp)
 
+/-! ## Exact ideal-class receipts -/
+
+/-- The class-group obstruction map on the literal strict Selmer carrier,
+written additively so that its output lives in the same carrier as the
+allocated factor ledger. -/
+noncomputable def strictSelmerIdealClass59 :
+    SelmerCarrier (NumberField.RingOfIntegers K) K 59 →+
+      Additive (ClassGroup (NumberField.RingOfIntegers K)) :=
+  MonoidHom.toAdditive <|
+    IsDedekindDomain.selmerGroup.toClass
+      (R := NumberField.RingOfIntegers K) (K := K) (n := 59)
+
+/-- The class obstruction of the genuine plus-factor Selmer source is
+literally the class of the plus ideal allocated by the Fermat factorization. -/
+theorem fermatPlusStrictSelmer59_idealClass
+    (pair : StateLinkedIdealPair hζ S hz) :
+    strictSelmerIdealClass59 (K := K) (fermatPlusStrictSelmer59 pair) =
+      pair.ledger.rootClass 0 := by
+  change Additive.ofMul
+      (IsDedekindDomain.selmerGroup.toClass
+        (R := NumberField.RingOfIntegers K) (K := K) (n := 59)
+        (emptySelmerClassOfIdealPower
+          (normalizedPlusFactor hζ S hz)
+          (normalizedPlusFactor_ne_zero hζ S hz)
+          pair.plusIdeal pair.plus_pow)) = _
+  rw [emptySelmerClassOfIdealPower_toClass]
+  rfl
+
+/-- The class obstruction of the genuine minus-factor Selmer source is
+literally the class of the minus ideal allocated by the Fermat factorization. -/
+theorem fermatMinusStrictSelmer59_idealClass
+    (pair : StateLinkedIdealPair hζ S hz) :
+    strictSelmerIdealClass59 (K := K) (fermatMinusStrictSelmer59 pair) =
+      pair.ledger.rootClass 1 := by
+  change Additive.ofMul
+      (IsDedekindDomain.selmerGroup.toClass
+        (R := NumberField.RingOfIntegers K) (K := K) (n := 59)
+        (emptySelmerClassOfIdealPower
+          (normalizedMinusFactor hζ S hz)
+          (normalizedMinusFactor_ne_zero hζ S hz)
+          pair.minusIdeal pair.minus_pow)) = _
+  rw [emptySelmerClassOfIdealPower_toClass]
+  rfl
+
 /-! ## The genuine odd-character sources -/
 
 /-- Project the solution-dependent plus factor into the canonical odd
