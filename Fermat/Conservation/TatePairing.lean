@@ -308,6 +308,60 @@ theorem pairAt_eq_zero_of_other_places
   rw [hentries] at hsum
   simpa using hsum
 
+/-- If every local column outside two distinct retained places is silent,
+global reciprocity retains their exact two-term balance.  Unlike the
+one-column corollary above, this theorem does not erase the auxiliary
+receipt. -/
+theorem pairAt_add_pairAt_eq_zero_of_outside_two
+    (reciprocity : GlobalReciprocityLaw pairing)
+    (distinguished auxiliary : Place)
+    (hne : distinguished ≠ auxiliary)
+    (x : SelmerChi) (y : DOmegaSelmerChiStar)
+    (hother : ∀ v, v ≠ distinguished → v ≠ auxiliary →
+      pairing.pairAt v x y = 0) :
+    pairing.pairAt distinguished x y +
+        pairing.pairAt auxiliary x y = 0 := by
+  classical
+  have hentries :
+      pairing.readings x y =
+        Finsupp.single distinguished
+            (pairing.pairAt distinguished x y) +
+          Finsupp.single auxiliary (pairing.pairAt auxiliary x y) := by
+    ext v
+    change pairing.pairAt v x y = _
+    by_cases hvd : v = distinguished
+    · subst v
+      simp [hne, PlaceIndexedLocalPairing.pairAt]
+    · by_cases hva : v = auxiliary
+      · subst v
+        simp [hne, PlaceIndexedLocalPairing.pairAt]
+      · calc
+          pairing.pairAt v x y = 0 := hother v hvd hva
+          _ = (Finsupp.single distinguished
+                  (pairing.pairAt distinguished x y) +
+                Finsupp.single auxiliary
+                  (pairing.pairAt auxiliary x y)) v := by
+            simp [hvd, hva]
+  have hsum := reciprocity.sum_eq_zero x y
+  rw [hentries,
+    Finsupp.sum_add_index' (fun _ => rfl) (fun _ _ _ => rfl)] at hsum
+  simpa using hsum
+
+/-- Oriented form of the two-place conservation law: the wild reading is
+the negative of the retained auxiliary reading. -/
+theorem pairAt_eq_neg_pairAt_of_outside_two
+    (reciprocity : GlobalReciprocityLaw pairing)
+    (distinguished auxiliary : Place)
+    (hne : distinguished ≠ auxiliary)
+    (x : SelmerChi) (y : DOmegaSelmerChiStar)
+    (hother : ∀ v, v ≠ distinguished → v ≠ auxiliary →
+      pairing.pairAt v x y = 0) :
+    pairing.pairAt distinguished x y =
+      -pairing.pairAt auxiliary x y :=
+  eq_neg_of_add_eq_zero_left
+    (reciprocity.pairAt_add_pairAt_eq_zero_of_outside_two
+      distinguished auxiliary hne x y hother)
+
 end GlobalReciprocityLaw
 
 /-! ## Explicit local-condition orthogonality -/
