@@ -64,6 +64,32 @@ ordinary discrete group cohomology. -/
 abbrev LambdaRootsContinuousH2 :=
   ContinuousKummerCohomologyTwo 59 (LambdaLocalField59 K)
 
+/-- The same lambda-local degree-two cohomology after changing only the
+roots-of-unity coefficients to the primitive-root-oriented trivial line. -/
+abbrev LambdaOrientedContinuousH2 :=
+  OrientedContinuousH2 59 (LambdaLocalField59 K)
+
+/-- The primitive root at lambda induces an equivalence between the two
+coefficient presentations of continuous local `H²`.  This changes
+coordinates; it is not a local invariant or scalar readout. -/
+def lambdaH2CoefficientOrientationEquiv59 :
+    LambdaRootsContinuousH2 K ≃L[ZMod 59]
+      LambdaOrientedContinuousH2 K :=
+  orientH2Equiv 59 (LambdaLocalField59 K)
+    (lambdaLocalPrimitiveRoot59 K)
+    (lambdaLocalPrimitiveRoot59_isPrimitive K)
+
+/-- Readback of the lambda-local coefficient orientation through the
+underlying continuous linear map. -/
+@[simp]
+theorem lambdaH2CoefficientOrientationEquiv59_apply
+    (x : LambdaRootsContinuousH2 K) :
+    lambdaH2CoefficientOrientationEquiv59 K x =
+      orientH2 59 (LambdaLocalField59 K)
+        (lambdaLocalPrimitiveRoot59 K)
+        (lambdaLocalPrimitiveRoot59_isPrimitive K) x :=
+  rfl
+
 /-- The exact type of a descended continuous cup at the cyclotomic wild
 completion. -/
 abbrev LambdaContinuousCup59 :=
