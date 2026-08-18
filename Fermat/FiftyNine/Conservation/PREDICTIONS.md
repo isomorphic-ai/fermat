@@ -61,9 +61,49 @@ conservation proof.
   kernel-checked as
   `oldWildInterfaceOfPairing_eq_iff_calibration`: equality of interfaces is
   equivalent to the original universal old-reading calibration theorem.
-  Wild lawfulness, relation-(7a) gauge seating, the relevant kernel inclusion,
-  reciprocity, and a normalized-fiber member remain separate; no Case-II,
-  (7a), or FLT endpoint is claimed.
+  The later theorem `wildLawfulness827_of_reciprocity` shows that the same
+  still-open one-column reciprocity interface supplies wild lawfulness, so
+  lawfulness is no longer an independent seam.  The normalized readout
+  endpoint also constructs localization, boundary nonvanishing, and a fiber
+  member internally.  `pointedTateIncidence827_of_fourierSeating_of_lift`
+  additionally constructs the incidence package from Fourier seating and a
+  nonzero q-relaxed localization lift.  The later theorem
+  `cyclotomicQLocalizationEquivariance827`, exposed here as
+  `normalizedQLocalizationEquivariance827`, proves the Fourier seating law for
+  the canonical cyclotomic action and localization.  Thus the strongest
+  theorem, `vandiverSevenA_of_normalizedContinuousCanonicalLift`, needs the
+  reflected lift but no separately supplied seating premise.  The remaining
+  literal inputs are that lift, relation-(7a) gauge seating and
+  `ker Lambda ≤ ker G`, and reciprocity.  The lift itself now has an exact
+  boundary:
+  `nonempty_cyclotomicReflectedQRelaxedLocalizationLift827_iff` identifies it,
+  at any chosen 827-place, with nonvanishing of
+  `classSilentPointedCoordinate827` on the kernel of the projected finite-S
+  class obstruction.  That nonvanishing is not proved.  Any hypothetical
+  lift is a full reflected-character wave with every 827 coordinate nonzero,
+  not a point mass.  A subsequent kernel audit makes the
+  logical boundary sharper: reciprocity forces this one-column coefficient
+  to be the zero map
+  (`normalizedWildCoefficientOfCanonicalLift59_eq_zero`), and
+  `normalizedCanonicalLiftProcessesAtLeastSevenA_iff_gauge_eq_zero` proves
+  that the advertised `WildProcessesAtLeastSevenA` premise is then equivalent
+  to the *entire* class-valued gauge being zero.  Since
+  `vandiverSevenA_of_classGauge_eq_zero` already obtains (7a) by evaluating
+  that vanishing gauge at the Fermat class, the compiled lift endpoint is a
+  valid conditional/regression theorem but not a non-circular proof of (7a).
+  The next arithmetic step must provide a finer nonzero readout or an
+  independent comparison that does not already contain the target.  No full
+  Case-II or unconditional (7a)/FLT conclusion is claimed.
+- The generic reciprocity layer now records one exact candidate shape for that
+  next step.  `pairAt_add_pairAt_eq_zero_of_outside_two` retains a distinct
+  auxiliary column and proves `wild + auxiliary = 0`; its oriented form
+  `pairAt_eq_neg_pairAt_of_outside_two` gives `wild = -auxiliary`.  This is
+  structural conservation algebra only, and the tame realization now routes
+  its outside-two bookkeeping through this theorem.  It is not yet the
+  literal p=59 successor: the full-wave theorem shows that a cyclotomic lift
+  retains all 58 coordinates above 827.  The arithmetic route must sum that
+  whole orbit, or Fourier-compress it, and compare the retained value with the
+  class gauge.  None of those arithmetic steps is claimed.
 
 ## 2026-08-13 — Vostokov wild-reading prediction
 

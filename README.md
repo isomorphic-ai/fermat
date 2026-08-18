@@ -411,11 +411,46 @@ restricts any such pairing to the old eigenspace seats and proves the full
 59-local core and the complete q-relaxed localization for the old-shaped
 interface constructed from that same pairing.  Its self-calibration is
 definitional; equality with an independently supplied historical wild
-reading remains exactly the explicit universal calibration seam.  Wild
-lawfulness, class-valued (7a) gauge seating, the endpoint kernel inclusion,
-global reciprocity, and a normalized-fiber member remain open.  In particular,
-this laboratory does not yet prove full Case II, relation (7a), or a new
-all-prime FLT theorem.
+reading remains exactly the explicit universal calibration seam.
+`wildLawfulness827_of_reciprocity` proves that reciprocity for this
+one-column localization automatically supplies lawfulness on the conserved
+827 kernel; reciprocity itself remains an open arithmetic interface.
+`NormalizedContinuousReadout59` then compiles a stronger relation-(7a)
+endpoint which internally supplies localization, boundary nonvanishing, a
+member of the retained normalized fiber, and that reciprocity-derived
+lawfulness.  `AlgebraicPointedIncidence827` proves that Fourier seating plus
+a nonzero `ReflectedQRelaxedLocalizationLift827` constructs the formerly
+independent `PointedTateIncidence827` package; no complement or splitting is
+chosen.  `CyclotomicLocalizationEquivariance827` proves the Fourier seating
+law for the canonical cyclotomic action and localization, so
+`vandiverSevenA_of_normalizedContinuousCanonicalLift` is the strongest direct
+endpoint: callers pass a reflected lift but neither incidence nor seating.
+No such lift is inhabited.  `ReflectedLocalizationLiftCriterion827` makes
+this exact: at any chosen 827-place, lift inhabitation is equivalent to
+nonvanishing of `classSilentPointedCoordinate827` on the kernel of the
+projected finite-S class obstruction.  That nonvanishing remains open, and
+any hypothetical lift is proved to be a full reflected-character wave with
+all 58 coordinates above 827 nonzero.  The remaining concrete inputs are
+that lift, class-valued (7a) gauge seating,
+`WildProcessesAtLeastSevenA`, and reciprocity.  There is an important exact boundary:
+`normalizedWildCoefficientOfCanonicalLift59_eq_zero` proves that reciprocity
+makes this one-column coefficient the zero map, while
+`normalizedCanonicalLiftProcessesAtLeastSevenA_iff_gauge_eq_zero` proves that its
+`WildProcessesAtLeastSevenA` premise is then equivalent to vanishing of the
+entire class-valued gauge.  That gauge vanishing already implies (7a) directly
+by `vandiverSevenA_of_classGauge_eq_zero`.  Thus the lift-facing endpoint is a
+kernel-checked conditional/regression theorem, not a non-circular derivation
+of (7a); a finer nonzero readout or genuinely independent comparison remains
+necessary.  The generic reciprocity layer now supplies a precise next shape:
+`pairAt_add_pairAt_eq_zero_of_outside_two` retains an auxiliary column and
+proves `wild + auxiliary = 0`, equivalently `wild = -auxiliary`, instead of
+killing the only retained reading; the tame realization has a compiled
+wrapper from its outside-two bookkeeping to that balance.  For the actual
+cyclotomic lift this is only a prototype, because the lift is a full 58-place
+wave.  The p=59 successor must retain/sum the whole 827 orbit, or
+Fourier-compress it, and then provide the arithmetic gauge comparison.  None
+of that is constructed yet.  In particular, this laboratory does not yet
+prove full Case II, relation (7a), or a new all-prime FLT theorem.
 
 [`Fermat/FiftyNine/Conservation/Verification.lean`](Fermat/FiftyNine/Conservation/Verification.lean)
 is the non-imported executable audit leaf for this campaign.  It checks the
