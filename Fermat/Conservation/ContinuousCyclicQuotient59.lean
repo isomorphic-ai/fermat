@@ -5,9 +5,9 @@ Authors: Fabian Franz, OpenAI
 
 # Continuous cyclic quotients of an absolute Galois group at 59
 
-This file isolates the generic group-theoretic plumbing behind a cyclic
-degree-`59` quotient.  Restriction from an absolute Galois group to the
-Galois group of a supplied normal subextension is continuous and
+This file is the API-compatible order-59 specialization of
+`ContinuousCyclicQuotient`.  Restriction from an absolute Galois group to
+the Galois group of a supplied normal subextension is continuous and
 surjective.  Composing restriction with a supplied continuous
 identification of that Galois group with `Multiplicative (ZMod 59)` gives
 an honest continuous cyclic quotient.
@@ -18,9 +18,7 @@ It also does not define an inflation map on continuous cohomology, compare
 discrete and continuous cohomology, or prove that an inflated `H²` class is
 nonzero.  Those are separate cohomological and arithmetic obligations.
 -/
-import Mathlib.FieldTheory.AbsoluteGaloisGroup
-import Mathlib.FieldTheory.Galois.Profinite
-import Mathlib.Topology.Algebra.ContinuousMonoidHom
+import Fermat.Conservation.ContinuousCyclicQuotient
 
 noncomputable section
 
@@ -39,19 +37,15 @@ variable (F : Type*) [Field F]
 continuous homomorphism out of the absolute Galois group. -/
 def absoluteGaloisRestriction
     (L : IntermediateField F (AlgebraicClosure F)) [Normal F L] :
-    Field.absoluteGaloisGroup F →ₜ* (L ≃ₐ[F] L) where
-  toMonoidHom := AlgEquiv.restrictNormalHom L
-  continuous_toFun := InfiniteGalois.restrictNormalHom_continuous L
+    Field.absoluteGaloisGroup F →ₜ* (L ≃ₐ[F] L) :=
+  ContinuousCyclicQuotient.absoluteGaloisRestriction F L
 
 /-- Restriction from the absolute Galois group to a normal subextension is
 surjective. -/
 theorem absoluteGaloisRestriction_surjective
     (L : IntermediateField F (AlgebraicClosure F)) [Normal F L] :
     Function.Surjective (absoluteGaloisRestriction F L) := by
-  change Function.Surjective
-    (AlgEquiv.restrictNormalHom (F := F) (K₁ := AlgebraicClosure F) L)
-  exact AlgEquiv.restrictNormalHom_surjective
-    (F := F) (K₁ := L) (E := AlgebraicClosure F)
+  exact ContinuousCyclicQuotient.absoluteGaloisRestriction_surjective F L
 
 /-- An honest continuous `C₅₉` quotient obtained from a supplied normal
 subextension and a supplied continuous cyclic identification of its Galois
@@ -63,8 +57,7 @@ def cyclicQuotient59
     (L : IntermediateField F (AlgebraicClosure F)) [Normal F L]
     (e : (L ≃ₐ[F] L) ≃ₜ* CyclicGroup59) :
     Field.absoluteGaloisGroup F →ₜ* CyclicGroup59 :=
-  (ContinuousMonoidHom.toContinuousMonoidHom e).comp
-    (absoluteGaloisRestriction F L)
+  ContinuousCyclicQuotient.cyclicQuotient F 59 L e
 
 @[simp]
 theorem cyclicQuotient59_apply
@@ -72,7 +65,7 @@ theorem cyclicQuotient59_apply
     (e : (L ≃ₐ[F] L) ≃ₜ* CyclicGroup59)
     (g : Field.absoluteGaloisGroup F) :
     cyclicQuotient59 F L e g = e (AlgEquiv.restrictNormalHom L g) :=
-  rfl
+  ContinuousCyclicQuotient.cyclicQuotient_apply F 59 L e g
 
 /-- The resulting continuous cyclic homomorphism is a quotient map in the
 algebraic sense: its underlying function is surjective. -/
@@ -80,8 +73,6 @@ theorem cyclicQuotient59_surjective
     (L : IntermediateField F (AlgebraicClosure F)) [Normal F L]
     (e : (L ≃ₐ[F] L) ≃ₜ* CyclicGroup59) :
     Function.Surjective (cyclicQuotient59 F L e) := by
-  change Function.Surjective
-    (fun g ↦ e (absoluteGaloisRestriction F L g))
-  exact e.surjective.comp (absoluteGaloisRestriction_surjective F L)
+  exact ContinuousCyclicQuotient.cyclicQuotient_surjective F 59 L e
 
 end Fermat.Conservation.ContinuousCyclicQuotient59
