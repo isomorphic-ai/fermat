@@ -472,6 +472,21 @@ theorem wildProcessesAtLeastSevenA_zero_iff
     rw [LinearMap.mem_ker, hgauge]
     rfl
 
+omit [Module (IntegralPadicGroupAlgebra 59 GaloisIndex59) SelmerChi] in
+/-- Vanishing of the complete class-valued gauge already implies relation
+(7a), by evaluating it at the seated Fermat class.  This is the direct route
+showing why a zero wild coefficient together with
+`WildProcessesAtLeastSevenA` contains the endpoint rather than derives new
+information about it. -/
+theorem vandiverSevenA_of_classGauge_eq_zero
+    {pair : StateLinkedIdealPair hζ S hz} {hF : H_FLT SelmerChi}
+    (seating : ClassValuedSevenAGaugeSeating pair hF)
+    (hgauge : seating.gauge = 0) :
+    pair.ledger.VandiverSevenA 0 1 := by
+  apply (selectedClassGauge59_eq_zero_iff_vandiverSevenA pair).mp
+  rw [← seating.gauge_at_fermat, hgauge]
+  rfl
+
 /-- **KERNEL INTERFACE 2.**  The wild coefficient uses nothing beyond the
 relation-(7a) question and therefore descends to `Q_7a`:
 `ker G ≤ ker Λ`. -/
