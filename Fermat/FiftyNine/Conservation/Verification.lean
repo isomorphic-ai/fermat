@@ -108,9 +108,18 @@ import Fermat.FiftyNine.Conservation.DetectorWitness827
 import Fermat.FiftyNine.Conservation.GaugeSteering827
 import Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 import Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
+import Fermat.FiftyNine.Conservation.FourierPairingProjection827
 import Fermat.FiftyNine.Conservation.PrimalOrbitResidue827
+import Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827
 import Fermat.FiftyNine.Conservation.ExplicitResiduePlaceOrbit827
+import Fermat.FiftyNine.Conservation.LocalReduction827
+import Fermat.FiftyNine.Conservation.CyclotomicTameContext59
 import Fermat.FiftyNine.Conservation.FullOrbitReciprocity827
+import Fermat.FiftyNine.Conservation.RawOrbitReciprocity827
+import Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827
+import Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827
+import Fermat.FiftyNine.Conservation.ActualTameLedger827
+import Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827
 import Fermat.FiftyNine.Conservation.PointedTateIncidence
 import Fermat.FiftyNine.Conservation.AlgebraicPointedIncidence827
 import Fermat.FiftyNine.Conservation.TransversalityVerdict827
@@ -1426,6 +1435,370 @@ enumeration of the support. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedCircularUnitProduct_of_cyclotomicReflectedOrbit,
   Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827_isPureCharacter
+
+/-! The physical 827 orbit is now connected end to end at the scalar level.
+`LocalReduction827` builds each actual valuation-ring reduction and tame
+context; `FourierPairingProjection827` projects only under the complete
+58-place sum; `RawOrbitReciprocity827` transports that honest raw sum through
+global reciprocity; and `ExplicitTameOrbitReciprocity827` specializes the
+chain to the first circular unit and a genuine q-relaxed representative.
+
+The inverse place orientation remains explicit throughout.  In particular,
+these checks do not install the false pointwise identification of a raw
+residue coordinate with its selected Fourier component. -/
+
+#check Fermat.FiftyNine.Conservation.LocalReduction827.LocalRing827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.localReductionHom827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.localReductionHom827_algebraMap
+#check Fermat.FiftyNine.Conservation.LocalReduction827.chosenUniformizer827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.chosenUniformizer827_spec
+#check Fermat.FiftyNine.Conservation.LocalReduction827.chosenUniformizer827_ne_zero
+#check Fermat.FiftyNine.Conservation.LocalReduction827.chosenUniformizerUnit827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.valuationOfNeZero_chosenUniformizerUnit827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.localUnitPart827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.angularComponent827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.angularComponent827_globalUnit
+#check Fermat.FiftyNine.Conservation.LocalReduction827.attestationRootUnit_isPrimitive_public
+#check Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_ord
+#check Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_angularComponent_globalUnit
+#check Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_residueCharacter_eq_residueLog
+#check Fermat.FiftyNine.Conservation.LocalReduction827.realNorm_firstGeneratedUnit_eq_sq
+#check Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_primalResidue_eq_fullOrbitUnitReading
+#check Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_value_globalUnit
+#check Fermat.FiftyNine.Conservation.LocalReduction827.canonicalZeta59
+#check Fermat.FiftyNine.Conservation.LocalReduction827.canonicalZeta59_isPrimitive
+#check Fermat.FiftyNine.Conservation.LocalReduction827.inverseOrientedFullOrbitUnitReading827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.rhoQ827
+#check Fermat.FiftyNine.Conservation.LocalReduction827.qLocalizationCoordinate827_eq_candidateRepresentative
+#check Fermat.FiftyNine.Conservation.LocalReduction827.actualTameReadingAtOrbitPlace827_eq_raw_product
+#check Fermat.FiftyNine.Conservation.LocalReduction827.actualTameReading827_eq_inverseOriented_raw_product
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.localReductionHom827,
+  IsLocalization.lift
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.localReductionHom827_algebraMap,
+  IsLocalization.lift_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.angularComponent827_globalUnit,
+  Fermat.FiftyNine.Conservation.LocalReduction827.localReductionHom827_algebraMap
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827,
+  Fermat.FiftyNine.Conservation.LocalReduction827.angularComponent827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_residueCharacter_eq_residueLog,
+  Fermat.FiftyNine.Conservation.CapacityCertificate.symbolPower
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_primalResidue_eq_fullOrbitUnitReading,
+  Fermat.FiftyNine.Conservation.LocalReduction827.realNorm_firstGeneratedUnit_eq_sq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_primalResidue_eq_fullOrbitUnitReading,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.fullOrbitUnitReading827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_value_globalUnit,
+  Fermat.Conservation.TameSymbol.Context.value
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.qLocalizationCoordinate827_eq_candidateRepresentative,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.candidate_represents
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.actualTameReadingAtOrbitPlace827_eq_raw_product,
+  Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827_value_globalUnit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.actualTameReadingAtOrbitPlace827_eq_raw_product,
+  Fermat.FiftyNine.Conservation.LocalReduction827.qLocalizationCoordinate827_eq_candidateRepresentative
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.actualTameReading827_eq_inverseOriented_raw_product,
+  Fermat.FiftyNine.Conservation.LocalReduction827.actualTameReadingAtOrbitPlace827_eq_raw_product
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalReduction827.actualTameReading827_eq_inverseOriented_raw_product,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.indexedPlaceOrbitEquiv827_eq_orbitPlace827Subtype_inv
+
+#check Fermat.FiftyNine.Conservation.FourierPairingProjection827.sum_mul_pureInverse_eq_sum_characterComponent_mul
+#check Fermat.FiftyNine.Conservation.FourierPairingProjection827.inverseReindex
+#check Fermat.FiftyNine.Conservation.FourierPairingProjection827.fourierCoefficient_inverseReindex
+#check Fermat.FiftyNine.Conservation.FourierPairingProjection827.sum_inverseReindex_mul_pureInverse_eq_neg_selectedComponent
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.sum_mul_pureInverse_eq_sum_characterComponent_mul,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fourierCoefficient
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.fourierCoefficient_inverseReindex,
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.inverseReindex
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.fourierCoefficient_inverseReindex,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fourierCoefficient
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.sum_inverseReindex_mul_pureInverse_eq_neg_selectedComponent,
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.sum_mul_pureInverse_eq_sum_characterComponent_mul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.sum_inverseReindex_mul_pureInverse_eq_neg_selectedComponent,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_neg_selected
+
+/-! The full 58-by-28 residue table now certifies every nontrivial even
+Fourier coefficient of every generated circular unit.  The terminal theorem
+transports that nonvanishing through the physically forced inverse place
+orientation. -/
+
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.residueLog_eq_of_symbol
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.orbitGeometricResidue827
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.orbitRealNodeResidue827
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.orbitEdgeResidue827
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullGeneratedMatrix827
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullGeneratedMatrix827_entry_certificate
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.orbitReductionHom827_generatedUnit_eq
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullOrbitUnitReading827_generatedUnit_eq
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.powerCharacter59
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.powerCharacter59_apply
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.firstGenerated_powerTwo_fourierCoefficient_eq
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullGeneratedMatrix827_powerFourier_ne_zero
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.exists_powerCharacter59
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullOrbitUnitReading827_generatedUnit_fourier_ne_zero_of_even_nontrivial
+#check Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.inverseReindex_fullOrbitUnitReading827_generatedUnit_fourier_ne_zero
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.residueLog_eq_of_symbol,
+  Fermat.FiftyNine.Conservation.CapacityCertificate.residueLog
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.orbitReductionHom827_generatedUnit_eq,
+  Fermat.FiftyNine.Conservation.Credit.generatedUnit_eq_orbit_ratio
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullOrbitUnitReading827_generatedUnit_eq,
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.orbitReductionHom827_generatedUnit_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullOrbitUnitReading827_generatedUnit_eq,
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.residueLog_eq_of_symbol
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.exists_powerCharacter59,
+  MonoidHom.map_cyclic
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullOrbitUnitReading827_generatedUnit_fourier_ne_zero_of_even_nontrivial,
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.exists_powerCharacter59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullOrbitUnitReading827_generatedUnit_fourier_ne_zero_of_even_nontrivial,
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullGeneratedMatrix827_powerFourier_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.inverseReindex_fullOrbitUnitReading827_generatedUnit_fourier_ne_zero,
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.fourierCoefficient_inverseReindex
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.inverseReindex_fullOrbitUnitReading827_generatedUnit_fourier_ne_zero,
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.fullOrbitUnitReading827_generatedUnit_fourier_ne_zero_of_even_nontrivial
+
+#check Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedComponent_of_rawOrbit
+#check Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.wild_eq_selectedComponent_of_raw_reciprocity
+#check Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_inverseOrientedComponent_of_rawOrbit
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedComponent_of_rawOrbit,
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_neg_sum_orbitReading
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedComponent_of_rawOrbit,
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.sum_mul_pureInverse_eq_sum_characterComponent_mul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.wild_eq_selectedComponent_of_raw_reciprocity,
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.sum_mul_pureInverse_eq_sum_characterComponent_mul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_inverseOrientedComponent_of_rawOrbit,
+  Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedComponent_of_rawOrbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_inverseOrientedComponent_of_rawOrbit,
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.inverseReindex
+
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.orientedPrimalMode827
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.inverseOrientedPrimalUnitWave827
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.inverseOrientedPrimalUnitWave827_isPureCharacter
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.tameOrbitBasePlace827
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.actualTameOrbitValue827
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.actualTameOrbitValue827_eq_raw_product
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.actualReflectedLocalizationWave827_isPureCharacter
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.sum_actualTameOrbitValue827_eq_neg_selectedProduct
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.wild_eq_selectedProduct_of_actualTameOrbitReciprocity827
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.inverseOrientedPrimalUnitWave827,
+  Fermat.FiftyNine.Conservation.LocalReduction827.inverseOrientedFullOrbitUnitReading827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.actualTameOrbitValue827,
+  Fermat.FiftyNine.Conservation.LocalReduction827.tameContext827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.actualTameOrbitValue827_eq_raw_product,
+  Fermat.FiftyNine.Conservation.LocalReduction827.actualTameReading827_eq_inverseOriented_raw_product
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.actualReflectedLocalizationWave827_isPureCharacter,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.projectedLocalization_isPureCharacter
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.sum_actualTameOrbitValue827_eq_neg_selectedProduct,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.actualTameOrbitValue827_eq_raw_product
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.sum_actualTameOrbitValue827_eq_neg_selectedProduct,
+  Fermat.FiftyNine.Conservation.FourierPairingProjection827.sum_mul_pureInverse_eq_sum_characterComponent_mul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.wild_eq_selectedProduct_of_actualTameOrbitReciprocity827,
+  Fermat.FiftyNine.Conservation.RawOrbitReciprocity827.wild_eq_selectedComponent_of_raw_reciprocity
+
+/-! The nonvanishing composition keeps the reciprocity equation visible and
+joins the two independently certified local factors.  It proves that the
+complete actual tame sum, and hence any wild reading satisfying that exact
+equation, cannot vanish in a nontrivial even mode. -/
+
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.inverseOrientedPrimalUnitWave827_ne_zero_of_even_nontrivial
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.actualReflectedLocalizationWave827_ne_zero_of_lift
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.selectedProduct_actualTameOrbit827_ne_zero
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.sum_actualTameOrbitValue827_ne_zero
+#check Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.wild_ne_zero_of_actualTameOrbitReciprocity827
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.inverseOrientedPrimalUnitWave827_ne_zero_of_even_nontrivial,
+  Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827.inverseReindex_fullOrbitUnitReading827_generatedUnit_fourier_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.actualReflectedLocalizationWave827_ne_zero_of_lift,
+  Fermat.FiftyNine.Conservation.ReflectedLocalizationLiftCriterion827.qLocalizationCoordinate_ne_zero_at_every_place_of_lift
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.selectedProduct_actualTameOrbit827_ne_zero,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.inverseOrientedPrimalUnitWave827_ne_zero_of_even_nontrivial
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.selectedProduct_actualTameOrbit827_ne_zero,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.actualReflectedLocalizationWave827_ne_zero_of_lift
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.sum_actualTameOrbitValue827_ne_zero,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.sum_actualTameOrbitValue827_eq_neg_selectedProduct
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.sum_actualTameOrbitValue827_ne_zero,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.selectedProduct_actualTameOrbit827_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.wild_ne_zero_of_actualTameOrbitReciprocity827,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.wild_eq_selectedProduct_of_actualTameOrbitReciprocity827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.wild_ne_zero_of_actualTameOrbitReciprocity827,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.selectedProduct_actualTameOrbit827_ne_zero
+
+/-! The complementary tame-context construction covers every height-one
+place away from 59 using its literal ideal-quotient residue field.  Applied
+to the same circular unit and retained q-relaxed representative, its final
+theorem proves actual local-symbol silence outside the 59/827 support. -/
+
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.Place
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.Residue
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.LocalRing
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.localReductionHom
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.localReductionHom_algebraMap
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.chosenUniformizer
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.chosenUniformizer_spec
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.chosenUniformizer_ne_zero
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.chosenUniformizerUnit
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.valuationOfNeZero_chosenUniformizerUnit
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.localUnitPart
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.angularComponent
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.absNorm_coprime_59_of_not_over59
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.residueChar_ne_59
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.residueRoot_isPrimitive
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.residueRootUnit
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.residueRootUnit_isPrimitive
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.card_sub_one_dvd_59
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.context
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.context_ord
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.rhoQ827
+#check Fermat.FiftyNine.Conservation.CyclotomicTameContext59.value_firstGenerated_candidate_eq_zero_outside_support
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.localReductionHom,
+  IsLocalization.lift
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.localReductionHom_algebraMap,
+  IsLocalization.lift_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.localUnitPart,
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.valuationOfNeZero_chosenUniformizerUnit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.angularComponent,
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.localReductionHom
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.angularComponent,
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.localUnitPart
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.absNorm_coprime_59_of_not_over59,
+  Ideal.exists_isMaximal_dvd_of_dvd_absNorm
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.residueChar_ne_59,
+  Ideal.ringChar_quot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.residueRoot_isPrimitive,
+  IsPrimitiveRoot.idealQuotient_mk
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.card_sub_one_dvd_59,
+  orderOf_dvd_card
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.context,
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.residueRootUnit_isPrimitive
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.value_firstGenerated_candidate_eq_zero_outside_support,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.ReflectedQRelaxedLocalizationLift827.outside_reading_eq_zero_of_both_units
+
+/-! The actual tame ledger retains those orbit values on their genuine
+height-one places.  Its support is proved to lie over 827, its aggregate is
+the complete orbit sum, and omitted nonwild places agree with the canonical
+local tame symbol rather than being silenced by representation alone. -/
+
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_orbit
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_eq_zero_of_not_over827
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_support_subset_placesOver827
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_sum_eq_orbit_sum
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.wild_add_actualTameLedger827_sum_eq_zero_iff
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.canonicalTameValue_eq_actualTameLedger827_of_outside_support
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827.actualTameOrbitValue827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_orbit,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_orbit,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.indexedPlaceOrbitEquiv827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_eq_zero_of_not_over827,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_support_subset_placesOver827,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_eq_zero_of_not_over827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_sum_eq_orbit_sum,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.wild_add_actualTameLedger827_sum_eq_zero_iff,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_sum_eq_orbit_sum
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.canonicalTameValue_eq_actualTameLedger827_of_outside_support,
+  Fermat.FiftyNine.Conservation.CyclotomicTameContext59.value_firstGenerated_candidate_eq_zero_outside_support
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.canonicalTameValue_eq_actualTameLedger827_of_outside_support,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_eq_zero_of_not_over827
+
+/-! Nonvanishing now reaches the honest finite-support ledger itself.  The
+final theorem consumes a visible reciprocity equation on that ledger and
+forces its wild contribution to be nonzero. -/
+
+#check Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_sum_ne_zero
+#check Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_ne_zero
+#check Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.wild_ne_zero_of_actualTameLedgerReciprocity827
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_sum_ne_zero,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_sum_eq_orbit_sum
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_sum_ne_zero,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.sum_actualTameOrbitValue827_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_ne_zero,
+  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_sum_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.wild_ne_zero_of_actualTameLedgerReciprocity827,
+  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.wild_ne_zero_of_actualTameOrbitReciprocity827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.wild_ne_zero_of_actualTameLedgerReciprocity827,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.wild_add_actualTameLedger827_sum_eq_zero_iff
 
 /-! TRANSVERSALITY W3 keeps the strict and relaxed conditions on the same
 module, names the class-field-theory five-term continuation, and derives the
@@ -5476,9 +5849,18 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.FourierPairingProjection827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.PrimalOrbitResidue827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.OrbitPlace827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.LocalReduction827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CyclotomicTameContext59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.FullOrbitReciprocity827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.RawOrbitReciprocity827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ActualTameLedger827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.AlgebraicPointedIncidence827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
@@ -5630,9 +6012,18 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.FourierPairingProjection827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.PrimalOrbitResidue827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.OrbitPlace827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.LocalReduction827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.CyclotomicTameContext59
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.FullOrbitReciprocity827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.RawOrbitReciprocity827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ActualTameLedger827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.AlgebraicPointedIncidence827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
