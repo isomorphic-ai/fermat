@@ -636,6 +636,23 @@ is neither assumed nor needed.  The still-missing arithmetic facts are the
 vanishing of the explicit odd complement, rank one of the selected character
 line, and nonvanishing of the Artin readout on that line.
 
+`FermatFactorArtinFourierBoundary827` removes the abstract value of that
+readout from the remaining statement.  Every strict Selmer representative
+has a well-defined 58-coordinate residue wave (independent of the chosen
+Kummer representative), and every genuine tame row is its residue coordinate
+times the supported valuation of the relaxed input.  Against the normalized
+profile this gives the map-level identity, for every strict input `x`,
+
+```text
+classReadout (classGauge x) = - FourierCoefficient₄₄ (residueWave x).
+```
+
+The normalized profile determines both the strict functional and its class
+readout independently of which global point in the reflected fiber is used.
+For the Fermat-factor input, `(7a)` already implies that the displayed
+coefficient is zero; W5 is now precisely the converse zero-reflection
+statement for this concrete coefficient, not an unspecified Artin map.
+
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
 classes to exactly the retained W1 `H¹` factors, recovers the W1 `H²` cup and
