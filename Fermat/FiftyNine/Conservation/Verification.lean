@@ -2200,9 +2200,21 @@ and global pullback without asserting a local invariant or comparison theorem.
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH1
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaRootsContinuousH1
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaRootsContinuousH2
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2CoefficientOrientationEquiv59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2CoefficientOrientationEquiv59_apply
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaContinuousCup59
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaContinuousH2Readout59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.exists_conditionalNoncanonicalLambdaH2Readout_eq_one
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2Readout59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59_symm_apply
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaContinuousH2ContinuousReadout59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2ContinuousReadout59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59_symm_apply
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup_apply
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromCup
@@ -2211,6 +2223,18 @@ and global pullback without asserting a local invariant or comparison theorem.
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromContinuousReadout_apply
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairingFromCup
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairingFromCup_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2Pairing
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2Pairing_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairing
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairing_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingWithContinuousReadout
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingWithContinuousReadout_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairing
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairing_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59_pairing_apply
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup,
@@ -2237,10 +2261,280 @@ and global pullback without asserting a local invariant or comparison theorem.
   Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairingFromCup,
   Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalization59
 
--- All four readback theorems are definitional (`rfl`).  Their expanded
--- formulas are signature audits above; dependency guards intentionally do
--- not pretend that constants occurring only in theorem types occur in the
--- proof values.
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2,
+  Fermat.Conservation.ContinuousKummerOrientation.OrientedContinuousH2
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2CoefficientOrientationEquiv59,
+  Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2CoefficientOrientationEquiv59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2CoefficientOrientationEquiv59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59_isPrimitive
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.exists_conditionalNoncanonicalLambdaH2Readout_eq_one,
+  Fermat.Conservation.ContinuousKummerTateAlgebra.exists_conditionalNoncanonicalReadout_eq_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2Readout59,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59,
+  Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59_isPrimitive
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2ContinuousReadout59,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59,
+  Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59_isPrimitive
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59,
+  Fermat.Conservation.ContinuousKummerTateAlgebra.kummerCupH1
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59,
+  Fermat.Conservation.ContinuousKummerTateCup.cupH1
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2Pairing,
+  Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairing
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairing,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromCup
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairing,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingWithContinuousReadout,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromContinuousReadout
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingWithContinuousReadout,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairing,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairingFromCup
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairing,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairing
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicReflectedEmptySupportLanding827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59_pairing_apply,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2CoefficientOrientationEquiv59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2CoefficientOrientationEquiv59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2CoefficientOrientationEquiv59_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2CoefficientOrientationEquiv59_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.exists_conditionalNoncanonicalLambdaH2Readout_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.exists_conditionalNoncanonicalLambdaH2Readout_eq_one
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2Readout59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2Readout59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59_symm_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedLinearReadoutTransportEquiv59_symm_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2ContinuousReadout59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH2ContinuousReadout59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59_symm_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaH2SuppliedContinuousReadoutTransportEquiv59_symm_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaContinuousCup59_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2Pairing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2Pairing
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2Pairing_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2Pairing_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairing
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairing_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairing_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingWithContinuousReadout' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingWithContinuousReadout
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingWithContinuousReadout_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingWithContinuousReadout_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairing
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairing_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairing_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59_pairing_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59_pairing_apply
+
+-- All nine pairing readbacks, the canonical cup readback, the coefficient-
+-- orientation readback, and the four supplied-readout transport readbacks are
+-- definitional
+-- (`rfl`).  Their expanded formulas are signature audits above; dependency
+-- guards intentionally do not pretend that constants occurring only in
+-- theorem types occur in the proof values.
 
 /-! ### Span-restricted pairing at the literal lambda place
 
