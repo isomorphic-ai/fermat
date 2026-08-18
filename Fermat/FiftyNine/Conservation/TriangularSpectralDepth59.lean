@@ -39,18 +39,22 @@ local instance : Fact (Nat.Prime 59) := ⟨by decide⟩
 variable (K : Type) [Field K] [NumberField K]
 variable [IsCyclotomicExtension {59} ℚ K]
 
-private theorem canonicalLambda59_ne_zero_local : canonicalLambda59 K ≠ 0 := by
+theorem canonicalLambda59_ne_zero : canonicalLambda59 K ≠ 0 := by
   apply (Valuation.ne_zero_iff (Valued.v : Valuation (LambdaField59 K) ℤᵐ⁰)).mp
   rw [canonicalLambda59_valuation]
   exact WithZero.exp_ne_zero
 
-local instance : NontriviallyNormedField (LambdaField59 K) :=
+@[reducible] noncomputable def lambdaField59NontriviallyNormedField :
+    NontriviallyNormedField (LambdaField59 K) :=
   ⟨⟨(canonicalLambda59 K)⁻¹, by
     rw [Valued.toNormedField.one_lt_norm_iff, map_inv₀,
       canonicalLambda59_valuation]
     rw [show (WithZero.exp (-1 : ℤ))⁻¹ = WithZero.exp (1 : ℤ) by norm_num]
     rw [← WithZero.exp_zero, WithZero.exp_lt_exp]
     norm_num⟩⟩
+
+local instance : NontriviallyNormedField (LambdaField59 K) :=
+  lambdaField59NontriviallyNormedField K
 
 /-- The real norm radius corresponding to lambda-depth `s`. -/
 def depthRadius59 (s : ℕ) : ℝ :=
@@ -64,7 +68,7 @@ theorem depthRadius59_nonneg (s : ℕ) : 0 ≤ depthRadius59 K s := by
   exact norm_nonneg _
 
 theorem depthRadius59_pos (s : ℕ) : 0 < depthRadius59 K s := by
-  exact norm_pos_iff.mpr (pow_ne_zero s (canonicalLambda59_ne_zero_local K))
+  exact norm_pos_iff.mpr (pow_ne_zero s (canonicalLambda59_ne_zero K))
 
 theorem depthRadius59_le_one (s : ℕ) : depthRadius59 K s ≤ 1 := by
   rw [depthRadius59, Valued.toNormedField.norm_le_one_iff, map_pow,
@@ -107,7 +111,7 @@ theorem coefficient_valuation_le_exp_neg_of_weighted_norm_le_depthRadius59
     Valued.v b ≤ WithZero.exp (-(s : ℤ)) := by
   let lambdaPow : LambdaField59 K := canonicalLambda59 K ^ s
   have hlambdaPow0 : lambdaPow ≠ 0 :=
-    pow_ne_zero s (canonicalLambda59_ne_zero_local K)
+    pow_ne_zero s (canonicalLambda59_ne_zero K)
   have hscaled : spectralNorm (F59 K) (E59 K)
       (algebraMap (F59 K) (E59 K) (b / lambdaPow) *
         twistedLambdaRoot59 K ^ i) ≤ 1 := by
