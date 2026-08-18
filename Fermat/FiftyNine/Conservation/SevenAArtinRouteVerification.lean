@@ -28,6 +28,13 @@ This non-imported executable audit leaf covers only the newly exposed route:
   is proved faithful at the single Fermat-selected class; this faithfulness
   is further reduced to seating in the genuine chi=15 class line,
   one-dimensionality of that line, and readout nonvanishing on it.
+* the allocated plus root is now unconditionally fixed by the complete odd
+  class projector: genuine class-map naturality identifies cyclotomic `-1`
+  with the allocated minus root, and relation 7D makes that root the negative
+  of the plus root;
+* exact chi=15 seating is isolated as vanishing of the derived complement
+  between the complete odd projector and the selected irregular projector,
+  both on the allocated plus root and directly on the W7 class gauge.
 
 The checks deliberately keep the remaining lanes separate.  W1 is a local
 cup receipt; no Poitou--Tate theorem yet produces a single global reflected
@@ -35,6 +42,10 @@ class simultaneously carrying its wild coordinate and the realized tame
 profile, and no common-Hom-line theorem yet identifies the two boundary
 functionals.  Within W7, the only visible input is pointwise faithfulness of
 the produced readout, the exact target of the Kummer--Artin comparison.
+The odd character seat is proved, but the sharper chi=15 seat is not: its
+remaining arithmetic obligation is precisely that the allocated plus root's
+odd-minus-chi=15 complement vanishes.  Poitou--Tate alone does not supply
+that Kummer--Artin character-support comparison.
 This file does not import the monolithic exponent-59 verifier.
 -/
 import Fermat.Conservation.GuardDependsOn
@@ -56,6 +67,7 @@ import Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827
 import Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827
 import Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59
 import Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59
+import Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59
 
 /-! ## Public route inventory -/
 
@@ -183,6 +195,25 @@ already available. -/
 #check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange
 #check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_eq_plusRoot_add_plusRoot
 #check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_plusRoot_projector_fixed
+
+/-! The allocated plus root is now genuinely seated in the complete odd
+class space.  The final equivalence records exactly what remains before this
+can be sharpened to the selected chi=15 line. -/
+
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.normalizationCorrectionStrictSelmer59_mem_unitRange
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.strictSelmerClassLinearMap59_normalizationCorrection_eq_zero
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.strictSelmerClassLinearMap59_cyclotomicNegOne
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_allocatedPlusRoot_eq_allocatedMinusRoot
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.allocatedMinusRoot_eq_neg_allocatedPlusRoot
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_allocatedPlusRoot_eq_neg
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassMinusProjector59
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassMinusProjector59_allocatedPlusRoot
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_selectedClassGauge59_eq_neg
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassMinusProjector59_selectedClassGauge59
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassIrregularComplement59
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.allocatedPlusRoot_eq_irregularProjection_add_complement
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.allocatedPlusRoot_irregularProjector_fixed_iff_complement_eq_zero
+#check Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.selectedClassGauge59_irregularProjector_fixed_iff_complement_eq_zero
 
 /-! The produced-readout W7 boundary.  Full injectivity is unnecessary:
 only zero reflection at the one Fermat-selected class remains visible. -/
@@ -331,6 +362,30 @@ info: 'Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.s
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange
+
+/--
+info: 'Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassMinusProjector59_allocatedPlusRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassMinusProjector59_allocatedPlusRoot
+
+/--
+info: 'Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.allocatedPlusRoot_irregularProjector_fixed_iff_complement_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.allocatedPlusRoot_irregularProjector_fixed_iff_complement_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.selectedClassGauge59_irregularProjector_fixed_iff_complement_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.selectedClassGauge59_irregularProjector_fixed_iff_complement_eq_zero
 
 /--
 info: 'Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_ringUnit_silence' depends on axioms: [propext,
@@ -514,6 +569,44 @@ to the actual unit-range exactness receipt. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange,
   Fermat.FiftyNine.Conservation.FermatFactorClassGaugeSeating59.fermatFactorClassGaugeMap59_eq_zero_iff_mem_unitRange
+
+/-! Complete odd seating consumes the genuine conjugation action, the
+proved 7D relation, and the literal unit-kernel removal of the normalization
+correction.  The chi=15 equivalence then depends on that proved odd seat. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.strictSelmerClassLinearMap59_normalizationCorrection_eq_zero,
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.normalizationCorrectionStrictSelmer59_mem_unitRange
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_allocatedPlusRoot_eq_allocatedMinusRoot,
+  Fermat.FiftyNine.Conservation.FermatFactorConjugation59.fermatMinusStrictSelmer59_eq_correction_add_conj
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_allocatedPlusRoot_eq_allocatedMinusRoot,
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.strictSelmerClassLinearMap59_cyclotomicNegOne
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_allocatedPlusRoot_eq_neg,
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_allocatedPlusRoot_eq_allocatedMinusRoot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_allocatedPlusRoot_eq_neg,
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.allocatedMinusRoot_eq_neg_allocatedPlusRoot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassMinusProjector59_allocatedPlusRoot,
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_allocatedPlusRoot_eq_neg
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.allocatedPlusRoot_irregularProjector_fixed_iff_complement_eq_zero,
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassMinusProjector59_allocatedPlusRoot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_selectedClassGauge59_eq_neg,
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_eq_plusRoot_add_plusRoot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_selectedClassGauge59_eq_neg,
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_allocatedPlusRoot_eq_neg
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassMinusProjector59_selectedClassGauge59,
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicNegOne_selectedClassGauge59_eq_neg
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.selectedClassGauge59_irregularProjector_fixed_iff_complement_eq_zero,
+  Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59.cyclotomicClassMinusProjector59_selectedClassGauge59
 
 /-! W7 consumes the concrete class seating, the generic pointwise kernel
 comparison, and the established selected-class characterization of 7A. -/
