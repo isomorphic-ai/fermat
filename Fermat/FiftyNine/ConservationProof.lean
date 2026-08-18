@@ -15,6 +15,16 @@ import Fermat.FiftyNine.Conservation.FermatStateHistoricalDescent59
 
 namespace Fermat.FiftyNine
 
+/-- The statewise equation-(8) construction rules out Case II over any
+cyclotomic realization containing a supplied primitive 59th root. -/
+theorem secondCaseExcluded_fiftyNine_stateEquationEight
+    {K : Type} [Field K] [NumberField K]
+    [IsCyclotomicExtension {59} ℚ K]
+    {zeta : K} (hZeta : IsPrimitiveRoot zeta 59) :
+    Fermat.SecondCaseExcluded 59 :=
+  Conservation.FermatStateHistoricalDescent59.secondCaseExcluded_fiftyNine_via_stateEquationEight
+    hZeta
+
 /-- Fermat's Last Theorem at exponent `59`, through the allocated
 conservation state, literal equation (8), and strict historical support
 descent. -/
