@@ -1,5 +1,28 @@
 # N59 conservation findings
 
+## 2026-08-18 — Continuous Kummer--Tate cup and lambda specialization are compiled
+
+- The repository now contains a genuine continuous Alexander--Whitney cup
+  `H¹_cont(G,A) × H¹_cont(G,B) → H²_cont(G,C)`.  It is closed on honest
+  continuous cocycles, kills boundaries in both inputs by explicit
+  primitives, and descends through Mathlib's actual homology quotients.
+- `kummerPairing` composes this cup with the oriented-left and roots-valued
+  right Kummer maps to give a generic canonical `H²(mu_n)`-valued pairing.
+  At the cyclotomic lambda completion, `lambdaContinuousCup59` and
+  `lambdaLocalH2Pairing` are the compiled specializations; scalarization and
+  global pullback retain the readout as a visible argument.
+- This is a dual phase-space pairing between differently typed degree-one
+  seats, with their interaction retained in degree two.  It is not yet
+  called symplectic: no identification of the two seats and no alternation
+  theorem has been proved.  Package B remains already discharged by the
+  common ambient Selmer action and the stable full set of places above 827.
+- The exact remaining bridges are: construct the normalized local invariant
+  or readout; prove its normalization, orientation/sign convention, and
+  comparison with the 59-Hilbert symbol; prove the Poitou--Tate global
+  reflected lift; and prove the unit-proportional comparison with the 7a
+  gauge.  This entry supersedes older status text that lists continuous
+  cohomology descent or lambda packaging as still open.
+
 ## 2026-08-17 — Kummer--Tate route: quotient-first core and algebraic cup spine
 
 - `ReflectedWildKummerCoreAt59` is now quotient-first: its arithmetic field
