@@ -3302,12 +3302,11 @@ reciprocity theorem is introduced by this structural bridge. -/
 
 /-! ### Canonical cyclotomic action: Package B discharged
 
-The ambient field, unit, Kummer-quotient, and place actions are constructed
-canonically.  `CyclotomicValuationCovariance59 K` remains the named shape of
-the crucial arithmetic law, and `cyclotomicValuationCovariance59 K` proves
-it.  Consequently the strict action, complete 827-supported action, their
-compatibility, and the reflected landing are all canonical constructions
-with no supplied action, covariance, or landing certificate. -/
+The ambient field, unit, Kummer-quotient, place, valuation, and supported
+Selmer actions are the transparent `p = 59` specializations of the
+prime-generic construction.  Only the complete 827 support, its compatible
+restriction, and the reflected landing remain local to this campaign.  No
+action, covariance, or landing certificate is supplied by a caller. -/
 
 #check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicFieldAction59
 #check Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59
@@ -3337,10 +3336,10 @@ with no supplied action, covariance, or landing certificate. -/
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicKummerHom59,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59_maps_powerRange
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicKummerHom
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicKummerHom59_mul_apply,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59_mul_apply
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicKummerHom_mul_apply
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59_mem_placesOver827_iff,
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59_under_int
@@ -3349,28 +3348,25 @@ with no supplied action, covariance, or landing certificate. -/
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59_mem_placesOver827_iff
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicValuationCovariance59,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicUnitEquiv59
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicValuationCovariance
 #guard_depends_on
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicValuationCovariance59,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicPlaceEquiv59
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerAddHomAt59,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerAddHomAt
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerLinearMapAt59,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerAddHomAt59
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerLinearMapAt
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerRepresentationAt59,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicSelmerLinearMapAt59
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerRepresentationAt
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStrictSelmerRepresentation59,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStableSupport59_empty
-#guard_depends_on
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStrictSelmerRepresentation59,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicValuationCovariance59
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicStrictSelmerRepresentation
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicQRelaxedSelmerRepresentation827,
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStableSupport59_placesOver827
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicQRelaxedSelmerRepresentation827,
-  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicValuationCovariance59
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerRepresentationAt
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicEmptySupportActionCompatibility827,
   Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicStrictSelmerRepresentation59

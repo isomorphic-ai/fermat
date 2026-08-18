@@ -86,7 +86,9 @@ theorem cyclotomicUnitEquiv59_two_correction
         (normalizationCorrectionFieldUnit59 hζ) =
       (-1 : Kˣ) * (normalizationCorrectionFieldUnit59 hζ) ^ 2 := by
   apply Units.ext
-  simp only [cyclotomicUnitEquiv59, Units.coe_mapEquiv,
+  simp only [cyclotomicUnitEquiv59,
+    Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicUnitEquiv,
+    Units.coe_mapEquiv,
     normalizationCorrectionFieldUnit59_val, Units.val_mul,
     Units.val_neg, Units.val_one, Units.val_pow_eq_pow_val]
   have hmap :
