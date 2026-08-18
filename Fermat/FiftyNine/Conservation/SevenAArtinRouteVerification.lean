@@ -27,6 +27,14 @@ This non-imported executable audit leaf covers only the newly exposed route:
   class is independent of the chosen normalized W3 basepoint and whose
   vanishing is equivalent to nonemptiness of the concrete W1+W3 fiber;
   vanishing of this basepoint-independent obstruction remains unresolved;
+* at the canonical `(59, 44)` character pair, the W2 cokernel class and
+  normalized-W3 coset are now point-free named objects: their implementation
+  uses a private existing W3 point, while every public comparison is proved
+  independent of that choice; the named obstruction is not proved zero;
+* the canonical W2 obstruction is also exposed through the complete dual
+  boundary of functionals annihilating the restricted lambda image;
+  dual-annihilator separation proves that this boundary vanishes exactly
+  when the obstruction does, without asserting either vanishing or a lift;
 * the normalized wild and complete `827` boundaries are literal linear maps
   on one genuine seated primal Selmer space; under `GlobalReciprocityLaw`
   they are exact negatives, have equal kernels, and lie in one explicit
@@ -94,6 +102,10 @@ class.  None of these equivalences proves existence, range membership, or
 obstruction vanishing.  Thus
 the rank-one unit comparison is exact once seated nonvanishing is supplied,
 but it is not an unconditional Poitou--Tate lift.
+At the canonical character pair this cokernel class is now a point-free
+named obstruction, and the full dual boundary detects it exactly.  Detection
+does not supply the missing zero theorem: the canonical obstruction and its
+dual boundary are not proved to vanish here.
 
 Within W7, pointwise faithfulness of the produced readout is now displayed
 as one concrete mode-44 Fourier zero-reflection statement for the actual
@@ -135,6 +147,8 @@ import Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827
 import Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827
 import Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827
 import Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827
+import Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827
+import Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827
 import Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827
 import Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827
 import Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827
@@ -239,6 +253,32 @@ does not assert that it vanishes. -/
 #check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.prescribedW1LambdaCoset827_eq_normalized_iff_obstruction_eq_zero
 #check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero
 #check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_prescribed_eq_normalizedCoset
+
+/-! The canonical `(59, 44)` specialization hides its implementation
+basepoint and exports one point-free obstruction.  The following endpoints
+characterize its zero locus; they do not inhabit it. -/
+
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalNormalizedW3LambdaCoset827
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalW1LambdaObstruction827
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalNormalizedW3LambdaCoset827_eq
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalW1LambdaObstruction827_eq
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalW1LambdaObstruction827_eq_prescribed_sub_normalized
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.prescribedW1LambdaCoset827_eq_canonicalNormalized_iff_obstruction_eq_zero
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.w1w3CompatibleFiber827_nonempty_iff_canonicalObstruction_eq_zero
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.w1w3CompatibleFiber827_nonempty_iff_prescribed_eq_canonicalNormalized
+
+/-! The complete dual-annihilator boundary detects that canonical
+obstruction exactly.  Separation is a criterion, not a vanishing proof. -/
+
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.CanonicalW1LambdaBoundaryTestSpace827
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1LambdaBoundaryAt827
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1LambdaBoundaryAt827_apply
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1LambdaBoundaryAt827_eq
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaBoundary827
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaBoundary827_eq
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaBoundary827_apply
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaObstruction827_eq_zero_iff_boundary_eq_zero
+#check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1w3CompatibleFiber827_nonempty_iff_canonicalBoundary_eq_zero
 
 /-! W4's completed algebraic implication.  The arithmetic same-line
 producer remains intentionally outside this theorem. -/
@@ -743,6 +783,50 @@ info: 'Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3Compatible
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero
 
+/-! The canonical point-free obstruction and complete dual boundary retain
+only Lean's standard quotient/classical dependencies.  These audits certify
+the criteria, not either missing vanishing statement. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalW1LambdaObstruction827_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalW1LambdaObstruction827_eq
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.w1w3CompatibleFiber827_nonempty_iff_canonicalObstruction_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.w1w3CompatibleFiber827_nonempty_iff_canonicalObstruction_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1LambdaBoundaryAt827_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1LambdaBoundaryAt827_eq
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaObstruction827_eq_zero_iff_boundary_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaObstruction827_eq_zero_iff_boundary_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1w3CompatibleFiber827_nonempty_iff_canonicalBoundary_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1w3CompatibleFiber827_nonempty_iff_canonicalBoundary_eq_zero
+
 /--
 info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.context59_residueCharacter_angularComponent_eq_of_kummer_mk_eq' depends on axioms: [propext,
  Classical.choice,
@@ -1079,6 +1163,52 @@ the literal quotient-kernel characterization; no zero proof is introduced. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_prescribed_eq_normalizedCoset,
   Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero
+
+/-! The canonical W2 objects consume the generic basepoint-independence
+theorems.  Their zero criterion is inherited from the concrete cokernel
+criterion rather than from a hidden lift witness. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalNormalizedW3LambdaCoset827_eq,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3LambdaCoset827_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalW1LambdaObstruction827_eq,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalW1LambdaObstruction827_eq_prescribed_sub_normalized,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq_prescribed_sub_normalized
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.w1w3CompatibleFiber827_nonempty_iff_canonicalObstruction_eq_zero,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.w1w3CompatibleFiber827_nonempty_iff_prescribed_eq_canonicalNormalized,
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.w1w3CompatibleFiber827_nonempty_iff_canonicalObstruction_eq_zero
+
+/-! The dual boundary consumes genuine basepoint independence and
+dual-annihilator separation.  Its final fiber criterion factors through the
+canonical obstruction criterion and does not prove the boundary zero. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1LambdaBoundaryAt827_eq,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaBoundary827_eq,
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1LambdaBoundaryAt827_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaObstruction827_eq_zero_iff_boundary_eq_zero,
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.canonicalW1LambdaObstruction827_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaObstruction827_eq_zero_iff_boundary_eq_zero,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq_zero_iff_mem_range
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaObstruction827_eq_zero_iff_boundary_eq_zero,
+  Subspace.forall_mem_dualAnnihilator_apply_eq_zero_iff
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1w3CompatibleFiber827_nonempty_iff_canonicalBoundary_eq_zero,
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaObstruction827.w1w3CompatibleFiber827_nonempty_iff_canonicalObstruction_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1w3CompatibleFiber827_nonempty_iff_canonicalBoundary_eq_zero,
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaObstruction827_eq_zero_iff_boundary_eq_zero
 
 /-! The combined W3/unit-silence receipt really composes realization,
 arbitrary-unit cancellation, and quotient readout construction. -/
