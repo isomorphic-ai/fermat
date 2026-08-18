@@ -15,6 +15,7 @@ the public quotient-valuation criterion.  No parallel carrier or supplied
 local condition is introduced.
 -/
 import Fermat.Conservation.SelmerEigenspace
+import Fermat.Conservation.SelmerSequence
 
 open scoped nonZeroDivisors
 
@@ -131,5 +132,81 @@ theorem emptySelmerClassOfIdealPower_valuation
         (emptySelmerClassOfIdealPower (K := K) q hq I hpow).1 = 1 :=
   (emptySelmerClassOfIdealPower (K := K) q hq I hpow).property v
     (Set.notMem_empty v)
+
+/-! ## Class-group readback -/
+
+omit [IsDedekindDomain R] in
+/-- The allocated ideal in an ideal-power presentation is nonzero whenever
+its principal generator is nonzero. -/
+theorem ideal_ne_zero_of_pow_eq_span
+    {n : ℕ} [Fact n.Prime] (q : R) (hq : q ≠ 0) (I : Ideal R)
+    (hpow : I ^ n = Ideal.span {q}) : I ≠ 0 := by
+  intro hzero
+  have hspan : Ideal.span {q} = 0 := by
+    rw [← hpow, hzero, zero_pow ((Fact.out : n.Prime).ne_zero)]
+  change Ideal.span {q} = ⊥ at hspan
+  rw [Ideal.span_singleton_eq_bot] at hspan
+  exact hq hspan
+
+/-- The nonzero integral ideal, bundled as a unit of the fractional-ideal
+group used by the class-group quotient. -/
+noncomputable def idealFractionalUnit
+    (I : Ideal R) (hI : I ≠ 0) : (FractionalIdeal R⁰ K)ˣ :=
+  Units.mk0 (I : FractionalIdeal R⁰ K) (by
+    intro hzero
+    rw [FractionalIdeal.coeIdeal_eq_zero] at hzero
+    exact hI hzero)
+
+@[simp]
+theorem idealFractionalUnit_val
+    (I : Ideal R) (hI : I ≠ 0) :
+    ((idealFractionalUnit (K := K) I hI :
+      (FractionalIdeal R⁰ K)ˣ) : FractionalIdeal R⁰ K) = I :=
+  rfl
+
+/-- The bundled allocated ideal is exactly an `n`th root of the principal
+fractional ideal of the embedded radicand. -/
+theorem idealFractionalUnit_pow_eq_toPrincipalIdeal
+    {n : ℕ} [Fact n.Prime] (q : R) (hq : q ≠ 0) (I : Ideal R)
+    (hpow : I ^ n = Ideal.span {q}) :
+    idealFractionalUnit (K := K) I
+          (ideal_ne_zero_of_pow_eq_span q hq I hpow) ^ n =
+      toPrincipalIdeal R K
+        (integralFieldUnit (K := K) q hq) := by
+  apply Units.ext
+  simp only [Units.val_pow_eq_pow_val, idealFractionalUnit_val,
+    coe_toPrincipalIdeal]
+  calc
+    (I : FractionalIdeal R⁰ K) ^ n =
+        ((I ^ n : Ideal R) : FractionalIdeal R⁰ K) := by
+      rw [FractionalIdeal.coeIdeal_pow]
+    _ = ((Ideal.span {q} : Ideal R) : FractionalIdeal R⁰ K) := by
+      exact congrArg
+        (fun J : Ideal R ↦ (J : FractionalIdeal R⁰ K)) hpow
+    _ = FractionalIdeal.spanSingleton R⁰ (algebraMap R K q) := by
+      exact FractionalIdeal.coeIdeal_span_singleton q
+    _ = FractionalIdeal.spanSingleton R⁰
+        (integralFieldUnit (K := K) q hq : K) := by
+      rw [integralFieldUnit_val]
+
+/-- Exact class-group receipt: the Selmer obstruction of the radicand is the
+class of the same ideal whose `n`th power generated it. -/
+theorem emptySelmerClassOfIdealPower_toClass
+    {n : ℕ} [Fact n.Prime] [Fact (0 < n)]
+    (q : R) (hq : q ≠ 0) (I : Ideal R)
+    (hpow : I ^ n = Ideal.span {q}) :
+    IsDedekindDomain.selmerGroup.toClass
+        (R := R) (K := K) (n := n)
+        (emptySelmerClassOfIdealPower (K := K) q hq I hpow) =
+      ClassGroup.mk K
+        (idealFractionalUnit (K := K) I
+          (ideal_ne_zero_of_pow_eq_span q hq I hpow)) := by
+  exact IsDedekindDomain.selmerGroup.toClass_eq_mk_of_representative_root
+    (R := R) (K := K) (n := n)
+    (emptySelmerClassOfIdealPower (K := K) q hq I hpow)
+    (integralFieldUnit (K := K) q hq) rfl
+    (idealFractionalUnit (K := K) I
+      (ideal_ne_zero_of_pow_eq_span q hq I hpow))
+    (idealFractionalUnit_pow_eq_toPrincipalIdeal q hq I hpow)
 
 end Fermat.Conservation.IdealPowerSelmer

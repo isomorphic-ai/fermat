@@ -902,6 +902,41 @@ private theorem classGroupEquiv_symm_mk (I : (FractionalIdeal R⁰ K)ˣ) :
   rw [FractionalIdeal.canonicalEquiv_self]
   rfl
 
+/-- Read back the ideal class selected by the empty-support Selmer
+obstruction.  If a representative `x` has principal fractional ideal equal
+to the `n`th power of `I`, then the class-group obstruction of its Selmer
+class is literally `ClassGroup.mk K I`.
+
+This is the public computation rule needed by arithmetic constructions that
+already possess an ideal root.  It avoids choosing a second root inside the
+consumer: uniqueness in the factorization geometry identifies the canonical
+root used by `toClass` with the supplied one. -/
+theorem toClass_eq_mk_of_representative_root [Fact <| 0 < n]
+    (q : K⟮(∅ : Set <| HeightOneSpectrum R), n⟯)
+    (x : Kˣ)
+    (hx : q.1 = QuotientGroup.mk x)
+    (I : (FractionalIdeal R⁰ K)ˣ)
+    (hI : I ^ n = toPrincipalIdeal R K x) :
+    toClass (R := R) (K := K) (n := n) q = ClassGroup.mk K I := by
+  let f := toPrincipalIdeal R K
+  let geometry := fractionalIdealFactorization (R := R) (K := K)
+  let e := selmerEquivDivisibleClasses (R := R) (K := K) (n := n)
+  let divisible : PowerRoot.divisibleElements f n :=
+    ⟨x, (PowerRoot.mem_powerSubgroup).2 ⟨I, hI⟩⟩
+  have hdivisible :
+      PowerRoot.toDivisibleClasses f n divisible = e q := by
+    apply Subtype.ext
+    rw [PowerRoot.toDivisibleClasses_apply]
+    change QuotientGroup.mk x = q.1
+    exact hx.symm
+  rw [toClass]
+  change (ClassGroup.equiv K).symm
+      (PowerRoot.obstruction (f := f) (n := n) geometry (e q)) = _
+  rw [← hdivisible, PowerRoot.obstruction_toDivisibleClasses]
+  rw [PowerRoot.root_eq_of_pow_eq (f := f) (n := n)
+    geometry divisible hI]
+  exact classGroupEquiv_symm_mk I
+
 private theorem classGroupToObstructionTarget_toClass_eq_toSClass [Fact <| 0 < n]
     (q : K⟮(∅ : Set <| HeightOneSpectrum R),n⟯) :
     classGroupToObstructionTarget (R := R) (K := K) ∅
