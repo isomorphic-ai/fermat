@@ -35,6 +35,13 @@ abbrev LocalField59 := distinguishedPlace.adicCompletion K
 def localization59 : K →+* LocalField59 K distinguishedPlace :=
   NumberField.FinitePlace.embedding distinguishedPlace
 
+/-- The finite-place completion has characteristic zero because its
+canonical number-field embedding is injective. -/
+instance localField59CharZero :
+    CharZero (LocalField59 K distinguishedPlace) :=
+  charZero_of_injective_algebraMap
+    (localization59 K distinguishedPlace).injective
+
 /-- Readback of the completion embedding on a global element. -/
 @[simp]
 theorem localization59_apply (x : K) :
