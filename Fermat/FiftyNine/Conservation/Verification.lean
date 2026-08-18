@@ -30,6 +30,15 @@ import Fermat.Conservation.DiscreteKummerTatePairing
 import Fermat.Conservation.KummerCupSpanReadout
 import Fermat.Conservation.LocalKummerTransport
 import Fermat.Conservation.CohomologicalKummerPairing
+import Fermat.Conservation.AlbertDescentDatum59
+import Fermat.Conservation.AlbertExtension59
+import Fermat.Conservation.AlbertOrder59
+import Fermat.Conservation.AlbertGalois59
+import Fermat.Conservation.OrientedKummerRepresentative59
+import Fermat.Conservation.KummerCharacterComparison59
+import Fermat.Conservation.ConcreteTwistedLiftCupBridge59
+import Fermat.Conservation.IntegratedTwistedKummerCup59
+import Fermat.Conservation.CyclicLiftNaturality59
 import Fermat.FiftyNine.Conservation.Spine
 import Fermat.FiftyNine.Conservation.CapacityCertificate
 import Fermat.FiftyNine.Conservation.BoundedSinnott
@@ -58,6 +67,7 @@ import Fermat.FiftyNine.Conservation.IwasawaLocalization59
 import Fermat.FiftyNine.Conservation.KummerTateLocalization59
 import Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59
 import Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59
+import Fermat.FiftyNine.Conservation.TwistedArtinHasse59
 import Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
@@ -2265,6 +2275,108 @@ than an installed witness.
 #check Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59.twistedLambdaRootsCarryH2Class59_ne_zero
 #check Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59.exists_twistedLambdaNoncanonicalReadout_eq_one
 
+/-! ### Albert datum, genuine Kummer representative, and twisted carry--cup bridge
+
+The Albert branch now constructs its Hilbert--90 datum and the automorphism
+on the first overfield, including the exact 59th-iterate identity.  Separately,
+the continuous Kummer character is represented by the genuine chosen-root
+cocycle and is identified exactly with the splitting-field character.  An
+explicit twisted `C59²` cochain then identifies the pulled carry class with
+the genuine oriented Kummer cup in actual continuous `H²`.  These checks do
+not claim that the unconditional `C59²` coordinate producer, local invariant,
+or Hilbert-symbol comparison has already been constructed. -/
+
+#check Fermat.Conservation.AlbertDescentDatum59.exists_albert_descent_datum59
+#check Fermat.Conservation.AlbertDescentDatum59.concreteKummerGenerator59
+#check Fermat.Conservation.AlbertDescentDatum59.concreteKummer_exists_albert_descent_datum59
+#check Fermat.Conservation.AlbertExtension59.albertPolynomial59_irreducible
+#check Fermat.Conservation.AlbertExtension59.albertLiftAlgEquiv59
+#check Fermat.Conservation.AlbertExtension59.albertLiftAlgEquiv59_pow_algebraMap
+#check Fermat.Conservation.AlbertExtension59.albertLiftAlgEquiv59_pow_root
+#check Fermat.Conservation.AlbertExtension59.orbitProduct59_eq_algebraMap_norm
+#check Fermat.Conservation.AlbertExtension59.scalarRootAutomorphism59
+#check Fermat.Conservation.AlbertExtension59.albertLiftAlgEquiv59_pow_fiftyNine
+#check Fermat.Conservation.AlbertOrder59.scalarRootAutomorphism59_pow_fiftyNine
+#check Fermat.Conservation.AlbertOrder59.scalarRootAutomorphism59_ne_one
+#check Fermat.Conservation.AlbertOrder59.albertLiftAlgEquiv59_pow_3481
+#check Fermat.Conservation.AlbertOrder59.albertLiftAlgEquiv59_pow_fiftyNine_ne_one
+#check Fermat.Conservation.AlbertOrder59.albertLiftAlgEquiv59_orderOf
+#check Fermat.Conservation.AlbertGalois59.albertOverfield59_finrank
+#check Fermat.Conservation.AlbertGalois59.albertLiftAlgEquiv59_distinct_powers
+#check Fermat.Conservation.AlbertGalois59.albertOverfield59_card_aut
+#check Fermat.Conservation.AlbertGalois59.albertOverfield59_isGalois
+#check Fermat.Conservation.AlbertGalois59.albertLiftAlgEquiv59_zpowers_eq_top
+
+#check Fermat.Conservation.OrientedKummerRepresentative59.orientedKummerCharacter
+#check Fermat.Conservation.OrientedKummerRepresentative59.orient_continuousClassOfUnit_representative
+#check Fermat.Conservation.OrientedKummerRepresentative59.characterCycle_orientedKummerCharacter
+#check Fermat.Conservation.OrientedKummerRepresentative59.characterCycle_actualClass_eq_orientedKummer
+#check Fermat.Conservation.OrientedKummerRepresentative59.kummerCupH1_representative
+#check Fermat.Conservation.OrientedKummerRepresentative59.orientH2_kummerCupH1
+#check Fermat.Conservation.KummerCharacterComparison59.cocycleValue_eq_algebraicPowerRoot59
+#check Fermat.Conservation.KummerCharacterComparison59.orientedKummerValue_eq_kummerCharacter59_toAdd
+#check Fermat.Conservation.KummerCharacterComparison59.kummerCharacter59_eq_orientedKummerCharacter
+
+#check Fermat.Conservation.ConcreteTwistedLiftCupBridge59.twistedCorrection59
+#check Fermat.Conservation.ConcreteTwistedLiftCupBridge59.twistedComparison_eq_kernelEmbed59
+#check Fermat.Conservation.ConcreteTwistedLiftCupBridge59.twistedCorrection59_add
+#check Fermat.Conservation.ConcreteTwistedLiftCupBridge59.continuous_twistedCorrection59
+#check Fermat.Conservation.ConcreteTwistedLiftCupBridge59.twistedCupPrimitive59
+#check Fermat.Conservation.ConcreteTwistedLiftCupBridge59.twistedCupPrimitive59_equation
+#check Fermat.Conservation.IntegratedTwistedKummerCup59.pulledCarry_sub_characterCup_eq_boundary_of_twistedLift
+#check Fermat.Conservation.IntegratedTwistedKummerCup59.h2Projection_pulledCarry_eq_characterCup_of_twistedLift
+#check Fermat.Conservation.IntegratedTwistedKummerCup59.actualH2_pulledCarry_eq_characterCup_of_twistedLift
+#check Fermat.Conservation.IntegratedTwistedKummerCup59.pulledCarry_actualH2_eq_orientedKummerCup_of_twistedLift
+
+#check Fermat.Conservation.CyclicLiftNaturality59.exists_continuous_lift_iff_of_compatible_equiv
+#check Fermat.Conservation.CyclicLiftNaturality59.noContinuousLift_iff_of_compatible_equiv
+#check Fermat.Conservation.CyclicLiftNaturality59.exists_compatible_scalarRotation59
+#check Fermat.Conservation.CyclicLiftNaturality59.noContinuousLift_iff_scalarRotation59
+
+#check Fermat.FiftyNine.Conservation.TwistedArtinHasse59.samePrimeFiniteLog_twist59_eq
+#check Fermat.FiftyNine.Conservation.TwistedArtinHasse59.normalizedFiniteLog59_mod59
+#check Fermat.FiftyNine.Conservation.TwistedArtinHasse59.cyclotomicFinrank59
+#check Fermat.FiftyNine.Conservation.TwistedArtinHasse59.trace_algebraMap_normalizedFiniteLog59
+#check Fermat.FiftyNine.Conservation.TwistedArtinHasse59.normalizedTraceFiniteLog59_mod59_ne_zero
+#check Fermat.FiftyNine.Conservation.TwistedArtinHasse59.trace_algebraMap_normalizedFiniteLog59_mod59_ne_zero
+
+#guard_depends_on
+  Fermat.Conservation.AlbertDescentDatum59.concreteKummer_exists_albert_descent_datum59,
+  Fermat.Conservation.AlbertDescentDatum59.exists_albert_descent_datum59
+#guard_depends_on
+  Fermat.Conservation.AlbertExtension59.albertLiftAlgEquiv59_pow_fiftyNine,
+  Fermat.Conservation.AlbertExtension59.orbitProduct59_eq_algebraMap_norm
+#guard_depends_on
+  Fermat.Conservation.AlbertOrder59.albertLiftAlgEquiv59_orderOf,
+  Fermat.Conservation.AlbertExtension59.albertLiftAlgEquiv59_pow_fiftyNine
+#guard_depends_on
+  Fermat.Conservation.AlbertOrder59.albertLiftAlgEquiv59_orderOf,
+  Fermat.Conservation.AlbertOrder59.albertLiftAlgEquiv59_pow_3481
+#guard_depends_on
+  Fermat.Conservation.AlbertGalois59.albertOverfield59_isGalois,
+  Fermat.Conservation.AlbertGalois59.albertOverfield59_card_aut
+#guard_depends_on
+  Fermat.Conservation.AlbertGalois59.albertLiftAlgEquiv59_zpowers_eq_top,
+  Fermat.Conservation.AlbertOrder59.albertLiftAlgEquiv59_orderOf
+#guard_depends_on
+  Fermat.Conservation.KummerCharacterComparison59.kummerCharacter59_eq_orientedKummerCharacter,
+  Fermat.Conservation.KummerCharacterComparison59.cocycleValue_eq_algebraicPowerRoot59
+#guard_depends_on
+  Fermat.Conservation.IntegratedTwistedKummerCup59.pulledCarry_actualH2_eq_orientedKummerCup_of_twistedLift,
+  Fermat.Conservation.IntegratedTwistedKummerCup59.actualH2_pulledCarry_eq_characterCup_of_twistedLift
+#guard_depends_on
+  Fermat.Conservation.IntegratedTwistedKummerCup59.pulledCarry_actualH2_eq_orientedKummerCup_of_twistedLift,
+  Fermat.Conservation.OrientedKummerRepresentative59.orientH2_kummerCupH1
+#guard_depends_on
+  Fermat.Conservation.CyclicLiftNaturality59.noContinuousLift_iff_scalarRotation59,
+  Fermat.Conservation.CyclicLiftNaturality59.exists_compatible_scalarRotation59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedArtinHasse59.normalizedTraceFiniteLog59_mod59_ne_zero,
+  Fermat.FiftyNine.Conservation.TwistedArtinHasse59.normalizedTraceFiniteLog59_mod59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedArtinHasse59.trace_algebraMap_normalizedFiniteLog59_mod59_ne_zero,
+  Fermat.FiftyNine.Conservation.TwistedArtinHasse59.trace_algebraMap_normalizedFiniteLog59_mod59
+
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup,
   Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup
@@ -3125,6 +3237,15 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.KummerCupSpanReadout
 #guard_standard_axioms_prefix Fermat.Conservation.LocalKummerTransport
 #guard_standard_axioms_prefix Fermat.Conservation.CohomologicalKummerPairing
+#guard_standard_axioms_prefix Fermat.Conservation.AlbertDescentDatum59
+#guard_standard_axioms_prefix Fermat.Conservation.AlbertExtension59
+#guard_standard_axioms_prefix Fermat.Conservation.AlbertOrder59
+#guard_standard_axioms_prefix Fermat.Conservation.AlbertGalois59
+#guard_standard_axioms_prefix Fermat.Conservation.OrientedKummerRepresentative59
+#guard_standard_axioms_prefix Fermat.Conservation.KummerCharacterComparison59
+#guard_standard_axioms_prefix Fermat.Conservation.ConcreteTwistedLiftCupBridge59
+#guard_standard_axioms_prefix Fermat.Conservation.IntegratedTwistedKummerCup59
+#guard_standard_axioms_prefix Fermat.Conservation.CyclicLiftNaturality59
 #guard_standard_axioms_prefix Fermat.Conservation.ContinuousH2Nonboundary
 #guard_standard_axioms_prefix Fermat.Conservation.FiniteCyclicH2Generator59
 #guard_standard_axioms_prefix Fermat.Conservation.DiscreteToContinuousH2
@@ -3144,6 +3265,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TwistedLambdaKummerQuotient59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TwistedArtinHasse59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
