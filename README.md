@@ -708,9 +708,12 @@ separate obligations.
 `ResidueKummerFrobeniusAutomorphism827` further proves that the bundled
 Frobenius endomorphism is reversible.  Its explicit inverse sends the
 universal Kummer root to `u^(-14) * T`, and the two compositions are the
-identity algebra map.  The local read therefore comes from a genuine
-algebra automorphism, while no global class-field-theoretic Artin element is
-claimed.
+identity algebra map; the automorphism's order divides 59.
+`StrictOrbitKummerFrobeniusAutomorphism827` instantiates this reversible
+action at each of the 58 actual orbit coordinates and identifies its root
+multiplier with the stored exponent-wave coordinate.  The local read
+therefore comes from genuine cyclic algebra automorphisms, while no global
+class-field-theoretic Artin element is claimed.
 
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
@@ -756,18 +759,36 @@ W1W3CompatibleFiber827 is nonempty
 ```
 
 These are the canonical obstruction and all of its scalar boundary charges,
-not a proof that either vanishes.  The nonzero ambient W1 cup has not yet
+not a proof that either vanishes.  `CanonicalW1PoitouTateReduction827` now
+maps the genuine strict chi=15 primal space into the complete annihilator
+test space and proves, under the explicit global-reciprocity interface, that
+the canonical boundary restricted to those tests is exactly
+
+```text
+W1 receipt functional + local Kummer--Frobenius mode-44 functional.
+```
+
+It then proves boundary vanishing, obstruction vanishing, and nonemptiness
+of the W1+W3 compatible fiber from exactly two visible hypotheses:
+surjectivity of this primal-test representation (the Poitou--Tate theorem)
+and cancellation of those two displayed functionals (the remaining global
+Kummer--Artin comparison).  Neither hypothesis is manufactured or hidden.
+
+The nonzero ambient W1 cup has not yet
 been shown nonzero after restriction to the genuine seated primal Selmer
 space, and
 `TwistedLambdaStrictSelmerObstruction59` shows why its obvious left factor
 cannot serve as that witness: the explicit W1 radicand has lambda valuation
 `-1`, whereas every strict 59-Selmer representative has lambda valuation
 divisible by 59.  Thus a different strict chi=15 class must be produced and
-paired nontrivially with W1's retained reflected factor.  Moreover,
-`GlobalReciprocityLaw` is still
-consumed rather than constructed.  These PT/local-compatibility,
-seated-transversality, and reciprocity seams remain separate from the
-now-pointwise W7 class-readout seam.
+paired nontrivially with W1's retained reflected factor.
+`IrregularPrimalClassGaugeBridge827` proves that the class gauge restricted
+to that strict chi=15 primal space has range exactly the genuine chi=15
+class-projector image.  Consequently seated-orbit transversality in W4 is
+equivalent to nonvanishing of the canonical class readout on that image—the
+W7 nonvanishing input.  Those are now one seam, not two.  The rank-one and
+selected-class seating inputs of W7 remain separate, and
+`GlobalReciprocityLaw` is still consumed rather than constructed.
 
 There is now, however, a separate completed state-to-history route at the
 same exponent.  `FermatStateTakagiSevenA59` proves the Takagi relation for the
