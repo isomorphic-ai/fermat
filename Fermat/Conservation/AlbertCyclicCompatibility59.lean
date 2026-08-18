@@ -90,6 +90,79 @@ theorem cyclicReduction3481To59_ofAdd_one :
       Multiplicative.ofAdd (1 : ZMod 59) := by
   rfl
 
+/-- An element of `C3481` reducing to the standard generator of `C59` has
+unit additive coordinate modulo `59²`, and hence generates `C3481`. -/
+theorem cyclicReduction3481To59_preimage_generator_isUnit
+    (x : CyclicGroup3481)
+    (hx : cyclicReduction3481To59 x =
+      Multiplicative.ofAdd (1 : ZMod 59)) :
+    IsUnit x.toAdd := by
+  rw [← ZMod.natCast_zmod_val x.toAdd]
+  rw [ZMod.isUnit_iff_coprime]
+  have hnot : ¬59 ∣ x.toAdd.val := by
+    intro hdvd
+    have hxzero : (x.toAdd.val : ZMod 59) = 0 := by
+      rw [ZMod.natCast_eq_zero_iff]
+      exact hdvd
+    have hxone : (x.toAdd.val : ZMod 59) = 1 := by
+      have h := congrArg Multiplicative.toAdd hx
+      change ZMod.castHom (by norm_num : 59 ∣ 3481) (ZMod 59)
+          x.toAdd = 1 at h
+      rw [ZMod.castHom_apply, ZMod.cast_eq_val] at h
+      exact h
+    rw [hxzero] at hxone
+    have hne : (0 : ZMod 59) ≠ (1 : ZMod 59) := by decide
+    exact hne hxone
+  have hcop := Nat.Prime.coprime_pow_of_not_dvd
+    (by decide : Nat.Prime 59) hnot (m := 2)
+  norm_num at hcop ⊢
+  exact hcop
+
+/-- Surjectivity after reduction from `C3481` to `C59` already forces
+surjectivity before reduction.  Indeed, a preimage of the standard
+generator has unit coordinate modulo `59²`, so its powers cover all of
+`C3481`. -/
+theorem surjective_of_cyclicReduction3481To59_comp_surjective
+    {G : Type} [Group G]
+    (psi : G →* CyclicGroup3481)
+    (hsurj : Function.Surjective
+      (cyclicReduction3481To59.toMonoidHom.comp psi)) :
+    Function.Surjective psi := by
+  obtain ⟨g, hg⟩ := hsurj (Multiplicative.ofAdd (1 : ZMod 59))
+  let x := psi g
+  have hxred : cyclicReduction3481To59 x =
+      Multiplicative.ofAdd (1 : ZMod 59) := hg
+  have hxunit : IsUnit x.toAdd :=
+    cyclicReduction3481To59_preimage_generator_isUnit x hxred
+  intro y
+  let u : (ZMod 3481)ˣ := hxunit.unit
+  let n : ℕ := (((u⁻¹ : (ZMod 3481)ˣ) : ZMod 3481) * y.toAdd).val
+  refine ⟨g ^ n, ?_⟩
+  rw [map_pow]
+  apply Multiplicative.toAdd.injective
+  change n • x.toAdd = y.toAdd
+  have hu : (u : ZMod 3481) = x.toAdd := hxunit.unit_spec
+  rw [← hu, nsmul_eq_mul]
+  change (n : ZMod 3481) * (u : ZMod 3481) = y.toAdd
+  rw [show (n : ZMod 3481) =
+      ((u⁻¹ : (ZMod 3481)ˣ) : ZMod 3481) * y.toAdd by
+    exact ZMod.natCast_zmod_val _]
+  calc
+    (((u⁻¹ : (ZMod 3481)ˣ) : ZMod 3481) * y.toAdd) *
+        (u : ZMod 3481) =
+      (((u⁻¹ : (ZMod 3481)ˣ) : ZMod 3481) * (u : ZMod 3481)) *
+        y.toAdd := by ac_rfl
+    _ = y.toAdd := by simp
+
+/-- Continuous specialization of
+`surjective_of_cyclicReduction3481To59_comp_surjective`. -/
+theorem continuous_surjective_of_cyclicReduction3481To59_comp_surjective
+    {G : Type} [Group G] [TopologicalSpace G]
+    (psi : G →ₜ* CyclicGroup3481)
+    (hsurj : Function.Surjective (cyclicReduction3481To59.comp psi)) :
+    Function.Surjective psi :=
+  surjective_of_cyclicReduction3481To59_comp_surjective psi.toMonoidHom hsurj
+
 /-- Restriction from the transported closure Galois group back to the
 original degree-59 field, via the chosen embedding equivalence. -/
 def albertClosureRestriction59
@@ -537,6 +610,23 @@ theorem concreteKummer_exists_albertCharacter3481
       rw [generatorGalEquiv59_eq_kummerGalEquiv59 F zeta a hzeta ha
         hsigma hfinrank]
       rfl
+
+/-- The exact Albert lift produced by a norm witness is automatically
+surjective: its reduction is the already-surjective concrete Kummer
+character, and surjectivity lifts across `C3481 → C59`. -/
+theorem concreteKummer_exists_surjective_albertCharacter3481
+    (beta : kummerExtension59 F a)
+    (hbeta : Algebra.norm F beta = zeta) :
+    ∃ psi : Field.absoluteGaloisGroup F →ₜ* CyclicGroup3481,
+      Function.Surjective psi ∧
+      cyclicReduction3481To59.comp psi =
+        kummerCharacter59 F zeta a hzeta ha := by
+  obtain ⟨psi, hpsi⟩ :=
+    concreteKummer_exists_albertCharacter3481 F zeta a hzeta ha beta hbeta
+  refine ⟨psi, ?_, hpsi⟩
+  apply continuous_surjective_of_cyclicReduction3481To59_comp_surjective psi
+  rw [hpsi]
+  exact kummerCharacter59_surjective F zeta a hzeta ha
 
 end ConcreteKummer
 
