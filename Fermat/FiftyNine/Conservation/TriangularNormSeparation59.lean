@@ -133,6 +133,63 @@ theorem triangularNormPerturbation59_valuation_lt_one
       rw [← WithZero.exp_zero, WithZero.exp_lt_exp]
       omega
 
+/-- Every nonconstant triangular norm perturbation of an integral
+polynomial has at least one lambda of depth.  This non-strict form is the
+input needed to seat the complete initial triangular norm in `U₁`. -/
+theorem triangularNormPerturbation59_valuation_le_depth_one
+    (f : (LambdaField59 K)[X])
+    (hf : ∀ k : ℕ, 0 < k → Valued.v (f.coeff k) ≤ 1)
+    (j : ℕ) (hj0 : 0 < j) :
+    Valued.v (triangularNormPerturbation59 K f j) ≤
+      WithZero.exp (-1 : ℤ) := by
+  rw [triangularNormPerturbation59, map_mul, map_pow, map_pow,
+    twistedLambda59_valuation]
+  have hc := triangularCoefficient_valuation_le_one K f hf j hj0
+  have hcpow : Valued.v (triangularCoefficient f j) ^ 59 ≤ 1 := by
+    simpa using pow_le_one₀
+      (show 0 ≤ Valued.v (triangularCoefficient f j) from bot_le) hc
+  calc
+    Valued.v (triangularCoefficient f j) ^ 59 *
+          WithZero.exp (-1 : ℤ) ^ j ≤
+        1 * WithZero.exp (-1 : ℤ) ^ j :=
+      mul_le_mul_left hcpow _
+    _ = WithZero.exp (-(j : ℤ)) := by
+      rw [one_mul, ← WithZero.exp_nsmul]
+      congr 1
+      simp only [nsmul_eq_mul]
+      omega
+    _ ≤ WithZero.exp (-1 : ℤ) := by
+      rw [WithZero.exp_le_exp]
+      omega
+
+/-- The actual norm of the complete initial triangular product is a first
+one-unit whenever all positive coefficients are integral. -/
+theorem norm_aeval_triangularProduct_mem_U1
+    (f : (LambdaField59 K)[X])
+    (hf : ∀ k : ℕ, 0 < k → Valued.v (f.coeff k) ≤ 1) :
+    Valued.v
+        (Algebra.norm (LambdaField59 K)
+            (aeval (twistedLambdaRoot59 K) (triangularProduct f 58)) - 1) ≤
+      WithZero.exp (-1 : ℤ) := by
+  have hnormFormula := norm_aeval_triangularProduct 59
+    (LambdaField59 K) (lambdaLocalPrimitiveRoot59 K) (twistedLambda59 K)
+    (lambdaLocalPrimitiveRoot59_isPrimitive K) (twistedLambda59_not_pow K)
+    f 58 (by norm_num) (by norm_num)
+  change Algebra.norm (LambdaField59 K)
+      (aeval (twistedLambdaRoot59 K) (triangularProduct f 58)) =
+    ∏ j ∈ Finset.Icc 1 58,
+      (1 + triangularNormPerturbation59 K f j) at hnormFormula
+  rw [hnormFormula]
+  apply prod_one_add_sub_one_le
+    (Valued.v : Valuation (LambdaField59 K) ℤᵐ⁰)
+      (Finset.Icc 1 58) (triangularNormPerturbation59 K f)
+      (WithZero.exp (-1 : ℤ))
+  · rw [← WithZero.exp_zero, WithZero.exp_lt_exp]
+    norm_num
+  · intro j hj
+    exact triangularNormPerturbation59_valuation_le_depth_one K f hf j
+      (Finset.mem_Icc.mp hj).1
+
 /-- A depth bound on the whole triangular norm product applies separately
 to every elementary perturbation. -/
 theorem each_triangularNormPerturbation59_valuation_le
