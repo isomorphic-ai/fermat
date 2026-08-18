@@ -28,6 +28,15 @@
   `ContinuousCyclicH2Equiv59` proves the reverse discrete/continuous boundary
   transfer and that every class is a unique carry multiple; the readout is
   therefore a genuine linear equivalence with `ZMod 59`.
+- `PrimeCyclicH2` now proves the same construction symbolically for every
+  prime `p`: the carry cocycle, generator-loop normalization, boundary
+  annihilation, discrete-to-continuous comparison, spanning theorem, and
+  final continuous `H² ≃ₗ ZMod p` are all prime-parametric.
+  `PrimeCyclicH2At59` proves that the previously compiled generator, carry,
+  readout, and final equivalence at `59` are definitionally the generic
+  specialization.  Thus the finite-cyclic normalization is no longer a
+  per-prime calculation; only the local arithmetic comparison remains
+  specialized.
 - `ContinuousH2Pullback59` descends cochain precomposition to actual
   continuous `H²`, and `ContinuousH2PullbackFunctorial59` proves its identity
   and contravariant-composition laws on every class.  The concrete
@@ -60,6 +69,13 @@
   power, logarithmic power compatibility and integral-trace divisibility
   would force its normalized residue to vanish, contradicting `-1`.  Thus
   `60` is not a 59th power in the completed-log principal-unit domain.
+- `CompletedLogLocalPowerObstruction59` proves that the restriction to the
+  logarithmic domain loses no possible root.  The lambda ideal is the actual
+  maximal ideal, its residue field has characteristic `59`, and every
+  valuation-ring root of the principal unit `60` is forced into the
+  principal-unit domain.  A valuation argument first forces any hypothetical
+  root in the full completion to be an integer unit.  Consequently `60` is
+  not a 59th power in the actual lambda-adic local field.
 - `TwistedLambdaNormalizedEndpoint59` composes the entire cohomological side
   under one explicit naturality equation
   `readout.comp twistedLambdaH2Inflation59 =
@@ -71,6 +87,11 @@
   two normalized endpoints: construct the local roots-valued `H²` invariant
   and prove that its restriction along the explicit inflation is the finite
   cyclic equivalence, with its Artin--Hasse/completed-log interpretation.
+  The new full-field non-power theorem does not by itself cross this seam:
+  non-membership in the subgroup of 59th powers is weaker than the required
+  non-membership in the relevant cyclic norm group.  The missing comparison
+  is precisely the Artin--Hasse/local-reciprocity statement which evaluates
+  the pairing with the chosen primitive root.
   No new axiom, provider, fabricated scalar, local reciprocity theorem, or
   Hilbert-symbol identity is used above.
 
