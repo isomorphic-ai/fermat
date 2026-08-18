@@ -594,7 +594,16 @@ that orbit silence is equivalent to lambda orthogonality.  Separately,
 58-place coefficient profile, proves exact support and base normalization,
 and records both the physical left-translation action and the corresponding
 inverse-character eigenlaw.  It is a local profile, not an asserted global
-reflected Selmer lift.  Finally,
+reflected Selmer lift.  `ArbitraryUnitOrbitDecomposition827` proves that the
+raw 58-place residue wave of every genuine global unit is an explicit
+conjugation-even half plus one cyclotomic-root mode.  The fixed inverse
+orientation sends that root mode from `1` to `57`; mode `43` is odd and
+distinct.  `InverseEvenPrimitiveFourierSilence827` proves the finite Fourier
+cancellation, and `ArbitraryUnitFourierSilence827` composes the two halves:
+the actual raw unit wave consumed by the tame context has zero inverse-
+oriented mode-43 coefficient and zero mode-43 projection.  This still owes
+the comparison from that scalar Fourier projection to the concrete strict-
+Selmer tame-orbit functional for the chosen reflected input.  Finally,
 `OneDimensionalUnitProportionality` supplies the pure W4 algebra: two
 explicitly nonzero readouts in one explicitly supplied finrank-one submodule
 differ by a unique unit scalar.  It deliberately does not assert the still
