@@ -21,6 +21,7 @@ No global reciprocity law is asserted here.
 -/
 import Fermat.FiftyNine.Conservation.CanonicalConjugatePairGlobalLedger827
 import Fermat.FiftyNine.Conservation.NormalizedContinuousWildLocalization59
+import Fermat.Conservation.PointedFiniteOrbitLedger
 import Fermat.Conservation.TatePairing
 import Fermat.Conservation.TamePlacePairing
 
@@ -132,6 +133,24 @@ theorem rawFullOrbitReadings827_apply
             (rawTameOrbitReading827 K tau x y) := by
   simp [rawFullOrbitReadings827]
 
+/-- Pointwise, the bilinear raw construction is exactly the generic pointed
+finite-orbit ledger.  The raw definition remains bilinear by construction;
+this theorem is its scalar ledger adapter. -/
+theorem rawFullOrbitReadings827_apply_eq_pointedOrbitLedger
+    (x : StrictCarrier59 K) (y : RelaxedCarrier827 K) :
+    rawFullOrbitReadings827 K x y =
+      PointedFiniteOrbitLedger.pointedOrbitLedger
+        (lambdaPlace59 K) (rawWildReading59 K x y)
+        (tameOrbitPlace827 (K := K))
+        (fun tau ↦ rawTameOrbitReading827 K tau x y) := by
+  rw [rawFullOrbitReadings827_apply]
+  rfl
+
+private theorem lambdaPlace59_not_mem_tameOrbitPlace827_range :
+    lambdaPlace59 K ∉ Set.range (tameOrbitPlace827 (K := K)) := by
+  simpa only [tameOrbitPlace827_range_eq_placesOver827 (K := K)] using
+    lambdaPlace59_not_mem_placesOver827 (K := K)
+
 /-- Reading the raw ledger at the distinguished wild place recovers exactly
 the normalized continuous Kummer pairing.  Every tame row is genuinely
 seated over 827, which is disjoint from the place over 59. -/
@@ -140,17 +159,12 @@ theorem rawFullOrbitReadings827_apply_lambda
     (x : StrictCarrier59 K) (y : RelaxedCarrier827 K) :
     rawFullOrbitReadings827 K x y (lambdaPlace59 K) =
       rawWildReading59 K x y := by
-  classical
-  rw [rawFullOrbitReadings827_apply, Finsupp.add_apply,
-    Finsupp.single_eq_same, Finset.sum_apply']
-  rw [Finset.sum_eq_zero, add_zero]
-  intro tau _
-  rw [Finsupp.single_eq_of_ne]
-  intro hplace
-  apply lambdaPlace59_not_mem_placesOver827 (K := K)
-  rw [hplace]
-  exact (indexedPlaceOrbitEquiv827 K
-    (tameOrbitBasePlace827 (K := K)) tau).2
+  rw [rawFullOrbitReadings827_apply_eq_pointedOrbitLedger]
+  exact PointedFiniteOrbitLedger.pointedOrbitLedger_apply_distinguished
+    (lambdaPlace59 K) (rawWildReading59 K x y)
+    (tameOrbitPlace827 (K := K))
+    (fun tau ↦ rawTameOrbitReading827 K tau x y)
+    (lambdaPlace59_not_mem_tameOrbitPlace827_range K)
 
 /-- Reading the raw ledger at an 827 orbit place recovers exactly that
 place's globally-root-oriented tame symbol. -/
@@ -161,24 +175,13 @@ theorem rawFullOrbitReadings827_apply_orbit
     rawFullOrbitReadings827 K x y
         (tameOrbitPlace827 (K := K) tau) =
       rawTameOrbitReading827 K tau x y := by
-  classical
-  rw [rawFullOrbitReadings827_apply, Finsupp.add_apply,
-    Finsupp.single_eq_of_ne, zero_add, Finset.sum_apply']
-  · rw [Finset.sum_eq_single tau]
-    · simp
-    · intro sigma _ hsigma
-      rw [Finsupp.single_eq_of_ne]
-      intro hplace
-      apply hsigma
-      apply (indexedPlaceOrbitEquiv827 K
-        (tameOrbitBasePlace827 (K := K))).injective
-      exact Subtype.ext hplace.symm
-    · simp
-  · intro hplace
-    apply lambdaPlace59_not_mem_placesOver827 (K := K)
-    rw [← hplace]
-    exact (indexedPlaceOrbitEquiv827 K
-      (tameOrbitBasePlace827 (K := K)) tau).2
+  rw [rawFullOrbitReadings827_apply_eq_pointedOrbitLedger]
+  exact PointedFiniteOrbitLedger.pointedOrbitLedger_apply_orbit
+    (lambdaPlace59 K) (rawWildReading59 K x y)
+    (tameOrbitPlace827 (K := K))
+    (fun tau ↦ rawTameOrbitReading827 K tau x y)
+    (tameOrbitPlace827_injective (K := K))
+    (lambdaPlace59_not_mem_tameOrbitPlace827_range K) tau
 
 /-- The raw ledger is definitionally silent away from the wild place and
 the complete 827 orbit. -/
@@ -187,18 +190,13 @@ theorem rawFullOrbitReadings827_apply_eq_zero_of_outside
     (v : Place K) (hwild : v ≠ lambdaPlace59 K)
     (h827 : v ∉ placesOver827 K) :
     rawFullOrbitReadings827 K x y v = 0 := by
-  classical
-  rw [rawFullOrbitReadings827_apply, Finsupp.add_apply,
-    Finsupp.single_eq_of_ne, zero_add, Finset.sum_apply']
-  · apply Finset.sum_eq_zero
-    intro tau _
-    rw [Finsupp.single_eq_of_ne]
-    intro hplace
-    apply h827
-    rw [hplace]
-    exact (indexedPlaceOrbitEquiv827 K
-      (tameOrbitBasePlace827 (K := K)) tau).2
-  · exact fun hplace ↦ hwild hplace
+  rw [rawFullOrbitReadings827_apply_eq_pointedOrbitLedger]
+  apply
+    PointedFiniteOrbitLedger.pointedOrbitLedger_apply_eq_zero_of_ne_of_not_mem_range
+      (lambdaPlace59 K) (rawWildReading59 K x y)
+      (tameOrbitPlace827 (K := K))
+      (fun tau ↦ rawTameOrbitReading827 K tau x y) v hwild
+  simpa only [tameOrbitPlace827_range_eq_placesOver827 (K := K)] using h827
 
 /-- The constructed raw support is contained in exactly the retained wild
 place and the full set of places above 827. -/
@@ -206,17 +204,25 @@ theorem rawFullOrbitReadings827_support_subset
     (x : StrictCarrier59 K) (y : RelaxedCarrier827 K) :
     ↑(rawFullOrbitReadings827 K x y).support ⊆
       Set.insert (lambdaPlace59 K) (placesOver827 K) := by
-  intro v hv
-  by_contra hout
-  have hwild : v ≠ lambdaPlace59 K := by
-    intro hplace
-    exact hout (Set.mem_insert_iff.mpr (Or.inl hplace))
-  have h827 : v ∉ placesOver827 K := by
-    intro hv827
-    exact hout (Set.mem_insert_iff.mpr (Or.inr hv827))
-  exact (Finsupp.mem_support_iff.mp hv)
-    (rawFullOrbitReadings827_apply_eq_zero_of_outside
-      K x y v hwild h827)
+  rw [rawFullOrbitReadings827_apply_eq_pointedOrbitLedger]
+  simpa only [tameOrbitPlace827_range_eq_placesOver827 (K := K)] using
+    PointedFiniteOrbitLedger.pointedOrbitLedger_support_subset_insert_range
+      (lambdaPlace59 K) (rawWildReading59 K x y)
+      (tameOrbitPlace827 (K := K))
+      (fun tau ↦ rawTameOrbitReading827 K tau x y)
+
+/-- Aggregating the complete raw ledger is the wild reading plus the sum of
+all 58 tame orbit readings, in the supplied orbit orientation. -/
+theorem rawFullOrbitReadings827_sum
+    (x : StrictCarrier59 K) (y : RelaxedCarrier827 K) :
+    (rawFullOrbitReadings827 K x y).sum (fun _ entry ↦ entry) =
+      rawWildReading59 K x y +
+        ∑ tau : GaloisIndex59, rawTameOrbitReading827 K tau x y := by
+  rw [rawFullOrbitReadings827_apply_eq_pointedOrbitLedger]
+  exact PointedFiniteOrbitLedger.pointedOrbitLedger_sum
+    (lambdaPlace59 K) (rawWildReading59 K x y)
+    (tameOrbitPlace827 (K := K))
+    (fun tau ↦ rawTameOrbitReading827 K tau x y)
 
 section Seated
 
@@ -492,17 +498,13 @@ theorem canonicalFullOrbitLocalPairing827_support_subset
       (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi) :
     ↑((canonicalFullOrbitLocalPairing827 K omega chi).readings x y).support ⊆
       Set.insert (lambdaPlace59 K) (placesOver827 K) := by
-  intro v hv
-  by_contra hout
-  have hwild : v ≠ lambdaPlace59 K := by
-    intro hplace
-    exact hout (Set.mem_insert_iff.mpr (Or.inl hplace))
-  have h827 : v ∉ placesOver827 K := by
-    intro hv827
-    exact hout (Set.mem_insert_iff.mpr (Or.inr hv827))
-  exact (Finsupp.mem_support_iff.mp hv)
-    (canonicalFullOrbitLocalPairing827_pairAt_eq_zero_of_outside
-      K omega chi x y v hwild h827)
+  exact rawFullOrbitReadings827_support_subset K
+    ((toSeatedCarrier
+      (rho := cyclotomicStrictSelmerRepresentation59 K)
+      (chi := chi)).toAddMonoidHom x)
+    ((toSupportedCarrier
+      (rho := cyclotomicQRelaxedSelmerRepresentation827 K)
+      (eta := InvolutiveBase.reflectedCharacter omega chi)).toAddMonoidHom y)
 
 omit [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)] in
 /-- Outside 59 and 827, the constructed zero row agrees with the actual
