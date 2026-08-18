@@ -568,6 +568,17 @@ Fourier-compress it, and then provide the arithmetic gauge comparison.  None
 of that local-lift refinement is constructed yet, and this does not provide a
 new all-prime FLT theorem.
 
+For the newer full strict-Selmer Artin route, the class-valued seating is no
+longer an open input.  `FermatFactorClassGaugeSeating59` re-reads the genuine
+strict-Selmer class obstruction as a `ZMod 59` linear map and proves that its
+value on the literal plus-minus Fermat-factor difference is exactly the
+selected relation-(7a) class.  The map is surjective, and its kernel is
+exactly the range of the genuine global-unit inclusion.  Consequently a
+scalar Selmer reading factors through this class gauge by a unique class
+readout if and only if it kills every global-unit class.  This does not
+manufacture an Artin map: it isolates the remaining Kummer--Artin theorem as
+the concrete unit-silence statement for the complete 827-orbit reading.
+
 There is now, however, a separate completed state-to-history route at the
 same exponent.  `FermatStateTakagiSevenA59` proves the Takagi relation for the
 allocated Fermat pair and kills both actual root classes.
