@@ -320,6 +320,15 @@ proves it injective, and retains its exact Kummer-class readback.  The
 corresponding `*59` files preserve the older public API as transparent
 specializations; only support at `827` and the solution-dependent Fermat
 endpoints remain in those adapters.
+
+`PrimeResidueFourier` supplies the residue-field Fourier dictionary for every
+prime `p`: character functions and orthogonality, normalized Fourier
+coordinates and reconstruction, the character basis, pure-mode support and
+pointed-silence consequences, and reduction of `p`-adic characters modulo
+`p`.  `SplitPrimeFourier827` preserves the established order-59 API as a thin
+specialization, while the splitting and regular place-orbit arithmetic at
+`827` remains correctly campaign-specific.
+
 `PrimeCyclotomicSelmerVerification` is the non-imported executable audit for
 this spine: it inventories the generic API, records its intended dependency
 graph, rejects public product-equivalence shortcuts, and checks every

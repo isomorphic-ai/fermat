@@ -10,11 +10,12 @@ lossy shadow of a relative orientation.  At the auxiliary prime 827 the
 position coordinates are the 58 places in one regular Galois orbit, while
 the character coordinates are their Fourier modes.
 
-This file proves the cyclotomic splitting count and the finite-field Fourier
-dictionary.  A positional delta has a nonzero coefficient in every
-frequency, while a nonzero pure-character vector is nonzero at every
-position.  Consequently a pure-character localization vector cannot be
-silent at 57 places and nonzero at the selected place.
+This file proves the cyclotomic splitting count and specializes the
+prime-generic residue-field Fourier dictionary at `p = 59`.  A positional
+delta has a nonzero coefficient in every frequency, while a nonzero
+pure-character vector is nonzero at every position.  Consequently a
+pure-character localization vector cannot be silent at 57 places and
+nonzero at the selected place.
 
 The current q-relaxed representation is supplied abstractly and has no
 compiled compatibility with the arithmetic permutation of places.
@@ -26,12 +27,9 @@ branch verdict.
 No Selmer splitting, section, endpoint, relation (7a), or transformer is
 constructed.
 -/
+import Fermat.Conservation.PrimeResidueFourier
 import Fermat.FiftyNine.Conservation.GaugeSteering827
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Galois
-import Mathlib.GroupTheory.FiniteAbelian.Duality
-import Mathlib.RingTheory.ZMod.Torsion
-import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
-import Mathlib.LinearAlgebra.StdBasis
 
 open scoped BigOperators nonZeroDivisors NumberField
 open Module
@@ -205,7 +203,7 @@ theorem galoisIndex59_card : Fintype.card GaloisIndex59 = 58 := by
   simp only [GaloisIndex59, Fintype.card_units]
   decide +kernel +revert
 
-/-! ## Position and character bases -/
+/-! ## Prime-generic residue Fourier analysis specialized at 59 -/
 
 universe uDelta
 
@@ -214,12 +212,12 @@ section CharacterFunctions
 variable {Delta : Type uDelta} [CommGroup Delta]
 
 /-- A unit-valued character, viewed as a position vector. -/
-def characterFunction
+abbrev characterFunction
     (chi : Delta →* (ZMod 59)ˣ) : Delta → ZMod 59 :=
   fun g ↦ (chi g : ZMod 59)
 
 /-- The same character as a monoid homomorphism into the field. -/
-def characterMonoidHom
+abbrev characterMonoidHom
     (chi : Delta →* (ZMod 59)ˣ) : Delta →* ZMod 59 :=
   (Units.coeHom (ZMod 59)).comp chi
 
@@ -227,21 +225,22 @@ def characterMonoidHom
 theorem characterMonoidHom_apply
     (chi : Delta →* (ZMod 59)ˣ) (g : Delta) :
     characterMonoidHom chi g = characterFunction chi g :=
-  rfl
+  Fermat.Conservation.PrimeResidueFourier.characterMonoidHom_apply
+    (p := 59) chi g
 
 theorem characterMonoidHom_injective :
-    Function.Injective (characterMonoidHom (Delta := Delta)) := by
-  intro chi psi h
-  ext g
-  exact DFunLike.congr_fun h g
+    Function.Injective (characterMonoidHom (Delta := Delta)) :=
+  Fermat.Conservation.PrimeResidueFourier.characterMonoidHom_injective
+    (p := 59) (Delta := Delta)
 
 theorem characterFunction_apply_ne_zero
     (chi : Delta →* (ZMod 59)ˣ) (g : Delta) :
     characterFunction chi g ≠ 0 :=
-  Units.ne_zero (chi g)
+  Fermat.Conservation.PrimeResidueFourier.characterFunction_apply_ne_zero
+    (p := 59) chi g
 
 /-- A vector lies in one pure character mode. -/
-def IsPureCharacter
+abbrev IsPureCharacter
     (chi : Delta →* (ZMod 59)ˣ) (v : Delta → ZMod 59) : Prop :=
   ∃ component : ZMod 59, v = component • characterFunction chi
 
@@ -251,9 +250,9 @@ theorem pointEvaluation_of_pureCharacter
     (v : Delta → ZMod 59) (chi : Delta →* (ZMod 59)ˣ)
     (component : ZMod 59) (selected : Delta)
     (hv : v = component • characterFunction chi) :
-    v selected = component * (chi selected : ZMod 59) := by
-  rw [hv]
-  rfl
+    v selected = component * (chi selected : ZMod 59) :=
+  Fermat.Conservation.PrimeResidueFourier.pointEvaluation_of_pureCharacter
+    (p := 59) v chi component selected hv
 
 end CharacterFunctions
 
@@ -268,69 +267,40 @@ local instance : Fintype (Delta →* (ZMod 59)ˣ) := Fintype.ofFinite _
 omit [Fintype Delta] [IsCyclic Delta] in
 theorem characterFunction_linearIndependent :
     LinearIndependent (ZMod 59)
-      (characterFunction (Delta := Delta)) := by
-  change LinearIndependent (ZMod 59)
-    (fun chi : Delta →* (ZMod 59)ˣ ↦
-      (characterMonoidHom chi : Delta → ZMod 59))
-  exact (linearIndependent_monoidHom Delta (ZMod 59)).comp
-    (characterMonoidHom (Delta := Delta))
-    (characterMonoidHom_injective (Delta := Delta))
+      (characterFunction (Delta := Delta)) :=
+  Fermat.Conservation.PrimeResidueFourier.characterFunction_linearIndependent
+    (p := 59) (Delta := Delta)
 
 /-- `ZMod 59` contains every root required by a cyclic group of order 58. -/
 theorem enoughRootsForFourier (hcard : Fintype.card Delta = 58) :
-    HasEnoughRootsOfUnity (ZMod 59) (Monoid.exponent Delta) := by
-  rw [IsCyclic.exponent_eq_card, Nat.card_eq_fintype_card, hcard]
-  simpa using
-    (inferInstance : HasEnoughRootsOfUnity (ZMod 59) (59 - 1))
+    HasEnoughRootsOfUnity (ZMod 59) (Monoid.exponent Delta) :=
+  Fermat.Conservation.PrimeResidueFourier.enoughRootsForFourier
+    (p := 59) (Delta := Delta) hcard
 
 theorem characterDual_card (hcard : Fintype.card Delta = 58) :
-    Nat.card (Delta →* (ZMod 59)ˣ) = 58 := by
-  letI : HasEnoughRootsOfUnity (ZMod 59) (Monoid.exponent Delta) :=
-    enoughRootsForFourier (Delta := Delta) hcard
-  rw [CommGroup.card_monoidHom_of_hasEnoughRootsOfUnity Delta (ZMod 59),
-    Nat.card_eq_fintype_card, hcard]
+    Nat.card (Delta →* (ZMod 59)ˣ) = 58 :=
+  Fermat.Conservation.PrimeResidueFourier.characterDual_card
+    (p := 59) (Delta := Delta) hcard
 
 theorem sum_characters_apply
     (hcard : Fintype.card Delta = 58) (x : Delta) :
     (∑ chi : Delta →* (ZMod 59)ˣ, (chi x : ZMod 59)) =
-      if x = 1 then (58 : ZMod 59) else 0 := by
-  letI : HasEnoughRootsOfUnity (ZMod 59) (Monoid.exponent Delta) :=
-    enoughRootsForFourier (Delta := Delta) hcard
-  by_cases hx : x = 1
-  · subst x
-    have hc : Fintype.card (Delta →* (ZMod 59)ˣ) = 58 :=
-      (Nat.card_eq_fintype_card :
-        Nat.card (Delta →* (ZMod 59)ˣ) =
-          Fintype.card (Delta →* (ZMod 59)ˣ)).symm.trans
-            (characterDual_card (Delta := Delta) hcard)
-    simp [hc]
-  · rw [if_neg hx]
-    obtain ⟨eta, heta⟩ :=
-      CommGroup.exists_apply_ne_one_of_hasEnoughRootsOfUnity
-        Delta (ZMod 59) hx
-    have heta' : (eta x : ZMod 59) ≠ 1 := by
-      intro h
-      exact heta (Units.ext h)
-    refine eq_zero_of_mul_eq_self_left heta' ?_
-    simp only [Finset.mul_sum, ← Units.val_mul, ← MonoidHom.mul_apply]
-    exact Fintype.sum_bijective _ (Group.mulLeft_bijective eta) _ _
-      (fun _ ↦ rfl)
+      if x = 1 then (58 : ZMod 59) else 0 :=
+  Fermat.Conservation.PrimeResidueFourier.sum_characters_apply
+    (p := 59) (Delta := Delta) hcard x
 
 /-- Orthogonality of the 58 residue-field characters. -/
 theorem character_orthogonality
     (hcard : Fintype.card Delta = 58) (s x : Delta) :
     (∑ chi : Delta →* (ZMod 59)ˣ,
         ((chi s : ZMod 59))⁻¹ * (chi x : ZMod 59)) =
-      if s = x then (58 : ZMod 59) else 0 := by
-  letI : HasEnoughRootsOfUnity (ZMod 59) (Monoid.exponent Delta) :=
-    enoughRootsForFourier (Delta := Delta) hcard
-  simpa only [map_inv, map_mul, Units.val_inv_eq_inv_val,
-    Units.val_mul, inv_mul_eq_one] using
-    (sum_characters_apply (Delta := Delta) hcard (s⁻¹ * x))
+      if s = x then (58 : ZMod 59) else 0 :=
+  Fermat.Conservation.PrimeResidueFourier.character_orthogonality
+    (p := 59) (Delta := Delta) hcard s x
 
 /-- The normalized Fourier coordinate of a position vector in one character
 mode. -/
-def fourierCoefficient (v : Delta → ZMod 59)
+abbrev fourierCoefficient (v : Delta → ZMod 59)
     (chi : Delta →* (ZMod 59)ˣ) : ZMod 59 :=
   (58 : ZMod 59)⁻¹ *
     ∑ s : Delta, ((chi s : ZMod 59))⁻¹ * v s
@@ -341,74 +311,30 @@ theorem fourier_reconstruction
     (hcard : Fintype.card Delta = 58)
     (v : Delta → ZMod 59) (x : Delta) :
     (∑ chi : Delta →* (ZMod 59)ˣ,
-        fourierCoefficient v chi * characterFunction chi x) = v x := by
-  letI : HasEnoughRootsOfUnity (ZMod 59) (Monoid.exponent Delta) :=
-    enoughRootsForFourier (Delta := Delta) hcard
-  calc
-    (∑ chi : Delta →* (ZMod 59)ˣ,
-        fourierCoefficient v chi * characterFunction chi x) =
-        (58 : ZMod 59)⁻¹ *
-          ∑ chi : Delta →* (ZMod 59)ˣ, ∑ s : Delta,
-            ((chi s : ZMod 59))⁻¹ * v s * (chi x : ZMod 59) := by
-      simp only [fourierCoefficient, characterFunction]
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro chi _
-      rw [mul_assoc, Finset.sum_mul]
-    _ = (58 : ZMod 59)⁻¹ *
-          ∑ s : Delta, v s *
-            ∑ chi : Delta →* (ZMod 59)ˣ,
-              ((chi s : ZMod 59))⁻¹ * (chi x : ZMod 59) := by
-      apply congrArg ((58 : ZMod 59)⁻¹ * ·)
-      rw [Finset.sum_comm]
-      apply Finset.sum_congr rfl
-      intro s _
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro chi _
-      ring
-    _ = (58 : ZMod 59)⁻¹ *
-          ∑ s : Delta, v s *
-            (if s = x then (58 : ZMod 59) else 0) := by
-      apply congrArg ((58 : ZMod 59)⁻¹ * ·)
-      apply Finset.sum_congr rfl
-      intro s _
-      rw [character_orthogonality (Delta := Delta) hcard s x]
-    _ = v x := by
-      have h58 : (58 : ZMod 59) ≠ 0 := by decide +kernel +revert
-      simp only [mul_ite, mul_zero, Finset.sum_ite_eq',
-        Finset.mem_univ, if_pos]
-      calc
-        (58 : ZMod 59)⁻¹ * (v x * 58) =
-            (58 : ZMod 59)⁻¹ * 58 * v x := by ring
-        _ = v x := by rw [inv_mul_cancel₀ h58, one_mul]
+        fourierCoefficient v chi * characterFunction chi x) = v x :=
+  Fermat.Conservation.PrimeResidueFourier.fourier_reconstruction
+    (p := 59) (Delta := Delta) hcard v x
 
 omit [IsCyclic Delta] in
 /-- A position delta has a nonzero coordinate in every character frequency. -/
 theorem fourierCoefficient_positionBasis
     (selected : Delta) (chi : Delta →* (ZMod 59)ˣ) :
     fourierCoefficient (Pi.basisFun (ZMod 59) Delta selected) chi =
-      (58 : ZMod 59)⁻¹ * ((chi selected : ZMod 59))⁻¹ := by
-  classical
-  unfold fourierCoefficient
-  congr 1
-  rw [Finset.sum_eq_single selected]
-  · rw [Pi.basisFun_apply, Pi.single_eq_same, mul_one]
-  · intro s _ hs
-    rw [Pi.basisFun_apply, Pi.single_eq_of_ne hs, mul_zero]
-  · intro h
-    exact (h (Finset.mem_univ selected)).elim
+      (58 : ZMod 59)⁻¹ * ((chi selected : ZMod 59))⁻¹ :=
+  Fermat.Conservation.PrimeResidueFourier.fourierCoefficient_positionBasis
+    (p := 59) (Delta := Delta) selected chi
 
 omit [IsCyclic Delta] in
 theorem fourierCoefficient_positionBasis_ne_zero
     (selected : Delta) (chi : Delta →* (ZMod 59)ˣ) :
-    fourierCoefficient (Pi.basisFun (ZMod 59) Delta selected) chi ≠ 0 := by
-  rw [fourierCoefficient_positionBasis]
-  exact mul_ne_zero (inv_ne_zero (by decide +kernel +revert))
-    (inv_ne_zero (Units.ne_zero (chi selected)))
+    fourierCoefficient (Pi.basisFun (ZMod 59) Delta selected) chi ≠ 0 :=
+  by
+    rw [fourierCoefficient_positionBasis]
+    exact mul_ne_zero (inv_ne_zero (by decide +kernel +revert))
+      (inv_ne_zero (Units.ne_zero (chi selected)))
 
 /-- The vector obtained by retaining one Fourier component. -/
-def characterComponent (v : Delta → ZMod 59)
+abbrev characterComponent (v : Delta → ZMod 59)
     (chi : Delta →* (ZMod 59)ˣ) : Delta → ZMod 59 :=
   fourierCoefficient v chi • characterFunction chi
 
@@ -418,32 +344,25 @@ theorem characterComponent_apply
     (v : Delta → ZMod 59) (chi : Delta →* (ZMod 59)ˣ)
     (selected : Delta) :
     characterComponent v chi selected =
-      fourierCoefficient v chi * (chi selected : ZMod 59) := by
-  rfl
+      fourierCoefficient v chi * (chi selected : ZMod 59) :=
+  Fermat.Conservation.PrimeResidueFourier.characterComponent_apply
+    (p := 59) v chi selected
 
 /-- The character modes form the character basis dual to the position
 basis. -/
-noncomputable def characterBasis
+noncomputable abbrev characterBasis
     (hcard : Fintype.card Delta = 58) :
-    Basis (Delta →* (ZMod 59)ˣ) (ZMod 59) (Delta → ZMod 59) := by
-  letI : HasEnoughRootsOfUnity (ZMod 59) (Monoid.exponent Delta) :=
-    enoughRootsForFourier (Delta := Delta) hcard
-  letI : Fintype (Delta →* (ZMod 59)ˣ) := Fintype.ofFinite _
-  apply basisOfLinearIndependentOfCardEqFinrank
-    (characterFunction_linearIndependent (Delta := Delta))
-  rw [Module.finrank_fintype_fun_eq_card]
-  simpa only [Nat.card_eq_fintype_card] using
-    (CommGroup.card_monoidHom_of_hasEnoughRootsOfUnity Delta (ZMod 59))
+    Basis (Delta →* (ZMod 59)ˣ) (ZMod 59) (Delta → ZMod 59) :=
+  Fermat.Conservation.PrimeResidueFourier.characterBasis
+    (p := 59) (Delta := Delta) hcard
 
 @[simp]
 theorem characterBasis_apply
     (hcard : Fintype.card Delta = 58)
     (chi : Delta →* (ZMod 59)ˣ) :
-    characterBasis (Delta := Delta) hcard chi = characterFunction chi := by
-  letI : HasEnoughRootsOfUnity (ZMod 59) (Monoid.exponent Delta) :=
-    enoughRootsForFourier (Delta := Delta) hcard
-  letI : Fintype (Delta →* (ZMod 59)ˣ) := Fintype.ofFinite _
-  rw [characterBasis, coe_basisOfLinearIndependentOfCardEqFinrank]
+    characterBasis (Delta := Delta) hcard chi = characterFunction chi :=
+  Fermat.Conservation.PrimeResidueFourier.characterBasis_apply
+    (p := 59) (Delta := Delta) hcard chi
 
 theorem characterBasis_fourier_sum
     (hcard : Fintype.card Delta = 58) (v : Delta → ZMod 59) :
@@ -461,36 +380,25 @@ theorem characterBasis_repr_eq_fourierCoefficient
     (hcard : Fintype.card Delta = 58) (v : Delta → ZMod 59)
     (chi : Delta →* (ZMod 59)ˣ) :
     (characterBasis (Delta := Delta) hcard).repr v chi =
-      fourierCoefficient v chi := by
-  calc
-    (characterBasis (Delta := Delta) hcard).repr v chi =
-        (characterBasis (Delta := Delta) hcard).repr
-          (∑ psi : Delta →* (ZMod 59)ˣ,
-            fourierCoefficient v psi •
-              characterBasis (Delta := Delta) hcard psi) chi := by
-      rw [characterBasis_fourier_sum (Delta := Delta) hcard v]
-    _ = fourierCoefficient v chi := by
-      rw [Basis.repr_sum_self]
+      fourierCoefficient v chi :=
+  Fermat.Conservation.PrimeResidueFourier.characterBasis_repr_eq_fourierCoefficient
+    (p := 59) (Delta := Delta) hcard v chi
 
 theorem fourierCoefficient_pureCharacter
     (hcard : Fintype.card Delta = 58)
     (chi : Delta →* (ZMod 59)ˣ) (component : ZMod 59) :
     fourierCoefficient (component • characterFunction chi) chi =
-      component := by
-  rw [← characterBasis_repr_eq_fourierCoefficient (Delta := Delta) hcard]
-  rw [← characterBasis_apply (Delta := Delta) hcard chi]
-  rw [map_smul, Basis.repr_self]
-  simp
+      component :=
+  Fermat.Conservation.PrimeResidueFourier.fourierCoefficient_pureCharacter
+    (p := 59) (Delta := Delta) hcard chi component
 
 theorem characterComponent_pureCharacter
     (hcard : Fintype.card Delta = 58)
     (chi : Delta →* (ZMod 59)ˣ) (component : ZMod 59) :
     characterComponent (component • characterFunction chi) chi =
-      component • characterFunction chi := by
-  funext x
-  rw [characterComponent_apply,
-    fourierCoefficient_pureCharacter (Delta := Delta) hcard]
-  rfl
+      component • characterFunction chi :=
+  Fermat.Conservation.PrimeResidueFourier.characterComponent_pureCharacter
+    (p := 59) (Delta := Delta) hcard chi component
 
 /-- Projecting a vector already lying in the selected pure mode returns the
 same vector. -/
@@ -498,18 +406,18 @@ theorem characterComponent_eq_self_of_pure
     (hcard : Fintype.card Delta = 58)
     (chi : Delta →* (ZMod 59)ˣ) (v : Delta → ZMod 59)
     (hpure : IsPureCharacter chi v) :
-    characterComponent v chi = v := by
-  rcases hpure with ⟨component, rfl⟩
-  exact characterComponent_pureCharacter (Delta := Delta) hcard chi component
+    characterComponent v chi = v :=
+  Fermat.Conservation.PrimeResidueFourier.characterComponent_eq_self_of_pure
+    (p := 59) (Delta := Delta) hcard chi v hpure
 
 omit [Fintype Delta] [IsCyclic Delta] in
 /-- A nonzero pure character vector has full support. -/
 theorem pureCharacter_support_eq_univ
     (chi : Delta →* (ZMod 59)ˣ) {component : ZMod 59}
     (hcomponent : component ≠ 0) :
-    Function.support (component • characterFunction chi) = Set.univ := by
-  ext g
-  simp [Function.mem_support, hcomponent, characterFunction_apply_ne_zero]
+    Function.support (component • characterFunction chi) = Set.univ :=
+  Fermat.Conservation.PrimeResidueFourier.pureCharacter_support_eq_univ
+    (p := 59) chi hcomponent
 
 omit [Fintype Delta] [IsCyclic Delta] in
 /-- In particular, a nonzero pure character vector cannot be a delta at one
@@ -518,14 +426,9 @@ theorem pureCharacter_not_support_singleton
     [Nontrivial Delta]
     (chi : Delta →* (ZMod 59)ˣ) {component : ZMod 59}
     (hcomponent : component ≠ 0) (selected : Delta) :
-    Function.support (component • characterFunction chi) ≠ {selected} := by
-  obtain ⟨other, hother⟩ := exists_ne selected
-  intro h
-  have : other ∈ Function.support (component • characterFunction chi) := by
-    rw [pureCharacter_support_eq_univ chi hcomponent]
-    exact Set.mem_univ other
-  rw [h, Set.mem_singleton_iff] at this
-  exact hother this
+    Function.support (component • characterFunction chi) ≠ {selected} :=
+  Fermat.Conservation.PrimeResidueFourier.pureCharacter_not_support_singleton
+    (p := 59) chi hcomponent selected
 
 omit [IsCyclic Delta] in
 /-- Pointed silence is impossible for a nonzero pure character.  If every
@@ -535,17 +438,9 @@ theorem pureCharacter_pointed_silence
     (chi : Delta →* (ZMod 59)ˣ) (v : Delta → ZMod 59)
     (selected : Delta) (hpure : IsPureCharacter chi v)
     (hsilence : ∀ position, position ≠ selected → v position = 0) :
-    v selected = 0 := by
-  obtain ⟨other, hother⟩ := Fintype.exists_ne_of_one_lt_card hcard selected
-  rcases hpure with ⟨component, hmode⟩
-  have hz : component * (chi other : ZMod 59) = 0 := by
-    rw [← pointEvaluation_of_pureCharacter
-      (component := component) (selected := other) _ _ hmode]
-    exact hsilence other hother
-  have hcomponent : component = 0 :=
-    (mul_eq_zero.mp hz).resolve_right (Units.ne_zero _)
-  rw [hmode]
-  simp [hcomponent]
+    v selected = 0 :=
+  Fermat.Conservation.PrimeResidueFourier.pureCharacter_pointed_silence
+    (p := 59) hcard chi v selected hpure hsilence
 
 end Fourier
 
@@ -558,7 +453,7 @@ interface.  Everything below is a consequence of an inhabitant of that
 interface; none is manufactured here. -/
 
 /-- Reduction of a 59-adic character to a residue-field Fourier character. -/
-def reducedCharacter59
+abbrev reducedCharacter59
     {Delta : Type*} [CommGroup Delta]
     (eta : InvolutiveBase.Character (PadicInt 59) Delta) :
     Delta →* (ZMod 59)ˣ :=
@@ -570,7 +465,8 @@ theorem reducedCharacter59_apply
     (eta : InvolutiveBase.Character (PadicInt 59) Delta) (delta : Delta) :
     (reducedCharacter59 eta delta : ZMod 59) =
       PadicInt.toZMod (eta delta : PadicInt 59) :=
-  rfl
+  Fermat.Conservation.PrimeResidueFourier.reducedCharacterAt_apply
+    (p := 59) eta delta
 
 section Seating
 
