@@ -561,6 +561,29 @@ structure TameSilenceReciprocity827
     Fermat.Conservation.TatePairing.GlobalReciprocityLaw
       localization.toReflectedWildCarrierExtension827.qRelaxedWild.toPlaceIndexedLocalPairing
 
+omit [IsCyclotomicExtension {59} ℚ K]
+  [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
+  [Module (ZMod 59) SelmerChi] in
+/-- Reciprocity for the one-column localized pairing forces its complete
+wild reading to vanish.  Consequently it supplies lawfulness on the
+conserved 827 kernel automatically; no separate kernel premise is needed
+once this exact reciprocity interface is available. -/
+theorem wildLawfulness827_of_reciprocity
+    (localization : ReflectedWildLocalizationAt59 rhoQ omega chi
+      distinguishedPlace wild)
+    (execution : TameSilenceReciprocity827 rhoQ omega chi distinguishedPlace
+      wild localization) :
+    WildLawfulness827 rhoQ omega chi selectedPlace distinguishedPlace wild
+      localization.toReflectedWildCarrierExtension827 := by
+  refine ⟨?_⟩
+  intro h y _hy
+  rw [LinearMap.mem_ker]
+  have hfunctional := Lambda_apply_eq_zero_of_reciprocity
+    localization.toReflectedWildCarrierExtension827.qRelaxedWild
+    execution.globalReciprocity h
+  have hvalue := congrArg (fun reading ↦ reading y) hfunctional
+  simpa [selectedWildFunctional827, Lambda, pair_59] using hvalue
+
 /-! ## Step 10: typed surviving-kernel route only -/
 
 /-- **SURVIVING KERNEL ROUTE INTERFACE.**  These are only the typed plug
