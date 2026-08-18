@@ -4,6 +4,7 @@ import Fermat.Classical
 import Fermat.Conservation.CohomologyLedger
 import Fermat.Eleven.Cyclotomic
 import Fermat.Eleven.SevenFold
+import Fermat.FiftyNine.ConservationProof
 import Fermat.FiftyNine.GenericProof
 import Fermat.Five.Dirichlet
 import Fermat.Five.Conservation
@@ -118,6 +119,14 @@ theorem holdsAt_fiftyNine : HoldsAt 59 :=
 certificate theorem. -/
 theorem holdsAt_fiftyNine_generic : HoldsAt 59 :=
   FiftyNine.GenericProof.holdsAt_fiftyNine_generic
+
+/-- Exponent fifty-nine through the literal conservation-state equation (8),
+followed by Vandiver's strict historical support descent.  This is the public
+receipt for the route which constructs the equation-(8) generators from the
+allocated Fermat state rather than starting from the older monolithic
+historical assembly. -/
+theorem holdsAt_fiftyNine_stateEquationEight : HoldsAt 59 :=
+  FiftyNine.holdsAt_fiftyNine_stateEquationEight
 
 /-- Fermat's theorem for exponent sixty-seven, through the complete
 historical Vandiver assembly reused by the seven-fold ladder. -/

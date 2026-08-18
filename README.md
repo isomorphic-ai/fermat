@@ -35,6 +35,13 @@ The completed public fixed-exponent results are:
 | 1051 | `Fermat.holdsAt_oneThousandFiftyOne` | complete Bernoulli regularity scan |
 | 1381 | `Fermat.holdsAt_oneThousandThreeHundredEightyOne` | one-channel cyclic-certificate Vandiver descent |
 
+Exponent `59` also exports
+`Fermat.holdsAt_fiftyNine_stateEquationEight`.  This additional public
+receipt starts with the allocated integral Fermat state, constructs its
+literal equation-(8) generators and coefficient units, and feeds them into
+the historical support descent before combining the resulting Case-II
+contradiction with the checked Sophie--Germain Case-I computation.
+
 The nine completed irregular-prime endpoints from `37` through `1381` are
 also reassembled through the regularized Kummer correction.  After
 `import Fermat`, their public aliases have the suffix `_kummerIso`, for
@@ -438,10 +445,11 @@ makes this one-column coefficient the zero map, while
 `normalizedCanonicalLiftProcessesAtLeastSevenA_iff_gauge_eq_zero` proves that its
 `WildProcessesAtLeastSevenA` premise is then equivalent to vanishing of the
 entire class-valued gauge.  That gauge vanishing already implies (7a) directly
-by `vandiverSevenA_of_classGauge_eq_zero`.  Thus the lift-facing endpoint is a
-kernel-checked conditional/regression theorem, not a non-circular derivation
-of (7a); a finer nonzero readout or genuinely independent comparison remains
-necessary.  The generic reciprocity layer now supplies a precise next shape:
+by `vandiverSevenA_of_classGauge_eq_zero`.  Thus this lift-facing endpoint is
+a kernel-checked conditional/regression theorem, not by itself a
+non-circular derivation of (7a); a finer nonzero readout or genuinely
+independent comparison remains necessary within that local branch.  The
+generic reciprocity layer now supplies a precise next shape:
 `pairAt_add_pairAt_eq_zero_of_outside_two` retains an auxiliary column and
 proves `wild + auxiliary = 0`, equivalently `wild = -auxiliary`, instead of
 killing the only retained reading; the tame realization has a compiled
@@ -449,8 +457,22 @@ wrapper from its outside-two bookkeeping to that balance.  For the actual
 cyclotomic lift this is only a prototype, because the lift is a full 58-place
 wave.  The p=59 successor must retain/sum the whole 827 orbit, or
 Fourier-compress it, and then provide the arithmetic gauge comparison.  None
-of that is constructed yet.  In particular, this laboratory does not yet
-prove full Case II, relation (7a), or a new all-prime FLT theorem.
+of that local-lift refinement is constructed yet, and this does not provide a
+new all-prime FLT theorem.
+
+There is now, however, a separate completed state-to-history route at the
+same exponent.  `FermatStateTakagiSevenA59` proves the Takagi relation for the
+allocated Fermat pair and kills both actual root classes.
+`FermatStateEquationEight59` turns this into literal factorizations
+`q = epsilon * rho^59`; `FermatStateSelmerUnitLifts59` and
+`FermatStatePrimalUnitProjection59` identify the resulting genuine Selmer
+and irregular-mode unit classes.  Finally,
+`FermatStateHistoricalDescent59` constructs the initial historical state at
+`m = 29`, produces an admissible successor at `m = 57` with strictly smaller
+prime-ideal support, invokes the proved uniform continuation, and exports
+both `SecondCaseExcluded 59` and `Fermat.HoldsAt 59`.  This route closes the
+fixed exponent without claiming that the still-experimental local
+reciprocity branch has been completed.
 
 [`Fermat/FiftyNine/Conservation/Verification.lean`](Fermat/FiftyNine/Conservation/Verification.lean)
 is the non-imported executable audit leaf for this campaign.  It checks the
