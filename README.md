@@ -660,6 +660,21 @@ chi=15 covariance on strict eigenspaces and on the image of the actual class
 projector.  This establishes character alignment, but does not manufacture
 character support, rank one, or nonvanishing.
 
+`CanonicalModeFortyFourClassFactorization827` removes the normalized-fiber
+point from this construction altogether.  The correctly signed mode-44
+linear map kills the genuine `UnitModP` range, so exactness produces a unique
+class-level factorization with no chosen reflected carrier in either its
+statement or result.  Its kernel is the pullback of the class-readout kernel,
+and injectivity is equivalent to the exact remaining zero-reflection law
+
+```text
+FourierCoefficient₄₄ (residueWave x) = 0
+  -> classGauge x = 0.
+```
+
+Thus the class readout itself is now canonical; proving that it is faithful
+on the needed class (or on the chi=15 line) remains arithmetic work.
+
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
 classes to exactly the retained W1 `H¹` factors, recovers the W1 `H²` cup and
@@ -679,10 +694,20 @@ packages the actual lambda class and all 58 supported valuations into one
 `ZMod 59`-linear localization map and defines its fiber over the exact W1+W3
 target.  Nonemptiness of that fiber is proved equivalent to the existing
 normalized W3 fiber containing a point with W1's prescribed lambda
-localization.  A lambda-plus-827 Poitou--Tate range/kernel theorem must still
-produce that intersection; no point is hidden in the definition.  The W1
-nonzero ambient cup also has not yet been shown nonzero after restriction to
-the genuine seated primal Selmer space, and `GlobalReciprocityLaw` is still
+localization.  `LambdaOrbitAffineKernelCriterion827` sharpens this further.
+After fixing any existing normalized W3 point `y₀`, a compatible point
+exists exactly when
+
+```text
+W1.reflected - lambdaLocalization(y₀)
+```
+
+lies in the range of lambda localization restricted to the kernel of all 58
+orbit-valuation coordinates.  A lambda-plus-827 Poitou--Tate theorem must
+still prove precisely that range membership; no point is hidden in the
+definition.  The nonzero ambient W1 cup also has not yet been shown nonzero
+after restriction to the genuine seated primal Selmer space, and
+`GlobalReciprocityLaw` is still
 consumed rather than constructed.  These PT/local-compatibility,
 seated-transversality, and reciprocity seams remain separate from the
 now-pointwise W7 class-readout seam.
