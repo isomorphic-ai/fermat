@@ -519,7 +519,12 @@ and literal field-norm existence with vanishing of one named coefficient.
 `NormalizedContinuousKummerPairing59` selects a normalized algebraic readout
 and composes it with the genuine continuous cup to obtain total local and
 global pairings.  This selected scalar readout is linear, but is not claimed
-continuous or canonical as a local invariant.  `ContinuousOldWildAdapter59`
+continuous or canonical as a local invariant.  `TwistedLambdaCupReceipt59`
+retains the two differently typed degree-one factors, their actual
+roots-valued continuous cup class, its proved nonvanishing, and its
+normalized reading `= 1`; it does not collapse the primal and reflected
+coefficient seats or claim a new global eigenspace theorem.
+`ContinuousOldWildAdapter59`
 restricts any such pairing to the old eigenspace seats and proves the full
 `hash omega` adjoint law.  Finally,
 `NormalizedContinuousWildLocalization59` inhabits all three fields of the
