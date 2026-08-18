@@ -47,88 +47,6 @@ local instance : NontriviallyNormedField (F59 K) :=
 noncomputable local instance : FiniteDimensional (F59 K) (E59 K) :=
   (twistedLambdaPowerBasis59 K).finite
 
-private theorem spectralNorm_eq_one_of_sub_one_lt_one
-    (z : E59 K)
-    (hz : spectralNorm (F59 K) (E59 K) (z - 1) < 1) :
-    spectralNorm (F59 K) (E59 K) z = 1 := by
-  have hna := isNonarchimedean_spectralNorm
-    (K := F59 K) (L := E59 K)
-  have hle : spectralNorm (F59 K) (E59 K) z ≤ 1 := by
-    calc
-      spectralNorm (F59 K) (E59 K) z =
-          spectralNorm (F59 K) (E59 K) (1 + (z - 1)) := by ring_nf
-      _ ≤ max (spectralNorm (F59 K) (E59 K) (1 : E59 K))
-          (spectralNorm (F59 K) (E59 K) (z - 1)) := hna _ _
-      _ ≤ 1 := by
-        rw [spectralNorm_one]
-        exact max_le le_rfl hz.le
-  apply le_antisymm hle
-  apply le_of_not_gt
-  intro hlt
-  have hone : spectralNorm (F59 K) (E59 K) (1 : E59 K) < 1 := by
-    calc
-      spectralNorm (F59 K) (E59 K) (1 : E59 K) =
-          spectralNorm (F59 K) (E59 K) (z - (z - 1)) := by ring_nf
-      _ ≤ max (spectralNorm (F59 K) (E59 K) z)
-          (spectralNorm (F59 K) (E59 K) (-(z - 1))) := by
-        simpa [sub_eq_add_neg] using hna z (-(z - 1))
-      _ < 1 := by
-        rw [spectralNorm_neg (Algebra.IsAlgebraic.isAlgebraic (z - 1))]
-        exact max_lt hlt hz
-  exact (lt_irrefl (1 : ℝ)) (by simpa only [spectralNorm_one] using hone)
-
-/-- At the closed coefficient boundary, strict smallness of the selected
-root still makes the evaluated triangular product a spectral unit. -/
-theorem evaluated_triangularProduct59_spectralNorm_eq_one_boundary
-    (f : (F59 K)[X])
-    (hf : ∀ j : ℕ, 0 < j → Valued.v (f.coeff j) ≤ 1) :
-    spectralNorm (F59 K) (E59 K)
-        (aeval (twistedLambdaRoot59 K) (triangularProduct f 58)) = 1 := by
-  let r : ℝ := spectralNorm (F59 K) (E59 K) (twistedLambdaRoot59 K)
-  have hr0 : 0 ≤ r := spectralNorm_nonneg _
-  have hrlt : r < 1 := spectralNorm_twistedLambdaRoot59_lt_one K
-  have hr1 : r ≤ 1 := hrlt.le
-  have hfnorm : ∀ j : ℕ, 0 < j → ‖f.coeff j‖ ≤ 1 := by
-    intro j hj
-    rw [Valued.toNormedField.norm_le_one_iff]
-    exact hf j hj
-  have hc : ∀ j : ℕ, 0 < j → ‖triangularCoefficient f j‖ ≤ 1 :=
-    triangularCoefficient_norm_le f 1 zero_le_one le_rfl hfnorm
-  let x : ℕ → E59 K := fun j ↦
-    algebraMap (F59 K) (E59 K) (triangularCoefficient f j) *
-      twistedLambdaRoot59 K ^ j
-  have hx : ∀ j ∈ Finset.Icc 1 58,
-      spectralNorm (F59 K) (E59 K) (x j) ≤ r := by
-    intro j hj
-    have hjpos : 0 < j := (Finset.mem_Icc.mp hj).1
-    have hrpow : r ^ j ≤ r := by
-      obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hjpos.ne'
-      rw [pow_succ]
-      simpa using mul_le_mul_of_nonneg_right
-        (pow_le_one₀ hr0 hr1) hr0
-    change spectralNorm (F59 K) (E59 K)
-      (algebraMap (F59 K) (E59 K) (triangularCoefficient f j) *
-        twistedLambdaRoot59 K ^ j) ≤ r
-    rw [← spectralMulAlgNorm_def, map_mul, map_pow,
-      spectralMulAlgNorm_def, spectralMulAlgNorm_def,
-      spectralNorm_extends]
-    calc
-      ‖triangularCoefficient f j‖ * r ^ j ≤ 1 * r :=
-        mul_le_mul (hc j hjpos) hrpow (pow_nonneg hr0 j) zero_le_one
-      _ = r := one_mul r
-  have hprod :=
-    (prod_one_add_first_order_bound
-      (s := Finset.Icc 1 58) x r hr0 hr1 hx).1
-  have heval :
-      aeval (twistedLambdaRoot59 K) (triangularProduct f 58) =
-        ∏ j ∈ Finset.Icc 1 58, (1 + x j) := by
-    rw [triangularProduct_eq_prod]
-    simp only [map_prod, map_add, map_one, map_mul, aeval_C, map_pow,
-      aeval_X, x]
-  apply spectralNorm_eq_one_of_sub_one_lt_one K
-  rw [heval]
-  exact hprod.trans_lt hrlt
-
 /-- Initial integral decomposition of an arbitrary extension element whose
 field norm is a valuation unit. The returned polynomial is normalized,
 `P` is its literal evaluated triangular product, and the residual coordinate
@@ -182,7 +100,9 @@ theorem exists_initial_integral_decomposition
   let P : E59 K :=
     aeval (twistedLambdaRoot59 K) (triangularProduct f 58)
   have hP : spectralNorm (F59 K) (E59 K) P = 1 := by
-    exact evaluated_triangularProduct59_spectralNorm_eq_one_boundary K f hfVal
+    exact evaluated_triangularProduct_spectralNorm_eq_one_of_alpha_lt_one
+      f 58 hfNorm (twistedLambdaRoot59 K)
+        (spectralNorm_twistedLambdaRoot59_lt_one K)
   have hPNe : P ≠ 0 := by
     intro hzero
     rw [hzero, spectralNorm_zero] at hP
