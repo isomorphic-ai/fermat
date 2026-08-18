@@ -13,9 +13,12 @@ receipt and the nonempty normalized fiber.
 
 The strongest endpoint derives pointed incidence from a concrete reflected
 lift plus Fourier seating, and derives lawfulness from reciprocity.  The
-remaining inputs stay visible: that lift and seating, the class-valued
-relation-(7a) comparison, and global reciprocity.  In particular this module
-neither collapses the fiber nor erases `ker G`.
+present one-column reciprocity interface also annihilates the resulting wild
+coefficient.  Consequently its `processes at least 7a` input is proved below
+to be equivalent to vanishing of the complete class-valued gauge map.  The
+endpoint remains a useful type-correct diagnostic, but is not presented as a
+non-circular proof of relation (7a).  This module neither collapses the fiber
+nor erases `ker G`.
 -/
 import Fermat.FiftyNine.Conservation.AlgebraicPointedIncidence827
 import Fermat.FiftyNine.Conservation.NormalizedContinuousWildLocalization59
@@ -205,6 +208,30 @@ noncomputable def normalizedWildCoefficientOfReciprocity59
     (normalizedWildLawfulness59_of_reciprocity
       K omega chi selectedPlace execution)
 
+/-- The coefficient produced from the present one-column reciprocity
+interface is the zero map.  Keeping this theorem explicit prevents a later
+consumer from mistaking reciprocity-derived lawfulness for a nonzero wild
+readout. -/
+theorem normalizedWildCoefficientOfReciprocity59_eq_zero
+    (selectedPlace : Place827 K)
+    (incidence : PointedTateIncidence827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi selectedPlace)
+    (seating : QLocalizationEquivariance827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi selectedPlace)
+    (execution : NormalizedTameSilenceReciprocity59 K omega chi) :
+    normalizedWildCoefficientOfReciprocity59
+        K omega chi selectedPlace incidence seating execution = 0 := by
+  simpa [normalizedWildCoefficientOfReciprocity59,
+    normalizedWildCoefficient59, normalizedReflectedWildCarrierExtension59]
+    using wildCoefficient827_eq_zero_of_reciprocity
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi selectedPlace (lambdaPlace59 K)
+      (normalizedOldWildInterface59 K omega chi)
+      (normalizedBoundaryFunctional59_ne_zero
+        K omega chi selectedPlace incidence seating)
+      (normalizedReflectedWildLocalization59 K omega chi)
+      execution
+
 /-- A concrete reflected lift and Fourier seating construct the pointed
 incidence used by the normalized readout. -/
 noncomputable def normalizedPointedIncidence59OfLift
@@ -236,9 +263,64 @@ noncomputable def normalizedWildCoefficientOfLift59
     (normalizedPointedIncidence59OfLift K omega chi lift seating)
     seating execution
 
+/-- The lift-facing spelling of the same zero-coefficient boundary. -/
+theorem normalizedWildCoefficientOfLift59_eq_zero
+    (lift : ReflectedQRelaxedLocalizationLift827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi)
+    (seating : QLocalizationEquivariance827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi lift.selectedPlace)
+    (execution : NormalizedTameSilenceReciprocity59 K omega chi) :
+    normalizedWildCoefficientOfLift59
+        K omega chi lift seating execution = 0 :=
+  normalizedWildCoefficientOfReciprocity59_eq_zero
+    K omega chi lift.selectedPlace
+    (normalizedPointedIncidence59OfLift K omega chi lift seating)
+    seating execution
+
 variable {zeta : K} {hZeta : IsPrimitiveRoot zeta 59}
 variable {solution : FermatState.PrimitiveSecondCaseSolution}
 variable {hz : (59 : ℤ) ∣ solution.z}
+
+/-- Under the current one-column reciprocity interface, the normalized
+`processes at least 7a` premise is exactly the stronger assertion that the
+entire class-valued gauge map is zero. -/
+theorem normalizedProcessesAtLeastSevenA_iff_gauge_eq_zero
+    (selectedPlace : Place827 K)
+    (incidence : PointedTateIncidence827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi selectedPlace)
+    (seating : QLocalizationEquivariance827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi selectedPlace)
+    (pair : StateLinkedIdealPair hZeta solution hz)
+    (hF : H_FLT (OldPrimal59
+      (cyclotomicStrictSelmerRepresentation59 K) chi))
+    (gaugeSeating : ClassValuedSevenAGaugeSeating pair hF)
+    (execution : NormalizedTameSilenceReciprocity59 K omega chi) :
+    WildProcessesAtLeastSevenA gaugeSeating
+        (normalizedWildCoefficientOfReciprocity59
+          K omega chi selectedPlace incidence seating execution) ↔
+      gaugeSeating.gauge = 0 := by
+  rw [normalizedWildCoefficientOfReciprocity59_eq_zero]
+  exact wildProcessesAtLeastSevenA_zero_iff gaugeSeating
+
+/-- Lift-facing spelling of the exact same proof boundary. -/
+theorem normalizedLiftProcessesAtLeastSevenA_iff_gauge_eq_zero
+    (lift : ReflectedQRelaxedLocalizationLift827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi)
+    (seating : QLocalizationEquivariance827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi lift.selectedPlace)
+    (pair : StateLinkedIdealPair hZeta solution hz)
+    (hF : H_FLT (OldPrimal59
+      (cyclotomicStrictSelmerRepresentation59 K) chi))
+    (gaugeSeating : ClassValuedSevenAGaugeSeating pair hF)
+    (execution : NormalizedTameSilenceReciprocity59 K omega chi) :
+    WildProcessesAtLeastSevenA gaugeSeating
+        (normalizedWildCoefficientOfLift59
+          K omega chi lift seating execution) ↔
+      gaugeSeating.gauge = 0 := by
+  rw [normalizedWildCoefficientOfLift59_eq_zero]
+  exact wildProcessesAtLeastSevenA_zero_iff gaugeSeating
 
 /-- The Ulam relation-(7a) endpoint with the continuous Kummer localization,
 the boundary proof, and a member of the retained normalized fiber all
@@ -273,9 +355,10 @@ theorem vandiverSevenA_of_normalizedContinuousReadout
         lawful pair hF gaugeSeating processes execution y
 
 /-- Stronger compiled endpoint: for the normalized localization, global
-reciprocity discharges lawfulness automatically.  The remaining arithmetic
-comparison is exactly that the resulting wild coefficient processes the
-class-valued relation-(7a) gauge. -/
+reciprocity discharges lawfulness automatically.  Because that same
+one-column reciprocity makes the coefficient zero, the `processes` argument
+here is equivalent to vanishing of the entire gauge map, as recorded by
+`normalizedProcessesAtLeastSevenA_iff_gauge_eq_zero`. -/
 theorem vandiverSevenA_of_normalizedContinuousReciprocity
     (selectedPlace : Place827 K)
     (incidence : PointedTateIncidence827
@@ -299,7 +382,9 @@ theorem vandiverSevenA_of_normalizedContinuousReciprocity
 
 /-- Strongest lift-facing endpoint in this module: the concrete reflected
 q-relaxed lift replaces the independent pointed-incidence premise, while
-reciprocity replaces the independent lawfulness premise. -/
+reciprocity replaces the independent lawfulness premise.  It retains the
+explicit circularity diagnostic: its `processes` input is equivalent to
+vanishing of the whole gauge map. -/
 theorem vandiverSevenA_of_normalizedContinuousLift
     (lift : ReflectedQRelaxedLocalizationLift827
       (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi)
