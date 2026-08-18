@@ -2,6 +2,39 @@
 
 ## 2026-08-18 — Albert equivalence and both normalized scalar endpoints are compiled
 
+- The low-degree carry/lift stack is now prime-parametric end to end.
+  `PrimeCyclicExtension` constructs the exact sequence
+  `C_p → C_(p²) → C_p` symbolically; `PrimeContinuousHomogeneousPullback`
+  pulls degrees one through three; and `PrimeContinuousCarryLift` constructs
+  both directions of
+  `pulledCarryH2Class chi = 0 ↔ chi lifts continuously to C_(p²)` for
+  every prime `p`.  The old order-59 reduction, section, kernel coordinate,
+  pulled cycle, correction primitive, and final criterion are all proved
+  definitionally equal to the generic specialization.
+- `PrimeKummerCyclicQuotient` now constructs the concrete splitting field,
+  cyclic Galois coordinate, and surjective absolute-Galois Kummer character
+  for every prime `p`.  `PrimeKummerCharacterComparison` proves that this
+  restricted-Galois character is exactly the genuine oriented chosen-root
+  Kummer character, generically and with no generator rotation.
+  `PrimeKummerCarryLiftCriterion` and `PrimeOrientedCarryH2Class` then attach
+  the actual carry/lift obstruction to that concrete character and transport
+  it losslessly into the roots-of-unity coefficient line used by the Kummer
+  cup.  Every order-59 object is definitionally the corresponding generic
+  specialization.
+- The first Albert layer is generic as well: `PrimeAlbertDescentDatum`
+  proves at an arbitrary prime that a primitive-root norm witness supplies
+  the constructive Hilbert--90 descent unit, including its non-`p`-th-power
+  property.  This removes the literal 59 from the arithmetic input to the
+  cyclic-`p²` construction; the later field-construction layer remains a
+  separate module.
+- `KummerOnePlusRootNorm59` proves directly, by the product over all Kummer
+  conjugates, that `Norm(1 + alpha) = 1 + a` when `alpha^59 = a`.
+  `BareLambdaNorm59` specializes this to `a = zeta_59 - 1`, producing the
+  explicit witness `1 + alpha` whose norm is `zeta_59`.  Therefore the bare
+  valuation-one lambda factor has zero primitive-root norm obstruction; the
+  nonnorm problem for `60 * lambda` is rigorously localized to the principal
+  unit twist `60`.  This sharpens, but does not discharge, the remaining
+  Artin--Hasse comparison.
 - `AlbertCyclicCompatibility59` constructs an exact continuous `C3481` lift
   of the concrete Kummer character from every primitive-root norm witness.
   `AlbertCyclicConverse59` now proves the converse: the lift cuts out its
