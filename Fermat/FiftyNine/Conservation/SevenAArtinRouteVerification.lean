@@ -14,12 +14,15 @@ This non-imported executable audit leaf covers only the newly exposed route:
   class gauge exactly at the global-unit-silence boundary;
 * seated global reciprocity balances that orbit against the lambda row;
 * the inverse-oriented even-plus-primitive Fourier shape has zero mode 43;
+* every actual global-unit raw residue wave has that shape and therefore
+  has zero inverse-oriented mode-43 projection;
 * W7 identifies orbit silence with relation 7A once an explicit injective
   class readout and its exact factorization are supplied.
 
 The checks deliberately do not claim the still-missing arithmetic inputs:
-same-Hom-line membership, arbitrary-unit orbit silence, a global reflected
-lift, or the Kummer--Artin comparison.  This file does not import the
+same-Hom-line membership, comparison of the scalar Fourier projection with
+the concrete strict-Selmer tame orbit for a reflected input, a global
+reflected lift, or the Kummer--Artin comparison.  This file does not import the
 monolithic exponent-59 verifier.
 -/
 import Fermat.Conservation.GuardDependsOn
@@ -29,6 +32,8 @@ import Fermat.FiftyNine.Conservation.NormalizedFullOrbitEigenprofile827
 import Fermat.FiftyNine.Conservation.StrictTameOrbitClassFactorization827
 import Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827
 import Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827
+import Fermat.FiftyNine.Conservation.ArbitraryUnitOrbitDecomposition827
+import Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827
 import Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59
 
 /-! ## Public route inventory -/
@@ -75,9 +80,7 @@ the normalized lambda term. -/
 #check Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827.seatedTameOrbitSum827_eq_neg_normalizedLambda_of_globalReciprocity
 #check Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827.seatedTameOrbitSum827_eq_zero_iff_normalizedLambda_eq_zero
 
-/-! The committed finite Fourier half of arbitrary-unit silence.  The
-arithmetic decomposition of an arbitrary unit is deliberately not imported
-or claimed here. -/
+/-! The committed finite Fourier half of arbitrary-unit silence. -/
 
 #check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseReindex_powerCharacter59_one_eq_fiftySeven
 #check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.powerCharacter59_fortyThree_negOne
@@ -85,6 +88,18 @@ or claimed here. -/
 #check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseReindex_negOne_invariant
 #check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseReindex_even_add_primitiveRootMode_eq
 #check Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero
+
+/-! The arithmetic global-unit decomposition and its composed raw-tame
+mode-43 silence. -/
+
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitOrbitDecomposition827.orbitReductionHom827_unitsComplexConj
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitOrbitDecomposition827.exists_rawGlobalUnitOrbitWave827_rootMode_decomposition
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitOrbitDecomposition827.fullOrbitUnitReading827_negOne_even
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.rawGlobalUnitEvenPart827
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.exists_rawGlobalUnitOrbitWave827_eq_even_add_primitiveRootMode
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_eq_zero
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_characterComponent_eq_zero
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_fullOrbitUnitReading827_powerFortyThree_eq_zero
 
 /-! W7's honest algebraic partial closure.  Readout existence,
 factorization, and injectivity remain explicit theorem arguments. -/
@@ -141,6 +156,22 @@ info: 'Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inver
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ArbitraryUnitOrbitDecomposition827.exists_rawGlobalUnitOrbitWave827_rootMode_decomposition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ArbitraryUnitOrbitDecomposition827.exists_rawGlobalUnitOrbitWave827_rootMode_decomposition
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_eq_zero
 
 /--
 info: 'Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA' depends on axioms: [propext,
@@ -213,6 +244,22 @@ preserved evenness, odd target mode, and separation of modes 57 and 43. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero,
   Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.powerCharacter59_fiftySeven_ne_fortyThree
+
+/-! The actual arbitrary-unit endpoint consumes both the CM-unit arithmetic
+decomposition and the separately proved inverse-oriented Fourier theorem. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitOrbitDecomposition827.exists_rawGlobalUnitOrbitWave827_rootMode_decomposition,
+  unit_inv_conj_is_root_of_unity
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.exists_rawGlobalUnitOrbitWave827_eq_even_add_primitiveRootMode,
+  Fermat.FiftyNine.Conservation.ArbitraryUnitOrbitDecomposition827.exists_rawGlobalUnitOrbitWave827_rootMode_decomposition
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_eq_zero,
+  Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.exists_rawGlobalUnitOrbitWave827_eq_even_add_primitiveRootMode
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_eq_zero,
+  Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero
 
 /-! W7 consumes the concrete class seating, the generic pointwise kernel
 comparison, and the established selected-class characterization of 7A. -/
