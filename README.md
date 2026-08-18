@@ -590,6 +590,11 @@ identity `wild + tameOrbit = 0`; it does not erase the tame orbit or prove
 that unit-silence obligation.  `SeatedTameOrbitReciprocityBalance827` proves
 this exact balance on the actual complementary character seats and derives
 that orbit silence is equivalent to lambda orthogonality.  Separately,
+`NormalizedFullOrbitEigenprofile827` constructs the complete reflected
+58-place coefficient profile, proves exact support and base normalization,
+and records both the physical left-translation action and the corresponding
+inverse-character eigenlaw.  It is a local profile, not an asserted global
+reflected Selmer lift.  Finally,
 `OneDimensionalUnitProportionality` supplies the pure W4 algebra: two
 explicitly nonzero readouts in one explicitly supplied finrank-one submodule
 differ by a unique unit scalar.  It deliberately does not assert the still
