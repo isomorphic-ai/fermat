@@ -1,5 +1,51 @@
 # N59 conservation findings
 
+## 2026-08-18 — The genuine 827 tame orbit is inverse-oriented and nonzero
+
+- `LocalReduction827` constructs the actual valuation ring, residue
+  reduction, uniformizer, angular component, and `TameSymbol.Context` at
+  each of the 58 explicit places over 827.  The canonical place coordinate
+  `tau` reads the residue-map coordinate `tau⁻¹`; this inverse is forced by
+  `indexedPlaceOrbitEquiv827_eq_orbitPlace827Subtype_inv` and is retained in
+  `inverseOrientedFullOrbitUnitReading827`.  No equality between the raw
+  residue coordinate and its pointwise Fourier projection is asserted.
+- `CyclotomicTameContext59` performs the complementary construction at every
+  height-one place away from 59, using the literal ideal-quotient residue
+  field.  Applied to the first generated circular unit and a genuine
+  q-relaxed representative, its final theorem proves the actual tame-symbol
+  value is zero at every place outside the union of the places over 59 and
+  827.  Thus the finite-support audit is arithmetic rather than a supplied
+  silence table.
+- `FourierPairingProjection827` proves the projection only under the complete
+  orbit sum.  Inverting the physical place index changes the selected
+  coefficient from `eta` to `eta⁻¹`; the code records that orientation and
+  never assumes the two coefficients agree.  `ExplicitTameOrbitReciprocity827`
+  then defines all 58 genuine local tame values and proves their sum is the
+  negative selected product of the inverse-oriented primal component and the
+  genuine reflected localization wave.
+- `PrimalFourierNonvanishing827` extends the old half-orbit computation to a
+  fully computable `58 × 28` matrix and proves every entry is the residue
+  reading of the corresponding actual generated circular unit.  A kernel
+  decision checks all 28 nontrivial even Fourier modes against all 28 unit
+  columns: every one of the resulting 784 coefficients is nonzero.  The
+  final theorem transports this exhaustive certificate through the inverse
+  place orientation.
+- `ExplicitTameOrbitNonvanishing827` composes those receipts.  For a genuine
+  `ReflectedQRelaxedLocalizationLift827` and an oriented mode certified even
+  and nontrivial, the selected primal component, every selected reflected
+  coordinate, their product, and the complete 58-term actual tame sum are
+  nonzero.  If a scalar `wildReading` satisfies the explicit equation
+  `wildReading + ∑ tau, actualTameOrbitValue827 ... tau = 0`, Lean proves
+  `wildReading ≠ 0`.
+- Within this actual wild-plus-tame ledger, the sole unfilled global
+  arithmetic arrow is now the Hilbert reciprocity theorem producing that
+  displayed equation for the genuine wild reading and the 58 genuine tame
+  symbols.  The equation remains a hypothesis, and the old abstract
+  `pairAt` interface is not relabeled as an actual local value.  Outside this
+  adapter, lift existence, the class-valued gauge comparison, relation (7a),
+  and the later FLT steps remain separately open; none follows from this
+  nonvanishing result.
+
 ## 2026-08-18 — Exact norm detector, normalized localization, and readout endpoint
 
 - `ExactNormIntersection59` strengthens the quotient obstruction to the full
