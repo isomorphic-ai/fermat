@@ -45,7 +45,11 @@ The same import exposes the plus and minus
 `exists_explicitProjectedUnitLift_classSilent_*` receipts: the concrete
 equation-(8) coefficient units are projected in the irregular character
 seat and proved to land in the kernel of the actual 59-torsion ideal-class
-map.
+map.  Their companion
+`exists_explicitProjectedUnitDifference_classSilent59` retains one concrete
+projected global-unit representative of the actual plus-minus Selmer
+difference, identifies it with twice the plus mode, and proves that its
+genuine class obstruction vanishes.
 
 The nine completed irregular-prime endpoints from `37` through `1381` are
 also reassembled through the regularized Kummer correction.  After
@@ -482,7 +486,8 @@ CyclotomicUnitSelmerNaturality59
 → FermatFactorClassProjection59
   Takagi kills the projected actual class obstructions
 → FermatStateUnitClassKernel59
-  explicit projected equation-(8) coefficient units land in that kernel
+  explicit projected equation-(8) coefficient units and their actual
+  plus-minus difference land in that kernel
 ```
 
 This chain is generic over the cyclotomic realization and Fermat state at
@@ -635,6 +640,7 @@ import Fermat
 #check Fermat.FiftyNine.Conservation.CyclotomicSelmerClassNaturality59.strictSelmerClassLinearMap59_characterProjector
 #check Fermat.FiftyNine.Conservation.FermatStateUnitClassKernel59.exists_explicitProjectedUnitLift_classSilent_fermatPlus59
 #check Fermat.FiftyNine.Conservation.FermatStateUnitClassKernel59.exists_explicitProjectedUnitLift_classSilent_fermatMinus59
+#check Fermat.FiftyNine.Conservation.FermatStateUnitClassKernel59.exists_explicitProjectedUnitDifference_classSilent59
 #eval Fermat.Ladder.FaulhaberResponse.responseData
 #check Fermat.Ladder.FourHundredNinetyOne.proofBacked
 #check Fermat.Ladder.FiveHundredEightySeven.proofBacked

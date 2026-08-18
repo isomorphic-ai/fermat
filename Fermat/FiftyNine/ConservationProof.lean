@@ -11,7 +11,8 @@ constructs literal equation-(8) witnesses from an allocated primitive
 second-case Fermat state, enters Vandiver's historical support descent, and
 uses the checked Sophie--Germain computation for Case I.  It also exposes
 the cyclotomic unit/class naturality chain and the resulting explicit
-class-silent projected coefficient-unit witnesses.
+class-silent projected coefficient-unit witnesses, including their actual
+plus-minus Selmer difference.
 -/
 import Fermat.FiftyNine.Conservation.FermatStateHistoricalDescent59
 import Fermat.FiftyNine.Conservation.FermatStateUnitClassKernel59
