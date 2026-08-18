@@ -20,6 +20,8 @@ import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.Ledger
 import Fermat.Conservation.Transfer
 import Fermat.Conservation.ExteriorTransfer
+import Fermat.Conservation.SelmerEigenspace
+import Fermat.Conservation.TatePairing
 import Fermat.Conservation.TamePlacePairing
 import Fermat.Conservation.WildKummerPairing
 import Fermat.Conservation.IwasawaTracePairing
@@ -105,6 +107,10 @@ import Fermat.FiftyNine.Conservation.TateBridge
 import Fermat.FiftyNine.Conservation.DetectorWitness827
 import Fermat.FiftyNine.Conservation.GaugeSteering827
 import Fermat.FiftyNine.Conservation.SplitPrimeFourier827
+import Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
+import Fermat.FiftyNine.Conservation.PrimalOrbitResidue827
+import Fermat.FiftyNine.Conservation.ExplicitResiduePlaceOrbit827
+import Fermat.FiftyNine.Conservation.FullOrbitReciprocity827
 import Fermat.FiftyNine.Conservation.PointedTateIncidence
 import Fermat.FiftyNine.Conservation.AlgebraicPointedIncidence827
 import Fermat.FiftyNine.Conservation.TransversalityVerdict827
@@ -113,8 +119,10 @@ import Fermat.FiftyNine.Conservation.UlamReadout827
 import Fermat.FiftyNine.Conservation.ArtinHasseInventory
 import Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 import Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
+import Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827
 import Fermat.FiftyNine.Conservation.CyclotomicLocalizationEquivariance827
 import Fermat.FiftyNine.Conservation.ReflectedLocalizationLiftCriterion827
+import Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827
 import Fermat.FiftyNine.Conservation.LocalCompletion59
 import Fermat.FiftyNine.Conservation.VostokovLocalization59
 import Fermat.FiftyNine.Conservation.VostokovShapeAudit59
@@ -582,6 +590,8 @@ proof-relevant, and routes global reciprocity through the existing
 #check Fermat.Conservation.TatePairing.character_mul_reflectedCharacter
 #check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing
 #check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt
+#check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.awayReadingTotal
+#check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.readingTotalOn
 #check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt_smul_adjoint
 #check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt_hash_smul_adjoint
 #check Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.finite_support
@@ -594,12 +604,20 @@ proof-relevant, and routes global reciprocity through the existing
 #check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.ledger_conservation_identity
 #check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.reciprocityTransfer
 #check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.reciprocity_L1_conservation
+#check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_awayReadingTotal
+#check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_readingTotalOn
 #check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places
 #check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_add_pairAt_eq_zero_of_outside_two
 #check Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_pairAt_of_outside_two
 #check Fermat.Conservation.TatePairing.LocalOrthogonalityGuard
 #check Fermat.Conservation.TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero
 
+#guard_depends_on
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.awayReadingTotal,
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.readings
+#guard_depends_on
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.readingTotalOn,
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt
 #guard_depends_on
   Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt_smul_adjoint,
   Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.adjoint_law
@@ -624,6 +642,18 @@ proof-relevant, and routes global reciprocity through the existing
 #guard_depends_on
   Fermat.Conservation.TatePairing.GlobalReciprocityLaw.reciprocity_L1_conservation,
   Fermat.Conservation.IsoConserveBridge.transfer_L1_conservation
+#guard_depends_on
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_awayReadingTotal,
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.sum_eq_zero
+#guard_depends_on
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_awayReadingTotal,
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.awayReadingTotal
+#guard_depends_on
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_readingTotalOn,
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.sum_eq_zero
+#guard_depends_on
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_readingTotalOn,
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.readingTotalOn
 #guard_depends_on
   Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places,
   Fermat.Conservation.TatePairing.GlobalReciprocityLaw.sum_eq_zero
@@ -894,6 +924,7 @@ localization-lift interface still awaiting an arithmetic inhabitant. -/
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.QRelaxedReflectedDual827
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.firstResidueFunctional827
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.firstResidueFunctional827_generatedUnit
+#check Fermat.Conservation.SelmerEigenspace.characterProjectorAt_eq_self_of_mem
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedReflectedProjector827
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.qLocalizationCoordinate827
 #check Fermat.FiftyNine.Conservation.DetectorWitness827.firstLampScale827
@@ -968,6 +999,12 @@ localization-lift interface still awaiting an arithmetic inhabitant. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.DetectorWitness827.firstResidueFunctional827_generatedUnit,
   Fermat.FiftyNine.Conservation.CapacityCertificate.residueFunctional_generatedUnit_eq
+#guard_depends_on
+  Fermat.Conservation.SelmerEigenspace.characterProjectorAt_eq_self_of_mem,
+  Fermat.Conservation.SelmerEigenspace.mem_characterEigenspaceAt_iff
+#guard_depends_on
+  Fermat.Conservation.SelmerEigenspace.characterProjectorAt_eq_self_of_mem,
+  Fermat.Conservation.InvolutiveBase.characterIdempotent
 #guard_depends_on
   Fermat.FiftyNine.Conservation.DetectorWitness827.qRelaxedReflectedProjector827,
   Fermat.Conservation.SelmerEigenspace.characterProjectorAt
@@ -1177,6 +1214,218 @@ representation does not currently produce an inhabitant. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.SplitPrimeFourier827.no_transverseDirection_of_fourierSeating,
   Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fixedAttention_of_fourierSeating
+
+/-! The complete 58-place orbit is retained until complementary character
+waves are multiplied.  Their product is constant, so the full orbit sum is
+the negative of any selected product in `ZMod 59`; global reciprocity then
+turns the distinguished reading into that selected product. -/
+
+#check Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.pointwiseProduct_complementaryCharacters
+#check Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.pointwiseProduct_eq_selected_of_complementaryPureCharacters
+#check Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_card_mul_selected
+#check Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_fiftyEight_mul_selected
+#check Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_neg_selected
+#check Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.galoisIndex59_sum_pointwiseProduct_eq_neg_selected
+#check Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.cyclotomic_projectedLocalization_product_sum_eq_neg_selected
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.pointwiseProduct_complementaryCharacters,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.characterFunction
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.pointwiseProduct_eq_selected_of_complementaryPureCharacters,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.pointwiseProduct_complementaryCharacters
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_card_mul_selected,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.pointwiseProduct_eq_selected_of_complementaryPureCharacters
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_fiftyEight_mul_selected,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_card_mul_selected
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_neg_selected,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_fiftyEight_mul_selected
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.galoisIndex59_sum_pointwiseProduct_eq_neg_selected,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_neg_selected
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.cyclotomic_projectedLocalization_product_sum_eq_neg_selected,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.galoisIndex59_sum_pointwiseProduct_eq_neg_selected
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.cyclotomic_projectedLocalization_product_sum_eq_neg_selected,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.projectedLocalization_isPureCharacter
+
+/-! The primal wave is now the Fourier projection of the explicit full
+residue orbit of the first generated circular unit.  The corresponding
+height-one primes give an explicit 58-place orbit, rather than an abstract
+enumeration of the support. -/
+
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitRoot827
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitRoot827_isPrimitive
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827_zeta
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitRoot827_one_eq_firstRowRoot
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827_one_eq_firstReductionHom
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.fullOrbitUnitReading827
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.fullOrbitUnitReading827_firstGenerated_one
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.unitCharacterWave827
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.unitCharacterWave827_isPureCharacter
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.unitCharacterWave827_mul_apply
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827_isPureCharacter
+#check Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827_product_sum_eq_neg_selected
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitRoot827_isPrimitive,
+  Fermat.FiftyNine.Conservation.Credit.attestationRoot_order
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitRoot827_isPrimitive
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827_zeta,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitRoot827_one_eq_firstRowRoot,
+  Fermat.FiftyNine.Conservation.CapacityCertificate.rowRoot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827_one_eq_firstReductionHom,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitRoot827_one_eq_firstRowRoot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.fullOrbitUnitReading827,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.fullOrbitUnitReading827_firstGenerated_one,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827_one_eq_firstReductionHom
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.fullOrbitUnitReading827_firstGenerated_one,
+  Fermat.FiftyNine.Conservation.CapacityCertificate.residueFunctional_generatedUnit_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.unitCharacterWave827,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.fullOrbitUnitReading827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.unitCharacterWave827_isPureCharacter,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.fourierCoefficient
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.unitCharacterWave827_mul_apply,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.unitCharacterWave827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.unitCharacterWave827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827_isPureCharacter,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.unitCharacterWave827_isPureCharacter
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827_product_sum_eq_neg_selected,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.cyclotomic_projectedLocalization_product_sum_eq_neg_selected
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827_product_sum_eq_neg_selected,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827_isPureCharacter
+
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_surjective
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitRoot827_injective
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_ker_ne_bot
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_comp_algebraMap
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827_under_int
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827_mem_placesOver827
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827Subtype
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827Subtype_injective
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlaceEquiv827
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitRoot827_mul
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_comp_cyclotomicRingEquiv
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.cyclotomicRingOfIntegersEquiv59_symm_local
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.cyclotomicPlaceEquiv59_orbitPlace
+#check Fermat.FiftyNine.Conservation.OrbitPlace827.indexedPlaceOrbitEquiv827_eq_orbitPlace827Subtype_inv
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_surjective,
+  ZMod.ringHom_surjective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitRoot827_injective,
+  Fermat.FiftyNine.Conservation.Credit.attestationRoot_order
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_ker_ne_bot,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_ker_ne_bot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827_under_int,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_comp_algebraMap
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827_mem_placesOver827,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827_under_int
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827Subtype,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827_mem_placesOver827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827Subtype_injective,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitRoot827_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827Subtype_injective,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827_zeta
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlaceEquiv827,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlace827Subtype_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitPlaceEquiv827,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.placesOver827_ncard_eq_fiftyEight
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitRoot827_mul,
+  Fermat.FiftyNine.Conservation.Credit.attestationRoot_order
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_comp_cyclotomicRingEquiv,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitRoot827_mul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_comp_cyclotomicRingEquiv,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.orbitReductionHom827_zeta
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.cyclotomicRingOfIntegersEquiv59_symm_local,
+  KummerCriterion.cyclotomicRingOfIntegersEquiv_mul_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.cyclotomicPlaceEquiv59_orbitPlace,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.cyclotomicRingOfIntegersEquiv59_symm_local
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.cyclotomicPlaceEquiv59_orbitPlace,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.orbitReductionHom827_comp_cyclotomicRingEquiv
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.indexedPlaceOrbitEquiv827_eq_orbitPlace827Subtype_inv,
+  Fermat.FiftyNine.Conservation.CyclotomicLocalizationEquivariance827.indexedPlaceOrbitEquiv827_eq_cyclotomicPlaceEquiv59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.OrbitPlace827.indexedPlaceOrbitEquiv827_eq_orbitPlace827Subtype_inv,
+  Fermat.FiftyNine.Conservation.OrbitPlace827.cyclotomicPlaceEquiv59_orbitPlace
+
+#check Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.orbitReading
+#check Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_neg_sum_orbitReading
+#check Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedProduct_of_complementaryOrbit
+#check Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedProduct_of_cyclotomicReflectedOrbit
+#check Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedCircularUnitProduct_of_cyclotomicReflectedOrbit
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.orbitReading,
+  Fermat.Conservation.TatePairing.PlaceIndexedLocalPairing.pairAt
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_neg_sum_orbitReading,
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.orbitReading
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_neg_sum_orbitReading,
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_readingTotalOn
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedProduct_of_complementaryOrbit,
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_neg_sum_orbitReading
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedProduct_of_complementaryOrbit,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.sum_pointwiseProduct_eq_neg_selected
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedProduct_of_cyclotomicReflectedOrbit,
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_neg_sum_orbitReading
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedProduct_of_cyclotomicReflectedOrbit,
+  Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827.cyclotomic_projectedLocalization_product_sum_eq_neg_selected
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedCircularUnitProduct_of_cyclotomicReflectedOrbit,
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedProduct_of_cyclotomicReflectedOrbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_selectedCircularUnitProduct_of_cyclotomicReflectedOrbit,
+  Fermat.FiftyNine.Conservation.PrimalOrbitResidue827.complementaryPrimalUnitWave827_isPureCharacter
 
 /-! TRANSVERSALITY W3 keeps the strict and relaxed conditions on the same
 module, names the class-field-theory five-term continuation, and derives the
@@ -2477,6 +2726,29 @@ explicit inputs. -/
 #check Fermat.FiftyNine.Conservation.ReflectedLocalizationLiftCriterion827.qLocalizationCoordinate_ne_zero_at_every_place_of_lift
 #check Fermat.FiftyNine.Conservation.ReflectedLocalizationLiftCriterion827.nonempty_cyclotomicReflectedQRelaxedLocalizationLift827_iff
 #check Fermat.FiftyNine.Conservation.ReflectedLocalizationLiftCriterion827.tameSilence827_ne_zero_of_lift
+
+/-! Rational 827 is a concrete relaxed source in the trivial character
+mode.  Projecting it supplies an actual reflected localization lift only
+under the explicit condition that the reflected character is trivial; the
+general reflected-character seam remains visible. -/
+
+#check Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeFieldUnit827
+#check Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrime_valuation_toAdd_eq_neg_one
+#check Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrime_valuation_toAdd_eq_zero_of_not_mem
+#check Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeSource827
+#check Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.cyclotomicQRelaxedSelmerRepresentation827_attestationPrimeSource
+#check Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeSource827_ne_zero
+#check Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeSource827_mem_trivial_characterEigenspace
+#check Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeSource827_mem_reflectedCharacter_of_eq_one
+
+#check Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrime_reflectedProjector_eq_source827
+#check Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrimeDetectorSUnit827
+#check Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.fromSUnitLift_attestationPrimeDetectorSUnit827
+#check Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.projectedCandidateSClassObstruction827_attestationPrime_eq_one
+#check Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.qLocalizationCoordinate827_attestationPrime_ne_zero
+#check Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrimeReflectedLocalizationLift827
+#check Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.nonempty_attestationPrimeReflectedLocalizationLift827
+
 #check Fermat.FiftyNine.Conservation.UlamReadout827.wildLawfulness827_of_reciprocity
 #check Fermat.FiftyNine.Conservation.UlamReadout827.wildProcessesAtLeastSevenA_zero_iff
 #check Fermat.FiftyNine.Conservation.UlamReadout827.vandiverSevenA_of_classGauge_eq_zero
@@ -4262,6 +4534,62 @@ harness. -/
   Fermat.FiftyNine.Conservation.ReflectedLocalizationLiftCriterion827.projectedCandidateSClassObstruction827_eq_one_of_lift
 
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeFieldUnit827,
+  Fermat.FiftyNine.Conservation.Credit.attestationPrime
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrime_valuation_toAdd_eq_neg_one,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.attestationPrime_not_dvd_fiftyNine
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrime_valuation_toAdd_eq_zero_of_not_mem,
+  Fermat.FiftyNine.Conservation.DetectorWitness827.placesOver827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeSource827,
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrime_valuation_toAdd_eq_zero_of_not_mem
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.cyclotomicQRelaxedSelmerRepresentation827_attestationPrimeSource,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.cyclotomicKummerHom59_mk
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeSource827_ne_zero,
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrime_valuation_toAdd_eq_neg_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeSource827_mem_trivial_characterEigenspace,
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.cyclotomicQRelaxedSelmerRepresentation827_attestationPrimeSource
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeSource827_mem_reflectedCharacter_of_eq_one,
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrimeSource827_mem_trivial_characterEigenspace
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrime_reflectedProjector_eq_source827,
+  Fermat.Conservation.SelmerEigenspace.characterProjectorAt_eq_self_of_mem
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrimeDetectorSUnit827,
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrime_valuation_toAdd_eq_zero_of_not_mem
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.fromSUnitLift_attestationPrimeDetectorSUnit827,
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrime_reflectedProjector_eq_source827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.projectedCandidateSClassObstruction827_attestationPrime_eq_one,
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.fromSUnitLift_attestationPrimeDetectorSUnit827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.qLocalizationCoordinate827_attestationPrime_ne_zero,
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrime_reflectedProjector_eq_source827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.qLocalizationCoordinate827_attestationPrime_ne_zero,
+  Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827.attestationPrime_valuation_toAdd_eq_neg_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrimeReflectedLocalizationLift827,
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.qLocalizationCoordinate827_attestationPrime_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrimeReflectedLocalizationLift827,
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.projectedCandidateSClassObstruction827_attestationPrime_eq_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.nonempty_attestationPrimeReflectedLocalizationLift827,
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.attestationPrimeReflectedLocalizationLift827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827.nonempty_attestationPrimeReflectedLocalizationLift827,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.placesOver827_ncard_eq_fiftyEight
+
+#guard_depends_on
   Fermat.FiftyNine.Conservation.UlamReadout827.wildLawfulness827_of_reciprocity,
   Fermat.FiftyNine.Conservation.TateBridge.Lambda_apply_eq_zero_of_reciprocity
 #guard_depends_on
@@ -5136,6 +5464,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.StateFactorPair
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.StateFactorConjugation
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CommonActionStage
+#guard_standard_axioms_prefix Fermat.Conservation.SelmerEigenspace
 #guard_standard_axioms_prefix Fermat.Conservation.TatePairing
 #guard_standard_axioms_prefix Fermat.Conservation.TamePlacePairing
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TateBridge
@@ -5146,6 +5475,10 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.DetectorWitness827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.PrimalOrbitResidue827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.OrbitPlace827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.FullOrbitReciprocity827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.AlgebraicPointedIncidence827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
@@ -5253,8 +5586,10 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.OrientedCarryH2Class59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CyclotomicLocalizationEquivariance827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ReflectedLocalizationLiftCriterion827
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.LocalCompletion59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.VostokovShapeAudit59
@@ -5294,6 +5629,10 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.GaugeSteering827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.SplitPrimeFourier827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.PrimalOrbitResidue827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.OrbitPlace827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.FullOrbitReciprocity827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.PointedTateIncidence
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.AlgebraicPointedIncidence827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.TransversalityVerdict827
@@ -5315,8 +5654,10 @@ trivial-coefficient conversion genuinely uses Mathlib's `H¹` equivalence. -/
 #audit_no_product_equiv_types_prefix Fermat.Conservation.TamePlacePairing
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.RationalAttestationPrimeSource827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.CyclotomicLocalizationEquivariance827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ReflectedLocalizationLiftCriterion827
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.TrivialReflectedAttestationPrimeLift827
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.LocalCompletion59
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.VostokovLocalization59
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.VostokovShapeAudit59
