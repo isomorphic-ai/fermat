@@ -57,6 +57,7 @@ import Fermat.FiftyNine.Conservation.VostokovShapeAudit59
 import Fermat.FiftyNine.Conservation.IwasawaLocalization59
 import Fermat.FiftyNine.Conservation.KummerTateLocalization59
 import Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59
+import Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59
 import Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
@@ -2236,6 +2237,34 @@ and global pullback without asserting a local invariant or comparison theorem.
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59
 #check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.toCanonicalReflectedWildKummerCoreAt59_pairing_apply
 
+/-! ### Explicit carry class and the exact local cyclic-lift seam
+
+The finite carry class is concrete and nonzero.  After pullback, its
+vanishing is exactly equivalent to a continuous `C59²` lift.  The specified
+twisted-lambda character and roots-valued H² class are therefore checked
+here, while their no-lift arithmetic remains a visible proposition rather
+than an installed witness.
+-/
+
+#check Fermat.Conservation.CyclicCarryH2Class59.continuousCarryH2Class59_ne_zero
+#check Fermat.Conservation.ContinuousCarryLiftObstruction59.boundaryLift59
+#check Fermat.Conservation.ContinuousCarryLiftObstruction59.differential_liftPrimitive59
+#check Fermat.Conservation.ContinuousCarryLiftObstruction59.pulledCarryCycle59_boundary_iff_exists_continuous_lift
+#check Fermat.Conservation.ContinuousCarryLiftObstruction59.pulledCarryCycle59_not_boundary_iff_noContinuousLift
+#check Fermat.Conservation.ContinuousCarryLiftObstruction59.pulledCarryH2Class59_ne_zero_of_noContinuousLift
+#check Fermat.Conservation.KummerCyclicQuotient59.kummerCharacter59
+#check Fermat.Conservation.KummerCyclicQuotient59.kummerCharacter59_surjective
+#check Fermat.Conservation.OrientedCarryH2Class59.rootsCarryH2Class59
+#check Fermat.Conservation.OrientedCarryH2Class59.rootsCarryH2Class59_ne_zero_of_noContinuousLift
+#check Fermat.FiftyNine.Conservation.TwistedLambdaKummerQuotient59.twistedLambda59_valuation
+#check Fermat.FiftyNine.Conservation.TwistedLambdaKummerQuotient59.twistedLambdaKummerCharacter59
+#check Fermat.FiftyNine.Conservation.TwistedLambdaKummerQuotient59.twistedLambdaKummerCharacter59_surjective
+#check Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59.TwistedLambdaNoContinuousLift59
+#check Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59.twistedLambdaRootsCarryH2Class59
+#check Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59.lambdaH2CoefficientOrientationEquiv59_twistedLambdaRootsCarry
+#check Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59.twistedLambdaRootsCarryH2Class59_ne_zero
+#check Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59.exists_twistedLambdaNoncanonicalReadout_eq_one
+
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup,
   Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup
@@ -3096,6 +3125,15 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.KummerCupSpanReadout
 #guard_standard_axioms_prefix Fermat.Conservation.LocalKummerTransport
 #guard_standard_axioms_prefix Fermat.Conservation.CohomologicalKummerPairing
+#guard_standard_axioms_prefix Fermat.Conservation.ContinuousH2Nonboundary
+#guard_standard_axioms_prefix Fermat.Conservation.FiniteCyclicH2Generator59
+#guard_standard_axioms_prefix Fermat.Conservation.DiscreteToContinuousH2
+#guard_standard_axioms_prefix Fermat.Conservation.CyclicCarryH2Class59
+#guard_standard_axioms_prefix Fermat.Conservation.ContinuousHomogeneousPullback59
+#guard_standard_axioms_prefix Fermat.Conservation.ContinuousCarryLiftObstruction59
+#guard_standard_axioms_prefix Fermat.Conservation.ContinuousCyclicQuotient59
+#guard_standard_axioms_prefix Fermat.Conservation.KummerCyclicQuotient59
+#guard_standard_axioms_prefix Fermat.Conservation.OrientedCarryH2Class59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.EmptySupportReflectedInclusion827
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.LocalCompletion59
@@ -3104,6 +3142,8 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.IwasawaLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.KummerTateLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TwistedLambdaKummerQuotient59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TwistedLambdaCarryH2Class59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
