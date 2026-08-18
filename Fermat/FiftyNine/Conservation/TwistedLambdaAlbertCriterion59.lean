@@ -61,6 +61,28 @@ theorem exists_twistedLambdaAlbertCharacter3481_of_norm
   refine ⟨psi, ?_⟩
   simpa [twistedLambdaKummerCharacter59] using hpsi
 
+/-- The local Albert lift supplied by a norm witness is in fact onto
+`C59²`, so its fixed field has the full expected degree `59²`. -/
+theorem exists_surjective_twistedLambdaAlbertCharacter3481_of_norm
+    (beta : twistedLambdaKummerExtension59 K)
+    (hbeta : Algebra.norm (LambdaField59 K) beta =
+      lambdaLocalPrimitiveRoot59 K) :
+    ∃ psi : Field.absoluteGaloisGroup (LambdaField59 K) →ₜ*
+        CyclicGroup3481,
+      Function.Surjective psi ∧
+      cyclicReduction3481To59.comp psi =
+        twistedLambdaKummerCharacter59 K := by
+  obtain ⟨psi, hsurj, hpsi⟩ :=
+    concreteKummer_exists_surjective_albertCharacter3481
+      (LambdaField59 K)
+      (lambdaLocalPrimitiveRoot59 K)
+      (twistedLambda59 K)
+      (lambdaLocalPrimitiveRoot59_isPrimitive K)
+      (twistedLambda59_not_pow K)
+      beta hbeta
+  refine ⟨psi, hsurj, ?_⟩
+  simpa [twistedLambdaKummerCharacter59] using hpsi
+
 /-- The reduction map used by the Albert construction is the same map as
 the carry-obstruction reduction after normalizing `59 ^ 2 = 3481`. -/
 theorem cyclicReduction3481To59_eq_reduction59 :
