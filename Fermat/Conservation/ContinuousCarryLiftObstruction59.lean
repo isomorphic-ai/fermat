@@ -332,4 +332,277 @@ theorem pulledCarryH2Class59_ne_zero_of_noContinuousLift
     ((h2Projection_eq_zero_iff (coefficients G)
       (pulledCarryCycle59 chi)).mp hprojection)
 
+/-! ## Converse: a lift constructs a boundary primitive -/
+
+/-- Divide a kernel element by `59`, using standard representatives. -/
+def kernelCoordinate59 (z : CyclicGroup59Squared) : CyclicGroup59 :=
+  Multiplicative.ofAdd ((z.toAdd.val / 59 : ℕ) : ZMod 59)
+
+set_option maxRecDepth 100000 in
+/-- The kernel coordinate is a right inverse to the kernel embedding on
+elements killed by reduction. -/
+theorem kernelEmbed59_kernelCoordinate59
+    (z : CyclicGroup59Squared) (hz : reduction59 z = 1) :
+    kernelEmbed59 (kernelCoordinate59 z) = z := by
+  decide +revert
+
+/-- Multiplication by `59` is injective from C₅₉ into C₅₉². -/
+theorem kernelEmbed59_injective : Function.Injective kernelEmbed59 := by
+  have hleft : Function.LeftInverse kernelCoordinate59 kernelEmbed59 := by
+    intro x
+    decide +revert
+  exact hleft.injective
+
+/-- The kernel coordinate comparing a lift with the standard section. -/
+def liftCorrection59
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared) (g : G) : ZMod 59 :=
+  (kernelCoordinate59 (standardSection59 (chi g) * (psi g)⁻¹)).toAdd
+
+omit [IsTopologicalGroup G] in
+/-- The comparison between a section and a genuine lift lies in the kernel
+of reduction. -/
+theorem comparison_mem_kernel59
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared)
+    (hlift : reduction59.comp psi = chi) (g : G) :
+    reduction59 (standardSection59 (chi g) * (psi g)⁻¹) = 1 := by
+  have hpoint := DFunLike.congr_fun hlift g
+  have hred : reduction59 (psi g) = chi g := by
+    change reduction59 (psi g) = chi g at hpoint
+    exact hpoint
+  simp [hred]
+
+omit [IsTopologicalGroup G] in
+/-- Re-embedding the correction recovers the section/lift comparison. -/
+theorem comparison_eq_kernelEmbed59
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared)
+    (hlift : reduction59.comp psi = chi) (g : G) :
+    standardSection59 (chi g) * (psi g)⁻¹ =
+      kernelEmbed59 (Multiplicative.ofAdd (liftCorrection59 chi psi g)) := by
+  symm
+  exact kernelEmbed59_kernelCoordinate59 _
+    (comparison_mem_kernel59 chi psi hlift g)
+
+omit [IsTopologicalGroup G] in
+/-- Factor the standard section into the genuine lift and its correction. -/
+theorem section_eq_lift_mul_kernel59
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared)
+    (hlift : reduction59.comp psi = chi) (g : G) :
+    standardSection59 (chi g) = psi g *
+      kernelEmbed59 (Multiplicative.ofAdd (liftCorrection59 chi psi g)) := by
+  have h := comparison_eq_kernelEmbed59 chi psi hlift g
+  calc
+    standardSection59 (chi g) =
+        (standardSection59 (chi g) * (psi g)⁻¹) * psi g := by simp
+    _ = kernelEmbed59
+        (Multiplicative.ofAdd (liftCorrection59 chi psi g)) * psi g := by rw [h]
+    _ = psi g *
+        kernelEmbed59 (Multiplicative.ofAdd (liftCorrection59 chi psi g)) := by
+      ac_rfl
+
+omit [IsTopologicalGroup G] in
+/-- The correction coordinate satisfies exactly the carry coboundary law. -/
+theorem liftCorrection59_add
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared)
+    (hlift : reduction59.comp psi = chi) (g h : G) :
+    liftCorrection59 chi psi g + liftCorrection59 chi psi h =
+      liftCorrection59 chi psi (g * h) +
+        carry59 (chi g).toAdd (chi h).toAdd := by
+  have hg := section_eq_lift_mul_kernel59 chi psi hlift g
+  have hh := section_eq_lift_mul_kernel59 chi psi hlift h
+  have hgh := section_eq_lift_mul_kernel59 chi psi hlift (g * h)
+  have hprod :
+      psi (g * h) *
+          (kernelEmbed59 (Multiplicative.ofAdd (liftCorrection59 chi psi g)) *
+            kernelEmbed59 (Multiplicative.ofAdd (liftCorrection59 chi psi h))) =
+        psi (g * h) *
+          (kernelEmbed59
+              (Multiplicative.ofAdd (liftCorrection59 chi psi (g * h))) *
+            kernelEmbed59
+              (Multiplicative.ofAdd
+                (carry59 (chi g).toAdd (chi h).toAdd))) := by
+    calc
+      psi (g * h) *
+          (kernelEmbed59 (Multiplicative.ofAdd (liftCorrection59 chi psi g)) *
+            kernelEmbed59 (Multiplicative.ofAdd (liftCorrection59 chi psi h))) =
+        (psi g *
+            kernelEmbed59 (Multiplicative.ofAdd (liftCorrection59 chi psi g))) *
+          (psi h *
+            kernelEmbed59 (Multiplicative.ofAdd (liftCorrection59 chi psi h))) := by
+              rw [map_mul]
+              ac_rfl
+      _ = standardSection59 (chi g) * standardSection59 (chi h) := by
+            rw [← hg, ← hh]
+      _ = standardSection59 (chi g * chi h) *
+          kernelEmbed59
+            (Multiplicative.ofAdd
+              (carry59 (chi g).toAdd (chi h).toAdd)) := by
+            rw [standardSection59_mul]
+      _ = standardSection59 (chi (g * h)) *
+          kernelEmbed59
+            (Multiplicative.ofAdd
+              (carry59 (chi g).toAdd (chi h).toAdd)) := by
+            congr 1
+            exact congrArg standardSection59 (chi.map_mul g h).symm
+      _ = (psi (g * h) *
+          kernelEmbed59
+            (Multiplicative.ofAdd (liftCorrection59 chi psi (g * h)))) *
+          kernelEmbed59
+            (Multiplicative.ofAdd
+              (carry59 (chi g).toAdd (chi h).toAdd)) := by rw [hgh]
+      _ = psi (g * h) *
+          (kernelEmbed59
+              (Multiplicative.ofAdd (liftCorrection59 chi psi (g * h))) *
+            kernelEmbed59
+              (Multiplicative.ofAdd
+                (carry59 (chi g).toAdd (chi h).toAdd))) := by ac_rfl
+  have hkernel := mul_left_cancel hprod
+  have hcoordinate :
+      Multiplicative.ofAdd (liftCorrection59 chi psi g) *
+          Multiplicative.ofAdd (liftCorrection59 chi psi h) =
+        Multiplicative.ofAdd (liftCorrection59 chi psi (g * h)) *
+          Multiplicative.ofAdd
+            (carry59 (chi g).toAdd (chi h).toAdd) := by
+    apply kernelEmbed59_injective
+    simpa only [map_mul] using hkernel
+  exact congrArg Multiplicative.toAdd hcoordinate
+
+omit [IsTopologicalGroup G] in
+/-- The lift correction is continuous. -/
+theorem continuous_liftCorrection59
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared) :
+    Continuous (liftCorrection59 chi psi) := by
+  have hcomparison : Continuous
+      (fun g : G ↦ standardSection59 (chi g) * (psi g)⁻¹) :=
+    (standardSection59.continuous.comp chi.continuous).mul psi.continuous.inv
+  have hcoordinate : Continuous
+      (fun z : CyclicGroup59Squared ↦ (kernelCoordinate59 z).toAdd) :=
+    continuous_of_discreteTopology
+  exact hcoordinate.comp hcomparison
+
+/-- The invariant homogeneous one-cochain obtained from the correction
+coordinate of a supplied lift. -/
+def liftPrimitiveRaw59
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared) : C(G, C(G, ZMod 59)) where
+  toFun x :=
+    ⟨fun y ↦ liftCorrection59 chi psi (x⁻¹ * y),
+      (continuous_liftCorrection59 chi psi).comp
+        (continuous_const.mul continuous_id)⟩
+  continuous_toFun := by
+    apply ContinuousMap.continuous_of_continuous_uncurry
+    exact (continuous_liftCorrection59 chi psi).comp
+      (continuous_fst.inv.mul continuous_snd)
+
+@[simp] theorem liftPrimitiveRaw59_apply
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared) (x y : G) :
+    liftPrimitiveRaw59 chi psi x y = liftCorrection59 chi psi (x⁻¹ * y) :=
+  rfl
+
+/-- The correction cochain bundled in Mathlib's continuous homogeneous
+degree-one complex. -/
+def liftPrimitive59
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared) :
+    Cochain (coefficients G) 1 := by
+  refine ⟨⟨liftPrimitiveRaw59 chi psi, ?_⟩⟩
+  intro a
+  apply ContinuousMap.ext
+  intro x
+  apply ContinuousMap.ext
+  intro y
+  change liftCorrection59 chi psi ((a⁻¹ * x)⁻¹ * (a⁻¹ * y)) =
+    liftCorrection59 chi psi (x⁻¹ * y)
+  congr 1
+  group
+
+@[simp] theorem liftPrimitive59_oneValue
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared) (x y : G) :
+    oneValue (liftPrimitive59 chi psi).val x y =
+      liftCorrection59 chi psi (x⁻¹ * y) :=
+  rfl
+
+/-- A supplied continuous lift gives an explicit primitive of the pulled
+carry cycle. -/
+theorem differential_liftPrimitive59
+    (chi : G →ₜ* CyclicGroup59)
+    (psi : G →ₜ* CyclicGroup59Squared)
+    (hlift : reduction59.comp psi = chi) :
+    differential (coefficients G) 1 2 (liftPrimitive59 chi psi) =
+      cycleCochain (coefficients G) 2 3 (pulledCarryCycle59 chi) := by
+  apply Cochain.ext
+  apply Subtype.ext
+  apply ContinuousMap.ext
+  intro w
+  apply ContinuousMap.ext
+  intro x
+  apply ContinuousMap.ext
+  intro y
+  change
+    liftCorrection59 chi psi (x⁻¹ * y) -
+        (liftCorrection59 chi psi (w⁻¹ * y) -
+          liftCorrection59 chi psi (w⁻¹ * x)) =
+      carry59 ((chi w)⁻¹ * chi x).toAdd ((chi x)⁻¹ * chi y).toAdd
+  have hc := liftCorrection59_add chi psi hlift (w⁻¹ * x) (x⁻¹ * y)
+  have hprod : (w⁻¹ * x) * (x⁻¹ * y) = w⁻¹ * y := by group
+  have hchiwx : chi (w⁻¹ * x) = (chi w)⁻¹ * chi x := by simp
+  have hchixy : chi (x⁻¹ * y) = (chi x)⁻¹ * chi y := by simp
+  rw [hprod, hchiwx, hchixy] at hc
+  calc
+    liftCorrection59 chi psi (x⁻¹ * y) -
+        (liftCorrection59 chi psi (w⁻¹ * y) -
+          liftCorrection59 chi psi (w⁻¹ * x)) =
+      liftCorrection59 chi psi (w⁻¹ * x) +
+          liftCorrection59 chi psi (x⁻¹ * y) -
+        liftCorrection59 chi psi (w⁻¹ * y) := by abel
+    _ = carry59 ((chi w)⁻¹ * chi x).toAdd
+        ((chi x)⁻¹ * chi y).toAdd := by
+      rw [hc]
+      abel
+
+/-- Any supplied continuous lift gives a continuous boundary primitive for
+the pulled carry cycle. -/
+theorem pulledCarryCycle59_boundary_of_exists_continuous_lift
+    (chi : G →ₜ* CyclicGroup59)
+    (hlift : ∃ psi : G →ₜ* CyclicGroup59Squared,
+      reduction59.comp psi = chi) :
+    ∃ b : Cochain (coefficients G) 1,
+      differential (coefficients G) 1 2 b =
+        cycleCochain (coefficients G) 2 3
+          (pulledCarryCycle59 chi) := by
+  obtain ⟨psi, hpsi⟩ := hlift
+  exact ⟨liftPrimitive59 chi psi,
+    differential_liftPrimitive59 chi psi hpsi⟩
+
+/-- The pulled carry cycle is a boundary exactly when the quotient
+character lifts continuously through C₅₉². -/
+theorem pulledCarryCycle59_boundary_iff_exists_continuous_lift
+    (chi : G →ₜ* CyclicGroup59) :
+    (∃ b : Cochain (coefficients G) 1,
+      differential (coefficients G) 1 2 b =
+        cycleCochain (coefficients G) 2 3
+          (pulledCarryCycle59 chi)) ↔
+      ∃ psi : G →ₜ* CyclicGroup59Squared,
+        reduction59.comp psi = chi := by
+  constructor
+  · exact exists_continuous_lift_of_pulledCarryCycle59_boundary chi
+  · exact pulledCarryCycle59_boundary_of_exists_continuous_lift chi
+
+/-- Equivalently, the pulled carry cycle is not a boundary exactly when
+the character has no continuous C₅₉²-valued lift. -/
+theorem pulledCarryCycle59_not_boundary_iff_noContinuousLift
+    (chi : G →ₜ* CyclicGroup59) :
+    (¬ ∃ b : Cochain (coefficients G) 1,
+      differential (coefficients G) 1 2 b =
+        cycleCochain (coefficients G) 2 3
+          (pulledCarryCycle59 chi)) ↔ NoContinuousLift chi := by
+  exact not_congr (pulledCarryCycle59_boundary_iff_exists_continuous_lift chi)
+
 end Fermat.Conservation.ContinuousCarryLiftObstruction59
