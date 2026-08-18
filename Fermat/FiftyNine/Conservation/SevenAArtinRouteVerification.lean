@@ -70,6 +70,16 @@ This non-imported executable audit leaf covers only the newly exposed route:
   named canonical class readout; injectivity of that readout is exactly the
   still-unresolved converse that zero mode 44 forces the genuine class gauge
   to vanish;
+* literal residue Frobenius on `ZMod 827[T]/(T^59-u)` scales the universal
+  Kummer root by `u^14`; transport through the actual 58-place residue orbit
+  identifies its exponent wave with the strict residue wave used by mode 44;
+* this local Kummer--Frobenius interpretation is promoted to equality of
+  `ZMod 59`-linear maps: the canonical class readout after the genuine class
+  gauge is exactly the local Frobenius mode-44 map;
+* for every reflected class carrying the normalized 58-coordinate profile,
+  the whole seated irregular PT-test-space boundary is the restriction of
+  that same local Frobenius map and agrees pointwise with both the canonical
+  class readout and the literal Frobenius Fourier coefficient;
 * W7 is specialized to that named readout on the genuine chi=15 character
   line: seating of the selected class, rank one of the line, and nonvanishing
   of the restricted canonical readout suffice for the 7A equivalence, but
@@ -110,10 +120,15 @@ dual boundary are not proved to vanish here.
 Within W7, pointwise faithfulness of the produced readout is now displayed
 as one concrete mode-44 Fourier zero-reflection statement for the actual
 Fermat factor.  Its reverse implication is proved unconditionally.  The
-missing forward reflection is the exact target of the Kummer--Artin
-factorization/comparison.  The canonical signed mode-44 readout now exists
+missing forward reflection is the exact target of the global ray-class
+Kummer--Artin faithfulness comparison, not of the now-complete local
+Frobenius factorization.  The canonical signed mode-44 readout now exists
 uniquely without choosing a reflected carrier, but its injectivity remains
 exactly this unresolved zero-reflection statement.
+The new Frobenius statements are genuinely local residue calculations and
+map factorizations.  They do not construct a ray-class Artin map, a Hilbert
+class field, global Artin reciprocity, a Poitou--Tate lift, or faithfulness.
+Those global arithmetic identifications remain the honest Artin seam.
 The canonical-character-line W7 endpoint removes arbitrary-readout and
 factorization parameters, but still assumes the selected chi=15 seat, rank
 one of that line, and nonvanishing of the canonical readout on it.
@@ -152,6 +167,8 @@ import Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827
 import Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827
 import Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827
 import Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827
+import Fermat.FiftyNine.Conservation.KummerFrobeniusRead827
+import Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827
 
 /-! ## Public route inventory -/
 
@@ -466,6 +483,36 @@ remaining zero-reflection direction. -/
 #check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_injective_iff_modeFortyFour_reflects_classGauge_zero
 #check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_selectedClassGauge59_eq_negativeModeFortyFour
 #check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_classReadout_injective
+
+/-! The canonical readout now has literal local residue-Frobenius semantics.
+The first module proves the universal Kummer-root action and transports its
+exponent wave through the actual 58-place orbit.  The second bundles the
+Frobenius endomorphism, promotes the readout identity to equality of linear
+maps, and restricts it to the genuine irregular PT test space.  None of these
+declarations is a global ray-class Artin map or a faithfulness theorem. -/
+
+#check Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.ResidueKummerAlgebra827
+#check Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.residueKummerRoot827
+#check Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.residueKummerRoot827_pow_fiftyNine
+#check Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_residueKummerRoot827
+#check Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitAngularComponent827
+#check Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitFrobeniusExponentWave827
+#check Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitFrobeniusExponentWave827_eq_residueWave
+#check Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_strictOrbitKummerRoot827
+#check Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier
+
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.residueFrobeniusAlgHom827
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.residueFrobeniusAlgHom827_root
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.strictOrbitFrobeniusExponentWaveLinearMap827
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.strictOrbitFrobeniusExponentWaveLinearMap827_apply
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.localKummerFrobeniusModeFortyFourLinearMap827
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.localKummerFrobeniusModeFortyFourLinearMap827_apply
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.SevenALocalKummerFrobeniusFactorization827
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.irregularPrimalInclusion59
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.irregularPrimalInclusion59_apply
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_canonicalClassReadout
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_frobeniusFourier
 
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_selectedClassGauge59_eq_neg_fourierCoefficient
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_pointwiseFaithful_iff_fourierCoefficient_zero_implies_selectedClassGauge59_eq_zero
@@ -956,6 +1003,82 @@ info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourier
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA
 
+/-! The local residue-Frobenius semantics, map factorization, and genuine
+PT-test-space restrictions introduce no nonstandard axioms.  These guards do
+not relabel the local constructions as global Artin reciprocity. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_residueKummerRoot827' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_residueKummerRoot827
+
+/--
+info: 'Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitFrobeniusExponentWave827_eq_residueWave' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitFrobeniusExponentWave827_eq_residueWave
+
+/--
+info: 'Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_strictOrbitKummerRoot827' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_strictOrbitKummerRoot827
+
+/--
+info: 'Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.residueFrobeniusAlgHom827_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.residueFrobeniusAlgHom827_root
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.SevenALocalKummerFrobeniusFactorization827' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.SevenALocalKummerFrobeniusFactorization827
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_canonicalClassReadout' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_canonicalClassReadout
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_frobeniusFourier' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_frobeniusFourier
+
 /-! ## Proof-value dependency gates -/
 
 /-! The W1 receipt consumes both the established nonzero cup and its
@@ -1413,6 +1536,69 @@ class-function certificate. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero,
   Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+
+/-! The local Frobenius route consumes the literal Kummer-root power law,
+the actual residue-field transport, the canonical class gauge/readout maps,
+and the genuine seated orbit boundary.  These transitive gates prevent the
+new names from degenerating into disconnected aliases while making no global
+Artin-reciprocity claim. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_strictOrbitKummerRoot827,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_residueKummerRoot827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitFrobeniusExponentWave827_eq_residueWave,
+  Fermat.Conservation.TameSymbol.Context.residueCharacter_map_ringEquiv
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitFrobeniusExponentWave827_eq_residueWave,
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.orbitResidueEquiv827_angularComponent
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827_classGaugeMap59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitFrobeniusExponentWave827_eq_residueWave
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.residueFrobeniusAlgHom827_root,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_residueKummerRoot827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.strictOrbitFrobeniusExponentWaveLinearMap827_apply,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitFrobeniusExponentWave827_eq_residueWave
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.localKummerFrobeniusModeFortyFourLinearMap827_apply,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.localKummerFrobeniusModeFortyFourLinearMap827_apply,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.strictOrbitFrobeniusExponentWave827_eq_residueWave
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.SevenALocalKummerFrobeniusFactorization827,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.SevenALocalKummerFrobeniusFactorization827,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.localKummerFrobeniusModeFortyFourLinearMap827_apply
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedOrbitBoundaryFunctional827_eq_strictTameOrbitFunctional827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.localKummerFrobeniusModeFortyFourLinearMap827_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_canonicalClassReadout,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_canonicalClassReadout,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.SevenALocalKummerFrobeniusFactorization827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_frobeniusFourier,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_frobeniusFourier,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.localKummerFrobeniusModeFortyFourLinearMap827_apply
 
 /-! The canonical point-free descent consumes actual quotient-unit silence
 and the generic class-gauge factorization theorem.  Its injectivity endpoint
