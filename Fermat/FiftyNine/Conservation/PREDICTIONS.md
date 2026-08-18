@@ -41,6 +41,30 @@ conservation proof.
   but neither arithmetic input is inhabited in the current tree.  Thus no
   localization premise or downstream (7a) premise is reported discharged.
 
+### Later boundary update — 2026-08-18
+
+- The outcome above remains the correct score for the original task and its
+  independently supplied historical `wild.reading`.  It is not rewritten
+  retrospectively.  A later route closed a different, carefully typed branch:
+  the exact critical norm calculation gives a nonzero genuine Kummer cup;
+  one-dimensional linear algebra then supplies a normalized algebraic
+  readout, and the actual continuous cup constructs a total local/global
+  Kummer pairing.
+- `oldWildInterfaceOfPairing` restricts any such quotient pairing to the two
+  old seated eigenspaces.  Its full `hash omega` adjoint law is formal there.
+  For the interface constructed by this restriction, calibration is
+  definitional, so `normalizedReflectedWildKummerCore59` and
+  `normalizedReflectedWildLocalization59` are now inhabited without opening
+  formula tier (d).
+- This does **not** identify the constructed interface with an independently
+  supplied historical wild reading.  The exact remaining comparison is
+  kernel-checked as
+  `oldWildInterfaceOfPairing_eq_iff_calibration`: equality of interfaces is
+  equivalent to the original universal old-reading calibration theorem.
+  Wild lawfulness, relation-(7a) gauge seating, the relevant kernel inclusion,
+  reciprocity, and a normalized-fiber member remain separate; no Case-II,
+  (7a), or FLT endpoint is claimed.
+
 ## 2026-08-13 — Vostokov wild-reading prediction
 
 - **Committed guess: the V1 coverage upgrade does not close.**  I expect the

@@ -1,5 +1,41 @@
 # N59 conservation findings
 
+## 2026-08-18 — Exact norm detector and normalized continuous wild localization
+
+- `ExactNormIntersection59` strengthens the quotient obstruction to the full
+  subgroup identity
+  `(twistedLambdaNormUnits59 K).range ⊓ U59 K = U60 K`.  At critical
+  depth, extension-norm membership is therefore equivalent to one more digit
+  of lambda depth, equivalently to vanishing of `criticalCoefficient59`.
+  Both unit-range and literal field-norm equations have compiled positive and
+  negative iff forms.  This is a statewise detector; it does not identify a
+  Fermat-produced class with the distinguished unit-60 input.
+- `NormalizedContinuousKummerPairing59` selects a normalized algebraic
+  readout from the proved existence theorem and composes it with the genuine
+  continuous Kummer cup.  The resulting local and global quotient pairings
+  are total.  Their values on the explicit twisted-lambda/primitive-root and
+  unit-60/primitive-root pairs are exactly `1`.  The cup and retained
+  cohomology are continuous; the selected scalar readout is a plain linear
+  map, and no continuity or canonical local-invariant claim is made for it.
+- `ContinuousOldWildAdapter59` proves that every total quotient pairing
+  restricts to an `OldWildInterface59`.  The `hash omega` adjoint law follows
+  formally from the primal and reflected character seats.  Calibration of
+  the pairing against the interface obtained from that same restriction is
+  definitional, so this direction never defines the new pairing from an old
+  reading.  For an independently supplied historical interface, the theorem
+  `oldWildInterfaceOfPairing_eq_iff_calibration` proves that equality is
+  exactly the original universal calibration proposition; no comparison is
+  fabricated.
+- `NormalizedContinuousWildLocalization59` applies that restriction to the
+  selected normalized continuous pairing.  It constructs the canonical
+  old-shaped interface, all three fields of `ReflectedWildKummerCoreAt59`,
+  and the complete q-relaxed `ReflectedWildLocalizationAt59`.  Thus W1 step 4
+  is inhabited for this constructed interface.  Equality with a separately
+  banked historical reading remains open, as do wild lawfulness,
+  `ClassValuedSevenAGaugeSeating`, `ker Lambda ≤ ker G`, global reciprocity,
+  and a member of `NormalizedReflectedFiber827`.  No full Case II, relation
+  (7a), kernel/fiber closure, or FLT conclusion follows from this update.
+
 ## 2026-08-18 — The Kummer--Albert spine is prime-parametric and the local seam is explicit
 
 - The low-degree carry/lift stack is now prime-parametric end to end.
@@ -152,9 +188,10 @@
   and rules out a continuous `C_(59²)` lift of its concrete character.
   The next honest statewise seam is not local Kummer theory: no current
   theorem identifies an arbitrary Fermat/Vandiver quotient class with this
-  distinguished unit-`60` class.  Likewise, a single nonzero cup value does
-  not construct the total pairing, empty-support landing, and old-carrier
-  calibration required by the Vostokov core.
+  distinguished unit-`60` class.  Subsequent one-dimensional readout and
+  restriction adapters do construct a total pairing, canonical landing, and
+  self-calibrated core for the interface obtained from that pairing.  They do
+  not identify it with an independently supplied historical wild reading.
 - `TwistedLambdaCupUnitReduction59` performs the parallel reduction inside
   genuine continuous cohomology.  The explicit bare-lambda norm witness
   constructs a compatible `C_(59²)` lift, so both its roots-valued carry
@@ -271,11 +308,12 @@
   continuous `C_(59²)` lift.  Thus the normalization equality is not a
   second independent arithmetic problem; one-dimensional `H²` algebra
   constructs it after the concrete nonnorm theorem is known.
-  The new full-field non-power theorem does not by itself cross this seam:
-  non-membership in the subgroup of 59th powers is weaker than the required
-  non-membership in the relevant cyclic norm group.  The missing comparison
-  is precisely the Artin--Hasse/local-reciprocity statement which evaluates
-  the pairing with the chosen primitive root.
+  `ExactNormIntersection59` further upgrades the conclusion to
+  `range(Norm) ⊓ U_59 = U_60` and exposes both pointwise norm membership and
+  literal field-norm existence as the zero locus of
+  `criticalCoefficient59`.  The later normalized continuous pairing reads
+  the chosen twisted/unit-60 classes, while comparison with an independently
+  supplied historical wild interface remains a distinct calibration theorem.
   No new axiom, provider, fabricated scalar, local reciprocity theorem, or
   Hilbert-symbol identity is used above.
 
@@ -313,12 +351,11 @@
   proof it derives a nonzero roots-valued class and a noncanonical linear
   readout taking value one.  It does not call that readout the normalized
   local invariant.
-- The remaining local arithmetic is now sharply split into three honest
-  comparisons: prove the Artin--Hasse special value for the unit twist and
-  Albert's norm/lift criterion; identify the resulting carry/Bockstein class
-  with the canonical Kummer cup; and compare the eventual normalized local
-  invariant with the desired Hilbert/wild reading.  No provider, fabricated
-  value, or new axiom discharges any of these seams.
+- This checkpoint split the local arithmetic into three honest comparisons.
+  The later norm-image and Kummer--Albert work closes the norm/lift criterion,
+  identifies the genuine cup, and constructs a normalized algebraic readout.
+  The comparison with an independently supplied historical Hilbert/wild
+  reading remains distinct.  No fabricated value or new axiom discharges it.
 
 ## 2026-08-18 — Continuous Kummer--Tate cup and lambda specialization are compiled
 
@@ -341,14 +378,14 @@
   called symplectic: no identification of the two seats and no alternation
   theorem has been proved.  Package B remains already discharged by the
   common ambient Selmer action and the stable full set of places above 827.
-- The remaining invariant obstruction is arithmetic, not coordinate-level:
-  the current APIs provide neither a canonical local fundamental `H²` class
-  with a nonzero theorem nor a computation `H² ≃ ZMod 59`.  The zero
-  functional or an arbitrary basis functional is therefore not acceptable.
-  What remains is the normalized local invariant, including its
-  normalization/orientation/sign and 59-Hilbert comparison; the Poitou--Tate
-  global reflected lift; and the unit-proportional 7a comparison.  This entry
-  supersedes older text listing continuous descent or lambda packaging open.
+- At this checkpoint the invariant obstruction was arithmetic rather than
+  coordinate-level.  Subsequent norm nonvanishing and one-dimensional linear
+  algebra now select a normalized algebraic readout and hence a total pairing;
+  this is not a claim that the selected readout is topology-preserving or a
+  canonical local invariant.  Its restriction constructs a canonical
+  old-shaped interface and q-relaxed localization.  Comparison to any
+  independently supplied historical reading, the Poitou--Tate global lift,
+  lawfulness, gauge/kernel seating, and reciprocity remain separate.
 
 ## 2026-08-17 — Kummer--Tate route: quotient-first core and algebraic cup spine
 
@@ -396,8 +433,10 @@
   its ideal is a nonzero prime above `59`, and supplies the completion,
   embedding, and local primitive root.  `KummerCupSpanLocalization59` pulls
   the span-restricted local pairing back to the global quotient and installs
-  it in the canonical-action core with landing derived.  Its only new
-  arithmetic inputs are the span readout and independent calibration.
+  it in the canonical-action core with landing derived.  For this historical
+  cup-span route, its only new arithmetic inputs are the span readout and
+  independent calibration.  The later normalized continuous route instead
+  constructs its own total pairing and canonical old-shaped interface.
 - `CyclotomicSelmerAction59` constructs the common ambient cyclotomic action,
   transports places, proves stability of the full set above 827, restricts
   the action to strict and supported Selmer carriers, and proves their
@@ -405,12 +444,12 @@
   proves `ord_v(sigma q) = ord_(sigma⁻¹ v)(q)` modulo 59 from transport of
   prime-ideal multiplicities.  Package B is therefore discharged for the
   canonical actions, including the reflected strict-to-827 landing.
-- No localization or relation-(7a) premise is thereby claimed discharged.
-  The continuous-cohomology comparison, normalized continuous `H²` invariant
-  and Hilbert comparison/factorization through the cup span, independent
-  old-reading calibration, Poitou--Tate global
-  reflected lift, lawfulness, gauge seating, kernel
-  comparison, reciprocity, and normalized-fiber member remain distinct.
+- At this historical checkpoint no localization or relation-(7a) premise was
+  discharged.  The later normalized continuous route now inhabits the core
+  and localization for the interface constructed by restricting its own
+  total pairing.  Independent historical old-reading calibration,
+  Poitou--Tate global reflected lift, lawfulness, gauge seating, kernel
+  comparison, reciprocity, and a normalized-fiber member remain distinct.
 
 ## 2026-08-17 — Vostokov C2/C3 result: tier-(c) is reduced, not inhabited
 
@@ -433,13 +472,15 @@
   readback receipts.  `toReflectedWildKummerCoreAt59` derives landing from
   `EmptySupportActionCompatibility827`, and the direct localization
   constructor then fires mechanically.
-- The two required inputs have no producer in the current cone: the
+- The two required inputs have no producer in this historical tier-(c) cone: the
   representations `rho` and `rhoQ` are arbitrary and no ambient action
   compatibility is available; `wild` is arbitrary and no independent
   Iwasawa/Hilbert comparison theorem identifies its reading.  Therefore the
-  strict core remains uninhabited, localization and carrier extension are
-  **not discharged**, and the committed session-inhabitation prediction is
-  not met.
+  tier-(c) core remains uninhabited for that independently supplied `wild`,
+  and the committed session-inhabitation prediction was not met at this
+  checkpoint.  The later normalized continuous branch does inhabit the core,
+  localization, and carrier extension for the interface obtained by
+  restricting its own pairing; it does not supply this historical comparison.
 - Tier (c) remains the cheapest unrefuted tier.  This is an honest reduced
   theorem boundary permitted by C2's infrastructure clause, not a tier-(d)
   reduced-series deliverable and not permission to build one.  Relation
@@ -662,13 +703,13 @@
   interface or privileged reflected class is needed.  The resulting public
   carrier is the whole normalized affine fiber, and its W0 witness adapter
   is local to an explicitly supplied fiber member.
-- At the W1 audit, step 4 was the first irreducible arithmetic producer.
-  The latest tier-(c) entry above has reduced its three-field core further:
-  ambient action compatibility derives the canonical map and landing, while
-  a realized total-coordinate reduction plus independent comparison derives
-  the pairing and quotient calibration.  Neither input, the resulting core,
-  nor `ReflectedWildLocalizationAt59` has an unconditional inhabitant, and no
-  extension from a complement is used.
+- At the original W1 audit, step 4 was the first irreducible arithmetic
+  producer.  The historical tier-(c) route reduced its three-field core to
+  total-coordinate realization plus an independent comparison.  A later
+  continuous-cup route now inhabits the core and
+  `ReflectedWildLocalizationAt59` for the interface obtained by restricting
+  that pairing itself.  It does not prove equality with an independently
+  supplied historical interface, and no extension from a complement is used.
 - The step-5 inclusion is likewise undecided, not disproved.  No tracked
   theorem compares the selected 827 boundary kernel with the wild reading
   at `h_F`.  `SelectedWildLawfulness827` names the inclusion, while its
