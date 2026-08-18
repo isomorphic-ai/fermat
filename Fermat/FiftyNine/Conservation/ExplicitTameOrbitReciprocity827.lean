@@ -3,17 +3,23 @@ Copyright (c) 2026 Fabian Franz. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Fabian Franz, Codex
 
-# Explicit tame-orbit reciprocity at 827
+# Explicit fixed-root tame-orbit Fourier balance at 827
 
-This module combines the honest local tame contexts at all 58 places above
-827 with Fourier projection under the complete orbit sum.  Canonical place
+This module combines the local tame contexts at all 58 places above 827 with
+Fourier projection under the complete orbit sum.  Those contexts express
+every value relative to the same fixed attestation primitive root; they are
+genuine local symbols, but their `ZMod 59` coordinates are not the reductions
+of one fixed global cyclotomic root.  Canonical place
 coordinates are inverse-oriented relative to the residue-map indices, so the
 primal wave is explicitly the selected Fourier component of the inverse-
 reindexed raw circular-unit readings.  No pointwise projected comparison is
 used.
 
-The final scalar theorem consumes an explicit reciprocity equation between a
-wild reading and the sum of these actual tame-symbol values.
+The unweighted sum below is therefore a fixed-root Fourier detector/balance,
+not a literal global-reciprocity ledger.  The final scalar theorem only
+consumes a supplied equation involving that detector.  The globally
+`zeta`-normalized ledger is the weighted canonical ledger constructed in
+`CanonicalGlobalTameLedger827`.
 -/
 import Fermat.FiftyNine.Conservation.LocalReduction827
 import Fermat.FiftyNine.Conservation.RawOrbitReciprocity827
@@ -83,9 +89,9 @@ noncomputable abbrev tameOrbitBasePlace827 : Place827 K :=
   orbitPlace827Subtype
     (canonicalZeta59_isPrimitive (K := K)) 1
 
-/-- The actual tame-symbol value at canonical place index `tau`.  The local
-context is indexed by `tau⁻¹`, exactly as forced by the explicit place
-orbit equivalence. -/
+/-- The actual tame-symbol value at canonical place index `tau`, expressed
+in the fixed attestation-root coordinate.  The local context is indexed by
+`tau⁻¹`, exactly as forced by the explicit place-orbit equivalence. -/
 noncomputable def actualTameOrbitValue827
     (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
     (lift : ReflectedQRelaxedLocalizationLift827
@@ -129,10 +135,10 @@ theorem actualReflectedLocalizationWave827_isPureCharacter
       (tameOrbitBasePlace827 (K := K)))
     lift.source
 
-/-- Summing all 58 actual local tame-symbol values performs the Fourier
-projection under the sum.  The result is the negative product of the honest
-inverse-oriented primal wave and the reflected localization wave at any
-selected orbit index. -/
+/-- Summing all 58 fixed-root local tame-symbol coordinates performs the
+Fourier projection under the unweighted sum.  The result is the negative
+product of the inverse-oriented primal wave and the reflected localization
+wave at any selected orbit index. -/
 theorem sum_actualTameOrbitValue827_eq_neg_selectedProduct
     (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
     (lift : ReflectedQRelaxedLocalizationLift827
@@ -174,9 +180,10 @@ theorem sum_actualTameOrbitValue827_eq_neg_selectedProduct
         projectedLocalizationVector827 (rhoQ827 (K := K)) omega chi
           (tameOrbitBasePlace827 (K := K)) lift.source selected) := rfl
 
-/-- A concrete reciprocity equation for the wild place and these 58 actual
-tame values immediately identifies the wild scalar with the selected
-inverse-oriented Fourier product. -/
+/-- A supplied unweighted balance equation for the wild scalar and these 58
+fixed-root coordinates identifies that scalar with the selected
+inverse-oriented Fourier product.  This premise is not itself the globally
+`zeta`-normalized reciprocity equation. -/
 theorem wild_eq_selectedProduct_of_actualTameOrbitReciprocity827
     (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
     (lift : ReflectedQRelaxedLocalizationLift827

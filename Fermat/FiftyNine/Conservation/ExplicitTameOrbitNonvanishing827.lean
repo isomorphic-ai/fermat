@@ -3,7 +3,7 @@ Copyright (c) 2026 Fabian Franz. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Fabian Franz, Codex
 
-# Nonvanishing of the explicit tame orbit and wild reading at 827
+# Nonvanishing of the fixed-root tame-orbit detector at 827
 
 This module joins three independently checked arithmetic facts:
 
@@ -11,12 +11,15 @@ This module joins three independently checked arithmetic facts:
   coefficient in every nontrivial even mode;
 * a genuine reflected q-relaxed lift has nonzero localization at every place
   over 827;
-* the sum of the 58 actual tame symbols is the negative selected product.
+* the unweighted sum of the 58 fixed-root tame coordinates is the negative
+  selected product.
 
-Consequently the explicit tame ledger is nonzero, and any wild reading that
-satisfies the displayed global reciprocity equation is nonzero as well.  The
-reciprocity equation remains a visible hypothesis: this file neither invents
-local values nor replaces it with a provider structure.
+Consequently the fixed-root Fourier detector is nonzero, and any wild reading
+that satisfies the displayed unweighted balance equation is nonzero as well.
+That equation is a visible hypothesis, but it is not literal global Hilbert
+reciprocity: global `zeta`-normalization inserts an orbit weight.  This file
+neither invents local values nor replaces the premise with a provider
+structure.
 -/
 import Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827
 import Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827
@@ -111,7 +114,8 @@ theorem selectedProduct_actualTameOrbit827_ne_zero
     (actualReflectedLocalizationWave827_ne_zero_of_lift
       (K := K) omega chi lift selected)
 
-/-- The complete sum of the 58 actual tame-symbol values is nonzero. -/
+/-- The unweighted fixed-root sum of the 58 tame-symbol coordinates is
+nonzero. -/
 theorem sum_actualTameOrbitValue827_ne_zero
     (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
     (heven : orientedPrimalMode827 omega chi (-1) = 1)
@@ -127,9 +131,9 @@ theorem sum_actualTameOrbitValue827_ne_zero
     (selectedProduct_actualTameOrbit827_ne_zero
       (K := K) omega chi heven hne lift selected)
 
-/-- An explicit global reciprocity equation forces its actual wild reading
-to be nonzero.  The equation is retained as the sole global arithmetic input
-of this implication. -/
+/-- A supplied unweighted fixed-root balance equation forces its wild scalar
+to be nonzero.  This implication does not identify that equation with global
+Hilbert reciprocity. -/
 theorem wild_ne_zero_of_actualTameOrbitReciprocity827
     (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
     (heven : orientedPrimalMode827 omega chi (-1) = 1)

@@ -2,15 +2,17 @@ import Fermat.FiftyNine.Conservation.CyclotomicTameContext59
 import Fermat.FiftyNine.Conservation.ExplicitTameOrbitReciprocity827
 
 /-!
-# The actual finite tame ledger at 827
+# The fixed-root finite tame-coordinate ledger at 827
 
 This file seats the already constructed tame-symbol values on their genuine
-height-one places above `827`.  It also proves that every omitted nonwild
-local value vanishes, so the finite ledger loses no tame contribution away
-from the wild place and the `827` orbit.
+height-one places above `827`.  Their additive coordinates use the same fixed
+attestation primitive root at every residue presentation; the unweighted sum
+is therefore a Fourier detector, not the globally `zeta`-normalized sum.  It
+also proves that every omitted nonwild local value vanishes.
 
 No reciprocity assertion is made here.  The final scalar equivalence is only
-the exact rewriting of the ledger total as the explicit orbit sum.
+the exact rewriting of this fixed-root coordinate total as the explicit
+orbit sum.  `CanonicalGlobalTameLedger827` supplies the global-root weighting.
 -/
 
 open scoped BigOperators NumberField
@@ -57,8 +59,9 @@ noncomputable abbrev tameOrbitPlace827 (tau : GaloisIndex59) :
     Fermat.FiftyNine.Conservation.CyclotomicTameContext59.Place K :=
   (indexedPlaceOrbitEquiv827 K (tameOrbitBasePlace827 (K := K)) tau).1
 
-/-- The finite tame ledger: its retained entries are exactly the already
-constructed local symbols, seated at the corresponding height-one places. -/
+/-- The finite fixed-root coordinate ledger: its retained entries are the
+already constructed local symbols, seated at the corresponding height-one
+places. -/
 noncomputable def actualTameLedger827
     (lift : ReflectedQRelaxedLocalizationLift827
       (rhoQ827 (K := K)) omega chi) :
@@ -128,8 +131,8 @@ theorem actualTameLedger827_support_subset_placesOver827
     (actualTameLedger827_apply_eq_zero_of_not_over827
       (K := K) omega chi lift v hout)
 
-/-- Aggregating the finite height-one ledger is definitionally the complete
-explicit tame-orbit sum. -/
+/-- Aggregating the finite fixed-root height-one ledger is definitionally the
+complete unweighted explicit tame-orbit sum. -/
 theorem actualTameLedger827_sum_eq_orbit_sum
     (lift : ReflectedQRelaxedLocalizationLift827
       (rhoQ827 (K := K)) omega chi) :
@@ -158,9 +161,10 @@ theorem actualTameLedger827_sum_eq_orbit_sum
         (fun _ entry ↦ entry) = ∑ tau : GaloisIndex59, value tau
   simpa using hsum (Finset.univ : Finset GaloisIndex59)
 
-/-- Adding an arbitrary proposed wild contribution to the honest finite
-ledger is equivalent to adding it to the complete explicit 827-orbit sum.
-This is only a scalar rewrite; it does not assume or package reciprocity. -/
+/-- Adding an arbitrary proposed wild scalar to the fixed-root ledger is
+equivalent to adding it to the unweighted explicit 827-orbit sum.  This is
+only a scalar rewrite; it does not assume or package reciprocity, and this
+unweighted equation is not the globally normalized one. -/
 theorem wild_add_actualTameLedger827_sum_eq_zero_iff
     (lift : ReflectedQRelaxedLocalizationLift827
       (rhoQ827 (K := K)) omega chi)

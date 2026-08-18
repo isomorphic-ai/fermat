@@ -21,8 +21,10 @@ character associated to the irregular index `44` is
 
 so reflection gives `omega * chi^-1 = omega^44`.  Lean computes its reduction
 as `powerCharacter59 44`, and kernel checks both parity and nontriviality.  The
-final theorems therefore specialize the actual tame-orbit and wild-reading
-nonvanishing chain without `heven` or `hne` premises.
+final theorems therefore specialize the fixed-root tame-orbit detector and
+its conditional wild-reading chain without `heven` or `hne` premises.  The
+globally `zeta`-normalized weighted ledger is treated separately in
+`CanonicalGlobalTameLedgerIrregular827`.
 -/
 import Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827
 import Mathlib.RingTheory.WittVector.Compare
@@ -214,7 +216,7 @@ theorem selectedProduct_actualTameOrbit827_canonical_irregular_ne_zero
     orientedPrimalMode827_canonical_irregular_even
     orientedPrimalMode827_canonical_irregular_ne_one lift selected
 
-/-- The complete honest 827 tame ledger is nonzero in the canonical
+/-- The unweighted fixed-root 827 detector total is nonzero in the canonical
 irregular character seat. -/
 theorem sum_actualTameOrbitValue827_canonical_irregular_ne_zero
     (lift : ReflectedQRelaxedLocalizationLift827
@@ -228,9 +230,9 @@ theorem sum_actualTameOrbitValue827_canonical_irregular_ne_zero
     orientedPrimalMode827_canonical_irregular_even
     orientedPrimalMode827_canonical_irregular_ne_one lift 1
 
-/-- Global reciprocity forces nonvanishing of the wild reading in the actual
-canonical irregular character seat.  Only the genuine lift and displayed
-reciprocity equation remain as arithmetic inputs. -/
+/-- A supplied unweighted fixed-root balance equation forces nonvanishing of
+its wild scalar in the canonical irregular character seat.  It is not the
+globally normalized reciprocity equation. -/
 theorem wild_ne_zero_of_actualTameOrbitReciprocity827_canonical_irregular
     (lift : ReflectedQRelaxedLocalizationLift827
       (rhoQ827 (K := K)) canonicalTeichmullerCharacter59
@@ -246,7 +248,7 @@ theorem wild_ne_zero_of_actualTameOrbitReciprocity827_canonical_irregular
     orientedPrimalMode827_canonical_irregular_ne_one lift 1
     wildReading reciprocity
 
-/-- The total of the genuine height-one-place tame ledger is nonzero in the
+/-- The unweighted fixed-root height-one detector total is nonzero in the
 canonical irregular seat.  A genuine reflected lift is the only premise. -/
 theorem actualTameLedger827_canonical_irregular_sum_ne_zero
     (lift : ReflectedQRelaxedLocalizationLift827
@@ -259,7 +261,7 @@ theorem actualTameLedger827_canonical_irregular_sum_ne_zero
     orientedPrimalMode827_canonical_irregular_even
     orientedPrimalMode827_canonical_irregular_ne_one lift 1
 
-/-- The genuine finite-support tame ledger itself is nonzero in the
+/-- The fixed-root finite-support detector ledger itself is nonzero in the
 canonical irregular seat. -/
 theorem actualTameLedger827_canonical_irregular_ne_zero
     (lift : ReflectedQRelaxedLocalizationLift827
@@ -272,8 +274,9 @@ theorem actualTameLedger827_canonical_irregular_ne_zero
     orientedPrimalMode827_canonical_irregular_even
     orientedPrimalMode827_canonical_irregular_ne_one lift 1
 
-/-- Reciprocity on the genuine height-one-place ledger forces the wild
-reading to be nonzero in the canonical irregular seat. -/
+/-- A supplied unweighted balance equation on the fixed-root height-one
+ledger forces its wild scalar to be nonzero in the canonical irregular
+seat. -/
 theorem wild_ne_zero_of_actualTameLedgerReciprocity827_canonical_irregular
     (lift : ReflectedQRelaxedLocalizationLift827
       (rhoQ827 (K := K)) canonicalTeichmullerCharacter59

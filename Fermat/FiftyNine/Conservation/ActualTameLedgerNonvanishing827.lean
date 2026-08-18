@@ -3,12 +3,13 @@ Copyright (c) 2026 Fabian Franz. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Fabian Franz, Codex
 
-# Nonvanishing of the actual height-one tame ledger at 827
+# Nonvanishing of the fixed-root height-one detector ledger at 827
 
 This module transports the already proved 58-place nonvanishing result to
-the honest finite-support ledger on height-one places.  It also states the
-final wild nonvanishing implication directly in terms of that ledger.  The
-global reciprocity equation remains a visible arithmetic hypothesis.
+the fixed-root finite-support ledger on genuine height-one places.  It also
+states the final wild nonvanishing implication directly in terms of an
+unweighted balance equation on that ledger.  This is a detector statement,
+not a global Hilbert-reciprocity identification.
 -/
 import Fermat.FiftyNine.Conservation.ActualTameLedger827
 import Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827
@@ -39,8 +40,9 @@ variable {K : Type uK} [Field K] [NumberField K]
   [IsCyclotomicExtension {59} ℚ K]
   [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
 
-/-- The total of the honest height-one-place tame ledger is nonzero whenever
-the genuine lift is read in a nontrivial even complementary mode. -/
+/-- The unweighted total of the fixed-root height-one-place detector ledger
+is nonzero whenever the genuine lift is read in a nontrivial even
+complementary mode. -/
 theorem actualTameLedger827_sum_ne_zero
     (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
     (heven : orientedPrimalMode827 omega chi (-1) = 1)
@@ -54,7 +56,7 @@ theorem actualTameLedger827_sum_ne_zero
   exact sum_actualTameOrbitValue827_ne_zero
     (K := K) omega chi heven hne lift selected
 
-/-- In particular, the actual finite-support tame ledger itself is nonzero. -/
+/-- In particular, the fixed-root finite-support ledger itself is nonzero. -/
 theorem actualTameLedger827_ne_zero
     (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
     (heven : orientedPrimalMode827 omega chi (-1) = 1)
@@ -69,9 +71,9 @@ theorem actualTameLedger827_ne_zero
   rw [hzero]
   simp
 
-/-- Global reciprocity stated directly on the honest height-one-place ledger
-forces the genuine wild contribution to be nonzero.  The reciprocity equation
-remains the single visible arithmetic input. -/
+/-- A supplied unweighted balance equation on the fixed-root height-one
+ledger forces the wild scalar to be nonzero.  This premise is not the
+globally `zeta`-normalized reciprocity equation. -/
 theorem wild_ne_zero_of_actualTameLedgerReciprocity827
     (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
     (heven : orientedPrimalMode827 omega chi (-1) = 1)
