@@ -118,12 +118,80 @@ postulate a local invariant. -/
 abbrev LambdaContinuousH2Readout59 :=
   LambdaRootsContinuousH2 K →ₗ[ZMod 59] ZMod 59
 
+/-- Linear scalar readouts written in the oriented `H²` coordinates.  This
+is a type of possible supplied maps, not a distinguished local invariant. -/
+abbrev LambdaOrientedContinuousH2Readout59 :=
+  LambdaOrientedContinuousH2 K →ₗ[ZMod 59] ZMod 59
+
+/-- Losslessly transport a supplied linear readout from oriented `H²`
+coordinates to the roots-valued `H²` retained by the canonical cup.  This
+equivalence constructs no readout. -/
+def lambdaH2SuppliedLinearReadoutTransportEquiv59 :
+    LambdaOrientedContinuousH2Readout59 K ≃ₗ[ZMod 59]
+      LambdaContinuousH2Readout59 K :=
+  orientH2ReadoutEquiv 59 (LambdaLocalField59 K)
+    (lambdaLocalPrimitiveRoot59 K)
+    (lambdaLocalPrimitiveRoot59_isPrimitive K)
+
+/-- A transported supplied readout first changes the coefficient coordinates
+of the retained degree-two class. -/
+@[simp]
+theorem lambdaH2SuppliedLinearReadoutTransportEquiv59_apply
+    (readout : LambdaOrientedContinuousH2Readout59 K)
+    (x : LambdaRootsContinuousH2 K) :
+    lambdaH2SuppliedLinearReadoutTransportEquiv59 K readout x =
+      readout (lambdaH2CoefficientOrientationEquiv59 K x) :=
+  rfl
+
+/-- Inverse transport evaluates a roots-valued supplied readout after the
+inverse coefficient orientation. -/
+@[simp]
+theorem lambdaH2SuppliedLinearReadoutTransportEquiv59_symm_apply
+    (readout : LambdaContinuousH2Readout59 K)
+    (x : LambdaOrientedContinuousH2 K) :
+    (lambdaH2SuppliedLinearReadoutTransportEquiv59 K).symm readout x =
+      readout ((lambdaH2CoefficientOrientationEquiv59 K).symm x) :=
+  rfl
+
 /-- The topology-preserving form of the scalar readout seam.
 
 A future normalized local invariant should naturally inhabit this stronger
 type.  Its underlying linear map is accepted by the minimal adapter below. -/
 abbrev LambdaContinuousH2ContinuousReadout59 :=
   LambdaRootsContinuousH2 K →L[ZMod 59] ZMod 59
+
+/-- Topology-preserving scalar readouts written in the oriented `H²`
+coordinates.  This is again only a type of explicitly supplied maps. -/
+abbrev LambdaOrientedContinuousH2ContinuousReadout59 :=
+  LambdaOrientedContinuousH2 K →L[ZMod 59] ZMod 59
+
+/-- Losslessly transport a supplied topology-preserving readout from
+oriented `H²` coordinates to roots-valued `H²`.  The equivalence contains no
+chosen invariant, normalization, or arithmetic value. -/
+def lambdaH2SuppliedContinuousReadoutTransportEquiv59 :
+    LambdaOrientedContinuousH2ContinuousReadout59 K ≃ₗ[ZMod 59]
+      LambdaContinuousH2ContinuousReadout59 K :=
+  orientH2ContinuousReadoutEquiv 59 (LambdaLocalField59 K)
+    (lambdaLocalPrimitiveRoot59 K)
+    (lambdaLocalPrimitiveRoot59_isPrimitive K)
+
+/-- Application of the transported supplied continuous readout. -/
+@[simp]
+theorem lambdaH2SuppliedContinuousReadoutTransportEquiv59_apply
+    (readout : LambdaOrientedContinuousH2ContinuousReadout59 K)
+    (x : LambdaRootsContinuousH2 K) :
+    lambdaH2SuppliedContinuousReadoutTransportEquiv59 K readout x =
+      readout (lambdaH2CoefficientOrientationEquiv59 K x) :=
+  rfl
+
+/-- Inverse application of the supplied continuous-readout transport. -/
+@[simp]
+theorem lambdaH2SuppliedContinuousReadoutTransportEquiv59_symm_apply
+    (readout : LambdaContinuousH2ContinuousReadout59 K)
+    (x : LambdaOrientedContinuousH2 K) :
+    (lambdaH2SuppliedContinuousReadoutTransportEquiv59 K).symm readout x =
+      readout ((lambdaH2CoefficientOrientationEquiv59 K).symm x) :=
+  rfl
 
 /-- Consume a completed continuous cup and the canonical lambda-local Kummer
 maps while retaining the honest continuous `H^2(mu_59)` result. -/
