@@ -446,6 +446,8 @@ open Fermat.Conservation
 #check TatePairing.GlobalReciprocityLaw.reciprocityTransfer
 #check TatePairing.GlobalReciprocityLaw.reciprocity_L1_conservation
 #check TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places
+#check TatePairing.GlobalReciprocityLaw.pairAt_add_pairAt_eq_zero_of_outside_two
+#check TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_pairAt_of_outside_two
 #check TatePairing.LocalOrthogonalityGuard
 #check TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero
 
@@ -1050,6 +1052,13 @@ open Fermat.Conservation
 #guard_depends_on
   TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places,
   TatePairing.PlaceIndexedLocalPairing.pairAt
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.pairAt_add_pairAt_eq_zero_of_outside_two,
+  TatePairing.GlobalReciprocityLaw.sum_eq_zero,
+  TatePairing.PlaceIndexedLocalPairing.pairAt
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_pairAt_of_outside_two,
+  TatePairing.GlobalReciprocityLaw.pairAt_add_pairAt_eq_zero_of_outside_two
 #guard_depends_on TatePairing.LocalOrthogonalityGuard.pairAt_eq_zero,
   TatePairing.LocalOrthogonalityGuard.orthogonal
 
