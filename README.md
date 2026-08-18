@@ -612,6 +612,12 @@ readout (selectedClassGauge59 pair) = 0
 Under that pointwise hypothesis, tame-orbit silence at the literal Fermat
 factor difference is equivalent to `VandiverSevenA 0 1`.  No dimension bound
 or injectivity theorem for the complete 59-torsion class group is required.
+`FermatFactorClassGaugeCharacterBoundary59` also isolates the first step of
+the optional character-component route: the selected class is fixed by the
+canonical irregular projector exactly when the difference between the
+literal Fermat Selmer class and its irregular projection lies in the genuine
+global-unit range.  That unit-range receipt is not currently supplied, and
+the reduction is transitively independent of the older Takagi proof.
 
 Two independent wild-side obligations remain.  First, the globally realized
 827 profile is not yet proved compatible at lambda with the reflected factor
