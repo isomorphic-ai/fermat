@@ -48,6 +48,12 @@
   value at the actual place above 59 is zero from an honestly supplied
   `GlobalReciprocityLaw`, comparison at all 58 orbit places, and silence at
   every remaining nonwild place.
+- `CanonicalConjugatePairConservation827` packages the same live zero-total
+  `Finsupp` as a literal `PlaceLedger`, routes it through a zero-spent
+  `Transfer` to `Ledger.vacuum`, and exports its exact scheduler-L1 receipt.
+  This records the proved tame cancellation in the generic conservation
+  infrastructure.  It is not a place-indexed Kummer--Tate pairing and does
+  not prove global Hilbert reciprocity.
 - Those three local-global inputs are not constructed here.  The genuine
   global-reciprocity producer, the all-orbit pairing comparison, any
   outside-place silence still required by that pairing, an independent
