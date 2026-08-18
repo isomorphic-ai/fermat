@@ -40,6 +40,7 @@ open Fermat.FiftyNine.Conservation.FermatFactorConjugation59
 open Fermat.FiftyNine.Conservation.FermatFactorSelmerSource59
 open Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 open Fermat.FiftyNine.Conservation.StateFactorPair
+open Fermat.FiftyNine.Conservation.UlamReadout827
 
 local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
 local instance : Fact (0 < 59) := ⟨by norm_num⟩
@@ -200,6 +201,27 @@ theorem cyclotomicClassMinusProjector59_allocatedPlusRoot
   cyclotomicClassMinusProjector59_eq_self_of_negOne _
     (cyclotomicNegOne_allocatedPlusRoot_eq_neg pair)
 
+/-- The W7 class gauge itself is odd.  This is the form consumed by the
+pointwise Artin-readout route: the gauge is twice the allocated plus root,
+so the genuine `-1` class action negates it as well. -/
+theorem cyclotomicNegOne_selectedClassGauge59_eq_neg
+    (pair : StateLinkedIdealPair hZeta S hz) :
+    cyclotomicClassTorsionRepresentation59 K (-1)
+        (selectedClassGauge59 pair) =
+      -selectedClassGauge59 pair := by
+  rw [selectedClassGauge59_eq_plusRoot_add_plusRoot, map_add,
+    cyclotomicNegOne_allocatedPlusRoot_eq_neg]
+  rw [neg_add]
+
+/-- Consequently the actual W7 class gauge is fixed by the complete odd
+projector, without any chi=15 seating premise. -/
+theorem cyclotomicClassMinusProjector59_selectedClassGauge59
+    (pair : StateLinkedIdealPair hZeta S hz) :
+    cyclotomicClassMinusProjector59 (K := K)
+        (selectedClassGauge59 pair) = selectedClassGauge59 pair :=
+  cyclotomicClassMinusProjector59_eq_self_of_negOne _
+    (cyclotomicNegOne_selectedClassGauge59_eq_neg pair)
+
 /-- The part of the full odd class space not retained by the selected
 `chi = omega^15` projector.  This is a derived endomorphism, not supplied
 data. -/
@@ -238,6 +260,20 @@ theorem allocatedPlusRoot_irregularProjector_fixed_iff_complement_eq_zero
           (allocatedRootClassPTorsion pair.ledger 0) = 0 := by
   rw [cyclotomicClassIrregularComplement59, LinearMap.sub_apply,
     cyclotomicClassMinusProjector59_allocatedPlusRoot]
+  exact eq_comm.trans sub_eq_zero.symm
+
+/-- The same exact chi=15 obstruction, now stated directly on the W7 class
+gauge: all even support has been removed, and the only remaining question is
+whether its complementary odd component vanishes. -/
+theorem selectedClassGauge59_irregularProjector_fixed_iff_complement_eq_zero
+    [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
+    (pair : StateLinkedIdealPair hZeta S hz) :
+    cyclotomicClassProjector59 K irregularCharacter59
+        (selectedClassGauge59 pair) = selectedClassGauge59 pair ↔
+      cyclotomicClassIrregularComplement59 (K := K)
+          (selectedClassGauge59 pair) = 0 := by
+  rw [cyclotomicClassIrregularComplement59, LinearMap.sub_apply,
+    cyclotomicClassMinusProjector59_selectedClassGauge59]
   exact eq_comm.trans sub_eq_zero.symm
 
 end Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59
