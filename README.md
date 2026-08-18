@@ -705,6 +705,13 @@ requested W5 equality of maps; producing that carrier with W1's lambda
 coordinate and upgrading local Frobenius to global Artin reciprocity remain
 separate obligations.
 
+`ResidueKummerFrobeniusAutomorphism827` further proves that the bundled
+Frobenius endomorphism is reversible.  Its explicit inverse sends the
+universal Kummer root to `u^(-14) * T`, and the two compositions are the
+identity algebra map.  The local read therefore comes from a genuine
+algebra automorphism, while no global class-field-theoretic Artin element is
+claimed.
+
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
 classes to exactly the retained W1 `H¹` factors, recovers the W1 `H²` cup and
@@ -749,9 +756,14 @@ W1W3CompatibleFiber827 is nonempty
 ```
 
 These are the canonical obstruction and all of its scalar boundary charges,
-not a proof that either vanishes.  The nonzero ambient W1 cup also has not
-yet been shown nonzero
-after restriction to the genuine seated primal Selmer space, and
+not a proof that either vanishes.  The nonzero ambient W1 cup has not yet
+been shown nonzero after restriction to the genuine seated primal Selmer
+space, and
+`TwistedLambdaStrictSelmerObstruction59` shows why its obvious left factor
+cannot serve as that witness: the explicit W1 radicand has lambda valuation
+`-1`, whereas every strict 59-Selmer representative has lambda valuation
+divisible by 59.  Thus a different strict chi=15 class must be produced and
+paired nontrivially with W1's retained reflected factor.  Moreover,
 `GlobalReciprocityLaw` is still
 consumed rather than constructed.  These PT/local-compatibility,
 seated-transversality, and reciprocity seams remain separate from the
