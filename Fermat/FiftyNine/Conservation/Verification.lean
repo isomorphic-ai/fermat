@@ -56,6 +56,7 @@ import Fermat.FiftyNine.Conservation.VostokovLocalization59
 import Fermat.FiftyNine.Conservation.VostokovShapeAudit59
 import Fermat.FiftyNine.Conservation.IwasawaLocalization59
 import Fermat.FiftyNine.Conservation.KummerTateLocalization59
+import Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59
 import Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 import Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 import Fermat.FiftyNine.Conservation.TransformerProbe
@@ -2188,6 +2189,59 @@ the checks below do not manufacture that arithmetic comparison. -/
   Fermat.FiftyNine.Conservation.KummerTateLocalization59.toActualCompletionCanonicalReflectedWildKummerCoreAt59_pairing_apply,
   Fermat.FiftyNine.Conservation.KummerTateLocalization59.toActualCompletionCanonicalReflectedWildKummerCoreAt59
 
+/-! ### Continuous Kummer--Tate adapter at the literal lambda place
+
+This layer keeps the complete continuous `H²(mu_59)` class until an explicit
+linear or continuous-linear readout is supplied.  The checks therefore cover
+the two differently typed `H¹` seats, the retained `H²` target, scalarization,
+and global pullback without asserting a local invariant or comparison theorem.
+-/
+
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaOrientedContinuousH1
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaRootsContinuousH1
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaRootsContinuousH2
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaContinuousCup59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaContinuousH2Readout59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.LambdaContinuousH2ContinuousReadout59
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromCup
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromCup_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromContinuousReadout
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromContinuousReadout_apply
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairingFromCup
+#check Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairingFromCup_apply
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup,
+  Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalPrimitiveRoot59_isPrimitive
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromCup,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalH2PairingFromCup
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromContinuousReadout,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromCup
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairingFromCup,
+  Fermat.Conservation.LocalKummerTransport.Pairing.pullback
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairingFromCup,
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaLocalPairingFromCup
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59.lambdaGlobalPairingFromCup,
+  Fermat.FiftyNine.Conservation.LocalCompletion59.lambdaLocalization59
+
+-- All four readback theorems are definitional (`rfl`).  Their expanded
+-- formulas are signature audits above; dependency guards intentionally do
+-- not pretend that constants occurring only in theorem types occur in the
+-- proof values.
+
 /-! ### Span-restricted pairing at the literal lambda place
 
 This is the narrowest compiled local adapter.  Completion, lambda place,
@@ -2755,6 +2809,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.VostokovShapeAudit59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.IwasawaLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.KummerTateLocalization59
+#guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.GaugeAsNaturalityDefect59
 #guard_standard_axioms_prefix Fermat.FiftyNine.Conservation.TransformerProbe
@@ -2785,6 +2840,7 @@ trivial-coefficient conversion genuinely uses Mathlib's `H¹` equivalence. -/
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.VostokovShapeAudit59
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.IwasawaLocalization59
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.KummerTateLocalization59
+#audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59
 #audit_no_product_equiv_types_prefix Fermat.FiftyNine.Conservation.KummerCupSpanLocalization59
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FocusConormal
 #audit_no_product_equiv_types_prefix Fermat.Conservation.SteeringFiber
