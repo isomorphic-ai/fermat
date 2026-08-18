@@ -281,6 +281,65 @@ theorem strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
       intro tau _
       ring
 
+/-- The normalized 58-coordinate profile, rather than a chosen global
+representative of its fiber, determines the complete strict tame
+functional. -/
+theorem strictTameOrbitFunctional827_eq_of_normalizedProfile
+    (y y' : RelaxedCarrier827 K)
+    (hy : ∀ tau : GaloisIndex59,
+      relaxedOrbitValuation827 K tau y =
+        normalizedFullOrbitEigenprofileCoordinates827
+          canonicalTeichmullerCharacter59 irregularCharacter59 tau)
+    (hy' : ∀ tau : GaloisIndex59,
+      relaxedOrbitValuation827 K tau y' =
+        normalizedFullOrbitEigenprofileCoordinates827
+          canonicalTeichmullerCharacter59 irregularCharacter59 tau) :
+    strictTameOrbitFunctional827 K y =
+      strictTameOrbitFunctional827 K y' := by
+  ext x
+  rw [strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+      K y hy x,
+    strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+      K y' hy' x]
+
+/-- The resulting class readout is likewise independent of the point chosen
+inside the normalized reflected fiber.  Surjectivity of the genuine Selmer
+class gauge transports equality of the two strict functionals to equality
+on the whole class carrier. -/
+theorem classReadout_eq_of_normalizedProfile
+    (y y' : RelaxedCarrier827 K)
+    (hy : ∀ tau : GaloisIndex59,
+      relaxedOrbitValuation827 K tau y =
+        normalizedFullOrbitEigenprofileCoordinates827
+          canonicalTeichmullerCharacter59 irregularCharacter59 tau)
+    (hy' : ∀ tau : GaloisIndex59,
+      relaxedOrbitValuation827 K tau y' =
+        normalizedFullOrbitEigenprofileCoordinates827
+          canonicalTeichmullerCharacter59 irregularCharacter59 tau)
+    (readout readout' : ClassTorsion59 K →ₗ[ZMod 59] ZMod 59)
+    (hreadout :
+      readout.comp (fermatFactorClassGaugeMap59 (K := K)) =
+        strictTameOrbitFunctional827 K y)
+    (hreadout' :
+      readout'.comp (fermatFactorClassGaugeMap59 (K := K)) =
+        strictTameOrbitFunctional827 K y') :
+    readout = readout' := by
+  have hfunctional :
+      strictTameOrbitFunctional827 K y =
+        strictTameOrbitFunctional827 K y' :=
+    strictTameOrbitFunctional827_eq_of_normalizedProfile K y y' hy hy'
+  apply LinearMap.ext
+  intro c
+  obtain ⟨x, rfl⟩ := fermatFactorClassGaugeMap59_surjective (K := K) c
+  calc
+    readout (fermatFactorClassGaugeMap59 (K := K) x) =
+        strictTameOrbitFunctional827 K y x :=
+      LinearMap.congr_fun hreadout x
+    _ = strictTameOrbitFunctional827 K y' x :=
+      LinearMap.congr_fun hfunctional x
+    _ = readout' (fermatFactorClassGaugeMap59 (K := K) x) :=
+      (LinearMap.congr_fun hreadout' x).symm
+
 variable [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
   {zeta : K} {hZeta : IsPrimitiveRoot zeta 59}
   {S : Fermat.FiftyNine.Conservation.FermatState.PrimitiveSecondCaseSolution}
