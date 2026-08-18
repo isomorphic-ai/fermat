@@ -173,6 +173,34 @@ abbrev NormalizedTameSilenceReciprocity59 :=
     (normalizedOldWildInterface59 K omega chi)
     (normalizedReflectedWildLocalization59 K omega chi)
 
+/-- For the normalized one-column localization, reciprocity itself proves
+lawfulness on the conserved 827 kernel. -/
+theorem normalizedWildLawfulness59_of_reciprocity
+    (selectedPlace : Place827 K)
+    (execution : NormalizedTameSilenceReciprocity59 K omega chi) :
+    NormalizedWildLawfulness59 K omega chi selectedPlace :=
+  wildLawfulness827_of_reciprocity
+    (cyclotomicQRelaxedSelmerRepresentation827 K)
+    omega chi selectedPlace (lambdaPlace59 K)
+    (normalizedOldWildInterface59 K omega chi)
+    (normalizedReflectedWildLocalization59 K omega chi)
+    execution
+
+/-- The canonical coefficient when lawfulness is obtained from reciprocity
+rather than supplied separately. -/
+noncomputable def normalizedWildCoefficientOfReciprocity59
+    (selectedPlace : Place827 K)
+    (incidence : PointedTateIncidence827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi selectedPlace)
+    (seating : QLocalizationEquivariance827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi selectedPlace)
+    (execution : NormalizedTameSilenceReciprocity59 K omega chi) :
+    H_FLT (OldPrimal59
+      (cyclotomicStrictSelmerRepresentation59 K) chi) →ₗ[ZMod 59] ZMod 59 :=
+  normalizedWildCoefficient59 K omega chi selectedPlace incidence seating
+    (normalizedWildLawfulness59_of_reciprocity
+      K omega chi selectedPlace execution)
+
 variable {zeta : K} {hZeta : IsPrimitiveRoot zeta 59}
 variable {solution : FermatState.PrimitiveSecondCaseSolution}
 variable {hz : (59 : ℤ) ∣ solution.z}
@@ -208,5 +236,30 @@ theorem vandiverSevenA_of_normalizedContinuousReadout
         boundary_ne_zero
         (normalizedReflectedWildLocalization59 K omega chi)
         lawful pair hF gaugeSeating processes execution y
+
+/-- Stronger compiled endpoint: for the normalized localization, global
+reciprocity discharges lawfulness automatically.  The remaining arithmetic
+comparison is exactly that the resulting wild coefficient processes the
+class-valued relation-(7a) gauge. -/
+theorem vandiverSevenA_of_normalizedContinuousReciprocity
+    (selectedPlace : Place827 K)
+    (incidence : PointedTateIncidence827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi selectedPlace)
+    (seating : QLocalizationEquivariance827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi selectedPlace)
+    (pair : StateLinkedIdealPair hZeta solution hz)
+    (hF : H_FLT (OldPrimal59
+      (cyclotomicStrictSelmerRepresentation59 K) chi))
+    (gaugeSeating : ClassValuedSevenAGaugeSeating pair hF)
+    (execution : NormalizedTameSilenceReciprocity59 K omega chi)
+    (processes : WildProcessesAtLeastSevenA gaugeSeating
+      (normalizedWildCoefficientOfReciprocity59
+        K omega chi selectedPlace incidence seating execution)) :
+    pair.ledger.VandiverSevenA 0 1 :=
+  vandiverSevenA_of_normalizedContinuousReadout
+    K omega chi selectedPlace incidence seating
+    (normalizedWildLawfulness59_of_reciprocity
+      K omega chi selectedPlace execution)
+    pair hF gaugeSeating processes execution
 
 end Fermat.FiftyNine.Conservation.NormalizedContinuousReadout59
