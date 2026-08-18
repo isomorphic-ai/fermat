@@ -88,6 +88,24 @@ def pairAt
     (v : Place) (x : SelmerChi) (y : DOmegaSelmerChiStar) : ZMod p :=
   pairing.readings x y v
 
+/-- Total of every retained local receipt away from one distinguished
+place.  The `Finsupp` erasure keeps the definition finite even when the type
+of all places is infinite. -/
+def awayReadingTotal
+    (pairing : PlaceIndexedLocalPairing p Delta omega chi Place
+      SelmerChi DOmegaSelmerChiStar)
+    (distinguished : Place) (x : SelmerChi) (y : DOmegaSelmerChiStar) :
+    ZMod p :=
+  ((pairing.readings x y).erase distinguished).sum fun _ value ↦ value
+
+/-- Total reading on a named finite collection of places. -/
+def readingTotalOn
+    (pairing : PlaceIndexedLocalPairing p Delta omega chi Place
+      SelmerChi DOmegaSelmerChiStar)
+    (places : Finset Place) (x : SelmerChi) (y : DOmegaSelmerChiStar) :
+    ZMod p :=
+  ∑ v ∈ places, pairing.pairAt v x y
+
 /-- Named projection of the arithmetic adjoint law. -/
 theorem pairAt_smul_adjoint
     (pairing : PlaceIndexedLocalPairing p Delta omega chi Place
@@ -284,6 +302,68 @@ theorem reciprocity_L1_conservation
           (reciprocity.reciprocityTransfer x y).before) :=
   IsoConserveBridge.transfer_L1_conservation
     (reciprocity.reciprocityTransfer x y)
+
+/-- Reciprocity reads one distinguished column as the negative total of
+every other retained column, without collapsing the away support. -/
+theorem pairAt_eq_neg_awayReadingTotal
+    (reciprocity : GlobalReciprocityLaw pairing)
+    (distinguished : Place) (x : SelmerChi) (y : DOmegaSelmerChiStar) :
+    pairing.pairAt distinguished x y =
+      -pairing.awayReadingTotal distinguished x y := by
+  classical
+  have hsum := reciprocity.sum_eq_zero x y
+  rw [← Finsupp.erase_add_single distinguished (pairing.readings x y),
+    Finsupp.sum_add_index' (fun _ ↦ rfl) (fun _ _ _ ↦ rfl)] at hsum
+  have hbalanced :
+      pairing.awayReadingTotal distinguished x y +
+          pairing.pairAt distinguished x y = 0 := by
+    simpa [PlaceIndexedLocalPairing.awayReadingTotal,
+      PlaceIndexedLocalPairing.pairAt] using hsum
+  exact eq_neg_of_add_eq_zero_right hbalanced
+
+/-- If all columns outside one distinguished place and a finite retained set
+are silent, reciprocity balances the distinguished column against the exact
+total on that set. -/
+theorem pairAt_eq_neg_readingTotalOn
+    (reciprocity : GlobalReciprocityLaw pairing)
+    (distinguished : Place) (places : Finset Place)
+    (hdistinguished : distinguished ∉ places)
+    (x : SelmerChi) (y : DOmegaSelmerChiStar)
+    (houtside : ∀ v, v ≠ distinguished → v ∉ places →
+      pairing.pairAt v x y = 0) :
+    pairing.pairAt distinguished x y =
+      -pairing.readingTotalOn places x y := by
+  classical
+  let entries := pairing.readings x y
+  have hsupport : entries.support ⊆ insert distinguished places := by
+    intro v hv
+    rw [Finset.mem_insert]
+    by_cases hvd : v = distinguished
+    · exact Or.inl hvd
+    · refine Or.inr ?_
+      by_contra hvp
+      exact (Finsupp.mem_support_iff.mp hv) (houtside v hvd hvp)
+  have hsum_support :
+      entries.support.sum (fun v ↦ entries v) = 0 :=
+    reciprocity.sum_eq_zero x y
+  have hsum_insert :
+      (insert distinguished places).sum (fun v ↦ entries v) = 0 := by
+    calc
+      (insert distinguished places).sum (fun v ↦ entries v) =
+          entries.support.sum (fun v ↦ entries v) := by
+        symm
+        apply Finset.sum_subset hsupport
+        intro v _hv hnot
+        by_contra hne
+        exact hnot (Finsupp.mem_support_iff.mpr hne)
+      _ = 0 := hsum_support
+  have hbalanced :
+      pairing.pairAt distinguished x y +
+          pairing.readingTotalOn places x y = 0 := by
+    rw [Finset.sum_insert hdistinguished] at hsum_insert
+    simpa [PlaceIndexedLocalPairing.readingTotalOn,
+      PlaceIndexedLocalPairing.pairAt, entries] using hsum_insert
+  exact eq_neg_of_add_eq_zero_left hbalanced
 
 /-- If every local column except one is silent, reciprocity silences the
 remaining column. -/

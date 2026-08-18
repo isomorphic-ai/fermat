@@ -433,6 +433,8 @@ open Fermat.Conservation
 #check TatePairing.character_mul_reflectedCharacter
 #check TatePairing.PlaceIndexedLocalPairing
 #check TatePairing.PlaceIndexedLocalPairing.pairAt
+#check TatePairing.PlaceIndexedLocalPairing.awayReadingTotal
+#check TatePairing.PlaceIndexedLocalPairing.readingTotalOn
 #check TatePairing.PlaceIndexedLocalPairing.pairAt_smul_adjoint
 #check TatePairing.PlaceIndexedLocalPairing.pairAt_hash_smul_adjoint
 #check TatePairing.PlaceIndexedLocalPairing.finite_support
@@ -445,6 +447,8 @@ open Fermat.Conservation
 #check TatePairing.GlobalReciprocityLaw.ledger_conservation_identity
 #check TatePairing.GlobalReciprocityLaw.reciprocityTransfer
 #check TatePairing.GlobalReciprocityLaw.reciprocity_L1_conservation
+#check TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_awayReadingTotal
+#check TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_readingTotalOn
 #check TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places
 #check TatePairing.GlobalReciprocityLaw.pairAt_add_pairAt_eq_zero_of_outside_two
 #check TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_pairAt_of_outside_two
@@ -1051,6 +1055,18 @@ open Fermat.Conservation
 #guard_depends_on
   TatePairing.GlobalReciprocityLaw.reciprocity_L1_conservation,
   IsoConserveBridge.transfer_L1_conservation
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_awayReadingTotal,
+  TatePairing.GlobalReciprocityLaw.sum_eq_zero
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_awayReadingTotal,
+  TatePairing.PlaceIndexedLocalPairing.awayReadingTotal
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_readingTotalOn,
+  TatePairing.GlobalReciprocityLaw.sum_eq_zero
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_readingTotalOn,
+  TatePairing.PlaceIndexedLocalPairing.readingTotalOn
 #guard_depends_on
   TatePairing.GlobalReciprocityLaw.pairAt_eq_zero_of_other_places,
   TatePairing.PlaceIndexedLocalPairing.pairAt
