@@ -10,11 +10,12 @@ actual completion of the `59`-th cyclotomic field at
 `lambda = (zeta_59 - 1)`.  Its retained output is genuine continuous `H^2`
 with roots-of-unity coefficients.
 
-The descended cup remains an explicit input so this adapter is independent of
-its implementation.  Likewise, scalarization takes a plain linear or
-continuous-linear readout as an explicit argument.  No provider structure,
-local-invariant existence claim, Tate-duality theorem, Hilbert-symbol
-comparison, or new axiom is introduced here.
+The reusable adapters retain an explicit descended-cup input, while the
+canonical specialization consumes the actual continuous cup.  Scalarization
+still takes a plain linear or continuous-linear readout as an explicit
+argument.  No provider structure, local-invariant existence claim,
+Tate-duality theorem, Hilbert-symbol comparison, or unsupported postulate is
+introduced here.
 -/
 import Fermat.Conservation.ContinuousKummerTateAlgebra
 import Fermat.Conservation.LocalKummerTransport
@@ -59,6 +60,20 @@ abbrev LambdaContinuousCup59 :=
     LambdaRootsContinuousH1 K →ₗ[ZMod 59]
       LambdaRootsContinuousH2 K
 
+/-- The actual continuous cup specialized to the coefficient pairing at the
+cyclotomic lambda completion. -/
+def lambdaContinuousCup59 : LambdaContinuousCup59 K :=
+  kummerCupH1 59 (LambdaLocalField59 K)
+
+/-- Readback of the canonical lambda-local cup specialization. -/
+@[simp]
+theorem lambdaContinuousCup59_apply
+    (x : LambdaOrientedContinuousH1 K)
+    (y : LambdaRootsContinuousH1 K) :
+    lambdaContinuousCup59 K x y =
+      kummerCupH1 59 (LambdaLocalField59 K) x y :=
+  rfl
+
 /-- The weakest scalar readout seam needed by the downstream algebra.
 
 This is only a type alias for an explicit argument; it does not install or
@@ -97,6 +112,28 @@ theorem lambdaLocalH2PairingFromCup_apply
         (rightKummerMap 59 (LambdaLocalField59 K) y) :=
   rfl
 
+/-- Apply the canonical continuous cup to the canonical lambda-local Kummer
+maps, retaining the honest roots-of-unity-valued continuous `H²` class. -/
+def lambdaLocalH2Pairing :
+    KummerClass 59 (LambdaLocalField59 K) →+
+      KummerClass 59 (LambdaLocalField59 K) →+
+        LambdaRootsContinuousH2 K :=
+  kummerPairing 59 (LambdaLocalField59 K)
+    (lambdaLocalPrimitiveRoot59 K)
+    (lambdaLocalPrimitiveRoot59_isPrimitive K)
+
+/-- Readback of the canonical retained local `H²` pairing. -/
+@[simp]
+theorem lambdaLocalH2Pairing_apply
+    (x y : KummerClass 59 (LambdaLocalField59 K)) :
+    lambdaLocalH2Pairing K x y =
+      lambdaContinuousCup59 K
+        (leftKummerMap 59 (LambdaLocalField59 K)
+          (lambdaLocalPrimitiveRoot59 K)
+          (lambdaLocalPrimitiveRoot59_isPrimitive K) x)
+        (rightKummerMap 59 (LambdaLocalField59 K) y) :=
+  rfl
+
 /-- Scalarize the retained local `H^2` pairing by an explicitly supplied
 linear readout. -/
 def lambdaLocalPairingFromCup
@@ -126,6 +163,26 @@ theorem lambdaLocalPairingFromCup_apply
         (rightKummerMap 59 (LambdaLocalField59 K) y)) :=
   rfl
 
+/-- Scalarize the canonical retained local `H²` pairing by an explicitly
+supplied linear readout. -/
+def lambdaLocalPairing
+    (readout : LambdaContinuousH2Readout59 K) :
+    WildKummerPairing.Pairing 59 (LambdaLocalField59 K) :=
+  lambdaLocalPairingFromCup K (lambdaContinuousCup59 K) readout
+
+/-- Readback of the canonical scalarized local pairing. -/
+@[simp]
+theorem lambdaLocalPairing_apply
+    (readout : LambdaContinuousH2Readout59 K)
+    (x y : KummerClass 59 (LambdaLocalField59 K)) :
+    lambdaLocalPairing K readout x y =
+      readout (lambdaContinuousCup59 K
+        (leftKummerMap 59 (LambdaLocalField59 K)
+          (lambdaLocalPrimitiveRoot59 K)
+          (lambdaLocalPrimitiveRoot59_isPrimitive K) x)
+        (rightKummerMap 59 (LambdaLocalField59 K) y)) :=
+  rfl
+
 /-- A topology-preserving readout enters only through its underlying linear
 map; this adapter still makes no existence or normalization claim. -/
 def lambdaLocalPairingFromContinuousReadout
@@ -142,6 +199,27 @@ theorem lambdaLocalPairingFromContinuousReadout_apply
     (x y : KummerClass 59 (LambdaLocalField59 K)) :
     lambdaLocalPairingFromContinuousReadout K cup readout x y =
       readout (cup
+        (leftKummerMap 59 (LambdaLocalField59 K)
+          (lambdaLocalPrimitiveRoot59 K)
+          (lambdaLocalPrimitiveRoot59_isPrimitive K) x)
+        (rightKummerMap 59 (LambdaLocalField59 K) y)) :=
+  rfl
+
+/-- Scalarize the canonical local cup by an explicitly supplied
+topology-preserving readout. -/
+def lambdaLocalPairingWithContinuousReadout
+    (readout : LambdaContinuousH2ContinuousReadout59 K) :
+    WildKummerPairing.Pairing 59 (LambdaLocalField59 K) :=
+  lambdaLocalPairingFromContinuousReadout K
+    (lambdaContinuousCup59 K) readout
+
+/-- Readback of the canonical topology-preserving scalarization. -/
+@[simp]
+theorem lambdaLocalPairingWithContinuousReadout_apply
+    (readout : LambdaContinuousH2ContinuousReadout59 K)
+    (x y : KummerClass 59 (LambdaLocalField59 K)) :
+    lambdaLocalPairingWithContinuousReadout K readout x y =
+      readout (lambdaContinuousCup59 K
         (leftKummerMap 59 (LambdaLocalField59 K)
           (lambdaLocalPrimitiveRoot59 K)
           (lambdaLocalPrimitiveRoot59_isPrimitive K) x)
@@ -166,6 +244,28 @@ theorem lambdaGlobalPairingFromCup_apply
     (x y : KummerClass 59 K) :
     lambdaGlobalPairingFromCup K cup readout x y =
       readout (cup
+        (leftKummerMap 59 (LambdaLocalField59 K)
+          (lambdaLocalPrimitiveRoot59 K)
+          (lambdaLocalPrimitiveRoot59_isPrimitive K)
+          (LocalKummerTransport.map 59 (lambdaLocalization59 K) x))
+        (rightKummerMap 59 (LambdaLocalField59 K)
+          (LocalKummerTransport.map 59 (lambdaLocalization59 K) y))) :=
+  rfl
+
+/-- Pull the canonical scalarized lambda-local pairing back to global Kummer
+classes.  The scalar readout remains explicit. -/
+def lambdaGlobalPairing
+    (readout : LambdaContinuousH2Readout59 K) :
+    WildKummerPairing.Pairing 59 K :=
+  lambdaGlobalPairingFromCup K (lambdaContinuousCup59 K) readout
+
+/-- Readback of the canonical global pullback. -/
+@[simp]
+theorem lambdaGlobalPairing_apply
+    (readout : LambdaContinuousH2Readout59 K)
+    (x y : KummerClass 59 K) :
+    lambdaGlobalPairing K readout x y =
+      readout (lambdaContinuousCup59 K
         (leftKummerMap 59 (LambdaLocalField59 K)
           (lambdaLocalPrimitiveRoot59 K)
           (lambdaLocalPrimitiveRoot59_isPrimitive K)
