@@ -90,6 +90,19 @@ abbrev ContinuousKummerCohomologyTwo :=
   (continuousCohomology (ZMod n) (AbsoluteGalois F) 2).obj
     (rootsTopRepresentation n F)
 
+/-- Conditional, noncanonical normalization of a linear readout at a supplied
+nonzero continuous Kummer `H²` class.
+
+This is only linear algebra over the prime field `ZMod n`: it neither produces
+the nonzero class nor identifies the chosen readout with a local invariant or
+any other arithmetic normalization. -/
+theorem exists_conditionalNoncanonicalReadout_eq_one
+    [Fact (Nat.Prime n)]
+    (z : ContinuousKummerCohomologyTwo n F) (hz : z ≠ 0) :
+    ∃ readout : ContinuousKummerCohomologyTwo n F →ₗ[ZMod n] ZMod n,
+      readout z = 1 :=
+  Module.Projective.exists_dual_eq_one (ZMod n) hz
+
 /-- Compose any descended bilinear continuous-`H¹` cup product with the
 oriented left and un-oriented right Kummer maps.
 
