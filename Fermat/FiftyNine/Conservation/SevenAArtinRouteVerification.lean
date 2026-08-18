@@ -16,14 +16,16 @@ This non-imported executable audit leaf covers only the newly exposed route:
 * the inverse-oriented even-plus-primitive Fourier shape has zero mode 43;
 * every actual global-unit raw residue wave has that shape and therefore
   has zero inverse-oriented mode-43 projection;
+* the raw wave is identified with the genuine canonical tame context and
+  with the actual strict-Selmer `unitInclusion` pairing, including the
+  mandatory global-root factor and inverse place orientation;
 * W7 identifies orbit silence with relation 7A once an explicit injective
   class readout and its exact factorization are supplied.
 
 The checks deliberately do not claim the still-missing arithmetic inputs:
-same-Hom-line membership, comparison of the scalar Fourier projection with
-the concrete strict-Selmer tame orbit for a reflected input, a global
-reflected lift, or the Kummer--Artin comparison.  This file does not import the
-monolithic exponent-59 verifier.
+same-Hom-line membership, a global reflected lift realizing the required
+pure orbit mode, or the Kummer--Artin comparison.  This file does not import
+the monolithic exponent-59 verifier.
 -/
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.OneDimensionalUnitProportionality
@@ -34,6 +36,8 @@ import Fermat.FiftyNine.Conservation.SeatedTameOrbitReciprocityBalance827
 import Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827
 import Fermat.FiftyNine.Conservation.ArbitraryUnitOrbitDecomposition827
 import Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827
+import Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827
+import Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827
 import Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59
 
 /-! ## Public route inventory -/
@@ -100,6 +104,19 @@ mode-43 silence. -/
 #check Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_eq_zero
 #check Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_characterComponent_eq_zero
 #check Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_fullOrbitUnitReading827_powerFortyThree_eq_zero
+
+/-! The exact local and carrier comparisons retain the forced inverse
+orientation and the global-root coordinate factor. -/
+
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.inverseOrientedRawGlobalUnitOrbitWave827
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.tameContext827_primalResidue_eq_rawGlobalUnitOrbitWave827
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.tameContext827_value_globalUnit_at_tameOrbitPlace827
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.canonicalContext827_value_globalUnit_at_tameOrbitPlace827
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.tameContext827_value_globalUnit_relaxedRepresentative_eq_raw_product
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.ringUnitClass59
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.strictKummerClass59_unitInclusion_ringUnitClass59
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.relaxedOrbitValuation827
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTameOrbitReading827_unitInclusion_eq_orientedRaw_mul_relaxedValuation
 
 /-! W7's honest algebraic partial closure.  Readout existence,
 factorization, and injectivity remain explicit theorem arguments. -/
@@ -172,6 +189,22 @@ info: 'Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReind
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.canonicalContext827_value_globalUnit_at_tameOrbitPlace827' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.canonicalContext827_value_globalUnit_at_tameOrbitPlace827
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTameOrbitReading827_unitInclusion_eq_orientedRaw_mul_relaxedValuation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTameOrbitReading827_unitInclusion_eq_orientedRaw_mul_relaxedValuation
 
 /--
 info: 'Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA' depends on axioms: [propext,
@@ -260,6 +293,22 @@ decomposition and the separately proved inverse-oriented Fourier theorem. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827.inverseReindex_rawGlobalUnitOrbitWave827_powerFortyThree_eq_zero,
   Fermat.FiftyNine.Conservation.InverseEvenPrimitiveFourierSilence827.inverseEvenPrimitive_powerFortyThree_fourier_eq_zero
+
+/-! The tame comparison really passes through the fixed-root residue
+calculation, the global-root normalization, and the actual Selmer carrier. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.canonicalContext827_value_globalUnit_at_tameOrbitPlace827,
+  Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.tameContext827_value_globalUnit_at_tameOrbitPlace827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.canonicalContext827_value_globalUnit_at_tameOrbitPlace827,
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.tameContext827_value_eq_sigma_mul_context
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTameOrbitReading827_unitInclusion_eq_orientedRaw_mul_relaxedValuation,
+  Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTameOrbitReading827_unitInclusion_eq_context_value
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTameOrbitReading827_unitInclusion_eq_orientedRaw_mul_relaxedValuation,
+  Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.canonicalContext827_value_globalUnit_at_tameOrbitPlace827
 
 /-! W7 consumes the concrete class seating, the generic pointwise kernel
 comparison, and the established selected-class characterization of 7A. -/
