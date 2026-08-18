@@ -302,6 +302,25 @@ The `At59` modules are compatibility receipts showing that the earlier
 order-59 constructions are specializations of this generic code rather than
 new certificates.
 
+The same directory also contains a second prime-parametric spine for the
+global Selmer action.  `PrimeCyclotomicSelmerAction` constructs the actual
+field, unit, Kummer-quotient, place, valuation, and stable-support actions for
+an arbitrary prime `p`.  `PrimeCyclotomicUnitSelmerNaturality` proves that the
+genuine global-unit inclusion intertwines this action, including arbitrary
+character projectors.  `PrimeCyclotomicSelmerClassNaturality` constructs the
+fractional-ideal and class-group actions and proves naturality of the actual
+strict Selmer class map and its `p`-torsion character projectors.  The
+independent `PrimeEmptySupportEigenspaceInclusion` module lifts the canonical
+strict-to-supported Selmer inclusion to arbitrary character eigenspaces,
+proves it injective, and retains its exact Kummer-class readback.  The
+corresponding `*59` files preserve the older public API as transparent
+specializations; only support at `827` and the solution-dependent Fermat
+endpoints remain in those adapters.
+`PrimeCyclotomicSelmerVerification` is the non-imported executable audit for
+this spine: it inventories the generic API, records its intended dependency
+graph, rejects public product-equivalence shortcuts, and checks every
+declaration against the standard `propext`/choice/quotient axiom budget.
+
 The concrete local experiment lives in
 [`Fermat/FiftyNine/Conservation/`](Fermat/FiftyNine/Conservation/).  Lean
 proves that `60` is not a 59th power in the actual lambda-adic field, while
@@ -490,9 +509,10 @@ CyclotomicUnitSelmerNaturality59
   plus-minus difference land in that kernel
 ```
 
-This chain is generic over the cyclotomic realization and Fermat state at
-the fixed exponent `59`.  It is not an all-prime theorem, and it does not
-close the separate Vostokov/local-reciprocity branch.  Finally,
+The action and naturality portion of this chain is prime-parametric; the
+equation-(8), Takagi, and plus/minus Fermat-state endpoints shown here remain
+specific to exponent `59`.  Thus this is not an all-prime FLT theorem, and it
+does not close the separate Vostokov/local-reciprocity branch.  Finally,
 `FermatStateHistoricalDescent59` constructs the initial historical state at
 `m = 29`, produces an admissible successor at `m = 57` with strictly smaller
 prime-ideal support, invokes the proved uniform continuation, and exports
@@ -612,6 +632,7 @@ lake build Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly138
 lake build Fermat.Ladder.FourHundredNinetyOne
 lake build Fermat.Ladder.FiveHundredEightySeven
 lake build Fermat.Ladder.SixHundredNinetyOne
+lake build Fermat.Conservation.PrimeCyclotomicSelmerVerification
 lake build Fermat.FiftyNine.Conservation.CyclotomicUnitSelmerNaturality59
 lake build Fermat.FiftyNine.Conservation.CyclotomicSelmerClassNaturality59
 lake build Fermat.FiftyNine.Conservation.FermatFactorClassProjection59

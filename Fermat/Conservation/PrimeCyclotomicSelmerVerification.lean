@@ -1,0 +1,218 @@
+/-
+Copyright (c) 2026 Fabian Franz. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Fabian Franz, Codex
+
+# Executable audit of the prime-generic cyclotomic Selmer spine
+
+This non-imported leaf audits the actual prime-parametric action, the
+canonical strict-to-supported inclusion, and the unit and class naturality
+maps.  It records the intended implementation dependencies and checks every
+declaration in the four namespaces against the standard axiom budget and the
+project's public no-product-equivalence rule.
+-/
+import Fermat.Conservation.GuardDependsOn
+import Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
+import Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
+import Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion
+
+open Lean Elab Command
+
+/-- Audit every declaration below a namespace against Lean's standard
+extensionality, choice, and quotient boundary. -/
+elab "#guard_standard_axioms_prefix " p:ident : command => do
+  let env ← getEnv
+  let auditedPrefix := p.getId
+  let allowed : Array Name :=
+    #[``propext, ``Classical.choice, ``Quot.sound]
+  let declarations :=
+    env.constants.toList
+      |>.map Prod.fst
+      |>.filter auditedPrefix.isPrefixOf
+  for declaration in declarations do
+    let axioms ← Lean.collectAxioms declaration
+    let unexpected := axioms.filter fun ax => !allowed.contains ax
+    unless unexpected.isEmpty do
+      throwError
+        "{declaration} depends on nonstandard axioms: {unexpected}"
+
+/-! ## Public inventory: canonical action -/
+
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicFieldAction
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicUnitEquiv
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicUnitEquiv_one_apply
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicUnitEquiv_mul_apply
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicUnitEquiv_maps_powerRange
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicKummerHom
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicKummerHom_mk
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicKummerHom_one_apply
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicKummerHom_mul_apply
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicIntegerAction
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicPlaceEquiv
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicPlaceEquiv_asIdeal
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicPlaceEquiv_under_int
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.valuationOfNeZero_cyclotomic
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.CyclotomicValuationCovariance
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicValuationCovariance
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.CyclotomicStableSupport
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicStableSupport_empty
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerAddHomAt
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerLinearMapAt
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerRepresentationAt
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicStrictSelmerRepresentation
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt
+#check Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt
+
+/-! ## Public inventory: strict-to-supported inclusion -/
+
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic_injective
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.EmptySupportEigenspaceLanding
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.EmptySupportActionCompatibility
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.EmptySupportActionCompatibility.toEigenspaceLanding
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_apply
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_intertwines
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_apply
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_injective
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerQuotientAt_emptySupportEigenspaceInclusion
+#check Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerClassAt_emptySupportEigenspaceInclusion
+
+/-! ## Public inventory: units to strict Selmer -/
+
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicRingUnitMulEquiv
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicRingUnitMulEquiv_powRange
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicUnitModPMulEquiv
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicUnitModPMulEquiv_mk
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicUnitModPAddEquiv
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicUnitModPAddEquiv_one_apply
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicUnitModPAddEquiv_mul_apply
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitModP_nsmul_eq_zero
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicUnitModPAddHom
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicUnitModPLinearMap
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicUnitModPRepresentation
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicRingUnitMulEquiv_map_algebraMap
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusion_cyclotomicUnitModPAddEquiv
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionLinearMap
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionIntertwiner
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicUnitProjector
+#check Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionLinearMap_characterProjector
+
+/-! ## Public inventory: strict Selmer to class torsion -/
+
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicFractionalIdealEquiv
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicFractionalIdealUnitMulEquiv
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassGroupMulEquiv
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassGroupMulEquiv_mk
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassGroupMulEquiv_one_apply
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassGroupMulEquiv_mul_apply
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicAdditiveClassGroupRepresentation
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerIdealClass
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicFractionEquiv_eq
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicFractionalIdealEquiv_toPrincipalIdeal
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerIdealClass_cyclotomic
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.ClassTorsion
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassTorsionAddHom
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassTorsionLinearMap
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassTorsionRepresentation
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassLinearMap
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassLinearMap_value
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassIntertwiner
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassProjector
+#check Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassLinearMap_characterProjector
+
+/-! ## Representative kernel-axiom readout -/
+
+#print axioms Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicValuationCovariance
+#print axioms Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicStrictSelmerRepresentation
+#print axioms Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt
+#print axioms Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_injective
+#print axioms Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerClassAt_emptySupportEigenspaceInclusion
+#print axioms Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionLinearMap_characterProjector
+#print axioms Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerIdealClass_cyclotomic
+#print axioms Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassLinearMap_characterProjector
+
+/-! ## Exhaustive namespace invariants -/
+
+#guard_standard_axioms_prefix Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion
+#guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicSelmerAction
+#guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
+#guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
+
+#audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion
+#audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicSelmerAction
+#audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
+#audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
+
+/-! ## Intended implementation spine -/
+
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicKummerHom,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicUnitEquiv_maps_powerRange
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicValuationCovariance,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.valuationOfNeZero_cyclotomic
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerAddHomAt,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicValuationCovariance
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerRepresentationAt,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicSelmerLinearMapAt
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicStrictSelmerRepresentation,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicStableSupport_empty
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicReflectedEmptySupportLandingAt,
+  Fermat.Conservation.PrimeCyclotomicSelmerAction.cyclotomicEmptySupportActionCompatibilityAt
+
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic_injective,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.EmptySupportActionCompatibility.toEigenspaceLanding,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusionPadic_intertwines
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion_injective,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportInclusionPadic_injective
+#guard_depends_on
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.toKummerClassAt_emptySupportEigenspaceInclusion,
+  Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion.emptySupportEigenspaceInclusion
+
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionLinearMap,
+  Fermat.Conservation.CommonActionStage.unitInclusion
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusion_cyclotomicUnitModPAddEquiv,
+  Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.cyclotomicRingUnitMulEquiv_map_algebraMap
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionIntertwiner,
+  Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusion_cyclotomicUnitModPAddEquiv
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionLinearMap_characterProjector,
+  Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality.unitInclusionIntertwiner
+
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerIdealClass,
+  IsDedekindDomain.selmerGroup.toClass
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassGroupMulEquiv_mk,
+  ClassGroup.mk_canonicalEquiv
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicFractionalIdealEquiv_toPrincipalIdeal,
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicFractionEquiv_eq
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerIdealClass_cyclotomic,
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.cyclotomicClassGroupMulEquiv_mk
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassIntertwiner,
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerIdealClass_cyclotomic
+#guard_depends_on
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassLinearMap_characterProjector,
+  Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality.strictSelmerClassIntertwiner

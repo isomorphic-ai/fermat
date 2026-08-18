@@ -7,9 +7,9 @@ Authors: Fabian Franz, Codex
 
 The cyclotomic ring automorphisms transport nonzero fractional ideals and
 preserve principal ideals.  They therefore induce an honest action on the
-ideal class group.  This file proves that Mathlib's strict Selmer class map
-intertwines that action with the already constructed action on the Kummer
-quotient.
+ideal class group.  This file proves that the vendored generic strict Selmer
+class map, built on Mathlib's actual Selmer carrier, intertwines that action
+with the already constructed action on the Kummer quotient.
 
 The proof works for every strict Selmer class.  It chooses only the
 canonical fractional-ideal root supplied by the Dedekind factorization
