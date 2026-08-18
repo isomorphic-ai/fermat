@@ -370,6 +370,46 @@ theorem classReadout_classGaugeMap59_eq_neg_fourierCoefficient
     strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
       K y hprofile x
 
+/-- The concrete mode-`44` coefficient descends through the genuine ideal
+class gauge: two strict Selmer inputs with the same class obstruction have
+the same residue-wave reading.  The normalized global carrier and its
+factorizing readout are constructed internally. -/
+theorem fourierCoefficient_eq_of_classGaugeMap59_eq
+    (x x' : StrictCarrier59 K)
+    (hclass : fermatFactorClassGaugeMap59 (K := K) x =
+      fermatFactorClassGaugeMap59 (K := K) x') :
+    fourierCoefficient (strictOrbitResidueWave827 K x)
+        (powerCharacter59 44) =
+      fourierCoefficient (strictOrbitResidueWave827 K x')
+        (powerCharacter59 44) := by
+  obtain ⟨y, _heigen, hprofile, _hringUnit, _hunitClass,
+      readout, factorization, _unique⟩ :=
+    NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827
+      (K := K)
+  have hx := classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+    K y hprofile readout factorization x
+  have hx' := classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+    K y hprofile readout factorization x'
+  rw [hclass] at hx
+  exact neg_inj.mp (hx.symm.trans hx')
+
+/-- In particular, a strict input with trivial ideal-class gauge has zero
+mode-`44` residue coefficient.  This is the all-input form of the easy
+direction of Kummer--Artin compatibility. -/
+theorem fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero
+    (x : StrictCarrier59 K)
+    (hclass : fermatFactorClassGaugeMap59 (K := K) x = 0) :
+    fourierCoefficient (strictOrbitResidueWave827 K x)
+        (powerCharacter59 44) = 0 := by
+  obtain ⟨y, _heigen, hprofile, _hringUnit, _hunitClass,
+      readout, factorization, _unique⟩ :=
+    NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827
+      (K := K)
+  have hvalue := classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+    K y hprofile readout factorization x
+  rw [hclass, map_zero] at hvalue
+  exact neg_eq_zero.mp hvalue.symm
+
 /-- The factorizing class readout has a completely explicit value on the
 selected relation-7A class: the negative mode-`44` coefficient of the actual
 Fermat-factor strict residue wave. -/
