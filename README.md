@@ -339,6 +339,19 @@ final scalar adapter consumes an honest supplied reciprocity equation; this
 module constructs neither local values nor a global pairing, reciprocity law,
 Kummer class, or cyclotomic support orbit.
 
+`PrimeFullOrbitReciprocity` connects that finite algebra to an actual
+prime-generic `PlaceIndexedLocalPairing`.  From an explicitly supplied
+`GlobalReciprocityLaw`, an injectively indexed finite auxiliary orbit disjoint
+from the distinguished place, an outside-silence proof, and pointwise local
+comparison equations, it first derives the negative complete-orbit balance.
+When the orbit has cardinality `p - 1`, complementary waves compress to a
+selected product, while a raw primal vector compresses only under the full
+sum to its selected Fourier component; the inverse-index specialization keeps
+the opposite place orientation visible.  The pairing's representation group
+and the orbit-index group remain separate types.  The module does not
+construct the pairing, reciprocity law, support silence, local comparisons,
+or a cyclotomic orbit: those arithmetic boundaries stay explicit inputs.
+
 `PrimeCyclotomicLocalizationEquivariance` then combines the actual
 cyclotomic Selmer representation, its valuation covariance, and the genuine
 character projector.  For arbitrary prime `p` and any cyclotomically stable

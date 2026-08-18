@@ -15,6 +15,7 @@ The local comparison is an explicit hypothesis.  No Kummer class, local
 Tate value, silence law, or reflected lift is manufactured here.
 -/
 import Fermat.Conservation.TatePairing
+import Fermat.Conservation.PrimeFullOrbitReciprocity
 import Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
 import Fermat.FiftyNine.Conservation.PrimalOrbitResidue827
 
@@ -52,7 +53,8 @@ def orbitReading
       SelmerChi DOmegaSelmerChiStar)
     {Index : Type*} (auxiliaryPlace : Index → Place)
     (x : SelmerChi) (y : DOmegaSelmerChiStar) : Index → ZMod 59 :=
-  fun index ↦ pairing.pairAt (auxiliaryPlace index) x y
+  Fermat.Conservation.PrimeFullOrbitReciprocity.orbitReading
+    pairing auxiliaryPlace x y
 
 namespace GlobalReciprocityLaw
 
@@ -71,32 +73,10 @@ theorem pairAt_eq_neg_sum_orbitReading
     (houtside : ∀ v, v ≠ distinguished →
       v ∉ Set.range auxiliaryPlace → pairing.pairAt v x y = 0) :
     pairing.pairAt distinguished x y =
-      -∑ index : Index, orbitReading pairing auxiliaryPlace x y index := by
-  classical
-  let places : Finset Place := Finset.univ.image auxiliaryPlace
-  have hdistinguished :
-      distinguished ∉ places := by
-    intro hmem
-    obtain ⟨index, _, hindex⟩ := Finset.mem_image.mp hmem
-    exact hdisjoint index hindex
-  have houtsidePlaces : ∀ v, v ≠ distinguished → v ∉ places →
-      pairing.pairAt v x y = 0 := by
-    intro v hvd hvplaces
-    apply houtside v hvd
-    rintro ⟨index, rfl⟩
-    exact hvplaces (Finset.mem_image.mpr ⟨index, Finset.mem_univ _, rfl⟩)
-  have htotal : pairing.readingTotalOn places x y =
-      ∑ index : Index, orbitReading pairing auxiliaryPlace x y index := by
-    unfold PlaceIndexedLocalPairing.readingTotalOn
-    rw [Finset.sum_image hinjective.injOn]
-    rfl
-  calc
-    pairing.pairAt distinguished x y =
-        -pairing.readingTotalOn places x y :=
-      reciprocity.pairAt_eq_neg_readingTotalOn distinguished places
-        hdistinguished x y houtsidePlaces
-    _ = -∑ index : Index,
-        orbitReading pairing auxiliaryPlace x y index := congrArg Neg.neg htotal
+      -∑ index : Index, orbitReading pairing auxiliaryPlace x y index :=
+  Fermat.Conservation.PrimeFullOrbitReciprocity.GlobalReciprocityLaw.pairAt_eq_neg_sum_orbitReading
+    (p := 59) reciprocity distinguished auxiliaryPlace hinjective hdisjoint
+      x y houtside
 
 /-- On a 58-place auxiliary orbit, complementary character phases turn the
 global reciprocity balance into the selected local product.  The comparison
@@ -120,22 +100,11 @@ theorem pairAt_eq_selectedProduct_of_complementaryOrbit
       pairing.pairAt (auxiliaryPlace index) x y =
         primal index * reflected index) :
     pairing.pairAt distinguished x y =
-      primal selected * reflected selected := by
-  calc
-    pairing.pairAt distinguished x y =
-        -∑ index : Index,
-          orbitReading pairing auxiliaryPlace x y index :=
-      pairAt_eq_neg_sum_orbitReading reciprocity distinguished
-        auxiliaryPlace hinjective hdisjoint x y houtside
-    _ = -∑ index : Index, primal index * reflected index := by
-      congr 1
-      apply Finset.sum_congr rfl
-      intro index _
-      exact hcomparison index
-    _ = -(-(primal selected * reflected selected)) := by
-      rw [sum_pointwiseProduct_eq_neg_selected hcard mode
-        primal reflected selected hprimal hreflected]
-    _ = primal selected * reflected selected := neg_neg _
+      primal selected * reflected selected :=
+  Fermat.Conservation.PrimeFullOrbitReciprocity.GlobalReciprocityLaw.pairAt_eq_selectedProduct_of_complementaryOrbit
+    (p := 59) hcard reciprocity distinguished auxiliaryPlace hinjective
+      hdisjoint x y houtside mode primal reflected selected hprimal hreflected
+      hcomparison
 
 /-! ## The canonically seated reflected wave -/
 
@@ -200,7 +169,9 @@ theorem pairAt_eq_selectedProduct_of_cyclotomicReflectedOrbit
         ∑ index : GaloisIndex59, primal index * reflected index := by
     apply Finset.sum_congr rfl
     intro index _
-    simpa only [orbitReading, reflected] using hcomparison index
+    simpa only [orbitReading,
+      Fermat.Conservation.PrimeFullOrbitReciprocity.orbitReading,
+      reflected] using hcomparison index
   have hcompression :
       (∑ index : GaloisIndex59, primal index * reflected index) =
         -(primal selectedIndex * reflected selectedIndex) := by

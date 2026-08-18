@@ -15,6 +15,7 @@ The scalar theorem takes the reciprocity equation itself as its sole
 arithmetic input.  It does not manufacture a global pairing or a local value.
 -/
 import Fermat.Conservation.PrimeFourierPairingCompression
+import Fermat.Conservation.PrimeFullOrbitReciprocity
 import Fermat.FiftyNine.Conservation.FullOrbitReciprocity827
 import Fermat.FiftyNine.Conservation.FourierPairingProjection827
 
@@ -67,33 +68,10 @@ theorem GlobalReciprocityLaw.pairAt_eq_selectedComponent_of_rawOrbit
       pairing.pairAt (auxiliaryPlace index) x y =
         raw index * reflected index) :
     pairing.pairAt distinguished x y =
-      characterComponent raw eta selected * reflected selected := by
-  have horbit :
-      (∑ index : Delta,
-          FullOrbitReciprocity827.orbitReading
-            pairing auxiliaryPlace x y index) =
-        ∑ index : Delta, raw index * reflected index := by
-    apply Finset.sum_congr rfl
-    intro index _
-    exact hcomparison index
-  have hprojection :
-      (∑ index : Delta, raw index * reflected index) =
-        -(characterComponent raw eta selected * reflected selected) :=
-    Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_neg_selectedComponent
-        (p := 59) hcard eta raw reflected selected hreflected
-  calc
-    pairing.pairAt distinguished x y =
-        -∑ index : Delta,
-          FullOrbitReciprocity827.orbitReading
-            pairing auxiliaryPlace x y index :=
-      FullOrbitReciprocity827.GlobalReciprocityLaw.pairAt_eq_neg_sum_orbitReading
-        reciprocity distinguished auxiliaryPlace hinjective hdisjoint
-          x y houtside
-    _ = -∑ index : Delta, raw index * reflected index :=
-      congrArg Neg.neg horbit
-    _ = -(-(characterComponent raw eta selected * reflected selected)) :=
-      congrArg Neg.neg hprojection
-    _ = characterComponent raw eta selected * reflected selected := neg_neg _
+      characterComponent raw eta selected * reflected selected :=
+  Fermat.Conservation.PrimeFullOrbitReciprocity.GlobalReciprocityLaw.pairAt_eq_selectedComponent_of_rawOrbit
+    (p := 59) hcard reciprocity distinguished auxiliaryPlace hinjective
+      hdisjoint x y houtside eta raw reflected selected hreflected hcomparison
 
 /-- The scalar form consumed by a family of explicit tame symbols. The sole
 arithmetic input is the retained reciprocity equation itself. -/
@@ -131,8 +109,8 @@ theorem GlobalReciprocityLaw.pairAt_eq_inverseOrientedComponent_of_rawOrbit
     pairing.pairAt distinguished x y =
       characterComponent (inverseReindex raw) eta selected *
         reflected selected :=
-  pairAt_eq_selectedComponent_of_rawOrbit hcard reciprocity distinguished
-    auxiliaryPlace hinjective hdisjoint x y houtside eta
-    (inverseReindex raw) reflected selected hreflected hcomparison
+  Fermat.Conservation.PrimeFullOrbitReciprocity.GlobalReciprocityLaw.pairAt_eq_inverseOrientedComponent_of_rawOrbit
+    (p := 59) hcard reciprocity distinguished auxiliaryPlace hinjective
+      hdisjoint x y houtside eta raw reflected selected hreflected hcomparison
 
 end Fermat.FiftyNine.Conservation.RawOrbitReciprocity827
