@@ -76,6 +76,14 @@
   principal-unit domain.  A valuation argument first forces any hypothetical
   root in the full completion to be an integer unit.  Consequently `60` is
   not a 59th power in the actual lambda-adic local field.
+- `TwistUnitKummerObstruction59` transports that theorem into the actual
+  multiplicative Kummer quotient.  The class `[60]` is nonzero,
+  `X^59 - 60` is irreducible, and its Kummer character is surjective.  In the
+  same quotient the twisted radicand decomposes literally as
+  `[60 * lambda] = [60] + [lambda]`, so the twist genuinely changes the bare
+  lambda class.  This retains the completed-log result in precisely the
+  carrier on which the local cup product acts, without assigning a pairing
+  value to it.
 - `TwistedLambdaNormalizedEndpoint59` composes the entire cohomological side
   under one explicit naturality equation
   `readout.comp twistedLambdaH2Inflation59 =
@@ -84,9 +92,16 @@
   primitive-root norm, and failure of every continuous `C59²` lift.  The
   equation remains a visible theorem premise rather than a provider field.
 - The honest remaining arithmetic seam is now the comparison between these
-  two normalized endpoints: construct the local roots-valued `H²` invariant
-  and prove that its restriction along the explicit inflation is the finite
-  cyclic equivalence, with its Artin--Hasse/completed-log interpretation.
+  two normalized endpoints.  It can be crossed by constructing the local
+  roots-valued `H²` invariant and proving its Artin--Hasse/completed-log
+  interpretation, or directly by proving the equivalent concrete
+  primitive-root nonnorm theorem.
+  More sharply, `TwistUnitKummerObstruction59` proves that existence of a
+  full normalized-inflation readout is equivalent to each of: nonvanishing
+  of the genuine twisted cup, failure of the primitive-root norm, and failure
+  of a continuous `C_(59²)` lift.  Thus the normalization equality is not a
+  second independent arithmetic problem; one-dimensional `H²` algebra
+  constructs it after the concrete nonnorm theorem is known.
   The new full-field non-power theorem does not by itself cross this seam:
   non-membership in the subgroup of 59th powers is weaker than the required
   non-membership in the relevant cyclic norm group.  The missing comparison
