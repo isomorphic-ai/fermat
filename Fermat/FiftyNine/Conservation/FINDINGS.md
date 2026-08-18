@@ -1,5 +1,51 @@
 # N59 conservation findings
 
+## 2026-08-18 — The canonical conjugate pair closes the 827 lift
+
+- `ConjugatePairSource827` starts from one actual place `P` over 827 and the
+  conjugation-fixed ideal `P * conjugate(P)`.  The proved coprimality of 59
+  with the maximal-real class number supplies principal data while retaining
+  its plus-class provenance.  The resulting literal 827-unit is seated in
+  Mathlib's genuine finite-`S` Selmer carrier; no arbitrary root, class
+  certificate, localization provider, complement, or splitting is supplied.
+- `ConjugatePlaceOrbit827` identifies complex conjugation with orbit index
+  `-1`.  `CanonicalConjugatePairProjection827` then expands the actual
+  character idempotent: the source has raw coefficients `-1` precisely at
+  orbit positions `1` and `-1`, and its canonical reflected `(59,44)`
+  coordinate is `reduction(1 / 58) * (-2)`, hence nonzero.  This is a theorem
+  about the literal supported valuation, not a per-mode input certificate.
+- `ConjugatePairClassSilence827` proves that the literal 827-unit range is
+  stable under the canonical cyclotomic action, p-adic coefficient action,
+  and therefore the genuine reflected projector.  The finite-`S` kernel
+  theorem then gives identity projected class obstruction.  Thus the same
+  projected source is simultaneously class-silent and locally nonzero.
+- `CanonicalConjugatePairLift827` composes those two receipts into
+  `canonicalConjugatePairLift827 place` for every actual place over 827 and
+  the fixed-base `canonicalBaseConjugatePairLift827`.  In particular,
+  `nonempty_canonicalConjugatePairLift827` inhabits the formerly open lift
+  type, and `canonical_classSilentPointedCoordinate827_ne_zero` proves the
+  class-silent pointed coordinate is nonzero at **every** 827 place.  Lift
+  existence and full-orbit nonvanishing are now closed.
+- `CanonicalConjugatePairIncidence827` spends that receipt at the explicit
+  tame-orbit base place.  It unconditionally constructs the pointed
+  Poitou--Tate incidence package, proves the reflected boundary functional is
+  nonzero, and inhabits the retained `NormalizedReflectedFiber827`.  The
+  fiber remains a whole affine fiber; no preferred member or splitting is
+  selected.
+- `CanonicalConjugatePairGlobalLedger827` installs this concrete lift in the
+  globally root-oriented tame ledger.  The resulting ledger has no lift
+  parameter, is nonzero, and has scalar total zero.  The no-lift endpoint
+  `pairAt_lambdaPlace59_eq_zero_of_canonicalConjugatePair827` proves the wild
+  value at the actual place above 59 is zero from an honestly supplied
+  `GlobalReciprocityLaw`, comparison at all 58 orbit places, and silence at
+  every remaining nonwild place.
+- Those three local-global inputs are not constructed here.  The genuine
+  global-reciprocity producer, the all-orbit pairing comparison, any
+  outside-place silence still required by that pairing, an independent
+  non-circular class-gauge comparison, relation (7a), Case II, and FLT all
+  remain open.  The lift was a real seam and is now genuinely discharged;
+  none of the later seams is inferred from that fact.
+
 ## 2026-08-18 — The fixed-root 827 detector is nonzero; the global-root ledger balances
 
 - `LocalReduction827` constructs the actual valuation ring, residue
@@ -53,11 +99,14 @@
   15 and selects inverse-oriented primal exponent 43, whose coefficient is
   zero.  Hence the canonical ledger is nonzero while its scalar total is
   zero: live local entries cancel exactly.
-- The remaining global arithmetic arrow is a genuine Hilbert-reciprocity
+- At the checkpoint recorded by this section, the remaining global
+  arithmetic arrow was a genuine Hilbert-reciprocity
   producer for the wild value together with this **canonical weighted** tame
   ledger.  In the present `(59,44)` mode such an equation forces the wild
-  scalar to be zero, not nonzero.  Lift existence, the class-valued gauge
-  comparison, relation (7a), and the later FLT steps remain separately open.
+  scalar to be zero, not nonzero.  The later conjugate-pair construction in
+  the section above closes lift existence and installs the concrete ledger;
+  the reciprocity producer, local comparisons, class-valued gauge comparison,
+  relation (7a), and the later FLT steps remain separately open.
 
 ## 2026-08-18 — Exact norm detector, normalized localization, and readout endpoint
 
@@ -116,18 +165,19 @@
   branch.  Consequently
   `vandiverSevenA_of_normalizedContinuousCanonicalLift` is the strongest
   public endpoint: its signature carries neither `PointedTateIncidence827`
-  nor a seating premise.  The reflected lift is still not inhabited.  The
-  remaining literal endpoint inputs are that lift,
+  nor a seating premise.  At this checkpoint the reflected lift was not yet
+  inhabited, so the remaining literal endpoint inputs were that lift,
   `ClassValuedSevenAGaugeSeating`, `WildProcessesAtLeastSevenA`, and
-  reciprocity.
+  reciprocity.  The later section above closes the lift input only.
 - `ReflectedLocalizationLiftCriterion827` removes the old representative
   fields from the existence mystery.
   `nonempty_reflectedQRelaxedLocalizationLift827_iff` identifies a generic
   lift with nonvanishing of some `classSilentPointedCoordinate827`, and
   `nonempty_cyclotomicReflectedQRelaxedLocalizationLift827_iff` makes the
   criterion independent of the chosen 827-place in the canonical action.
-  The required nonvanishing on the kernel of the projected finite-S class
-  obstruction remains open.  Moreover,
+  At this checkpoint the required nonvanishing on the kernel of the
+  projected finite-S class obstruction remained open; the conjugate-pair
+  result above later proves it at every 827-place.  Moreover,
   `qLocalizationCoordinate_ne_zero_at_every_place_of_lift` and
   `tameSilence827_ne_zero_of_lift` prove that any lift is a full 58-place
   reflected-character wave, never a point mass.
@@ -155,11 +205,13 @@
   annihilating the wild reading.  The tame realization's
   `distinguished_eq_neg_auxiliary_of_reciprocity` wrapper composes explicit
   tame bookkeeping with the generic balance after a residual non-tame audit.
-  This is still only structural infrastructure for p=59: the lift criterion
-  proves the 827 localization is a full 58-place wave, so the actual successor
-  must retain/sum the whole orbit or Fourier-compress it, not reduce it to one
-  literal auxiliary column.  No such orbit sum, arithmetic auxiliary
-  comparison, or gauge bridge has been built.
+  At this checkpoint this was only structural infrastructure for p=59: the
+  lift criterion proved the 827 localization is a full 58-place wave, so the
+  actual successor had to retain/sum the whole orbit rather than reduce it to
+  one literal auxiliary column.  The later canonical conjugate-pair ledger
+  above performs that globally oriented orbit sum.  Its all-orbit pairing
+  comparison, reciprocity producer, required outside-place silence, and gauge
+  bridge remain open.
 
 ## 2026-08-18 — The Kummer--Albert spine is prime-parametric and the local seam is explicit
 
@@ -938,8 +990,10 @@
   endpoint now construct that core and consume a fiber member; the algebraic
   incidence constructor further replaces the independent incidence package
   by a nonzero lift plus Fourier seating, and the later canonical theorem
-  supplies the seating.  The nonzero lift remains uninhabited.  W0 remains
-  red, STOP fires, and Lane 1 remains closed.
+  supplies the seating.  At this checkpoint the nonzero lift remained
+  uninhabited.  The newest section above later closes that lift and constructs
+  incidence, while W0 remains red at the reciprocity/non-circular-comparison
+  boundary; STOP fires and Lane 1 remains closed.
 - The real relation-(7a) gauge is class-valued.  Its selected value is exactly
   the `r₀ + 58 r₁` word, and its zero test is equivalent in both directions to
   `VandiverSevenA 0 1`.  `ClassValuedSevenAGaugeSeating` asks for a whole

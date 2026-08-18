@@ -24,29 +24,31 @@ interface actually constructed from that pairing:
 | Old-shaped wild interface | INHABITED FROM THE PAIRING | `oldWildInterfaceOfPairing` restricts any total quotient pairing to the two old eigenspaces; the full `hash omega` adjoint law is formal.  Calibration against the interface constructed by that restriction is definitional, and the new pairing is never defined from an old reading. |
 | Canonical 59 core/localization | INHABITED FOR THE CONSTRUCTED INTERFACE | `normalizedReflectedWildKummerCore59` fills the total pairing, canonical 827 landing, and self-calibration fields.  `normalizedReflectedWildLocalization59` fires the complete q-relaxed localization consumer. |
 | Independently supplied historical reading | SEAM theorem/provenance | `oldWildInterfaceOfPairing_eq_iff_calibration` proves that equality with a separately supplied historical interface is exactly the original universal old-reading calibration proposition.  No such equality is inferred from bilinearity or normalization. |
-| Reflected 827 lift | EXACT NONVANISHING CRITERION / OPEN | `nonempty_cyclotomicReflectedQRelaxedLocalizationLift827_iff` proves, at any chosen 827-place, that a lift exists exactly when `classSilentPointedCoordinate827` is nonzero on the kernel of the projected finite-S class obstruction.  That nonvanishing is not proved.  Every hypothetical lift has nonzero localization at all 58 places and nonzero nonselected-localization vector; it is a full reflected-character wave, not a point mass. |
-| Downstream relation (7a) route | COMPILED CANONICAL-LIFT ENDPOINT / CIRCULAR PROCESSING BOUNDARY | `wildLawfulness827_of_reciprocity` derives lawfulness from the still-open one-column reciprocity interface.  `cyclotomicQLocalizationEquivariance827` proves canonical Fourier seating, so `vandiverSevenA_of_normalizedContinuousCanonicalLift` accepts only a nonzero q-relaxed lift as geometric input and internally supplies seating, incidence, localization, boundary nonvanishing, a fiber member, and lawfulness.  However, reciprocity makes this one-column coefficient exactly zero, and `normalizedCanonicalLiftProcessesAtLeastSevenA_iff_gauge_eq_zero` proves that its remaining processing premise is then equivalent to vanishing of the entire class gauge.  That premise already implies (7a) directly.  The endpoint is a valid conditional/regression theorem, not a non-circular crossing. |
-| Retained auxiliary-column route | GENERIC TWO-PLACE CONSERVATION + TAME WRAPPER COMPILED / FULL-ORBIT INSTANCE OPEN | `pairAt_add_pairAt_eq_zero_of_outside_two` and `pairAt_eq_neg_pairAt_of_outside_two` prove that, when every outside row vanishes, reciprocity retains `wild + auxiliary = 0`, equivalently `wild = -auxiliary`, instead of killing the wild coefficient.  `distinguished_eq_neg_auxiliary_of_reciprocity` composes tame bookkeeping with the required residual audit.  But a canonical p=59 lift is a full 58-place 827 wave, so its successor must retain/sum that whole orbit or Fourier-compress it; it cannot literally discard 57 coordinates in favor of one auxiliary column.  No arithmetic orbit sum or gauge comparison is constructed. |
+| Reflected 827 lift | INHABITED / EXACT NONVANISHING PROVED | `canonicalConjugatePairLift827` constructs a genuine lift from the conjugation-fixed divisor `P * conjugate(P)`: its reflected `(59,44)` projection is nonzero and its projected finite-`S` class obstruction is one.  `nonempty_canonicalConjugatePairLift827` inhabits the type, while `canonical_classSilentPointedCoordinate827_ne_zero` proves the exact criterion at every 827-place.  The resulting lift is a full reflected-character wave, not a point mass. |
+| Downstream relation (7a) route | CONCRETE LIFT INSTALLED / CIRCULAR PROCESSING BOUNDARY | `canonicalBaseConjugatePairLift827` supplies the formerly open geometric argument, so seating, incidence, localization, boundary nonvanishing, and a fiber member can all be constructed.  `wildLawfulness827_of_reciprocity` still derives lawfulness only from the open one-column reciprocity interface.  That reciprocity makes the coefficient zero, and `normalizedCanonicalLiftProcessesAtLeastSevenA_iff_gauge_eq_zero` makes the remaining processing premise equivalent to vanishing of the whole class gauge, which already implies (7a).  The endpoint remains a conditional/regression theorem, not a non-circular crossing. |
+| Retained auxiliary/full-orbit route | CONCRETE 58-PLACE LEDGER / LOCAL-GLOBAL COMPARISON OPEN | `canonicalConjugatePairGlobalLedger827` installs the canonical lift in the globally root-oriented 827 ledger, proves the ledger nonzero, and proves its scalar total zero.  `pairAt_lambdaPlace59_eq_zero_of_canonicalConjugatePair827` removes the lift premise but honestly retains `GlobalReciprocityLaw`, comparison at all 58 orbit places, and silence at every other nonwild place.  No producer for those inputs or independent gauge comparison is constructed. |
 
 Thus W1 step 4 is discharged for the canonical interface constructed from
 the normalized pairing.  It is not discharged relative to an independently
 supplied historical reading unless its explicit calibration theorem is
-proved.  The normalized endpoint therefore has fewer explicit arguments;
-Fourier seating is now proved canonically, while the nonzero q-relaxed lift
-is not inhabited.  More
-importantly, under its reciprocity premise the remaining
+proved.  The normalized endpoint therefore has fewer explicit arguments.
+Fourier seating is proved canonically and the nonzero q-relaxed lift is now
+inhabited.  More importantly, under its reciprocity premise the remaining
 `WildProcessesAtLeastSevenA` input is exactly the stronger assertion that the
 whole class-valued gauge is zero, which already contains (7a).  A finer
-nonzero readout or a genuinely independent gauge comparison remains.  No full
-Case II, relation (7a), reciprocity, kernel/fiber closure, or FLT endpoint
-follows.
+nonzero readout or a genuinely independent gauge comparison remains.  The
+global reciprocity producer, all-orbit local pairing comparison, and required
+outside-place silence also remain.  No full Case II, relation (7a),
+kernel/fiber closure, or FLT endpoint follows.
 
 The newly compiled two-place reciprocity law is a structural prototype beyond
 this zero-readout stop: retain an auxiliary receipt rather than erase every
 non-wild column.  The full-wave theorem rules out treating it as the literal
-p=59 successor.  That route must retain/sum the entire 827 orbit, or express
-the same conservation in Fourier coordinates, before an arithmetic
-non-circular gauge comparison can be attempted.
+p=59 successor.  The concrete canonical ledger now retains the entire 827
+orbit and performs its globally oriented sum.  What remains is to identify an
+actual pairing with every ledger row, prove global reciprocity and
+outside-place silence, and construct an arithmetic non-circular gauge
+comparison.
 
 ## 2026-08-17 Kummer--Tate boundary delta (historical snapshot)
 
@@ -286,9 +288,9 @@ two-prime obstruction.
 | Global reciprocity and conservation tunnel | ABSENT → INTERFACE law / PROVEN wiring | `TatePairing.GlobalReciprocityLaw` is the class-field-theory interface.  From that law, `PlaceLedger.toLedger`, `toVacuumTransfer`, and `reciprocity_L1_conservation` compile its zero sum through `Ledger`, `Transfer`, and `IsoConserveBridge`.  For the one-column localization, `wildLawfulness827_of_reciprocity` also derives wild lawfulness from this same interface.  The later generic two-place laws retain an auxiliary column and prove `wild + auxiliary = 0` / `wild = -auxiliary`; no arithmetic auxiliary instance is supplied. |
 | `SplitPrimeFourier827` | ABSENT → PROVEN Fourier geometry → CANONICAL CYCLOTOMIC SEATING PROVEN | The 58 places above 827 form one regular Galois orbit.  A position delta contains every frequency, while a nonzero pure-character vector has full positional support.  `cyclotomicQLocalizationEquivariance827` identifies that orbit with the canonical cyclotomic place action and proves the required contragredient localization law, hence `FixedAttention` for the canonical representation. |
 | `FocusConormal` and `ExteriorTransfer` | Boolean branch → RETAINED conormal and Plücker coordinates | The pointed class is `[lambda]` in the cokernel of the dual constraint map, equivalently `lambda` restricted to the lawful kernel.  It is zero exactly in the fixed branch.  For an independent frame spanning the constraint image, the exterior coordinate vanishes exactly when fixed and is nonzero exactly when the augmented observation gains rank one.  The old dichotomy is derived, never parallel. |
-| `PointedTateIncidence827` | Unnamed bit → PROVEN five-term shape → ALGEBRAIC CONSTRUCTOR FROM ONE OPEN LIFT | The strict observation `F = (G,lambda)` and relaxed observation `G` live on the same q-relaxed carrier.  `pointedTateIncidence827_of_fixed_of_localization_ne_zero` constructs both stored exactness fields from fixed attention and a nonzero reflected localization.  Its cyclotomic specialization uses the now-proved canonical seating plus `ReflectedQRelaxedLocalizationLift827`.  Only the lift remains uninhabited; no complement or splitting is selected. |
+| `PointedTateIncidence827` | Unnamed bit → PROVEN five-term shape → CANONICAL INSTANCE AVAILABLE | The strict observation `F = (G,lambda)` and relaxed observation `G` live on the same q-relaxed carrier.  `pointedTateIncidence827_of_fixed_of_localization_ne_zero` constructs both stored exactness fields from fixed attention and a nonzero reflected localization.  Its cyclotomic specialization now consumes the constructed `canonicalBaseConjugatePairLift827`; no complement or splitting is selected. |
 | Ulam detector budget | Ambient-detector nondegeneracy demanded → class-valued question and two kernel directions isolated → ZERO-READOUT AUDIT | `ClassValuedSevenAGaugeSeating` seats the genuine `ClassPTorsion (𝓞 K) 59`-valued gauge on `H_FLT`.  In general `WildProcessesAtLeastSevenA` records `ker Lambda ≤ ker G`, while `WildUsesNothingBeyondSevenA` records the reverse inclusion needed for kernel equality and `im G ≃ im Lambda`.  For the present reciprocity-derived coefficient, however, `Lambda = 0`; hence `WildProcessesAtLeastSevenA` is equivalent to `G = 0`, which already implies (7a).  Scalar proportionality is not introduced. |
-| Selected relation-(7a) future | Pointed branch unexplained → canonically seated lift endpoint compiled → CIRCULARITY LOCATED | `reflectedBoundaryFunctional827` remains a covector, not a class.  The normalized endpoint constructs seating, localization, incidence, the boundary-nonzero receipt, and a retained-fiber witness once a nonzero q-relaxed lift is supplied.  Reciprocity conditionally supplies lawfulness but also annihilates the one-column coefficient.  Its remaining processing premise therefore contains (7a), so the compiled endpoint is a regression theorem rather than an arithmetic proof.  Equality with an independently supplied historical reading remains optional calibration; a finer nonzero readout or independent comparison is still required. |
+| Selected relation-(7a) future | Pointed branch unexplained → canonical lift inhabited → CIRCULARITY LOCATED | `reflectedBoundaryFunctional827` remains a covector, not a class.  The constructed canonical lift now supplies seating, localization, incidence, the boundary-nonzero receipt, and a retained-fiber witness without a lift premise.  Reciprocity conditionally supplies lawfulness but also annihilates the one-column coefficient.  Its remaining processing premise therefore contains (7a), so the compiled endpoint is a regression theorem rather than an arithmetic proof.  Equality with an independently supplied historical reading remains optional calibration; a finer nonzero readout or independent comparison is still required. |
 | Conditional Tate master implication | ABSENT → PROVEN (conditional), now factored through Stokes | `Lambda_apply_eq_zero_of_reciprocity` kills the complete wild detector functional.  Evaluating it at the shared detector and using the existing gauge comparison yields the same conditional `VandiverSevenA 0 1`.  This is not an unconditional proof of (7a). |
 
 ## N59 assembly summary
@@ -303,7 +305,7 @@ two-prime obstruction.
 | Selected fold and principalization consumers | ABSENT → LITERAL (Transfer), conditional on supplied (7a) | Derived (7d) and odd-torsion netting are accounted; only the missing producer is a seam. |
 | Selected common-action stage | Selmer exactness SEAM → character-allocation SEAM at a fixed reflected pair | The vendored sequence and its additive realization are unconditional.  Once a reflected pair is supplied, the typed gauge attempt retains the class obstruction at the first missing character service; the selected cone itself does not manufacture that pair, and rho remains a later conditional wall. |
 | Selected PowerRoot cube test | Unclassified comparison → TYPED OUTCOME 4 | Generic localization naturality is proved, but the actual `r₀,r₁` arise from distinct allocated root inputs and the selected comparison is wild reflected-dual Tate data.  Stage 3 therefore retains the wild route rather than replacing it with a generic defect. |
-| Selected Tate route to (7a) | Global detector faithfulness demanded → canonically seated lift endpoint → zero-coefficient boundary exposed | W1 step 4 has the total normalized continuous pairing, canonical old-shaped interface, strict-to-relaxed landing, q-relaxed localization, and canonical Fourier seating.  The normalized endpoint constructs incidence, boundary nonvanishing, and a fiber member from a nonzero lift; reciprocity supplies lawfulness.  But reciprocity also forces the resulting coefficient to zero, so its `WildProcessesAtLeastSevenA` premise is equivalent to the entire class gauge being zero and is not an independent route to (7a).  Historical-interface equality is optional calibration; a finer nonzero readout or independent gauge comparison remains. |
+| Selected Tate route to (7a) | Global detector faithfulness demanded → canonical lift constructed → zero-coefficient boundary exposed | W1 step 4 has the total normalized continuous pairing, canonical old-shaped interface, strict-to-relaxed landing, q-relaxed localization, canonical Fourier seating, and now `canonicalBaseConjugatePairLift827`.  Incidence, boundary nonvanishing, and a fiber member are therefore available.  Reciprocity remains an input and also forces the resulting coefficient to zero, so `WildProcessesAtLeastSevenA` is equivalent to the entire class gauge being zero and is not an independent route to (7a).  Historical-interface equality is optional calibration; a finer nonzero readout or independent gauge comparison remains. |
 | FermatState.StockCreditTransformer | ABSENT → SEAM | No state-linked positive successor transaction is constructed. |
 
 The guarded transformer probes remain evidence of type boundaries, not
@@ -314,10 +316,10 @@ endpoint declarations remain absent.
 
 | Work package | Compiled result | Remaining boundary |
 | --- | --- | --- |
-| W1: split-prime Fourier geometry | 827 splits into one regular orbit of 58 places; position and character bases are Fourier dual; a delta contains every frequency and a nonzero pure character has full support.  `cyclotomicQLocalizationEquivariance827` now proves that the canonical representation/localization has exactly the required contragredient seating. | No seating premise remains for the canonical normalized branch.  This theorem does not construct a nonzero reflected q-relaxed lift. |
+| W1: split-prime Fourier geometry | 827 splits into one regular orbit of 58 places; position and character bases are Fourier dual; a delta contains every frequency and a nonzero pure character has full support.  `cyclotomicQLocalizationEquivariance827` proves the required contragredient seating, and `CanonicalConjugatePairLift827` now supplies the nonzero reflected wave. | No seating or lift-existence premise remains for the canonical normalized branch.  This row does not construct reciprocity or the gauge comparison. |
 | W2: focus conormal and exterior transfer | The conormal class, its restriction to the lawful kernel, the Plücker coordinate, and augmented-rank gain are compiled.  Fixed/transverse is their zero/nonzero shadow. | No arithmetic theorem computes the retained 827 class; no complement or Selmer splitting is selected. |
-| W3: pointed Tate incidence | The strict-to-relaxed first leg, actual primal/reflected maps, five-term interface, dimension balance, and both rank allocations compile.  Both middle exactness laws are constructed algebraically from fixed attention plus nonzero reflected localization; canonical seating now supplies fixed attention. | A `ReflectedQRelaxedLocalizationLift827` is the sole remaining geometric input.  It is not inhabited, so incidence is conditionally discharged rather than unconditional. |
-| W4: branch activation and Ulam W0 audit | From canonical seating plus a nonzero reflected lift, `AlgebraicPointedIncidence827` constructs incidence; the conserved bit then lands in reflected-dual obstruction and gives boundary nonvanishing plus a nonempty normalized fiber.  `reflectedBoundaryFunctional827` remains the actual localization covector beneath the rank count. | The normalized endpoint consumes that boundary proof and a fiber member internally.  Reciprocity conditionally supplies lawfulness but forces its one-column coefficient to zero.  The endpoint kernel premise then becomes whole-gauge vanishing and already contains (7a).  W0 is therefore still red: neither the lift nor a non-circular nonzero readout/comparison is produced. |
+| W3: pointed Tate incidence | The strict-to-relaxed first leg, actual primal/reflected maps, five-term interface, dimension balance, and both rank allocations compile.  Both middle exactness laws are constructed algebraically from fixed attention plus nonzero reflected localization; canonical seating and `canonicalBaseConjugatePairLift827` supply both inputs. | No geometric input remains.  No complement or splitting is selected. |
+| W4: branch activation and Ulam W0 audit | The canonical lift lets `AlgebraicPointedIncidence827` construct incidence; the conserved bit then lands in reflected-dual obstruction and gives boundary nonvanishing plus a nonempty normalized fiber.  `reflectedBoundaryFunctional827` remains the actual localization covector beneath the rank count. | Reciprocity conditionally supplies lawfulness but forces its one-column coefficient to zero.  The endpoint kernel premise becomes whole-gauge vanishing and already contains (7a).  W0 is still red only at the non-circular readout/comparison and local-global reciprocity layer, not at lift existence. |
 
 ## Literal gate inventory
 
@@ -423,7 +425,7 @@ is equivalent to `G = 0`.  That is already stronger than the selected (7a)
 claim.  The specialization is retained as an exact boundary/regression audit,
 not presented as a proof route across Lemma I.
 
-The localization frontier has strictly shrunk four times.  First,
+The localization frontier has strictly shrunk five times.  First,
 `ReflectedWildKummerCoreAt59` reduced the localization to a representative
 pairing, one reflected landing proposition, and old-reading calibration.
 Second, `IwasawaTracePairing` now defines the representative pairing from
@@ -445,6 +447,15 @@ adjoint law, and `NormalizedContinuousWildLocalization59` now inhabits the
 core and q-relaxed localization for this constructed interface.  The scalar
 readout is not claimed continuous or canonical as a local invariant.
 
+Fifth, `ConjugatePairSource827` retains a literal 827-unit source from the
+plus-provenance divisor `P * conjugate(P)`.
+`CanonicalConjugatePairProjection827` and
+`ConjugatePairClassSilence827` prove the same reflected projection nonzero
+and class-silent; `CanonicalConjugatePairLift827` therefore constructs the
+genuine lift.  `CanonicalConjugatePairIncidence827` spends it on pointed
+incidence, boundary nonvanishing, and whole-fiber inhabitation.  The
+transversality lift frontier is closed without a split.
+
 This construction does not settle comparison with an independently supplied
 historical interface.  `oldWildInterfaceOfPairing_eq_iff_calibration` proves
 that such equality is exactly the original universal calibration theorem.
@@ -453,26 +464,20 @@ coordinate/comparison routes; tier (d) remains forbidden while cheaper routes
 are unrefuted.
 
 The normalized conditional Ulam endpoint now constructs the localization,
-boundary-nonzero receipt, and a normalized-fiber member internally.  Its
-remaining premises are:
+boundary-nonzero receipt, and a normalized-fiber member internally.
+`CanonicalConjugatePairLift827` closes its former lift premise, and
+`CanonicalConjugatePairIncidence827` records the resulting incidence,
+boundary nonvanishing, and whole-fiber inhabitation.  Its remaining premises
+are:
 
-1. A nonzero `ReflectedQRelaxedLocalizationLift827`.
-   `cyclotomicQLocalizationEquivariance827` now proves the formerly separate
-   `QLocalizationEquivariance827` seating premise.  Canonical seating plus the
-   lift constructs `PointedTateIncidence827`, boundary nonvanishing, and a
-   nonempty retained fiber.
-   `nonempty_cyclotomicReflectedQRelaxedLocalizationLift827_iff` reduces lift
-   existence exactly to nonvanishing of `classSilentPointedCoordinate827` on
-   the projected-class kernel at any chosen 827-place.  That nonvanishing is
-   not proved.  Any lift is a full 58-place character wave, not a point mass;
-2. `ClassValuedSevenAGaugeSeating` and
+1. `ClassValuedSevenAGaugeSeating` and
    `WildProcessesAtLeastSevenA`.  This is a literal remaining premise, but
-   under item 3 the coefficient is zero and
+   under item 2 the coefficient is zero and
    `normalizedCanonicalLiftProcessesAtLeastSevenA_iff_gauge_eq_zero` identifies it
    with vanishing of the entire gauge.  It therefore already contains (7a),
    rather than independently processing it.  The reverse kernel direction is
    needed only if the stronger processed-range equivalence is requested; and
-3. `TameSilenceReciprocity827`, whose sole arithmetic field is global
+2. `TameSilenceReciprocity827`, whose sole arithmetic field is global
    reciprocity because the place-indexed interface has single wild support.
    This same premise now supplies `WildLawfulness827` by
    `wildLawfulness827_of_reciprocity`; lawfulness is conditional, but no
@@ -484,10 +489,10 @@ non-circular proof plan.  The arithmetic frontier is to replace the zero
 coefficient by a finer nonzero readout, or prove an independent comparison
 whose premise does not already assert vanishing of the target gauge.  The
 generic two-place reciprocity theorems and the tame-realization wrapper now
-provide a structural prototype by retaining an auxiliary column.  The exact
-lift theorem shows that the p=59 instance must instead retain/sum the full
-58-place orbit or Fourier-compress it.  No such orbit readout or arithmetic
-gauge comparison is yet constructed.
+provide a structural prototype by retaining an auxiliary column.  The
+concrete canonical ledger now retains and sums the full 58-place orbit.  Its
+global reciprocity law, all-orbit pairing comparison, outside-place silence,
+and arithmetic gauge comparison are not constructed.
 
 The old condition `(Lambda wild).ker = ⊥` remains a historical sufficient
 detour, not this frontier.  The comparison lane remains the processed-range
@@ -505,23 +510,23 @@ below.
 | `H_FLT`, `Lambda`, and the class-valued gauge | **PROVEN DEFINITIONS / ZERO-COEFFICIENT CIRCULARITY EXPOSED** | `H_FLT` is the selected primal Selmer carrier.  `ClassValuedSevenAGaugeSeating` asks for `G : H_FLT →ₗ ClassPTorsion (𝓞 K) 59` with the correct Fermat value.  In general `ker Lambda ≤ ker G` is `WildProcessesAtLeastSevenA`; for the present reciprocity-derived `Lambda = 0`, it is equivalent to `G = 0`.  Since `vandiverSevenA_of_classGauge_eq_zero` evaluates that equality to obtain (7a), this kernel premise is not an independent proof step here. |
 | `EmptySupportReflectedInclusion827` | **CANONICAL MAP, INJECTIVITY, AND KUMMER BRIDGE PROVEN FROM ONE LANDING PROP** | `ReflectedEmptySupportLanding827` only asserts eigenspace membership.  It yields the integral-group-algebra-linear `oldReflectedToQRelaxed827`, formal injectivity, and `toKummerClassAt (...) = toKummerClass y`.  There is no equivalence, section, complement, or splitting. |
 | `ReflectedWildKummerCoreAt59` and `ReflectedWildLocalizationAt59` | **NORMALIZED CONTINUOUS CORE AND LOCALIZATION INHABITED FOR THE CONSTRUCTED INTERFACE** | `NormalizedContinuousKummerPairing59` supplies the total quotient pairing; `ContinuousOldWildAdapter59` restricts it and proves the adjoint law; canonical actions supply landing; `NormalizedContinuousWildLocalization59` fires the q-relaxed consumer.  Equality with a separately supplied historical interface is equivalent to the still-explicit universal calibration theorem.  The historical `CalibratedReductionAt59` and discrete cup-span routes remain available comparison charts. |
-| `NormalizedReflectedFiber827` | **WHOLE FIBER RETAINED / CONDITIONALLY NONEMPTY / ENDPOINT CONSUMES A MEMBER INTERNALLY** | Canonical `QLocalizationEquivariance827` plus a nonzero `ReflectedQRelaxedLocalizationLift827` construct `PointedTateIncidence827`, then prove boundary nonvanishing and `Nonempty` of the normalized affine fiber.  The endpoint eliminates that `Nonempty` internally rather than accepting a separate fiber witness.  Lift existence is now exactly one named class-silent coordinate nonvanishing, still open; no canonical member or fiber collapse is asserted. |
-| `TatePairing.GlobalReciprocityLaw` | **ARITHMETIC INTERFACE (b), NO PRODUCER; ONE- AND TWO-COLUMN CONSEQUENCES PROVEN** | Construct an actual sum-zero theorem `Σ_v ⟨h_F, y*⟩_v = 0` for that same exact pair; a pair-specific producer is sufficient.  The generic law has no inhabitant in the selected cone.  For one retained column, it supplies `WildLawfulness827` but kills the coefficient.  For two distinct retained columns, `pairAt_add_pairAt_eq_zero_of_outside_two` and its tame-bookkeeping wrapper preserve an auxiliary receipt.  A cyclotomic lift is a full 58-place wave, so the p=59 instance still needs a whole-orbit sum or Fourier compression; no arithmetic comparison is supplied. |
-| `vandiverSevenA_of_normalizedContinuousCanonicalLift` | **STRONGEST COMPILED CONDITIONAL (7a) ENDPOINT / REGRESSION ONLY** | The canonical seating, localization, pointed incidence, boundary nonvanishing, a retained-fiber member, and lawfulness are no longer arguments.  Its literal signature accepts a nonzero `ReflectedQRelaxedLocalizationLift827`, `ClassValuedSevenAGaugeSeating`, `WildProcessesAtLeastSevenA`, and one-column reciprocity.  `normalizedWildCoefficientOfCanonicalLift59_eq_zero` and `normalizedCanonicalLiftProcessesAtLeastSevenA_iff_gauge_eq_zero` show that the last two arithmetic inputs already contain gauge vanishing and hence (7a).  The theorem is formally sound but not a non-circular derivation. |
+| `NormalizedReflectedFiber827` | **WHOLE FIBER RETAINED / UNCONDITIONALLY NONEMPTY IN THE CANONICAL CHANNEL** | `canonicalConjugatePairPointedIncidence827` constructs the pointed package at the actual base place, `canonicalConjugatePairBoundaryFunctional827_ne_zero` proves boundary nonvanishing, and `canonicalConjugatePairNormalizedReflectedFiber827_nonempty` inhabits the normalized affine fiber.  No canonical member, complement, splitting, or fiber collapse is selected. |
+| `TatePairing.GlobalReciprocityLaw` | **ARITHMETIC INTERFACE, NO PRODUCER; CONCRETE FULL-ORBIT CONSUMER PROVEN** | `canonicalConjugatePairGlobalLedger827` constructs the 58-place globally oriented ledger and proves it nonzero with scalar total zero.  `pairAt_lambdaPlace59_eq_zero_of_canonicalConjugatePair827` consumes an actual global reciprocity law, comparison at every orbit place, and outside-place silence to force the wild value to zero.  It does not construct any of those three inputs.  The generic one- and two-column consequences remain structural alternatives. |
+| `vandiverSevenA_of_normalizedContinuousCanonicalLift` | **CANONICALLY INSTANTIABLE CONDITIONAL (7a) ENDPOINT / REGRESSION ONLY** | `canonicalBaseConjugatePairLift827` now supplies its formerly explicit lift argument, and the incidence module separately proves boundary nonvanishing and fiber inhabitation.  `ClassValuedSevenAGaugeSeating`, `WildProcessesAtLeastSevenA`, and one-column reciprocity remain.  `normalizedWildCoefficientOfCanonicalLift59_eq_zero` and `normalizedCanonicalLiftProcessesAtLeastSevenA_iff_gauge_eq_zero` show that the last two arithmetic inputs already contain gauge vanishing and hence (7a).  The theorem is formally sound but not a non-circular derivation. |
 | `PlaceLedger.toLedger`, `PlaceLedger.toVacuumTransfer`, and `GlobalReciprocityLaw.reciprocity_L1_conservation` | **PROVEN** | Once reciprocity is supplied, the place-indexed sum is literally carried through `Ledger`, a zero-spent `Transfer`, and the `IsoConserveBridge` L1 identity. |
 | `Lambda_apply_eq_zero_of_reciprocity` | **PROVEN Stokes theorem**, conditional only on the named reciprocity law | Every non-wild column is zero by the constructed single support.  Applying reciprocity for every reflected-dual detector proves the functional equality `Lambda x = 0`, not merely one scalar coordinate. |
 | `wild_detector_faithful` | **RETAINED HISTORICAL GLOBAL SUFFICIENT INTERFACE; NOT NECESSARY** | `(Lambda wild).ker = ⊥` still implies the query-level condition through `wild_detector_faithful_on_Q_7a_of_global`, but the new quotient-form consumers require only `Lambda wild x = 0 → gauge x = 0`.  `wild_detector_faithful_of_finrank_one` assumes the stronger `finrank H_FLT = 1`; the proved bound `finrank Q_7a ≤ 1` does not supply that premise. |
 | Processed-range comparison | **GENERIC TWO-DIRECTION INTERFACE / CURRENT ZERO-READOUT DEGENERATES** | In general `WildProcessesAtLeastSevenA` gives `ker Lambda ≤ ker G`, while `WildUsesNothingBeyondSevenA` gives the reverse inclusion and together they construct `im G ≃ im Lambda`.  For the reciprocity-derived one-column coefficient, `Lambda = 0`, so the first direction is exactly `G = 0` and the range equivalence is vacuous.  A useful comparison now requires a finer nonzero readout or an independently justified non-circular relation. |
 | `gauge_eq_local_tate_pairing` | **OLDER SUFFICIENT COMPARISON INTERFACE** | One selected detector and a unit identify its 59-local reading with the scalarized difference gauge and reflect zero scalar reading back to zero of the retained class-group gauge.  Its new exact zero iff theorem confirms the gauge/relation equivalence once the interface is supplied; it does not construct the one-dimensional character seating. |
 | `transverse_detector_exists` | **ABSTRACT PRE-WITNESS / Q-RELAXED SEATING MISMATCH** | The proposition still packages a detector in the old empty-support reflected dual together with a lamp action and realization.  The finite-`S` data lives in `QRelaxedReflectedDual827`; there is no seating map into the old wild dual, and the single-wild-column pairing has no nonzero q-coordinate.  Thus this interface remains sufficient only for the old conditional implication, not an inhabited Stage-2 witness. |
-| `ReflectedLocalizationLiftCriterion827` | **EXACT LIFT BOUNDARY PROVEN / NONVANISHING OPEN** | The former finite-S constructor required a nonzero projected coordinate and trivial projected class obstruction.  Every lift's representative support now proves the converse obstruction identity.  Thus `nonempty_reflectedQRelaxedLocalizationLift827_iff` is exactly nonvanishing of some `classSilentPointedCoordinate827`; canonical Fourier seating makes this equivalent at any chosen 827-place.  No lift is inhabited.  Every hypothetical cyclotomic lift has all 58 q-coordinates nonzero and nonzero `tameSilence827`. |
+| `ReflectedLocalizationLiftCriterion827` | **EXACT LIFT BOUNDARY PROVED AND INHABITED** | The criterion identifies lift existence with nonvanishing of a class-silent pointed coordinate.  `CanonicalConjugatePairLift827` supplies the literal source, proves identity projected obstruction, constructs the lift, and proves that coordinate nonzero at every 827-place.  Every resulting cyclotomic lift has all 58 q-coordinates nonzero and nonzero `tameSilence827`. |
 | `GaugeSteering827` FOCUS instance | **PROVEN INSTANTIATION / BRANCH UNDECIDABLE WITH PRESENT MACHINERY** | The post-projector class obstruction is bundled as a surjective `ZMod 59` map by restricting to its range; this is not a section.  Nonpointed q-localizations form the silence map and the selected q-localization is the reading.  The exact missing computation is `lambda(ker rho ∩ ker T)`: no current theorem proves it bottom or supplies a nonzero element.  Both conditional consequences compile, and multiplication by the checked nonzero scale `48` preserves the branch. |
 | `SplitPrimeFourier827` | **PROVEN FOURIER VERDICT / CANONICAL SEATING INHABITED** | Splitting, orbit size 58, Fourier reconstruction, delta-all-frequency, and pure-character full support are proved.  `cyclotomicQLocalizationEquivariance827` proves the exact action/localization comparison for the canonical cyclotomic representation, so its verdict is FIXED without a caller-supplied seating premise. |
 | `FocusConormal` and `ExteriorTransfer` | **PROVEN RETAINED COORDINATES** | Fixedness, transverse direction, dual pullback, Plücker vanishing, and augmented-rank gain are equivalent projections of the retained conormal/exterior data.  No complement or Selmer splitting is selected. |
-| `PointedTateIncidence827` | **MAPS AND ACTUAL BOUNDARY FUNCTIONAL SEATED; EXACTNESS CONSTRUCTED FROM ONE OPEN LIFT** | The primal restriction is literally `pointedConormalRestriction827`; the reflected boundary is the transpose of actual q-relaxed reflected localization.  The algebraic constructor proves both stored exactness fields from canonical Fourier seating plus a `ReflectedQRelaxedLocalizationLift827`.  Lift existence is exactly the still-open class-silent coordinate nonvanishing; no independent Poitou–Tate exactness package, complement, or splitting is needed. |
-| W4 branch activation | **CANONICALLY SEATED LIFT ENDPOINT COMPILED; ZERO-READOUT STOP** | A nonzero q-relaxed lift constructs incidence, the FIXED branch, boundary nonvanishing, and a nonempty normalized fiber because Fourier seating is now canonical.  The normalized endpoint consumes those results internally, and reciprocity conditionally supplies lawfulness.  Reciprocity also makes its coefficient zero; the endpoint-relevant kernel inclusion then says the whole gauge is zero and already contains (7a).  Thus no non-circular relation-(7a) proof, endpoint, or transformer is activated. |
-| `SelectedTameComparison` | **SUBSEQUENT LOCAL WALL; NOT ATTEMPTED** | Its tame-symbol/capacity comparison remains downstream of an actual `ReflectedQRelaxedLocalizationLift827`.  Since no lift inhabitant was obtained, this session did not attempt to construct the selected angular-component/local-context comparison. |
-| Supported valuation versus finite-`S` class sequence | **BOTH MARGINAL KERNELS PROVEN / THEIR POINTED INTERSECTION IMAGE UNCOMPUTED** | `supportValuation_ker_eq_range_emptySupportInclusion` proves the kernel of full supported valuation.  The vendored `toSClass_ker` proves the finite-`S` class kernel.  `GaugeSteering827` now couples them at the correct post-projector source, but no theorem computes the selected valuation on the class-kernel/nonpointed-silence intersection; no valuation-surjectivity shortcut is used. |
+| `PointedTateIncidence827` | **MAPS, BOUNDARY FUNCTIONAL, AND CANONICAL INCIDENCE INHABITED** | The primal restriction is literally `pointedConormalRestriction827`; the reflected boundary is the transpose of actual q-relaxed reflected localization.  `canonicalConjugatePairPointedIncidence827` now supplies both exactness fields from the constructed lift and canonical seating.  No independent exactness package, complement, or splitting is needed. |
+| W4 branch activation | **CANONICAL GEOMETRY ACTIVE; ZERO-READOUT STOP** | The canonical lift constructs incidence, the FIXED branch, boundary nonvanishing, and a nonempty normalized fiber.  Reciprocity conditionally supplies lawfulness but also makes the one-column coefficient zero; the endpoint-relevant kernel inclusion then says the whole gauge is zero and already contains (7a).  Thus lift geometry is active, while no non-circular relation-(7a) proof, endpoint, or transformer is activated. |
+| `SelectedTameComparison` | **SUBSEQUENT LOCAL WALL; LIFT NO LONGER BLOCKS IT** | Its selected tame-symbol/capacity comparison remains unconstructed.  The canonical lift now supplies the source, support, and nonzero localization; the remaining work is the actual angular-component/local pairing comparison, not lift existence. |
+| Supported valuation versus finite-`S` class sequence | **CANONICAL CLASS-SILENT NONZERO POINT CONSTRUCTED / FULL STEERING INTERSECTION STILL OPEN** | `ConjugatePairClassSilence827` proves the canonical projected source lies in the finite-`S` unit kernel, while `CanonicalConjugatePairProjection827` computes its selected valuation nonzero.  This closes the exact lift criterion without a surjectivity shortcut.  The stricter `GaugeSteering827` intersection with all nonpointed coordinates silent remains a different computation: the canonical lift is a full 58-place wave. |
 | `ArtinHasseInventory.campaignResidualInventory_eq` | **V1 PROVEN: EXACT TWO-KIND RESIDUAL, CONNECTED TO V2** | Covered-factor/residual-factor decomposition is explicit in additive Kummer coordinates.  A supplied normalized decomposition makes both normalized-factor residuals zero, but no tracked equality seats either actual input as one of those factors.  The residual remains exactly `[statewiseSelmerLift, transverseDetectorComponent]`; `pairing_campaignFactorDecomposition` compiles their pairing as the four covered/residual cross-terms. |
 | `VostokovShapeAudit59` | **C1 PROVEN: LABELS BOUND TO LITERAL CLASSES / BOTH STILL RESIDUAL** | The statewise and transverse inputs are exactly `toKummerClass x` and `toKummerClassAt y`; their chosen quotient representatives have explicit readback.  At the current bank boundary each whole class is retained as residual, without claiming mathematical nonmembership.  Every normalized 827-fiber point is proved outside the canonical strict range by its coordinate `1 ≠ 0`; no section, complement, or splitting is selected. |
 | Capacity, bounded Sinnott, funded flow/repayment, and the statewise (7d) fold | **PROVEN** | These are genuine selected bank receipts and are retained in the place-by-place audit rather than redescribed as local theorems. |
@@ -544,30 +549,28 @@ nonpointed silence forces pointed silence and hence FIXED.  The canonical
 cyclotomic action and localization now satisfy that law by
 `cyclotomicQLocalizationEquivariance827`.  Given a nonzero q-relaxed lift,
 `AlgebraicPointedIncidence827` constructs `PointedTateIncidence827`, and the
-conserved dimension lands entirely in the reflected dual.  The lift remains
-explicit and uninhabited, but its boundary is now exact: it is equivalent to
-nonvanishing of the class-silent pointed coordinate.  A hypothetical lift is
-a full 58-place character wave.  The literal ULAM STOP **fires**.
+conserved dimension lands entirely in the reflected dual.
+`CanonicalConjugatePairLift827` now constructs that lift and proves the exact
+class-silent pointed coordinate nonzero at every 827-place.  It is a full
+58-place character wave.  The literal ULAM STOP **fires**.
 `reflectedBoundaryFunctional827` is a genuine localization covector on
 `QRelaxedReflectedDual827`, but it is not itself a class.  The q-relaxed
 pairing extension is inhabited for the normalized continuous pairing and its
-canonically restricted old-shaped interface.  The normalized endpoint now
-constructs incidence, boundary nonvanishing, and consumes a retained-fiber
-member from a nonzero q-relaxed lift, using canonical Fourier seating.
+canonically restricted old-shaped interface.
+`CanonicalConjugatePairIncidence827` now constructs incidence, proves boundary
+nonvanishing, and inhabits the retained whole fiber at the actual base place.
 Reciprocity
 supplies lawfulness conditionally, but also makes the resulting one-column
 coefficient exactly zero.  The corresponding kernel comparison is therefore
 equivalent to vanishing of the whole class gauge and already contains (7a).
-The lift, class-valued gauge seating, and reciprocity itself
-remain uninhabited, and a finer nonzero readout or independent comparison
-remains necessary.
+Class-valued gauge seating and reciprocity itself remain uninhabited, and a
+finer nonzero readout or independent comparison remains necessary.
 Therefore **STOP=true; W0 remains red; Lane 1 is closed.**
 
-The remaining interfaces are separated by role.  At the transversality layer
-only a nonzero `ReflectedQRelaxedLocalizationLift827` remains; canonical
-`QLocalizationEquivariance827` is now proved, and together they construct the
-two exactness laws of `PointedTateIncidence827`.  The canonical q-relaxed
-Selmer action itself is constructed.  At localization the normalized continuous
+The remaining interfaces are separated by role.  The transversality layer is
+closed in the canonical channel: the q-relaxed action, Fourier seating,
+genuine lift, both exactness laws of `PointedTateIncidence827`, boundary
+nonvanishing, and fiber inhabitation are constructed.  At localization the normalized continuous
 pairing, its canonical old-shaped interface, core, and q-relaxed consumer are
 inhabited.  If a separately supplied historical interface is required, its
 equality remains exactly the independent old-reading calibration theorem.
@@ -577,13 +580,13 @@ boundary-nonzero, fiber-member, and lawfulness arguments; lawfulness follows
 from reciprocity.  That same reciprocity proves `Lambda = 0`, so the nominal
 downstream condition `ker Lambda ≤ ker G` is exactly `G = 0` and is not a
 non-circular frontier.  The genuine frontier is a finer nonzero readout or an
-independent gauge comparison, together with the still-uninhabited
-lift and actual reciprocity producer.  The reverse
+independent gauge comparison, together with the actual reciprocity producer,
+all-orbit local comparison, and required outside-place silence.  The reverse
 kernel inclusion remains relevant only after a nondegenerate comparison is
 available.  The generic two-place balance and its tame-bookkeeping wrapper
-show how an auxiliary receipt can be retained, but the full-wave theorem
-forces the actual p=59 route to sum the entire 827 orbit or work in Fourier
-coordinates rather than retain one literal auxiliary place.  Global
+show how an auxiliary receipt can be retained.  The concrete conjugate-pair
+global ledger now performs the required 58-place sum, but it does not identify
+an actual local pairing with those rows or prove reciprocity.  Global
 `ker Lambda = 0` is only a retained sufficient detour, not the frontier.
 There is no unconditional
 `StateLinkedIdealPair.vandiverSevenA`, no unconditional (7a) transaction, and
@@ -719,12 +722,12 @@ precise current frontier is instead the typed program above.  The normalized
 continuous total pairing, its canonically restricted old-shaped interface,
 and q-relaxed localization are now constructed.  Equality with an independent
 historical reading remains calibration.  The strongest normalized endpoint
-now internalizes localization, boundary nonvanishing, a fiber member, and
-reciprocity-derived lawfulness.  Algebraic pointed incidence further reduces
-its transversality premises to a nonzero q-relaxed lift, because Fourier
-seating is now proved canonically.  Lift existence is exactly the still-open
-nonvanishing of the class-silent pointed coordinate, and any lift is a full
-58-place wave.
+now internalizes localization and reciprocity-derived lawfulness.
+`CanonicalConjugatePairLift827` closes lift existence with a class-silent
+nonzero source at every 827-place, and
+`CanonicalConjugatePairIncidence827` constructs pointed incidence, boundary
+nonvanishing, and a nonempty whole fiber at the explicit base place.  The
+lift is a full 58-place wave.
 Its signature also asks for class-valued gauge seating, the inclusion
 `ker Lambda ≤ ker G`, and an actual global reciprocity producer.  The exact
 audit shows that reciprocity forces this `Lambda` to zero, making the
@@ -733,9 +736,10 @@ proves (7a) directly.  The compiled endpoint is therefore a sound regression
 theorem but not a non-circular proof.  Canonical action compatibility is
 already constructed; a finer nonzero readout or genuinely independent gauge
 comparison is the remaining arithmetic need.  Generic two-place reciprocity
-and tame bookkeeping compile as a prototype, but the actual successor must
-retain/sum the whole 827 orbit or Fourier-compress it.  No scalar comparison
-or downstream arithmetic inhabitant is asserted.
+and tame bookkeeping compile as a prototype.  The concrete conjugate-pair
+ledger now retains and sums the whole 827 orbit, but the all-orbit pairing
+comparison, outside-place silence, reciprocity producer, and gauge comparison
+remain open.  No downstream arithmetic inhabitant is asserted.
 
 There are also two unrelated readings of the numeral two which must not be
 conflated.  `DepthCertificate.depthTwoCertificate` measures Bernoulli

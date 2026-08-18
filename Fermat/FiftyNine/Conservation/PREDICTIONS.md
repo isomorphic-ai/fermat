@@ -79,9 +79,11 @@ conservation proof.
   `nonempty_cyclotomicReflectedQRelaxedLocalizationLift827_iff` identifies it,
   at any chosen 827-place, with nonvanishing of
   `classSilentPointedCoordinate827` on the kernel of the projected finite-S
-  class obstruction.  That nonvanishing is not proved.  Any hypothetical
-  lift is a full reflected-character wave with every 827 coordinate nonzero,
-  not a point mass.  A subsequent kernel audit makes the
+  class obstruction.  At this checkpoint that nonvanishing was not proved.
+  The later resolution attached to the 2026-08-08 prediction below constructs
+  it at every 827-place.  The resulting lift is a full reflected-character
+  wave with every 827 coordinate nonzero, not a point mass.  A subsequent
+  kernel audit makes the
   logical boundary sharper: reciprocity forces this one-column coefficient
   to be the zero map
   (`normalizedWildCoefficientOfCanonicalLift59_eq_zero`), and
@@ -101,9 +103,11 @@ conservation proof.
   structural conservation algebra only, and the tame realization now routes
   its outside-two bookkeeping through this theorem.  It is not yet the
   literal p=59 successor: the full-wave theorem shows that a cyclotomic lift
-  retains all 58 coordinates above 827.  The arithmetic route must sum that
-  whole orbit, or Fourier-compress it, and compare the retained value with the
-  class gauge.  None of those arithmetic steps is claimed.
+  retains all 58 coordinates above 827.  At this checkpoint the arithmetic
+  route still had to sum that orbit.  The later canonical conjugate-pair
+  ledger performs the globally oriented sum; its pairing comparison,
+  reciprocity producer, outside-place silence, and class-gauge comparison
+  remain open.
 
 ## 2026-08-13 — Vostokov wild-reading prediction
 
@@ -233,6 +237,32 @@ conservation proof.
   conditional only at the wild 59-coordinate.  This predicts no
   unconditional relation (7a), endpoint, or transformer, and preserves the
   no-splitting guard.
+
+### Later resolution — 2026-08-18
+
+- The original session did not meet the prediction: the arbitrary finite-`S`
+  root remembered only valuation congruences and did not prove the required
+  joint class-silence/nonvanishing condition.  That historical outcome is not
+  rewritten.
+- A later construction closes the exact seam.  From an actual 827-place `P`,
+  it retains the plus-class provenance of the conjugation-fixed divisor
+  `P * conjugate(P)`, obtains a literal 827-unit source, proves its canonical
+  reflected `(59,44)` projection has value
+  `reduction(1 / 58) * (-2) ≠ 0`, and proves its projected finite-`S` class
+  obstruction is the identity.  `canonicalConjugatePairLift827` therefore
+  constructs the genuine lift, while
+  `canonical_classSilentPointedCoordinate827_ne_zero` proves the exact
+  criterion at every place over 827.  No splitting or per-prime lift
+  certificate was introduced.
+- At the explicit orbit base place the constructed lift now also yields the
+  actual pointed incidence package, a nonzero reflected boundary functional,
+  and `Nonempty NormalizedReflectedFiber827`; the whole fiber is retained.
+- This resolution does not automatically prove the separately predicted
+  `SelectedTameComparison`.  The concrete global ledger now installs the
+  lift and is nonzero with total zero, but global reciprocity, comparison of
+  the chosen pairing with all 58 orbit values, outside-place silence where
+  required, the independent class-gauge bridge, relation (7a), Case II, and
+  FLT remain open.
 
 ## 2026-08-07 — q-relaxed reflected-carrier repair prediction
 
