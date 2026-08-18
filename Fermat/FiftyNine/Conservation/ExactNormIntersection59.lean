@@ -27,6 +27,7 @@ noncomputable section
 namespace Fermat.FiftyNine.Conservation.ExactNormIntersection59
 
 open Fermat.FiftyNine.Conservation.CriticalUnitPowerSurjectivity59
+open Fermat.FiftyNine.Conservation.CriticalUnitCoefficient59
 open Fermat.FiftyNine.Conservation.CriticalUnitQuotient59
 open Fermat.FiftyNine.Conservation.EisensteinIntegrality59
 open Fermat.FiftyNine.Conservation.LocalCompletion59
@@ -101,5 +102,25 @@ theorem not_mem_twistedLambdaNormUnits59_range_iff_not_mem_U60_of_mem_U59
     u ∉ (twistedLambdaNormUnits59 K).range ↔ u ∉ U60 K :=
   not_congr
     (mem_twistedLambdaNormUnits59_range_iff_mem_U60_of_mem_U59 K u hu59)
+
+/-- On the critical layer the full extension-norm question is decided by
+one residue coefficient.  This is the finite detector a later Fermat-state
+calculation should target. -/
+theorem mem_twistedLambdaNormUnits59_range_iff_criticalCoefficient59_eq_zero
+    (u : U59 K) :
+    ((u : (F59 K)ˣ) ∈ (twistedLambdaNormUnits59 K).range) ↔
+      criticalCoefficient59 K u = 0 :=
+  (mem_twistedLambdaNormUnits59_range_iff_mem_U60_of_mem_U59 K
+      (u : (F59 K)ˣ) u.property).trans
+    (criticalCoefficient59_eq_zero_iff K u).symm
+
+/-- Nonzero critical coefficient is equivalently an honest non-norm
+certificate, not merely a quotient-level obstruction. -/
+theorem not_mem_twistedLambdaNormUnits59_range_iff_criticalCoefficient59_ne_zero
+    (u : U59 K) :
+    ((u : (F59 K)ˣ) ∉ (twistedLambdaNormUnits59 K).range) ↔
+      criticalCoefficient59 K u ≠ 0 :=
+  not_congr
+    (mem_twistedLambdaNormUnits59_range_iff_criticalCoefficient59_eq_zero K u)
 
 end Fermat.FiftyNine.Conservation.ExactNormIntersection59
