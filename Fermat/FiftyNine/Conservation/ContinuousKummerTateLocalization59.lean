@@ -118,6 +118,18 @@ postulate a local invariant. -/
 abbrev LambdaContinuousH2Readout59 :=
   LambdaRootsContinuousH2 K →ₗ[ZMod 59] ZMod 59
 
+/-- A supplied nonzero lambda-local `H²` class admits some algebraic linear
+readout taking value one on it.
+
+This specialization is conditional and noncanonical: it neither supplies the
+class or its nonzero proof nor constructs a continuous readout, normalized
+local invariant, or Hilbert-symbol comparison. -/
+theorem exists_conditionalNoncanonicalLambdaH2Readout_eq_one
+    (z : LambdaRootsContinuousH2 K) (hz : z ≠ 0) :
+    ∃ readout : LambdaContinuousH2Readout59 K, readout z = 1 :=
+  exists_conditionalNoncanonicalReadout_eq_one
+    59 (LambdaLocalField59 K) z hz
+
 /-- Linear scalar readouts written in the oriented `H²` coordinates.  This
 is a type of possible supplied maps, not a distinguished local invariant. -/
 abbrev LambdaOrientedContinuousH2Readout59 :=
