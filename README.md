@@ -567,47 +567,63 @@ generic reciprocity layer now supplies a precise next shape:
 proves `wild + auxiliary = 0`, equivalently `wild = -auxiliary`, instead of
 killing the only retained reading; the tame realization has a compiled
 wrapper from its outside-two bookkeeping to that balance.  For the actual
-cyclotomic lift this is only a prototype, because the lift is a full 58-place
-wave.  The p=59 successor must retain/sum the whole 827 orbit, or
-Fourier-compress it, and then provide the arithmetic gauge comparison.  None
-of that local-lift refinement is constructed yet, and this does not provide a
-new all-prime FLT theorem.
+cyclotomic lift this one-column theorem remains only a prototype, because the
+lift is a full 58-place wave.  The full-orbit successor is the strict-Selmer
+route below: it now retains and Fourier-processes the complete 827 orbit and
+constructs the class readout, while leaving its lambda/Poitou--Tate comparison
+explicit.  It does not provide a new all-prime FLT theorem.
 
-For the newer full strict-Selmer Artin route, the class-valued seating is no
-longer an open input.  `FermatFactorClassGaugeSeating59` re-reads the genuine
-strict-Selmer class obstruction as a `ZMod 59` linear map and proves that its
-value on the literal plus-minus Fermat-factor difference is exactly the
-selected relation-(7a) class.  The map is surjective, and its kernel is
-exactly the range of the genuine global-unit inclusion.  Consequently a
-scalar Selmer reading factors through this class gauge by a unique class
-readout if and only if it kills every global-unit class.  This does not
-manufacture an Artin map.  `StrictTameOrbitClassFactorization827` now builds
-the relevant scalar reading itself as the literal sum of all 58 genuine,
-globally-root-oriented tame rows above 827, and specializes the equivalence
-to that concrete functional.  The remaining Kummer--Artin theorem is exactly
-its global-unit silence.  Global reciprocity alone only gives the balanced
-identity `wild + tameOrbit = 0`; it does not erase the tame orbit or prove
-that unit-silence obligation.  `SeatedTameOrbitReciprocityBalance827` proves
-this exact balance on the actual complementary character seats and derives
-that orbit silence is equivalent to lambda orthogonality.  Separately,
-`NormalizedFullOrbitEigenprofile827` constructs the complete reflected
-58-place coefficient profile, proves exact support and base normalization,
-and records both the physical left-translation action and the corresponding
-inverse-character eigenlaw.  It is a local profile, not an asserted global
-reflected Selmer lift.  `ArbitraryUnitOrbitDecomposition827` proves that the
-raw 58-place residue wave of every genuine global unit is an explicit
-conjugation-even half plus one cyclotomic-root mode.  The fixed inverse
-orientation sends that root mode from `1` to `57`; mode `43` is odd and
-distinct.  `InverseEvenPrimitiveFourierSilence827` proves the finite Fourier
-cancellation, and `ArbitraryUnitFourierSilence827` composes the two halves:
-the actual raw unit wave consumed by the tame context has zero inverse-
-oriented mode-43 coefficient and zero mode-43 projection.  This still owes
-the comparison from that scalar Fourier projection to the concrete strict-
-Selmer tame-orbit functional for the chosen reflected input.  Finally,
-`OneDimensionalUnitProportionality` supplies the pure W4 algebra: two
-explicitly nonzero readouts in one explicitly supplied finrank-one submodule
-differ by a unique unit scalar.  It deliberately does not assert the still
-missing arithmetic common-Hom-line theorem.
+For the full strict-Selmer Artin route, the class gauge and its tame reading
+are now concrete.  `FermatFactorClassGaugeSeating59` exposes the genuine
+strict-Selmer class map onto `ClassTorsion59`; its kernel is exactly the
+global-unit range, and its value on the literal Fermat-factor difference is
+`selectedClassGauge59`.  `StrictTameOrbitClassFactorization827` defines the
+scalar reading as the literal sum of all 58 globally-root-oriented tame rows.
+`ArbitraryUnitLocalReduction827` and
+`ArbitraryUnitRawTameCarrierBridge827` then follow an actual ring unit through
+Mathlib's `unitInclusion` and identify every row with its raw residue wave,
+the genuine supported valuation of the relaxed input, the forced inverse
+place orientation, and the global-root coordinate factor.
+
+`ArbitraryUnitOrbitDecomposition827` and
+`ArbitraryUnitFourierSilence827` prove that every global-unit residue wave has
+zero inverse-oriented mode-43 coefficient.  Consequently
+`ArbitraryUnitTameOrbitSilence827` kills the complete strict tame functional
+whenever the relaxed valuation vector is the canonical pure reflected mode;
+the quotient-representative argument upgrades this from ring units to all
+`UnitModP` classes.  `NormalizedFullOrbitGlobalRealization827` removes the
+former profile-existence premise: the retained normalized reflected fiber is
+nonempty, and an actual global 827-relaxed Selmer carrier realizes the exact
+58-coordinate normalized profile.  `NormalizedFullOrbitUnitSilence827`
+combines these results with the exact strict Selmer sequence and constructs
+the unique class readout factoring the concrete tame functional.  The
+readout is forced by the quotient; it is not yet identified with an
+arithmetic Artin map, and no distinguished relaxed carrier is chosen.
+
+The W7 class-side seam is correspondingly much smaller than global
+injectivity.  `PointwiseFaithfulSevenAReadout827` proves that the unique
+factorizing readout only has to reflect zero at the single selected class:
+
+```text
+readout (selectedClassGauge59 pair) = 0
+  -> selectedClassGauge59 pair = 0
+```
+
+Under that pointwise hypothesis, tame-orbit silence at the literal Fermat
+factor difference is equivalent to `VandiverSevenA 0 1`.  No dimension bound
+or injectivity theorem for the complete 59-torsion class group is required.
+
+Two independent wild-side obligations remain.  First, the globally realized
+827 profile is not yet proved compatible at lambda with the reflected factor
+in `TwistedLambdaCupReceipt59`, nor is that lambda/827 pair produced by a
+Poitou--Tate range/kernel theorem; `SeatedTameOrbitReciprocityBalance827`
+still consumes, rather than constructs, the relevant global reciprocity law.
+Second, the W1 lambda functional and the 827 boundary/readout have not been
+placed in the same nonzero one-dimensional equivariant Hom line.
+`OneDimensionalUnitProportionality` proves the unit-scalar conclusion after
+that common line, membership, and nonvanishing are supplied, but it does not
+produce those arithmetic facts.  These lambda/Poitou--Tate and common-Hom-line
+seams are separate from the now-pointwise W7 class-readout seam.
 
 There is now, however, a separate completed state-to-history route at the
 same exponent.  `FermatStateTakagiSevenA59` proves the Takagi relation for the
