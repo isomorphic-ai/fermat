@@ -32,6 +32,15 @@
   nonzero, and inhabits the retained `NormalizedReflectedFiber827`.  The
   fiber remains a whole affine fiber; no preferred member or splitting is
   selected.
+- `CanonicalConjugatePairNormalizedEndpoint59` installs the same lift in the
+  historical normalized readout branch.  Its coefficient and conditional
+  relation-(7a) theorem no longer accept a lift argument.  The module also
+  preserves the exact warning: one-column reciprocity still makes the
+  coefficient zero, and
+  `canonicalConjugatePairProcessesAtLeastSevenA_iff_gauge_eq_zero` proves the
+  remaining processing premise equivalent to vanishing of the entire class
+  gauge.  The no-lift endpoint is therefore still conditional and circular,
+  not a proof of (7a).
 - `CanonicalConjugatePairGlobalLedger827` installs this concrete lift in the
   globally root-oriented tame ledger.  The resulting ledger has no lift
   parameter, is nonzero, and has scalar total zero.  The no-lift endpoint

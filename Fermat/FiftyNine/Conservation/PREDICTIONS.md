@@ -257,6 +257,10 @@ conservation proof.
 - At the explicit orbit base place the constructed lift now also yields the
   actual pointed incidence package, a nonzero reflected boundary functional,
   and `Nonempty NormalizedReflectedFiber827`; the whole fiber is retained.
+- The normalized endpoint can now install that lift internally as well.  Its
+  exact diagnostic remains `processes ↔ gauge = 0` under one-column
+  reciprocity, so removing the lift argument does not turn the historical
+  regression theorem into a non-circular proof of (7a).
 - This resolution does not automatically prove the separately predicted
   `SelectedTameComparison`.  The concrete global ledger now installs the
   lift and is nonzero with total zero, but global reciprocity, comparison of
