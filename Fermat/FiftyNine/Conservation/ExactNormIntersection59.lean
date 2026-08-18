@@ -78,4 +78,28 @@ theorem twistedLambdaNormUnits59_range_inf_U59_eq_U60 :
     exact ⟨mem_twistedLambdaNormUnits59_range_of_mem_U60 K u hu,
       U60_le_U59 K hu⟩
 
+/-- Pointwise form of the exact intersection law for a unit already known
+to lie at critical depth.  This is the convenient statewise interface: at
+depth 59, being a norm is exactly the same as having one further digit of
+lambda-adic depth. -/
+theorem mem_twistedLambdaNormUnits59_range_iff_mem_U60_of_mem_U59
+    (u : (F59 K)ˣ) (hu59 : u ∈ U59 K) :
+    u ∈ (twistedLambdaNormUnits59 K).range ↔ u ∈ U60 K := by
+  constructor
+  · intro hnorm
+    obtain ⟨beta, hbeta⟩ := hnorm
+    rw [← hbeta]
+    exact twistedLambdaNormUnits59_mem_U60_of_mem_U59 K beta (by
+      rw [hbeta]
+      exact hu59)
+  · exact mem_twistedLambdaNormUnits59_range_of_mem_U60 K u
+
+/-- Contrapositive statewise form: a critical-depth unit whose next-depth
+coefficient is nonzero cannot be an extension norm. -/
+theorem not_mem_twistedLambdaNormUnits59_range_iff_not_mem_U60_of_mem_U59
+    (u : (F59 K)ˣ) (hu59 : u ∈ U59 K) :
+    u ∉ (twistedLambdaNormUnits59 K).range ↔ u ∉ U60 K :=
+  not_congr
+    (mem_twistedLambdaNormUnits59_range_iff_mem_U60_of_mem_U59 K u hu59)
+
 end Fermat.FiftyNine.Conservation.ExactNormIntersection59
