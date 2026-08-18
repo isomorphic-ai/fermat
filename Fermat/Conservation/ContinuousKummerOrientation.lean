@@ -112,6 +112,27 @@ def orientH2
   ((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).map
     (rootsTopRepresentationEquivTrivial n F zeta hzeta).hom).hom
 
+/-- The degree-two coefficient orientation is itself a continuous linear
+equivalence.  This changes coordinates without scalarizing the retained
+cohomology class. -/
+def orientH2Equiv
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n) :
+    ((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).obj
+        (rootsTopRepresentation n F)) ≃L[ZMod n]
+      OrientedContinuousH2 n F :=
+  ((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).mapIso
+    (rootsTopRepresentationEquivTrivial n F zeta hzeta)).toContinuousLinearEquiv
+
+/-- Readback of the degree-two orientation equivalence through the existing
+continuous linear map. -/
+@[simp]
+theorem orientH2Equiv_apply
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n)
+    (x : ((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).obj
+      (rootsTopRepresentation n F))) :
+    orientH2Equiv n F zeta hzeta x = orientH2 n F zeta hzeta x :=
+  rfl
+
 /-- The un-oriented right Kummer map.  Its coefficient object remains
 `mu_n`; it is deliberately not identified with the oriented left target. -/
 def rightKummerMap :
