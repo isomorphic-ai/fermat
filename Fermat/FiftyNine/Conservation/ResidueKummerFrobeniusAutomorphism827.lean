@@ -180,7 +180,87 @@ theorem residueKummerFrobeniusAlgEquiv827_root
   rw [residueKummerFrobeniusAlgEquiv827_apply,
     residueFrobeniusAlgHom827_root]
 
+/-- Iterating the residue Frobenius automorphism multiplies the Kummer root
+by the corresponding power of its residue-symbol multiplier. -/
+theorem residueKummerFrobeniusAlgEquiv827_pow_apply_root
+    (u : (ZMod Credit.attestationPrime)ˣ) (n : ℕ) :
+    (residueKummerFrobeniusAlgEquiv827 u ^ n)
+        (residueKummerRoot827 u) =
+      algebraMap (ZMod Credit.attestationPrime)
+          (ResidueKummerAlgebra827 u)
+          ((u : ZMod Credit.attestationPrime) ^ (14 * n)) *
+        residueKummerRoot827 u := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      calc
+        (residueKummerFrobeniusAlgEquiv827 u ^ (n + 1))
+            (residueKummerRoot827 u) =
+            residueKummerFrobeniusAlgEquiv827 u
+              ((residueKummerFrobeniusAlgEquiv827 u ^ n)
+                (residueKummerRoot827 u)) := by
+          have hp := congrArg
+            (fun e : ResidueKummerAlgebra827 u ≃ₐ[ZMod Credit.attestationPrime]
+                ResidueKummerAlgebra827 u => e (residueKummerRoot827 u))
+            (pow_succ' (residueKummerFrobeniusAlgEquiv827 u) n)
+          simpa only [AlgEquiv.mul_apply] using hp
+        _ = residueKummerFrobeniusAlgEquiv827 u
+              (algebraMap (ZMod Credit.attestationPrime)
+                  (ResidueKummerAlgebra827 u)
+                  ((u : ZMod Credit.attestationPrime) ^ (14 * n)) *
+                residueKummerRoot827 u) := by rw [ih]
+        _ = algebraMap (ZMod Credit.attestationPrime)
+                (ResidueKummerAlgebra827 u)
+                ((u : ZMod Credit.attestationPrime) ^ (14 * (n + 1))) *
+              residueKummerRoot827 u := by
+          rw [map_mul, AlgEquiv.commutes,
+            residueKummerFrobeniusAlgEquiv827_root]
+          rw [← mul_assoc, ← map_mul]
+          congr 2
+          rw [← pow_add]
+          congr 1
+
+/-- The local Frobenius automorphism has order dividing 59.  This is the
+expected cyclic Kummer action; it is still a local algebra statement. -/
+theorem residueKummerFrobeniusAlgEquiv827_pow_fiftyNine
+    (u : (ZMod Credit.attestationPrime)ˣ) :
+    residueKummerFrobeniusAlgEquiv827 u ^ 59 = 1 := by
+  have hhom :
+      (residueKummerFrobeniusAlgEquiv827 u ^ 59).toAlgHom =
+        (1 : ResidueKummerAlgebra827 u ≃ₐ[ZMod Credit.attestationPrime]
+          ResidueKummerAlgebra827 u).toAlgHom := by
+    apply AdjoinRoot.algHom_ext
+    change (residueKummerFrobeniusAlgEquiv827 u ^ 59)
+        (residueKummerRoot827 u) = residueKummerRoot827 u
+    rw [residueKummerFrobeniusAlgEquiv827_pow_apply_root]
+    have h := ZMod.units_pow_card_sub_one_eq_one Credit.attestationPrime u
+    norm_num [Credit.attestationPrime] at h
+    have hval : (u : ZMod Credit.attestationPrime) ^ 826 = 1 := by
+      simpa using congrArg
+        (fun z : (ZMod Credit.attestationPrime)ˣ =>
+          (z : ZMod Credit.attestationPrime)) h
+    rw [show 14 * 59 = 826 by norm_num, hval, map_one, one_mul]
+  apply AlgEquiv.ext
+  intro a
+  exact DFunLike.congr_fun hhom a
+
 /-! ## Axiom audit -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_apply_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms residueKummerFrobeniusAlgEquiv827_pow_apply_root
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_fiftyNine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms residueKummerFrobeniusAlgEquiv827_pow_fiftyNine
 
 /--
 info: 'Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusMultiplier_pow_fiftyNine' depends on axioms: [propext,
