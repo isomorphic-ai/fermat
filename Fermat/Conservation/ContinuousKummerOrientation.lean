@@ -133,6 +133,76 @@ theorem orientH2Equiv_apply
     orientH2Equiv n F zeta hzeta x = orientH2 n F zeta hzeta x :=
   rfl
 
+/-- Scalar readouts in oriented coordinates are linearly equivalent to
+scalar readouts on roots-valued degree-two cohomology.  This only transports
+supplied maps through `orientH2Equiv`; it does not construct a readout. -/
+def orientH2ReadoutEquiv
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n) :
+    (OrientedContinuousH2 n F →ₗ[ZMod n] ZMod n) ≃ₗ[ZMod n]
+      (((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).obj
+        (rootsTopRepresentation n F)) →ₗ[ZMod n] ZMod n) :=
+  (orientH2Equiv n F zeta hzeta).symm.toLinearEquiv.arrowCongr
+    (LinearEquiv.refl (ZMod n) (ZMod n))
+
+/-- Applying the transported linear readout means orienting the retained
+degree-two class first. -/
+@[simp]
+theorem orientH2ReadoutEquiv_apply
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n)
+    (readout : OrientedContinuousH2 n F →ₗ[ZMod n] ZMod n)
+    (x : ((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).obj
+      (rootsTopRepresentation n F))) :
+    orientH2ReadoutEquiv n F zeta hzeta readout x =
+      readout (orientH2Equiv n F zeta hzeta x) :=
+  rfl
+
+/-- The inverse transport evaluates a roots-valued readout after applying
+the inverse degree-two orientation. -/
+@[simp]
+theorem orientH2ReadoutEquiv_symm_apply
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n)
+    (readout :
+      ((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).obj
+        (rootsTopRepresentation n F)) →ₗ[ZMod n] ZMod n)
+    (x : OrientedContinuousH2 n F) :
+    (orientH2ReadoutEquiv n F zeta hzeta).symm readout x =
+      readout ((orientH2Equiv n F zeta hzeta).symm x) :=
+  rfl
+
+/-- The same lossless transport for topology-preserving scalar readouts.
+The equivalence itself is linear on the two spaces of continuous linear maps;
+it still supplies no distinguished element of either space. -/
+def orientH2ContinuousReadoutEquiv
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n) :
+    (OrientedContinuousH2 n F →L[ZMod n] ZMod n) ≃ₗ[ZMod n]
+      (((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).obj
+        (rootsTopRepresentation n F)) →L[ZMod n] ZMod n) :=
+  (orientH2Equiv n F zeta hzeta).symm.arrowCongrEquivₛₗ
+    (ContinuousLinearEquiv.refl (ZMod n) (ZMod n))
+
+/-- Application of the transported topology-preserving readout. -/
+@[simp]
+theorem orientH2ContinuousReadoutEquiv_apply
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n)
+    (readout : OrientedContinuousH2 n F →L[ZMod n] ZMod n)
+    (x : ((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).obj
+      (rootsTopRepresentation n F))) :
+    orientH2ContinuousReadoutEquiv n F zeta hzeta readout x =
+      readout (orientH2Equiv n F zeta hzeta x) :=
+  rfl
+
+/-- Inverse application of the transported topology-preserving readout. -/
+@[simp]
+theorem orientH2ContinuousReadoutEquiv_symm_apply
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n)
+    (readout :
+      ((continuousCohomology (ZMod n) (AbsoluteGalois F) 2).obj
+        (rootsTopRepresentation n F)) →L[ZMod n] ZMod n)
+    (x : OrientedContinuousH2 n F) :
+    (orientH2ContinuousReadoutEquiv n F zeta hzeta).symm readout x =
+      readout ((orientH2Equiv n F zeta hzeta).symm x) :=
+  rfl
+
 /-- The un-oriented right Kummer map.  Its coefficient object remains
 `mu_n`; it is deliberately not identified with the oriented left target. -/
 def rightKummerMap :
