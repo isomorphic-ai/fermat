@@ -210,4 +210,36 @@ theorem triangularNormPerturbations59_mem_U60_of_norm_mem_U59
   rw [hnormFormula] at hnorm
   exact triangularNormPerturbations59_mem_U60_of_product_mem_U59 K f hf hnorm
 
+/-- The whole triangular-product norm has the critical depth gap: once it
+enters `U_59`, it is already in `U_60`. -/
+theorem norm_aeval_triangularProduct_mem_U60_of_mem_U59
+    (f : (LambdaField59 K)[X])
+    (hf : ∀ k : ℕ, 0 < k → Valued.v (f.coeff k) ≤ 1)
+    (hnorm :
+      Valued.v
+          (Algebra.norm (LambdaField59 K)
+              (aeval (twistedLambdaRoot59 K) (triangularProduct f 58)) - 1) ≤
+        WithZero.exp (-59 : ℤ)) :
+    Valued.v
+        (Algebra.norm (LambdaField59 K)
+            (aeval (twistedLambdaRoot59 K) (triangularProduct f 58)) - 1) ≤
+      WithZero.exp (-60 : ℤ) := by
+  have hnormFormula := norm_aeval_triangularProduct 59
+    (LambdaField59 K) (lambdaLocalPrimitiveRoot59 K) (twistedLambda59 K)
+    (lambdaLocalPrimitiveRoot59_isPrimitive K) (twistedLambda59_not_pow K)
+    f 58 (by norm_num) (by norm_num)
+  change Algebra.norm (LambdaField59 K)
+      (aeval (twistedLambdaRoot59 K) (triangularProduct f 58)) =
+    ∏ j ∈ Finset.Icc 1 58,
+      (1 + triangularNormPerturbation59 K f j) at hnormFormula
+  rw [hnormFormula] at hnorm ⊢
+  apply prod_one_add_sub_one_le
+    (Valued.v : Valuation (LambdaField59 K) ℤᵐ⁰)
+      (Finset.Icc 1 58) (triangularNormPerturbation59 K f)
+      (WithZero.exp (-60 : ℤ))
+  · rw [← WithZero.exp_zero, WithZero.exp_lt_exp]
+    norm_num
+  · exact triangularNormPerturbations59_mem_U60_of_product_mem_U59
+      K f hf hnorm
+
 end Fermat.FiftyNine.Conservation.TriangularNormSeparation59
