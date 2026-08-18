@@ -42,7 +42,7 @@ import Mathlib.Algebra.Module.ZMod
 import Mathlib.NumberTheory.Padics.RingHoms
 import Mathlib.RepresentationTheory.Basic
 
-open scoped MonoidAlgebra nonZeroDivisors
+open scoped BigOperators MonoidAlgebra nonZeroDivisors
 
 noncomputable section
 
@@ -624,6 +624,34 @@ theorem characterProjectorAt_apply
     (characterProjectorAt rho eta x : SelmerCarrierAt R K S p) =
       rho.asAlgebraHom (characterIdempotent eta) x :=
   rfl
+
+/-- The supported character projector fixes every class already lying in
+its target character eigenspace. -/
+theorem characterProjectorAt_eq_self_of_mem
+    (rho : SelmerDeltaRepresentationAt (R := R) (K := K) (p := p)
+      (Delta := Delta) S)
+    (eta : Character (PadicInt p) Delta)
+    (x : SelmerCarrierAt R K S p)
+    (hx : x ∈ characterEigenspaceAt rho eta) :
+    (characterProjectorAt rho eta x : SelmerCarrierAt R K S p) = x := by
+  change rho.asAlgebraHom (characterIdempotent eta) x = x
+  rw [characterIdempotent, map_smul, map_sum]
+  simp only [LinearMap.smul_apply,
+    Representation.asAlgebraHom_single]
+  rw [mem_characterEigenspaceAt_iff] at hx
+  have heach (g : Delta) :
+      (((↑((eta g)⁻¹) : PadicInt p) • rho g) :
+          Module.End (PadicInt p) (SelmerCarrierAt R K S p)) x = x := by
+    change (↑((eta g)⁻¹) : PadicInt p) • rho g x = x
+    rw [hx g, ← mul_smul]
+    simp
+  change ⅟(Fintype.card Delta : PadicInt p) •
+      ((∑ g ∈ Finset.univ, (↑((eta g)⁻¹) : PadicInt p) • rho g) x) = x
+  rw [LinearMap.sum_apply]
+  simp_rw [heach]
+  rw [Finset.sum_const, Finset.card_univ,
+    ← Nat.cast_smul_eq_nsmul (PadicInt p), smul_smul,
+    invOf_mul_self, one_smul]
 
 /-- Applying the supported character projector twice changes nothing. -/
 theorem characterProjectorAt_idempotent
