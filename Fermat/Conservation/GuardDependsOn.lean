@@ -68,6 +68,30 @@ elab "#guard_depends_on " source:ident ", " identity:ident : command => do
     throwError
       "no transitive value-dependency path from {sourceName} to {identityName}; declaration types are intentionally ignored"
 
+/--
+`#guard_not_depends_on source, identity` is the negative proof-value guard.
+It succeeds exactly when the implementation of `source` has no transitive
+reference to `identity`; declaration types remain intentionally ignored.
+
+This is useful when a new proof shares infrastructure with an older route
+but must not close by invoking the older endpoint itself.
+-/
+elab "#guard_not_depends_on " source:ident ", " identity:ident : command => do
+  let sourceName ←
+    liftCoreM <| realizeGlobalConstNoOverloadWithInfo source
+  let identityName ←
+    liftCoreM <| realizeGlobalConstNoOverloadWithInfo identity
+  let env ← getEnv
+  let some sourceValue := (env.find? sourceName).bind declarationValue?
+    | throwError
+        "cannot audit {sourceName}: the declaration has no implementation value"
+  let depends := Id.run <|
+    (sourceValue.getUsedConstants.anyM
+      (valueDependsOn env identityName)).run' {}
+  if depends then
+    throwError
+      "unexpected transitive value-dependency path from {sourceName} to {identityName}; declaration types are intentionally ignored"
+
 /-- The equivalence constructors which could package a middle object as a
 product.  The no-splitting audit intentionally treats every one of these as
 forbidden when `Prod` occurs in the same public declaration type. -/
