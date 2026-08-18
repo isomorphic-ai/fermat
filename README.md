@@ -250,6 +250,162 @@ contain no project axioms. See the
 [KummerIso architecture note](Fermat/KummerIso/README.md) for the complete
 call graph, theorem boundaries, and both regression families.
 
+### Prime-parametric Kummer--Albert and local H² laboratory
+
+[`Fermat/Conservation/`](Fermat/Conservation/) contains the generic
+cohomological and field-theoretic implementation used to investigate the
+remaining local step without building a separate proof for each prime.  Its
+prime-parametric spine now constructs, for every prime `p` in characteristic
+zero:
+
+1. the concrete Kummer splitting field of `X^p - a` and its continuous,
+   surjective absolute-Galois character `chi_a : G_F → C_p`;
+2. the standard carry class in actual continuous `H²`, together with a
+   constructive proof that its pullback vanishes exactly when `chi_a` lifts
+   continuously to `C_(p²)`;
+3. the genuine chosen-root Kummer cocycle and its oriented Kummer cup,
+   including an equality between that cup and the pulled carry/Bockstein
+   class; and
+4. Albert's construction and converse, which identify a primitive-root norm
+   from the concrete Kummer extension with the existence of that compatible
+   `C_(p²)` lift.
+
+The public endpoint of this generic chain is
+`PrimeKummerNormLiftH2Criterion`.  It proves the full equivalence
+
+```text
+primitive p-th root is a norm
+↔ compatible continuous C_(p²) lift exists
+↔ pulled carry H² class is zero
+↔ oriented genuine Kummer cup is zero
+↔ roots-valued genuine Kummer cup is zero.
+```
+
+The corresponding nonnorm, no-lift, and nonzero forms are proved as well.
+The `At59` modules are compatibility receipts showing that the earlier
+order-59 constructions are specializations of this generic code rather than
+new certificates.
+
+The concrete local experiment lives in
+[`Fermat/FiftyNine/Conservation/`](Fermat/FiftyNine/Conservation/).  Lean
+proves that `60` is not a 59th power in the actual lambda-adic field, while
+the bare uniformizer `lambda = zeta_59 - 1` has the explicit norm witness
+`Norm(1 + alpha) = zeta_59`.  The same witness kills the bare-lambda Kummer
+cup in genuine continuous `H²(mu_59)`, and cup additivity proves that the
+cup for `60 * lambda` is exactly the cup for the unit factor `60`.  On the
+norm side, the primitive-root question for `60 * lambda` is reduced to the
+explicit correction
+
+```text
+c = (1 + 60 * lambda) / zeta_59 = 1 + 59 * lambda / zeta_59.
+```
+
+Its valuation is checked exactly: `c` lies in the one-unit layer `U_59` but
+not in `U_60`.  `CriticalUnitQuotient59` therefore constructs a genuine
+nonzero class `[c]` in `U_59 / U_60`, defines the image there of the actual
+field norm, and reduces the arithmetic question to the explicit exclusion
+`[c] ∉ image(Norm)`.  `CriticalUnitCoefficient59` constructs the
+coefficient `(u - 1) / lambda^59 mod lambda`, proves that its kernel is
+exactly `U_60`, and upgrades it to an equivalence from `U_59 / U_60` onto
+the additive group of the actual lambda residue field.  It then identifies
+that residue field canonically with `ZMod 59`, proves Frobenius
+`x^59 = x`, transports the cyclotomic Dwork identity
+`59 / lambda^58 = -1` into the residue field, and computes the correction's
+raw coefficient as exactly `-1`.  Its normalized form therefore sends `[c]`
+exactly to `1`.  `CriticalUnitPowerSurjectivity59` proves by an
+explicit completed-DVR Newton construction that every element of `U_60` is
+a genuine 59th power.  It follows that membership of `[c]` in the quotient
+norm image is equivalent—not merely necessary—to an exact norm witness for
+`c`, to a norm witness for `zeta_59`, and to vanishing of the genuine
+twisted-lambda Kummer cup.  `NormImageBridge59` now proves the expected
+one-dimensional norm hyperplane directly from the explicit finite
+triangular norm calculation: every actual norm in `U_59` lies in `U_60`, so
+the quotient norm image is exactly zero.  Thus `[c]` is excluded without an
+Artin--Hasse or local-reciprocity premise.
+`PrimeKummerExplicitNorm` supplies every prime Kummer extension with the
+selected-root power basis and expands every field norm as the exact finite
+product over its Kummer conjugates.  `PrimeKummerTrace` proves in the same
+coordinates, for every prime, that every nonconstant basis monomial has trace
+zero and hence
+`Trace(f(alpha)) = p * f.coeff 0` whenever `degree(f) < p`.
+At `59`, `ExplicitNormResidue59` computes
+`Norm(1 + c * alpha^j) = 1 + c^59 * (60 * lambda)^j` and proves for every
+`0 < j < 59` that entering `U_59` forces this norm into `U_60`.  Thus all
+single nonconstant power-basis perturbations are already silent at the
+critical layer.  `PrimeTriangularUnitFactorization` now factors every bounded
+polynomial, through degree `p - 1`, into those elementary factors and one
+exact residual factor `1 + a*y`; this is a generic finite recursion rather
+than a 59-case enumeration.  `PrimeTriangularNormBounds` proves that if the
+nonconstant coefficients begin with a common ultrametric bound `q ≤ 1`, all
+installed elementary coefficients retain that bound while the exact
+`X^p` remainder improves to `q²`.  Its valuation-native companion
+`PrimeTriangularValuationDepth` proves, over any `ℤᵐ⁰`-valued field, that
+coefficients beyond every installed stage and the exact `X^p` quotient have
+doubled depth.  `PolynomialSpectralNormBound` transports
+this coefficient estimate into the extension: evaluation at a spectral
+one-unit cannot enlarge the polynomial supremum norm.
+`PrimeTriangularSpectralContraction` composes the two statements into one
+exact evaluated factorization whose residual `a`-multiple has bound `q²`.
+`PrimeTriangularExplicitNorm` computes the norm of the complete evaluated
+triangular product as the exact base-field product
+`∏ j, (1 + c_j^p * a^j)`, exposing the valuation residue of every factor.
+`ValuationProductDominant` supplies the matching generic cancellation law:
+when the nonzero perturbations have distinct valuations, a depth bound on
+their full product forces the same bound on every perturbation.
+`SpectralNormProductRemainder` then proves that norms of sufficiently deep
+residual one-units stay that deep and that the error after the linear trace
+term is quadratically smaller.  At the two ends of the local calculation,
+`TwistedLambdaEisensteinIntegrality59` gives every unit-norm extension
+element a degree-`< 59` selected-root expansion with integral coefficients
+and unit constant term, while `CriticalUnitPowerKernel59` proves by the
+computed Dwork/Frobenius cancellation that every first one-unit has 59th
+power in `U_60`.  `TriangularSpectralDepth59` identifies real spectral
+radii with exact integer lambda-depth, recovers the depth of every
+selected-root coordinate, and specializes the generic contraction to an
+actual depth-doubling remainder in the twisted extension.
+`TriangularNormSeparation59` proves that the 58 elementary perturbations
+have pairwise distinct nonzero valuations modulo 59; therefore, if their
+complete triangular norm enters `U_59`, every elementary perturbation is
+already in `U_60`, and their whole triangular-product norm is in `U_60`.
+`TriangularResidualNormalization59` and
+`PrimeTriangularSpectralAbsorption` normalize the residual one-unit and
+absorb the additive remainder without losing its spectral bound.
+`TriangularResidualStep59` packages one complete actual round: an exact
+extension-field factorization, the depth recurrence `s ↦ 2*s+2`, and a
+concrete unit in `U_60` equal to the norm of the extracted base factor.
+`TriangularTerminalResidual59` proves that coordinate depth `s` puts the
+actual residual norm in depth `s+1`; in particular, the depth-62 terminal
+residual is already in `U_63 ⊆ U_60`.  `FiveStepResidual59` performs the
+literal finite iteration
+`0 → 2 → 6 → 14 → 30 → 62`, retaining the exact five-factor
+decomposition and a concrete `U_60` unit equal to the product of their
+actual field norms.  `InitialIntegralDecomposition59` connects an arbitrary
+extension element with unit norm to the depth-zero input, using strict
+smallness of the selected root at the closed integral coefficient boundary.
+`PowerU1Reflection59` proves by residue Frobenius that
+`u^59 ∈ U_1` forces `u ∈ U_1`.  Finally, `NormImageBridge59` composes
+these results with triangular norm separation: every actual norm in `U_59`
+already lies in `U_60`, so the complete critical quotient norm image is
+bottom.  The explicit depth-59 correction and hence the local primitive
+59th root are not norms, and the genuine twisted-lambda Kummer cup is
+nonzero.  `NormImageConsequences59` propagates this unconditional input
+through the existing Case II interfaces: the Kummer character has no
+continuous `C_(59²)` lift, a normalized roots-valued inflation readout
+exists, and one existential theorem packages that readout together with its
+full normalization equation and all five normalized endpoint conclusions.
+`Unit60KummerNormObstruction59` then cancels the already-trivial bare-lambda
+cup from the twisted class and obtains a second unconditional obstruction:
+the genuine unit-`60` Kummer cup is nonzero, `zeta_59` is not a norm from
+the extension generated by a 59th root of `60`, and that extension's
+concrete Kummer character has no continuous `C_(59²)` lift.
+In particular, this laboratory does not yet export a new all-prime FLT
+theorem.
+
+[`Fermat/FiftyNine/Conservation/Verification.lean`](Fermat/FiftyNine/Conservation/Verification.lean)
+is the non-imported executable audit leaf for this campaign.  It checks the
+named endpoints, dependency guards, compatibility modules, and the standard
+axiom budget separately from the public umbrella import.
+
 [`Fermat/Regular/`](Fermat/Regular/) contains reusable Faulhaber
 infrastructure and the checked historical bridge
 
