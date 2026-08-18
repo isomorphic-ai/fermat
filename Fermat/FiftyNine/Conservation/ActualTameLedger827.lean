@@ -69,6 +69,23 @@ theorem tameOrbitPlace827_injective :
     (tameOrbitBasePlace827 (K := K))).injective
   exact Subtype.ext hplace
 
+omit [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)] in
+/-- The canonical orbit coordinates enumerate exactly all height-one places
+above `827`. -/
+theorem tameOrbitPlace827_range_eq_placesOver827 :
+    Set.range (tameOrbitPlace827 (K := K)) = placesOver827 K := by
+  ext v
+  constructor
+  · rintro ⟨tau, rfl⟩
+    exact (indexedPlaceOrbitEquiv827 K
+      (tameOrbitBasePlace827 (K := K)) tau).2
+  · intro hv
+    let orbitEquiv := indexedPlaceOrbitEquiv827 K
+      (tameOrbitBasePlace827 (K := K))
+    let tau : GaloisIndex59 := orbitEquiv.symm ⟨v, hv⟩
+    refine ⟨tau, ?_⟩
+    exact congrArg Subtype.val (orbitEquiv.apply_symm_apply ⟨v, hv⟩)
+
 /-- The finite fixed-root coordinate ledger: its retained entries are the
 already constructed local symbols, seated at the corresponding height-one
 places. -/

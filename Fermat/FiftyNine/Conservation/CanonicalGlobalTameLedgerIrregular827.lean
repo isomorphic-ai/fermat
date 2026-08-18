@@ -17,6 +17,7 @@ it is a live ledger whose local entries cancel. No global reciprocity theorem
 or producer is asserted here; the final implication only consumes an
 explicitly supplied reciprocity equation.
 -/
+import Fermat.Conservation.FiniteOrbitLedgerReciprocity
 import Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedger827
 import Fermat.FiftyNine.Conservation.CanonicalIrregularMode827
 
@@ -28,6 +29,7 @@ set_option maxRecDepth 10000
 namespace Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827
 
 open Fermat.Conservation
+open Fermat.Conservation.FiniteOrbitLedgerReciprocity
 open Fermat.FiftyNine.Conservation.ActualTameLedger827
 open Fermat.FiftyNine.Conservation.CanonicalTameLedger827
 open Fermat.FiftyNine.Conservation.CanonicalIrregularMode827
@@ -214,12 +216,12 @@ theorem canonicalTameLedger827_canonical_irregular_ne_zero
         irregularCharacter59 lift tau ≠ 0 := by
     rw [canonicalTameOrbitValue827_eq_mul_actual]
     exact mul_ne_zero (Units.ne_zero tau) htau
-  intro hledger
-  have hentry := congrArg
-    (fun ledger : CyclotomicTameContext59.Place K →₀ ZMod 59 ↦
-      ledger (tameOrbitPlace827 (K := K) tau)) hledger
-  simp only [canonicalTameLedger827_apply_orbit, Finsupp.zero_apply] at hentry
-  exact hcanonical hentry
+  exact
+    orbitLedger_ne_zero_of_value_ne_zero
+      (tameOrbitPlace827 (K := K))
+      (canonicalTameOrbitValue827 (K := K)
+        canonicalTeichmullerCharacter59 irregularCharacter59 lift)
+      (tameOrbitPlace827_injective (K := K)) tau hcanonical
 
 /-- A displayed reciprocity equation for the globally normalized ledger
 forces the wild scalar to vanish.  This theorem consumes such an equation;
@@ -236,8 +238,11 @@ theorem wild_eq_zero_of_canonicalTameLedgerReciprocityEquation827
       (canonicalTameLedger827 (K := K) canonicalTeichmullerCharacter59
         irregularCharacter59 lift).sum (fun _ value ↦ value) = 0) :
     wildReading = 0 := by
-  rw [canonicalTameLedger827_canonical_irregular_sum_eq_zero,
-    add_zero] at reciprocityEquation
-  exact reciprocityEquation
+  exact
+    distinguished_eq_zero_of_add_ledger_sum_eq_zero
+        (canonicalTameLedger827 (K := K) canonicalTeichmullerCharacter59
+          irregularCharacter59 lift) wildReading
+        (canonicalTameLedger827_canonical_irregular_sum_eq_zero lift)
+        reciprocityEquation
 
 end Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827

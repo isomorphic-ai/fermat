@@ -332,6 +332,27 @@ finite support is contained in that range, but support equality is not claimed
 because supplied coefficients may be zero.  This module introduces neither
 character weights nor any local or global reciprocity assertion.
 
+`FiniteOrbitLedgerReciprocity` is the route-neutral conservation layer on top
+of that ledger.  Its seven-declaration API reconstructs the literal
+place-indexed reading ledger from one distinguished place and one injectively
+indexed finite orbit, turns an honestly supplied `GlobalReciprocityLaw` into
+the corresponding distinguished-plus-orbit balance, and propagates zero or
+nonzero ledger totals to the resulting local conclusions.  The arithmetic
+boundary is deliberately explicit: the pairing, reciprocity witness, orbit
+map, injectivity and disjointness, every pointwise local comparison, and
+silence at all omitted places remain inputs.  It neither identifies the
+abstract finite index with arithmetic support nor supplies any cyclotomic,
+character, regularity, or cardinality fact.  Unlike
+`PrimeFullOrbitReciprocity`, it does not require a group structure on the
+orbit index, an orbit of size `p - 1`, or Fourier waves; the latter module is
+the parallel prime full-orbit layer that adds character compression and its
+orientation-sensitive selected-component conclusions.  At exponent `59`,
+`tameOrbitPlace827_range_eq_placesOver827` supplies the deliberately separate
+arithmetic receipt that the canonical index range is exactly the set of places
+above `827`; the existing ledger-level zero/nonzero consequences and canonical
+global-reciprocity wrappers are now thin specializations of the generic
+ledger consequences.
+
 `PrimeResidueFourier` supplies the residue-field Fourier dictionary for every
 prime `p`: character functions and orthogonality, normalized Fourier
 coordinates and reconstruction, the character basis, pure-mode support and

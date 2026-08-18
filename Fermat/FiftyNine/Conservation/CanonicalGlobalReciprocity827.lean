@@ -18,6 +18,7 @@ cancellation then forces the distinguished reading to vanish.
 -/
 import Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827
 import Fermat.FiftyNine.Conservation.LocalCompletion59
+import Fermat.Conservation.FiniteOrbitLedgerReciprocity
 import Fermat.Conservation.TatePairing
 
 open scoped NumberField
@@ -77,6 +78,17 @@ theorem lambdaPlace59_not_mem_placesOver827 :
   rw [Ideal.mem_span_singleton] at hmem
   norm_num [Credit.attestationPrime] at hmem
 
+omit [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)] in
+private theorem tameOrbitPlace827_ne_distinguished
+    (distinguished : Place K)
+    (hdistinguished : distinguished ∉ placesOver827 K) :
+    ∀ tau : GaloisIndex59,
+      tameOrbitPlace827 (K := K) tau ≠ distinguished := by
+  intro tau hplace
+  apply hdistinguished
+  rw [← tameOrbitPlace827_range_eq_placesOver827 (K := K)]
+  exact ⟨tau, hplace⟩
+
 /-- Pointwise local comparison identifies the pairing's complete retained
 ledger with one distinguished wild entry plus the canonical 827 tame
 ledger.  Exhaustivity of the explicit 58-place orbit handles every place
@@ -98,34 +110,21 @@ theorem readings_eq_single_add_canonicalTameLedger827
       Finsupp.single distinguished wildReading +
         canonicalTameLedger827 (K := K)
           canonicalTeichmullerCharacter59 irregularCharacter59 lift := by
-  classical
-  ext v
-  change pairing.pairAt v x y = _
-  by_cases hvd : v = distinguished
-  · subst v
-    rw [hwild, Finsupp.add_apply, Finsupp.single_eq_same,
-      canonicalTameLedger827_apply_eq_zero_of_not_over827
-        (K := K) canonicalTeichmullerCharacter59 irregularCharacter59
-        lift distinguished hdistinguished,
-      add_zero]
-  · by_cases hq : v ∈ placesOver827 K
-    · let orbitEquiv := indexedPlaceOrbitEquiv827 K
-        (tameOrbitBasePlace827 (K := K))
-      let tau : GaloisIndex59 := orbitEquiv.symm ⟨v, hq⟩
-      have htau : tameOrbitPlace827 (K := K) tau = v := by
-        exact congrArg Subtype.val (orbitEquiv.apply_symm_apply ⟨v, hq⟩)
-      rw [← htau, horbit tau, Finsupp.add_apply]
-      have hne : distinguished ≠ tameOrbitPlace827 (K := K) tau := by
-        intro h
-        apply hvd
-        rw [← htau]
-        exact h.symm
-      simp [hne]
-    · rw [houtside v hvd hq, Finsupp.add_apply,
-        canonicalTameLedger827_apply_eq_zero_of_not_over827
-          (K := K) canonicalTeichmullerCharacter59 irregularCharacter59
-          lift v hq]
-      simp [Ne.symm hvd]
+  have houtsideRange : ∀ v : Place K, v ≠ distinguished →
+      v ∉ Set.range (tameOrbitPlace827 (K := K)) →
+      pairing.pairAt v x y = 0 := by
+    simpa only [tameOrbitPlace827_range_eq_placesOver827 (K := K)] using
+      houtside
+  simpa only [canonicalTameLedger827] using
+    (FiniteOrbitLedgerReciprocity.readings_eq_single_add_orbitLedger
+      (pairing := pairing) distinguished (tameOrbitPlace827 (K := K))
+      (tameOrbitPlace827_injective (K := K))
+      (tameOrbitPlace827_ne_distinguished
+        (K := K) distinguished hdistinguished)
+      x y wildReading hwild
+      (canonicalTameOrbitValue827 (K := K)
+        canonicalTeichmullerCharacter59 irregularCharacter59 lift)
+      horbit houtsideRange)
 
 /-- The existing global-reciprocity interface turns the pointwise local
 comparison into the exact scalar balance against the canonical tame ledger.
@@ -149,23 +148,22 @@ theorem wild_add_canonicalTameLedger827_sum_eq_zero_of_globalReciprocity
         (canonicalTameLedger827 (K := K)
           canonicalTeichmullerCharacter59 irregularCharacter59 lift).sum
             (fun _ value ↦ value) = 0 := by
-  have hreadings := readings_eq_single_add_canonicalTameLedger827
-    (pairing := pairing) lift distinguished hdistinguished x y wildReading
-    hwild horbit houtside
-  calc
-    wildReading +
-        (canonicalTameLedger827 (K := K)
-          canonicalTeichmullerCharacter59 irregularCharacter59 lift).sum
-            (fun _ value ↦ value) =
-      (Finsupp.single distinguished wildReading +
-        canonicalTameLedger827 (K := K)
-          canonicalTeichmullerCharacter59 irregularCharacter59 lift).sum
-            (fun _ value ↦ value) := by
-              rw [Finsupp.sum_add_index' (fun _ ↦ rfl) (fun _ _ _ ↦ rfl),
-                Finsupp.sum_single_index (by rfl)]
-    _ = (pairing.readings x y).sum (fun _ value ↦ value) := by
-      rw [hreadings]
-    _ = 0 := reciprocity.sum_eq_zero x y
+  have houtsideRange : ∀ v : Place K, v ≠ distinguished →
+      v ∉ Set.range (tameOrbitPlace827 (K := K)) →
+      pairing.pairAt v x y = 0 := by
+    simpa only [tameOrbitPlace827_range_eq_placesOver827 (K := K)] using
+      houtside
+  simpa only [canonicalTameLedger827] using
+    (FiniteOrbitLedgerReciprocity.wild_add_orbitLedger_sum_eq_zero_of_globalReciprocity
+      (pairing := pairing) reciprocity distinguished
+      (tameOrbitPlace827 (K := K))
+      (tameOrbitPlace827_injective (K := K))
+      (tameOrbitPlace827_ne_distinguished
+        (K := K) distinguished hdistinguished)
+      x y wildReading hwild
+      (canonicalTameOrbitValue827 (K := K)
+        canonicalTeichmullerCharacter59 irregularCharacter59 lift)
+      horbit houtsideRange)
 
 /-- In the canonical irregular mode, genuine global reciprocity and the
 explicit local comparison force the distinguished wild pairing value to
@@ -185,13 +183,24 @@ theorem pairAt_distinguished_eq_zero_of_globalReciprocity827
     (houtside : ∀ v : Place K, v ≠ distinguished →
       v ∉ placesOver827 K → pairing.pairAt v x y = 0) :
     pairing.pairAt distinguished x y = 0 := by
-  have hbalance :=
-    wild_add_canonicalTameLedger827_sum_eq_zero_of_globalReciprocity
-      (pairing := pairing) reciprocity lift distinguished hdistinguished
-      x y (pairing.pairAt distinguished x y) rfl horbit houtside
-  rw [canonicalTameLedger827_canonical_irregular_sum_eq_zero,
-    add_zero] at hbalance
-  exact hbalance
+  have houtsideRange : ∀ v : Place K, v ≠ distinguished →
+      v ∉ Set.range (tameOrbitPlace827 (K := K)) →
+      pairing.pairAt v x y = 0 := by
+    simpa only [tameOrbitPlace827_range_eq_placesOver827 (K := K)] using
+      houtside
+  apply
+    FiniteOrbitLedgerReciprocity.pairAt_eq_zero_of_globalReciprocity_of_orbitLedger_sum_eq_zero
+      (pairing := pairing) reciprocity distinguished
+      (tameOrbitPlace827 (K := K))
+      (tameOrbitPlace827_injective (K := K))
+      (tameOrbitPlace827_ne_distinguished
+        (K := K) distinguished hdistinguished)
+      x y
+      (canonicalTameOrbitValue827 (K := K)
+        canonicalTeichmullerCharacter59 irregularCharacter59 lift)
+      horbit houtsideRange
+  simpa only [canonicalTameLedger827] using
+    canonicalTameLedger827_canonical_irregular_sum_eq_zero lift
 
 /-- The same endpoint at the repository's concrete wild place
 `lambda = (zeta_59 - 1)`.  Its disjointness from the complete 827 orbit is

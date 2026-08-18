@@ -1741,6 +1741,7 @@ local tame symbol rather than being silenced by representation alone. -/
 
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_injective
+#check Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_range_eq_placesOver827
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_orbit
 #check Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827_apply_eq_zero_of_not_over827
@@ -1751,6 +1752,9 @@ local tame symbol rather than being silenced by representation alone. -/
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_injective,
+  Fermat.FiftyNine.Conservation.SplitPrimeFourier827.indexedPlaceOrbitEquiv827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_range_eq_placesOver827,
   Fermat.FiftyNine.Conservation.SplitPrimeFourier827.indexedPlaceOrbitEquiv827
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedger827.actualTameLedger827,
@@ -1801,11 +1805,14 @@ forces its wild contribution to be nonzero. -/
   Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_ne_zero,
   Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_sum_ne_zero
 #guard_depends_on
-  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.wild_ne_zero_of_actualTameLedgerReciprocity827,
-  Fermat.FiftyNine.Conservation.ExplicitTameOrbitNonvanishing827.wild_ne_zero_of_actualTameOrbitReciprocity827
+  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_ne_zero,
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.ledger_ne_zero_of_sum_ne_zero
 #guard_depends_on
   Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.wild_ne_zero_of_actualTameLedgerReciprocity827,
-  Fermat.FiftyNine.Conservation.ActualTameLedger827.wild_add_actualTameLedger827_sum_eq_zero_iff
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.distinguished_ne_zero_of_add_ledger_sum_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.wild_ne_zero_of_actualTameLedgerReciprocity827,
+  Fermat.FiftyNine.Conservation.ActualTameLedgerNonvanishing827.actualTameLedger827_sum_ne_zero
 
 /-! The unique irregular `(59, 44)` channel now has an honest p-adic
 Teichmuller character.  Reduction seats its reflected primal wave in power
@@ -2342,8 +2349,20 @@ genuine cancellation among live local entries. -/
   Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.canonicalTameLedger827_canonical_irregular_ne_zero,
   Fermat.FiftyNine.Conservation.CanonicalIrregularMode827.sum_actualTameOrbitValue827_canonical_irregular_ne_zero
 #guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.canonicalTameLedger827_canonical_irregular_ne_zero,
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.orbitLedger_ne_zero_of_value_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.canonicalTameLedger827_canonical_irregular_ne_zero,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.canonicalTameLedger827_canonical_irregular_ne_zero,
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameOrbitValue827_eq_mul_actual
+#guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.wild_eq_zero_of_canonicalTameLedgerReciprocityEquation827,
   Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.canonicalTameLedger827_canonical_irregular_sum_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.wild_eq_zero_of_canonicalTameLedgerReciprocityEquation827,
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.distinguished_eq_zero_of_add_ledger_sum_eq_zero
 
 /-! Finally, the canonical ledger is connected to the existing global
 reciprocity interface.  The adapter still consumes the genuine reciprocity
@@ -2360,19 +2379,40 @@ actual lambda-place value—to vanish. -/
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.readings_eq_single_add_canonicalTameLedger827,
-  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameLedger827_apply_eq_zero_of_not_over827
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.readings_eq_single_add_orbitLedger
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.readings_eq_single_add_canonicalTameLedger827,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_range_eq_placesOver827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.readings_eq_single_add_canonicalTameLedger827,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.readings_eq_single_add_canonicalTameLedger827,
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameOrbitValue827
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.wild_add_canonicalTameLedger827_sum_eq_zero_of_globalReciprocity,
-  Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.readings_eq_single_add_canonicalTameLedger827
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.wild_add_orbitLedger_sum_eq_zero_of_globalReciprocity
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.wild_add_canonicalTameLedger827_sum_eq_zero_of_globalReciprocity,
-  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.sum_eq_zero
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_range_eq_placesOver827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.wild_add_canonicalTameLedger827_sum_eq_zero_of_globalReciprocity,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.wild_add_canonicalTameLedger827_sum_eq_zero_of_globalReciprocity,
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameOrbitValue827
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.pairAt_distinguished_eq_zero_of_globalReciprocity827,
-  Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.wild_add_canonicalTameLedger827_sum_eq_zero_of_globalReciprocity
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.pairAt_eq_zero_of_globalReciprocity_of_orbitLedger_sum_eq_zero
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.pairAt_distinguished_eq_zero_of_globalReciprocity827,
   Fermat.FiftyNine.Conservation.CanonicalGlobalTameLedgerIrregular827.canonicalTameLedger827_canonical_irregular_sum_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.pairAt_distinguished_eq_zero_of_globalReciprocity827,
+  Fermat.FiftyNine.Conservation.ActualTameLedger827.tameOrbitPlace827_range_eq_placesOver827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.pairAt_distinguished_eq_zero_of_globalReciprocity827,
+  Fermat.FiftyNine.Conservation.CanonicalTameLedger827.canonicalTameOrbitValue827
 #guard_depends_on
   Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.pairAt_lambdaPlace59_eq_zero_of_globalReciprocity827,
   Fermat.FiftyNine.Conservation.CanonicalGlobalReciprocity827.lambdaPlace59_not_mem_placesOver827

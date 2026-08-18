@@ -7,13 +7,15 @@ Authors: Fabian Franz, Codex
 
 This non-imported leaf audits the actual prime-parametric action, the
 canonical strict-to-supported inclusion, the unit and class naturality maps,
-finite-orbit ledgers, the residue Fourier dictionary, complementary-wave
-pairing compression, full-orbit reciprocity transport, and cyclotomic
-localization covariance.  It records the intended implementation dependencies
-and checks every declaration in the audited namespaces against the standard
-axiom budget and the project's public no-product-equivalence rule.
+finite-orbit ledgers and their route-neutral reciprocity algebra, the residue
+Fourier dictionary, complementary-wave pairing compression, full-orbit
+reciprocity transport, and cyclotomic localization covariance.  It records the
+intended implementation dependencies and checks every declaration in the
+audited namespaces against the standard axiom budget and the project's public
+no-product-equivalence rule.
 -/
 import Fermat.Conservation.FiniteOrbitLedger
+import Fermat.Conservation.FiniteOrbitLedgerReciprocity
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 import Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
@@ -76,6 +78,16 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
 #check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_support_subset_range
 #check Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum
+
+/-! ## Public inventory: finite-orbit ledgers under supplied reciprocity -/
+
+#check Fermat.Conservation.FiniteOrbitLedgerReciprocity.ledger_ne_zero_of_sum_ne_zero
+#check Fermat.Conservation.FiniteOrbitLedgerReciprocity.distinguished_ne_zero_of_add_ledger_sum_eq_zero
+#check Fermat.Conservation.FiniteOrbitLedgerReciprocity.distinguished_eq_zero_of_add_ledger_sum_eq_zero
+#check Fermat.Conservation.FiniteOrbitLedgerReciprocity.orbitLedger_ne_zero_of_value_ne_zero
+#check Fermat.Conservation.FiniteOrbitLedgerReciprocity.readings_eq_single_add_orbitLedger
+#check Fermat.Conservation.FiniteOrbitLedgerReciprocity.wild_add_orbitLedger_sum_eq_zero_of_globalReciprocity
+#check Fermat.Conservation.FiniteOrbitLedgerReciprocity.pairAt_eq_zero_of_globalReciprocity_of_orbitLedger_sum_eq_zero
 
 /-! ## Public inventory: residue Fourier analysis -/
 
@@ -214,6 +226,9 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #print axioms Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply
 #print axioms Fermat.Conservation.FiniteOrbitLedger.orbitLedger_support_subset_range
 #print axioms Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum
+#print axioms Fermat.Conservation.FiniteOrbitLedgerReciprocity.ledger_ne_zero_of_sum_ne_zero
+#print axioms Fermat.Conservation.FiniteOrbitLedgerReciprocity.readings_eq_single_add_orbitLedger
+#print axioms Fermat.Conservation.FiniteOrbitLedgerReciprocity.pairAt_eq_zero_of_globalReciprocity_of_orbitLedger_sum_eq_zero
 #print axioms Fermat.Conservation.PrimeResidueFourier.fourier_reconstruction
 #print axioms Fermat.Conservation.PrimeResidueFourier.pureCharacter_pointed_silence
 #print axioms Fermat.Conservation.PrimeResidueFourier.reducedCharacterAt_apply
@@ -236,6 +251,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.FiniteOrbitLedger
+#guard_standard_axioms_prefix Fermat.Conservation.FiniteOrbitLedgerReciprocity
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeResidueFourier
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeFourierPairingCompression
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeFullOrbitReciprocity
@@ -246,6 +262,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 #audit_no_product_equiv_types_prefix Fermat.Conservation.FiniteOrbitLedger
+#audit_no_product_equiv_types_prefix Fermat.Conservation.FiniteOrbitLedgerReciprocity
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeResidueFourier
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeFourierPairingCompression
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeFullOrbitReciprocity
@@ -290,6 +307,25 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_depends_on
   Fermat.Conservation.FiniteOrbitLedger.orbitLedger_sum,
   Fermat.Conservation.FiniteOrbitLedger.orbitLedger
+
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.orbitLedger_ne_zero_of_value_ne_zero,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.readings_eq_single_add_orbitLedger,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.readings_eq_single_add_orbitLedger,
+  Fermat.Conservation.FiniteOrbitLedger.orbitLedger_apply_eq_zero_of_not_mem_range
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.wild_add_orbitLedger_sum_eq_zero_of_globalReciprocity,
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.readings_eq_single_add_orbitLedger
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.wild_add_orbitLedger_sum_eq_zero_of_globalReciprocity,
+  Fermat.Conservation.TatePairing.GlobalReciprocityLaw.sum_eq_zero
+#guard_depends_on
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.pairAt_eq_zero_of_globalReciprocity_of_orbitLedger_sum_eq_zero,
+  Fermat.Conservation.FiniteOrbitLedgerReciprocity.wild_add_orbitLedger_sum_eq_zero_of_globalReciprocity
 
 #guard_depends_on
   Fermat.Conservation.PrimeResidueFourier.fourier_reconstruction,
