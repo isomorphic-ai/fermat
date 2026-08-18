@@ -25,7 +25,9 @@ This non-imported executable audit leaf covers only the newly exposed route:
   every ring unit and every `UnitModP` class, thereby constructing its
   unique class-level readout;
 * W7 identifies orbit silence with relation 7A once that produced readout
-  is proved faithful at the single Fermat-selected class.
+  is proved faithful at the single Fermat-selected class; this faithfulness
+  is further reduced to seating in the genuine chi=15 class line,
+  one-dimensionality of that line, and readout nonvanishing on it.
 
 The checks deliberately keep the remaining lanes separate.  W1 is a local
 cup receipt; no Poitou--Tate theorem yet produces a single global reflected
@@ -53,6 +55,7 @@ import Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827
 import Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827
 import Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827
 import Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59
+import Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59
 
 /-! ## Public route inventory -/
 
@@ -91,6 +94,7 @@ relaxed carrier.  This is not yet a simultaneous wild/tame PT lift. -/
 producer remains intentionally outside this theorem. -/
 
 #check Fermat.Conservation.existsUnique_unit_smul_of_mem_finrank_one
+#check Fermat.Conservation.eq_zero_of_mem_finrank_one_of_readout_restrict_ne_zero
 
 /-! The concrete full-orbit class-factorization boundary. -/
 
@@ -177,6 +181,8 @@ already available. -/
 #check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.cyclotomicClassProjector59_selectedClassGauge59_eq_projectedSelmerClass
 #check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_projectedClass_eq_class
 #check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange
+#check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_eq_plusRoot_add_plusRoot
+#check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_plusRoot_projector_fixed
 
 /-! The produced-readout W7 boundary.  Full injectivity is unnecessary:
 only zero reflection at the one Fermat-selected class remains visible. -/
@@ -187,6 +193,16 @@ only zero reflection at the one Fermat-selected class remains visible. -/
 #check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.existsUnique_classReadout_with_pointwiseW7_of_ringUnit_silence
 #check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_unit_silence
 #check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_ringUnit_silence
+
+/-! The opaque pointwise premise is now decomposed exactly as in the
+Kummer--Artin strategy: character seating, rank one, and a nonzero readout
+on that genuine projector image. -/
+
+#check Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.irregularClassProjectorZMod59
+#check Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.irregularClassCharacterLine59
+#check Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.mem_irregularClassCharacterLine59_of_projector_fixed
+#check Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.selectedClassGauge59_eq_zero_of_readout_eq_zero_of_characterLine
+#check Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_characterLine
 
 /-! ## Main endpoint axiom audit -/
 
@@ -211,6 +227,14 @@ info: 'Fermat.Conservation.existsUnique_unit_smul_of_mem_finrank_one' depends on
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.existsUnique_unit_smul_of_mem_finrank_one
+
+/--
+info: 'Fermat.Conservation.eq_zero_of_mem_finrank_one_of_readout_restrict_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.eq_zero_of_mem_finrank_one_of_readout_restrict_ne_zero
 
 /--
 info: 'Fermat.FiftyNine.Conservation.StrictTameOrbitClassFactorization827.unit_silence_strictTameOrbitFunctional827_iff_existsUnique_classReadout' depends on axioms: [propext,
@@ -324,6 +348,14 @@ info: 'Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbit
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA
 
+/--
+info: 'Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_characterLine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_characterLine
+
 /-! ## Proof-value dependency gates -/
 
 /-! The W1 receipt consumes both the established nonzero cup and its
@@ -350,6 +382,9 @@ literal sigma-inverse reflected eigenlaw. -/
 
 #guard_depends_on
   Fermat.Conservation.existsUnique_unit_smul_of_mem_finrank_one,
+  exists_smul_eq_of_finrank_eq_one
+#guard_depends_on
+  Fermat.Conservation.eq_zero_of_mem_finrank_one_of_readout_restrict_ne_zero,
   exists_smul_eq_of_finrank_eq_one
 
 /-! The scalar orbit map reads the genuine raw tame rows, while its exact
@@ -505,4 +540,21 @@ consumer theorem. -/
   Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_ringUnit_silence
 #guard_depends_on
   Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_ringUnit_silence,
+  Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_pointwiseFaithful
+
+/-! The rank-one W7 adapter consumes the actual class projector, the
+generic one-dimensional zero-reflection theorem, and the sharp pointwise
+W7 endpoint. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.selectedClassGauge59_eq_zero_of_readout_eq_zero_of_characterLine,
+  Fermat.Conservation.eq_zero_of_mem_finrank_one_of_readout_restrict_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.selectedClassGauge59_eq_zero_of_readout_eq_zero_of_characterLine,
+  Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.mem_irregularClassCharacterLine59_of_projector_fixed
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_characterLine,
+  Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.selectedClassGauge59_eq_zero_of_readout_eq_zero_of_characterLine
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_characterLine,
   Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_pointwiseFaithful

@@ -5,10 +5,9 @@ Authors: Fabian Franz, Codex
 
 # Unit proportionality inside a one-dimensional line
 
-This file isolates the pure linear-algebra step used after two arithmetic
-readouts have been proved to occupy the same one-dimensional line.  It does
-not construct that line, prove membership in it, or prove either readout
-nonzero.
+This file isolates the pure linear-algebra steps used after arithmetic
+objects have been proved to occupy a one-dimensional line.  It neither
+constructs that line nor proves arithmetic membership or nonvanishing.
 -/
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 
@@ -53,5 +52,45 @@ theorem existsUnique_unit_smul_of_mem_finrank_one
     rw [sub_smul, show (u : k) = c by rfl, hc_value, ← hv, sub_self]
   exact Units.ext
     (sub_eq_zero.mp ((smul_eq_zero.mp hsmul).resolve_right hpsi_ne)).symm
+
+/-- A scalar readout which is nonzero on a one-dimensional line reflects
+zero at every point of that line.
+
+This is the pointwise form of the same rank-one principle used above.  It is
+deliberately phrased for a submodule of an arbitrary ambient module: later
+arithmetic code only has to prove that its selected class lies in the line,
+that the line has dimension one, and that the readout does not vanish
+identically on it. -/
+theorem eq_zero_of_mem_finrank_one_of_readout_restrict_ne_zero
+    (line : Submodule k V) (readout : V →ₗ[k] k)
+    (hline : Module.finrank k line = 1)
+    (hreadout : readout.comp line.subtype ≠ 0)
+    {x : V} (hx : x ∈ line) (hzero : readout x = 0) :
+    x = 0 := by
+  have hexists : ∃ anchor : line, readout anchor.1 ≠ 0 := by
+    by_contra h
+    push Not at h
+    apply hreadout
+    ext anchor
+    exact h anchor
+  obtain ⟨anchor, hanchor⟩ := hexists
+  have hanchor_ne : anchor ≠ 0 := by
+    intro h
+    apply hanchor
+    rw [h, Submodule.coe_zero, map_zero]
+  let xLine : line := ⟨x, hx⟩
+  obtain ⟨c, hc⟩ :=
+    exists_smul_eq_of_finrank_eq_one hline hanchor_ne xLine
+  have hc_value : c • anchor.1 = x := congrArg Subtype.val hc
+  have hproduct : c * readout anchor.1 = 0 := by
+    calc
+      c * readout anchor.1 = readout (c • anchor.1) := by
+        rw [map_smul, smul_eq_mul]
+      _ = readout x := by rw [hc_value]
+      _ = 0 := hzero
+  have hc_zero : c = 0 :=
+    (mul_eq_zero.mp hproduct).resolve_right hanchor
+  rw [hc_zero, zero_smul] at hc_value
+  exact hc_value.symm
 
 end Fermat.Conservation
