@@ -41,6 +41,11 @@ receipt starts with the allocated integral Fermat state, constructs its
 literal equation-(8) generators and coefficient units, and feeds them into
 the historical support descent before combining the resulting Case-II
 contradiction with the checked Sophie--Germain Case-I computation.
+The same import exposes the plus and minus
+`exists_explicitProjectedUnitLift_classSilent_*` receipts: the concrete
+equation-(8) coefficient units are projected in the irregular character
+seat and proved to land in the kernel of the actual 59-torsion ideal-class
+map.
 
 The nine completed irregular-prime endpoints from `37` through `1381` are
 also reassembled through the regularized Kummer correction.  After
@@ -466,7 +471,23 @@ allocated Fermat pair and kills both actual root classes.
 `FermatStateEquationEight59` turns this into literal factorizations
 `q = epsilon * rho^59`; `FermatStateSelmerUnitLifts59` and
 `FermatStatePrimalUnitProjection59` identify the resulting genuine Selmer
-and irregular-mode unit classes.  Finally,
+and irregular-mode unit classes.  The actual unit/class bridge is organized
+as follows:
+
+```text
+CyclotomicUnitSelmerNaturality59
+  unit quotient action + inclusion intertwiner + projector naturality
+→ CyclotomicSelmerClassNaturality59
+  actual class-group action + strict Selmer class-map intertwiner
+→ FermatFactorClassProjection59
+  Takagi kills the projected actual class obstructions
+→ FermatStateUnitClassKernel59
+  explicit projected equation-(8) coefficient units land in that kernel
+```
+
+This chain is generic over the cyclotomic realization and Fermat state at
+the fixed exponent `59`.  It is not an all-prime theorem, and it does not
+close the separate Vostokov/local-reciprocity branch.  Finally,
 `FermatStateHistoricalDescent59` constructs the initial historical state at
 `m = 29`, produces an admissible successor at `m = 57` with strictly smaller
 prime-ideal support, invokes the proved uniform continuation, and exports
@@ -478,6 +499,11 @@ reciprocity branch has been completed.
 is the non-imported executable audit leaf for this campaign.  It checks the
 named endpoints, dependency guards, compatibility modules, and the standard
 axiom budget separately from the public umbrella import.
+[`Fermat/FiftyNine/Conservation/HistoricalVerification.lean`](Fermat/FiftyNine/Conservation/HistoricalVerification.lean)
+is its deliberately separate sibling audit for the state-to-history route,
+including the unit/class naturality and class-kernel receipts.  Keeping the
+two leaves separate preserves the clean conservation laboratory's exclusion
+of the historical imports.
 
 [`Fermat/Regular/`](Fermat/Regular/) contains reusable Faulhaber
 infrastructure and the checked historical bridge
@@ -581,6 +607,12 @@ lake build Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly138
 lake build Fermat.Ladder.FourHundredNinetyOne
 lake build Fermat.Ladder.FiveHundredEightySeven
 lake build Fermat.Ladder.SixHundredNinetyOne
+lake build Fermat.FiftyNine.Conservation.CyclotomicUnitSelmerNaturality59
+lake build Fermat.FiftyNine.Conservation.CyclotomicSelmerClassNaturality59
+lake build Fermat.FiftyNine.Conservation.FermatFactorClassProjection59
+lake build Fermat.FiftyNine.Conservation.FermatStateUnitClassKernel59
+lake build Fermat.FiftyNine.ConservationProof
+lake build Fermat.FiftyNine.Conservation.HistoricalVerification
 ```
 
 A quick consumer file can simply use:
@@ -598,6 +630,11 @@ import Fermat
 #check Fermat.holdsAt_oneThousandThreeHundredEightyOne
 #check Fermat.holdsAt_oneThousandThreeHundredEightyOne_kummerIso
 #check Fermat.holdsAt_eleven_faulhaber
+#check Fermat.holdsAt_fiftyNine_stateEquationEight
+#check Fermat.FiftyNine.Conservation.CyclotomicUnitSelmerNaturality59.unitInclusionLinearMap59_characterProjector
+#check Fermat.FiftyNine.Conservation.CyclotomicSelmerClassNaturality59.strictSelmerClassLinearMap59_characterProjector
+#check Fermat.FiftyNine.Conservation.FermatStateUnitClassKernel59.exists_explicitProjectedUnitLift_classSilent_fermatPlus59
+#check Fermat.FiftyNine.Conservation.FermatStateUnitClassKernel59.exists_explicitProjectedUnitLift_classSilent_fermatMinus59
 #eval Fermat.Ladder.FaulhaberResponse.responseData
 #check Fermat.Ladder.FourHundredNinetyOne.proofBacked
 #check Fermat.Ladder.FiveHundredEightySeven.proofBacked

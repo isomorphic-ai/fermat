@@ -9,9 +9,12 @@ This small public facade exposes the completed conservation-state route
 without making users import its implementation module by name.  The proof
 constructs literal equation-(8) witnesses from an allocated primitive
 second-case Fermat state, enters Vandiver's historical support descent, and
-uses the checked Sophie--Germain computation for Case I.
+uses the checked Sophie--Germain computation for Case I.  It also exposes
+the cyclotomic unit/class naturality chain and the resulting explicit
+class-silent projected coefficient-unit witnesses.
 -/
 import Fermat.FiftyNine.Conservation.FermatStateHistoricalDescent59
+import Fermat.FiftyNine.Conservation.FermatStateUnitClassKernel59
 
 namespace Fermat.FiftyNine
 
