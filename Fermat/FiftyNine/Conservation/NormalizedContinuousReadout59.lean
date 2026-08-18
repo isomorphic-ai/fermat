@@ -11,10 +11,13 @@ so localization is no longer carried as an arithmetic hypothesis.  Pointed
 Poitou--Tate incidence and Fourier seating also construct the nonzero boundary
 receipt and the nonempty normalized fiber.
 
-The remaining inputs stay visible: lawfulness on the conserved 827 kernel,
-the class-valued relation-(7a) comparison, and global reciprocity.  In
-particular this module neither collapses the fiber nor erases `ker G`.
+The strongest endpoint derives pointed incidence from a concrete reflected
+lift plus Fourier seating, and derives lawfulness from reciprocity.  The
+remaining inputs stay visible: that lift and seating, the class-valued
+relation-(7a) comparison, and global reciprocity.  In particular this module
+neither collapses the fiber nor erases `ker G`.
 -/
+import Fermat.FiftyNine.Conservation.AlgebraicPointedIncidence827
 import Fermat.FiftyNine.Conservation.NormalizedContinuousWildLocalization59
 
 open scoped MonoidAlgebra nonZeroDivisors NumberField
@@ -26,6 +29,7 @@ namespace Fermat.FiftyNine.Conservation.NormalizedContinuousReadout59
 open Fermat.Conservation
 open Fermat.Conservation.LinkingInterfaces
 open Fermat.Conservation.SelmerEigenspace
+open AlgebraicPointedIncidence827
 open CyclotomicSelmerAction59
 open DetectorWitness827
 open LocalCompletion59
@@ -201,6 +205,37 @@ noncomputable def normalizedWildCoefficientOfReciprocity59
     (normalizedWildLawfulness59_of_reciprocity
       K omega chi selectedPlace execution)
 
+/-- A concrete reflected lift and Fourier seating construct the pointed
+incidence used by the normalized readout. -/
+noncomputable def normalizedPointedIncidence59OfLift
+    (lift : ReflectedQRelaxedLocalizationLift827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi)
+    (seating : QLocalizationEquivariance827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi lift.selectedPlace) :
+    PointedTateIncidence827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi lift.selectedPlace :=
+  pointedTateIncidence827_of_fourierSeating_of_lift
+    (cyclotomicQRelaxedSelmerRepresentation827 K)
+    omega chi lift seating
+
+/-- The normalized wild coefficient with both lawfulness and pointed
+incidence derived from reciprocity, Fourier seating, and the concrete lift. -/
+noncomputable def normalizedWildCoefficientOfLift59
+    (lift : ReflectedQRelaxedLocalizationLift827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi)
+    (seating : QLocalizationEquivariance827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi lift.selectedPlace)
+    (execution : NormalizedTameSilenceReciprocity59 K omega chi) :
+    H_FLT (OldPrimal59
+      (cyclotomicStrictSelmerRepresentation59 K) chi) →ₗ[ZMod 59] ZMod 59 :=
+  normalizedWildCoefficientOfReciprocity59
+    K omega chi lift.selectedPlace
+    (normalizedPointedIncidence59OfLift K omega chi lift seating)
+    seating execution
+
 variable {zeta : K} {hZeta : IsPrimitiveRoot zeta 59}
 variable {solution : FermatState.PrimitiveSecondCaseSolution}
 variable {hz : (59 : ℤ) ∣ solution.z}
@@ -261,5 +296,28 @@ theorem vandiverSevenA_of_normalizedContinuousReciprocity
     (normalizedWildLawfulness59_of_reciprocity
       K omega chi selectedPlace execution)
     pair hF gaugeSeating processes execution
+
+/-- Strongest lift-facing endpoint in this module: the concrete reflected
+q-relaxed lift replaces the independent pointed-incidence premise, while
+reciprocity replaces the independent lawfulness premise. -/
+theorem vandiverSevenA_of_normalizedContinuousLift
+    (lift : ReflectedQRelaxedLocalizationLift827
+      (cyclotomicQRelaxedSelmerRepresentation827 K) omega chi)
+    (seating : QLocalizationEquivariance827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi lift.selectedPlace)
+    (pair : StateLinkedIdealPair hZeta solution hz)
+    (hF : H_FLT (OldPrimal59
+      (cyclotomicStrictSelmerRepresentation59 K) chi))
+    (gaugeSeating : ClassValuedSevenAGaugeSeating pair hF)
+    (execution : NormalizedTameSilenceReciprocity59 K omega chi)
+    (processes : WildProcessesAtLeastSevenA gaugeSeating
+      (normalizedWildCoefficientOfLift59
+        K omega chi lift seating execution)) :
+    pair.ledger.VandiverSevenA 0 1 :=
+  vandiverSevenA_of_normalizedContinuousReciprocity
+    K omega chi lift.selectedPlace
+    (normalizedPointedIncidence59OfLift K omega chi lift seating)
+    seating pair hF gaugeSeating execution processes
 
 end Fermat.FiftyNine.Conservation.NormalizedContinuousReadout59
