@@ -114,6 +114,44 @@ theorem existsUnique_classReadout_factorization_negativeModeFortyFour827 :
       (reading := strictOrbitNegativeModeFortyFourLinearMap827 K)).1
         (strictOrbitNegativeModeFortyFourLinearMap827_unitInclusion_eq_zero K)
 
+/-- The actual canonical class readout.  This chooses the uniquely determined
+factorization of the signed mode-44 map, not a point of any reflected
+localization fiber. -/
+noncomputable def canonicalModeFortyFourClassReadout827 :
+    ClassTorsion59 K →ₗ[ZMod 59] ZMod 59 :=
+  Classical.choose
+    (existsUnique_classReadout_factorization_negativeModeFortyFour827 K)
+
+/-- The canonical readout pulls back to the signed mode-44 map on every
+strict Selmer input. -/
+theorem canonicalModeFortyFourClassReadout827_factorization :
+    (canonicalModeFortyFourClassReadout827 K).comp
+        (fermatFactorClassGaugeMap59 (K := K)) =
+      strictOrbitNegativeModeFortyFourLinearMap827 K :=
+  (Classical.choose_spec
+    (existsUnique_classReadout_factorization_negativeModeFortyFour827 K)).1
+
+/-- Any class readout with the required pullback is definitionally the
+canonical mode-44 readout. -/
+theorem classReadout_eq_canonicalModeFortyFourClassReadout827
+    (readout : ClassTorsion59 K →ₗ[ZMod 59] ZMod 59)
+    (factorization :
+      readout.comp (fermatFactorClassGaugeMap59 (K := K)) =
+        strictOrbitNegativeModeFortyFourLinearMap827 K) :
+    readout = canonicalModeFortyFourClassReadout827 K :=
+  (Classical.choose_spec
+    (existsUnique_classReadout_factorization_negativeModeFortyFour827 K)).2
+      readout factorization
+
+@[simp]
+theorem canonicalModeFortyFourClassReadout827_classGaugeMap59
+    (x : StrictCarrier59 K) :
+    canonicalModeFortyFourClassReadout827 K
+        (fermatFactorClassGaugeMap59 (K := K) x) =
+      strictOrbitNegativeModeFortyFourLinearMap827 K x :=
+  LinearMap.congr_fun
+    (canonicalModeFortyFourClassReadout827_factorization K) x
+
 /-- Any factorizing readout evaluates the class gauge by the literal signed
 mode-44 map on every strict Selmer input. -/
 theorem classReadout_classGaugeMap59_eq_negativeModeFortyFour
