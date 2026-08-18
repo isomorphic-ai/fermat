@@ -19,7 +19,11 @@ introduced here.
 -/
 import Fermat.Conservation.ContinuousKummerTateAlgebra
 import Fermat.Conservation.LocalKummerTransport
+import Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 import Fermat.FiftyNine.Conservation.LocalCompletion59
+import Fermat.FiftyNine.Conservation.VostokovLocalization59
+
+open scoped MonoidAlgebra nonZeroDivisors NumberField
 
 noncomputable section
 
@@ -29,10 +33,17 @@ open Fermat.Conservation
 open Fermat.Conservation.ContinuousKummerH1
 open Fermat.Conservation.ContinuousKummerOrientation
 open Fermat.Conservation.ContinuousKummerTateAlgebra
+open Fermat.Conservation.LinkingInterfaces
 open Fermat.Conservation.LocalKummerTransport
+open Fermat.Conservation.SelmerEigenspace
 open Fermat.Conservation.TameSymbol
 open Fermat.Conservation.WildKummerPairing
+open Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
+open Fermat.FiftyNine.Conservation.DetectorWitness827
 open Fermat.FiftyNine.Conservation.LocalCompletion59
+open Fermat.FiftyNine.Conservation.SplitPrimeFourier827
+open Fermat.FiftyNine.Conservation.UlamReadout827
+open Fermat.FiftyNine.Conservation.VostokovLocalization59
 
 local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
 
@@ -273,5 +284,50 @@ theorem lambdaGlobalPairing_apply
         (rightKummerMap 59 (LambdaLocalField59 K)
           (LocalKummerTransport.map 59 (lambdaLocalization59 K) y))) :=
   rfl
+
+section CanonicalCore
+
+variable (omega chi : InvolutiveBase.Character (PadicInt 59) GaloisIndex59)
+variable (wild : OldWildInterface59
+  (cyclotomicStrictSelmerRepresentation59 K) omega chi (lambdaPlace59 K))
+
+/-- The canonical-action 59-core built from the genuine continuous local cup.
+
+The lambda place, completion, primitive root, two continuous Kummer maps,
+global pullback, and strict-to-827-relaxed landing are all derived.  Once the
+existing characters and old wild interface are fixed, the only arithmetic
+inputs are an explicit `H²(mu_59)` readout and an independent comparison of
+the resulting Kummer pairing with the old reading. -/
+def toCanonicalReflectedWildKummerCoreAt59
+    (readout : LambdaContinuousH2Readout59 K)
+    (hcalibration :
+      ∀ x : OldPrimal59 (cyclotomicStrictSelmerRepresentation59 K) chi,
+      ∀ y : OldReflectedDual59
+        (cyclotomicStrictSelmerRepresentation59 K) omega chi,
+        lambdaGlobalPairing K readout (toKummerClass x) (toKummerClass y) =
+          wild.reading x y) :
+    ReflectedWildKummerCoreAt59
+      (cyclotomicStrictSelmerRepresentation59 K)
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      omega chi (lambdaPlace59 K) wild where
+  pairing := lambdaGlobalPairing K readout
+  landing := cyclotomicReflectedEmptySupportLanding827 K omega chi
+  old_calibration := hcalibration
+
+@[simp]
+theorem toCanonicalReflectedWildKummerCoreAt59_pairing_apply
+    (readout : LambdaContinuousH2Readout59 K)
+    (hcalibration :
+      ∀ x : OldPrimal59 (cyclotomicStrictSelmerRepresentation59 K) chi,
+      ∀ y : OldReflectedDual59
+        (cyclotomicStrictSelmerRepresentation59 K) omega chi,
+        lambdaGlobalPairing K readout (toKummerClass x) (toKummerClass y) =
+          wild.reading x y)
+    (x y : KummerClass 59 K) :
+    (toCanonicalReflectedWildKummerCoreAt59 K omega chi wild readout
+      hcalibration).pairing x y = lambdaGlobalPairing K readout x y :=
+  rfl
+
+end CanonicalCore
 
 end Fermat.FiftyNine.Conservation.ContinuousKummerTateLocalization59
