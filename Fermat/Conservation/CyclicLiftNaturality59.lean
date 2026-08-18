@@ -149,7 +149,10 @@ theorem scalarRotation59Squared_apply_toAdd
       (u : ZMod (59 ^ 2)) * x.toAdd :=
   rfl
 
-private abbrev reductionDvd59 : 59 ∣ 59 ^ 2 := by norm_num
+/-- The divisibility witness used by the canonical reduction from `59²` to
+`59`.  It is public so downstream coordinate-comparison statements do not
+contain an inaccessible private constant. -/
+abbrev reductionDvd59 : 59 ∣ 59 ^ 2 := by norm_num
 
 /-- Reducing a unit and then rotating agrees with rotating upstairs and
 then reducing. -/
