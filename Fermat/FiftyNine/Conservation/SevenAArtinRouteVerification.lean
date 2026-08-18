@@ -19,6 +19,14 @@ This non-imported executable audit leaf covers only the newly exposed route:
   from the actual reflected q-relaxed Selmer carrier to the product of the
   roots-valued lambda `H¹` seat and all 58 supported-valuation coordinates;
   its prescribed W1+W3 fiber is defined without asserting an inhabitant;
+* after fixing any existing normalized W3 point, W2 nonemptiness is exactly
+  membership of its missing lambda correction in lambda localization
+  restricted to the kernel of all 58 orbit valuations; this affine range
+  membership remains unresolved;
+* the same W2 boundary is packaged as a literal cokernel obstruction whose
+  class is independent of the chosen normalized W3 basepoint and whose
+  vanishing is equivalent to nonemptiness of the concrete W1+W3 fiber;
+  vanishing of this basepoint-independent obstruction remains unresolved;
 * the normalized wild and complete `827` boundaries are literal linear maps
   on one genuine seated primal Selmer space; under `GlobalReciprocityLaw`
   they are exact negatives, have equal kernels, and lie in one explicit
@@ -48,7 +56,16 @@ This non-imported executable audit leaf covers only the newly exposed route:
   independently of the chosen point of the normalized reflected fiber;
   moreover the readout/Fourier identity holds for every strict Selmer input,
   so the mode-44 coefficient descends through the genuine class gauge and
-  vanishes unconditionally on its kernel.
+  vanishes unconditionally on its kernel;
+* the point-free signed mode-44 linear map unconditionally kills the full
+  quotient-unit range and therefore has a uniquely determined, explicitly
+  named canonical class readout; injectivity of that readout is exactly the
+  still-unresolved converse that zero mode 44 forces the genuine class gauge
+  to vanish;
+* W7 is specialized to that named readout on the genuine chi=15 character
+  line: seating of the selected class, rank one of the line, and nonvanishing
+  of the restricted canonical readout suffice for the 7A equivalence, but
+  those three arithmetic inputs are not manufactured by the adapter;
 * the allocated plus root is now unconditionally fixed by the complete odd
   class projector: genuine class-map naturality identifies cyclotomic `-1`
   with the allocated minus root, and relation 7D makes that root the negative
@@ -70,15 +87,24 @@ W2 boundary is now exact and machine-readable:
 
 is equivalent to existence of a point in the already retained normalized W3
 fiber whose actual lambda localization is W1's prescribed reflected class.
-The equivalence does not prove that such a point exists.  Thus the rank-one
-unit comparison is exact once seated nonvanishing is supplied, but it is not
-an unconditional Poitou--Tate lift.
+After choosing any existing normalized W3 point, this is further equivalent
+to one explicit affine range-membership statement for an orbit-invisible
+correction, and to vanishing of a basepoint-independent literal cokernel
+class.  None of these equivalences proves existence, range membership, or
+obstruction vanishing.  Thus
+the rank-one unit comparison is exact once seated nonvanishing is supplied,
+but it is not an unconditional Poitou--Tate lift.
 
 Within W7, pointwise faithfulness of the produced readout is now displayed
 as one concrete mode-44 Fourier zero-reflection statement for the actual
 Fermat factor.  Its reverse implication is proved unconditionally.  The
 missing forward reflection is the exact target of the Kummer--Artin
-factorization/comparison.
+factorization/comparison.  The canonical signed mode-44 readout now exists
+uniquely without choosing a reflected carrier, but its injectivity remains
+exactly this unresolved zero-reflection statement.
+The canonical-character-line W7 endpoint removes arbitrary-readout and
+factorization parameters, but still assumes the selected chi=15 seat, rank
+one of that line, and nonvanishing of the canonical readout on it.
 The odd character seat is proved, but the sharper chi=15 seat is not: its
 remaining arithmetic obligation is precisely that the allocated plus root's
 odd-minus-chi=15 complement vanishes.  Poitou--Tate alone does not supply
@@ -107,7 +133,11 @@ import Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59
 import Fermat.FiftyNine.Conservation.AllocatedPlusRootOddSupport59
 import Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827
 import Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827
+import Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827
+import Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827
 import Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827
+import Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827
+import Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827
 
 /-! ## Public route inventory -/
 
@@ -174,6 +204,41 @@ remaining lift problem; neither one asserts that the fiber is inhabited. -/
 #check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_orbitBoundary_eq_strict
 #check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff
 #check Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff_exists_normalized_lambda
+
+/-! Fixing any retained normalized W3 point sharpens the same W2 boundary
+to an affine kernel equation.  The endpoint is an equivalence with range
+membership, not a proof that the required correction belongs to the range. -/
+
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.lambdaReflectedLocalizationLinear827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.fullOrbitValuationLocalizationLinear827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.FullOrbitValuationKernel827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.lambdaOnFullOrbitKernel827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1LambdaCorrection827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.fullOrbitValuationLocalization827_eq_zero_iff
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_exists_orbitKernelCorrection
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_exists_zeroOrbitCorrection
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1LambdaCorrection827_mem_range_iff_exists_orbitKernelCorrection
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_correction_mem_range
+
+/-! Passing to the literal quotient removes the arbitrary W3 basepoint from
+the W2 boundary.  The resulting cokernel class is canonical, but this file
+does not assert that it vanishes. -/
+
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3Difference827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.W1LambdaCokernel827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaCokernelProjection827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3LambdaCoset827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.prescribedW1LambdaCoset827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq_prescribed_sub_normalized
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3LambdaDifference_mem_restrictedRange827
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3LambdaCoset827_eq
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq_zero_iff_mem_range
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaCorrection827_mem_range_iff_basepoint
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.prescribedW1LambdaCoset827_eq_normalized_iff_obstruction_eq_zero
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero
+#check Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_prescribed_eq_normalizedCoset
 
 /-! W4's completed algebraic implication.  The arithmetic same-line
 producer remains intentionally outside this theorem. -/
@@ -342,6 +407,26 @@ and only the zero-reflection converse remains open. -/
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_of_classGaugeMap59_eq
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero
 
+/-! The signed mode-44 map now descends point-free to one unique canonical
+class readout.  Its injectivity criteria expose rather than solve the
+remaining zero-reflection direction. -/
+
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827_apply
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827_unitInclusion_eq_zero
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.existsUnique_classReadout_factorization_negativeModeFortyFour827
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827_factorization
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_eq_canonicalModeFortyFourClassReadout827
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827_classGaugeMap59
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_classGaugeMap59_eq_negativeModeFortyFour
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.negativeModeFortyFour_ker_eq_comap_classReadout_ker
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_injective_iff_negativeModeFortyFour_ker_eq_classGauge_ker
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_injective_iff_negativeModeFortyFour_reflects_classGauge_zero
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_injective_iff_modeFortyFour_reflects_classGauge_zero
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_selectedClassGauge59_eq_negativeModeFortyFour
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_classReadout_injective
+
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_selectedClassGauge59_eq_neg_fourierCoefficient
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_pointwiseFaithful_iff_fourierCoefficient_zero_implies_selectedClassGauge59_eq_zero
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_selectedClassGauge59_eq_zero
@@ -358,6 +443,13 @@ on that genuine projector image. -/
 #check Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.mem_irregularClassCharacterLine59_of_projector_fixed
 #check Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.selectedClassGauge59_eq_zero_of_readout_eq_zero_of_characterLine
 #check Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_characterLine
+
+/-! W7 specialized to the named canonical readout.  It removes choices of
+readout and factorization but deliberately retains the three arithmetic
+character-line inputs. -/
+
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.selectedClassGauge59_eq_zero_of_canonicalModeFortyFourReadout_eq_zero
+#check Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_canonicalCharacterLine
 
 /-! ## Main endpoint axiom audit -/
 
@@ -605,6 +697,52 @@ info: 'Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3Compati
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_nonempty_iff_exists_normalized_lambda
 
+/-! The affine W2 reduction also has standard dependencies.  Its endpoint
+audits an equivalence only; it does not witness the range membership. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_exists_orbitKernelCorrection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_exists_orbitKernelCorrection
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_correction_mem_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_correction_mem_range
+
+/-! The basepoint-free cokernel formulation has the same standard
+dependencies and does not conceal a vanishing witness. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3LambdaCoset827_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3LambdaCoset827_eq
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero
+
 /--
 info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.context59_residueCharacter_angularComponent_eq_of_kummer_mk_eq' depends on axioms: [propext,
  Classical.choice,
@@ -671,6 +809,60 @@ info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourier
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero
+
+/-! The point-free canonical descent and its unresolved injectivity
+criterion also remain within standard quotient/classical axioms. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827_unitInclusion_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827_unitInclusion_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.existsUnique_classReadout_factorization_negativeModeFortyFour827' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.existsUnique_classReadout_factorization_negativeModeFortyFour827
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827_factorization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827_factorization
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_injective_iff_modeFortyFour_reflects_classGauge_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_injective_iff_modeFortyFour_reflects_classGauge_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_classReadout_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_classReadout_injective
+
+/-! The W7 specialization to the canonical character-line readout also has
+only the standard quotient/classical dependencies. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_canonicalCharacterLine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_canonicalCharacterLine
 
 /--
 info: 'Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA' depends on axioms: [propext,
@@ -843,6 +1035,50 @@ Hom-space maps. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_orbitBoundary_eq_strict,
   Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedOrbitBoundaryFunctional827_eq_strictTameOrbitFunctional827
+
+/-! The affine W2 criterion really subtracts and restores an actual W3
+point, consuming its full normalized profile and W1's literal lambda
+coordinate.  The final range criterion is assembled from the concrete
+orbit-kernel correction and range-membership equivalences. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_exists_orbitKernelCorrection,
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_fullOrbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_exists_orbitKernelCorrection,
+  Fermat.FiftyNine.Conservation.LambdaOrbitLocalizationFiber827.w1w3CompatibleFiber827_lambda
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_exists_orbitKernelCorrection,
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.normalizedReflectedFiber827_relaxedOrbitValuation_eq_profile
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_exists_zeroOrbitCorrection,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.fullOrbitValuationLocalization827_eq_zero_iff
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_correction_mem_range,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_exists_orbitKernelCorrection
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_correction_mem_range,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1LambdaCorrection827_mem_range_iff_exists_orbitKernelCorrection
+
+/-! The W2 cokernel class is genuinely independent of the selected W3
+basepoint.  Its zero criterion consumes both the affine range theorem and
+the literal quotient-kernel characterization; no zero proof is introduced. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3LambdaCoset827_eq,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3LambdaDifference_mem_restrictedRange827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.normalizedW3LambdaCoset827_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineKernelCriterion827.w1w3CompatibleFiber827_nonempty_iff_correction_mem_range
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1LambdaObstructionClass827_eq_zero_iff_mem_range
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_prescribed_eq_normalizedCoset,
+  Fermat.FiftyNine.Conservation.LambdaOrbitAffineCokernel827.w1w3CompatibleFiber827_nonempty_iff_obstruction_eq_zero
 
 /-! The combined W3/unit-silence receipt really composes realization,
 arbitrary-unit cancellation, and quotient readout construction. -/
@@ -1047,6 +1283,63 @@ class-function certificate. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_eq_zero_of_classGaugeMap59_eq_zero,
   Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+
+/-! The canonical point-free descent consumes actual quotient-unit silence
+and the generic class-gauge factorization theorem.  Its injectivity endpoint
+only repackages the still-open zero-reflection condition, while the selected
+class theorem consumes injectivity rather than manufacturing it. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827_unitInclusion_eq_zero,
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827_unitInclusion_eq_zero,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.existsUnique_classReadout_factorization_negativeModeFortyFour827,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827_unitInclusion_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.existsUnique_classReadout_factorization_negativeModeFortyFour827,
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeSeating59.existsUnique_classReadout_factorization_iff_unit_silence
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827_factorization,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.existsUnique_classReadout_factorization_negativeModeFortyFour827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_eq_canonicalModeFortyFourClassReadout827,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.existsUnique_classReadout_factorization_negativeModeFortyFour827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827_classGaugeMap59,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827_factorization
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_injective_iff_modeFortyFour_reflects_classGauge_zero,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_injective_iff_negativeModeFortyFour_reflects_classGauge_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_injective_iff_modeFortyFour_reflects_classGauge_zero,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.strictOrbitNegativeModeFortyFourLinearMap827_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_classReadout_injective,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.classReadout_selectedClassGauge59_eq_negativeModeFortyFour
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_classReadout_injective,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA
+
+/-! The canonical-character-line W7 endpoint consumes the generic rank-one
+reflection lemma, the named readout's exact pullback, and the unconditional
+reverse implication.  Seating, rank one, and restricted nonvanishing remain
+explicit hypotheses. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.selectedClassGauge59_eq_zero_of_canonicalModeFortyFourReadout_eq_zero,
+  Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59.selectedClassGauge59_eq_zero_of_readout_eq_zero_of_characterLine
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_canonicalCharacterLine,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.selectedClassGauge59_eq_zero_of_canonicalModeFortyFourReadout_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_canonicalCharacterLine,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827.canonicalModeFortyFourClassReadout827_classGaugeMap59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_canonicalCharacterLine,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA
 
 #guard_depends_on
   Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.fourierCoefficient_fermatFactor_eq_zero_of_vandiverSevenA,
