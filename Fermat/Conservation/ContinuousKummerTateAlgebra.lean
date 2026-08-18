@@ -18,7 +18,7 @@ degree-two cohomology type.  No local invariant, Tate-duality theorem,
 Hilbert-symbol comparison, or global lifting theorem is asserted here.
 -/
 import Fermat.Conservation.ContinuousKummerOrientation
-import Fermat.Conservation.ContinuousKummerTateCupRaw
+import Fermat.Conservation.ContinuousKummerTateCup
 import Mathlib.FieldTheory.Galois.Profinite
 
 noncomputable section
@@ -93,8 +93,8 @@ abbrev ContinuousKummerCohomologyTwo :=
 /-- Compose any descended bilinear continuous-`H¹` cup product with the
 oriented left and un-oriented right Kummer maps.
 
-The cup product remains an explicit input until the generic cochain-level
-construction has completed its descent through continuous cohomology. -/
+Keeping the cup product as an explicit input makes this a reusable adapter;
+`kummerPairing` below supplies the canonical descended cup. -/
 def kummerPairingFromCup
     (zeta : F) (hzeta : IsPrimitiveRoot zeta n)
     (cup : OrientedContinuousH1 n F →ₗ[ZMod n]
@@ -120,6 +120,34 @@ theorem kummerPairingFromCup_apply
     (x y : KummerClass n F) :
     kummerPairingFromCup n F zeta hzeta cup x y =
       cup (leftKummerMap n F zeta hzeta x) (rightKummerMap n F y) :=
+  rfl
+
+variable [CharZero F]
+
+/-- The actual continuous cup specialized to the oriented scalar/root
+coefficient pairing. -/
+def kummerCupH1 :
+    OrientedContinuousH1 n F →ₗ[ZMod n]
+      ContinuousKummerCohomologyOne n F →ₗ[ZMod n]
+        ContinuousKummerCohomologyTwo n F :=
+  Fermat.Conservation.ContinuousKummerTateCup.cupH1
+    (scalarTimesRootPairing n F)
+
+/-- The canonical roots-valued continuous Kummer--Tate `H²` pairing. -/
+def kummerPairing
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n) :
+    KummerClass n F →+ KummerClass n F →+
+      ContinuousKummerCohomologyTwo n F :=
+  kummerPairingFromCup n F zeta hzeta (kummerCupH1 n F)
+
+@[simp]
+theorem kummerPairing_apply
+    (zeta : F) (hzeta : IsPrimitiveRoot zeta n)
+    (x y : KummerClass n F) :
+    kummerPairing n F zeta hzeta x y =
+      kummerCupH1 n F
+        (leftKummerMap n F zeta hzeta x)
+        (rightKummerMap n F y) :=
   rfl
 
 end Fermat.Conservation.ContinuousKummerTateAlgebra
