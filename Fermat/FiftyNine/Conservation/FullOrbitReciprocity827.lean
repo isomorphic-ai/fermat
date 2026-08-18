@@ -16,6 +16,7 @@ Tate value, silence law, or reflected lift is manufactured here.
 -/
 import Fermat.Conservation.TatePairing
 import Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
+import Fermat.FiftyNine.Conservation.PrimalOrbitResidue827
 
 open scoped BigOperators
 
@@ -30,6 +31,7 @@ open Fermat.FiftyNine.Conservation.DetectorWitness827
 open Fermat.FiftyNine.Conservation.SplitPrimeFourier827
 open Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 open Fermat.FiftyNine.Conservation.ComplementaryWaveCompression827
+open Fermat.FiftyNine.Conservation.PrimalOrbitResidue827
 
 local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
 
@@ -71,46 +73,30 @@ theorem pairAt_eq_neg_sum_orbitReading
     pairing.pairAt distinguished x y =
       -∑ index : Index, orbitReading pairing auxiliaryPlace x y index := by
   classical
-  let entries := pairing.readings x y
-  have hsupport : entries.support ⊆
-      insert distinguished (Finset.univ.image auxiliaryPlace) := by
-    intro v hv
-    rw [Finset.mem_insert]
-    by_cases hvd : v = distinguished
-    · exact Or.inl hvd
-    · refine Or.inr ?_
-      by_contra hnot
-      have hrange : v ∉ Set.range auxiliaryPlace := by
-        rintro ⟨index, rfl⟩
-        exact hnot (Finset.mem_image.mpr ⟨index, Finset.mem_univ _, rfl⟩)
-      exact (Finsupp.mem_support_iff.mp hv) (houtside v hvd hrange)
+  let places : Finset Place := Finset.univ.image auxiliaryPlace
   have hdistinguished :
-      distinguished ∉ Finset.univ.image auxiliaryPlace := by
+      distinguished ∉ places := by
     intro hmem
     obtain ⟨index, _, hindex⟩ := Finset.mem_image.mp hmem
     exact hdisjoint index hindex
-  have hsum_support :
-      entries.support.sum (fun v ↦ entries v) = 0 :=
-    reciprocity.sum_eq_zero x y
-  have hsum_insert :
-      (insert distinguished (Finset.univ.image auxiliaryPlace)).sum
-          (fun v ↦ entries v) = 0 := by
-    calc
-      (insert distinguished (Finset.univ.image auxiliaryPlace)).sum
-          (fun v ↦ entries v) =
-          entries.support.sum (fun v ↦ entries v) := by
-        symm
-        apply Finset.sum_subset hsupport
-        intro v _hv hnot
-        by_contra hne
-        exact hnot (Finsupp.mem_support_iff.mpr hne)
-      _ = 0 := hsum_support
-  rw [Finset.sum_insert hdistinguished] at hsum_insert
-  have hbalanced : pairing.pairAt distinguished x y +
-      ∑ index : Index, orbitReading pairing auxiliaryPlace x y index = 0 := by
-    rw [Finset.sum_image hinjective.injOn] at hsum_insert
-    simpa [PlaceIndexedLocalPairing.pairAt, orbitReading, entries] using hsum_insert
-  exact eq_neg_of_add_eq_zero_left hbalanced
+  have houtsidePlaces : ∀ v, v ≠ distinguished → v ∉ places →
+      pairing.pairAt v x y = 0 := by
+    intro v hvd hvplaces
+    apply houtside v hvd
+    rintro ⟨index, rfl⟩
+    exact hvplaces (Finset.mem_image.mpr ⟨index, Finset.mem_univ _, rfl⟩)
+  have htotal : pairing.readingTotalOn places x y =
+      ∑ index : Index, orbitReading pairing auxiliaryPlace x y index := by
+    unfold PlaceIndexedLocalPairing.readingTotalOn
+    rw [Finset.sum_image hinjective.injOn]
+    rfl
+  calc
+    pairing.pairAt distinguished x y =
+        -pairing.readingTotalOn places x y :=
+      reciprocity.pairAt_eq_neg_readingTotalOn distinguished places
+        hdistinguished x y houtsidePlaces
+    _ = -∑ index : Index,
+        orbitReading pairing auxiliaryPlace x y index := congrArg Neg.neg htotal
 
 /-- On a 58-place auxiliary orbit, complementary character phases turn the
 global reciprocity balance into the selected local product.  The comparison
@@ -235,6 +221,43 @@ theorem pairAt_eq_selectedProduct_of_cyclotomicReflectedOrbit
         projectedLocalizationVector827
           (cyclotomicQRelaxedSelmerRepresentation827 K)
           omega chi selectedPlace source selectedIndex := rfl
+
+set_option maxRecDepth 2000 in
+/-- Full-orbit reciprocity with both Fourier waves now constructed: the
+primal wave is the reflected-character component of the actual first
+generated circular unit's 58-place residue vector, and the reflected wave is
+the canonical q-relaxed localization.  The only local arithmetic seam left
+in this theorem is the explicit comparison with the Tate readings. -/
+theorem pairAt_eq_selectedCircularUnitProduct_of_cyclotomicReflectedOrbit
+    {zeta : K} (hZeta : IsPrimitiveRoot zeta 59)
+    (reciprocity : GlobalReciprocityLaw pairing)
+    (distinguished : Place)
+    (auxiliaryPlace : GaloisIndex59 → Place)
+    (hinjective : Function.Injective auxiliaryPlace)
+    (hdisjoint : ∀ index, auxiliaryPlace index ≠ distinguished)
+    (x : SelmerChi) (y : DOmegaSelmerChiStar)
+    (houtside : ∀ v, v ≠ distinguished →
+      v ∉ Set.range auxiliaryPlace → pairing.pairAt v x y = 0)
+    (selectedPlace : Place827 K)
+    (source : QRelaxedSelmerCarrier827 K)
+    (selectedIndex : GaloisIndex59)
+    (hcomparison : ∀ index,
+      pairing.pairAt (auxiliaryPlace index) x y =
+        complementaryPrimalUnitWave827 hZeta omega chi index *
+          projectedLocalizationVector827
+            (cyclotomicQRelaxedSelmerRepresentation827 K)
+            omega chi selectedPlace source index) :
+    pairing.pairAt distinguished x y =
+      complementaryPrimalUnitWave827 hZeta omega chi selectedIndex *
+        projectedLocalizationVector827
+          (cyclotomicQRelaxedSelmerRepresentation827 K)
+          omega chi selectedPlace source selectedIndex :=
+  pairAt_eq_selectedProduct_of_cyclotomicReflectedOrbit
+    reciprocity distinguished auxiliaryPlace hinjective hdisjoint x y
+      houtside selectedPlace source
+      (complementaryPrimalUnitWave827 hZeta omega chi) selectedIndex
+      (complementaryPrimalUnitWave827_isPureCharacter hZeta omega chi)
+      hcomparison
 
 end CyclotomicReflected
 
