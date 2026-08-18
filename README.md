@@ -652,6 +652,13 @@ readout independently of which global point in the reflected fiber is used.
 For the Fermat-factor input, `(7a)` already implies that the displayed
 coefficient is zero; W5 is now precisely the converse zero-reflection
 statement for this concrete coefficient, not an unspecified Artin map.
+`FermatFactorArtinCharacterCovariance827` further proves that each apparent
+representative coordinate is a descended tame-symbol linear functional,
+obtained by pairing with the inverse canonical uniformizer.  The whole wave
+and mode-44 reading are therefore genuinely linear and satisfy the expected
+chi=15 covariance on strict eigenspaces and on the image of the actual class
+projector.  This establishes character alignment, but does not manufacture
+character support, rank one, or nonvanishing.
 
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
@@ -667,13 +674,18 @@ nonzero.
 
 The remaining wild-side obligations are therefore sharply localized.  The
 normalized 827 point is not yet proved to have the exact lambda-local
-reflected factor retained by W1; a lambda-plus-827 Poitou--Tate range/kernel
-theorem must produce such a simultaneous point.  The W1 nonzero ambient cup
-also has not yet been shown nonzero after restriction to the genuine seated
-primal Selmer space, and `GlobalReciprocityLaw` is still consumed rather than
-constructed.  These PT/local-compatibility, seated-transversality, and
-reciprocity seams remain separate from the now-pointwise W7 class-readout
-seam.
+reflected factor retained by W1.  `LambdaOrbitLocalizationFiber827` now
+packages the actual lambda class and all 58 supported valuations into one
+`ZMod 59`-linear localization map and defines its fiber over the exact W1+W3
+target.  Nonemptiness of that fiber is proved equivalent to the existing
+normalized W3 fiber containing a point with W1's prescribed lambda
+localization.  A lambda-plus-827 Poitou--Tate range/kernel theorem must still
+produce that intersection; no point is hidden in the definition.  The W1
+nonzero ambient cup also has not yet been shown nonzero after restriction to
+the genuine seated primal Selmer space, and `GlobalReciprocityLaw` is still
+consumed rather than constructed.  These PT/local-compatibility,
+seated-transversality, and reciprocity seams remain separate from the
+now-pointwise W7 class-readout seam.
 
 There is now, however, a separate completed state-to-history route at the
 same exponent.  `FermatStateTakagiSevenA59` proves the Takagi relation for the
