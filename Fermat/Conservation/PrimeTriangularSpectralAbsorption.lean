@@ -96,6 +96,43 @@ theorem evaluated_triangularProduct_spectralNorm_eq_one
   rw [heval]
   exact hprod.trans_lt hq_lt
 
+/-- When the evaluation point itself is strictly inside the spectral unit
+ball, integral nonconstant coefficients suffice: every positive-degree
+triangular perturbation is strict because it contains a positive power of
+`alpha`.  This is the boundary-`q = 1` form needed for the first contraction
+round of an arbitrary integral Kummer element. -/
+theorem evaluated_triangularProduct_spectralNorm_eq_one_of_alpha_lt_one
+    (f : F[X]) (n : ℕ)
+    (hf : ∀ j : ℕ, 0 < j → ‖f.coeff j‖ ≤ 1)
+    (alpha : E) (halpha_lt : spectralNorm F E alpha < 1) :
+    spectralNorm F E (aeval alpha (triangularProduct f n)) = 1 := by
+  let x : ℕ → E := fun j ↦
+    algebraMap F E (triangularCoefficient f j) * alpha ^ j
+  have hc := triangularCoefficient_norm_le f 1 (by norm_num) (by norm_num) hf
+  have hx : ∀ j ∈ Finset.Icc 1 n, spectralNorm F E (x j) < 1 := by
+    intro j hj
+    have hjpos : 0 < j := (Finset.mem_Icc.mp hj).1
+    change spectralNorm F E
+      (algebraMap F E (triangularCoefficient f j) * alpha ^ j) < 1
+    rw [← spectralMulAlgNorm_def, map_mul, map_pow,
+      spectralMulAlgNorm_def, spectralMulAlgNorm_def,
+      spectralNorm_extends]
+    exact mul_lt_one_of_nonneg_of_lt_one_right (hc j hjpos)
+      (pow_nonneg (spectralNorm_nonneg alpha) j)
+      (pow_lt_one₀ (spectralNorm_nonneg alpha) halpha_lt
+        (Nat.ne_of_gt hjpos))
+  rw [triangularProduct_eq_prod]
+  simp only [map_prod, map_add, map_one, map_mul, aeval_C, map_pow,
+    aeval_X]
+  change spectralMulAlgNorm F E
+      (∏ j ∈ Finset.Icc 1 n, (1 + x j)) = 1
+  rw [map_prod]
+  apply Finset.prod_eq_one
+  intro j hj
+  change spectralNorm F E (1 + x j) = 1
+  apply spectralNorm_eq_one_of_sub_one_lt_one
+  simpa only [add_sub_cancel_left] using hx j hj
+
 /-- Dividing by a spectral unit preserves a spectral bound. -/
 theorem spectralNorm_div_le_of_eq_one
     (y P : E) (hP : spectralNorm F E P = 1) (q : ℝ)
