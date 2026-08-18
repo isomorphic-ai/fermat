@@ -303,7 +303,11 @@ order-59 constructions are specializations of this generic code rather than
 new certificates.
 
 The same directory also contains a second prime-parametric spine for the
-global Selmer action.  `PrimeCyclotomicSelmerAction` constructs the actual
+global Selmer action.  `CommonActionSelmerCore` isolates the concrete
+unit--Selmer--class sequence (`fromUnitLift`, its injectivity theorem, and the
+vendored `toClass` exact sequence) from the heavier campaign stage.  This
+keeps the reusable spine independent of every numbered-exponent directory.
+`PrimeCyclotomicSelmerAction` constructs the actual
 field, unit, Kummer-quotient, place, valuation, and stable-support actions for
 an arbitrary prime `p`.  `PrimeCyclotomicUnitSelmerNaturality` proves that the
 genuine global-unit inclusion intertwines this action, including arbitrary
@@ -320,6 +324,9 @@ endpoints remain in those adapters.
 this spine: it inventories the generic API, records its intended dependency
 graph, rejects public product-equivalence shortcuts, and checks every
 declaration against the standard `propext`/choice/quotient axiom budget.
+Its recursive import cone stays entirely inside `Fermat.Conservation`: it does
+not pass through `CommonActionStage`, either drain module, or any numbered
+exponent directory.
 
 The concrete local experiment lives in
 [`Fermat/FiftyNine/Conservation/`](Fermat/FiftyNine/Conservation/).  Lean

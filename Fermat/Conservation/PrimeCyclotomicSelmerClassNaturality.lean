@@ -15,6 +15,7 @@ The proof works for every strict Selmer class.  It chooses only the
 canonical fractional-ideal root supplied by the Dedekind factorization
 equivalence; no class representative or arithmetic premise is added.
 -/
+import Fermat.Conservation.CommonActionSelmerCore
 import Fermat.Conservation.IdealPowerSelmer
 import Fermat.Conservation.PrimeCyclotomicSelmerAction
 import Mathlib.RepresentationTheory.Intertwining

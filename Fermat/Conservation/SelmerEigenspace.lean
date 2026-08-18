@@ -37,7 +37,9 @@ local conditions use `IsDedekindDomain.HeightOneSpectrum`); some prose calls
 it `HeightOneSpectrum.selmerGroup`.  All definitions below use the declaration
 that actually exists at the pin.
 -/
-import Fermat.Conservation.CommonActionStage
+import Fermat.Conservation.CommonActionSelmerCore
+import Fermat.Conservation.InvolutiveBase
+import Fermat.Conservation.LinkingInterfaces
 import Mathlib.Algebra.Module.ZMod
 import Mathlib.NumberTheory.Padics.RingHoms
 import Mathlib.RepresentationTheory.Basic

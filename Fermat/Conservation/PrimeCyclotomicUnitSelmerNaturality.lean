@@ -13,6 +13,7 @@ global units modulo `p`-th powers and proves that Mathlib's actual
 The same intertwiner proves naturality for every character projector.  No
 prime-specific state or character is selected here.
 -/
+import Fermat.Conservation.CommonActionSelmerCore
 import Fermat.Conservation.PrimeCyclotomicSelmerAction
 import Mathlib.RepresentationTheory.Intertwining
 
