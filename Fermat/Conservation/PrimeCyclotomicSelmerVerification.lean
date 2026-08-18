@@ -7,16 +7,18 @@ Authors: Fabian Franz, Codex
 
 This non-imported leaf audits the actual prime-parametric action, the
 canonical strict-to-supported inclusion, the unit and class naturality maps,
-the residue Fourier dictionary, and cyclotomic localization covariance.  It
-records the intended implementation dependencies and checks every declaration
-in the audited namespaces against the standard axiom budget and the project's
-public no-product-equivalence rule.
+the residue Fourier dictionary, complementary-wave pairing compression, and
+cyclotomic localization covariance.  It records the intended implementation
+dependencies and checks every declaration in the audited namespaces against
+the standard axiom budget and the project's public no-product-equivalence
+rule.
 -/
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 import Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 import Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 import Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion
+import Fermat.Conservation.PrimeFourierPairingCompression
 
 open Lean Elab Command
 
@@ -97,6 +99,20 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #check Fermat.Conservation.PrimeResidueFourier.pureCharacter_pointed_silence
 #check Fermat.Conservation.PrimeResidueFourier.reducedCharacterAt
 #check Fermat.Conservation.PrimeResidueFourier.reducedCharacterAt_apply
+
+/-! ## Public inventory: complementary Fourier-pairing compression -/
+
+#check Fermat.Conservation.PrimeFourierPairingCompression.pointwiseProduct_complementaryCharacters
+#check Fermat.Conservation.PrimeFourierPairingCompression.pointwiseProduct_eq_selected_of_complementaryPureCharacters
+#check Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_card_mul_selected
+#check Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_pred_mul_selected
+#check Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_neg_selected
+#check Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_sum_characterComponent_mul
+#check Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_neg_selectedComponent
+#check Fermat.Conservation.PrimeFourierPairingCompression.inverseReindex
+#check Fermat.Conservation.PrimeFourierPairingCompression.fourierCoefficient_inverseReindex
+#check Fermat.Conservation.PrimeFourierPairingCompression.sum_inverseReindex_mul_pureInverse_eq_neg_selectedComponent
+#check Fermat.Conservation.PrimeFourierPairingCompression.wild_eq_selectedComponent_of_raw_reciprocity
 
 /-! ## Public inventory: actual cyclotomic localization covariance -/
 
@@ -180,6 +196,10 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #print axioms Fermat.Conservation.PrimeResidueFourier.fourier_reconstruction
 #print axioms Fermat.Conservation.PrimeResidueFourier.pureCharacter_pointed_silence
 #print axioms Fermat.Conservation.PrimeResidueFourier.reducedCharacterAt_apply
+#print axioms Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_neg_selected
+#print axioms Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_neg_selectedComponent
+#print axioms Fermat.Conservation.PrimeFourierPairingCompression.fourierCoefficient_inverseReindex
+#print axioms Fermat.Conservation.PrimeFourierPairingCompression.wild_eq_selectedComponent_of_raw_reciprocity
 #print axioms Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.eigenspaceSupportValuationAt_cyclotomicSupportOrbitMap
 #print axioms Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_orbit
 #print axioms Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.cyclotomicProjectedLocalizationVectorAt_isPureCharacter
@@ -191,6 +211,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeResidueFourier
+#guard_standard_axioms_prefix Fermat.Conservation.PrimeFourierPairingCompression
 #guard_standard_axioms_prefix Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeEmptySupportEigenspaceInclusion
@@ -198,6 +219,7 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicUnitSelmerNaturality
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicSelmerClassNaturality
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeResidueFourier
+#audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeFourierPairingCompression
 #audit_no_product_equiv_types_prefix Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance
 
 /-! ## Intended implementation spine -/
@@ -233,6 +255,40 @@ elab "#guard_standard_axioms_prefix " p:ident : command => do
 #guard_depends_on
   Fermat.Conservation.PrimeResidueFourier.pureCharacter_pointed_silence,
   Fermat.Conservation.PrimeResidueFourier.pointEvaluation_of_pureCharacter
+
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.pointwiseProduct_complementaryCharacters,
+  Fermat.Conservation.PrimeResidueFourier.characterFunction
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.pointwiseProduct_eq_selected_of_complementaryPureCharacters,
+  Fermat.Conservation.PrimeFourierPairingCompression.pointwiseProduct_complementaryCharacters
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_card_mul_selected,
+  Fermat.Conservation.PrimeFourierPairingCompression.pointwiseProduct_eq_selected_of_complementaryPureCharacters
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_pred_mul_selected,
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_card_mul_selected
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_neg_selected,
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_pred_mul_selected
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_sum_characterComponent_mul,
+  Fermat.Conservation.PrimeResidueFourier.fourierCoefficient
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_neg_selectedComponent,
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_sum_characterComponent_mul
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_neg_selectedComponent,
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_neg_selected
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.fourierCoefficient_inverseReindex,
+  Fermat.Conservation.PrimeFourierPairingCompression.inverseReindex
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_inverseReindex_mul_pureInverse_eq_neg_selectedComponent,
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_neg_selectedComponent
+#guard_depends_on
+  Fermat.Conservation.PrimeFourierPairingCompression.wild_eq_selectedComponent_of_raw_reciprocity,
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_neg_selectedComponent
 
 #guard_depends_on
   Fermat.Conservation.PrimeCyclotomicLocalizationEquivariance.eigenspaceSupportValuationAt_cyclotomicSupportOrbitMap,

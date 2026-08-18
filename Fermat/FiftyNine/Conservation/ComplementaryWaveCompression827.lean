@@ -15,6 +15,7 @@ The statements concern functions on the orbit only.  In particular, they do
 not identify either wave with a Kummer class or their product with a local
 Tate pairing.
 -/
+import Fermat.Conservation.PrimeFourierPairingCompression
 import Fermat.FiftyNine.Conservation.CyclotomicLocalizationEquivariance827
 
 open scoped BigOperators
@@ -45,11 +46,9 @@ theorem pointwiseProduct_complementaryCharacters
     (position : Delta) :
     (leftComponent • characterFunction chi) position *
         (rightComponent • characterFunction chi⁻¹) position =
-      leftComponent * rightComponent := by
-  simp only [Pi.smul_apply, smul_eq_mul, characterFunction,
-    MonoidHom.inv_apply, Units.val_inv_eq_inv_val]
-  have hchi : (chi position : ZMod 59) ≠ 0 := Units.ne_zero _
-  field_simp
+      leftComponent * rightComponent :=
+  Fermat.Conservation.PrimeFourierPairingCompression.pointwiseProduct_complementaryCharacters
+      (p := 59) chi leftComponent rightComponent position
 
 /-- Consequently, the pointwise product of two complementary pure-character
 waves can be read at any chosen position. -/
@@ -58,11 +57,9 @@ theorem pointwiseProduct_eq_selected_of_complementaryPureCharacters
     (selected position : Delta)
     (hleft : IsPureCharacter chi left)
     (hright : IsPureCharacter chi⁻¹ right) :
-    left position * right position = left selected * right selected := by
-  rcases hleft with ⟨leftComponent, rfl⟩
-  rcases hright with ⟨rightComponent, rfl⟩
-  rw [pointwiseProduct_complementaryCharacters,
-    pointwiseProduct_complementaryCharacters]
+    left position * right position = left selected * right selected :=
+  Fermat.Conservation.PrimeFourierPairingCompression.pointwiseProduct_eq_selected_of_complementaryPureCharacters
+      (p := 59) chi left right selected position hleft hright
 
 section Finite
 
@@ -76,11 +73,9 @@ theorem sum_pointwiseProduct_eq_card_mul_selected
     (hleft : IsPureCharacter chi left)
     (hright : IsPureCharacter chi⁻¹ right) :
     (∑ position : Delta, left position * right position) =
-      (Fintype.card Delta : ZMod 59) * (left selected * right selected) := by
-  rw [Finset.sum_congr rfl (fun position _ ↦
-    pointwiseProduct_eq_selected_of_complementaryPureCharacters
-      chi left right selected position hleft hright)]
-  simp
+      (Fintype.card Delta : ZMod 59) * (left selected * right selected) :=
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_card_mul_selected
+      (p := 59) chi left right selected hleft hright
 
 /-- On any 58-element orbit, complementary waves compress to 58 times their
 product at the selected position. -/
@@ -91,19 +86,9 @@ theorem sum_pointwiseProduct_eq_fiftyEight_mul_selected
     (hleft : IsPureCharacter chi left)
     (hright : IsPureCharacter chi⁻¹ right) :
     (∑ position : Delta, left position * right position) =
-      (58 : ZMod 59) * (left selected * right selected) := by
-  calc
-    (∑ position : Delta, left position * right position) =
-        (Fintype.card Delta : ZMod 59) *
-          (left selected * right selected) :=
-      sum_pointwiseProduct_eq_card_mul_selected
-        chi left right selected hleft hright
-    _ = (58 : ZMod 59) * (left selected * right selected) := by
-      have hcard' : (Fintype.card Delta : ZMod 59) =
-          ((58 : Nat) : ZMod 59) :=
-        congrArg (fun n : Nat ↦ (n : ZMod 59)) hcard
-      rw [hcard']
-      rfl
+      (58 : ZMod 59) * (left selected * right selected) :=
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_pred_mul_selected
+      (p := 59) hcard chi left right selected hleft hright
 
 /-- Since `58 = -1` in `ZMod 59`, full-orbit compression is negation. -/
 theorem sum_pointwiseProduct_eq_neg_selected
@@ -113,11 +98,9 @@ theorem sum_pointwiseProduct_eq_neg_selected
     (hleft : IsPureCharacter chi left)
     (hright : IsPureCharacter chi⁻¹ right) :
     (∑ position : Delta, left position * right position) =
-      -(left selected * right selected) := by
-  rw [sum_pointwiseProduct_eq_fiftyEight_mul_selected
-    hcard chi left right selected hleft hright]
-  have h58 : (58 : ZMod 59) = -1 := by decide +kernel +revert
-  rw [h58, neg_one_mul]
+      -(left selected * right selected) :=
+  Fermat.Conservation.PrimeFourierPairingCompression.sum_pointwiseProduct_eq_neg_selected
+      (p := 59) hcard chi left right selected hleft hright
 
 end Finite
 

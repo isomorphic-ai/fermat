@@ -329,6 +329,16 @@ pointed-silence consequences, and reduction of `p`-adic characters modulo
 specialization, while the splitting and regular place-orbit arithmetic at
 `827` remains correctly campaign-specific.
 
+`PrimeFourierPairingCompression` supplies the corresponding prime-generic
+pairing algebra.  Complementary pure character waves have constant pointwise
+product; on an orbit of cardinality `p - 1`, their complete sum is the
+negative of any selected product.  More generally, pairing an arbitrary raw
+vector with a pure inverse-character wave retains exactly its selected
+Fourier component, including the explicit inverse-index orientation.  Its
+final scalar adapter consumes an honest supplied reciprocity equation; this
+module constructs neither local values nor a global pairing, reciprocity law,
+Kummer class, or cyclotomic support orbit.
+
 `PrimeCyclotomicLocalizationEquivariance` then combines the actual
 cyclotomic Selmer representation, its valuation covariance, and the genuine
 character projector.  For arbitrary prime `p` and any cyclotomically stable

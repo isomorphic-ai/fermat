@@ -14,6 +14,7 @@ inverse place orientation explicitly.
 The scalar theorem takes the reciprocity equation itself as its sole
 arithmetic input.  It does not manufacture a global pairing or a local value.
 -/
+import Fermat.Conservation.PrimeFourierPairingCompression
 import Fermat.FiftyNine.Conservation.FullOrbitReciprocity827
 import Fermat.FiftyNine.Conservation.FourierPairingProjection827
 
@@ -77,17 +78,9 @@ theorem GlobalReciprocityLaw.pairAt_eq_selectedComponent_of_rawOrbit
     exact hcomparison index
   have hprojection :
       (∑ index : Delta, raw index * reflected index) =
-        -(characterComponent raw eta selected * reflected selected) := by
-    calc
-      (∑ index : Delta, raw index * reflected index) =
-          ∑ index : Delta,
-            characterComponent raw eta index * reflected index :=
-        sum_mul_pureInverse_eq_sum_characterComponent_mul
-          hcard eta raw reflected hreflected
-      _ = -(characterComponent raw eta selected * reflected selected) :=
-        sum_pointwiseProduct_eq_neg_selected hcard eta
-          (characterComponent raw eta) reflected selected
-          ⟨fourierCoefficient raw eta, rfl⟩ hreflected
+        -(characterComponent raw eta selected * reflected selected) :=
+    Fermat.Conservation.PrimeFourierPairingCompression.sum_mul_pureInverse_eq_neg_selectedComponent
+        (p := 59) hcard eta raw reflected selected hreflected
   calc
     pairing.pairAt distinguished x y =
         -∑ index : Delta,
@@ -113,22 +106,9 @@ theorem wild_eq_selectedComponent_of_raw_reciprocity
     (wild : ZMod 59)
     (reciprocity : wild + ∑ index : Delta,
       raw index * reflected index = 0) :
-    wild = characterComponent raw eta selected * reflected selected := by
-  have hprojection :
-      (∑ index : Delta, raw index * reflected index) =
-        -(characterComponent raw eta selected * reflected selected) := by
-    calc
-      (∑ index : Delta, raw index * reflected index) =
-          ∑ index : Delta,
-            characterComponent raw eta index * reflected index :=
-        sum_mul_pureInverse_eq_sum_characterComponent_mul
-          hcard eta raw reflected hreflected
-      _ = -(characterComponent raw eta selected * reflected selected) :=
-        sum_pointwiseProduct_eq_neg_selected hcard eta
-          (characterComponent raw eta) reflected selected
-          ⟨fourierCoefficient raw eta, rfl⟩ hreflected
-  rw [hprojection] at reciprocity
-  exact sub_eq_zero.mp (by simpa only [sub_eq_add_neg] using reciprocity)
+    wild = characterComponent raw eta selected * reflected selected :=
+  Fermat.Conservation.PrimeFourierPairingCompression.wild_eq_selectedComponent_of_raw_reciprocity
+      (p := 59) hcard eta raw reflected selected hreflected wild reciprocity
 
 /-- The explicit inverse-oriented specialization. Canonical place index
 `index` reads raw residue index `index⁻¹`. -/
