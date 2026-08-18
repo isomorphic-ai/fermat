@@ -618,18 +618,45 @@ canonical irregular projector exactly when the difference between the
 literal Fermat Selmer class and its irregular projection lies in the genuine
 global-unit range.  That unit-range receipt is not currently supplied, and
 the reduction is transitively independent of the older Takagi proof.
+`AllocatedPlusRootOddSupport59` nevertheless removes half of the support
+problem unconditionally.  The root-of-unity normalization correction is in
+the literal global-unit range, so the genuine class map kills it; cyclotomic
+`-1` then carries the allocated plus root to the minus root, while the proved
+relation `(7d)` makes the latter the negative of the former.  Hence both the
+plus root and the actual `selectedClassGauge59` are fixed by the complete odd
+projector.  Their remaining chi=15 obligation is now exactly the vanishing of
+an explicit odd-minus-chi=15 complement, rather than an opaque seating claim.
 
-Two independent wild-side obligations remain.  First, the globally realized
-827 profile is not yet proved compatible at lambda with the reflected factor
-in `TwistedLambdaCupReceipt59`, nor is that lambda/827 pair produced by a
-Poitou--Tate range/kernel theorem; `SeatedTameOrbitReciprocityBalance827`
-still consumes, rather than constructs, the relevant global reciprocity law.
-Second, the W1 lambda functional and the 827 boundary/readout have not been
-placed in the same nonzero one-dimensional equivariant Hom line.
-`OneDimensionalUnitProportionality` proves the unit-scalar conclusion after
-that common line, membership, and nonvanishing are supplied, but it does not
-produce those arithmetic facts.  These lambda/Poitou--Tate and common-Hom-line
-seams are separate from the now-pointwise W7 class-readout seam.
+`CharacterLinePointwiseFaithfulness59` makes the other W7 inputs equally
+literal.  If the selected gauge is fixed by the actual chi=15 projector, the
+image of that projector has `ZMod 59`-finrank one, and the constructed class
+readout is nonzero on that image, then the readout reflects zero at the
+selected gauge and the W7 equivalence follows.  Full class-group injectivity
+is neither assumed nor needed.  The still-missing arithmetic facts are the
+vanishing of the explicit odd complement, rank one of the selected character
+line, and nonvanishing of the Artin readout on that line.
+
+The wild-side comparison has also moved beyond abstract linear algebra.
+`WildOrbitBoundaryComparison827` transports the two explicit global Kummer
+classes to exactly the retained W1 `H¹` factors, recovers the W1 `H²` cup and
+its normalized value one, and curries both the normalized lambda reading and
+all 58 genuine tame rows into linear functionals on the same actual seated
+Selmer space.  For the same globally realized 827-relaxed reflected point,
+the orbit functional is literally the restriction of the strict tame
+functional.  Under the existing `GlobalReciprocityLaw` interface, Lean now
+proves the two maps are negatives, have equal kernels, inhabit one explicit
+one-dimensional line, and differ by a unique unit whenever the orbit map is
+nonzero.
+
+The remaining wild-side obligations are therefore sharply localized.  The
+normalized 827 point is not yet proved to have the exact lambda-local
+reflected factor retained by W1; a lambda-plus-827 Poitou--Tate range/kernel
+theorem must produce such a simultaneous point.  The W1 nonzero ambient cup
+also has not yet been shown nonzero after restriction to the genuine seated
+primal Selmer space, and `GlobalReciprocityLaw` is still consumed rather than
+constructed.  These PT/local-compatibility, seated-transversality, and
+reciprocity seams remain separate from the now-pointwise W7 class-readout
+seam.
 
 There is now, however, a separate completed state-to-history route at the
 same exponent.  `FermatStateTakagiSevenA59` proves the Takagi relation for the
