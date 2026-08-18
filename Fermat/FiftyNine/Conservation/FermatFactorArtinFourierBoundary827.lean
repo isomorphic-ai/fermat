@@ -286,6 +286,31 @@ variable [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)]
   {S : Fermat.FiftyNine.Conservation.FermatState.PrimitiveSecondCaseSolution}
   {hz : (59 : ℤ) ∣ S.z}
 
+/-- The Kummer--Fourier comparison before specializing to any Fermat class.
+For every genuine strict Selmer input, the factorizing class readout is the
+negative mode-`44` coefficient of its actual residue wave.  This is an
+equality of the two maps at every input, not a hypothesis or a statement
+assuming relation `(7a)`. -/
+theorem classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+    (y : RelaxedCarrier827 K)
+    (hprofile : ∀ tau : GaloisIndex59,
+      relaxedOrbitValuation827 K tau y =
+        normalizedFullOrbitEigenprofileCoordinates827
+          canonicalTeichmullerCharacter59 irregularCharacter59 tau)
+    (readout : ClassTorsion59 K →ₗ[ZMod 59] ZMod 59)
+    (factorization :
+      readout.comp (fermatFactorClassGaugeMap59 (K := K)) =
+        strictTameOrbitFunctional827 K y)
+    (x : StrictCarrier59 K) :
+    readout (fermatFactorClassGaugeMap59 (K := K) x) =
+      -fourierCoefficient (strictOrbitResidueWave827 K x)
+        (powerCharacter59 44) := by
+  change (readout.comp (fermatFactorClassGaugeMap59 (K := K))) x = _
+  rw [factorization]
+  exact
+    strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
+      K y hprofile x
+
 /-- The factorizing class readout has a completely explicit value on the
 selected relation-7A class: the negative mode-`44` coefficient of the actual
 Fermat-factor strict residue wave. -/
@@ -305,19 +330,9 @@ theorem classReadout_selectedClassGauge59_eq_neg_fourierCoefficient
         (strictOrbitResidueWave827 K
           (fermatFactorSelmerDifference59 pair))
         (powerCharacter59 44) := by
-  have hat := LinearMap.congr_fun factorization
-    (fermatFactorSelmerDifference59 pair)
-  change readout
-      (fermatFactorClassGaugeMap59 (K := K)
-        (fermatFactorSelmerDifference59 pair)) =
-    strictTameOrbitFunctional827 K y
-      (fermatFactorSelmerDifference59 pair) at hat
-  rw [fermatFactorClassGaugeMap59_fermatFactorSelmerDifference59 K pair]
-    at hat
-  rw [hat]
-  exact
-    strictTameOrbitFunctional827_eq_neg_fourierCoefficient_powerFortyFour
-      K y hprofile (fermatFactorSelmerDifference59 pair)
+  rw [← fermatFactorClassGaugeMap59_fermatFactorSelmerDifference59 K pair]
+  exact classReadout_classGaugeMap59_eq_neg_fourierCoefficient
+    K y hprofile readout factorization (fermatFactorSelmerDifference59 pair)
 
 /-- Pointwise faithfulness of the constructed readout is equivalent to one
 explicit Fourier-zero implication at the Fermat factor.  This is the exact
