@@ -16,6 +16,11 @@ difference must not change its class obstruction.  Exactness of the genuine
 unit--Selmer--class sequence expresses the same boundary as membership of
 `q - P_chi(q)` in the actual global-unit range.
 
+The already-proved relation `(7d)` also rewrites the selected gauge as twice
+the allocated plus root.  Since `2` is invertible modulo `59`, the desired
+fixedness is equivalently the missing chi-character allocation of that one
+root class.
+
 No Takagi theorem, relation `(7a)`, Artin map, class-group dimension claim,
 or injectivity assertion is imported or used here.
 -/
@@ -122,5 +127,49 @@ theorem selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange
   rw [map_sub, fermatFactorClassGaugeMap59_apply,
     fermatFactorClassGaugeMap59_apply]
   exact eq_comm.trans sub_eq_zero.symm
+
+omit [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)] in
+/-- Relation `(7d)` identifies the selected difference gauge with two copies
+of the allocated plus root in the genuine `59`-torsion class carrier. -/
+theorem selectedClassGauge59_eq_plusRoot_add_plusRoot
+    (pair : StateLinkedIdealPair hZeta S hz) :
+    selectedClassGauge59 pair =
+      allocatedRootClassPTorsion pair.ledger 0 +
+        allocatedRootClassPTorsion pair.ledger 0 := by
+  have hneg :
+      allocatedRootClassPTorsion pair.ledger 1 =
+        -allocatedRootClassPTorsion pair.ledger 0 := by
+    apply Subtype.ext
+    exact eq_neg_of_add_eq_zero_right
+      (Fermat.FiftyNine.Conservation.StateFactorConjugation.StateLinkedIdealPair.vandiverSevenD
+        pair)
+  change allocatedRootClassPTorsion pair.ledger 0 -
+      allocatedRootClassPTorsion pair.ledger 1 = _
+  rw [hneg]
+  abel
+
+/-- Because multiplication by `2` is invertible modulo `59`, seating the
+selected gauge is exactly seating its allocated plus root.  The right side
+is the first absent arithmetic character-allocation theorem. -/
+theorem selectedClassGauge59_projector_fixed_iff_plusRoot_projector_fixed
+    (pair : StateLinkedIdealPair hZeta S hz) :
+    cyclotomicClassProjector59 K irregularCharacter59
+        (selectedClassGauge59 pair) = selectedClassGauge59 pair ↔
+      cyclotomicClassProjector59 K irregularCharacter59
+          (allocatedRootClassPTorsion pair.ledger 0) =
+        allocatedRootClassPTorsion pair.ledger 0 := by
+  rw [selectedClassGauge59_eq_plusRoot_add_plusRoot]
+  rw [map_add]
+  constructor
+  · intro h
+    let twoUnit : (ZMod 59)ˣ := Units.mk0 2 (by decide)
+    apply smul_left_cancel twoUnit
+    change (2 : ZMod 59) •
+        cyclotomicClassProjector59 K irregularCharacter59
+          (allocatedRootClassPTorsion pair.ledger 0) =
+      (2 : ZMod 59) • allocatedRootClassPTorsion pair.ledger 0
+    simpa only [two_smul] using h
+  · intro h
+    rw [h]
 
 end Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59
