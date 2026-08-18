@@ -54,6 +54,19 @@
   the finite carry readout is the negative of this residue.  Under the one
   visible normalized-inflation equality, the genuine cup therefore reads as
   the negative completed-log residue.
+- `CompletedLogPowerObstruction59` proves an additional unconditional
+  analytic fact.  Every genuine completed logarithm lands in the actual
+  `lambda` ideal; if the distinguished completed-log unit `60` were a 59th
+  power, logarithmic power compatibility and integral-trace divisibility
+  would force its normalized residue to vanish, contradicting `-1`.  Thus
+  `60` is not a 59th power in the completed-log principal-unit domain.
+- `TwistedLambdaNormalizedEndpoint59` composes the entire cohomological side
+  under one explicit naturality equation
+  `readout.comp twistedLambdaH2Inflation59 =
+  actualContinuousCyclicH2Readout59`.  From that equality Lean derives cup
+  value `1`, the signed completed-log value, cup nonvanishing, failure of the
+  primitive-root norm, and failure of every continuous `C59²` lift.  The
+  equation remains a visible theorem premise rather than a provider field.
 - The honest remaining arithmetic seam is now the comparison between these
   two normalized endpoints: construct the local roots-valued `H²` invariant
   and prove that its restriction along the explicit inflation is the finite
