@@ -587,7 +587,13 @@ globally-root-oriented tame rows above 827, and specializes the equivalence
 to that concrete functional.  The remaining Kummer--Artin theorem is exactly
 its global-unit silence.  Global reciprocity alone only gives the balanced
 identity `wild + tameOrbit = 0`; it does not erase the tame orbit or prove
-that unit-silence obligation.
+that unit-silence obligation.  `SeatedTameOrbitReciprocityBalance827` proves
+this exact balance on the actual complementary character seats and derives
+that orbit silence is equivalent to lambda orthogonality.  Separately,
+`OneDimensionalUnitProportionality` supplies the pure W4 algebra: two
+explicitly nonzero readouts in one explicitly supplied finrank-one submodule
+differ by a unique unit scalar.  It deliberately does not assert the still
+missing arithmetic common-Hom-line theorem.
 
 There is now, however, a separate completed state-to-history route at the
 same exponent.  `FermatStateTakagiSevenA59` proves the Takagi relation for the
