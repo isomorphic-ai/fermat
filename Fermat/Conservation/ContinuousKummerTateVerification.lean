@@ -43,6 +43,12 @@ import Fermat.Conservation.ContinuousKummerTateCup
 #check Fermat.Conservation.ContinuousKummerOrientation.orientH2
 #check Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv
 #check Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv_apply
+#check Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv
+#check Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv_apply
+#check Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv_symm_apply
+#check Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv
+#check Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv_apply
+#check Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv_symm_apply
 #check Fermat.Conservation.ContinuousKummerOrientation.rightKummerMap
 #check Fermat.Conservation.ContinuousKummerOrientation.rightKummerMap_classOfUnit
 #check Fermat.Conservation.ContinuousKummerOrientation.leftKummerMap
@@ -157,6 +163,54 @@ info: 'Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv_apply' depe
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.ContinuousKummerOrientation.orientH2Equiv_apply
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv_apply
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv_symm_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerOrientation.orientH2ReadoutEquiv_symm_apply
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv_apply
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv_symm_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerOrientation.orientH2ContinuousReadoutEquiv_symm_apply
 
 /--
 info: 'Fermat.Conservation.ContinuousKummerOrientation.leftKummerMap_classOfUnit' depends on axioms: [propext,
