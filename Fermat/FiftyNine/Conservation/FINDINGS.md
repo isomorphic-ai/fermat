@@ -11,17 +11,24 @@
   At the cyclotomic lambda completion, `lambdaContinuousCup59` and
   `lambdaLocalH2Pairing` are the compiled specializations; scalarization and
   global pullback retain the readout as a visible argument.
+- `orientH2Equiv` and its lambda specialization now identify the roots-valued
+  and primitive-root-oriented coefficient presentations of continuous `H²`.
+  The linear and topology-preserving readout equivalences losslessly
+  transport caller-supplied functionals in both directions; they construct no
+  functional, invariant, normalization, or arithmetic value.
 - This is a dual phase-space pairing between differently typed degree-one
   seats, with their interaction retained in degree two.  It is not yet
   called symplectic: no identification of the two seats and no alternation
   theorem has been proved.  Package B remains already discharged by the
   common ambient Selmer action and the stable full set of places above 827.
-- The exact remaining bridges are: construct the normalized local invariant
-  or readout; prove its normalization, orientation/sign convention, and
-  comparison with the 59-Hilbert symbol; prove the Poitou--Tate global
-  reflected lift; and prove the unit-proportional comparison with the 7a
-  gauge.  This entry supersedes older status text that lists continuous
-  cohomology descent or lambda packaging as still open.
+- The remaining invariant obstruction is arithmetic, not coordinate-level:
+  the current APIs provide neither a canonical local fundamental `H²` class
+  with a nonzero theorem nor a computation `H² ≃ ZMod 59`.  The zero
+  functional or an arbitrary basis functional is therefore not acceptable.
+  What remains is the normalized local invariant, including its
+  normalization/orientation/sign and 59-Hilbert comparison; the Poitou--Tate
+  global reflected lift; and the unit-proportional 7a comparison.  This entry
+  supersedes older text listing continuous descent or lambda packaging open.
 
 ## 2026-08-17 — Kummer--Tate route: quotient-first core and algebraic cup spine
 
