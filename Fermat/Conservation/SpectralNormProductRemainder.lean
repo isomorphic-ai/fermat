@@ -102,6 +102,36 @@ theorem prod_one_add_first_order_bound
       simpa [Finset.prod_insert hi, Finset.sum_insert hi, P, S] using
         And.intro hfirst' hsecond'
 
+/-- In a finite Galois extension, the norm of a spectral one-unit remains
+at least as deep as its perturbation.  This is the terminal estimate used
+after a finite factorization has driven a residual factor sufficiently far
+down the extension filtration. -/
+theorem norm_one_add_sub_one_norm_le
+    [FiniteDimensional F E] [IsGalois F E]
+    (y : E) (hy : spectralNorm F E y ≤ 1) :
+    ‖Algebra.norm F (1 + y) - 1‖ ≤ spectralNorm F E y := by
+  classical
+  let x : (E ≃ₐ[F] E) → E := fun sigma ↦ sigma y
+  have hx (sigma : E ≃ₐ[F] E) :
+      spectralNorm F E (x sigma) ≤ spectralNorm F E y := by
+    change spectralNorm F E (sigma y) ≤ spectralNorm F E y
+    exact (spectralNorm_eq_of_equiv (K := F) (x := y) sigma).symm.le
+  have hbound :=
+    (prod_one_add_first_order_bound
+      (s := Finset.univ) x (spectralNorm F E y)
+      (spectralNorm_nonneg y) hy (fun sigma _ ↦ hx sigma)).1
+  have hprod :
+      (Finset.univ.prod fun sigma : E ≃ₐ[F] E ↦ 1 + x sigma) =
+        algebraMap F E (Algebra.norm F (1 + y)) := by
+    rw [Algebra.norm_eq_prod_automorphisms]
+    apply Finset.prod_congr rfl
+    intro sigma hsigma
+    simp only [x, map_add, map_one]
+  rw [hprod] at hbound
+  rw [← map_one (algebraMap F E), ← map_sub,
+    spectralNorm_extends] at hbound
+  simpa only [map_one] using hbound
+
 /-- In a finite Galois extension, the field norm of `1 + a*y` differs
 from its linear trace approximation by at most `‖a‖²`, provided `a` and
 `y` lie in the respective spectral unit balls. -/
