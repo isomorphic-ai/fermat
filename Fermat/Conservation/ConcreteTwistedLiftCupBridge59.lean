@@ -28,7 +28,7 @@ open Fermat.Conservation.ContinuousCarryLiftObstruction59
 
 local instance : Fact (Nat.Prime 59) := ⟨by decide⟩
 
-variable {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+variable {G : Type} [Group G] [TopologicalSpace G]
 
 /-!
 The input `q` below is deliberately not a homomorphism.  It is the

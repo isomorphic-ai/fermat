@@ -51,6 +51,7 @@ def characterValue (chi : G →ₜ* CyclicGroup59) : C(G, ZMod 59) where
   toFun g := (chi g).toAdd
   continuous_toFun := chi.continuous
 
+omit [IsTopologicalGroup G] in
 theorem characterValue_mul (chi : G →ₜ* CyclicGroup59) (g h : G) :
     characterValue chi (g * h) = characterValue chi g + characterValue chi h := by
   exact congrArg Multiplicative.toAdd (map_mul chi g h)
@@ -360,6 +361,7 @@ theorem homologyLinearEquiv_h2Projection_apply
 
 set_option backward.isDefEq.respectTransparency false in
 set_option maxHeartbeats 800000 in
+omit [CharZero F] in
 /-- Coefficient orientation commutes with the genuine degree-two homology
 projection of a nominal cycle. -/
 theorem orientH2_h2Projection

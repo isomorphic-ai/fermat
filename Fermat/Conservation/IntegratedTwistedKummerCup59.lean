@@ -63,6 +63,7 @@ def homogeneousPrimitive (r : C(G, ZMod 59)) :
   congr 1
   group
 
+omit [LocallyCompactSpace G] in
 @[simp]
 theorem homogeneousPrimitive_differential_apply
     (r : C(G, ZMod 59)) (w x y : G) :
@@ -116,7 +117,7 @@ theorem pulledCarry_sub_characterCup_eq_boundary_of_twistedLift
   rw [twistedCupPrimitive59_equation chi eta q hred htwist]
   congr 1
   · congr 1 <;>
-      simp only [map_mul, map_inv, toAdd_mul, toAdd_inv] <;> abel
+      simp only [map_mul, map_inv, toAdd_mul, toAdd_inv]
   · congr 1 <;>
       simp only [map_mul, map_inv, toAdd_mul, toAdd_inv] <;> abel
 
