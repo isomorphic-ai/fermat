@@ -8,7 +8,9 @@ Authors: Fabian Franz, Codex
 This non-imported executable audit leaf covers only the newly exposed route:
 
 * W1 retains the complete nonzero normalized twisted-lambda cup receipt;
-* W3 constructs the normalized inverse-reflected profile on all 58 places;
+* W3 constructs the normalized inverse-reflected profile on all 58 places,
+  and the normalized reflected fiber realizes that profile on an actual
+  global `827`-relaxed carrier;
 * the W4 algebra turns same-line nonvanishing into a unique unit scalar;
 * the concrete tame-orbit functional factors uniquely through the actual
   class gauge exactly at the global-unit-silence boundary;
@@ -19,13 +21,19 @@ This non-imported executable audit leaf covers only the newly exposed route:
 * the raw wave is identified with the genuine canonical tame context and
   with the actual strict-Selmer `unitInclusion` pairing, including the
   mandatory global-root factor and inverse place orientation;
-* W7 identifies orbit silence with relation 7A once an explicit injective
-  class readout and its exact factorization are supplied.
+* the realized profile makes the genuine strict tame functional silent on
+  every ring unit and every `UnitModP` class, thereby constructing its
+  unique class-level readout;
+* W7 identifies orbit silence with relation 7A once that produced readout
+  is proved faithful at the single Fermat-selected class.
 
-The checks deliberately do not claim the still-missing arithmetic inputs:
-same-Hom-line membership, a global reflected lift realizing the required
-pure orbit mode, or the Kummer--Artin comparison.  This file does not import
-the monolithic exponent-59 verifier.
+The checks deliberately keep the remaining lanes separate.  W1 is a local
+cup receipt; no Poitou--Tate theorem yet produces a single global reflected
+class simultaneously carrying its wild coordinate and the realized tame
+profile, and no common-Hom-line theorem yet identifies the two boundary
+functionals.  Within W7, the only visible input is pointwise faithfulness of
+the produced readout, the exact target of the Kummer--Artin comparison.
+This file does not import the monolithic exponent-59 verifier.
 -/
 import Fermat.Conservation.GuardDependsOn
 import Fermat.Conservation.OneDimensionalUnitProportionality
@@ -39,6 +47,12 @@ import Fermat.FiftyNine.Conservation.ArbitraryUnitFourierSilence827
 import Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827
 import Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827
 import Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59
+import Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827
+import Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827
+import Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827
+import Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827
+import Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827
+import Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59
 
 /-! ## Public route inventory -/
 
@@ -65,6 +79,13 @@ orientation. -/
 #check Fermat.FiftyNine.Conservation.normalizedFullOrbitEigenprofileLedger827_reflected_eigenlaw
 #check Fermat.FiftyNine.Conservation.NormalizedFullOrbitEigenprofile827
 #check Fermat.FiftyNine.Conservation.normalizedFullOrbitEigenprofile827
+
+/-! The normalized reflected fiber now realizes W3 on an actual global
+relaxed carrier.  This is not yet a simultaneous wild/tame PT lift. -/
+
+#check Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.normalizedReflectedFiber827_relaxedOrbitValuation_eq_profile
+#check Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.normalizedReflectedFiber827_relaxedOrbitValuation_isPureCharacter
+#check Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.exists_relaxedCarrier827_realizing_normalizedFullOrbitEigenprofile
 
 /-! W4's completed algebraic implication.  The arithmetic same-line
 producer remains intentionally outside this theorem. -/
@@ -118,13 +139,54 @@ orientation and the global-root coordinate factor. -/
 #check Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.relaxedOrbitValuation827
 #check Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTameOrbitReading827_unitInclusion_eq_orientedRaw_mul_relaxedValuation
 
-/-! W7's honest algebraic partial closure.  Readout existence,
-factorization, and injectivity remain explicit theorem arguments. -/
+/-! The genuine arbitrary-unit sum and strict functional are now silent for
+every carrier in the canonical pure reflected seat. -/
+
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.inverseReflectedResidueCharacter827_canonical_irregular_eq_powerFourteen
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.relaxedOrbitValuation827_isPureCharacter_of_eq_normalizedProfile
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.weightedRelaxedOrbitValuation827_isPureCharacter
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.sum_rawTameOrbitReading827_unitInclusion_eq_zero_of_pureMode
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.strictTameOrbitFunctional827_unitInclusion_ringUnitClass59_eq_zero
+#check Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.existsUnique_classReadout_of_relaxedOrbitValuation_isPureCharacter
+
+/-! Unit silence constructs the readout rather than accepting it as input. -/
+
+#check Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.ringUnitClass59_surjective
+#check Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_unit_silence
+#check Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_ringUnit_silence
+#check Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_with_kernel_detection_of_unit_silence
+#check Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_with_vandiverSevenA_of_unit_silence
+
+/-! The realized W3 carrier simultaneously retains its eigenseat, exact
+profile, ring-unit and quotient-unit silence, and unique class readout. -/
+
+#check Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.strictTameOrbitFunctional827_unitInclusion_eq_zero_of_normalizedProfile
+#check Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827
+
+/-! W7's underlying pointwise algebra. -/
 
 #check Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_eq_zero_iff_classGauge_eq_zero
 #check Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.fermatFactorClassGaugeMap59_fermatFactorSelmerDifference59
 #check Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_selectedClassGauge59_eq_zero
 #check Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA
+
+/-! The selected class's character seat is reduced to one exact global-unit
+range receipt, without pretending that receipt or Artin faithfulness is
+already available. -/
+
+#check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.cyclotomicClassProjector59_selectedClassGauge59_eq_projectedSelmerClass
+#check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_projectedClass_eq_class
+#check Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange
+
+/-! The produced-readout W7 boundary.  Full injectivity is unnecessary:
+only zero reflection at the one Fermat-selected class remains visible. -/
+
+#check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_selectedClassGauge59_eq_zero_of_pointwiseFaithful
+#check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_pointwiseFaithful
+#check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.existsUnique_classReadout_with_pointwiseW7_of_unit_silence
+#check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.existsUnique_classReadout_with_pointwiseW7_of_ringUnit_silence
+#check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_unit_silence
+#check Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_ringUnit_silence
 
 /-! ## Main endpoint axiom audit -/
 
@@ -205,6 +267,54 @@ info: 'Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTam
 -/
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTameOrbitReading827_unitInclusion_eq_orientedRaw_mul_relaxedValuation
+
+/--
+info: 'Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_ringUnit_silence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_ringUnit_silence
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.strictTameOrbitFunctional827_unitInclusion_ringUnitClass59_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.strictTameOrbitFunctional827_unitInclusion_ringUnitClass59_eq_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.exists_relaxedCarrier827_realizing_normalizedFullOrbitEigenprofile' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.exists_relaxedCarrier827_realizing_normalizedFullOrbitEigenprofile
+
+/--
+info: 'Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827
+
+/--
+info: 'Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange
+
+/--
+info: 'Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_ringUnit_silence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_ringUnit_silence
 
 /--
 info: 'Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA' depends on axioms: [propext,
@@ -310,6 +420,66 @@ calculation, the global-root normalization, and the actual Selmer carrier. -/
   Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827.rawTameOrbitReading827_unitInclusion_eq_orientedRaw_mul_relaxedValuation,
   Fermat.FiftyNine.Conservation.ArbitraryUnitLocalReduction827.canonicalContext827_value_globalUnit_at_tameOrbitPlace827
 
+/-! Ring-unit silence reaches the quotient through the actual surjective
+representative map and then invokes the exact class-factorization theorem. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_ringUnit_silence,
+  Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.ringUnitClass59_surjective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_ringUnit_silence,
+  Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_unit_silence
+
+/-! The genuine arbitrary-unit endpoint consumes both the concrete raw sum
+and the strict functional's definition; its readout is then constructed by
+the representative-level quotient adapter. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.strictTameOrbitFunctional827_unitInclusion_ringUnitClass59_eq_zero,
+  Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.sum_rawTameOrbitReading827_unitInclusion_eq_zero_of_pureMode
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.strictTameOrbitFunctional827_unitInclusion_ringUnitClass59_eq_zero,
+  Fermat.FiftyNine.Conservation.StrictTameOrbitClassFactorization827.strictTameOrbitFunctional827_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.existsUnique_classReadout_of_relaxedOrbitValuation_isPureCharacter,
+  Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_ringUnit_silence
+
+/-! Global W3 realization consumes the retained normalized fiber and its
+exact readback theorem. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.exists_relaxedCarrier827_realizing_normalizedFullOrbitEigenprofile,
+  Fermat.FiftyNine.Conservation.CanonicalConjugatePairIncidence827.canonicalConjugatePairNormalizedReflectedFiber827_nonempty
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.exists_relaxedCarrier827_realizing_normalizedFullOrbitEigenprofile,
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.normalizedReflectedFiber827_relaxedOrbitValuation_eq_profile
+
+/-! The combined W3/unit-silence receipt really composes realization,
+arbitrary-unit cancellation, and quotient readout construction. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827,
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitGlobalRealization827.exists_relaxedCarrier827_realizing_normalizedFullOrbitEigenprofile
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827,
+  Fermat.FiftyNine.Conservation.ArbitraryUnitTameOrbitSilence827.strictTameOrbitFunctional827_unitInclusion_ringUnitClass59_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.NormalizedFullOrbitUnitSilence827.exists_normalizedFullOrbitProfile_unitSilence_classReadout827,
+  Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_ringUnit_silence
+
+/-! Character seating uses strong projector naturality and reduces fixedness
+to the actual unit-range exactness receipt. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.cyclotomicClassProjector59_selectedClassGauge59_eq_projectedSelmerClass,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerClassNaturality59.strictSelmerClassLinearMap59_characterProjector
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange,
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_projectedClass_eq_class
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeCharacterBoundary59.selectedClassGauge59_projector_fixed_iff_difference_mem_unitRange,
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeSeating59.fermatFactorClassGaugeMap59_eq_zero_iff_mem_unitRange
+
 /-! W7 consumes the concrete class seating, the generic pointwise kernel
 comparison, and the established selected-class characterization of 7A. -/
 
@@ -325,3 +495,14 @@ comparison, and the established selected-class characterization of 7A. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.SevenAArtinPartialClosure59.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA,
   Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+
+/-! The readout-free W7 endpoint constructs the unique factorization from
+ring-unit silence and leaves only pointwise faithfulness to its sharp
+consumer theorem. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_ringUnit_silence,
+  Fermat.FiftyNine.Conservation.UnitSilenceClassReadout827.existsUnique_classReadout_of_ringUnit_silence
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_ringUnit_silence,
+  Fermat.FiftyNine.Conservation.PointwiseFaithfulSevenAReadout827.strictTameOrbitFunctional827_fermatFactor_eq_zero_iff_vandiverSevenA_of_pointwiseFaithful
