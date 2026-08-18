@@ -285,9 +285,11 @@ private theorem cyclotomicRingOfIntegersEquiv59_symm
     ← KummerCriterion.cyclotomicRingOfIntegersEquiv_mul_apply,
     mul_inv_cancel, KummerCriterion.cyclotomicRingOfIntegersEquiv_one_apply]
 
-/-- Integer-valued valuations of nonzero field elements obey the required
-contragredient cyclotomic transport law. -/
-private theorem valuationOfNeZero_cyclotomic59
+/-- Integer-valued height-one valuations of field units are natural under
+the canonical cyclotomic action, with contragredient place transport.  This
+public form lets finite-S unit ranges inherit the action without rebuilding
+ideal-factorization transport. -/
+theorem valuationOfNeZero_cyclotomic59
     (sigma : GaloisIndex59)
     (v : IsDedekindDomain.HeightOneSpectrum (𝓞 K))
     (x : Kˣ) :
