@@ -7,15 +7,16 @@ Authors: Fabian Franz, OpenAI
 
 This non-imported audit leaf checks the public construction receipts exposed
 by the continuous Kummer map, its primitive-root orientation, the raw
-Alexander--Whitney cup, the passage to genuine categorical cycles, and the
-typed coefficient algebra.
+Alexander--Whitney cup, its two-sided descent to genuine continuous
+cohomology, and the typed coefficient algebra.
 
-The endpoint deliberately remains an `H^2`-valued adapter taking a descended
-cup product as an input.  This file does not assert a local invariant,
-Hilbert-symbol comparison, Tate-duality theorem, or global reflected lift.
+The endpoint deliberately remains `H^2`-valued.  The generic cup is now
+constructed internally rather than supplied by a caller.  This file still
+does not assert the normalized local `H^2` readout, a Hilbert-symbol
+comparison, Tate-duality theorem, or global reflected lift.
 -/
 import Fermat.Conservation.ContinuousKummerTateAlgebra
-import Fermat.Conservation.ContinuousKummerTateCupCycles
+import Fermat.Conservation.ContinuousKummerTateCup
 
 /-! ## Genuine continuous Kummer `H^1` -/
 
@@ -75,6 +76,27 @@ import Fermat.Conservation.ContinuousKummerTateCupCycles
 #check Fermat.Conservation.ContinuousKummerTateCup.twoKernelToCycles
 #check Fermat.Conservation.ContinuousKummerTateCup.cupCycle
 
+/-! ## Nominal two-sided descent and genuine continuous cohomology -/
+
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.Cochain
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.Cycle
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.cycleConcreteLinearEquiv
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.Homology
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.homologyLinearEquiv
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.h1Projection
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.h1Projection_surjective
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.h1Projection_eq_zero_iff
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.h2Projection_eq_zero_iff
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCycleCupToH2
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCycleCupToH2_kills_left
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCycleCupToH2_kills_right
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCupH1
+#check Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCupH1_projection
+#check Fermat.Conservation.ContinuousKummerTateCup.transportBilinear
+#check Fermat.Conservation.ContinuousKummerTateCup.cupH1
+#check Fermat.Conservation.ContinuousKummerTateCup.cupH1_homologyLinearEquiv
+#check Fermat.Conservation.ContinuousKummerTateCup.cupH1_projection
+
 /-! ## Typed coefficient algebra and retained `H^2` output -/
 
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.scalarTimesRootPairing
@@ -82,6 +104,9 @@ import Fermat.Conservation.ContinuousKummerTateCupCycles
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.ContinuousKummerCohomologyTwo
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup
 #check Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup_apply
+#check Fermat.Conservation.ContinuousKummerTateAlgebra.kummerCupH1
+#check Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairing
+#check Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairing_apply
 
 /-! ## Axiom budgets
 
@@ -170,6 +195,52 @@ info: 'Fermat.Conservation.ContinuousKummerTateCup.cupCycle' depends on axioms: 
 #print axioms Fermat.Conservation.ContinuousKummerTateCup.cupCycle
 
 /--
+info: 'Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCycleCupToH2_kills_left' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCycleCupToH2_kills_left
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCycleCupToH2_kills_right' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCycleCupToH2_kills_right
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCupH1_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateCup.Nominal.nominalCupH1_projection
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerTateCup.cupH1' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateCup.cupH1
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerTateCup.cupH1_homologyLinearEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateCup.cupH1_homologyLinearEquiv
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerTateCup.cupH1_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateCup.cupH1_projection
+
+/--
 info: 'Fermat.Conservation.ContinuousKummerTateAlgebra.scalarTimesRootPairing_apply' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
@@ -184,3 +255,25 @@ info: 'Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup_appl
 -/
 #guard_msgs in
 #print axioms Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairingFromCup_apply
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerTateAlgebra.kummerCupH1' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateAlgebra.kummerCupH1
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairing
+
+/--
+info: 'Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairing_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.Conservation.ContinuousKummerTateAlgebra.kummerPairing_apply
