@@ -598,6 +598,7 @@ open Fermat.Conservation
 #check TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping
 #check TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_at_tame_places
 #check TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_of_tame_and_residual
+#check TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.distinguished_eq_neg_auxiliary_of_reciprocity
 #check TamePlacePairing.WildLocalInterface
 #check TamePlacePairing.WildLocalInterface.toPlaceIndexedLocalPairing
 #check TamePlacePairing.WildLocalInterface.pairAt_distinguished
@@ -619,6 +620,7 @@ open Fermat.Conservation
 #check TamePlacePairing.Seated.Realization.outsideTwoTameBookkeeping
 #check TamePlacePairing.Seated.Realization.outside_two_readings_at_tame_places
 #check TamePlacePairing.Seated.Realization.outside_two_readings_of_residual
+#check TamePlacePairing.Seated.Realization.distinguished_eq_neg_auxiliary_of_reciprocity
 
 /-! ## Vendored Selmer class-sequence surface -/
 
@@ -1054,7 +1056,9 @@ open Fermat.Conservation
   TatePairing.PlaceIndexedLocalPairing.pairAt
 #guard_depends_on
   TatePairing.GlobalReciprocityLaw.pairAt_add_pairAt_eq_zero_of_outside_two,
-  TatePairing.GlobalReciprocityLaw.sum_eq_zero,
+  TatePairing.GlobalReciprocityLaw.sum_eq_zero
+#guard_depends_on
+  TatePairing.GlobalReciprocityLaw.pairAt_add_pairAt_eq_zero_of_outside_two,
   TatePairing.PlaceIndexedLocalPairing.pairAt
 #guard_depends_on
   TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_pairAt_of_outside_two,
@@ -1234,6 +1238,12 @@ open Fermat.Conservation
 #guard_depends_on
   TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_of_tame_and_residual,
   TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_at_tame_places
+#guard_depends_on
+  TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.distinguished_eq_neg_auxiliary_of_reciprocity,
+  TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_pairAt_of_outside_two
+#guard_depends_on
+  TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.distinguished_eq_neg_auxiliary_of_reciprocity,
+  TamePlacePairing.PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_of_tame_and_residual
 #guard_depends_on TamePlacePairing.WildLocalInterface.pairAt_distinguished,
   TamePlacePairing.WildLocalInterface.toPlaceIndexedLocalPairing
 #guard_depends_on TamePlacePairing.WildLocalInterface.pairAt_eq_zero_of_ne,
@@ -1271,6 +1281,12 @@ open Fermat.Conservation
 #guard_depends_on
   TamePlacePairing.Seated.Realization.outside_two_readings_of_residual,
   TamePlacePairing.Seated.Realization.outsideTwoTameBookkeeping
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.distinguished_eq_neg_auxiliary_of_reciprocity,
+  TatePairing.GlobalReciprocityLaw.pairAt_eq_neg_pairAt_of_outside_two
+#guard_depends_on
+  TamePlacePairing.Seated.Realization.distinguished_eq_neg_auxiliary_of_reciprocity,
+  TamePlacePairing.Seated.Realization.outside_two_readings_of_residual
 
 /-! ## Vendored finite-S Selmer proof-value wiring -/
 

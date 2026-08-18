@@ -158,6 +158,22 @@ theorem outside_two_readings_of_tame_and_residual
       v hv hdistinguished hauxiliary
   · exact residual v hv hdistinguished hauxiliary
 
+/-- Tame valuation bookkeeping plus the residual non-tame audit upgrades
+global reciprocity to the exact two-place balance.  The auxiliary column is
+retained rather than silently discarded. -/
+theorem distinguished_eq_neg_auxiliary_of_reciprocity
+    (bookkeeping : realization.OutsideTwoTameBookkeeping
+      distinguished auxiliary x y)
+    (reciprocity : GlobalReciprocityLaw pairing)
+    (hne : distinguished ≠ auxiliary)
+    (residual : ∀ v, ¬IsTame v → v ≠ distinguished → v ≠ auxiliary →
+      pairing.pairAt v x y = 0) :
+    pairing.pairAt distinguished x y =
+      -pairing.pairAt auxiliary x y :=
+  reciprocity.pairAt_eq_neg_pairAt_of_outside_two
+    distinguished auxiliary hne x y
+      (bookkeeping.outside_two_readings_of_tame_and_residual residual)
+
 end OutsideTwoTameBookkeeping
 
 end PlaceIndexedTameRealization
@@ -465,6 +481,26 @@ theorem outside_two_readings_of_residual
   PlaceIndexedTameRealization.OutsideTwoTameBookkeeping.outside_two_readings_of_tame_and_residual
       (outsideTwoTameBookkeeping realization distinguished auxiliary x y)
       residual v hdistinguished hauxiliary
+
+/-- For the seated Selmer eigenspaces, tame support bookkeeping is already
+constructed.  Global reciprocity therefore identifies the distinguished
+reading with the negative auxiliary reading once only the residual non-tame
+rows are discharged. -/
+theorem distinguished_eq_neg_auxiliary_of_reciprocity
+    (realization : Realization pairing Residue IsTame)
+    (reciprocity : GlobalReciprocityLaw pairing)
+    (distinguished auxiliary : Place (R := R))
+    (hne : distinguished ≠ auxiliary)
+    (x : Primal (rho := rho) (chi := chi))
+    (y : ReflectedDual (rho := rho) (omega := omega) (chi := chi))
+    (residual : ∀ v, ¬IsTame v → v ≠ distinguished → v ≠ auxiliary →
+      pairing.pairAt v x y = 0) :
+    pairing.pairAt distinguished x y =
+      -pairing.pairAt auxiliary x y :=
+  reciprocity.pairAt_eq_neg_pairAt_of_outside_two
+    distinguished auxiliary hne x y
+      (realization.outside_two_readings_of_residual
+        distinguished auxiliary x y residual)
 
 end Realization
 
