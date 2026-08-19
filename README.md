@@ -725,6 +725,17 @@ Selmer preimage in that line with such an action; no class-group section is
 chosen.  This is local faithfulness and does not assert the converse or
 global Artin faithfulness.
 
+`GlobalClassKummerFrobeniusReadout827` records the strongest presently
+proved global descent of this local construction.  There is a unique
+`ZMod 59`-linear readout on the actual 59-torsion ideal class group whose
+pullback along the strict-Selmer class gauge is the signed mode-44 Fourier
+coefficient of the 58 genuine local Frobenius exponents.  In particular,
+the coefficient is independent of the chosen strict-Selmer representative
+and vanishes on every representative of the zero ideal class.  This is a
+class-level descent theorem; it still does not identify the readout with a
+ray-class Artin character or prove the global Kummer--Artin comparison
+required to cancel the W1 Poitou--Tate boundary.
+
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
 classes to exactly the retained W1 `H¹` factors, recovers the W1 `H²` cup and
