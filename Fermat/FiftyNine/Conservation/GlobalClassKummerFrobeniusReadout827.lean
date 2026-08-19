@@ -29,9 +29,11 @@ namespace Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827
 open Fermat.Conservation.CommonActionStage
 open CanonicalFullOrbitLocalPairing827
 open CanonicalModeFortyFourClassFactorization827
+open CyclotomicSelmerClassNaturality59
 open DetectorWitness827
 open FermatFactorClassGaugeSeating59
 open KummerFrobeniusRead827
+open PrimalFourierNonvanishing827
 open SplitPrimeFourier827
 
 local instance : Fact (Nat.Prime 59) := ⟨by norm_num⟩
@@ -78,7 +80,8 @@ theorem classReadout_eq_canonical_iff_frobeniusFourier
   · rintro rfl x
     exact canonicalModeFortyFourClassReadout827_eq_frobeniusFourier K x
   · intro h
-    exact (existsUnique_classKummerFrobeniusReadout827 K).unique readout h
+    exact (existsUnique_classKummerFrobeniusReadout827 K).unique h
+      (canonicalModeFortyFourClassReadout827_eq_frobeniusFourier K)
 
 /-- The Frobenius Fourier reading depends only on the ideal class of a
 strict Selmer input.  This is the literal representative-independence law
