@@ -736,6 +736,16 @@ class-level descent theorem; it still does not identify the readout with a
 ray-class Artin character or prove the global Kummer--Artin comparison
 required to cancel the W1 Poitou--Tate boundary.
 
+`StrictOrbitResidueWavePlaceCovariance827` proves the missing transport law
+for the actual 58 place coordinates.  Cyclotomic action on a strict Kummer
+class becomes the corresponding translation of the orbit place, including
+the forced change of globally rooted residue coordinates.  Consequently the
+complete residue and Frobenius exponent waves of every genuine chi=15
+strict class are pure mode 44.  On that eigenspace, one nonzero local
+coordinate therefore forces the mode-44 Fourier coefficient to be nonzero.
+The theorem does not itself produce such a coordinate or invoke global
+Artin reciprocity.
+
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
 classes to exactly the retained W1 `H¹` factors, recovers the W1 `H²` cup and
@@ -815,6 +825,17 @@ The intended cheaper formulation should replace it by the reflected local
 quotient/character seat described in `7A-ARTIN-READ.md`; the module records
 the stronger ambient-surjectivity diagnostic without presenting it as that
 final PT theorem.
+
+`LambdaReflectedLocalSeatAudit827` also prevents an unsafe shortcut in that
+refinement.  Since `GaloisIndex59` is definitionally `(ZMod 59)ˣ`, Lean can
+infer its ordinary scalar action on local continuous `H¹`; this is not the
+outer cyclotomic action.  The module proves that using this accidental
+action makes the reflected power-44 eigenspace zero.  For an honest outer
+local representation it defines the intended reflected seat and proves
+that the smallest carrier containing every genuine reflected localization
+and W1's retained receipt lies in that seat exactly when localization
+covariance and receipt seating both hold.  Constructing the completion-level
+cyclotomic action and its induced cohomological naturality remains open.
 
 The nonzero ambient W1 cup has not yet
 been shown nonzero after restriction to the genuine seated primal Selmer
