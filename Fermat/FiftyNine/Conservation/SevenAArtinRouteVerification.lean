@@ -92,6 +92,15 @@ This non-imported executable audit leaf covers only the newly exposed route:
   normalized local Frobenius charge; W2 vanishing and lift existence are
   reduced to explicit Poitou--Tate representation and Kummer--Artin
   cancellation hypotheses rather than asserted;
+* the literal lambda-plus-selected-827 localization and its two-charge
+  boundary now satisfy the proved reciprocity direction `range <= kernel`;
+  full Poitou--Tate exactness is reduced to the visible reverse inclusion,
+  which together with map-level cancellation directly inhabits the W1+W3
+  fiber without selecting a lift;
+* comparison with the inhabited one-coordinate pointed incidence exposes an
+  overlarge-codomain diagnostic: detecting every current W2 test is
+  equivalent to surjectivity onto the complete ambient lambda `H¹`, not the
+  still-unimplemented reflected local quotient/character seat;
 * the genuine irregular-primal class gauge reaches exactly the chi=15 class
   projector image, making W4 orbit-boundary nonvanishing literally
   equivalent to W7 nonvanishing of the canonical readout on that image;
@@ -201,6 +210,7 @@ import Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827
 import Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827
 import Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827
 import Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827
+import Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827
 
 /-! ## Public route inventory -/
 
@@ -359,6 +369,34 @@ cancellation as explicit hypotheses. -/
 #check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_eq_zero_of_pt_and_kummerArtin
 #check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaObstruction827_eq_zero_of_pt_and_kummerArtin
 #check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+
+/-! The pointed-incidence bridge exposes the literal lambda-plus-selected-
+827 localization and two-charge boundary.  Reciprocity proves only
+`range <= kernel`; the reverse inclusion remains the exact PT lifting seam.
+The direct consumer needs that seam plus map-level Kummer--Artin
+cancellation.  Its separate injectivity equivalence records that the older
+ambient W2 codomain is stronger than the intended reflected local seat. -/
+
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.relaxedOrbitValuation827_eq_profile_mul_selected
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.seatedOrbitBoundaryFunctional827_eq_selected_mul_localFrobenius
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.fullOrbitValuationKernel827_eq_reflectedG827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestGlobalPullback827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.CanonicalPointedObstructionLine827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_injective_iff_lambda_surjective
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalFrobeniusFunctional827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedPoitouTateBoundary827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedPoitouTateBoundary827_apply
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_eq_ker_iff_kernel_lifts
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.exists_reflected_lift_of_pt_kernel_lifts_of_boundary_cancels
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedPoitouTateBoundary827_receipt_one
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedPoitouTateBoundary827_receipt_one_eq_zero_iff
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_comp_primal_eq
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.canonicalPointedObstructionLine827_finrank_eq_one
+#check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius
 
 /-! W4's completed algebraic implication.  The arithmetic same-line
 producer remains intentionally outside this theorem. -/
@@ -1389,6 +1427,58 @@ info: 'Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.froben
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_of_classGauge_eq
 
+/-! The pointed-incidence comparison, easy reciprocity inclusion, reverse-
+inclusion reduction, and direct fiber consumer add no nonstandard axiom.
+The theorem types keep the missing PT direction and cancellation visible. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.fullOrbitValuationKernel827_eq_reflectedG827' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.fullOrbitValuationKernel827_eq_reflectedG827
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_injective_iff_lambda_surjective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_injective_iff_lambda_surjective
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_eq_ker_iff_kernel_lifts' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_eq_ker_iff_kernel_lifts
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius
+
 /-! ## Proof-value dependency gates -/
 
 /-! The W1 receipt consumes both the established nonzero cup and its
@@ -2085,6 +2175,75 @@ therefore connected to the actual maps rather than merely restated types. -/
   Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_zero_of_classGauge_eq_zero,
   Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier
 
+/-! The pointed-incidence bridge consumes the actual orbit equivariance,
+local Frobenius map, global-reciprocity balance, and concrete localization
+maps.  The direct fiber theorem then consumes the reverse-inclusion seam as
+an argument; no theorem below manufactures that PT input. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.relaxedOrbitValuation827_eq_profile_mul_selected,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.relaxedOrbitValuation827_eq_character_mul_selected
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.seatedOrbitBoundaryFunctional827_eq_selected_mul_localFrobenius,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.relaxedOrbitValuation827_eq_profile_mul_selected
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.seatedOrbitBoundaryFunctional827_eq_selected_mul_localFrobenius,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.seatedOrbitBoundaryFunctional827_eq_selected_mul_localFrobenius,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.localKummerFrobeniusModeFortyFourLinearMap827_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.fullOrbitValuationKernel827_eq_reflectedG827,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.fullOrbitValuationLocalization827_eq_zero_iff_selected_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestGlobalPullback827_mem_pointedObstructionLine,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestGlobalPullback827_mem_reflectedRestriction_ker
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_injective_iff_lambda_surjective,
+  LinearMap.dualMap_injective_iff
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.seatedOrbitBoundaryFunctional827_eq_selected_mul_localFrobenius
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_eq_ker_iff_kernel_lifts,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedPoitouTateBoundary827_receipt_one_eq_zero_iff,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedPoitouTateBoundary827_receipt_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.exists_reflected_lift_of_pt_kernel_lifts_of_boundary_cancels
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedPoitouTateBoundary827_receipt_one_eq_zero_iff
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.relaxedOrbitValuation827_eq_profile_mul_selected
+
+/-! The overlarge-codomain diagnostic and its sufficient producer remain
+connected to the inhabited pointed obstruction line and the actual primal
+Frobenius map. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_comp_primal_eq,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestGlobalPullback827_primal_eq_connecting_frobenius
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.canonicalPointedObstructionLine827_finrank_eq_one,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.canonicalPointedConnectingToObstructionLine827_injective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_injective_iff_lambda_surjective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_comp_primal_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.canonicalPointedConnectingToObstructionLine827_injective
+
 /-! ## Route-separation guards
 
 The new local automorphisms, negative W1 routing result, conditional W2
@@ -2093,7 +2252,11 @@ Frobenius descent do not close by calling the existing Fermat-specific 7A
 endpoint.  The bridge equivalence also does not consume the later canonical-
 character-line closure theorem whose remaining nonvanishing hypothesis it is
 designed to expose.  Neither W4 nor class descent consumes the conditional PT
-closure, and local faithfulness is not manufactured from class descent. -/
+closure, and local faithfulness is not manufactured from class descent.
+For the pointed route, the proved `range <= kernel` half does not consume the
+reverse-inclusion reduction or a lift, the direct fiber consumer does not call
+the older abstract-test closure, and the overlarge-codomain diagnostic remains
+independent of both PT closure and Fermat-specific 7A. -/
 
 #guard_not_depends_on
   Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_fiftyNine,
@@ -2133,6 +2296,33 @@ closure, and local faithfulness is not manufactured from class descent. -/
   Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine
 #guard_not_depends_on
   Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_eq_ker_iff_kernel_lifts
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_eq_ker_iff_kernel_lifts
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin,
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_injective_iff_lambda_surjective,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius,
   Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
 
 /-! The canonical point-free descent consumes actual quotient-unit silence
