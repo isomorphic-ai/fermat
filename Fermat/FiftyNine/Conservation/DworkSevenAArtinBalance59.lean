@@ -32,6 +32,7 @@ set_option maxHeartbeats 2000000
 namespace Fermat.FiftyNine.Conservation.DworkSevenAArtinBalance59
 
 open Fermat.Conservation
+open Fermat.Conservation.CommonActionStage
 open Fermat.Conservation.SelmerEigenspace
 open Fermat.Conservation.TatePairing
 open Fermat.FiftyNine.Conservation.ArbitraryUnitRawTameCarrierBridge827
@@ -40,6 +41,7 @@ open Fermat.FiftyNine.Conservation.CanonicalIrregularMode827
 open Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827
 open Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827
 open Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
+open Fermat.FiftyNine.Conservation.CyclotomicSelmerClassNaturality59
 open Fermat.FiftyNine.Conservation.DetectorWitness827
 open Fermat.FiftyNine.Conservation.DworkSeatedLambdaMeter59
 open Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827
@@ -123,8 +125,7 @@ theorem dworkLambdaBoundary_eq_neg_inv_smul_classGaugeReadout
         ((lift.wildScale⁻¹ : (ZMod 59)ˣ) : ZMod 59) •
           ((lift.wildScale : ZMod 59) •
             dworkSeatedLambdaPrimalBoundaryFunctional827 (K := K)) := by
-              rw [← smul_smul, ← Units.val_mul, inv_mul,
-                Units.val_one, one_smul]
+              rw [smul_smul, Units.inv_mul, one_smul]
     _ = ((lift.wildScale⁻¹ : (ZMod 59)ˣ) : ZMod 59) •
         (-((canonicalModeFortyFourClassReadout827 K).comp
           (irregularPrimalClassGauge59 K))) := by
@@ -147,7 +148,18 @@ theorem dworkLambdaBoundary_ne_zero_iff_classGaugeReadout_ne_zero
       (canonicalModeFortyFourClassReadout827 K).comp
           (irregularPrimalClassGauge59 K) ≠ 0 := by
   rw [dworkLambdaBoundary_eq_neg_inv_smul_classGaugeReadout lift reciprocity]
-  simp
+  constructor
+  · intro scaled_nonzero class_zero
+    apply scaled_nonzero
+    rw [class_zero, smul_zero, neg_zero]
+  · intro class_nonzero scaled_zero
+    apply class_nonzero
+    have smul_zero :
+        ((lift.wildScale⁻¹ : (ZMod 59)ˣ) : ZMod 59) •
+            ((canonicalModeFortyFourClassReadout827 K).comp
+              (irregularPrimalClassGauge59 K)) = 0 :=
+      neg_eq_zero.mp scaled_zero
+    exact (smul_eq_zero.mp smul_zero).resolve_left (Units.ne_zero _)
 
 /-- The Dwork local boundary and canonical class-gauge readout detect
 exactly the same primal test subspace. -/
@@ -161,7 +173,13 @@ theorem dworkLambdaBoundary_ker_eq_classGaugeReadout_ker
         (irregularPrimalClassGauge59 K)).ker := by
   rw [dworkLambdaBoundary_eq_neg_inv_smul_classGaugeReadout lift reciprocity]
   ext x
-  simp
+  simp only [LinearMap.mem_ker, LinearMap.neg_apply, LinearMap.smul_apply,
+    neg_eq_zero]
+  constructor
+  · intro h
+    exact (smul_eq_zero.mp h).resolve_left (Units.ne_zero _)
+  · intro h
+    rw [h, smul_zero]
 
 /-- Pointwise form of the same exact kernel identification. -/
 theorem dworkLambdaBoundary_apply_eq_zero_iff_classGaugeReadout_apply_eq_zero
