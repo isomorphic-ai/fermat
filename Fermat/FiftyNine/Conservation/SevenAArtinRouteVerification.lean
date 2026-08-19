@@ -95,6 +95,15 @@ This non-imported executable audit leaf covers only the newly exposed route:
 * the genuine irregular-primal class gauge reaches exactly the chi=15 class
   projector image, making W4 orbit-boundary nonvanishing literally
   equivalent to W7 nonvanishing of the canonical readout on that image;
+* global reciprocity and canonical restricted-readout nonvanishing now feed
+  W4's unique-unit comparison directly, eliminating a separate orbit-
+  transversality input while leaving readout nonvanishing explicit;
+* a nonzero local Frobenius exponent gives an automorphism of exact order 59,
+  and nonzero canonical class readout produces such a witness at one of the
+  58 actual places; this is local faithfulness, not global class faithfulness;
+* the genuine Frobenius Fourier reading descends uniquely through the strict-
+  Selmer ideal-class gauge and is representative-independent at class level;
+  this class descent is not a ray-class Artin map or reciprocity theorem;
 * W7 is specialized to that named readout on the genuine chi=15 character
   line: seating of the selected class, rank one of the line, and nonvanishing
   of the restricted canonical readout suffice for the 7A equivalence, but
@@ -189,6 +198,9 @@ import Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827
 import Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59
 import Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827
 import Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827
+import Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827
+import Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827
+import Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827
 
 /-! ## Public route inventory -/
 
@@ -384,6 +396,13 @@ line are one machine-checked seam, not two unrelated assumptions. -/
 #check Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_range_eq_irregularClassCharacterLine59
 #check Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_eq_classReadout_comp_irregularGauge
 #check Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero
+
+/-! With reciprocity supplied, the same canonical restricted-readout
+nonvanishing now yields wild transversality and W4's unique unit directly.
+The nonvanishing premise remains visible. -/
+
+#check Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.seatedWildBoundaryFunctional59_ne_zero_iff_classReadout_restrict_ne_zero
+#check Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.existsUnique_unit_wild_eq_smul_orbit_of_classReadout_ne_zero
 
 /-! The concrete full-orbit class-factorization boundary. -/
 
@@ -595,6 +614,28 @@ root multiplier.  These remain local residue statements. -/
 #check Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827
 #check Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_root
 #check Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_pow_fiftyNine
+
+/-! Local faithfulness upgrades a nonzero stored exponent to exact order 59
+and turns canonical-readout nonvanishing into an existential witness at one
+actual residue place.  It does not prove the class readout injective. -/
+
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.residueKummerRoot827_isUnit
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.residueKummerFrobeniusAlgEquiv827_ne_one_of_multiplier_ne_one
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitFrobeniusMultiplier827_ne_one_of_exponent_ne_zero
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_ne_one_of_exponent_ne_zero
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_orderOf_eq_fiftyNine
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_strictOrbitKummerFrobenius_orderOf_eq_fiftyNine_of_readout_ne_zero
+#check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine
+
+/-! The Frobenius Fourier reading now descends uniquely to the genuine
+59-torsion ideal-class carrier and is independent of strict-Selmer
+representatives.  This is class-level Kummer--Frobenius descent, not a
+global ray-class Artin construction. -/
+
+#check Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827
+#check Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.classReadout_eq_canonical_iff_frobeniusFourier
+#check Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_of_classGauge_eq
+#check Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_zero_of_classGauge_eq_zero
 
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_selectedClassGauge59_eq_neg_fourierCoefficient
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_pointwiseFaithful_iff_fourierCoefficient_zero_implies_selectedClassGauge59_eq_zero
@@ -1283,6 +1324,71 @@ info: 'Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOr
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero
 
+/-! W4's direct canonical-readout bridge has only the standard dependencies;
+global reciprocity and restricted-readout nonvanishing remain arguments. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.seatedWildBoundaryFunctional59_ne_zero_iff_classReadout_restrict_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.seatedWildBoundaryFunctional59_ne_zero_iff_classReadout_restrict_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.existsUnique_unit_wild_eq_smul_orbit_of_classReadout_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.existsUnique_unit_wild_eq_smul_orbit_of_classReadout_ne_zero
+
+/-! Exact local order and its existential class-line witness install no
+nonstandard assumption and assert no global faithfulness. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_orderOf_eq_fiftyNine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_orderOf_eq_fiftyNine
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_strictOrbitKummerFrobenius_orderOf_eq_fiftyNine_of_readout_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_strictOrbitKummerFrobenius_orderOf_eq_fiftyNine_of_readout_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine
+
+/-! The class-level Frobenius descent also has only the standard dependencies;
+it does not install Artin reciprocity or PT as an axiom. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827
+
+/--
+info: 'Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_of_classGauge_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_of_classGauge_eq
+
 /-! ## Proof-value dependency gates -/
 
 /-! The W1 receipt consumes both the established nonzero cup and its
@@ -1902,13 +2008,92 @@ identity. -/
   Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero,
   Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_range_eq_irregularClassCharacterLine59
 
+/-! The direct W4 bridge consumes both global reciprocity's wild/orbit
+identity and the proved W4/W7 nonvanishing equivalence. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.seatedWildBoundaryFunctional59_ne_zero_iff_classReadout_restrict_ne_zero,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.seatedWildBoundaryFunctional59_ne_zero_iff_classReadout_restrict_ne_zero,
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.existsUnique_unit_wild_eq_smul_orbit_of_classReadout_ne_zero,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.existsUnique_unit_wild_eq_smul_orbit_of_reciprocity
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.existsUnique_unit_wild_eq_smul_orbit_of_classReadout_ne_zero,
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero
+
+/-! Local faithfulness consumes the literal Kummer root, primitive-root
+finite logarithm, exact order-dividing-59 automorphism, canonical Frobenius
+Fourier readout, and genuine class-gauge surjectivity. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.residueKummerRoot827_isUnit,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.residueKummerRoot827_pow_fiftyNine
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.residueKummerFrobeniusAlgEquiv827_ne_one_of_multiplier_ne_one,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.residueKummerRoot827_isUnit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.residueKummerFrobeniusAlgEquiv827_ne_one_of_multiplier_ne_one,
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_root
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitFrobeniusMultiplier827_ne_one_of_exponent_ne_zero,
+  Fermat.Conservation.TameSymbol.Context.primitiveRoot_pow_residueCharacter_val
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_ne_one_of_exponent_ne_zero,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.residueKummerFrobeniusAlgEquiv827_ne_one_of_multiplier_ne_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_ne_one_of_exponent_ne_zero,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitFrobeniusMultiplier827_ne_one_of_exponent_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_orderOf_eq_fiftyNine,
+  Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_pow_fiftyNine
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_orderOf_eq_fiftyNine,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_ne_one_of_exponent_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_strictOrbitKummerFrobenius_orderOf_eq_fiftyNine_of_readout_ne_zero,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_strictOrbitKummerFrobenius_orderOf_eq_fiftyNine_of_readout_ne_zero,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.strictOrbitKummerFrobeniusAlgEquiv827_orderOf_eq_fiftyNine
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine,
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeSeating59.fermatFactorClassGaugeMap59_surjective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_strictOrbitKummerFrobenius_orderOf_eq_fiftyNine_of_readout_ne_zero
+
+/-! The class-level descent consumes the canonical Frobenius Fourier
+identity and genuine class-gauge surjectivity; its representative laws are
+therefore connected to the actual maps rather than merely restated types. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827,
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeSeating59.fermatFactorClassGaugeMap59_surjective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.classReadout_eq_canonical_iff_frobeniusFourier,
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_of_classGauge_eq,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_zero_of_classGauge_eq_zero,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.canonicalModeFortyFourClassReadout827_eq_frobeniusFourier
+
 /-! ## Route-separation guards
 
 The new local automorphisms, negative W1 routing result, conditional W2
-closure, and W4/W7 seam identification do not close by calling the existing
-Fermat-specific 7A endpoint.  The bridge equivalence also does not consume
-the later canonical-character-line closure theorem whose remaining
-nonvanishing hypothesis it is designed to expose. -/
+closure, W4/W7 seam identification, local faithfulness, and class-level
+Frobenius descent do not close by calling the existing Fermat-specific 7A
+endpoint.  The bridge equivalence also does not consume the later canonical-
+character-line closure theorem whose remaining nonvanishing hypothesis it is
+designed to expose.  Neither W4 nor class descent consumes the conditional PT
+closure, and local faithfulness is not manufactured from class descent. -/
 
 #guard_not_depends_on
   Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_fiftyNine,
@@ -1927,6 +2112,27 @@ nonvanishing hypothesis it is designed to expose. -/
   Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_canonicalCharacterLine
 #guard_not_depends_on
   Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.existsUnique_unit_wild_eq_smul_orbit_of_classReadout_ne_zero,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827.existsUnique_unit_wild_eq_smul_orbit_of_classReadout_ne_zero,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine,
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.existsUnique_classKummerFrobeniusReadout827,
   Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
 
 /-! The canonical point-free descent consumes actual quotient-unit silence
