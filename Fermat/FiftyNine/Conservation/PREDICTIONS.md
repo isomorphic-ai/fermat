@@ -3,6 +3,33 @@
 Recorded before inspecting or editing any Lean implementation for the
 conservation proof.
 
+## 2026-08-19 — complementary-depth Dwork cup prediction
+
+- **Committed C1 guess: both inputs are now literal Dwork shapes.**  The
+  newly banked covariance and finite-projector readback theorems should expose
+  the seated power-15 and power-44 Kummer classes by concrete 58-factor unit
+  products whose factors come from `1 + dworkParameter^15` and
+  `1 + dworkParameter^44`.  Unlike the historical universal old-carrier
+  audit, neither selected input should retain an arbitrary quotient-class
+  residual.
+- **Committed tier guess: specialized tier C2(b) is mathematically
+  sufficient.**  Since `15 + 44 = 59`, the first complementary-depth term in
+  the classical Artin--Hasse local-symbol formula should be a nonzero scalar
+  modulo 59; higher terms should lie beyond the required truncation.  No
+  Iwasawa-total-coordinate or full Vostokov--Brueckner machinery should be
+  needed for these two selected principal-unit products.
+- **Committed session guess: the current library stops at one exact
+  arithmetic formula signature.**  I predict the structural reduction from
+  the projected cups to a finite Dwork-orbit product will compile, but that
+  the tree does not yet contain the theorem identifying the continuous cup /
+  normalized invariant of complementary principal units with the classical
+  Artin--Hasse coefficient.  Unless inspection finds that comparison already
+  banked, the honest endpoint will therefore be the smallest named
+  complementary-depth evaluation whose nonzero value implies
+  `∃ u : (ZMod 59)ˣ, dworkSeatedLambdaCupClass59 =
+  (u : ZMod 59) • twistedLambdaKummerCupH2Class59 K`, with no value
+  fabricated and no stronger tier opened.
+
 ## 2026-08-17 — Vostokov two-shape core prediction
 
 - **Committed C1 guess: the two shapes have unequal but narrowly bounded
