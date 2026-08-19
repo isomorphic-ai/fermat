@@ -16,6 +16,7 @@ genuine local Kummer algebras to carry a Frobenius action of exact order
 readout is globally faithful or construct a ray-class Artin map.
 -/
 import Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827
+import Fermat.FiftyNine.Conservation.CharacterLinePointwiseFaithfulness59
 
 open Polynomial
 open scoped NumberField nonZeroDivisors
@@ -33,6 +34,7 @@ open Fermat.Conservation.TameSymbol
 open CanonicalFullOrbitLocalPairing827
 open CanonicalModeFortyFourClassFactorization827
 open CanonicalTameLedger827
+open CharacterLinePointwiseFaithfulness59
 open CyclotomicTameContext59
 open DetectorWitness827
 open FermatFactorClassGaugeSeating59
@@ -165,6 +167,42 @@ theorem exists_strictOrbitKummerFrobenius_orderOf_eq_fiftyNine_of_readout_ne_zer
     strictOrbitKummerFrobeniusAlgEquiv827_orderOf_eq_fiftyNine
       K x tau htau⟩
 
+/-- Nonvanishing on the actual irregular class line has a concrete local
+Galois witness.  A class in that line is lifted through the genuine
+surjective strict-Selmer class gauge, and one of its 58 residue Kummer
+Frobenius automorphisms has exact order `59`.
+
+The witness is deliberately existential: no class-group section or selected
+Selmer representative is installed. -/
+theorem exists_classGaugePreimage_with_localFrobenius_order_fiftyNine
+    (hreadout :
+      (canonicalModeFortyFourClassReadout827 K).comp
+          (irregularClassCharacterLine59 K).subtype ≠ 0) :
+    ∃ (x : StrictCarrier59 K) (tau : GaloisIndex59),
+      fermatFactorClassGaugeMap59 (K := K) x ∈
+          irregularClassCharacterLine59 K ∧
+      orderOf (strictOrbitKummerFrobeniusAlgEquiv827 K x tau) = 59 := by
+  have hexists :
+      ∃ q : irregularClassCharacterLine59 K,
+        canonicalModeFortyFourClassReadout827 K q.1 ≠ 0 := by
+    by_contra h
+    push Not at h
+    apply hreadout
+    ext q
+    simpa using h q
+  obtain ⟨q, hq⟩ := hexists
+  obtain ⟨x, hx⟩ :=
+    fermatFactorClassGaugeMap59_surjective (K := K) q.1
+  have hlocal :
+      canonicalModeFortyFourClassReadout827 K
+          (fermatFactorClassGaugeMap59 (K := K) x) ≠ 0 := by
+    rw [hx]
+    exact hq
+  obtain ⟨tau, htau⟩ :=
+    exists_strictOrbitKummerFrobenius_orderOf_eq_fiftyNine_of_readout_ne_zero
+      K x hlocal
+  exact ⟨x, tau, hx.symm ▸ q.property, htau⟩
+
 /-! ## Axiom audit -/
 
 /--
@@ -184,5 +222,14 @@ info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_
 #guard_msgs in
 #print axioms
   exists_strictOrbitKummerFrobenius_orderOf_eq_fiftyNine_of_readout_ne_zero
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827.exists_classGaugePreimage_with_localFrobenius_order_fiftyNine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms
+  exists_classGaugePreimage_with_localFrobenius_order_fiftyNine
 
 end Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827
