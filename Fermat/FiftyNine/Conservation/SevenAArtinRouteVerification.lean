@@ -7,7 +7,9 @@ Authors: Fabian Franz, Codex
 
 This non-imported executable audit leaf covers only the newly exposed route:
 
-* W1 retains the complete nonzero normalized twisted-lambda cup receipt;
+* W1 retains the complete nonzero normalized twisted-lambda cup receipt in
+  its ambient coefficient orientation; this does not seat its right factor
+  in the chi=15/power-44 outer cyclotomic character line;
 * W3 constructs the normalized inverse-reflected profile on all 58 places,
   and the normalized reflected fiber realizes that profile on an actual
   global `827`-relaxed carrier;
@@ -124,6 +126,23 @@ This non-imported executable audit leaf covers only the newly exposed route:
 * every global cyclotomic automorphism now fixes the lambda place, preserves
   its valuation, and extends functorially to a genuine automorphism of the
   lambda-adic completion, compatible with global-to-local embedding;
+* those completion automorphisms descend to a genuine representation on the
+  lambda-local Kummer quotient, and lambda localization intertwines it with
+  the existing global Kummer action; applying `rightKummerMap` afterwards
+  gives an honest orbit on the Kummer image, not an action on all local `H¹`;
+* W1's ambient coefficient-oriented right factor is exactly the continuous
+  Kummer class of the local primitive root; its genuine representative orbit
+  has power-one character, is nonzero, and differs from power 44 already at
+  the index `2`; ordinary Kummer naturality would therefore rule out, rather
+  than prove, the old power-44 receipt-seating condition;
+* the pointed PT construction is now restricted from the whole ambient local
+  `H¹` to the smallest proved carrier containing all genuine reflected
+  global localizations and W1's ambient receipt; this required carrier makes
+  no character-seat assertion, and reverse PT inclusion remains explicit;
+* that pointed PT engine is also extracted for an arbitrary supplied wild
+  meter, so a future genuinely power-44-seated meter can use the same
+  two-charge cancellation and existential-lift mechanism without inheriting
+  W1's power-one representative;
 * W7 is specialized to that named readout on the genuine chi=15 character
   line: seating of the selected class, rank one of the line, and nonvanishing
   of the restricted canonical readout suffice for the 7A equivalence, but
@@ -148,7 +167,8 @@ W2 boundary is now exact and machine-readable:
 `Nonempty W1W3CompatibleFiber827`
 
 is equivalent to existence of a point in the already retained normalized W3
-fiber whose actual lambda localization is W1's prescribed reflected class.
+fiber whose actual lambda localization is W1's prescribed ambient
+coefficient-oriented class (historically named `reflected` in the receipt).
 After choosing any existing normalized W3 point, this is further equivalent
 to one explicit affine range-membership statement for an orbit-invisible
 correction, and to vanishing of a basepoint-independent literal cokernel
@@ -225,6 +245,10 @@ import Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827
 import Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827
 import Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827
 import Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59
+import Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827
+import Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827
+import Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59
+import Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59
 
 /-! ## Public route inventory -/
 
@@ -238,8 +262,10 @@ import Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59
 #check Fermat.FiftyNine.Conservation.twistedLambdaCupReceipt59
 
 /-! W1's retained factors are reached by exact global-to-local transport.
-The future lambda-plus-827 lift must match the same reflected factor, not
-merely reproduce its scalar reading. -/
+The future lambda-plus-827 lift must match the same ambient
+coefficient-oriented factor, not merely reproduce its scalar reading.  The
+legacy field name `reflected` records its right-hand cup orientation; it is
+not a proved chi=15/power-44 outer-action seating statement. -/
 
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.lambdaPrimalFactorOfGlobalKummer59
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.lambdaReflectedFactorOfGlobalKummer59
@@ -261,6 +287,58 @@ outer action on continuous local cohomology; it is not itself that H¹ action. -
 #check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_lambdaLocalization
 #check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_one
 #check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul
+
+/-! The completion action now descends through 59th powers to the genuine
+lambda-local Kummer quotient.  Global-to-local Kummer transport is
+equivariant, and composing with the actual right Kummer map exposes an orbit
+inside continuous `H¹` on the Kummer image only.  No action on all of local
+continuous `H¹` is claimed. -/
+
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.LambdaLocalKummerClass59
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClass59_nsmul_eq_zero
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassAddHom59
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassLinearMap59
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassLinearMap59_one_apply
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassLinearMap59_mul_apply
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassRepresentation59
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaKummerLocalization59
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.globalCyclotomicKummerClassAddHom59
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.globalCyclotomicKummerClassAddHom59_toMul
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalization59_cyclotomicRingHom
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaKummerLocalization59_cyclotomic
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaKummerLocalization59_cyclotomicKummerHom
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_one_apply
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_mul_apply
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_localization
+#check Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_localization_cyclotomicKummerHom
+
+/-! Tracing W1's retained right factor to its exact representative exposes a
+sharp route correction.  It is the nonzero continuous Kummer class of the
+local primitive root, so the genuine representative action has power-one
+character.  At index `2` this differs from power 44.  Consequently ordinary
+Kummer naturality for a future outer `H¹` action is incompatible with the old
+power-44 receipt-seating predicate; the existing receipt is only ambient and
+coefficient-oriented. -/
+
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.reflectedPrimitiveUnit59
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.twistedLambdaCupReceipt59_reflected_eq
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionUnitEquiv59
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionRingEquiv59_primitiveRoot
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionUnitEquiv59_reflectedPrimitiveUnit
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.reflectedPrimitiveKummerClass59
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_one
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_mul
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_reflectedPrimitive
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.continuousClassOfUnit_cyclotomic_reflectedPrimitive_zmod
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.twistedLambdaCupReceipt59_reflected_ne_zero
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.continuousMap_reflectedPrimitiveKummerClass59
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.reflectedPrimitiveKummerClass59_ne_zero
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.receipt_powerOne_smul_ne_powerFortyFour_smul
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_reflectedPrimitive_ne_powerFortyFour
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.continuousClassOfUnit_cyclotomic_reflectedPrimitive_ne_powerFortyFour
+#check Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.not_twistedLambdaReceiptReflectedSeating827_of_naturality
 
 /-! The explicit ambient class used to normalize W1 is not itself a strict
 Selmer witness: its lambda valuation is `-1`, hence not divisible by 59.
@@ -439,6 +517,61 @@ the inverse comparison unit is carried by the resulting existential lift. -/
 #check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_pt_and_unitComparison
 #check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.NormalizedOrbitScaledWildLift827.wildBoundary_eq_scaledReceipt
 #check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.NormalizedOrbitScaledWildLift827.orbitBoundary_eq_frobenius
+
+/-! The current pointed PT boundary no longer needs the complete ambient
+local `H¹` as its wild term.  It restricts to the minimal required carrier:
+the span of genuine reflected global localizations together with W1's
+ambient coefficient-oriented receipt.  This restriction preserves every
+state used by the construction without asserting that W1 itself is power-44
+seated.  Reciprocity proves `range <= kernel`; reverse inclusion remains the
+literal PT seam, and the scaled consumer remains existential. -/
+
+#check Fermat.FiftyNine.Conservation.LambdaReflectedLocalSeatAudit827.lambdaReflectedRequiredCarrier827
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaReflectedLocalization_mem_requiredCarrier827
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaReflectedRequiredLocalization827
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaReflectedRequiredLocalization827_apply_coe
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.twistedLambdaReceipt_mem_requiredCarrier827
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.w1ReflectedRequiredReceipt827
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.w1ReflectedRequiredReceipt827_coe
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedPoitouTateBoundary827
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedPoitouTateBoundary827_apply
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedPoitouTateBoundary827_eq_ambient
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_le_boundary_ker
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_eq_ker_iff_kernel_lifts
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.exists_reflected_lift_of_required_pt_kernel_lifts
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.RequiredCarrierNormalizedOrbitScaledWildLift827
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.RequiredCarrierNormalizedOrbitScaledWildLift827.toAmbient
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedPoitouTateBoundary827_scaledReceipt_one
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_boundary_cancels
+#check Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_pt_and_unitComparison
+
+/-! The same pointed PT mechanism is now meter-parametric.  A supplied local
+Kummer meter generates the minimal wild carrier needed for localization and
+itself; reciprocity proves the easy range inclusion, reverse PT exactness is
+still an explicit input, and a unit comparison produces only an existential
+scaled global lift.  The final two checks record exact compatibility with the
+historical ambient W1 receipt without transferring its character mismatch to
+the generic construction. -/
+
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterRequiredCarrier827
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaReflectedLocalization_mem_meterRequiredCarrier827
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.meter_mem_lambdaMeterRequiredCarrier827
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterRequiredLocalization827
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.meterRequiredElement827
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedPoitouTateBoundary827
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedPoitouTateBoundary827_eq_ambient
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_le_boundary_ker
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_eq_ker_iff_kernel_lifts
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.exists_reflected_lift_of_meter_pt_kernel_lifts
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPrimalBoundaryFunctional827
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.NormalizedOrbitScaledLambdaMeterLift827
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedPoitouTateBoundary827_scaledMeter_one
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_boundary_cancels
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterRequiredCarrier827_w1_eq
+#check Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPrimalBoundaryFunctional827_w1_eq
 
 /-! W4's completed algebraic implication.  The arithmetic same-line
 producer remains intentionally outside this theorem. -/
@@ -1574,6 +1707,147 @@ info: 'Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotom
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul
 
+/-! The required-carrier PT restriction and its scaled existential consumer
+retain only the standard quotient/classical axioms. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_le_boundary_ker' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_le_boundary_ker
+
+/--
+info: 'Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_eq_ker_iff_kernel_lifts' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_eq_ker_iff_kernel_lifts
+
+/--
+info: 'Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_pt_and_unitComparison' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_pt_and_unitComparison
+
+/-! The meter-parametric PT engine and its W1 compatibility specialization
+likewise retain only the standard quotient/classical axioms. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_le_boundary_ker' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_le_boundary_ker
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_eq_ker_iff_kernel_lifts' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_eq_ker_iff_kernel_lifts
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPrimalBoundaryFunctional827_w1_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPrimalBoundaryFunctional827_w1_eq
+
+/-! The local Kummer quotient representation, localization covariance, and
+right-Kummer orbit introduce no nonstandard axiom and do not claim an action
+on all continuous `H¹`. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassRepresentation59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassRepresentation59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaKummerLocalization59_cyclotomicKummerHom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaKummerLocalization59_cyclotomicKummerHom
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_mul_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_mul_apply
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_localization_cyclotomicKummerHom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_localization_cyclotomicKummerHom
+
+/-! W1's exact primitive-root transform and the resulting power-one versus
+power-44 obstruction are likewise kernel-trusted. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionRingEquiv59_primitiveRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionRingEquiv59_primitiveRoot
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_reflectedPrimitive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_reflectedPrimitive
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.continuousClassOfUnit_cyclotomic_reflectedPrimitive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.continuousClassOfUnit_cyclotomic_reflectedPrimitive
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_reflectedPrimitive_ne_powerFortyFour' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_reflectedPrimitive_ne_powerFortyFour
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.not_twistedLambdaReceiptReflectedSeating827_of_naturality' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.not_twistedLambdaReceiptReflectedSeating827_of_naturality
+
 /-! ## Proof-value dependency gates -/
 
 /-! The W1 receipt consumes both the established nonzero cup and its
@@ -2378,6 +2652,118 @@ valuation preservation, then lifted through completion functoriality. -/
   Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul,
   Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaWithValRingEquiv59_mul
 
+/-! Restriction to the required PT carrier is definitionally equal to the
+ambient boundary after subtype forgetting; that fact is exposed above by
+its public equality theorem rather than a proof-value edge, because
+`#guard_depends_on` intentionally ignores declaration types.  The easy
+reciprocity inclusion remains the source of `range <= kernel`, while the
+scaled endpoint consumes the explicit reverse inclusion and unit
+cancellation instead of manufacturing either. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_le_boundary_ker,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_eq_ker_iff_kernel_lifts,
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_le_boundary_ker
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedPoitouTateBoundary827_scaledReceipt_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_boundary_cancels
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.cancelingWildScale827_mul
+
+/-! The meter-parametric extraction keeps the same honest dependency shape:
+its restriction equality is definitional and publicly checked above,
+reciprocity supplies only the easy inclusion, and the scaled consumer
+explicitly consumes both the reverse inclusion and the single-unit
+cancellation calculation. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_le_boundary_ker,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.lambdaPointedLocalization827_range_le_poitouTateBoundary_ker
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_eq_ker_iff_kernel_lifts,
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_le_boundary_ker
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedPoitouTateBoundary827_scaledMeter_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_boundary_cancels
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.cancelingWildScale827_mul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPrimalBoundaryFunctional827_w1_eq,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1ReceiptPrimalBoundaryFunctional827
+
+/-! The local Kummer representation consumes the genuine completion action,
+and its localization theorem consumes the proved global-to-local ring-map
+covariance.  The continuous codomain appears only after `rightKummerMap` is
+applied to the Kummer orbit. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassRepresentation59,
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassLinearMap59_one_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassRepresentation59,
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassLinearMap59_mul_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassLinearMap59_mul_apply,
+  Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaKummerLocalization59_cyclotomic,
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalization59_cyclotomicRingHom
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaKummerLocalization59_cyclotomicKummerHom,
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaKummerLocalization59_cyclotomic
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_mul_apply,
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassLinearMap59_mul_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_localization_cyclotomicKummerHom,
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_localization
+
+/-! The W1 character audit consumes the actual completed-root transform.
+Its negative power-44 result genuinely uses nonvanishing of the retained cup
+factor, and the final route correction consumes the existing parametric
+seating predicate only to refute it under Kummer naturality. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionRingEquiv59_primitiveRoot,
+  Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_lambdaLocalization
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionRingEquiv59_primitiveRoot,
+  KummerCriterion.cyclotomicSigmaOfUnit_apply_zeta
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionUnitEquiv59_reflectedPrimitiveUnit,
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionRingEquiv59_primitiveRoot
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_reflectedPrimitive,
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionUnitEquiv59_reflectedPrimitiveUnit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.continuousClassOfUnit_cyclotomic_reflectedPrimitive,
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionUnitEquiv59_reflectedPrimitiveUnit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.continuousClassOfUnit_cyclotomic_reflectedPrimitive,
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.twistedLambdaCupReceipt59_reflected_eq
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.receipt_powerOne_smul_ne_powerFortyFour_smul,
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.twistedLambdaCupReceipt59_reflected_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.cyclotomicLambdaCompletionKummerHom59_reflectedPrimitive_ne_powerFortyFour,
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.receipt_powerOne_smul_ne_powerFortyFour_smul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.not_twistedLambdaReceiptReflectedSeating827_of_naturality,
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.receipt_powerOne_smul_ne_powerFortyFour_smul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.not_twistedLambdaReceiptReflectedSeating827_of_naturality,
+  Fermat.FiftyNine.Conservation.LambdaReflectedLocalSeatAudit827.twistedLambdaReceiptReflectedSeating827_iff
+
 /-! ## Route-separation guards
 
 The new local automorphisms, negative W1 routing result, conditional W2
@@ -2472,6 +2858,64 @@ independent of both PT closure and Fermat-specific 7A. -/
   Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin
 #guard_not_depends_on
   Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+
+/-! The required-carrier route neither proves reverse PT exactness nor calls
+the older abstract-test or final 7A closures.  The local Kummer representation
+does not reuse the accidental scalar-units action on `H¹`.  Finally, the W1
+power-one audit is prior to every PT closure and cannot obtain its mismatch
+from the conditional seating-refutation theorem that consumes it. -/
+
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_le_boundary_ker,
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_eq_ker_iff_kernel_lifts
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.lambdaRequiredPointedLocalization827_range_le_boundary_ker,
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_pt_and_unitComparison
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.RequiredCarrierW1PointedPoitouTate827.nonempty_requiredCarrierScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_le_boundary_ker,
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_eq_ker_iff_kernel_lifts
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPointedLocalization827_range_le_boundary_ker,
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.lambdaMeterPrimalBoundaryFunctional827_w1_eq
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaMeterPointedPoitouTate827.nonempty_scaledLambdaMeterLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaLocalKummerClassRepresentation59,
+  Fermat.FiftyNine.Conservation.LambdaReflectedLocalSeatAudit827.scalarUnitsRepresentationOnLambdaH1827
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_localization_cyclotomicKummerHom,
+  Fermat.FiftyNine.Conservation.LambdaReflectedLocalSeatAudit827.scalarUnitsRepresentationOnLambdaH1827
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_localization_cyclotomicKummerHom,
+  Fermat.FiftyNine.Conservation.LambdaReflectedLocalSeatAudit827.twistedLambdaReceiptReflectedSeating827_iff
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59.lambdaRightKummerOrbitMap59_localization_cyclotomicKummerHom,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.continuousClassOfUnit_cyclotomic_reflectedPrimitive_zmod,
+  Fermat.FiftyNine.Conservation.LambdaReflectedLocalSeatAudit827.scalarUnitsRepresentationOnLambdaH1827
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.receipt_powerOne_smul_ne_powerFortyFour_smul,
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.not_twistedLambdaReceiptReflectedSeating827_of_naturality
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.not_twistedLambdaReceiptReflectedSeating827_of_naturality,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaReceiptCyclotomicRepresentative59.not_twistedLambdaReceiptReflectedSeating827_of_naturality,
   Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
 
 /-! The canonical point-free descent consumes actual quotient-unit silence
