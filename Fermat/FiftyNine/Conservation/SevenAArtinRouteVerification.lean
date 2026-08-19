@@ -113,6 +113,17 @@ This non-imported executable audit leaf covers only the newly exposed route:
 * the genuine Frobenius Fourier reading descends uniquely through the strict-
   Selmer ideal-class gauge and is representative-independent at class level;
   this class descent is not a ray-class Artin map or reciprocity theorem;
+* mode-44 purity upgrades local faithfulness to an exact equivalence on the
+  genuine chi=15 line: nonzero canonical class readout, a nonzero orbit
+  exponent, and a local Kummer--Frobenius automorphism of order 59 coincide;
+  existence of such a nonzero class remains an explicit arithmetic seam;
+* the pointed PT consumer retains the one honest normalization freedom:
+  after fixing the selected 827 coordinate to one, any unit comparison of
+  the wild and Frobenius functionals is cancelled by the wild scale
+  `-u⁻¹`; exact coefficient `-1` is no longer demanded;
+* every global cyclotomic automorphism now fixes the lambda place, preserves
+  its valuation, and extends functorially to a genuine automorphism of the
+  lambda-adic completion, compatible with global-to-local embedding;
 * W7 is specialized to that named readout on the genuine chi=15 character
   line: seating of the selected class, rank one of the line, and nonvanishing
   of the restricted canonical readout suffice for the 7A equivalence, but
@@ -211,6 +222,9 @@ import Fermat.FiftyNine.Conservation.CanonicalW4ClassReadoutBridge827
 import Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFaithfulness827
 import Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827
 import Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827
+import Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827
+import Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827
+import Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59
 
 /-! ## Public route inventory -/
 
@@ -234,6 +248,19 @@ merely reproduce its scalar reading. -/
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveCup59_eq_receipt
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveReading59_eq_one
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.normalizedLambdaGlobalPairing59_eq_localized_factor_cup
+
+/-! The global cyclotomic action now extends through the genuine lambda-adic
+completion.  This is the field-level precursor required before inducing the
+outer action on continuous local cohomology; it is not itself that H¹ action. -/
+
+#check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicPlaceEquiv59_lambdaPlace59
+#check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.lambdaValuation_cyclotomic59
+#check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaWithValRingEquiv59
+#check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaWithValRingEquiv59_uniformContinuous
+#check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59
+#check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_lambdaLocalization
+#check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_one
+#check Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul
 
 /-! The explicit ambient class used to normalize W1 is not itself a strict
 Selmer witness: its lambda valuation is `-1`, hence not divisible by 59.
@@ -397,6 +424,21 @@ ambient W2 codomain is stronger than the intended reflected local seat. -/
 #check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1BoundaryTestsToPointedObstructionLine827_comp_primal_eq
 #check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.canonicalPointedObstructionLine827_finrank_eq_one
 #check Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius
+
+/-! The normalized selected 827 coordinate leaves one retained unit scale at
+lambda.  Unit proportionality is therefore sufficient for the PT consumer;
+the inverse comparison unit is carried by the resulting existential lift. -/
+
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.NormalizedOrbitScaledWildLift827
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.NormalizedOrbitScaledWildLift827.fullOrbit
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.NormalizedOrbitScaledWildLift827.toNormalizedReflectedFiber827
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.lambdaPointedPoitouTateBoundary827_scaledReceipt_one
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.cancelingWildScale827
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.cancelingWildScale827_mul
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_boundary_cancels
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_pt_and_unitComparison
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.NormalizedOrbitScaledWildLift827.wildBoundary_eq_scaledReceipt
+#check Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.NormalizedOrbitScaledWildLift827.orbitBoundary_eq_frobenius
 
 /-! W4's completed algebraic implication.  The arithmetic same-line
 producer remains intentionally outside this theorem. -/
@@ -674,6 +716,18 @@ global ray-class Artin construction. -/
 #check Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.classReadout_eq_canonical_iff_frobeniusFourier
 #check Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_of_classGauge_eq
 #check Fermat.FiftyNine.Conservation.GlobalClassKummerFrobeniusReadout827.frobeniusFourier_eq_zero_of_classGauge_eq_zero
+
+/-! Purity of the genuine chi=15 orbit wave removes Fourier cancellation.
+Consequently the canonical readout is nonzero exactly when one actual local
+Kummer--Frobenius automorphism has full order 59.  The final existential
+statement is on the actual irregular class-projector image and selects no
+section of the class gauge. -/
+
+#check Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.strictOrbitKummerFrobeniusAlgEquiv827_eq_one_of_exponent_eq_zero
+#check Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.strictOrbitFrobeniusExponent_ne_zero_iff_orderOf_eq_fiftyNine
+#check Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.canonicalClassReadout_ne_zero_iff_exists_frobeniusExponent_ne_zero
+#check Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.canonicalClassReadout_ne_zero_iff_exists_localFrobenius_order_fiftyNine
+#check Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.irregularClassLineReadout_ne_zero_iff_exists_localFrobenius_order_fiftyNine
 
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_selectedClassGauge59_eq_neg_fourierCoefficient
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_pointwiseFaithful_iff_fourierCoefficient_zero_implies_selectedClassGauge59_eq_zero
@@ -1479,6 +1533,47 @@ info: 'Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregu
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius
 
+/-! Unit-scaled PT cancellation introduces no new axiom and retains the
+reverse PT inclusion as an explicit theorem argument. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_pt_and_unitComparison' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_pt_and_unitComparison
+
+/-! The faithful Artin read remains a finite local theorem with only the
+standard quotient/classical dependencies. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.irregularClassLineReadout_ne_zero_iff_exists_localFrobenius_order_fiftyNine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.irregularClassLineReadout_ne_zero_iff_exists_localFrobenius_order_fiftyNine
+
+/-! Extending the cyclotomic field automorphism to the lambda completion is
+also kernel-trusted; no continuity or local-action premise is postulated. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_lambdaLocalization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_lambdaLocalization
+
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul
+
 /-! ## Proof-value dependency gates -/
 
 /-! The W1 receipt consumes both the established nonzero cup and its
@@ -2244,6 +2339,45 @@ Frobenius map. -/
   Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius,
   Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.canonicalPointedConnectingToObstructionLine827_injective
 
+/-! The scaled consumer genuinely uses the inverse-unit cancellation and the
+actual pointed PT lifting consumer; it does not strengthen the PT input. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.lambdaPointedPoitouTateBoundary827_scaledReceipt_one
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.cancelingWildScale827_mul
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_boundary_cancels
+
+/-! The faithful irregular-line reading consumes actual mode purity, local
+Kummer--Frobenius order, and existential class-gauge descent. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.canonicalClassReadout_ne_zero_iff_exists_frobeniusExponent_ne_zero,
+  Fermat.FiftyNine.Conservation.StrictOrbitResidueWavePlaceCovariance827.frobeniusFourier_powerFortyFour_ne_zero_of_coordinate_ne_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.canonicalClassReadout_ne_zero_iff_exists_localFrobenius_order_fiftyNine,
+  Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.strictOrbitKummerFrobeniusAlgEquiv827_eq_one_of_exponent_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.irregularClassLineReadout_ne_zero_iff_exists_localFrobenius_order_fiftyNine,
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_range_eq_irregularClassCharacterLine59
+
+/-! The completed lambda action is forced by the fixed wild place and exact
+valuation preservation, then lifted through completion functoriality. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.lambdaValuation_cyclotomic59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59.valuationOfNeZero_cyclotomic59
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_lambdaLocalization,
+  Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaWithValRingEquiv59_uniformContinuous
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul,
+  Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaWithValRingEquiv59_mul
+
 /-! ## Route-separation guards
 
 The new local automorphisms, negative W1 routing result, conditional W2
@@ -2323,6 +2457,21 @@ independent of both PT closure and Fermat-specific 7A. -/
   Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin
 #guard_not_depends_on
   Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.irregularPrimalToW1BoundaryTests827_surjective_of_lambda_and_frobenius,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.ScaledW1PointedPoitouTate827.nonempty_normalizedOrbitScaledWildLift827_of_pt_and_unitComparison,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.irregularClassLineReadout_ne_zero_iff_exists_localFrobenius_order_fiftyNine,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.IrregularArtinReadEquivalence827.irregularClassLineReadout_ne_zero_iff_exists_localFrobenius_order_fiftyNine,
+  Fermat.FiftyNine.Conservation.CanonicalW1PointedIncidenceBridge827.w1w3CompatibleFiber827_nonempty_of_pt_kernel_lifts_of_kummerArtin
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59.cyclotomicLambdaCompletionRingEquiv59_mul,
   Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
 
 /-! The canonical point-free descent consumes actual quotient-unit silence
