@@ -1,5 +1,40 @@
 # N59 conservation findings
 
+## 2026-08-19 — Complementary Dwork cup reduces exactly to a finite tier-(b) seam
+
+- The selected Dwork inputs do have literal representatives: the power-15
+  and power-44 local Kummer projectors are the classes of explicit products
+  of 58 transported Dwork orbit factors.  Thus the earlier C1 obstruction
+  for abstract residual labels is absent on this branch, and the
+  complementary-depth identity `15 + 44 = 59` reaches the specialized
+  Artin--Hasse tier (b) without tier-(c) or full Vostokov machinery.
+- `DworkComplementaryCupReduction59` retains both degree-one factors and
+  proves that `dworkSeatedLambdaCupClass59` is their genuine continuous
+  local `H²` cup.  After the existing normalized readout, the value is
+  exactly a `58 × 58` sum of pairings of the explicit depth-15 and
+  depth-44 Dwork orbit classes; no representative or projector remains
+  opaque.
+- The smallest remaining scalar arithmetic theorem is nonvanishing of that
+  displayed finite complementary pairing.  The current library has no
+  Artin--Hasse/Hilbert-symbol theorem evaluating these orbit-factor cups, so
+  this is the exact tier-(b) formula frontier.  No pairing value is inferred
+  from the depth sum alone.
+- Scalar nonvanishing by itself does not prove the requested equality of
+  `H²` lines: `normalizedInflationReadout59` is a selected linear extension
+  and is not known to be injective on the whole continuous local `H²`.
+  The module therefore exports two honest adapters.  Either injectivity of
+  that readout or `Module.finrank ... = 1`, together with finite-pairing
+  nonvanishing, yields a unit multiple of
+  `twistedLambdaKummerCupH2Class59`.  An unconditional line comparison
+  requires one of those structural facts or a direct `H²`-level local
+  symbol formula.
+- `7A-ARTIN-READ.md` identifies the parallel global producer
+  `SevenAKummerArtinFactorization59`: retain the local cup factors, balance
+  the full 827 orbit by Poitou--Tate, and compare the resulting functional
+  with the class-valued 7A gauge.  That route is compatible with this
+  retained receipt but does not supply the missing complementary-depth
+  local cup evaluation.
+
 ## 2026-08-18 — The canonical conjugate pair closes the 827 lift
 
 - `ConjugatePairSource827` starts from one actual place `P` over 827 and the
