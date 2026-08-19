@@ -17,6 +17,7 @@ scale or lift and asserts no Poitou--Tate exactness or arithmetic
 nonvanishing theorem.
 -/
 import Fermat.Conservation.GuardDependsOn
+import Fermat.Conservation.OneDimensionalUnitProportionality
 import Fermat.FiftyNine.Conservation.LambdaMeterAffineCokernel827
 
 open scoped NumberField
@@ -133,8 +134,68 @@ theorem nonempty_normalizedOrbitScaledLambdaMeterLift827_iff_unitOrbit
   apply exists_congr
   intro scale
   exact
-    scaledLambdaMeterObstructionClass827_eq_zero_iff_smul_eq_normalized
-      meter (scale : ZMod 59) y₀
+      scaledLambdaMeterObstructionClass827_eq_zero_iff_smul_eq_normalized
+        meter (scale : ZMod 59) y₀
+
+/-! ## One-dimensional cokernel discharge -/
+
+omit [Invertible (Fintype.card GaloisIndex59 : PadicInt 59)] in
+/-- In a one-dimensional W1 lambda cokernel, nonzero meter and normalized
+`827` classes determine a unique unit normalization carrying the former to
+the latter. -/
+theorem existsUnique_unit_smul_lambdaMeterCokernelClass827_eq_normalized
+    (meter : LambdaRootsContinuousH1 K)
+    (y₀ : NormalizedReflectedFiber827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      canonicalTeichmullerCharacter59 irregularCharacter59
+      (tameOrbitBasePlace827 (K := K)))
+    (hfinrank : Module.finrank (ZMod 59)
+      (W1LambdaCokernel827 (K := K)
+        canonicalTeichmullerCharacter59 irregularCharacter59) = 1)
+    (hmeter : lambdaMeterCokernelClass827 (K := K) meter ≠ 0)
+    (hnormalized : normalizedW3LambdaCoset827 (K := K)
+      canonicalTeichmullerCharacter59 irregularCharacter59 y₀ ≠ 0) :
+    ∃! scale : (ZMod 59)ˣ,
+      (scale : ZMod 59) • lambdaMeterCokernelClass827 (K := K) meter =
+        normalizedW3LambdaCoset827 (K := K)
+          canonicalTeichmullerCharacter59 irregularCharacter59 y₀ := by
+  obtain ⟨scale, hscale, hscale_unique⟩ :=
+    existsUnique_unit_smul_of_mem_finrank_one
+      (⊤ : Submodule (ZMod 59)
+        (W1LambdaCokernel827 (K := K)
+          canonicalTeichmullerCharacter59 irregularCharacter59))
+      (normalizedW3LambdaCoset827 (K := K)
+        canonicalTeichmullerCharacter59 irregularCharacter59 y₀)
+      (lambdaMeterCokernelClass827 (K := K) meter)
+      (by simp) (by simp) (by simpa using hfinrank)
+      hnormalized hmeter
+  refine ⟨scale, hscale.symm, ?_⟩
+  intro other hother
+  exact hscale_unique other hother.symm
+
+/-- The note's one-dimensional-line criterion therefore discharges the
+entire affine globalization obstruction and produces a nonempty lift fiber.
+The point and the unique scale remain under existential packaging. -/
+theorem nonempty_normalizedOrbitScaledLambdaMeterLift827_of_finrank_one
+    (meter : LambdaRootsContinuousH1 K)
+    (y₀ : NormalizedReflectedFiber827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      canonicalTeichmullerCharacter59 irregularCharacter59
+      (tameOrbitBasePlace827 (K := K)))
+    (hfinrank : Module.finrank (ZMod 59)
+      (W1LambdaCokernel827 (K := K)
+        canonicalTeichmullerCharacter59 irregularCharacter59) = 1)
+    (hmeter : lambdaMeterCokernelClass827 (K := K) meter ≠ 0)
+    (hnormalized : normalizedW3LambdaCoset827 (K := K)
+      canonicalTeichmullerCharacter59 irregularCharacter59 y₀ ≠ 0) :
+    Nonempty (NormalizedOrbitScaledLambdaMeterLift827 (K := K) meter) := by
+  apply
+    (nonempty_normalizedOrbitScaledLambdaMeterLift827_iff_unitOrbit
+      meter y₀).2
+  obtain ⟨scale, hscale, _⟩ :=
+    existsUnique_unit_smul_lambdaMeterCokernelClass827_eq_normalized
+      meter y₀ hfinrank hmeter hnormalized
+  exact ⟨scale, hscale⟩
 
 /-! ## Kernel-trust and route-separation audit -/
 
@@ -147,6 +208,15 @@ info: 'Fermat.FiftyNine.Conservation.LambdaMeterAffineUnitOrbit827.nonempty_norm
 #print axioms
   nonempty_normalizedOrbitScaledLambdaMeterLift827_iff_unitOrbit
 
+/--
+info: 'Fermat.FiftyNine.Conservation.LambdaMeterAffineUnitOrbit827.nonempty_normalizedOrbitScaledLambdaMeterLift827_of_finrank_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms
+  nonempty_normalizedOrbitScaledLambdaMeterLift827_of_finrank_one
+
 #guard_depends_on
   scaledLambdaMeterObstructionClass827_eq_smul_sub_normalized,
   LambdaMeterAffineCokernel827.scaledLambdaMeterObstructionClass827_eq_meter_sub_normalized
@@ -158,6 +228,18 @@ info: 'Fermat.FiftyNine.Conservation.LambdaMeterAffineUnitOrbit827.nonempty_norm
 #guard_depends_on
   nonempty_normalizedOrbitScaledLambdaMeterLift827_iff_unitOrbit,
   LambdaMeterAffineCokernel827.nonempty_normalizedOrbitScaledLambdaMeterLift827_iff_exists_scale
+
+#guard_depends_on
+  existsUnique_unit_smul_lambdaMeterCokernelClass827_eq_normalized,
+  Fermat.Conservation.existsUnique_unit_smul_of_mem_finrank_one
+
+#guard_depends_on
+  nonempty_normalizedOrbitScaledLambdaMeterLift827_of_finrank_one,
+  existsUnique_unit_smul_lambdaMeterCokernelClass827_eq_normalized
+
+#guard_depends_on
+  nonempty_normalizedOrbitScaledLambdaMeterLift827_of_finrank_one,
+  nonempty_normalizedOrbitScaledLambdaMeterLift827_iff_unitOrbit
 
 /- The unit-orbit criterion consumes neither the former full reverse-PT
 inclusion nor its conditional lift constructor. -/
