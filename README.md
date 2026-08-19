@@ -715,6 +715,16 @@ multiplier with the stored exponent-wave coordinate.  The local read
 therefore comes from genuine cyclic algebra automorphisms, while no global
 class-field-theoretic Artin element is claimed.
 
+`LocalKummerFrobeniusFaithfulness827` proves the corresponding sharp local
+detection statement.  A nonzero stored exponent makes the local
+automorphism nonidentity, so its order is exactly 59.  Consequently a
+nonzero canonical class readout produces at least one exact-order
+Frobenius action among the 58 actual coordinates.  Nonvanishing on the
+chi=15 class line additionally produces an existential genuine strict
+Selmer preimage in that line with such an action; no class-group section is
+chosen.  This is local faithfulness and does not assert the converse or
+global Artin faithfulness.
+
 The wild-side comparison has also moved beyond abstract linear algebra.
 `WildOrbitBoundaryComparison827` transports the two explicit global Kummer
 classes to exactly the retained W1 `H¹` factors, recovers the W1 `H²` cup and
@@ -786,8 +796,12 @@ paired nontrivially with W1's retained reflected factor.
 to that strict chi=15 primal space has range exactly the genuine chi=15
 class-projector image.  Consequently seated-orbit transversality in W4 is
 equivalent to nonvanishing of the canonical class readout on that image—the
-W7 nonvanishing input.  Those are now one seam, not two.  The rank-one and
-selected-class seating inputs of W7 remain separate, and
+W7 nonvanishing input.  `CanonicalW4ClassReadoutBridge827` carries this
+equivalence through genuine global reciprocity: both wild transversality
+and the unique-unit wild/orbit comparison now consume that same canonical
+W7 nonvanishing premise directly, with no independent `horbit` hypothesis.
+Those are now one seam, not two.  The rank-one and selected-class seating
+inputs of W7 remain separate, and
 `GlobalReciprocityLaw` is still consumed rather than constructed.
 
 There is now, however, a separate completed state-to-history route at the
