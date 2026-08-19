@@ -80,6 +80,21 @@ This non-imported executable audit leaf covers only the newly exposed route:
   the whole seated irregular PT-test-space boundary is the restriction of
   that same local Frobenius map and agrees pointwise with both the canonical
   class readout and the literal Frobenius Fourier coefficient;
+* the residue Frobenius endomorphism has an explicit inverse and therefore
+  is a genuine algebra automorphism of order dividing 59; every one of the
+  58 actual strict-orbit coordinates carries this same automorphism and its
+  root action is the stored Frobenius exponent;
+* W1's explicit ambient twisted-lambda representative has lambda valuation
+  `-1`, so it cannot itself lie in any strict Selmer character seat; this is
+  a negative routing theorem, not a proof that the W1 functional vanishes;
+* genuine irregular primal tests map into the canonical W2 annihilator test
+  space, where the boundary is exactly the retained W1 charge plus the
+  normalized local Frobenius charge; W2 vanishing and lift existence are
+  reduced to explicit Poitou--Tate representation and Kummer--Artin
+  cancellation hypotheses rather than asserted;
+* the genuine irregular-primal class gauge reaches exactly the chi=15 class
+  projector image, making W4 orbit-boundary nonvanishing literally
+  equivalent to W7 nonvanishing of the canonical readout on that image;
 * W7 is specialized to that named readout on the genuine chi=15 character
   line: seating of the selected class, rank one of the line, and nonvanishing
   of the restricted canonical readout suffice for the 7A equivalence, but
@@ -169,6 +184,11 @@ import Fermat.FiftyNine.Conservation.CanonicalModeFortyFourClassFactorization827
 import Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827
 import Fermat.FiftyNine.Conservation.KummerFrobeniusRead827
 import Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827
+import Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827
+import Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827
+import Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59
+import Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827
+import Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827
 
 /-! ## Public route inventory -/
 
@@ -192,6 +212,15 @@ merely reproduce its scalar reading. -/
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveCup59_eq_receipt
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.localizedGlobalTwistedLambdaPrimitiveReading59_eq_one
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.normalizedLambdaGlobalPairing59_eq_localized_factor_cup
+
+/-! The explicit ambient class used to normalize W1 is not itself a strict
+Selmer witness: its lambda valuation is `-1`, hence not divisible by 59.
+This rules out one tempting shortcut without asserting wild vanishing or
+the absence of some other strict transversality witness. -/
+
+#check Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaRadicandUnit59_valuation
+#check Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaRadicandUnit59_valuation_toAdd
+#check Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaKummerClass_not_seated
 
 /-! W3: the full physical 827 orbit and frozen inverse-reflected
 orientation. -/
@@ -297,6 +326,28 @@ obstruction exactly.  Separation is a criterion, not a vanishing proof. -/
 #check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaObstruction827_eq_zero_iff_boundary_eq_zero
 #check Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1w3CompatibleFiber827_nonempty_iff_canonicalBoundary_eq_zero
 
+/-! The genuine irregular primal Selmer space now maps into the abstract W2
+annihilator test space.  On that image the canonical boundary is the retained
+W1 charge plus the normalized orbit charge, equivalently the local Frobenius
+charge.  The final consumers keep PT surjectivity and Kummer--Artin
+cancellation as explicit hypotheses. -/
+
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.irregularPrimalLambdaLocalization827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.irregularPrimalLambdaLocalization827_apply
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.irregularPrimalLambdaTestMap827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.irregularPrimalLambdaTestMap827_apply
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1ReceiptPrimalBoundaryFunctional827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1ReceiptPrimalBoundaryFunctional827_apply
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.irregularPrimalLambdaTestMap827_mem_dualAnnihilator
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.irregularPrimalToW1BoundaryTests827
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.irregularPrimalToW1BoundaryTests827_apply_coe
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_comp_primalTests_eq_receipt_add_orbit
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_comp_primalTests_eq_receipt_add_frobenius
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_eq_zero_of_primal_representation
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_eq_zero_of_pt_and_kummerArtin
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaObstruction827_eq_zero_of_pt_and_kummerArtin
+#check Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+
 /-! W4's completed algebraic implication.  The arithmetic same-line
 producer remains intentionally outside this theorem. -/
 
@@ -322,6 +373,17 @@ outside these theorems. -/
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.wildOrbitCommonLine827_finrank_eq_one
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.existsUnique_unit_wild_eq_smul_orbit_of_reciprocity
 #check Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.exists_normalized_wildOrbitBoundaryPair827
+
+/-! The actual irregular-primal class gauge reaches precisely the chi=15
+class-projector image.  Therefore normalized-orbit transversality on the
+genuine primal test space and canonical-readout nonvanishing on the W7 class
+line are one machine-checked seam, not two unrelated assumptions. -/
+
+#check Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59
+#check Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_apply
+#check Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_range_eq_irregularClassCharacterLine59
+#check Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_eq_classReadout_comp_irregularGauge
+#check Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero
 
 /-! The concrete full-orbit class-factorization boundary. -/
 
@@ -513,6 +575,26 @@ declarations is a global ray-class Artin map or a faithfulness theorem. -/
 #check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp
 #check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_canonicalClassReadout
 #check Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_frobeniusFourier
+
+/-! The local Frobenius endomorphism is now proved invertible and of order
+dividing 59.  The same genuine automorphism is installed coordinatewise on
+all 58 strict-orbit Kummer algebras, with the recorded exponent as its exact
+root multiplier.  These remain local residue statements. -/
+
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusMultiplier_pow_fiftyNine
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusInverseAlgHom827
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusInverseAlgHom827_root
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusAlgHom827_comp_inverse
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusInverseAlgHom827_comp
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_apply
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_root
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_apply_root
+#check Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_fiftyNine
+
+#check Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827
+#check Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_root
+#check Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_pow_fiftyNine
 
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_selectedClassGauge59_eq_neg_fourierCoefficient
 #check Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.classReadout_pointwiseFaithful_iff_fourierCoefficient_zero_implies_selectedClassGauge59_eq_zero
@@ -1079,6 +1161,128 @@ info: 'Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seated
 #guard_msgs in
 #print axioms Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_frobeniusFourier
 
+/-! The automorphism upgrades and their 58-place transport use only the
+standard quotient/classical infrastructure. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusAlgHom827_comp_inverse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusAlgHom827_comp_inverse
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusInverseAlgHom827_comp' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusInverseAlgHom827_comp
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_apply_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_apply_root
+
+/--
+info: 'Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_fiftyNine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_fiftyNine
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_root
+
+/--
+info: 'Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_pow_fiftyNine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_pow_fiftyNine
+
+/-! The negative W1 routing theorem installs no new assumption. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaRadicandUnit59_valuation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaRadicandUnit59_valuation
+
+/--
+info: 'Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaKummerClass_not_seated' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaKummerClass_not_seated
+
+/-! The W2 reduction keeps reciprocity, PT representation, and Kummer--Artin
+cancellation as theorem arguments; its consumers themselves add no axiom. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_eq_zero_of_pt_and_kummerArtin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_eq_zero_of_pt_and_kummerArtin
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaObstruction827_eq_zero_of_pt_and_kummerArtin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaObstruction827_eq_zero_of_pt_and_kummerArtin
+
+/--
+info: 'Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin
+
+/-! The W4/W7 bridge likewise introduces no nonstandard assumptions. -/
+
+/--
+info: 'Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_range_eq_irregularClassCharacterLine59' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_range_eq_irregularClassCharacterLine59
+
+/--
+info: 'Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_eq_classReadout_comp_irregularGauge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_eq_classReadout_comp_irregularGauge
+
+/--
+info: 'Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero
+
 /-! ## Proof-value dependency gates -/
 
 /-! The W1 receipt consumes both the established nonzero cup and its
@@ -1599,6 +1803,131 @@ Artin-reciprocity claim. -/
 #guard_depends_on
   Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_frobeniusFourier,
   Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.localKummerFrobeniusModeFortyFourLinearMap827_apply
+
+/-! The algebra-equivalence upgrade consumes both explicit inverse laws;
+its iteration theorem then feeds the 58 actual orbit automorphisms. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusAlgHom827_comp_inverse,
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusInverseAlgHom827_root
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusAlgHom827_comp_inverse,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.residueFrobeniusAlgHom827_root
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusInverseAlgHom827_comp,
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusInverseAlgHom827_root
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueFrobeniusInverseAlgHom827_comp,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.residueFrobeniusAlgHom827_root
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_apply_root,
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_root
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_fiftyNine,
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_apply_root
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_root,
+  Fermat.FiftyNine.Conservation.KummerFrobeniusRead827.frobenius_strictOrbitKummerRoot827
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_pow_fiftyNine,
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_fiftyNine
+
+/-! The W1 routing obstruction consumes the exact lambda valuation and the
+genuine strict-Selmer valuation-divisibility law. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaRadicandUnit59_valuation_toAdd,
+  Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaRadicandUnit59_valuation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaKummerClass_not_seated,
+  Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaRadicandUnit59_valuation_toAdd
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaKummerClass_not_seated,
+  Fermat.Conservation.SelmerEigenspace.representative_valuation_dvd
+
+/-! The W2 reduction is connected to the actual localization, reciprocity,
+normalized-orbit, local-Frobenius, obstruction, and fiber maps. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.irregularPrimalLambdaTestMap827_mem_dualAnnihilator,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.irregularPrimalLambdaTestMap827_mem_dualAnnihilator,
+  Fermat.FiftyNine.Conservation.FermatFactorArtinFourierBoundary827.rawTameOrbitReading827_eq_strictResidueWave_mul_relaxedValuation
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_comp_primalTests_eq_receipt_add_orbit,
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaBoundary827_apply
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_comp_primalTests_eq_receipt_add_orbit,
+  Fermat.FiftyNine.Conservation.WildOrbitBoundaryComparison827.seatedWildBoundaryFunctional59_eq_neg_orbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_comp_primalTests_eq_receipt_add_frobenius,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_comp_primalTests_eq_receipt_add_orbit
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_comp_primalTests_eq_receipt_add_frobenius,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_localKummerFrobeniusMode_comp
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_eq_zero_of_pt_and_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_comp_primalTests_eq_receipt_add_frobenius
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaObstruction827_eq_zero_of_pt_and_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_eq_zero_of_pt_and_kummerArtin
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaObstruction827_eq_zero_of_pt_and_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.canonicalW1LambdaObstruction827_eq_zero_iff_boundary_eq_zero
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.canonicalW1LambdaBoundary827_eq_zero_of_pt_and_kummerArtin
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin,
+  Fermat.FiftyNine.Conservation.CanonicalW1LambdaBoundary827.w1w3CompatibleFiber827_nonempty_iff_canonicalBoundary_eq_zero
+
+/-! The W4/W7 bridge consumes genuine class-gauge surjectivity and
+naturality, then the already established normalized orbit/readout map
+identity. -/
+
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_range_eq_irregularClassCharacterLine59,
+  Fermat.FiftyNine.Conservation.FermatFactorClassGaugeSeating59.fermatFactorClassGaugeMap59_surjective
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_range_eq_irregularClassCharacterLine59,
+  Fermat.FiftyNine.Conservation.CyclotomicSelmerClassNaturality59.strictSelmerClassLinearMap59_characterProjector
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_eq_classReadout_comp_irregularGauge,
+  Fermat.FiftyNine.Conservation.LocalKummerFrobeniusFactorization827.seatedOrbitBoundaryFunctional827_eq_canonicalClassReadout
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero,
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_eq_classReadout_comp_irregularGauge
+#guard_depends_on
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero,
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.irregularPrimalClassGauge59_range_eq_irregularClassCharacterLine59
+
+/-! ## Route-separation guards
+
+The new local automorphisms, negative W1 routing result, conditional W2
+closure, and W4/W7 seam identification do not close by calling the existing
+Fermat-specific 7A endpoint.  The bridge equivalence also does not consume
+the later canonical-character-line closure theorem whose remaining
+nonvanishing hypothesis it is designed to expose. -/
+
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.ResidueKummerFrobeniusAutomorphism827.residueKummerFrobeniusAlgEquiv827_pow_fiftyNine,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.StrictOrbitKummerFrobeniusAutomorphism827.strictOrbitKummerFrobeniusAlgEquiv827_root,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.TwistedLambdaStrictSelmerObstruction59.globalTwistedLambdaKummerClass_not_seated,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.CanonicalW1PoitouTateReduction827.w1w3CompatibleFiber827_nonempty_of_pt_and_kummerArtin,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero,
+  Fermat.FiftyNine.Conservation.CanonicalModeFortyFourCharacterLine827.fourierCoefficient_fermatFactor_eq_zero_iff_vandiverSevenA_of_canonicalCharacterLine
+#guard_not_depends_on
+  Fermat.FiftyNine.Conservation.IrregularPrimalClassGaugeBridge827.seatedOrbitBoundaryFunctional827_ne_zero_iff_classReadout_restrict_ne_zero,
+  Fermat.FiftyNine.Conservation.UlamReadout827.selectedClassGauge59_eq_zero_iff_vandiverSevenA
 
 /-! The canonical point-free descent consumes actual quotient-unit silence
 and the generic class-gauge factorization theorem.  Its injectivity endpoint
