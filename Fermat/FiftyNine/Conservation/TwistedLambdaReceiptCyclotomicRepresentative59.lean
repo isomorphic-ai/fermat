@@ -19,6 +19,7 @@ requires the functoriality of the absolute-Galois continuous cochain complex.
 -/
 import Fermat.FiftyNine.Conservation.TwistedLambdaCupReceipt59
 import Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59
+import Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59
 import Fermat.FiftyNine.Conservation.LambdaReflectedLocalSeatAudit827
 import Fermat.Conservation.LocalKummerTransport
 
@@ -35,6 +36,7 @@ open Fermat.Conservation.TameSymbol
 open Fermat.Conservation.WildKummerPairing
 open Fermat.FiftyNine.Conservation.CyclotomicSelmerAction59
 open Fermat.FiftyNine.Conservation.LambdaCyclotomicCompletionAction59
+open Fermat.FiftyNine.Conservation.LambdaLocalKummerClassAction59
 open Fermat.FiftyNine.Conservation.LambdaReflectedLocalSeatAudit827
 open Fermat.FiftyNine.Conservation.LocalCompletion59
 open Fermat.FiftyNine.Conservation.PrimalFourierNonvanishing827
@@ -133,9 +135,9 @@ theorem cyclotomicLambdaCompletionKummerHom59_mul
     cyclotomicLambdaCompletionKummerHom59 K (sigma * tau) =
       (cyclotomicLambdaCompletionKummerHom59 K sigma).comp
         (cyclotomicLambdaCompletionKummerHom59 K tau) := by
-  unfold cyclotomicLambdaCompletionKummerHom59
-  rw [cyclotomicLambdaCompletionRingEquiv59_mul]
-  exact Fermat.Conservation.LocalKummerTransport.map_comp _ _
+  apply AddMonoidHom.ext
+  intro x
+  exact lambdaLocalKummerClassLinearMap59_mul_apply K sigma tau x
 
 @[simp]
 theorem cyclotomicLambdaCompletionKummerHom59_classOfUnit
@@ -305,6 +307,8 @@ theorem not_twistedLambdaReceiptReflectedSeating827_of_naturality
   have hreflected :=
     (twistedLambdaReceiptReflectedSeating827_iff
       (K := K) rhoLocal).mp hseat auditTwoIndex59
+  rw [Fermat.FiftyNine.Conservation.CanonicalIrregularMode827.orientedPrimalMode827_canonical_irregular]
+    at hreflected
   have hpowerOne := hnatural auditTwoIndex59
   rw [continuousClassOfUnit_cyclotomic_reflectedPrimitive_zmod] at hpowerOne
   exact receipt_powerOne_smul_ne_powerFortyFour_smul K
