@@ -795,6 +795,27 @@ surjectivity of this primal-test representation (the Poitou--Tate theorem)
 and cancellation of those two displayed functionals (the remaining global
 Kummer--Artin comparison).  Neither hypothesis is manufactured or hidden.
 
+`CanonicalW1PointedIncidenceBridge827` now gives a more literal two-charge
+form of that reduction.  It combines genuine reflected lambda localization
+and the selected 827 coordinate into one map
+
+```text
+global reflected carrier -> H1_lambda x ZMod 59
+```
+
+and defines the corresponding boundary into the dual of the actual
+chi=15 primal test space.  Global reciprocity proves the inclusion
+`range(localization) <= ker(boundary)`.  The reverse inclusion is isolated
+as the exact missing Poitou--Tate lifting direction; together with the
+map-level equality saying
+that the W1 receipt is the negative local Frobenius functional, it produces
+the nonempty W1+W3 compatible fiber directly, without a selected lift.  The
+current lambda factor is still the ambient unprojected continuous `H1`.
+The intended cheaper formulation should replace it by the reflected local
+quotient/character seat described in `7A-ARTIN-READ.md`; the module records
+the stronger ambient-surjectivity diagnostic without presenting it as that
+final PT theorem.
+
 The nonzero ambient W1 cup has not yet
 been shown nonzero after restriction to the genuine seated primal Selmer
 space, and
