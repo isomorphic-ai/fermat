@@ -10,12 +10,16 @@ Kummer cup and proves that its selected normalized readout is one.  This
 module retains that result without discarding the two degree-one factors
 which created it.
 
-The factor order is deliberate.  The primal factor occupies the oriented
-left `H¹(F, F_59)` seat, while the reflected factor occupies the
-roots-valued right `H¹(F, mu_59)` seat.  This is the local coefficient
-orientation used by the global `chi | omega * chi⁻¹` pairing; the factors
-are not swapped or identified.  The receipt asserts no new global
-eigenspace, localization, Tate-duality, or reciprocity theorem.
+The factor order is deliberate.  The field-valued factor occupies the
+oriented left `H¹(F, F_59)` coefficient carrier, while the roots-valued
+factor occupies the right `H¹(F, mu_59)` coefficient carrier.  This is the
+coefficient variance required by the eventual global
+`chi | omega * chi⁻¹` pairing; the factors are not swapped or identified.
+It does **not** by itself put either concrete factor in one of those
+Delta-character eigenspaces.  In particular, the names `primal` and
+`reflected` below record the two roles in the oriented cup, not proved
+character-seating laws.  The receipt asserts no new global eigenspace,
+localization, Tate-duality, or reciprocity theorem.
 -/
 import Fermat.FiftyNine.Conservation.NormalizedContinuousKummerPairing59
 
@@ -43,10 +47,11 @@ reading.  Its two factors live in distinct coefficient carriers, its
 degree-two output is the actual continuous cup class, and the fixed
 normalized readout retains both the exact value and its nonvanishing. -/
 structure TwistedLambdaCupReceipt59 where
-  /-- The primal `chi` factor in the oriented left Kummer seat. -/
+  /-- The field-valued factor in the oriented left Kummer coefficient
+  carrier.  No `chi` eigenlaw is asserted here. -/
   primal : LambdaOrientedContinuousH1 K
-  /-- The reflected `omega * chi⁻¹` factor in the roots-valued right
-  Kummer seat. -/
+  /-- The roots-valued factor in the right Kummer coefficient carrier.
+  No `omega * chi⁻¹` eigenlaw is asserted here. -/
   reflected : LambdaRootsContinuousH1 K
   /-- The retained roots-of-unity-valued continuous `H²` class. -/
   cupClass : LambdaRootsContinuousH2 K
