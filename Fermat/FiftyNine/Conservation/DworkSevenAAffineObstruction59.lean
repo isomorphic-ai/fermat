@@ -173,6 +173,26 @@ theorem nonempty_dworkSeatedLambdaLift827_iff_unitOrbit
     nonempty_normalizedOrbitScaledLambdaMeterLift827_iff_unitOrbit
       (dworkSeatedLambdaMeterFortyFour59 (K := K)) y₀
 
+/-- A one-dimensional W1 lambda cokernel closes the Dwork globalization
+problem as soon as the concrete Dwork-meter and normalized-827 cosets are
+both nonzero. -/
+theorem nonempty_dworkSeatedLambdaLift827_of_cokernel_finrank_one
+    (y₀ : NormalizedReflectedFiber827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      canonicalTeichmullerCharacter59 irregularCharacter59
+      (tameOrbitBasePlace827 (K := K)))
+    (hfinrank : Module.finrank (ZMod 59)
+      (W1LambdaCokernel827 (K := K)
+        canonicalTeichmullerCharacter59 irregularCharacter59) = 1)
+    (hmeter : dworkLambdaMeterCokernelClass827 (K := K) ≠ 0)
+    (hnormalized : normalizedW3LambdaCoset827 (K := K)
+      canonicalTeichmullerCharacter59 irregularCharacter59 y₀ ≠ 0) :
+    Nonempty (DworkSeatedNormalizedOrbitScaledLambdaLift827 (K := K)) := by
+  exact
+    nonempty_normalizedOrbitScaledLambdaMeterLift827_of_finrank_one
+      (dworkSeatedLambdaMeterFortyFour59 (K := K)) y₀
+      hfinrank hmeter hnormalized
+
 /-! ## Relation-7A closure through the affine obstruction -/
 
 /-- The projected Fermat test closes conditionally from the exact affine
@@ -246,6 +266,48 @@ theorem dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_un
       (dworkSeatedLambdaMeterFortyFour59 (K := K))
       (scale : ZMod 59) y₀).2 hscale
 
+/-- Under the note's one-dimensional-line hypotheses, the affine lift is
+constructed internally and the projected Fermat test reaches relation 7A.
+All remaining arithmetic inputs stay explicit. -/
+theorem dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_cokernel_finrank_one
+    (y₀ : NormalizedReflectedFiber827
+      (cyclotomicQRelaxedSelmerRepresentation827 K)
+      canonicalTeichmullerCharacter59 irregularCharacter59
+      (tameOrbitBasePlace827 (K := K)))
+    (cokernel_rank_one : Module.finrank (ZMod 59)
+      (W1LambdaCokernel827 (K := K)
+        canonicalTeichmullerCharacter59 irregularCharacter59) = 1)
+    (meter_ne_zero : dworkLambdaMeterCokernelClass827 (K := K) ≠ 0)
+    (normalized_ne_zero : normalizedW3LambdaCoset827 (K := K)
+      canonicalTeichmullerCharacter59 irregularCharacter59 y₀ ≠ 0)
+    (reciprocity : GlobalReciprocityLaw
+      (canonicalFullOrbitLocalPairing827 K
+        canonicalTeichmullerCharacter59 irregularCharacter59))
+    (pair : StateLinkedIdealPair hZeta S hz)
+    (seated :
+      cyclotomicClassProjector59 K irregularCharacter59
+          (selectedClassGauge59 pair) = selectedClassGauge59 pair)
+    (class_rank_one : Module.finrank (ZMod 59)
+      (irregularClassCharacterLine59 K) = 1)
+    (readout_ne_zero :
+      (canonicalModeFortyFourClassReadout827 K).comp
+          (irregularClassCharacterLine59 K).subtype ≠ 0) :
+    dworkSeatedLambdaPrimalBoundaryFunctional827 (K := K)
+        (projectedFermatPrimalTest59 (K := K) pair) = 0 ↔
+      pair.ledger.VandiverSevenA 0 1 := by
+  apply
+    dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_unitOrbit
+      (K := K) y₀
+  · obtain ⟨scale, hscale, _⟩ :=
+      existsUnique_unit_smul_lambdaMeterCokernelClass827_eq_normalized
+        (dworkSeatedLambdaMeterFortyFour59 (K := K)) y₀
+        cokernel_rank_one meter_ne_zero normalized_ne_zero
+    exact ⟨scale, hscale⟩
+  · exact reciprocity
+  · exact seated
+  · exact class_rank_one
+  · exact readout_ne_zero
+
 /-! ## Kernel-trust and route-separation audit -/
 
 /--
@@ -282,6 +344,15 @@ info: 'Fermat.FiftyNine.Conservation.DworkSevenAAffineObstruction59.dworkLambdaB
 #print axioms
   dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_unitOrbit
 
+/--
+info: 'Fermat.FiftyNine.Conservation.DworkSevenAAffineObstruction59.dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_cokernel_finrank_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms
+  dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_cokernel_finrank_one
+
 #guard_depends_on
   exists_dworkSeatedLambdaLift827_with_scale_iff,
   LambdaMeterAffineCokernel827.exists_normalizedOrbitScaledLambdaMeterLift827_with_scale_iff
@@ -301,6 +372,18 @@ info: 'Fermat.FiftyNine.Conservation.DworkSevenAAffineObstruction59.dworkLambdaB
 #guard_depends_on
   dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_unitOrbit,
   LambdaMeterAffineUnitOrbit827.scaledLambdaMeterObstructionClass827_eq_zero_iff_smul_eq_normalized
+
+#guard_depends_on
+  nonempty_dworkSeatedLambdaLift827_of_cokernel_finrank_one,
+  LambdaMeterAffineUnitOrbit827.nonempty_normalizedOrbitScaledLambdaMeterLift827_of_finrank_one
+
+#guard_depends_on
+  dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_cokernel_finrank_one,
+  LambdaMeterAffineUnitOrbit827.existsUnique_unit_smul_lambdaMeterCokernelClass827_eq_normalized
+
+#guard_depends_on
+  dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_cokernel_finrank_one,
+  dworkLambdaBoundary_projectedFermatTest_eq_zero_iff_vandiverSevenA_of_unitOrbit
 
 /- The affine closure consumes neither the former full reverse-PT inclusion
 nor its conditional lift constructor. -/
