@@ -120,6 +120,27 @@ theorem dworkSeatedLambdaCupClass59_eq_finiteDworkRepresentatives :
   rw [classOfUnit_dworkProjectorUnitRepresentativeFortyFour59]
   rfl
 
+/-- Exact `58 × 58` expansion before scalarization.  Each summand remains a
+genuine continuous local `H²` cup of two explicit orbit-factor Kummer
+classes, so the complete cohomological receipt is retained. -/
+theorem dworkSeatedLambdaCupClass59_eq_doubleOrbitCupSum :
+    dworkSeatedLambdaCupClass59 (K := K) =
+      ∑ tau : GaloisIndex59, ∑ sigma : GaloisIndex59,
+        projectorExponent59 44 tau •
+          (projectorExponent59 15 sigma •
+            lambdaLocalH2Pairing K
+              (dworkPrincipalUnitOrbitKummerClass59
+                (K := K) sigma 15 (by norm_num))
+              (dworkPrincipalUnitOrbitKummerClass59
+                (K := K) tau 44 (by norm_num))) := by
+  rw [dworkSeatedLambdaCupClass59_eq_finiteDworkRepresentatives]
+  unfold dworkProjectorUnitRepresentativeFifteen59
+    dworkProjectorUnitRepresentativeFortyFour59
+  rw [classOfUnit_dworkProjectorUnitRepresentativeAtDepth59_eq_sum]
+  rw [classOfUnit_dworkProjectorUnitRepresentativeAtDepth59_eq_sum]
+  simp only [map_sum, map_nsmul, AddMonoidHom.finsetSum_apply,
+    AddMonoidHom.nsmul_apply, Finset.smul_sum]
+
 /-- Scalarizing the retained cup leaves exactly the finite complementary
 Dwork pairing. -/
 theorem normalizedInflationReadout59_dworkCup_eq_finiteDworkPairing :
@@ -146,13 +167,9 @@ theorem normalizedInflationReadout59_dworkCup_eq_doubleOrbitSum :
                 (K := K) sigma 15 (by norm_num))
               (dworkPrincipalUnitOrbitKummerClass59
                 (K := K) tau 44 (by norm_num))) := by
-  rw [normalizedInflationReadout59_dworkCup_eq_finiteDworkPairing]
-  unfold dworkProjectorUnitRepresentativeFifteen59
-    dworkProjectorUnitRepresentativeFortyFour59
-  rw [classOfUnit_dworkProjectorUnitRepresentativeAtDepth59_eq_sum]
-  rw [classOfUnit_dworkProjectorUnitRepresentativeAtDepth59_eq_sum]
-  simp only [map_sum, map_nsmul, AddMonoidHom.finsetSum_apply,
-    AddMonoidHom.nsmul_apply, Finset.smul_sum]
+  rw [dworkSeatedLambdaCupClass59_eq_doubleOrbitCupSum]
+  simp only [map_sum, map_nsmul]
+  rfl
 
 /-! ## Honest conditional line-comparison adapters -/
 
@@ -227,6 +244,14 @@ info: 'Fermat.FiftyNine.Conservation.DworkComplementaryCupReduction59.dworkSeate
 #print axioms dworkSeatedLambdaCupClass59_eq_finiteDworkRepresentatives
 
 /--
+info: 'Fermat.FiftyNine.Conservation.DworkComplementaryCupReduction59.dworkSeatedLambdaCupClass59_eq_doubleOrbitCupSum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+-/
+#guard_msgs in
+#print axioms dworkSeatedLambdaCupClass59_eq_doubleOrbitCupSum
+
+/--
 info: 'Fermat.FiftyNine.Conservation.DworkComplementaryCupReduction59.normalizedInflationReadout59_dworkCup_eq_finiteDworkPairing' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
@@ -273,15 +298,25 @@ readbacks. -/
   dworkSeatedLambdaCupClass59_eq_finiteDworkRepresentatives,
   classOfUnit_dworkProjectorUnitRepresentativeFortyFour59
 
+/- The cohomological orbit expansion consumes both the retained cup identity
+and the literal orbit-factor readback. -/
+#guard_depends_on
+  dworkSeatedLambdaCupClass59_eq_doubleOrbitCupSum,
+  dworkSeatedLambdaCupClass59_eq_finiteDworkRepresentatives
+
+#guard_depends_on
+  dworkSeatedLambdaCupClass59_eq_doubleOrbitCupSum,
+  classOfUnit_dworkProjectorUnitRepresentativeAtDepth59_eq_sum
+
 /- Scalar reduction consumes the retained `H²` identity. -/
 #guard_depends_on
   normalizedInflationReadout59_dworkCup_eq_finiteDworkPairing,
   dworkSeatedLambdaCupClass59_eq_finiteDworkRepresentatives
 
-/- The double sum consumes both finite reductions. -/
+/- Scalarization of the double sum consumes the retained `H²` expansion. -/
 #guard_depends_on
   normalizedInflationReadout59_dworkCup_eq_doubleOrbitSum,
-  normalizedInflationReadout59_dworkCup_eq_finiteDworkPairing
+  dworkSeatedLambdaCupClass59_eq_doubleOrbitCupSum
 
 #guard_depends_on
   normalizedInflationReadout59_dworkCup_eq_doubleOrbitSum,
