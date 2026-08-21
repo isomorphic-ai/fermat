@@ -2,21 +2,21 @@ import Fermat.KummerIso.CanonicalCubeRelation
 import Fermat.KummerIso.UnitAdaptiveRelationHarness
 
 /-!
-# Temporary Bernoulli validation boundary
+# Morishima's conjecture and the derivative-source boundary
 
 The historical logarithmic-derivative calculation supplies fixed cube
-precision.  A uniform bound of two on the valuations of its Bernoulli
-coefficients makes that precision exactly strong enough for the
-full-valuation Kummer kernel.
+precision.  Turning that precision into the full-valuation Kummer input
+requires the assertion that no relevant Bernoulli numerator is divisible by
+`p ^ 3`.  This is the per-prime statement traditionally called Morishima's
+conjecture; it is not a consequence of FLT.
 
-For the working-first splice, the one validation seam packages both parts
-of that source validation: the numerical Bernoulli bound and the canonical
-unit-family derivative source.  The latter is deliberately stated through
-`CanonicalDeepDerivativeSource`, the narrow compiler boundary isolated by
-the checked generic derivative adapter.
+The conjecture is an explicit hypothesis below.  The unrelated canonical
+unit-family derivative calculation remains a separately named temporary
+axiom, stated through `CanonicalDeepDerivativeSource`, the narrow compiler
+boundary isolated by the checked generic derivative adapter.
 
-This module keeps that temporary external dependency visible as one named
-axiom and otherwise contains only checked adapters.
+Thus this module no longer claims an unconditional Bernoulli valuation bound
+and no longer cites Wiles as a source for one.
 -/
 
 namespace Fermat.KummerIso
@@ -30,58 +30,50 @@ open Fermat.KummerIso.UnitAdaptiveRelationHarness
 
 noncomputable section
 
-/-- The two source-validation facts temporarily carried by the single
-Bernoulli seam.
+/-- Morishima's conjecture at the fixed prime `p`: none of the relevant
+Bernoulli numerators is divisible by `p ^ 3`.
 
-The first field is purely numerical.  The second is the canonical-family
-source calculation that the existing fixed-prime developments prove only
-after changing to a prime-specific diagonal basis. -/
-structure BernoulliValidationData
-    (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) : Prop where
-  valuation_le_two :
-    ∀ i : SourceIndex p,
-      padicValInt p (vandiverBernoulliNumerator p i) ≤ 2
-  canonical_derivative_source :
-    ∀ (K : Type) [Field K] [NumberField K]
-      [IsCyclotomicExtension {p} ℚ K],
-      ∀ {ζ : K} (hζ : IsPrimitiveRoot ζ p),
-        CanonicalDeepDerivativeSource hp5 hζ
+This is exactly the existing `NoBernoulliObstruction` condition, given a
+historically accurate public name at the generic Kummer splice.  See
+B. C. Kellner, *On irregular prime power divisors of the Bernoulli numbers*,
+Theorem 8.1 and Remark 8.3. -/
+def MorishimaConjectureAt (p : ℕ) : Prop :=
+  NoBernoulliObstruction p
 
-/-- Temporary external validation boundary for the Bernoulli side of the
-Fermat Case-II proof.
+/-- The all-prime form of Morishima's conjecture.  Generic endpoints below
+only request its visible per-prime instance. -/
+def MorishimaConjecture : Prop :=
+  ∀ p : ℕ, p.Prime → 5 ≤ p → MorishimaConjectureAt p
 
-The present external FLT trust boundary is Andrew Wiles,
-*Modular elliptic curves and Fermat's Last Theorem*, Annals of Mathematics
-141 (1995), 443--551, together with Richard Taylor and Andrew Wiles,
-*Ring-theoretic properties of certain Hecke algebras*, Annals of Mathematics
-141 (1995), 553--572.
+/-- Temporary external boundary for the canonical-family derivative source.
 
-This citation explicitly does **not** claim that Wiles or Taylor--Wiles prove
-this Bernoulli valuation bound directly.  It records a temporary external
-correctness dependency for the already-known FLT endpoint while the
-source-side computation is brought into the kernel.
+This statement is independent of Morishima's conjecture.  It records the
+generic change-of-basis/source-derivative calculation still missing from the
+kernel; fixed-prime channel proofs bypass it.
 
-TODO: remove this axiom completely.  Replace `valuation_le_two` with
-kernel-checked, machine-checkable certificates for every prime in the
-validated range (initially through two billion), together with a verified
-checker.  Replace `canonical_derivative_source` by the missing generic
-change-of-basis/source-derivative theorem.  Keeping both fields inside this
-one temporary seam makes the present two-seam trust boundary exact and
-machine-auditable.
--/
-axiom BernoulliValidationBound
-    (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) :
-    BernoulliValidationData p hp5
+TODO: replace this axiom by the generic canonical derivative calculation. -/
+axiom CanonicalDeepDerivativeSourceValidation
+    {K : Type} {p : ℕ} [Fact p.Prime]
+    [Field K] [NumberField K] [IsCyclotomicExtension {p} ℚ K]
+    (hp5 : 5 ≤ p) {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    CanonicalDeepDerivativeSource hp5 hζ
 
-/-- The validation boundary, expressed on the coefficient family consumed
-by `KummerFullValuation`. -/
+/-- Morishima's conjecture, expressed as the valuation bound consumed by
+`KummerFullValuation`.  Unlike the former `BernoulliValidationBound` axiom,
+the conjectural premise is explicit in this theorem's type. -/
 theorem vandiverCoefficientFamily_valuation_le_two
-    {p : ℕ} [Fact p.Prime] (hp5 : 5 ≤ p) :
+    {p : ℕ} [Fact p.Prime]
+    (hMorishima : MorishimaConjectureAt p) :
     ∀ i : SourceIndex p,
       (vandiverCoefficientFamily
         (p := p)).valuation i ≤ 2 := by
   intro i
-  exact (BernoulliValidationBound p hp5).valuation_le_two i
+  by_contra hle
+  change ¬ padicValInt p (vandiverBernoulliNumerator p i) ≤ 2 at hle
+  have hthree : 3 ≤ padicValInt p (vandiverBernoulliNumerator p i) := by
+    omega
+  exact hMorishima i
+    ((padicValInt_dvd_iff 3 _).2 (Or.inr hthree))
 
 /-- The canonical logarithmic-derivative source field of the validation
 boundary.  All subsequent conversion to cube precision is checked. -/
@@ -90,7 +82,7 @@ theorem canonicalDeepDerivativeSource
     [Field K] [NumberField K] [IsCyclotomicExtension {p} ℚ K]
     (hp5 : 5 ≤ p) {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
     CanonicalDeepDerivativeSource hp5 hζ :=
-  (BernoulliValidationBound p hp5).canonical_derivative_source K hζ
+  CanonicalDeepDerivativeSourceValidation hp5 hζ
 
 /-- The canonical source field, converted by the generic derivative
 calculation into the cube congruences used by the extraction kernel. -/
@@ -105,11 +97,13 @@ theorem canonicalPrimitiveRelationCubeCongruences
   primitiveRelationCubeCongruences_of_deep
     hp5 hζ (canonicalDeepDerivativeSource hp5 hζ) u hdeep
 
-/-- Vandiver's checked cube congruences, together with the single validation
-bound, supply the adaptive relation interface of the full-valuation kernel. -/
+/-- Vandiver's checked cube congruences, together with the explicit
+Morishima hypothesis, supply the adaptive relation interface of the
+full-valuation kernel. -/
 theorem primitiveRelationFullValuationCongruences_of_cube
     {G : Type*} [CommGroup G]
-    {p : ℕ} [Fact p.Prime] (hp5 : 5 ≤ p)
+    {p : ℕ} [Fact p.Prime]
+    (hMorishima : MorishimaConjectureAt p)
     (u : G) (E : SourceIndex p → G)
     (hcube : PrimitiveRelationCubeCongruences p u E) :
     KummerFullValuation.PrimitiveRelationFullValuationCongruences
@@ -118,15 +112,16 @@ theorem primitiveRelationFullValuationCongruences_of_cube
   exact
     KummerFullValuation.CoefficientFamily.fullPrecision_of_cubePrecision_of_valuation_le_two
       (vandiverCoefficientFamily (p := p)) a
-      (vandiverCoefficientFamily_valuation_le_two hp5)
+      (vandiverCoefficientFamily_valuation_le_two hMorishima)
       (hcube t a ht hrel hprimitive)
 
 /-- End-to-end algebraic splice: once the historical source has produced its
-cube congruences, the validation bound and the existing full-valuation
-kernel extract the `p`-th root. -/
+cube congruences, the explicit Morishima hypothesis and the existing
+full-valuation kernel extract the `p`-th root. -/
 theorem isPower_of_primitiveRelationCubeCongruences
     {G : Type*} [CommGroup G]
-    {p : ℕ} [Fact p.Prime] (hp5 : 5 ≤ p)
+    {p : ℕ} [Fact p.Prime]
+    (hMorishima : MorishimaConjectureAt p)
     (hpow : Function.Injective (fun x : G ↦ x ^ p))
     (u : G) (E : SourceIndex p → G)
     [hfinite : (Subgroup.closure (Set.range E)).FiniteIndex]
@@ -137,7 +132,7 @@ theorem isPower_of_primitiveRelationCubeCongruences
       (Fact.out : p.Prime) hpow u E
       (vandiverCoefficientFamily (p := p))
       (primitiveRelationFullValuationCongruences_of_cube
-        hp5 u E hcube)
+        hMorishima u E hcube)
 
 end
 

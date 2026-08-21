@@ -13,6 +13,11 @@ Each chosen prime still supplies finite, kernel-checked arithmetic. The
 parameter `N` is arbitrary; the theorem is not a proof of FLT for every
 prime simultaneously.
 
+The directory also contains a prime-parametric historical assembly. That
+route is deliberately conditional on `MorishimaConjectureAt p` and still has
+separate temporary equation-(7d) and canonical derivative-source seams. It
+must not be read as an unconditional all-prime theorem.
+
 ## Why there are two repairs
 
 Kummer's regular-prime proof uses regularity at two different mathematical
@@ -51,7 +56,10 @@ cᵢ = (Bᵢ / p²) mod p    when p² ∣ Bᵢ,
 ```
 
 The no-cube-obstruction condition `p³ ∤ Bᵢ` makes every lifted entry
-`cᵢ` nonzero. Ordinary coordinates receive the identity entry. Thus
+`cᵢ` nonzero. For a prime-parametric proof, its assertion at every relevant
+coordinate is exactly `MorishimaConjectureAt p`. This is Morishima's
+conjecture, not Vandiver's conjecture `p ∤ h⁺`, and it is not a consequence
+of FLT. Ordinary coordinates receive the identity entry. Thus
 
 ```text
 Cₚ = diag(cᵢ)
@@ -72,9 +80,10 @@ and Bézout lemmas then extract a `p`-th root of the exact unit ratio.
 The mixed construction is formalized for an abstract finite source type.
 `BernoulliCorrection` builds the genuine `Bᵢ / p²` entry directly from the
 integer divisibility witness on each lifted coordinate and uses `1`
-elsewhere. The fixed-exponent channel certificates prove the required
-statement `p³ ∤ Bᵢ`; they do not identify their separate Faulhaber
-`weight` with this quotient.
+elsewhere. The generic route takes `MorishimaConjectureAt p` explicitly.
+The fixed-exponent channel certificates instead prove the required statement
+`p³ ∤ Bᵢ` by kernel-checked finite computation; they do not identify their
+separate Faulhaber `weight` with this quotient.
 
 Independently, the reusable `DiagonalGauge p (Fin N)` and
 `fixedChannelAutomorphism` work for every `N`, including the empty block,
@@ -89,8 +98,8 @@ special Fermat ideals ─> primary/Takagi reflection ─> selected ideals princi
              p ∤ h⁺ ────────────────────────────────┘
 
 historical equations (7)--(10) ─> exact ratio ε₁/ε₂ at depth 2p
-finite-index real unit family ──> primitive-relation cube congruences
-lifted Bernoulli channels ──────> p³ ∤ Bᵢ
+canonical derivative source ───> primitive-relation cube congruences
+Morishima at p / checked channels ─> p³ ∤ Bᵢ
                                   │
                                   v
                      actual Bᵢ/p² diagonal automorphism
@@ -123,6 +132,11 @@ The modules implement this flow as follows:
   root into `x`, and produces the unweighted equation for the next
   induction step.
 - `SecondCase.lean` performs the complete historical second-case descent.
+- `BernoulliValidationBound.lean` names `MorishimaConjectureAt p`, derives
+  the former valuation bound from that explicit hypothesis, and keeps the
+  unrelated canonical derivative source under its own temporary axiom.
+- `ValidatedSecondCase.lean` threads the explicit Morishima premise through
+  the prime-parametric historical Case-II assembly.
 - `FixedExponent.lean` invokes the proof-producing Sophie--Germain search
   for Case I.
 - `Regressions.lean` checks the resulting endpoint at every completed
@@ -142,10 +156,12 @@ maintain a shadow copy of them.
 
 ## What is complete, and what remains distinct
 
-The historical path is complete. `WeightedReductionData.highCongruence`
-proves depth `(1 - ζ) ^ (2 * p)` for its literal ratio `ε₁ / ε₂`.
-`UnitExtraction` applies the correction to that exact ratio, and the
-historical descent consumes the resulting root.
+The certificate-backed fixed-exponent historical path is complete.
+`WeightedReductionData.highCongruence` proves depth
+`(1 - ζ) ^ (2 * p)` for its literal ratio `ε₁ / ε₂`. `UnitExtraction`
+applies the correction to that exact ratio, and the historical descent
+consumes the resulting root. The separate prime-parametric assembly remains
+conditional on Morishima and its two visibly named temporary seams.
 
 The direct regular-style witness is a separate object. For a
 `KummerIso.WeightedSolution`, the repository proves that its literal ratio
@@ -200,8 +216,8 @@ Fermat.KummerIso.ResidueRegressions.holdsAt_oneThousandThreeHundredEightyOne
 ```
 
 All nine residue regressions bypass `FermatEquationSevenD` and reuse their
-fixed unit systems and axis-8 channels instead of
-`BernoulliValidationBound`. They also reuse the explicit finite, checked
+fixed unit systems and axis-8 channels instead of assuming Morishima or the
+canonical derivative source. They also reuse the explicit finite, checked
 Sophie--Germain certificates in the corresponding `FirstCase.lean` modules
 instead of the generic search. Their axiom audits therefore contain only
 Lean's standard axioms, with no

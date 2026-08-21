@@ -5,17 +5,18 @@ import Fermat.KummerIso.FermatEquationSevenD
 import Fermat.KummerIso.UnitExtraction
 
 /-!
-# Case II through the two temporary validation seams
+# Case II with an explicit Morishima hypothesis
 
 This is the production assembly for the working-first Kummer splice.
 
 * `FermatEquationSevenD` supplies the historical equations-(7)--(10)
   construction, including the exact depth-`2p` quotient unit.
-* `BernoulliValidationBound` supplies the temporary source validation:
-  the Bernoulli valuation bound and canonical-family derivative source.
+* `MorishimaConjectureAt p` is the explicit no-Bernoulli-cube hypothesis.
+* `CanonicalDeepDerivativeSourceValidation` is the separate temporary
+  canonical-family derivative-source seam.
 
-Everything in this file is checked plumbing.  The exported endpoint has no
-additional certificate argument.
+Everything else in this file is checked plumbing.  The conjectural
+arithmetic premise is visible in every generic endpoint that consumes it.
 -/
 
 namespace Fermat.KummerIso
@@ -37,11 +38,12 @@ variable {K : Type} {p : ℕ} [Fact p.Prime]
   [Field K] [NumberField K] [NumberField.IsCMField K]
   [IsCyclotomicExtension {p} ℚ K]
 
-/-- The single Bernoulli validation seam, followed only by checked generic
-adapters, produces the exact deep-unit root interface consumed by the
-historical descent. -/
+/-- The explicit Morishima hypothesis and the separately named derivative
+source, followed only by checked generic adapters, produce the exact
+deep-unit root interface consumed by the historical descent. -/
 theorem kummerUnitPowerConclusion_of_canonicalCubeCongruences
-    (hp5 : 5 ≤ p) :
+    (hp5 : 5 ≤ p)
+    (hMorishima : MorishimaConjectureAt p) :
     Fermat.Irregular.VandiverCriterion.KummerUnitPowerConclusion K p := by
   intro ζ hζ u hdeep
   let uReal : NumberField.IsCMField.realUnits K :=
@@ -69,7 +71,7 @@ theorem kummerUnitPowerConclusion_of_canonicalCubeCongruences
       real_closure_finiteIndex (by omega : 2 < p) hζ
   obtain ⟨v, hv⟩ :=
     isPower_of_primitiveRelationCubeCongruences
-      hp5
+      hMorishima
       (Fermat.Irregular.VandiverRealUnits.odd_pow_injective
         (K := K) p
         ((Fact.out : p.Prime).odd_of_ne_two (by omega)))
@@ -83,7 +85,7 @@ theorem kummerUnitPowerConclusion_of_canonicalCubeCongruences
 reduction and the exact Kummer unit-power conclusion consumed by the descent.
 
 This is the common assembly boundary. It carries no validation policy:
-callers may obtain `hkummer` from the temporary Bernoulli-validation seam or
+callers may obtain `hkummer` from the conditional canonical-family route or
 from a finite unit system together with axis-8 channel data. -/
 theorem secondCaseExcluded_of_historicalReduction_of_kummerConclusion
     (hp5 : 5 ≤ p)
@@ -112,12 +114,15 @@ theorem secondCaseExcluded_of_historicalReduction_of_kummerConclusion
       ha hb hc hgcd hdiv
 
 /-- End-to-end historical Case II from an explicitly supplied historical
-equations-(7)--(10) reduction.  The only project axiom used internally by
-this theorem is `BernoulliValidationBound`; callers may construct the ideal
-side either through `FermatEquationSevenD` or through finite residue
-certificates. -/
+equations-(7)--(10) reduction.
+
+Morishima's conjecture is an explicit premise.  The canonical derivative
+source is the only project axiom used internally here; callers may construct
+the ideal side either through `FermatEquationSevenD` or through finite
+residue certificates. -/
 theorem secondCaseExcluded_of_historicalReduction
     (hp5 : 5 ≤ p)
+    (hMorishima : MorishimaConjectureAt p)
     {ζ : K} (hζ : IsPrimitiveRoot ζ p)
     (hreduce :
       EquationsSevenToTenReduction hζ
@@ -125,10 +130,12 @@ theorem secondCaseExcluded_of_historicalReduction
     Fermat.SecondCaseExcluded p :=
   secondCaseExcluded_of_historicalReduction_of_kummerConclusion
     hp5 hζ hreduce
-    (kummerUnitPowerConclusion_of_canonicalCubeCongruences hp5)
+    (kummerUnitPowerConclusion_of_canonicalCubeCongruences
+      hp5 hMorishima)
 
 /-- A finite unit system and its axis-8 channels discharge the Kummer-unit
-side of the historical reduction without using `BernoulliValidationBound`.
+side of the historical reduction without using Morishima's conjecture or
+the canonical derivative-source axiom.
 
 The theorem deliberately takes the equations-(7)--(10) reduction separately:
 in fixed-residue regressions that reduction comes from an independently
@@ -151,27 +158,30 @@ theorem secondCaseExcluded_of_historicalReduction_of_unitSystem_of_channels
     (Fermat.KummerIso.UnitExtraction.kummerUnitPowerConclusion_of_unitSystem_of_channels
       hp5 system channels)
 
-/-- End-to-end historical Case II through exactly the two deliberately named
-temporary validation seams. -/
+/-- End-to-end historical Case II through the equation-(7d) and canonical
+derivative-source seams, conditional on the explicit Morishima hypothesis. -/
 theorem secondCaseExcluded_of_two_validation_seams
     (hp5 : 5 ≤ p)
+    (hMorishima : MorishimaConjectureAt p)
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
     Fermat.SecondCaseExcluded p :=
-  secondCaseExcluded_of_historicalReduction hp5 hζ
+  secondCaseExcluded_of_historicalReduction hp5 hMorishima hζ
     (historicalEquationsSevenToTenReduction hp5 hζ)
 
-/-- End-to-end FLT after combining the two Case-II validation seams with
-the proof-producing Sophie--Germain search for Case I.
+/-- End-to-end FLT after combining an explicit Morishima hypothesis and the
+two Case-II validation seams with the proof-producing Sophie--Germain search
+for Case I.
 
 The three visible project axioms are `FermatEquationSevenD`,
-`BernoulliValidationBound`, and successful termination of the executable
-Sophie--Germain auxiliary-prime search. -/
+`CanonicalDeepDerivativeSourceValidation`, and successful termination of the
+executable Sophie--Germain auxiliary-prime search. -/
 theorem holdsAt_of_validation_seams
     (hp5 : 5 ≤ p)
+    (hMorishima : MorishimaConjectureAt p)
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
     Fermat.HoldsAt p :=
   Fermat.holdsAt_of_sophieGermainSearch_of_secondCaseExcluded
-    (secondCaseExcluded_of_two_validation_seams hp5 hζ)
+    (secondCaseExcluded_of_two_validation_seams hp5 hMorishima hζ)
 
 end
 

@@ -248,9 +248,18 @@ finite source type.  Separately, the auxiliary channel-weight gauge works
 over `Fin N` for every `N`, including `N = 0`; no equality between the two
 gauges is assumed.
 
-The historical route is end-to-end complete.  The independently exposed
-regular-style `WeightedSolution` is kept honest: its exact ratio is known
-to be semiprimary modulo `(p)`, but direct reuse still requires either
+For the prime-parametric assembly, the family of conditions `p³ ∤ Bᵢ` is
+now exposed honestly as `KummerIso.MorishimaConjectureAt p`. It is
+Morishima's conjecture, distinct from Vandiver's conjecture `p ∤ h⁺`, and is
+not inferred from Wiles's proof of FLT. The canonical derivative-source
+calculation is a separate temporary seam. Fixed-exponent unit-system and
+channel certificates bypass both through kernel-checked finite data.
+
+The certificate-backed fixed-exponent historical route is end-to-end
+complete. The separately exposed prime-parametric route is conditional on
+Morishima and its named source seams. The independently exposed regular-style
+`WeightedSolution` is kept honest: its exact ratio is known to be semiprimary
+modulo `(p)`, but direct reuse still requires either
 `KummerIso.DeepRatio.RegularUnitRatioDeep` or a proof identifying it with
 the historical ratio.  Conditional on that explicit depth premise,
 `KummerIso.Induction.exists_unweightedSolution_of_regularUnitRatioDeep`
@@ -260,9 +269,9 @@ for the next induction step; it does not claim the missing premise.
 The finite circular-unit residue certificates also replace the
 equation-(7d) seam at all nine completed campaign exponents.  Those closed
 regressions reuse each fixed certificate's checked unit system and axis-8
-channels, so `BernoulliValidationBound` is absent as well. They reuse the
-explicit finite Sophie--Germain certificates for Case I, and therefore
-contain no project axioms. See the
+channels, so they require neither Morishima nor the canonical derivative
+source. They reuse the explicit finite Sophie--Germain certificates for
+Case I, and therefore contain no project axioms. See the
 [KummerIso architecture note](Fermat/KummerIso/README.md) for the complete
 call graph, theorem boundaries, and both regression families.
 
@@ -910,7 +919,7 @@ The deep Bernoulli/class-group equivalence comes from the pinned
 [`KummerCriterion`](https://github.com/riccardobrasca/KummerCriterion)
 formalization.  Since the locally patched `flt-regular` core no longer
 accepts that condition as a premise, its generic FLT endpoint is deliberately
-reported as a separate result with the core's three temporary seams.
+reported as a separate result with every temporary premise and seam exposed.
 [`Fermat/Quadratic/`](Fermat/Quadratic/) contains
 quadratic-ring and unit calculations shared by several elementary descents.
 

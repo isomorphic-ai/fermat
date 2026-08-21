@@ -25,10 +25,13 @@ regularity:
   diagonal normalization of the lifted Bernoulli coefficients.
 
 `SecondCase` and `FixedExponent` assemble the complete historical route.
-`ValidatedSecondCase` exposes the prime-generic Case-II endpoint through
-the two deliberately named temporary validation seams.
+`ValidatedSecondCase` exposes a prime-generic Case-II endpoint conditional
+on the explicit `MorishimaConjectureAt p` proposition, through the separately
+named equation-(7d) and canonical derivative-source seams.
 `FermatEquationSevenDBruteForce` removes the equation-(7d) seam for any
-fixed prime carrying a kernel-checked circular-unit residue certificate.
+fixed prime carrying a kernel-checked circular-unit residue certificate; its
+fixed unit-system/channel route also bypasses Morishima and the derivative
+source.
 `ResidueRegressions` closes that route at all nine completed campaign
 exponents from `37` through `1381`.
 `Induction` records the conditional regular-style adapter: once the

@@ -164,8 +164,8 @@ certificates.
 
 The residue certificate gives the equations-(7)--(10) reduction, while the
 unit system and axis-8 channels give the Kummer unit-power conclusion. Thus
-this route uses neither `FermatEquationSevenD` nor
-`BernoulliValidationBound`. -/
+this route uses neither `FermatEquationSevenD`, Morishima's conjecture, nor
+the canonical derivative-source axiom. -/
 theorem secondCaseExcluded_of_residueCertificate_of_unitSystem_of_channels
     {N : ℕ}
     (hp5 : 5 ≤ p)
@@ -207,16 +207,18 @@ theorem holdsAt_of_residueCertificate_of_unitSystem_of_channels
 circular-unit residue certificate.
 
 Unlike `secondCaseExcluded_of_two_validation_seams`, this theorem does not
-use `FermatEquationSevenD`; its only project axiom is the temporary
-`BernoulliValidationBound`. -/
+use `FermatEquationSevenD`.  It explicitly assumes Morishima's conjecture at
+`p`; its only project axiom is the separate canonical derivative-source
+seam. -/
 theorem secondCaseExcluded_of_residueCertificate
     (hp5 : 5 ≤ p)
+    (hMorishima : MorishimaConjectureAt p)
     (C : Certificate p q)
     (hdet : C.matrix.det ≠ 0)
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
     Fermat.SecondCaseExcluded p :=
   Fermat.KummerIso.secondCaseExcluded_of_historicalReduction
-    hp5 hζ
+    hp5 hMorishima hζ
     (historicalEquationsSevenToTenReduction_of_residueCertificate
       hp5 C hdet hζ)
 
@@ -225,27 +227,32 @@ for both cases.
 
 The circular-unit residue certificate removes `FermatEquationSevenD` from
 Case II. The generic Sophie--Germain search handles Case I. Consequently,
-the only project axioms are `BernoulliValidationBound` and successful
-termination of the Sophie--Germain search. -/
+Morishima's conjecture is an explicit premise, and the project axioms are the
+canonical derivative-source seam and successful termination of the
+Sophie--Germain search. -/
 theorem holdsAt_of_residueCertificate
     (hp5 : 5 ≤ p)
+    (hMorishima : MorishimaConjectureAt p)
     (C : Certificate p q)
     (hdet : C.matrix.det ≠ 0)
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
     Fermat.HoldsAt p :=
   Fermat.holdsAt_of_sophieGermainSearch_of_secondCaseExcluded
     (secondCaseExcluded_of_residueCertificate
-      hp5 C hdet hζ)
+      hp5 hMorishima C hdet hζ)
 
-/-- Closed end-to-end FLT from a finite residue certificate.
+/-- Conditional end-to-end FLT from a finite residue certificate and the
+explicit Morishima hypothesis.
 
 The preceding theorem is useful inside an already chosen cyclotomic field.
 For fixed-exponent regressions, however, the field and primitive root are
 purely canonical infrastructure. This wrapper chooses the standard
-cyclotomic field once and discharges that infrastructure uniformly, leaving
-only the finite certificate and its determinant proof as inputs. -/
+cyclotomic field once and discharges that infrastructure uniformly. It still
+retains Morishima as an explicit input and the canonical derivative source
+as a named axiom. -/
 theorem holdsAt_of_residueCertificate_canonical
     (hp5 : 5 ≤ p)
+    (hMorishima : MorishimaConjectureAt p)
     (C : Certificate p q)
     (hdet : C.matrix.det ≠ 0) :
     Fermat.HoldsAt p := by
@@ -265,10 +272,11 @@ theorem holdsAt_of_residueCertificate_canonical
       (Set.mem_singleton p) (Fact.out : p.Prime).ne_zero
   exact
     holdsAt_of_residueCertificate
-      (K := CyclotomicField p ℚ) hp5 C hdet hζ
+      (K := CyclotomicField p ℚ) hp5 hMorishima C hdet hζ
 
-/-- Closed BVB-free Case II from a residue certificate and a field-generic
-fixed second-case certificate provider.
+/-- Closed Case II from a residue certificate and a field-generic fixed
+second-case certificate provider, with neither Morishima nor the canonical
+derivative-source seam.
 
 Only the provider's `unitSystem` and `channels` fields are consumed here. Its
 plus-class field is intentionally ignored because the independent residue
@@ -302,9 +310,10 @@ theorem secondCaseExcluded_of_residueCertificate_canonical_of_fixedCertificate
       fixed.unitSystem fixed.channels)
       ha hb hc hgcd hdiv
 
-/-- Closed BVB-free FLT from the same fixed certificates, retaining the
-generic proof-producing Sophie--Germain search as the default Case-I
-adapter. Its only project axiom is successful termination of that search.
+/-- Closed FLT from the same fixed certificates, bypassing both Morishima and
+the canonical derivative-source seam while retaining the generic
+proof-producing Sophie--Germain search as the default Case-I adapter. Its
+only project axiom is successful termination of that search.
 
 Fixed-exponent callers with explicit finite, checked Case-I certificates can
 instead combine the preceding `SecondCaseExcluded` theorem with

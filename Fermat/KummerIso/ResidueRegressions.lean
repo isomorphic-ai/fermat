@@ -43,10 +43,10 @@ below merely packages those existing theorems in the generic interface.
 
 Each endpoint also instantiates its already checked fixed second-case
 certificate and reuses its `unitSystem` and `channels` fields. Together those
-fields replace the temporary `BernoulliValidationBound` seam. Case I is
-supplied by each exponent's explicit finite, checked Sophie--Germain
-certificate, rather than by the generic search. Consequently, these nine
-FLT endpoints use no project axioms.
+fields bypass both the generic Morishima hypothesis and the temporary
+canonical derivative-source seam. Case I is supplied by each exponent's
+explicit finite, checked Sophie--Germain certificate, rather than by the
+generic search. Consequently, these nine FLT endpoints use no project axioms.
 -/
 
 namespace Fermat.KummerIso.ResidueRegressions
