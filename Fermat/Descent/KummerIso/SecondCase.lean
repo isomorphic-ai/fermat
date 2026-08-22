@@ -40,12 +40,68 @@ variable {K : Type} {p N : ℕ} [Fact p.Prime]
   [Field K] [NumberField K] [NumberField.IsCMField K]
   [IsCyclotomicExtension {p} ℚ K]
 
-/-- The complete correction-based historical assembly with its three
-upstream inputs kept explicit.
+/-- The complete correction-based historical assembly once the finite
+arithmetic has already been reduced to the actual Bernoulli cube condition.
 
 `hreduce` produces `EquationSevenToTenData`.  The descent theorem then
 applies `hkummer` to that data's literal `quotientUnit`, using its literal
 `highCongruence`; there is no bridge through a merely semiprimary unit. -/
+theorem secondCaseExcluded_of_plusClass_of_unitSystem_of_bernoulliCubeCondition
+    (hp5 : 5 ≤ p)
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hplus : PlusClassNondivisibility K p)
+    (system : LemmaTwoUnitSystem K p)
+    (hBernoulli :
+      Fermat.Irregular.VandiverData.BernoulliCubeCondition p) :
+    Fermat.SecondCaseExcluded p := by
+  have hp2 : p ≠ 2 := by
+    omega
+  obtain ⟨r, hr⟩ :=
+    (Fact.out : p.Prime).odd_of_ne_two hp2
+  let normalizer :=
+    Fermat.Irregular.VandiverRealNormalizationPrime.realGeneratorNormalizer
+      (K := K) hr hζ
+  have hroot :
+      RealUnitRootNormalization hζ :=
+    Fermat.Irregular.VandiverRealNormalizationPrime.realUnitRootNormalization
+      (K := K) (by omega) hζ
+  have heliminate :
+      RealPrincipalGeneratorElimination hζ :=
+    Fermat.KummerIso.Principalization.realPrincipalGeneratorElimination_of_plusClass
+      (K := K) hp5 hζ hplus
+  have hstart :
+      SecondCaseStartsHistoricalDescent hζ
+        (RealSourceAdmissible hζ) :=
+    Fermat.Irregular.VandiverHistoricalStartPrime.secondCaseStartsHistoricalDescent
+      (K := K) hp5 hr hζ
+  have hreduce :
+      EquationsSevenToTenReduction hζ
+        (RealSourceAdmissible hζ) :=
+    equationsSevenToTenReduction hζ normalizer hroot heliminate
+  have hkummer :
+      Fermat.Irregular.VandiverCriterion.KummerUnitPowerConclusion
+        K p := by
+    have hno :
+        Fermat.Irregular.VandiverLemmaTwoCore.NoBernoulliObstruction p :=
+      Fermat.Irregular.VandiverLemmaTwoBridge.noBernoulliObstruction_iff.mpr
+        (Fermat.Irregular.VandiverUnitLemma.not_bernoulliObstruction_of_bernoulliCubeCondition
+          hp5 hBernoulli)
+    intro ζ' hζ' u hdeep
+    exact
+      Fermat.KummerIso.UnitExtraction.isPower_of_unitSystem_of_noBernoulliObstruction
+        hp5 system hζ' u hdeep hno
+  intro a b c ha hb hc hgcd hdiv
+  exact
+    (secondCaseExcluded_of_historical_descent
+      hp2 hζ (RealSourceAdmissible hζ) hstart hreduce hkummer)
+      ha hb hc hgcd hdiv
+
+/-- The complete correction-based historical assembly with its three
+upstream inputs kept explicit.
+
+This compatibility entry point keeps the existing axis-8 channel route
+intact.  Compact moment receipts use the condition-level sibling theorem
+above, so existing fixed-exponent consumers are not migrated implicitly. -/
 theorem secondCaseExcluded_of_plusClass_of_unitSystem_of_channels
     (hp5 : 5 ≤ p)
     {ζ : K} (hζ : IsPrimitiveRoot ζ p)
