@@ -1,6 +1,6 @@
 # Generic fixed-exponent irregular proofs
 
-`Fermat/GenericIrregular/` factors the completed Vandiver-style campaigns
+`Fermat/Descent/GenericIrregular/` factors the completed Vandiver-style campaigns
 into one theorem parameterized by a prime and finite certificate data.
 
 The result has the fixed-exponent shape

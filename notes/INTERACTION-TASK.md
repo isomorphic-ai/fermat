@@ -26,7 +26,7 @@ carrier must be geometric + receipted.
 
 ## W1 — the interaction dynamics (generic, small, clean)
 
-`Fermat/Conservation/Interaction.lean`: the two-account system, s
+`Fermat/Experiments/Conservation/Interaction.lean`: the two-account system, s
 conservation, d -> (1-g)d, energy E = d^2 with E <= s^2 on positive
 ledgers, and the flow-bound trichotomy: g<2 damped, g=2 the period-two
 livelock ((A,B) -> (B,A)), g>2 supercritical-impossible-forever in a
@@ -38,7 +38,7 @@ word; its invariance is a payload statement).
 
 ## W2 — the non-lossy class carrier (Fabian's spec)
 
-`Fermat/Conservation/ClassCarrier.lean`: the state is NOT the lossy
+`Fermat/Experiments/Conservation/ClassCarrier.lean`: the state is NOT the lossy
 class [I]; it is (I_red, beta, annihilator receipts) where I_red lies
 in a bounded (Minkowski-type) fundamental region and beta is the
 principalization receipt of the reduction I = (beta) * I_red. Laws:
@@ -64,11 +64,11 @@ the SG certificate conditions to gcd-coprimality (condition (a)
 failures = shared factors = livelock channels; the sixfold law = the
 guaranteed Wendt X^2-X+1 shared factor for 3|k). The sweep's
 k_first table is the empirical periodic-annihilator record - cite
-GENERATION-CHAINS.md; do not recompute.
+notes/GENERATION-CHAINS.md; do not recompute.
 
 ## W4 — the gauge readings (predictions, not targets)
 
-Update BOUNDARY-MAP.md: restate 7a in interaction vocabulary - the
+Update notes/BOUNDARY-MAP.md: restate 7a in interaction vocabulary - the
 s-mode of the (I,J) pair requires a transverse third party (candidate:
 the 59-lamp 827 and/or Stickelberger), the old common mode becoming
 the new difference of the (state, lamp-view) pair. Named open

@@ -14,7 +14,7 @@ composition law appearing as necessity? Both outcomes are results.
 - The balance-at-the-top route: a⁶+b⁶=c⁶ ⟹ (a³)² + (b³)² = (c³)² — a
   Pythagorean triple OF CUBES; the n=2 balance engine parametrizes,
   the cube constraints propagate, a charged descent must close below.
-- The shared conservation floor (Fermat/Conservation/Floor) as always.
+- The shared conservation floor (Fermat/Experiments/Conservation/Floor) as always.
 
 ## The a/b/c ladder (honest statuses; any rung is a deliverable)
 

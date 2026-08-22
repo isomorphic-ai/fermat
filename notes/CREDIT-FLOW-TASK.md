@@ -2,7 +2,7 @@
 
 **TruthSeed:** `fermat-credit:flow-is-the-derivative-of-the-generator`
 **For:** PRO Goblin (GPT 5.6 Sol Ultra) via codex, working in ~/fermat.
-**Supersedes** the seam-3 approach of CREDIT-SEAMS-TASK.md. Fabian's
+**Supersedes** the seam-3 approach of notes/CREDIT-SEAMS-TASK.md. Fabian's
 ruling: importing or hoisting the classical Vandiver chain is the WRONG
 move — needing a classical lemma means the architecture is missing a
 primitive. The missing primitive is named below; Vandiver is credited
@@ -43,14 +43,14 @@ We are heading for ANY prime, and eventually ALL. Therefore:
    (plus the structures below). Nothing in the core knows which prime
    it serves.
 2. **Everything special about 59 lives in ONE thin instance file**
-   (`Fermat/FiftyNine/Conservation/Instance.lean` or similar): the
+   (`Fermat/Exponents/FiftyNine/Conservation/Instance.lean` or similar): the
    tower 7→29→59, the lamp 827, the generator 671, the irregular pair
    (59,44), the certified cube-free eigenvalue list. Each special fact
    enters through a NAMED structure field (a `CreditData p` /
    `FlowCertificate p` record), so instantiating prime 67 later means
    providing a record, not editing the core.
 3. **Mechanical gate (the Kimi done-gate pattern):** outside the
-   instance file(s), `grep -n "59" Fermat/Conservation/Credit/*.lean`
+   instance file(s), `grep -n "59" Fermat/Experiments/Conservation/Credit/*.lean`
    returns nothing load-bearing (docstrings citing the campaign are
    fine; literals in statements/proofs are not — `(p := 59)` appears
    only in the instance layer). Cite the grep in the closing commit.
@@ -61,7 +61,7 @@ We are heading for ANY prime, and eventually ALL. Therefore:
 
 ## The work
 
-**W1 — `Fermat/Conservation/Credit/Flow.lean` (generic).** The Kummer
+**W1 — `Fermat/Experiments/Conservation/Credit/Flow.lean` (generic).** The Kummer
 logarithmic-derivative homomorphism, derived from the generator datum:
 units-mod-p-th-powers → coefficient space of rank matching the orbit.
 Prove: (i) it is a homomorphism (flow of a product = sum of flows —

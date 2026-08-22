@@ -59,7 +59,7 @@ let the W1 consumers fire, and record in FINDINGS + BOUNDARY-MAP
 exactly which premises of the conditional endpoint are now DISCHARGED
 (localization, carrier extension) and which remain (lawfulness,
 gauge seating, kernel comparison, reciprocity, fiber member). Append
-the session as a new row to CONSERVATION-AUDIT.md in the established
+the session as a new row to notes/CONSERVATION-AUDIT.md in the established
 row format (input / processed with receipt / conserved / axis /
 audit), and mark row 24's open cell accordingly. If the core does NOT
 inhabit, the reduced named core per C2(d) is the deliverable and gets

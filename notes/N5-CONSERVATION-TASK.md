@@ -22,7 +22,7 @@ LESSON: drain with an INFINITE unit group — conservation modulo gauge.
 4. **The two-branch drain:** Dirichlet's case split (5 ∤ c and 5 | c)
    as two charged-descent lemmas, both draining the gauge-invariant
    charge strictly, both closed by the SHARED conservation floor
-   (Fermat/Conservation/Floor — reuse, never duplicate).
+   (Fermat/Experiments/Conservation/Floor — reuse, never duplicate).
 5. **Assemble:** `Fermat.Five.holdsAt_five_conservation :
    Fermat.HoldsAt 5`.
 

@@ -660,7 +660,7 @@
 - The broader default `lake build Fermat` is not a clean baseline: outside
   this cone it encounters a missing vendored `flt-regular` source
   `FltRegular/NumberTheory/KummerFullValuation.lean`, existing API mismatches
-  in `Fermat/Cases.lean` and `Fermat/Regular/KummerCriterion.lean`, and one
+  in `Fermat/Core/Cases.lean` and `Fermat/Descent/Regular/KummerCriterion.lean`, and one
   unrelated high-memory module killed with exit 137.  The run was stopped
   after those independent failures were established; none occurs in a
   touched module or requested verification target.

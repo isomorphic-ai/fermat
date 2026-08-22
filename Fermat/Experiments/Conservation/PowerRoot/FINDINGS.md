@@ -17,7 +17,7 @@
   repository baseline is not globally buildable: the external
   `flt-regular` package is missing
   `FltRegular/NumberTheory/KummerFullValuation.lean`, and unrelated
-  `Fermat/Cases.lean` / `Fermat/Regular/KummerCriterion.lean` sources already
+  `Fermat/Core/Cases.lean` / `Fermat/Descent/Regular/KummerCriterion.lean` sources already
   mismatch that package API; a separate large Vandiver target was killed by
   the OS with exit code 137.  Those files are outside this task and were not
   changed.  The requested complete verification cone itself is green.

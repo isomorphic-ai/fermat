@@ -196,7 +196,7 @@ structure ReflectedWildKummerCoreAt59 ... where
 ```
 
 See
-[`VostokovLocalization59.lean`](Fermat/FiftyNine/Conservation/VostokovLocalization59.lean#L70-L85).
+[`VostokovLocalization59.lean`](../Fermat/Exponents/FiftyNine/Conservation/VostokovLocalization59.lean#L70-L85).
 
 An inhabitant of those three fields already constructs the complete
 `ReflectedWildLocalizationAt59`, including:
@@ -260,7 +260,7 @@ new point came from the old carrier, and no section/complement/splitting is
 available or allowed.
 
 See
-[`VostokovShapeAudit59.lean`](Fermat/FiftyNine/Conservation/VostokovShapeAudit59.lean).
+[`VostokovShapeAudit59.lean`](../Fermat/Exponents/FiftyNine/Conservation/VostokovShapeAudit59.lean).
 
 ### Consequence for the formula ladder
 
@@ -278,7 +278,7 @@ See
 ## 3. The tier-(c) algebra that Lean has already finished
 
 The generic constructor is in
-[`IwasawaTracePairing.lean`](Fermat/Conservation/IwasawaTracePairing.lean).
+[`IwasawaTracePairing.lean`](../Fermat/Experiments/Conservation/IwasawaTracePairing.lean).
 
 For a ring `A`, it asks for three additive maps:
 
@@ -328,7 +328,7 @@ def IsComparedOn (arithmetic) (leftRep) (rightRep) (reading) : Prop :=
 `Reduction` packages the coordinates, their arithmetic realization, and the
 independent comparison theorem. It stores no arbitrary pairing value.
 
-At 59, [`IwasawaLocalization59.lean`](Fermat/FiftyNine/Conservation/IwasawaLocalization59.lean)
+At 59, [`IwasawaLocalization59.lean`](../Fermat/Exponents/FiftyNine/Conservation/IwasawaLocalization59.lean)
 binds that reduction to the exact C1 representatives. The theorem
 `descend_eq_oldReading` proves quotient-level calibration from:
 
@@ -452,7 +452,7 @@ adjoint_law : reading (a • x) y = reading x ((hash omega a) • y)
 ```
 
 See
-[`TamePlacePairing.lean`](Fermat/Conservation/TamePlacePairing.lean#L167-L188).
+[`TamePlacePairing.lean`](../Fermat/Experiments/Conservation/TamePlacePairing.lean#L167-L188).
 
 Bilinearity and the adjoint law do not characterize the Hilbert symbol. For
 example, scalar multiples of a lawful reading retain those formal laws. So
@@ -528,7 +528,7 @@ structure EmptySupportActionCompatibility rho rhoQ : Prop where
 ```
 
 See
-[`EmptySupportReflectedInclusion827.lean`](Fermat/FiftyNine/Conservation/EmptySupportReflectedInclusion827.lean#L69-L118).
+[`EmptySupportReflectedInclusion827.lean`](../Fermat/Exponents/FiftyNine/Conservation/EmptySupportReflectedInclusion827.lean#L69-L118).
 
 Once this is supplied, Lean already proves:
 

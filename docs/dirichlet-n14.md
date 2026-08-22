@@ -113,18 +113,18 @@ descent finishes.
 
 The checked proof is split into the following modules:
 
-- `Fermat/Quadratic/NegSeven.lean` constructs
+- `Fermat/Descent/Quadratic/NegSeven.lean` constructs
   `ℤ[(1+√-7)/2]`, proves its norm-Euclidean algorithm (with rounding error
   at most `11/16`), and classifies its units as `±1`;
-- `Fermat/Fourteen/PowerExtraction.lean` proves the specialized signed
+- `Fermat/Exponents/Fourteen/PowerExtraction.lean` proves the specialized signed
   fourteenth-power representation and returns the extracted root to
   `ℤ[√-7]` by a modulo-`2` argument;
-- `Fermat/Fourteen/FirstCase.lean` completes the case `7 ∤ tuv`;
-- `Fermat/Fourteen/DescentSetup.lean` performs the first factor allocation in
+- `Fermat/Exponents/Fourteen/FirstCase.lean` completes the case `7 ∤ tuv`;
+- `Fermat/Exponents/Fourteen/DescentSetup.lean` performs the first factor allocation in
   the generalized equation;
-- `Fermat/Fourteen/DescentArithmetic.lean` proves the three-factor
+- `Fermat/Exponents/Fourteen/DescentArithmetic.lean` proves the three-factor
   coprimality, mod-`8` orientation, and strict size estimates;
-- `Fermat/Fourteen/DescentConstruction.lean` constructs the smaller solution,
+- `Fermat/Exponents/Fourteen/DescentConstruction.lean` constructs the smaller solution,
   including the exceptional `n = 0` valuation, and proves
   `Fermat.Fourteen.Dirichlet.holdsAt_fourteen_dirichlet`.
 

@@ -99,35 +99,35 @@ fixed-exponent theorems and imports the proof-backed ladder datasets.
 
 The foundational statement and elementary transport lemmas live in:
 
-- [`Fermat/Basic.lean`](Fermat/Basic.lean): `HoldsAt`, primitive solutions,
+- [`Fermat/Core/Basic.lean`](Fermat/Core/Basic.lean): `HoldsAt`, primitive solutions,
   and transport along divisibility of exponents;
-- [`Fermat/Cases.lean`](Fermat/Cases.lean): first-case/second-case interfaces
+- [`Fermat/Core/Cases.lean`](Fermat/Core/Cases.lean): first-case/second-case interfaces
   and their final recombination;
-- [`Fermat/SophieGermain.lean`](Fermat/SophieGermain.lean): the reusable
+- [`Fermat/Core/SophieGermain.lean`](Fermat/Core/SophieGermain.lean): the reusable
   auxiliary-prime criterion.
 
 ### Exponent-specific proofs
 
-Each completed exponent has its own directory under `Fermat/`.
+Each completed exponent has its own directory under `Fermat/Exponents/`.
 
-- `Fermat/Five/`, `Fermat/Seven/`, and `Fermat/Fourteen/` contain
+- `Fermat/Exponents/Five/`, `Fermat/Exponents/Seven/`, and `Fermat/Exponents/Fourteen/` contain
   decompressed historical descents.  The modules separate normalization,
   coprimality, power extraction, allocation, and the final infinite descent.
-- `Fermat/Eleven/` and `Fermat/Thirteen/` contain two independent
+- `Fermat/Exponents/Eleven/` and `Fermat/Exponents/Thirteen/` contain two independent
   class-number certificates: a direct class-number-one calculation and a
   `SevenFold.lean` Faulhaber calculation connected to the same historical
   condition by the formal Kummer criterion.  The patched generic
   `flt-regular` endpoint is checked separately; it no longer consumes
   class-number regularity.
-- `Fermat/OneThousandFiftyOne/` contains a complete 524-index regularity
+- `Fermat/Exponents/OneThousandFiftyOne/` contains a complete 524-index regularity
   scan and its resulting cyclotomic class-number certificate.  Its public
   FLT endpoint uses the patched generic descent separately, while the scan
   remains the regular anchor used by the exponent-12613 campaign.
-- `Fermat/ThirtySeven/`, `Fermat/FiftyNine/`, `Fermat/SixtySeven/`,
-  `Fermat/OneHundredFiftySeven/`, `Fermat/FourHundredNinetyOne/`,
-  `Fermat/FiveHundredEightySeven/`, `Fermat/SixHundredSeven/`,
-  `Fermat/SixHundredNinetyOne/`, and
-  `Fermat/OneThousandThreeHundredEightyOne/` contain the completed
+- `Fermat/Exponents/ThirtySeven/`, `Fermat/Exponents/FiftyNine/`, `Fermat/Exponents/SixtySeven/`,
+  `Fermat/Exponents/OneHundredFiftySeven/`, `Fermat/Exponents/FourHundredNinetyOne/`,
+  `Fermat/Exponents/FiveHundredEightySeven/`, `Fermat/Exponents/SixHundredSeven/`,
+  `Fermat/Exponents/SixHundredNinetyOne/`, and
+  `Fermat/Exponents/OneThousandThreeHundredEightyOne/` contain the completed
   irregular-prime campaigns. Their final public endpoints are the corresponding
   `VandiverHistoricalAssembly*.lean` modules.
 
@@ -188,7 +188,7 @@ the prime-generic Takagi--Furtwängler and historical Vandiver assembly.
 
 ### Reusable irregular-prime machinery
 
-[`Fermat/Irregular/`](Fermat/Irregular/) contains the shared number theory
+[`Fermat/Descent/Irregular/`](Fermat/Descent/Irregular/) contains the shared number theory
 used by the concrete irregular exponents.  Important families include:
 
 - Bernoulli/Faulhaber and Voronoi--Kummer congruences;
@@ -203,7 +203,7 @@ Exponent-specific modules instantiate these generic results with explicit
 finite data.  Large matrices and Bernoulli numbers are checked using compact
 kernel-verifiable certificates rather than trusted external computations.
 
-[`Fermat/GenericIrregular/`](Fermat/GenericIrregular/) is the new
+[`Fermat/Descent/GenericIrregular/`](Fermat/Descent/GenericIrregular/) is the new
 fixed-exponent assembly layer.  Its theorem
 `Fermat.GenericIrregular.FixedExponent.holdsAt_of_certificate` proves
 `Fermat.HoldsAt p` from a parameterized fixed-second-case certificate
@@ -226,12 +226,12 @@ directories. End-to-end regressions are checked at `37`, `59`, `67`, `157`,
 `491`, `587`, `607`, `691`, and `1381`. They include the two-channel `157`,
 `587`, and `691` cases and the three-channel `491` case, each closed by one
 weighted-moment determinant. The current generic campaign stops at `1381`. See the
-[GenericIrregular architecture note](Fermat/GenericIrregular/README.md) for
+[GenericIrregular architecture note](Fermat/Descent/GenericIrregular/README.md) for
 the complete dependency flow, channel table, and certificate boundary.
 
 ### The regularized Kummer splice
 
-[`Fermat/KummerIso/`](Fermat/KummerIso/) reassembles those same nine
+[`Fermat/Descent/KummerIso/`](Fermat/Descent/KummerIso/) reassembles those same nine
 fixed-second-case certificates through an explicit repair of Kummer's proof.
 The two uses of regularity are kept separate:
 
@@ -272,12 +272,12 @@ regressions reuse each fixed certificate's checked unit system and axis-8
 channels, so they require neither Morishima nor the canonical derivative
 source. They reuse the explicit finite Sophie--Germain certificates for
 Case I, and therefore contain no project axioms. See the
-[KummerIso architecture note](Fermat/KummerIso/README.md) for the complete
+[KummerIso architecture note](Fermat/Descent/KummerIso/README.md) for the complete
 call graph, theorem boundaries, and both regression families.
 
 ### Prime-parametric Kummer--Albert and local H² laboratory
 
-[`Fermat/Conservation/`](Fermat/Conservation/) contains the generic
+[`Fermat/Experiments/Conservation/`](Fermat/Experiments/Conservation/) contains the generic
 cohomological and field-theoretic implementation used to investigate the
 remaining local step without building a separate proof for each prime.  Its
 prime-parametric spine now constructs, for every prime `p` in characteristic
@@ -411,7 +411,7 @@ not pass through `CommonActionStage`, either drain module, or any numbered
 exponent directory.
 
 The concrete local experiment lives in
-[`Fermat/FiftyNine/Conservation/`](Fermat/FiftyNine/Conservation/).  Lean
+[`Fermat/Exponents/FiftyNine/Conservation/`](Fermat/Exponents/FiftyNine/Conservation/).  Lean
 proves that `60` is not a 59th power in the actual lambda-adic field, while
 the bare uniformizer `lambda = zeta_59 - 1` has the explicit norm witness
 `Norm(1 + alpha) = zeta_59`.  The same witness kills the bare-lambda Kummer
@@ -831,7 +831,7 @@ that the W1 receipt is the negative local Frobenius functional, it produces
 the nonempty W1+W3 compatible fiber directly, without a selected lift.  The
 current lambda factor is still the ambient unprojected continuous `H1`.
 The intended cheaper formulation should replace it by the reflected local
-quotient/character seat described in `7A-ARTIN-READ.md`; the module records
+quotient/character seat described in `notes/7A-ARTIN-READ.md`; the module records
 the stronger ambient-surjectivity diagnostic without presenting it as that
 final PT theorem.
 
@@ -898,17 +898,17 @@ both `SecondCaseExcluded 59` and `Fermat.HoldsAt 59`.  This route closes the
 fixed exponent without claiming that the still-experimental local
 reciprocity branch has been completed.
 
-[`Fermat/FiftyNine/Conservation/Verification.lean`](Fermat/FiftyNine/Conservation/Verification.lean)
+[`Fermat/Exponents/FiftyNine/Conservation/Verification.lean`](Fermat/Exponents/FiftyNine/Conservation/Verification.lean)
 is the non-imported executable audit leaf for this campaign.  It checks the
 named endpoints, dependency guards, compatibility modules, and the standard
 axiom budget separately from the public umbrella import.
-[`Fermat/FiftyNine/Conservation/HistoricalVerification.lean`](Fermat/FiftyNine/Conservation/HistoricalVerification.lean)
+[`Fermat/Exponents/FiftyNine/Conservation/HistoricalVerification.lean`](Fermat/Exponents/FiftyNine/Conservation/HistoricalVerification.lean)
 is its deliberately separate sibling audit for the state-to-history route,
 including the unit/class naturality and class-kernel receipts.  Keeping the
 two leaves separate preserves the clean conservation laboratory's exclusion
 of the historical imports.
 
-[`Fermat/Regular/`](Fermat/Regular/) contains reusable Faulhaber
+[`Fermat/Descent/Regular/`](Fermat/Descent/Regular/) contains reusable Faulhaber
 infrastructure and the checked historical bridge
 
 ```text
@@ -920,12 +920,12 @@ The deep Bernoulli/class-group equivalence comes from the pinned
 formalization.  Since the locally patched `flt-regular` core no longer
 accepts that condition as a premise, its generic FLT endpoint is deliberately
 reported as a separate result with every temporary premise and seam exposed.
-[`Fermat/Quadratic/`](Fermat/Quadratic/) contains
+[`Fermat/Descent/Quadratic/`](Fermat/Descent/Quadratic/) contains
 quadratic-ring and unit calculations shared by several elementary descents.
 
 ### The seven-fold ladder
 
-[`Fermat/Ladder/`](Fermat/Ladder/) records the campaign's measured
+[`Fermat/Experiments/Ladder/`](Fermat/Experiments/Ladder/) records the campaign's measured
 decomposition independently of the final theorem statement.
 
 - `Basic.lean` defines the seven folds, checked traces, pass/contradiction

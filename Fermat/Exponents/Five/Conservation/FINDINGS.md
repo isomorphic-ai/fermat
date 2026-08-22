@@ -3,7 +3,7 @@
 ## 2026-07-28 — dependency and reconstruction boundary
 
 - The repository's completed Dirichlet route is spread across ten modules
-  under `Fermat/Five`: modular entry, generalized equation, half-sum
+  under `Fermat/Exponents/Five`: modular entry, generalized equation, half-sum
   coordinates, integer power splitting, golden-order fifth-power extraction,
   two descent recurrences, initial-state construction, and outer reduction.
   None of those modules may enter the N5 conservation import cone.

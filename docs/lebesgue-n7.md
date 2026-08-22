@@ -18,7 +18,7 @@ missing argument on pp. 348–349.
 
 The formal proof follows this corrected Lebesgue route.  The earlier factor
 arithmetic from Lamé's 1840 memoir (JMPA pp. 195–211) is recorded separately
-in `Fermat/Seven/LameArithmetic.lean`, but is not substituted for Lebesgue's
+in `Fermat/Exponents/Seven/LameArithmetic.lean`, but is not substituted for Lebesgue's
 published correction.
 
 Equations below are transcriptions rather than quotations of the surrounding
@@ -226,14 +226,14 @@ Théorème I has already ruled out.
 
 ## Lean modules
 
-- `Fermat/Seven/LameArithmetic.lean`: Lamé's exceptional-factor arithmetic;
-- `Fermat/Seven/Lebesgue/Symmetric.lean`: `s,u,v,t` and the seventh-power
+- `Fermat/Exponents/Seven/LameArithmetic.lean`: Lamé's exceptional-factor arithmetic;
+- `Fermat/Exponents/Seven/Lebesgue/Symmetric.lean`: `s,u,v,t` and the seventh-power
   identity;
-- `Fermat/Seven/Lebesgue/Primitive.lean`: parity and coprimality of `t`;
-- `Fermat/Seven/Lebesgue/PowerAllocation.lean`: the rigorous seventh- and
+- `Fermat/Exponents/Seven/Lebesgue/Primitive.lean`: parity and coprimality of `t`;
+- `Fermat/Exponents/Seven/Lebesgue/PowerAllocation.lean`: the rigorous seventh- and
   fourteenth-power allocation;
-- `Fermat/Seven/Lebesgue/EvenSquare.lean` and
+- `Fermat/Exponents/Seven/Lebesgue/EvenSquare.lean` and
   `FinalSubstitution.lean`: the final completed square;
-- `Fermat/Seven/Lebesgue/Descent.lean`: Théorème I, including the Addition;
-- `Fermat/Seven/Lebesgue/TheoremTwo.lean` and `Reduction.lean`: Théorème II
+- `Fermat/Exponents/Seven/Lebesgue/Descent.lean`: Théorème I, including the Addition;
+- `Fermat/Exponents/Seven/Lebesgue/TheoremTwo.lean` and `Reduction.lean`: Théorème II
   and the standard `Fermat.HoldsAt 7` statement.

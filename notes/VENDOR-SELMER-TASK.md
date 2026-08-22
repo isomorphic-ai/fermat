@@ -15,7 +15,7 @@ now reaches.
 Port the selmer-class-sequence material (toClass, toClass_ker,
 toClass_range and their private helpers) from ~/Mathlib branch
 selmer-class-sequence into this tree as
-Fermat/Conservation/SelmerSequence.lean (route-neutral core).
+Fermat/Experiments/Conservation/SelmerSequence.lean (route-neutral core).
 Provenance header: the PR URL above, the head commit, and per-source
 SHA-256 (the IsoConserveStatements pattern). The fermat pin is mathlib
 rev 0531bb79 on Lean 4.31.0-rc1 - the research audit confirmed
@@ -27,12 +27,12 @@ header. Faithful port, no improvements - deltas are findings.
 ## W2 — inhabit the realization
 
 Construct the instance of SelmerClassSequenceRealization (the withheld
-structure in Fermat/Conservation/CommonActionStage.lean and its
+structure in Fermat/Experiments/Conservation/CommonActionStage.lean and its
 selected N59 counterpart): classProjection from the vendored toClass
 (through the Additive wrapping the stage already uses), middle
 exactness from toClass_ker, surjectivity onto the p-torsion from
 toClass_range. WithheldSelmerClassSequenceRealization becomes a
-theorem. The unconditional wall falls; update BOUNDARY-MAP.md
+theorem. The unconditional wall falls; update notes/BOUNDARY-MAP.md
 accordingly (before -> after, provenance cited).
 
 ## W3 — advance honestly through what unlocks

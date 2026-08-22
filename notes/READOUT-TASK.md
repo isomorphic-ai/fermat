@@ -31,7 +31,7 @@ the conserved fiber forward.
 
 ## Part A — the generic abstraction (route-neutral core)
 
-New module `Fermat/Conservation/ReadoutLedger.lean` (name
+New module `Fermat/Experiments/Conservation/ReadoutLedger.lean` (name
 `ConservedReadoutComparison` acceptable for the two-readout part),
 generic over a field K and K-modules, with generic theorems for:
 

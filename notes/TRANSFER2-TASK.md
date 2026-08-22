@@ -4,7 +4,7 @@
 **For:** PRO Goblin (GPT 5.6 Sol Ultra) via codex, working in ~/fermat.
 **Mandate (Fabian, 2026-08-02):** continue. The TRANSFER session flipped
 nine rows and met the tunnel; this session completes the sweep. Success
-criterion: after this session, every row of BOUNDARY-MAP.md is LITERAL
+criterion: after this session, every row of notes/BOUNDARY-MAP.md is LITERAL
 except exactly the three named seams (Lemma I / 7a, the transformer
 successor, layer transport) — which remain untouched, guarded, and
 stated in Transfer vocabulary. Still NO seam crossing, NO endpoint.
@@ -36,7 +36,7 @@ stated in Transfer vocabulary. Still NO seam crossing, NO endpoint.
 
 ## W-final — the map, closed
 
-Update BOUNDARY-MAP.md in place (before→after preserved). End state:
+Update notes/BOUNDARY-MAP.md in place (before→after preserved). End state:
 a closing section "The remaining frontier" listing exactly the three
 seams (plus any row proven seam-blocked above), each with its required
 Transfer written out. Verification gains a guard per new LITERAL row.

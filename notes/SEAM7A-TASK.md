@@ -8,7 +8,7 @@ relation (7a) — by the Spiegelung route. "Let's see if it closes that
 way." An honest obstruction map remains an acceptable deliverable; a
 forced theorem is not.
 
-## The wanted poster (from BOUNDARY-MAP.md, your own writing)
+## The wanted poster (from notes/BOUNDARY-MAP.md, your own writing)
 
 Construct the exact-cancellation transfer:
 

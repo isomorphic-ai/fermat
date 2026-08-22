@@ -2028,8 +2028,8 @@
   cube divisibility coefficientwise in the raw generated-edge basis, whereas
   the credited Vandiver calculation produces those congruences in the
   diagonal/character basis.  The historical coefficientwise endpoint is
-  explicitly diagonal in `Fermat/Irregular/VandiverLemmaTwoCore.lean` and
-  `Fermat/FiftyNine/VandiverDiagonalUnits.lean`.
+  explicitly diagonal in `Fermat/Descent/Irregular/VandiverLemmaTwoCore.lean` and
+  `Fermat/Exponents/FiftyNine/VandiverDiagonalUnits.lean`.
 - The correct generated interface has one congruence for each character row:
   `59 ^ 3 ∣ (∑ i, a i * M k i) * B k`.  At conductor 59 the remaining
   change of basis is finite: modulo 59, `M` is a row-scaled Vandermonde matrix

@@ -9,7 +9,7 @@ computation mathematics rather than numerology." The linking stage
 (W1–W5, commits 72a363b..b46febc) is complete and audited. 7a remains
 the GAUGE, never the target; NO transformer, NO endpoint.
 
-## W0 — discharge erratum E1 by derivation (ERRATA.md)
+## W0 — discharge erratum E1 by derivation (notes/ERRATA.md)
 
 The 7a/7d mode labels in BOUNDARY-MAP's interaction rereading are
 reversed (7a: x - y = 0 kills the DIFFERENCE; 7d: x + y = 0 kills the

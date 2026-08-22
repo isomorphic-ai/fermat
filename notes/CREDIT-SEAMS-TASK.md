@@ -3,7 +3,7 @@
 **TruthSeed:** `fermat-credit:four-holes-three-yours`
 **For:** PRO Goblin (GPT 5.6 Sol Ultra) via codex, working in ~/fermat.
 **Starting point:** your own seam localization (HEAD ad51517,
-`Fermat/FiftyNine/Conservation/FINDINGS.md`). The ladder C1–C3 and the
+`Fermat/Exponents/FiftyNine/Conservation/FINDINGS.md`). The ladder C1–C3 and the
 generated N59 instantiation are accepted and audited (endpoint absent,
 forbidden names unknown, 30+37 theorems at standard trio — verified
 independently). This session fills the seams you named, in order:

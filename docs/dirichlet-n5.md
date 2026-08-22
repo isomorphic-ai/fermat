@@ -65,7 +65,7 @@ Here `q,r` are both odd.  In the both-odd branch, Theorem V first writes
 `m=n=5`; after `p=5r` the same calculation gives (C), now with `q` odd and
 `r` even.  Thus the two source branches really do enter the same core
 equation with different coordinate parity.  This is the content of
-`Fermat/Five/Coordinates.lean` and `Fermat/Five/InitialArithmetic.lean`.
+`Fermat/Exponents/Five/Coordinates.lean` and `Fermat/Exponents/Five/InitialArithmetic.lean`.
 
 ## The quartic used in both descents
 
@@ -88,7 +88,7 @@ norm identities behind the repetitions are
 
 The first is used when `t` is odd and `s` even (Crelle p. 365); the second
 when `t,s` are both odd (p. 374).  In Lean, `F` and these two descent
-normalizations are in `Fermat/Five/Descent.lean`.
+normalizations are in `Fermat/Exponents/Five/Descent.lean`.
 
 ## The old branch: both original entries odd
 
@@ -133,7 +133,7 @@ Consequently the first state is
 
 with `t` odd, `s` even and divisible by `5`, and `5∤t`.  This is precisely
 `EvenCore.exists_evenState`, which returns `EvenState 1 4 t s w` in
-`Fermat/Five/Initial.lean`.
+`Fermat/Exponents/Five/Initial.lean`.
 
 For the repeating step, the source retains an auxiliary coefficient and
 considers
@@ -188,7 +188,7 @@ Theorem VII, begun on p. 371 and completed on p. 372, records the hypotheses:
 `P,Q` are coprime and odd, `5∣Q`, `5∤P`, and `P²-5Q²` is four times a
 fifth power.  In Lean these formulas are
 `half_fifth_coordinate_formulas` and `exists_odd_half_coordinates` in
-`Fermat/Five/PowerExtraction.lean`.
+`Fermat/Exponents/Five/PowerExtraction.lean`.
 
 For (C) with `q,r` odd, the source factor allocation on pp. 373–374, at
 `n=5,A=1`, is exactly
@@ -211,7 +211,7 @@ h = 4,       5^4 s F(t,s) = 16 w^5.
 ```
 
 This is `OddCore.exists_oddState`, returning `OddState 4 t s w` in
-`Fermat/Five/Initial.lean`.
+`Fermat/Exponents/Five/Initial.lean`.
 
 For the repeating step, the source again retains the auxiliary coefficient:
 
@@ -260,9 +260,9 @@ instead works in the maximal order
 O₅ = ℤ[(1+√5)/2].
 ```
 
-`Fermat/Quadratic/Golden.lean` proves that the absolute norm is Euclidean,
+`Fermat/Descent/Quadratic/Golden.lean` proves that the absolute norm is Euclidean,
 so `O₅` has the UFD infrastructure needed for coprime-factor extraction.
-`Fermat/Five/PowerExtraction.lean` proves that the two conjugate factors are
+`Fermat/Exponents/Five/PowerExtraction.lean` proves that the two conjugate factors are
 coprime in `O₅`, extracts a fifth power up to a unit, and removes the unit
 ambiguity.  When `P,Q` have opposite parity, a modulo-`2` argument returns
 the root to `ℤ[√5]`.  When `P,Q` are both odd, the algebraic integer is
@@ -285,7 +285,7 @@ Euler's *Additions à l'Algèbre*, article 75.  In the addition, p. 370 reduces
 the exponent modulo `5`; pp. 370–371 isolate the admissible residue and turn
 the resulting factor into (D16).
 
-**Lean repair.**  `Fermat/Quadratic/GoldenUnits.lean` proves the required
+**Lean repair.**  `Fermat/Descent/Quadratic/GoldenUnits.lean` proves the required
 classification.  It identifies `9+4√5` as the fundamental norm-one Pell
 solution and proves that every unit of `O₅` is
 
@@ -295,7 +295,7 @@ solution and proves that every unit of `O₅` is
 
 The sign is a fifth power because the exponent is odd.  The unit exponent is
 reduced modulo `5`, and the finite coordinate congruence
-`phi_remainder_eq_zero` in `Fermat/Five/PowerExtraction.lean` eliminates the
+`phi_remainder_eq_zero` in `Fermat/Exponents/Five/PowerExtraction.lean` eliminates the
 remaining residue.  This supplies, within Lean, the classification and unit
 absorption used informally in the source calculations.
 
@@ -303,26 +303,26 @@ absorption used informally in the source calculations.
 
 The checked proof is split into the following modules:
 
-- `Fermat/Five/Modular.lean` proves the modulo-`25` entry calculation;
-- `Fermat/Five/Equation.lean` performs the signed permutation that puts the
+- `Fermat/Exponents/Five/Modular.lean` proves the modulo-`25` entry calculation;
+- `Fermat/Exponents/Five/Equation.lean` performs the signed permutation that puts the
   entry divisible by `5` on the right of (E);
-- `Fermat/Five/Reduction.lean` reduces primitive FLT data to impossibility of
+- `Fermat/Exponents/Five/Reduction.lean` reduces primitive FLT data to impossibility of
   `FifthEquation`;
-- `Fermat/Five/PowerSplitting.lean` supplies the signed odd-power allocation
+- `Fermat/Exponents/Five/PowerSplitting.lean` supplies the signed odd-power allocation
   for coprime integer factors;
-- `Fermat/Five/Coordinates.lean` constructs `OddCore` and `EvenCore`;
-- `Fermat/Five/InitialArithmetic.lean` proves the coprime allocations from
+- `Fermat/Exponents/Five/Coordinates.lean` constructs `OddCore` and `EvenCore`;
+- `Fermat/Exponents/Five/InitialArithmetic.lean` proves the coprime allocations from
   (C), including the exact factors `16`, `25`, and `2·25`;
-- `Fermat/Quadratic/Golden.lean` and
-  `Fermat/Quadratic/GoldenUnits.lean` provide the Euclidean maximal order and
+- `Fermat/Descent/Quadratic/Golden.lean` and
+  `Fermat/Descent/Quadratic/GoldenUnits.lean` provide the Euclidean maximal order and
   its Pell-based unit classification;
-- `Fermat/Five/PowerExtraction.lean` proves the two quadratic representation
+- `Fermat/Exponents/Five/PowerExtraction.lean` proves the two quadratic representation
   interfaces and their coordinate formulas;
-- `Fermat/Five/Initial.lean` constructs the initial states at `h=4` and
+- `Fermat/Exponents/Five/Initial.lean` constructs the initial states at `h=4` and
   `(g,h)=(1,4)`;
-- `Fermat/Five/Descent.lean` proves both exact recurrences and both strict
+- `Fermat/Exponents/Five/Descent.lean` proves both exact recurrences and both strict
   descents;
-- `Fermat/Five/Dirichlet.lean` joins the branches and proves
+- `Fermat/Exponents/Five/Dirichlet.lean` joins the branches and proves
   `Fermat.Five.Dirichlet.holdsAt_five_dirichlet`.
 
 Thus the formal dependency chain follows the completed memoir and addition;

@@ -4,7 +4,7 @@
 **For:** PRO Goblin (GPT 5.6 Sol Ultra) via codex, working in ~/fermat.
 **Target:** discharge `Fermat.Conservation.KummerDrain.FactorPrincipalizationPermit`
 for the Fermat-produced state — the exact typed hole in
-TransformerProbe.lean — closing W2 of TRANSFORMER-TASK.md.
+TransformerProbe.lean — closing W2 of notes/TRANSFORMER-TASK.md.
 
 ## The construction (Fabian's mirror + the flt9 splice reading)
 
@@ -28,7 +28,7 @@ ledger form — honest norm bookkeeping on the factor ledger, statewise.
 
 ## The work
 
-W1 — `Fermat/Conservation/Credit/Fold.lean` (generic): conjugation as
+W1 — `Fermat/Experiments/Conservation/Credit/Fold.lean` (generic): conjugation as
 the ledger transpose on the class/debit ledger (the Vacuum rung's
 `opposite` machinery lifted to classes); the relative-norm fold
 operation; the generic netting lemma (odd-torsion class equal to both

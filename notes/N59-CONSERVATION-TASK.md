@@ -3,7 +3,7 @@
 **TruthSeed:** `fermat-n59:the-credit-column-debuts`
 **For:** PRO Goblin (GPT 5.6 Sol Ultra) via codex, working in ~/fermat.
 **Target:** `Fermat.FiftyNine.holdsAt_fiftyNine_conservation : Fermat.HoldsAt 59`
-**Location:** `Fermat/FiftyNine/Conservation/`
+**Location:** `Fermat/Exponents/FiftyNine/Conservation/`
 
 ## Why 59, and why now
 

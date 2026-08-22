@@ -79,7 +79,7 @@ Prove/confirm, in order:
    implication). Mark the global interface as sufficient-but-not-
    necessary in doc comments. DO NOT delete it — retained conversion,
    not deletion.
-6. **BOUNDARY-MAP.md.** Restate the frontier: it is now the three
+6. **notes/BOUNDARY-MAP.md.** Restate the frontier: it is now the three
    arithmetic interfaces of the comparison program — (a) exact-pair
    tame silence ⟨h_F, y*⟩_v = 0 for v ≠ 59 including 827, (b) an
    actual global reciprocity producer Σ_v ⟨h_F, y*⟩_v = 0, (c) the

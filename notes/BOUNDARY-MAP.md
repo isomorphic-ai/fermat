@@ -240,8 +240,8 @@ SHA-256 `a6fb493fdaf8686eed654b4b0f7abe84ef14d4198304ef4dcf9f8160c8afd2f6`
 at the empty-support commit and
 `9810a9311a0833042b5ec1d9e5e7a930cdefb30e85adcbc5c785e8e382eb7307`
 at the finite-`S` commit.
-`Fermat/Conservation/PowerRootObstruction.lean` and
-`Fermat/Conservation/SelmerSequence.lean` record their complete compatibility
+`Fermat/Experiments/Conservation/PowerRootObstruction.lean` and
+`Fermat/Experiments/Conservation/SelmerSequence.lean` record their complete compatibility
 deltas: ordinary imports and omitted module export-control commands; the
 pinned `MonoidHom.restrict` spelling; repeated file-local notation/options;
 one explicit quotient type argument required by Lean 4.31; and omission of
@@ -686,7 +686,7 @@ special class relation.  No forbidden implementation was imported or copied,
 so `τ₂` and the unconditional `FactorPrincipalizationPermit` remain absent.
 
 **DERIVED GAUGE READING — earned swap quotient
-(2026-08-05; discharges `ERRATA.md` E1).**  Put `x = r₀` and `y = r₁`
+(2026-08-05; discharges `notes/ERRATA.md` E1).**  Put `x = r₀` and `y = r₁`
 before applying the earned swap.  Since the allocated ledger proves
 `59 • r₁ = 0`, the open (7a) expression satisfies
 

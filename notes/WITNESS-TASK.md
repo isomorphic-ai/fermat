@@ -12,7 +12,7 @@ interfaces; it forces nothing.
 On the tame layer + seated Selmer eigenspaces: construct a concrete
 candidate dual element y for a chosen auxiliary prime q - the lamp
 table nominates q = 827 first (59's own minimal certified lamp;
-GENERATION-CHAINS.md), fallbacks from the table if it fails. Verify by
+notes/GENERATION-CHAINS.md), fallbacks from the table if it fails. Verify by
 computation/valuation bookkeeping: (a) y lies in the right
 eigenspace/dual leg; (b) its valuation support is contained in
 {the 59-adic place, places above q}; (c) every tame reading outside q

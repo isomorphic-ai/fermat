@@ -2,8 +2,8 @@
 
 **TruthSeed:** `fermat-credit:without-a-generator-nothing-provides-credit`
 **For:** PRO Goblin (GPT 5.6 Sol Ultra) via codex, working in ~/fermat.
-**Locations:** `Fermat/Conservation/Credit/` (the ladder — route-neutral,
-like the Floor) and `Fermat/FiftyNine/Conservation/` (the endpoint).
+**Locations:** `Fermat/Experiments/Conservation/Credit/` (the ladder — route-neutral,
+like the Floor) and `Fermat/Exponents/FiftyNine/Conservation/` (the endpoint).
 **Endpoint target:**
 `Fermat.FiftyNine.holdsAt_fiftyNine_conservation : Fermat.HoldsAt 59`
 
@@ -71,7 +71,7 @@ the credit ledger's anatomy:
 ## Phasing (this session)
 
 - **Phase I — C1, C2, C3 as ladder rungs** in
-  `Fermat/Conservation/Credit/`, each with the generative discipline
+  `Fermat/Experiments/Conservation/Credit/`, each with the generative discipline
   below, each with its own PREDICTIONS/FINDINGS entries and audit
   surface. Small instantiating fields are welcome where they make a rung
   honest (φ and ℚ(√5) for the generator vocabulary — reuse the N5

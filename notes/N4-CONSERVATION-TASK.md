@@ -2,8 +2,8 @@
 
 **TruthSeed:** `fermat-n4:balance-powers-drain`
 **For:** PRO Goblin (ultra) via codex, in ~/fermat.
-**Predecessors:** Fermat/Two/PythagorasConservation.lean (BALANCE mode),
-Fermat/Three/Conservation/ (DRAIN mode, Eisenstein charge). This rung:
+**Predecessors:** Fermat/Exponents/Two/PythagorasConservation.lean (BALANCE mode),
+Fermat/Exponents/Three/Conservation/ (DRAIN mode, Eisenstein charge). This rung:
 n=4 as drain over ℤ itself — with the n=2 balance ledger as the engine.
 
 ## The conservation structure (spine mandatory, realization yours)
@@ -24,7 +24,7 @@ n=4 as drain over ℤ itself — with the n=2 balance ledger as the engine.
    double-descent), stated as a charged-descent lemma.
 4. **The floor:** REUSE the conservation floor from n=3
    (noInfinitePositiveChargeDrain) — hoist it to a shared location
-   (e.g. Fermat/Conservation/Floor.lean) imported by BOTH Three and
+   (e.g. Fermat/Experiments/Conservation/Floor.lean) imported by BOTH Three and
    Four if that keeps cones clean, or import Three's module. The floor
    is mode-generic; do not duplicate it.
 5. **Assemble:** `Fermat.Four.holdsAt_four_conservation :

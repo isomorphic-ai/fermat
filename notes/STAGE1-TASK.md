@@ -11,7 +11,7 @@ and the global product formula are OUT of scope (later stages).
 
 ## W1 — the tame Hilbert symbol (generic, route-neutral)
 
-New module (e.g. Fermat/Conservation/TameSymbol.lean): for a place v
+New module (e.g. Fermat/Experiments/Conservation/TameSymbol.lean): for a place v
 with residue characteristic NOT p and residue field of size q with
 p | q - 1, the explicit tame symbol
   (a,b)_v = omega( (-1)^{v(a)v(b)} * a^{v(b)} / b^{v(a)} )^{(q-1)/p}

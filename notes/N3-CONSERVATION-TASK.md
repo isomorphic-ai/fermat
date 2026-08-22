@@ -2,7 +2,7 @@
 
 **TruthSeed:** `fermat-n3:drain-mode`
 **For:** PRO Goblin (ultra) via codex, in ~/fermat.
-**Predecessor:** Fermat/Two/PythagorasConservation.lean — n=2 as the
+**Predecessor:** Fermat/Exponents/Two/PythagorasConservation.lean — n=2 as the
 BALANCE mode (empty coupling ⟹ additive ledger; integer ledger closes
 at 3²+4²=5²). Your task is n=3 as the DRAIN mode: the integer ledger
 provably cannot close, shown by conservation accounting.
@@ -45,7 +45,7 @@ provably cannot close, shown by conservation accounting.
 PREDICTIONS first (commit before work); FINDINGS at discovery; commit
 early and often; full lake build; #print axioms (standard trio) on
 every public theorem; no sorry/admit/axiom in delivered theorems;
-whitespace clean. Work in Fermat/Three/, files under a Conservation
+whitespace clean. Work in Fermat/Exponents/Three/, files under a Conservation
 namespace/dir so the classical route stays untouched.
 
 The deliverable either way: n=2 (balance) and n=3 (drain) as the first

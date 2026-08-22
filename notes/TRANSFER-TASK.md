@@ -3,7 +3,7 @@
 **TruthSeed:** `fermat-ledger:strictly-smaller-was-a-projection-of-a-transaction`
 **For:** PRO Goblin (GPT 5.6 Sol Ultra) via codex, working in ~/fermat.
 **Mandate (Fabian, 2026-08-01):** "Yes, transfer. As much as we can do!"
-BOUNDARY-MAP.md found one missing invariant class repeated in every
+notes/BOUNDARY-MAP.md found one missing invariant class repeated in every
 row: the accounted transfer. This session mints it once, bridges it to
 the scheduler's formalized law, and retrofits as many cones as budget
 allows. Still NO Lemma I, NO transformer inhabitant, NO endpoint —
@@ -12,7 +12,7 @@ inhabitation problems, not solved.
 
 ## W1 — mint `Transfer` (route-neutral core)
 
-`Fermat/Conservation/Transfer.lean`: the accounted transfer between
+`Fermat/Experiments/Conservation/Transfer.lean`: the accounted transfer between
 Ledger states over a common carrier:
 
 - fields: `before after : Ledger-state`, `spent`, with laws
@@ -69,7 +69,7 @@ projection + flip its BOUNDARY-MAP classification via a new
 ## W4 — the map update
 
 Re-run the classification for every retrofitted path; update
-BOUNDARY-MAP.md in place (keep the old classification visible as
+notes/BOUNDARY-MAP.md in place (keep the old classification visible as
 struck-through or a before/after column — the map's history is part
 of the record). Restate the three seams' boundary entries in Transfer
 vocabulary. Verification gains a guard per new LITERAL claim.

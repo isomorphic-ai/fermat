@@ -14,7 +14,7 @@ Vendor the minimal Heis carrier + payload statements from
 iso-conserve-lean (provenance header: source path, commit, SHA-256 per
 file — toolchains differ, do not fight them; port the small proofs to
 this tree's Lean where cheap, restate-and-reprove where trivial).
-Deliver in the route-neutral core: `Fermat/Conservation/Heis.lean`
+Deliver in the route-neutral core: `Fermat/Experiments/Conservation/Heis.lean`
 with the group laws, center, abelianization hom, commutator = area.
 
 ## W2 — the abelianization theorem and AreaTransfer
@@ -37,7 +37,7 @@ with the group laws, center, abelianization hom, commutator = area.
 
 ## W3 — reread the three seams in area vocabulary (READ ONLY)
 
-Update BOUNDARY-MAP.md's frontier section: for each seam state what it
+Update notes/BOUNDARY-MAP.md's frontier section: for each seam state what it
 looks like at D=2, as a conjecture-shaped requirement, clearly marked
 PREDICTION not theorem:
 

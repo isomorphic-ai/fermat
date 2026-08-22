@@ -63,7 +63,7 @@ fold, repayment, the N59 instance layer):
    transitively uses a named identity lemma. Classify: LITERAL
    (identity load-bearing) / DECORATIVE (identity defined nearby but
    bypassed) / ABSENT.
-2. Write BOUNDARY-MAP.md: the classification table, and for every
+2. Write notes/BOUNDARY-MAP.md: the classification table, and for every
    DECORATIVE/ABSENT theorem and every named open seam (7a/Lemma-I,
    the transformer successor, layer transport), state the boundary in
    invariant terms: WHICH conserved quantity is missing such that the

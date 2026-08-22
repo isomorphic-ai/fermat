@@ -1,6 +1,6 @@
 # The regularized Kummer splice
 
-`Fermat/KummerIso/` reconstructs the completed fixed-irregular proofs
+`Fermat/Descent/KummerIso/` reconstructs the completed fixed-irregular proofs
 through one explicit repair of Kummer's unit argument. It is a
 fixed-exponent method:
 
@@ -151,7 +151,7 @@ The modules implement this flow as follows:
 The factor allocation and descent algebra are reused from the pinned
 `flt-regular` dependency. The historical primary, reflection, real-unit,
 Bernoulli, and logarithmic-derivative layers are reused from
-`Fermat/Irregular/` and `Fermat/GenericIrregular/`; this directory does not
+`Fermat/Descent/Irregular/` and `Fermat/Descent/GenericIrregular/`; this directory does not
 maintain a shadow copy of them.
 
 ## What is complete, and what remains distinct
