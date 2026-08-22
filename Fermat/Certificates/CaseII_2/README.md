@@ -14,8 +14,9 @@ The exponent-1381 moment route is split into:
   normalized Kummer unit-extraction route and proves `Fermat.HoldsAt 1381`.
 
 The determinant compresses simultaneous nonvanishing; it does not by itself
-identify externally supplied numbers with Bernoulli coefficients.  The 1381
-receipt therefore retains one kernel-checked modular power-sum equality as
-the weight-provenance bridge, while avoiding imports of the older
-exponent-local Faulhaber certificate modules.  Replacing that bridge with a
-higher Kummer interpolation checker is an independent future optimization.
+identify externally supplied numbers with Bernoulli coefficients.  For 1381,
+two kernel-checked low contacts at indices `266` and `1646` authenticate the
+weight.  Sun's depth-two Bernoulli interpolation then transports them to the
+lifted index `367346` and proves that its normalized residue is exactly `561`.
+No power sum at the lifted index is evaluated, and the receipt avoids imports
+of the older exponent-local Faulhaber certificate modules.

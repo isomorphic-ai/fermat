@@ -226,6 +226,11 @@ irregular channel `{266}`, with lifted index `367346`.  Its source
 `689 × 689` circular-unit matrix is certified by 690 cyclic correlations.
 Those finite facts feed the reusable diagonal-unit and Lemma-II layers, then
 the prime-generic Takagi--Furtwängler and historical Vandiver assembly.
+The parallel [`CaseII_2` moment receipt](Fermat/Certificates/CaseII_2/) checks
+only the low contacts at `266` and `1646`; Sun's depth-two interpolation
+authenticates the lifted Bernoulli weight `561` without evaluating a power sum
+at index `367346`.  Rewiring the legacy consumers to this route is deferred to
+one later migration.
 
 ### Reusable irregular-prime machinery
 
