@@ -107,9 +107,13 @@ The Lean source tree is organized by role:
   shared interfaces, and classical wrappers;
 - [`Fermat/Descent/`](Fermat/Descent/) contains reusable irregular, Kummer,
   quadratic, and regular descent machinery;
+- [`Fermat/Certificates/`](Fermat/Certificates/) contains case-oriented finite
+  receipts shared by concrete proof assemblies.  The exponent-`1831`
+  Fourier determinant certificate lives under `CaseII_1/`;
 - [`Fermat/Exponents/`](Fermat/Exponents/) contains the concrete
-  fixed-exponent developments, including historical descents and checked
-  finite certificates.  Exponent directory names remain English words;
+  fixed-exponent developments, including historical descents, local finite
+  data, and thin certificate adapters.  Exponent directory names remain
+  English words;
 - [`Fermat/Experiments/`](Fermat/Experiments/) contains the Conservation and
   Ladder laboratories and their proof-backed datasets.
 
