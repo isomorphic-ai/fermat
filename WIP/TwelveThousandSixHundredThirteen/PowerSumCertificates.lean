@@ -1,4 +1,4 @@
-import Fermat.Basic
+import Fermat.Core.Basic
 
 /-!
 # Modular power sums for the exponent-12613 Bernoulli channels

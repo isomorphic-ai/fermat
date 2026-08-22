@@ -1,4 +1,4 @@
-import Fermat.TwelveThousandSixHundredThirteen.IrregularScanCertificateChunkedCore
+import Fermat.Exponents.TwelveThousandSixHundredThirteen.IrregularScanCertificateChunkedCore
 
 /-!
 # Batched irregular-scan certificate: block 24

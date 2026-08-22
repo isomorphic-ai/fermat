@@ -1,5 +1,5 @@
-import Fermat.TwelveThousandSixHundredThirteen.HighBernoulliChunked
-import Fermat.TwelveThousandSixHundredThirteen.IrregularScanCertificateChunkedAssembly
+import Fermat.Exponents.TwelveThousandSixHundredThirteen.HighBernoulliChunked
+import Fermat.Exponents.TwelveThousandSixHundredThirteen.IrregularScanCertificateChunkedAssembly
 
 /-!
 # Complete chunked low scan and Bernoulli bridge at exponent 12613

@@ -1,5 +1,5 @@
-import Fermat.Irregular.DirectBernoulli
-import Fermat.TwelveThousandSixHundredThirteen.PowerSumCertificates
+import Fermat.Descent.Irregular.DirectBernoulli
+import Fermat.Exponents.TwelveThousandSixHundredThirteen.PowerSumCertificates
 
 /-!
 # The four high Bernoulli channels at exponent 12613
