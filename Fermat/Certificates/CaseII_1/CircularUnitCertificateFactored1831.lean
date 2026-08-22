@@ -1,4 +1,4 @@
-import Fermat.Certificates.CaseII_1.CircularUnitFourierFactors
+import Fermat.Certificates.CaseII_1.CircularUnitFourierFactors1831
 
 /-!
 # Factored circular-unit determinant at exponent 1831
@@ -6,7 +6,7 @@ import Fermat.Certificates.CaseII_1.CircularUnitFourierFactors
 This is an independent replacement path for the cyclic-correlation
 certificate.  The generic Fourier determinant theorem reduces
 nonsingularity to the `914` nontrivial coefficients checked in
-`CircularUnitFourierFactors`; the package row and column permutations then
+`CircularUnitFourierFactors1831`; the package row and column permutations then
 transfer the result to the uploaded `914 × 914` matrix.
 
 The correlation certificate remains available in parallel while downstream
