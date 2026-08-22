@@ -738,11 +738,41 @@ def quotientPowerSum (p t a k : ℕ) : ℤ :=
     (((a * m) / (p ^ t) : ℕ) : ℤ) *
       ((a * m : ℕ) : ℤ) ^ (k - 1)
 
-/-- Voronoi after division by the index.
+/-- Voronoi after division by the index, at an arbitrary residual depth.
 
-Applying the prime-power congruence at depth `s + 1` and assuming
-`vₚ(k) ≤ s` leaves a congruence of depth one for `Bₖ / k`.  This is the
-rational cancellation step used in Kummer's proof. -/
+Applying the prime-power congruence at depth `s + e` and assuming
+`vₚ(k) ≤ s` leaves `e` powers of `p` after division by `k`.  The depth-one
+specialization below is the rational cancellation step used in Kummer's
+classical congruence; depth two is used by Sun's affine interpolation. -/
+theorem normalized_voronoi_hasPadicValAtLeast
+    {p s e a k : ℕ} [Fact p.Prime]
+    (hp5 : 5 ≤ p) (he : 1 ≤ e) (ha : a.Coprime p) (hk : 0 < k)
+    (hkeven : Even k) (hks : padicValNat p k ≤ s) :
+    HasPadicValAtLeast p (e : ℤ)
+      (((a : ℚ) ^ k - 1) * (bernoulli k / (k : ℚ)) -
+        (quotientPowerSum p (s + e) a k : ℚ)) := by
+  have hcoprime : a.Coprime (p ^ (s + e)) := ha.pow_right (s + e)
+  have h := voronoi_primePower_hasPadicValAtLeast hp5 (by omega)
+    hcoprime hk hkeven
+  have hfactor :
+      ((a : ℚ) ^ k - 1) * bernoulli k -
+          (k : ℚ) * (quotientPowerSum p (s + e) a k : ℚ) =
+        (k : ℚ) *
+          (((a : ℚ) ^ k - 1) * (bernoulli k / (k : ℚ)) -
+            (quotientPowerSum p (s + e) a k : ℚ)) := by
+    field_simp [Nat.cast_ne_zero.mpr hk.ne']
+  have h' :
+      HasPadicValAtLeast p ((e : ℤ) + s)
+        ((k : ℚ) *
+          (((a : ℚ) ^ k - 1) * (bernoulli k / (k : ℚ)) -
+            (quotientPowerSum p (s + e) a k : ℚ))) := by
+    rw [← hfactor]
+    simpa only [quotientPowerSum, Int.cast_sum, Int.cast_mul,
+      Int.cast_natCast, Int.cast_pow, Nat.cast_pow,
+      show ((s + e : ℕ) : ℤ) = (e : ℤ) + s by omega] using h
+  exact HasPadicValAtLeast.of_nat_mul hk.ne' hks h'
+
+/-- Depth-one compatibility wrapper for the normalized Voronoi congruence. -/
 theorem normalized_voronoi_hasPadicValAtLeast_one
     {p s a k : ℕ} [Fact p.Prime]
     (hp5 : 5 ≤ p) (ha : a.Coprime p) (hk : 0 < k)
@@ -750,26 +780,8 @@ theorem normalized_voronoi_hasPadicValAtLeast_one
     HasPadicValAtLeast p 1
       (((a : ℚ) ^ k - 1) * (bernoulli k / (k : ℚ)) -
         (quotientPowerSum p (s + 1) a k : ℚ)) := by
-  have hcoprime : a.Coprime (p ^ (s + 1)) := ha.pow_right (s + 1)
-  have h := voronoi_primePower_hasPadicValAtLeast hp5 (by omega)
-    hcoprime hk hkeven
-  have hfactor :
-      ((a : ℚ) ^ k - 1) * bernoulli k -
-          (k : ℚ) * (quotientPowerSum p (s + 1) a k : ℚ) =
-        (k : ℚ) *
-          (((a : ℚ) ^ k - 1) * (bernoulli k / (k : ℚ)) -
-            (quotientPowerSum p (s + 1) a k : ℚ)) := by
-    field_simp [Nat.cast_ne_zero.mpr hk.ne']
-  have h' :
-      HasPadicValAtLeast p ((1 : ℤ) + s)
-        ((k : ℚ) *
-          (((a : ℚ) ^ k - 1) * (bernoulli k / (k : ℚ)) -
-            (quotientPowerSum p (s + 1) a k : ℚ))) := by
-    rw [← hfactor]
-    simpa only [quotientPowerSum, Int.cast_sum, Int.cast_mul,
-      Int.cast_natCast, Int.cast_pow, Nat.cast_pow,
-      show ((s + 1 : ℕ) : ℤ) = (1 : ℤ) + s by omega] using h
-  exact HasPadicValAtLeast.of_nat_mul hk.ne' hks h'
+  simpa using normalized_voronoi_hasPadicValAtLeast
+    (e := 1) hp5 (by omega) ha hk hkeven hks
 
 /-- Over `ZMod p`, the sum of the `k`-th powers of the nonzero standard
 residues is `-1` when `p - 1` divides `k`, and zero otherwise. -/
