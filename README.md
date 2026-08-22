@@ -13,21 +13,27 @@ This abbreviates Mathlib's `FermatLastTheoremFor n`.  The project deliberately
 studies descent, cyclotomic, finite-certificate, and decomposition routes
 rather than importing the modern modularity proof.
 
-The completed public fixed-exponent results are:
+The completed fixed-exponent results exposed by the umbrella import are:
 
 | Exponent | Public theorem after `import Fermat` | Main route |
 | ---: | --- | --- |
 | 3 | `Fermat.holdsAt_three` | Mathlib's checked classical descent |
 | 4 | `Fermat.holdsAt_four` | Mathlib's checked classical descent |
 | 5 | `Fermat.holdsAt_five` | Dirichlet's two-branch descent |
+| 6 | `Fermat.Six.holdsAt_six_conservation` | direct conservation descent |
 | 7 | `Fermat.holdsAt_seven` | Lebesgue's 1840 proof and Addition |
+| 10 | `Fermat.Eleven.SevenFold.holdsAt_ten` | divisibility transport from exponent 5 |
 | 11 | `Fermat.holdsAt_eleven` | class number one; direct Faulhaber alternative |
+| 12 | `Fermat.Eleven.SevenFold.holdsAt_twelve` | divisibility transport from exponent 3 |
 | 13 | `Fermat.holdsAt_thirteen` | class number one; direct Faulhaber alternative |
 | 14 | `Fermat.holdsAt_fourteen` | Dirichlet's independent 1832 descent |
 | 37 | `Fermat.holdsAt_thirtySeven` | Vandiver--Takagi--Furtwängler |
 | 59 | `Fermat.holdsAt_fiftyNine` | Vandiver--Takagi--Furtwängler |
+| 60 | `Fermat.FiftyNine.Folding.holdsAt_sixty_via_three` | divisibility transport from exponent 3; alternatives from 4 and 5 |
+| 66 | `Fermat.SixtySeven.NeighborFolding.holdsAt_sixtySix_via_eleven` | divisibility transport from exponent 11; alternative from 3 |
 | 67 | `Fermat.holdsAt_sixtySeven` | Vandiver--Takagi--Furtwängler |
 | 157 | `Fermat.holdsAt_oneHundredFiftySeven` | two-probe Vandiver descent |
+| 229 | `Fermat.holdsAt_twoHundredTwentyNine` | complete Voronoi/Bernoulli regularity scan; patched generic descent |
 | 491 | `Fermat.holdsAt_fourHundredNinetyOne` | three-channel cyclic-certificate Vandiver descent |
 | 587 | `Fermat.holdsAt_fiveHundredEightySeven` | Vandiver--Sinnott; see provenance below |
 | 607 | `Fermat.holdsAt_sixHundredSeven` | one-channel circular-unit Vandiver descent |
@@ -57,9 +63,12 @@ also reassembled through the regularized Kummer correction.  After
 example `Fermat.holdsAt_thirtySeven_kummerIso` and
 `Fermat.holdsAt_oneThousandThreeHundredEightyOne_kummerIso`.
 
-The exponent directory for `1831` contains work-in-progress finite
-certificates.  Its presence does not by itself mean that a public
-`Fermat.HoldsAt n` theorem has been completed.
+Exponent `1831` is also complete, but its endpoint currently lives in the
+direct module
+[`Fermat.Exponents.OneThousandEightHundredThirtyOne.VandiverHistoricalAssembly1831`](Fermat/Exponents/OneThousandEightHundredThirtyOne/VandiverHistoricalAssembly1831.lean)
+rather than the `Fermat` umbrella import.  Importing that module exposes
+`Fermat.OneThousandEightHundredThirtyOne.holdsAt_oneThousandEightHundredThirtyOne :
+Fermat.HoldsAt 1831`.
 
 ### Provenance and method labels
 
@@ -92,15 +101,37 @@ the exact computation and formal verification are modern.
 
 ## Repository map
 
+The Lean source tree is organized by role:
+
+- [`Fermat/Core/`](Fermat/Core/) contains stable statement boundaries,
+  shared interfaces, and classical wrappers;
+- [`Fermat/Descent/`](Fermat/Descent/) contains reusable irregular, Kummer,
+  quadratic, and regular descent machinery;
+- [`Fermat/Exponents/`](Fermat/Exponents/) contains the concrete
+  fixed-exponent developments, including historical descents and checked
+  finite certificates.  Exponent directory names remain English words;
+- [`Fermat/Experiments/`](Fermat/Experiments/) contains the Conservation and
+  Ladder laboratories and their proof-backed datasets.
+
+Module paths follow this filesystem taxonomy.  Declaration namespaces remain
+stable: for example, the module `Fermat.Experiments.Ladder.Response` still
+exposes declarations under `Fermat.Ladder`.
+
 ### Public entry point
 
 [`Fermat.lean`](Fermat.lean) is the umbrella import.  It exposes the public
 fixed-exponent theorems and imports the proof-backed ladder datasets.
 
-The foundational statement and elementary transport lemmas live in:
+The stable statement and interface layer includes:
 
-- [`Fermat/Core/Basic.lean`](Fermat/Core/Basic.lean): `HoldsAt`, primitive solutions,
-  and transport along divisibility of exponents;
+- [`Fermat/Core/Statement/Basic.lean`](Fermat/Core/Statement/Basic.lean): the
+  proposition-only `HoldsAt` boundary;
+- [`Fermat/Core/Statement.lean`](Fermat/Core/Statement.lean): the statement
+  facade and transport along divisibility of exponents;
+- [`Fermat/Core/Basic.lean`](Fermat/Core/Basic.lean): the broad
+  Mathlib-plus-statement prelude used by classical developments;
+- [`Fermat/Core/Classical.lean`](Fermat/Core/Classical.lean): the checked
+  exponent-`3` and exponent-`4` wrappers and elementary transport to `14`;
 - [`Fermat/Core/Cases.lean`](Fermat/Core/Cases.lean): first-case/second-case interfaces
   and their final recombination;
 - [`Fermat/Core/SophieGermain.lean`](Fermat/Core/SophieGermain.lean): the reusable
@@ -108,7 +139,8 @@ The foundational statement and elementary transport lemmas live in:
 
 ### Exponent-specific proofs
 
-Each completed exponent has its own directory under `Fermat/Exponents/`.
+Each primary campaign exponent has its own directory under
+`Fermat/Exponents/`.
 
 - `Fermat/Exponents/Five/`, `Fermat/Exponents/Seven/`, and `Fermat/Exponents/Fourteen/` contain
   decompressed historical descents.  The modules separate normalization,
@@ -119,17 +151,22 @@ Each completed exponent has its own directory under `Fermat/Exponents/`.
   condition by the formal Kummer criterion.  The patched generic
   `flt-regular` endpoint is checked separately; it no longer consumes
   class-number regularity.
-- `Fermat/Exponents/OneThousandFiftyOne/` contains a complete 524-index regularity
-  scan and its resulting cyclotomic class-number certificate.  Its public
-  FLT endpoint uses the patched generic descent separately, while the scan
-  remains the regular anchor used by the exponent-12613 campaign.
+- `Fermat/Exponents/TwoHundredTwentyNine/` contains a complete depth-one
+  Voronoi/Bernoulli regularity scan, while
+  `Fermat/Exponents/OneThousandFiftyOne/` contains a complete 524-index
+  regularity scan and its resulting cyclotomic class-number certificate.
+  Their public FLT endpoints use the patched generic descent separately; the
+  exponent-1051 scan remains the regular anchor used by the exponent-12613
+  campaign.
 - `Fermat/Exponents/ThirtySeven/`, `Fermat/Exponents/FiftyNine/`, `Fermat/Exponents/SixtySeven/`,
   `Fermat/Exponents/OneHundredFiftySeven/`, `Fermat/Exponents/FourHundredNinetyOne/`,
   `Fermat/Exponents/FiveHundredEightySeven/`, `Fermat/Exponents/SixHundredSeven/`,
   `Fermat/Exponents/SixHundredNinetyOne/`, and
   `Fermat/Exponents/OneThousandThreeHundredEightyOne/` contain the completed
-  irregular-prime campaigns. Their final public endpoints are the corresponding
-  `VandiverHistoricalAssembly*.lean` modules.
+  umbrella-exported irregular-prime campaigns.  The
+  `Fermat/Exponents/OneThousandEightHundredThirtyOne/` campaign is complete as
+  well and is available by direct module import.  Their final historical
+  endpoints are the corresponding `VandiverHistoricalAssembly*.lean` modules.
 
 The irregular-prime directories use a deliberately layered layout:
 
@@ -406,9 +443,9 @@ thin order-59 adapter.
 this spine: it inventories the generic API, records its intended dependency
 graph, rejects public product-equivalence shortcuts, and checks every
 declaration against the standard `propext`/choice/quotient axiom budget.
-Its recursive import cone stays entirely inside `Fermat.Conservation`: it does
-not pass through `CommonActionStage`, either drain module, or any numbered
-exponent directory.
+Its recursive import cone stays entirely inside
+`Fermat.Experiments.Conservation`: it does not pass through
+`CommonActionStage`, either drain module, or any numbered exponent directory.
 
 The concrete local experiment lives in
 [`Fermat/Exponents/FiftyNine/Conservation/`](Fermat/Exponents/FiftyNine/Conservation/).  Lean
@@ -977,6 +1014,11 @@ proof routes at `5`, `7`, `11`, `13`, `14`, and `37`.  The source PDFs,
 generated proof packages, and audit material used during development are
 kept in the sibling archive `../fermat-data` in the campaign workspace.
 
+[`notes/`](notes/) contains task briefs, audits, handoffs, and working or
+provenance records.  It is outside the Lean library and is not the
+authoritative surface for current theorem status; the checked Lean endpoints
+and the public-results table above are.
+
 ## Building
 
 The project pins Lean `v4.31.0-rc1` and exact revisions of Mathlib,
@@ -994,29 +1036,30 @@ The default target is the umbrella module `Fermat`.  Useful targeted builds
 include:
 
 ```bash
-lake build Fermat.Ladder.Response
-lake build Fermat.Ladder.FaulhaberResponse
-lake build Fermat.Ladder.HistoricalResponse
-lake build Fermat.KummerIso
-lake build Fermat.KummerIso.Regressions
-lake build Fermat.ThirtySeven.VandiverHistoricalAssembly37
-lake build Fermat.FourHundredNinetyOne.VandiverHistoricalAssembly491
-lake build Fermat.FourHundredNinetyOne.SecondCase
-lake build Fermat.FiveHundredEightySeven.VandiverHistoricalAssembly587
-lake build Fermat.SixHundredSeven.VandiverHistoricalAssembly607
-lake build Fermat.SixHundredNinetyOne.VandiverHistoricalAssembly691
-lake build Fermat.OneThousandFiftyOne.Regularity
-lake build Fermat.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
-lake build Fermat.Ladder.FourHundredNinetyOne
-lake build Fermat.Ladder.FiveHundredEightySeven
-lake build Fermat.Ladder.SixHundredNinetyOne
-lake build Fermat.Conservation.PrimeCyclotomicSelmerVerification
-lake build Fermat.FiftyNine.Conservation.CyclotomicUnitSelmerNaturality59
-lake build Fermat.FiftyNine.Conservation.CyclotomicSelmerClassNaturality59
-lake build Fermat.FiftyNine.Conservation.FermatFactorClassProjection59
-lake build Fermat.FiftyNine.Conservation.FermatStateUnitClassKernel59
-lake build Fermat.FiftyNine.ConservationProof
-lake build Fermat.FiftyNine.Conservation.HistoricalVerification
+lake build Fermat.Experiments.Ladder.Response
+lake build Fermat.Experiments.Ladder.FaulhaberResponse
+lake build Fermat.Experiments.Ladder.HistoricalResponse
+lake build Fermat.Descent.KummerIso
+lake build Fermat.Descent.KummerIso.Regressions
+lake build Fermat.Exponents.ThirtySeven.VandiverHistoricalAssembly37
+lake build Fermat.Exponents.FourHundredNinetyOne.VandiverHistoricalAssembly491
+lake build Fermat.Exponents.FourHundredNinetyOne.SecondCase
+lake build Fermat.Exponents.FiveHundredEightySeven.VandiverHistoricalAssembly587
+lake build Fermat.Exponents.SixHundredSeven.VandiverHistoricalAssembly607
+lake build Fermat.Exponents.SixHundredNinetyOne.VandiverHistoricalAssembly691
+lake build Fermat.Exponents.OneThousandFiftyOne.Regularity
+lake build Fermat.Exponents.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
+lake build Fermat.Exponents.OneThousandEightHundredThirtyOne.VandiverHistoricalAssembly1831
+lake build Fermat.Experiments.Ladder.FourHundredNinetyOne
+lake build Fermat.Experiments.Ladder.FiveHundredEightySeven
+lake build Fermat.Experiments.Ladder.SixHundredNinetyOne
+lake build Fermat.Experiments.Conservation.PrimeCyclotomicSelmerVerification
+lake build Fermat.Exponents.FiftyNine.Conservation.CyclotomicUnitSelmerNaturality59
+lake build Fermat.Exponents.FiftyNine.Conservation.CyclotomicSelmerClassNaturality59
+lake build Fermat.Exponents.FiftyNine.Conservation.FermatFactorClassProjection59
+lake build Fermat.Exponents.FiftyNine.Conservation.FermatStateUnitClassKernel59
+lake build Fermat.Exponents.FiftyNine.ConservationProof
+lake build Fermat.Exponents.FiftyNine.Conservation.HistoricalVerification
 ```
 
 A quick consumer file can simply use:
