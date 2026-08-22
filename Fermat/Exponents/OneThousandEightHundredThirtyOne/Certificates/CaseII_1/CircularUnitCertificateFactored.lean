@@ -1,4 +1,4 @@
-import Fermat.Exponents.OneThousandEightHundredThirtyOne.CircularUnitFourierFactors
+import Fermat.Exponents.OneThousandEightHundredThirtyOne.Certificates.CaseII_1.CircularUnitFourierFactors
 
 /-!
 # Factored circular-unit determinant at exponent 1831
