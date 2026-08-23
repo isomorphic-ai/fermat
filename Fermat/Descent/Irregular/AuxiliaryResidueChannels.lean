@@ -303,6 +303,21 @@ def factorization (A : CyclicPresentation hp_three C X)
         vandermondeTeichmullerEvenSubOneMatrix (p := p) hp_three j i)
       (X.inverseMoment_frequency_eq_vandermonde j) e
 
+/-- Two presentations of the same residue matrix with the same row
+coordinates have identical nontrivial Fourier scalars. This transports a
+checked scalar from a stored phase array to the canonical phase reconstructed
+from the certificate. -/
+theorem scalar_eq_of_row_eq
+    (A B : CyclicPresentation hp_three C X) (hrow : A.row = B.row)
+    (j : Fin (kummerLogRank p)) :
+    (A.factorization j).scalar = (B.factorization j).scalar := by
+  have hD : differenceMatrix (kummerLogRank p) A.phase =
+      differenceMatrix (kummerLogRank p) B.phase := by
+    apply (Matrix.reindex A.row.symm X.column.symm).injective
+    rw [← A.matrix_eq, hrow, ← B.matrix_eq]
+  exact fourierCoeff_eq_of_differenceMatrix_eq
+    X.fourierRoot X.fourierRoot_isPrimitive A.phase B.phase hD (X.frequency j)
+
 end CyclicPresentation
 
 end

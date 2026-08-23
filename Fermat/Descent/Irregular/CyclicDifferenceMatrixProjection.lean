@@ -107,6 +107,59 @@ theorem mulVec_reindex_equiv
     (Equiv.sum_comp column
       (fun i ↦ M r i * v (column.symm i)))
 
+/-- A reduced difference matrix determines every nontrivial Fourier
+coefficient. Its phase is determined only up to an additive constant, which
+the nontrivial character sum kills. -/
+theorem fourierCoeff_eq_of_differenceMatrix_eq [IsDomain R]
+    (ω : R) (hω : IsPrimitiveRoot ω (n + 1))
+    (f g : Cyc n → R)
+    (hD : differenceMatrix n f = differenceMatrix n g)
+    (frequency : Fin n) :
+    fourierCoeff ω hω.pow_eq_one f frequency =
+      fourierCoeff ω hω.pow_eq_one g frequency := by
+  let x : Cyc n := coord n frequency
+  let χ := fourierChar ω hω.pow_eq_one frequency
+  let F : Cyc n → R := fun y ↦ (f (x + y) - f x) * χ y
+  let G : Cyc n → R := fun y ↦ (g (x + y) - g x) * χ y
+  have hFzero : F 0 = 0 := by simp [F]
+  have hGzero : G 0 = 0 := by simp [G]
+  have hsums : (∑ y : Cyc n, F y) = ∑ y : Cyc n, G y := by
+    rw [← sum_coord_eq_sum_cyc_of_zero F hFzero,
+      ← sum_coord_eq_sum_cyc_of_zero G hGzero]
+    apply Finset.sum_congr rfl
+    intro i _
+    dsimp only [F, G, x]
+    have hij := congrArg (fun M ↦ M frequency i) hD
+    exact congrArg (fun z : R ↦ z * χ (coord n i)) hij
+  have hcharSum : (∑ y : Cyc n, χ y) = 0 :=
+    AddChar.sum_eq_zero_of_ne_one (fourierChar_ne_one ω hω frequency)
+  have hF : (∑ y : Cyc n, F y) =
+      χ (-x) * fourierCoeff ω hω.pow_eq_one f frequency := by
+    calc
+      (∑ y : Cyc n, F y) =
+          (∑ y : Cyc n, f (x + y) * χ y) - f x * ∑ y : Cyc n, χ y := by
+        simp only [F, sub_mul, Finset.sum_sub_distrib, Finset.mul_sum]
+      _ = (∑ y : Cyc n, f (x + y) * χ y) := by
+        rw [hcharSum, mul_zero, sub_zero]
+      _ = χ (-x) * fourierCoeff ω hω.pow_eq_one f frequency :=
+        sum_shift_mul_fourierChar ω hω f x frequency
+  have hG : (∑ y : Cyc n, G y) =
+      χ (-x) * fourierCoeff ω hω.pow_eq_one g frequency := by
+    calc
+      (∑ y : Cyc n, G y) =
+          (∑ y : Cyc n, g (x + y) * χ y) - g x * ∑ y : Cyc n, χ y := by
+        simp only [G, sub_mul, Finset.sum_sub_distrib, Finset.mul_sum]
+      _ = (∑ y : Cyc n, g (x + y) * χ y) := by
+        rw [hcharSum, mul_zero, sub_zero]
+      _ = χ (-x) * fourierCoeff ω hω.pow_eq_one g frequency :=
+        sum_shift_mul_fourierChar ω hω g x frequency
+  rw [hF, hG] at hsums
+  have hχ : χ (-x) ≠ 0 := by
+    dsimp only [χ]
+    rw [fourierChar_apply]
+    exact pow_ne_zero _ (hω.ne_zero (by omega))
+  exact mul_left_cancel₀ hχ hsums
+
 end
 
 end Fermat.Irregular.CyclicDifferenceMatrix
