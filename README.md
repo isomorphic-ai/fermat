@@ -108,8 +108,9 @@ The Lean source tree is organized by role:
 - [`Fermat/Descent/`](Fermat/Descent/) contains reusable irregular, Kummer,
   quadratic, and regular descent machinery;
 - [`Fermat/Certificates/`](Fermat/Certificates/) contains case-oriented finite
-  receipts shared by concrete proof assemblies.  The exponent-`1831`
-  Fourier determinant certificate lives under `CaseII_1/`;
+  receipts shared by concrete proof assemblies.  Under `CaseII_1/`, exponent
+  `1831` has both the complete Fourier determinant receipt and selective
+  frequency-`278` receipts at the split primes `358877` and `18311`;
 - [`Fermat/Exponents/`](Fermat/Exponents/) contains the concrete
   fixed-exponent developments, including historical descents, local finite
   data, and thin certificate adapters.  Exponent directory names remain
@@ -1059,6 +1060,8 @@ lake build Fermat.Exponents.SixHundredNinetyOne.VandiverHistoricalAssembly691
 lake build Fermat.Exponents.OneThousandFiftyOne.Regularity
 lake build Fermat.Exponents.OneThousandThreeHundredEightyOne.VandiverHistoricalAssembly1381
 lake build Fermat.Exponents.OneThousandEightHundredThirtyOne.VandiverHistoricalAssembly1831
+lake build Fermat.Exponents.OneThousandEightHundredThirtyOne.CircularUnitResidueChannelNaturality1831
+lake build Fermat.Exponents.OneThousandEightHundredThirtyOne.SinnottKummerChannels18311
 lake build Fermat.Experiments.Ladder.FourHundredNinetyOne
 lake build Fermat.Experiments.Ladder.FiveHundredEightySeven
 lake build Fermat.Experiments.Ladder.SixHundredNinetyOne
