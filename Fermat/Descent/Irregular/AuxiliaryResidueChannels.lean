@@ -1,4 +1,5 @@
 import Fermat.Descent.Irregular.CyclicDifferenceMatrixProjection
+import Fermat.Descent.Irregular.FiniteCharacterProjection
 import Fermat.Descent.Irregular.SelectiveKummerSaturation
 import Fermat.Descent.Irregular.CircularUnitResidues
 
@@ -28,6 +29,71 @@ noncomputable section
 open Fermat.Irregular.CyclicDifferenceMatrix
 open Fermat.Irregular.CircularUnitResidues
 open KummerCriterion.CyclotomicUnits
+
+/-- Coordinates of the nontrivial real characters at `p`. This data is
+independent of the auxiliary split prime. -/
+structure CharacterCoordinates (p : ℕ) [Fact p.Prime]
+    (hp_three : 3 ≤ p) where
+  generator : ZMod p
+  fourierRoot : ZMod p
+  fourierRoot_eq_generator_sq : fourierRoot = generator ^ 2
+  fourierRoot_isPrimitive :
+    IsPrimitiveRoot fourierRoot (kummerLogRank p + 1)
+  column : Equiv.Perm (Fin (kummerLogRank p))
+  column_square : ∀ i : Fin (kummerLogRank p),
+    (generator ^
+        (CyclicDifferenceMatrix.coord (kummerLogRank p) (column i)).val) ^ 2 =
+      teichmullerEvenNode (p := p) hp_three i
+
+namespace CharacterCoordinates
+
+variable {p : ℕ} [Fact p.Prime] {hp_three : 3 ≤ p}
+
+/-- The inverse Fourier frequency attached to Kummer row `j`. -/
+def frequency (_X : CharacterCoordinates p hp_three)
+    (j : Fin (kummerLogRank p)) : Fin (kummerLogRank p) :=
+  j.rev
+
+/-- Every canonical Kummer row is an inverse Fourier character after the
+fixed column reindexing. -/
+theorem inverseMoment_frequency_eq_vandermonde
+    (X : CharacterCoordinates p hp_three)
+    (j i : Fin (kummerLogRank p)) :
+    inverseMomentMatrix X.fourierRoot
+        X.fourierRoot_isPrimitive.pow_eq_one (X.frequency j) (X.column i) =
+      vandermondeTeichmullerEvenSubOneMatrix (p := p) hp_three j i := by
+  rw [frequency, inverseMomentMatrix, fourierChar_rev_apply]
+  simp only [neg_neg, fourierChar_apply]
+  rw [X.fourierRoot_eq_generator_sq]
+  change
+    (X.generator ^ 2) ^
+          ((j.val + 1) *
+            (CyclicDifferenceMatrix.coord (kummerLogRank p)
+              (X.column i)).val) - 1 =
+      teichmullerEvenNode (p := p) hp_three i ^ (j.val + 1) - 1
+  congr 1
+  let s :=
+    (CyclicDifferenceMatrix.coord (kummerLogRank p) (X.column i)).val
+  calc
+    (X.generator ^ 2) ^
+        ((j.val + 1) *
+          (CyclicDifferenceMatrix.coord (kummerLogRank p) (X.column i)).val) =
+      X.generator ^ (2 * ((j.val + 1) * s)) := by
+        exact (pow_mul X.generator 2 ((j.val + 1) * s)).symm
+    _ = X.generator ^ ((s * 2) * (j.val + 1)) := by
+      congr 1
+      ac_rfl
+    _ = ((X.generator ^ s) ^ 2) ^ (j.val + 1) := by
+      calc
+        X.generator ^ ((s * 2) * (j.val + 1)) =
+            (X.generator ^ (s * 2)) ^ (j.val + 1) :=
+          pow_mul X.generator (s * 2) (j.val + 1)
+        _ = ((X.generator ^ s) ^ 2) ^ (j.val + 1) := by
+          rw [pow_mul X.generator s 2]
+    _ = teichmullerEvenNode (p := p) hp_three i ^ (j.val + 1) := by
+      rw [X.column_square]
+
+end CharacterCoordinates
 
 /-- The canonical, auxiliary-prime-independent Kummer character channel. -/
 def canonicalKummerChannel (p : ℕ) [Fact p.Prime] (hp_three : 3 ≤ p)
@@ -200,6 +266,44 @@ theorem cyclic_reindexed_factorization
           intro i _
           dsimp only [F]
           rw [Equiv.symm_apply_apply, halign]
+
+/-- A q-dependent cyclic presentation of a circular-unit residue
+certificate in fixed p-dependent character coordinates. -/
+structure CyclicPresentation {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
+    (hp_three : 3 ≤ p) (C : Certificate p q)
+    (X : CharacterCoordinates p hp_three) where
+  row : Equiv.Perm (Fin (kummerLogRank p))
+  phase : CyclicDifferenceMatrix.Cyc (kummerLogRank p) → ZMod p
+  matrix_eq : C.matrix =
+    Matrix.reindex row.symm X.column.symm
+      (differenceMatrix (kummerLogRank p) phase)
+
+namespace CyclicPresentation
+
+variable {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
+variable {hp_three : 3 ≤ p} {C : Certificate p q}
+variable {X : CharacterCoordinates p hp_three}
+
+/-- Every row of a cyclic auxiliary residue certificate factors through
+the corresponding intrinsic Kummer row. Only its Fourier coefficient
+depends on the auxiliary prime. -/
+def factorization (A : CyclicPresentation hp_three C X)
+    (j : Fin (kummerLogRank p)) : Factorization p q hp_three C j where
+  weights := fun sourceRow ↦
+    positiveMomentMatrix X.fourierRoot
+      X.fourierRoot_isPrimitive.pow_eq_one (X.frequency j) (A.row sourceRow)
+  scalar := fourierCoeff X.fourierRoot
+    X.fourierRoot_isPrimitive.pow_eq_one A.phase (X.frequency j)
+  factors := by
+    intro e
+    exact cyclic_reindexed_factorization
+      A.row X.column C.matrix A.phase A.matrix_eq
+      X.fourierRoot X.fourierRoot_isPrimitive (X.frequency j)
+      (fun i ↦
+        vandermondeTeichmullerEvenSubOneMatrix (p := p) hp_three j i)
+      (X.inverseMoment_frequency_eq_vandermonde j) e
+
+end CyclicPresentation
 
 end
 

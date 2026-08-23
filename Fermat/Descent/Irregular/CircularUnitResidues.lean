@@ -59,6 +59,81 @@ def normalizedUnitValue (root : ZMod q)
     (1 - embeddingRoot root j ^ (i.val + 2)) /
       (1 - embeddingRoot root j)
 
+/-- The inversion-invariant weight attached to the even power-residue
+exponent `2 * h`. -/
+def evenSymbolWeight (h : ℕ) (x : ZMod q) : ZMod q :=
+  (1 - x) ^ (2 * h) / x ^ h
+
+/-- The normalized circular-unit symbol is a quotient of two values of the
+even symbol weight. This is the auxiliary-prime-independent algebra behind
+every cyclic phase receipt. -/
+theorem normalizedUnitValue_pow_two_mul_eq_weight_ratio
+    (hp2 : p ≠ 2) {root : ZMod q} (hroot : IsPrimitiveRoot root p)
+    (j i : Fin ((p - 3) / 2)) :
+    normalizedUnitValue root j i ^ (2 * h) =
+      evenSymbolWeight h
+          (embeddingRoot root j ^ (i.val + 2)) /
+        evenSymbolWeight h (embeddingRoot root j) := by
+  let x : ZMod q := embeddingRoot root j
+  let a : ℕ := i.val + 2
+  let e : ℕ := canonicalNormalizationExponent (p := p) a
+  have hxprim : IsPrimitiveRoot x p :=
+    embeddingRoot_isPrimitive hp2 hroot j
+  have hx0 : x ≠ 0 := hxprim.ne_zero (Fact.out : p.Prime).ne_zero
+  have hx1 : 1 - x ≠ 0 :=
+    sub_ne_zero.mpr (Ne.symm (hxprim.ne_one (Fact.out : p.Prime).one_lt))
+  have hnorm : 2 * e + a ≡ 1 [MOD p] :=
+    canonicalNormalizationExponent_modEq hp2 a
+  have hnormh : h * (2 * e + a) ≡ h * 1 [MOD p] :=
+    hnorm.mul_left h
+  have hexp : (2 * h) * e + h * a ≡ h [MOD p] := by
+    simpa [Nat.mul_add, Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+      hnormh
+  have hpow : x ^ ((2 * h) * e + h * a) = x ^ h :=
+    pow_eq_pow_of_modEq hexp hxprim.pow_eq_one
+  change (x ^ e * (1 - x ^ a) / (1 - x)) ^ (2 * h) =
+    evenSymbolWeight h (x ^ a) / evenSymbolWeight h x
+  simp only [evenSymbolWeight, mul_pow, div_pow]
+  field_simp [hx0, hx1]
+  have hpow' : x ^ (e * (2 * h)) * x ^ (a * h) = x ^ h := by
+    rw [← pow_add]
+    simpa [Nat.mul_comm] using hpow
+  calc
+    _ = (x ^ (e * (2 * h)) * x ^ (a * h)) *
+          (1 - x ^ a) ^ (2 * h) := by ring
+    _ = x ^ h * (1 - x ^ a) ^ (2 * h) := by rw [hpow']
+    _ = _ := by ring
+
+/-- The even symbol weight descends through inversion. -/
+theorem evenSymbolWeight_inv (x : ZMod q) (hx : x ≠ 0) :
+    evenSymbolWeight h x⁻¹ = evenSymbolWeight h x := by
+  unfold evenSymbolWeight
+  have hsub : 1 - x⁻¹ = (x - 1) / x := by
+    field_simp [hx]
+  rw [hsub, div_pow]
+  field_simp [hx]
+  rw [one_div]
+  field_simp [hx]
+  ring_nf
+  have hxpow : x ^ h ≠ 0 := pow_ne_zero h hx
+  rw [pow_mul x h 2, inv_pow]
+  rw [show (x ^ h) ^ 2 * (x ^ h)⁻¹ = x ^ h by
+    field_simp [hxpow]]
+  congr 1
+  rw [pow_mul, pow_mul]
+  have hneg : (-1 + x) ^ h = (-1 : ZMod q) ^ h * (1 - x) ^ h := by
+    rw [show -1 + x = -(1 - x) by ring, neg_pow]
+  rw [hneg]
+  rw [mul_pow]
+  have hsignsq : ((-1 : ZMod q) ^ h) ^ 2 = 1 := by
+    calc
+      ((-1 : ZMod q) ^ h) ^ 2 = (-1 : ZMod q) ^ (h * 2) :=
+        (pow_mul (-1 : ZMod q) h 2).symm
+      _ = (-1 : ZMod q) ^ (2 * h) := by rw [Nat.mul_comm]
+      _ = ((-1 : ZMod q) ^ 2) ^ h := pow_mul (-1 : ZMod q) 2 h
+      _ = 1 := by simp
+  rw [hsignsq, one_mul]
+
 structure Certificate (p q : ℕ) [Fact p.Prime] [Fact q.Prime] where
   hp2 : p ≠ 2
   symbolExponent : ℕ
@@ -73,6 +148,47 @@ structure Certificate (p q : ℕ) [Fact p.Prime] [Fact q.Prime] where
 namespace Certificate
 
 variable (C : Certificate p q)
+
+/-- The power-residue exponent of an odd-prime split certificate is even. -/
+theorem symbolExponent_even : Even C.symbolExponent := by
+  have hq2 : q ≠ 2 := by
+    intro hq
+    subst q
+    have heq : 1 = C.symbolExponent * p := by
+      simpa using C.q_sub_one
+    have hpdiv : p ∣ 1 := ⟨C.symbolExponent, by
+      simpa [Nat.mul_comm] using heq⟩
+    exact (Fact.out : Nat.Prime p).ne_one (Nat.dvd_one.mp hpdiv)
+  have hpodd : Odd p := (Fact.out : Nat.Prime p).odd_of_ne_two C.hp2
+  have hqodd : Odd q := (Fact.out : Nat.Prime q).odd_of_ne_two hq2
+  have hprod : Even (C.symbolExponent * p) := by
+    rw [← C.q_sub_one]
+    exact Nat.Odd.sub_odd hqodd odd_one
+  rcases Nat.even_mul.mp hprod with hm | hp_even
+  · exact hm
+  · exact ((Nat.not_even_iff_odd.mpr hpodd) hp_even).elim
+
+/-- Every even symbol weight of a nontrivial `p`th root is itself a `p`th
+root of unity in the split residue field. -/
+theorem evenSymbolWeight_pow_eq_one
+    (hm : C.symbolExponent = 2 * h)
+    (x : ZMod q) (hxp : x ^ p = 1) (hx1 : x ≠ 1) :
+    evenSymbolWeight h x ^ p = 1 := by
+  have hx0 : x ≠ 0 := by
+    intro hx
+    rw [hx, zero_pow (Fact.out : Nat.Prime p).ne_zero] at hxp
+    exact zero_ne_one hxp
+  have hsub0 : 1 - x ≠ 0 := sub_ne_zero.mpr (Ne.symm hx1)
+  have hqexp : q - 1 = (2 * h) * p := by
+    rw [C.q_sub_one, hm]
+  unfold evenSymbolWeight
+  rw [div_pow, ← pow_mul, ← pow_mul]
+  have hnum : (1 - x) ^ ((2 * h) * p) = 1 := by
+    rw [← hqexp]
+    exact ZMod.pow_card_sub_one_eq_one hsub0
+  have hden : x ^ (h * p) = 1 := by
+    rw [Nat.mul_comm, pow_mul, hxp, one_pow]
+  rw [hnum, hden, div_one]
 
 def rootUnit : (ZMod q)ˣ :=
   Units.mk0 C.root (C.root_isPrimitive.ne_zero (Fact.out : p.Prime).ne_zero)
