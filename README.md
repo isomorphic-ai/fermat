@@ -114,8 +114,9 @@ The Lean source tree is organized by role:
   generic auxiliary-prime factorization proves that both detectors are
   q-dependent scalars times the same intrinsic Bernoulli/Kummer channel.
   Dividing by those nonzero scalars makes the detectors literally equal;
-  production descent consumes a q-free projection-kernel theorem, while
-  either split prime can provide its interchangeable provenance;
+  the normalized selective descent consumes a q-free projection-kernel
+  theorem, while either split prime can provide its interchangeable
+  provenance;
 - [`Fermat/Exponents/`](Fermat/Exponents/) contains the concrete
   fixed-exponent developments, including historical descents, local finite
   data, and thin certificate adapters.  Exponent directory names remain

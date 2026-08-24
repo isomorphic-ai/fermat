@@ -17,7 +17,7 @@ For exponent `1831`, two certificate styles coexist:
 - `CircularUnitProjectionReceipt1831AtQ358877.lean` and
   `CircularUnitProjectionReceipt1831AtQ18311.lean` compile the two
   q-dependent receipts into the same q-free projection-kernel theorem;
-- `CircularUnitProjectionReceipt1831.lean` is the neutral production
+- `CircularUnitProjectionReceipt1831.lean` is the neutral normalized-route
   selector. It currently uses the smaller prime, and can switch providers
   without changing its public theorem or any downstream proof.
 
