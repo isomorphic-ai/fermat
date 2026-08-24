@@ -119,6 +119,33 @@ theorem CPlus_pSaturated_of_selective_kummer_rows
       (p := p) hp_five j).mpr (hregular j hj)
   · exact hexceptional s e hpow
 
+/-- Q-free generator interface. A complete irregular scan supplies the
+support of the possibly missing Bernoulli rows, while an intrinsic receipt
+annihilates exactly those canonical Kummer coordinates on every power
+relation. -/
+theorem CPlus_pSaturated_of_irregular_support_kummer_rows
+    (hp_three : 3 ≤ p) (hp_five : 5 ≤ p)
+    (exceptional : Fin (kummerLogRank p) → Prop)
+    (hsupport : ∀ j,
+      (p : ℤ) ∣ (_root_.bernoulli
+        (2 * kummerLogRowIndex (p := p) j)).num → exceptional j)
+    (hexceptional : ∀ (s : ℤ) (e : Fin (kummerLogRank p) → ℤ),
+      CPlusExponentProduct (p := p) (K := K) hp_three s e ∈
+          pPowerSubgroup (EPlus (K := K)) p →
+      ∀ j, exceptional j →
+        Matrix.mulVec
+          (vandermondeTeichmullerEvenSubOneMatrix (p := p) hp_three)
+          (fun a => (e a : ZMod p)) j = 0) :
+    pSaturated (CPlus (p := p) (K := K) hp_three) (EPlus (K := K)) p := by
+  apply CPlus_pSaturated_of_selective_kummer_rows
+    (p := p) (K := K) hp_three hp_five exceptional
+  · intro j hj
+    exact (bernoulliFactor_ne_zero_iff_not_dvd_bernoulli_num
+      (p := p) (kummerLogRowIndex_one_le (p := p) j)
+      (two_mul_kummerLogRowIndex_le_sub_three (p := p) j)).mpr
+      (fun hdiv => hj (hsupport j hdiv))
+  · exact hexceptional
+
 /-- A generated detector may vary with the chosen auxiliary prime, but only
 its value and relation on exceptional rows are used. -/
 theorem CPlus_pSaturated_of_selective_detectors
@@ -165,15 +192,11 @@ theorem CPlus_pSaturated_of_irregular_support_detectors
               (vandermondeTeichmullerEvenSubOneMatrix (p := p) hp_three)
               (fun a => (e a : ZMod p)) j = 0) :
     pSaturated (CPlus (p := p) (K := K) hp_three) (EPlus (K := K)) p := by
-  apply CPlus_pSaturated_of_selective_detectors
-    (p := p) (K := K) hp_three hp_five exceptional detector
-  · intro j hj
-    exact (bernoulliFactor_ne_zero_iff_not_dvd_bernoulli_num
-      (p := p) (kummerLogRowIndex_one_le (p := p) j)
-      (two_mul_kummerLogRowIndex_le_sub_three (p := p) j)).mpr
-      (fun hdiv => hj (hsupport j hdiv))
-  · exact hdetector
-  · exact hdetector_relation
+  apply CPlus_pSaturated_of_irregular_support_kummer_rows
+    (p := p) (K := K) hp_three hp_five exceptional hsupport
+  intro s e hpow j hj
+  exact (mul_eq_zero.mp (hdetector_relation s e hpow j hj)).resolve_left
+    (hdetector j hj)
 
 end
 

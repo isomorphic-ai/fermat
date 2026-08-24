@@ -155,6 +155,20 @@ theorem normalizedResidueDetector_eq_canonical
     A.residueDetector_eq_scalar_mul_canonical, ← mul_assoc,
     inv_mul_cancel₀ hscalar, one_mul]
 
+/-- After removing their nonzero auxiliary scalars, any two residue
+detectors on the same intrinsic row agree exactly. This is the normalized
+form of auxiliary-prime naturality. -/
+theorem normalizedResidueDetectors_eq
+    {q₁ q₂ : ℕ} [Fact q₁.Prime] [Fact q₂.Prime]
+    {C₁ : Certificate p q₁} {C₂ : Certificate p q₂}
+    (A₁ : Factorization p q₁ hp_three C₁ channelRow)
+    (A₂ : Factorization p q₂ hp_three C₂ channelRow)
+    (h₁ : A₁.scalar ≠ 0) (h₂ : A₂.scalar ≠ 0)
+    (e : Fin (kummerLogRank p) → ZMod p) :
+    A₁.normalizedResidueDetector e = A₂.normalizedResidueDetector e := by
+  rw [A₁.normalizedResidueDetector_eq_canonical h₁,
+    A₂.normalizedResidueDetector_eq_canonical h₂]
+
 /-- A nonzero auxiliary scalar makes detector vanishing equivalent to
 vanishing of the intrinsic Kummer channel. -/
 theorem residueDetector_eq_zero_iff_canonical
