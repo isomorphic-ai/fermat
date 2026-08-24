@@ -1,4 +1,5 @@
 import Fermat.Descent.Irregular.AuxiliaryResidueSelectedChannel
+import Fermat.Descent.Irregular.BernoulliChannelProjection
 import Fermat.Descent.Irregular.SelectiveCircularUnitResidues
 
 /-!
@@ -35,6 +36,7 @@ namespace Fermat.Irregular.BareAuxiliaryResidueChannel
 noncomputable section
 
 open Fermat.Irregular.AuxiliaryResidueChannels
+open Fermat.Irregular.BernoulliChannelProjection
 open Fermat.Irregular.CircularUnitResidues
 open Fermat.Irregular.CircularUnitResidues.Certificate
 open Fermat.Irregular.SelectiveCircularUnitResidues
@@ -242,6 +244,41 @@ theorem canonicalKummerChannel_exponents_eq_zero_of_CPlus_product_mem_powers
       A.factorization_scalar_ne s e hpow
 
 end SelectedChannelReceipt
+
+/-- A matrix-free family provider at one split prime.  It stores exactly one
+selected multiplicative receipt for every row in the Bernoulli support.
+
+The q-free projection certificate is the true downstream object.  Receipts
+from different auxiliary primes can therefore still be mixed by constructing
+that certificate coordinatewise; this structure is only the common and
+generator-friendly one-prime convenience case. -/
+structure SelectedChannelProvider
+    {N : ℕ} (support : BernoulliChannelSupport p N)
+    (D : SplitPrimeData p q) (hp_three : 3 ≤ p) where
+  receipt : ∀ i, SelectedChannelReceipt D hp_three (support.row i)
+
+namespace SelectedChannelProvider
+
+universe u
+
+variable {N : ℕ} {support : BernoulliChannelSupport p N}
+variable {D : SplitPrimeData p q} {hp_three : 3 ≤ p}
+
+/-- Compile a family of matrix-free selected products into the intrinsic,
+q-free vector projection receipt consumed by the Bernoulli-channel descent.
+-/
+def toProjectionKernelCertificate
+    (A : SelectedChannelProvider support D hp_three) :
+    ProjectionKernelCertificate.{u} support hp_three where
+  powerRelation_kernel := by
+    intro K _ _ _ _ s e hpow
+    apply (support.projection_eq_zero_iff hp_three _).2
+    intro i
+    exact
+      (A.receipt i).canonicalKummerChannel_exponents_eq_zero_of_CPlus_product_mem_powers
+        s e hpow
+
+end SelectedChannelProvider
 
 end
 
