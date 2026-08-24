@@ -116,7 +116,11 @@ The Lean source tree is organized by role:
   Dividing by those nonzero scalars makes the detectors literally equal;
   the normalized selective descent consumes a q-free projection-kernel
   theorem, while either split prime can provide its interchangeable
-  provenance;
+  provenance. The generic vector-valued extension packages `N` possible
+  Bernoulli indices as `Fin N` canonical projections and feeds them to the
+  new parallel `BernoulliChannelLadder`; checked rungs currently have
+  `N = 1, 2, 3` at exponents `1831`, `157`, and `491` respectively, without
+  replacing their historical endpoints;
 - [`Fermat/Exponents/`](Fermat/Exponents/) contains the concrete
   fixed-exponent developments, including historical descents, local finite
   data, and thin certificate adapters.  Exponent directory names remain

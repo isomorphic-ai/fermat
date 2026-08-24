@@ -64,3 +64,39 @@ and hence has the same kernel.  More strongly, multiplying by `882⁻¹` and
 `projection`. `CircularUnitResiduesChannelsIntrinsic.lean` consumes only a
 normalized projection theorem as an argument; the one-line
 `CircularUnitResiduesChannelsNormalized.lean` assembly selects provenance.
+
+## Finite Bernoulli-channel ladder
+
+The normalized projection is now vector-valued. A
+`BernoulliChannelSupport p N` stores an injective, complete list of the
+possible irregular Bernoulli indices and maps it to exactly `N` canonical
+Kummer rows. A `ProjectionKernelCertificate` says that every global
+`p`th-power relation is killed by that `Fin N`-valued projection. The
+auxiliary-prime adapter proves this coordinatewise from only `N`
+nonvanishing scalar obligations; it never asks for the full circular-unit
+residue matrix to be invertible. The current small-prime adapters still reuse
+authenticated matrix-entry provenance. `AuxiliaryResidueBareSelectedChannel`
+and its trusted chunked-product layer provide the matrix-free generator path
+for larger rungs.
+
+The parallel end-to-end ladder currently has these checked rungs:
+
+| channels `N` | exponent | Bernoulli support | selected residue scalars |
+| ---: | ---: | --- | --- |
+| 1 | 1831 | `{1274}` | `1165` at `q = 18311` |
+| 2 | 157 | `{62, 110}` | `5, 104` at `q = 7537` |
+| 3 | 491 | `{292, 336, 338}` | `467, 92, 373` at `q = 983` |
+
+`Fermat.GenericIrregular.BernoulliChannelLadder.holdsAt_of_ladderCertificate`
+is the generator-facing function. Its certificate joins the same ordered
+support to normalized Case II.1 projections and lifted Case II.2 channels,
+then supplies an intrinsic logarithmic Lemma-II unit system and an explicit
+Sophie--Germain witness. The historical exponent routes remain separate and
+continue to build.
+
+“Determinant-free” here means free of the old q-residue full-rank
+determinant. The Lemma-II adapters still certify a different, p-side
+integral logarithmic change of basis. Also, the core support is deliberately
+one-way: `N` is exactly the stored complete candidate-support size. The
+optional `ExactBernoulliChannelSupport` adds the stronger assertion that
+every stored candidate is genuinely irregular when that fact is needed.
