@@ -1,6 +1,7 @@
 import Fermat.Descent.Irregular.VandiverHistoricalDescent
 import Fermat.Descent.Irregular.VandiverLemmaOne
 import Fermat.Descent.Irregular.CyclotomicDiscriminantPrime
+import Fermat.Descent.Irregular.PlusClassNondivisibility
 import FltRegular.NumberTheory.Cyclotomic.MoreLemmas
 
 /-!
@@ -38,11 +39,6 @@ variable {K : Type} {p : ℕ} [Fact p.Prime]
   [Field K] [NumberField K] [NumberField.IsCMField K]
 
 local notation3 "K⁺" => NumberField.maximalRealSubfield K
-
-/-- The exact plus-class input used in Vandiver's real-ideal steps. -/
-def PlusClassNondivisibility (K : Type*) [Field K] [NumberField K]
-    (p : ℕ) : Prop :=
-  ¬ p ∣ NumberField.classNumber (NumberField.maximalRealSubfield K)
 
 /-- For a prime `p ≥ 5`, the exponents `p - 2` and `p` are coprime.
 This is the arithmetic fact behind the Bézout step from (7a),(7d) to (8). -/
