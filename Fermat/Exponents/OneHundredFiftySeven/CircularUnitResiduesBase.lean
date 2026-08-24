@@ -11,7 +11,7 @@ Bernoulli-channel routes can reuse the same provenance independently.
 
 open scoped NumberField
 
-namespace Fermat.OneHundredFiftySeven.CircularUnitResidues
+namespace Fermat.OneHundredFiftySeven.CircularUnitResiduesBase
 
 noncomputable section
 
@@ -58,4 +58,4 @@ theorem evalMatrix_circularUnit157
 end
 
 
-end Fermat.OneHundredFiftySeven.CircularUnitResidues
+end Fermat.OneHundredFiftySeven.CircularUnitResiduesBase

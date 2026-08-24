@@ -29,7 +29,7 @@ local instance : Fact (Nat.Prime 7537) := ⟨by norm_num⟩
 namespace QCertificate
 
 abbrev certificate :=
-  Fermat.OneHundredFiftySeven.CircularUnitResidues.certificate
+  Fermat.OneHundredFiftySeven.CircularUnitResiduesBase.certificate
 
 end QCertificate
 
@@ -48,7 +48,7 @@ def storedPresentation : CyclicPresentation (by norm_num)
   matrix_eq := by
     ext j i
     simp only [QCertificate.certificate,
-      Fermat.OneHundredFiftySeven.CircularUnitResidues.certificate,
+      Fermat.OneHundredFiftySeven.CircularUnitResiduesBase.certificate,
       Matrix.reindex_apply, Matrix.submatrix_apply, differenceMatrix]
     exact matrix_entry_eq_phase j i
 
