@@ -1,5 +1,6 @@
 import Fermat.Descent.Irregular.CircularUnitGeneratorBridge
 import Fermat.Descent.Irregular.CircularUnitResidues
+import Fermat.Descent.Irregular.AuxiliaryResidueChannels
 import KummerCriterion.CyclotomicUnits.Saturation
 
 /-!
@@ -26,7 +27,9 @@ open Fermat.Irregular.CircularUnitFamily
 open Fermat.Irregular.CircularUnitGeneratorBridge
 open Fermat.Irregular.CircularUnitResidues
 open Fermat.Irregular.CircularUnitResidues.Certificate
+open Fermat.Irregular.AuxiliaryResidueChannels
 open KummerCriterion
+open KummerCriterion.CyclotomicUnits
 
 variable {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
 variable {K : Type*} [Field K] [NumberField K]
@@ -141,6 +144,26 @@ theorem matrix_mulVec_exponents_eq_zero_of_CPlus_product_mem_powers
     · exact (Fact.out : Nat.Prime p).ne_one hp1
     · exact C.hp2 hp2
   exact (mul_eq_zero.mp hzero).resolve_left htwo
+
+/-- An authenticated nonblind auxiliary-prime factorization turns every
+plus-side `p`th-power relation into a statement on the intrinsic Kummer
+channel. The conclusion contains neither the auxiliary prime nor its residue
+matrix: those data serve only as provenance for this canonical relation. -/
+theorem canonicalKummerChannel_exponents_eq_zero_of_CPlus_product_mem_powers
+    (C : Certificate p q) (hp_three : 3 ≤ p)
+    {channelRow : Fin (kummerLogRank p)}
+    (A : Factorization p q hp_three C channelRow)
+    (hscalar : A.scalar ≠ 0)
+    (s : ℤ) (e : Fin (kummerLogRank p) → ℤ)
+    (hpow : CPlusExponentProduct (p := p) (K := K) hp_three s e ∈
+      pPowerSubgroup (EPlus (K := K)) p) :
+    canonicalKummerChannel p hp_three channelRow
+        (fun i ↦ (e i : ZMod p)) = 0 := by
+  apply (A.residueDetector_eq_zero_iff_canonical hscalar _).mp
+  rw [Factorization.residueDetector,
+    matrix_mulVec_exponents_eq_zero_of_CPlus_product_mem_powers
+      (K := K) C hp_three s e hpow]
+  simp
 
 end
 

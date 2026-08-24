@@ -136,6 +136,25 @@ theorem residueDetector_eq_scalar_mul_canonical
       A.scalar * canonicalKummerChannel p hp_three channelRow e :=
   A.factors e
 
+/-- Remove the sole auxiliary-prime-dependent scalar from a residue
+detector. This definition is useful only when the scalar is nonzero; in that
+case it is literally the intrinsic Kummer channel. -/
+def normalizedResidueDetector
+    (A : Factorization p q hp_three C channelRow)
+    (e : Fin (kummerLogRank p) → ZMod p) : ZMod p :=
+  A.scalar⁻¹ * A.residueDetector e
+
+/-- Normalizing a nonblind auxiliary-prime detector recovers the canonical,
+auxiliary-prime-independent Kummer channel exactly. -/
+theorem normalizedResidueDetector_eq_canonical
+    (A : Factorization p q hp_three C channelRow) (hscalar : A.scalar ≠ 0)
+    (e : Fin (kummerLogRank p) → ZMod p) :
+    A.normalizedResidueDetector e =
+      canonicalKummerChannel p hp_three channelRow e := by
+  rw [normalizedResidueDetector,
+    A.residueDetector_eq_scalar_mul_canonical, ← mul_assoc,
+    inv_mul_cancel₀ hscalar, one_mul]
+
 /-- A nonzero auxiliary scalar makes detector vanishing equivalent to
 vanishing of the intrinsic Kummer channel. -/
 theorem residueDetector_eq_zero_iff_canonical
