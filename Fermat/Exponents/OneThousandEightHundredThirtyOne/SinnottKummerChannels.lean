@@ -1,12 +1,13 @@
-import Fermat.Exponents.OneThousandEightHundredThirtyOne.CircularUnitResiduesChannels
+import Fermat.Exponents.OneThousandEightHundredThirtyOne.CircularUnitResiduesChannelsNormalized
 import KummerCriterion.CyclotomicUnits.SaturationIndex
 
 /-!
 # Selective Sinnott--Kummer endpoint for exponent 1831
 
-This independent endpoint converts the one-channel circular-unit saturation
-theorem into plus-class-number nondivisibility. It leaves the legacy full
-residue-matrix route unchanged and does not import its determinant receipt.
+This endpoint converts the normalized, q-free circular-unit projection
+theorem into plus-class-number nondivisibility. An auxiliary split prime is
+used only behind the provenance receipt; the descent below depends solely on
+the intrinsic Bernoulli-`1274` channel.
 -/
 
 open scoped NumberField
@@ -18,7 +19,7 @@ noncomputable section
 set_option maxHeartbeats 0
 
 open Fermat.Irregular.CircularUnitFamily
-open Fermat.OneThousandEightHundredThirtyOne.CircularUnitResiduesChannels
+open Fermat.OneThousandEightHundredThirtyOne.CircularUnitResiduesChannelsNormalized
 open KummerCriterion
 
 variable {K : Type} [Field K] [NumberField K]
@@ -52,8 +53,8 @@ theorem not_dvd_hPlus : ¬1831 ∣ hPlus K := by
   exact (CPlus_index_prime_dvd_iff_normalizedCPlus_index_prime_dvd
     (p := 1831) (K := K) (by norm_num) (by norm_num)).mpr hnormalized
 
-/-- The plus class number is prime to `1831`, using only the single
-frequency-278 detector on the finite residue side. -/
+/-- The plus class number is prime to `1831`, using only the normalized
+intrinsic projection at Bernoulli index `1274`. -/
 theorem not_dvd_classNumber :
     ¬1831 ∣ NumberField.classNumber K⁺ := by
   simpa [hPlus, NumberField.classNumber] using not_dvd_hPlus (K := K)

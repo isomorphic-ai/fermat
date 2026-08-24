@@ -112,7 +112,10 @@ The Lean source tree is organized by role:
   `1831` has both the complete Fourier determinant receipt and selective
   frequency-`278` receipts at the split primes `358877` and `18311`.  The
   generic auxiliary-prime factorization proves that both detectors are
-  q-dependent scalars times the same intrinsic Bernoulli/Kummer channel;
+  q-dependent scalars times the same intrinsic Bernoulli/Kummer channel.
+  Dividing by those nonzero scalars makes the detectors literally equal;
+  production descent consumes a q-free projection-kernel theorem, while
+  either split prime can provide its interchangeable provenance;
 - [`Fermat/Exponents/`](Fermat/Exponents/) contains the concrete
   fixed-exponent developments, including historical descents, local finite
   data, and thin certificate adapters.  Exponent directory names remain

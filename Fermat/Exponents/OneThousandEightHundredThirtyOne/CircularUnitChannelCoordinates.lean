@@ -1,5 +1,6 @@
 import Fermat.Descent.Irregular.CircularUnitResiduePresentation
 import Fermat.Exponents.OneThousandEightHundredThirtyOne.CircularUnitEntryCoordinates
+import Fermat.Exponents.OneThousandEightHundredThirtyOne.CircularUnitProjection1831
 
 /-!
 # Character coordinates at exponent 1831
@@ -15,6 +16,7 @@ namespace Fermat.OneThousandEightHundredThirtyOne.CircularUnitChannelCoordinates
 noncomputable section
 
 open Fermat.Irregular.AuxiliaryResidueChannels
+open Fermat.OneThousandEightHundredThirtyOne.CircularUnitProjection
 open Fermat.OneThousandEightHundredThirtyOne.CircularUnitEntryCertificate
 open Fermat.OneThousandEightHundredThirtyOne.CircularUnitMatrix
 
@@ -55,15 +57,16 @@ def coordinates : ArithmeticCoordinates 1831 (by norm_num) where
   classExponent_add_sq := classExponent_add_sq
   row_square := row_exponent_square_certificate
 
-/-- The sole possible irregular Bernoulli index `1274` is Kummer row `636`. -/
-def irregularKummerRow : Fin 914 := 636
+/-- Compatibility alias for the p-only irregular Kummer row. -/
+abbrev irregularKummerRow : Fin 914 :=
+  CircularUnitProjection.irregularKummerRow
 
 /-- Kummer row `636` means Bernoulli index `2 * (636 + 1) = 1274`. -/
 theorem irregularKummerRow_bernoulliIndex :
     2 * KummerCriterion.CyclotomicUnits.kummerLogRowIndex
         (p := 1831) irregularKummerRow =
       1274 := by
-  norm_num [irregularKummerRow,
+  norm_num [irregularKummerRow, CircularUnitProjection.irregularKummerRow,
     KummerCriterion.CyclotomicUnits.kummerLogRowIndex]
 
 /-- Fourier coefficients omit frequency zero, so inverse character `278` is

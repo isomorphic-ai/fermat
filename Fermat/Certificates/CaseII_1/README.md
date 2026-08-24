@@ -13,7 +13,13 @@ For exponent `1831`, two certificate styles coexist:
 - `CircularUnitIrregularChannel1831AtQ18311.lean` checks the same frequency
   at the second split prime `q = 18311`;
 - `CircularUnitResidueCertificate1831AtQ18311.lean` authenticates the latter
-  phase as the actual circular-unit residue matrix.
+  phase as the actual circular-unit residue matrix;
+- `CircularUnitProjectionReceipt1831AtQ358877.lean` and
+  `CircularUnitProjectionReceipt1831AtQ18311.lean` compile the two
+  q-dependent receipts into the same q-free projection-kernel theorem;
+- `CircularUnitProjectionReceipt1831.lean` is the neutral production
+  selector. It currently uses the smaller prime, and can switch providers
+  without changing its public theorem or any downstream proof.
 
 The selective descent proves that only the Fourier channel reflected from
 the possible irregular Bernoulli index `1274` is required. The two split
@@ -53,4 +59,8 @@ receipts through the generic constructor.  Kummer row `636`, Bernoulli index
 `1274`, inverse Fourier frequency `278`, and Lean slot `277` are proved to be
 the same character.  The resulting detectors are exactly `882 * projection`
 and `1165 * projection`; Lean proves the second equals `1195` times the first
-and hence has the same kernel.
+and hence has the same kernel.  More strongly, multiplying by `882⁻¹` and
+`1165⁻¹` respectively makes both normalized detectors literally equal to
+`projection`. `CircularUnitResiduesChannelsIntrinsic.lean` consumes only a
+normalized projection theorem as an argument; the one-line
+`CircularUnitResiduesChannelsNormalized.lean` assembly selects provenance.

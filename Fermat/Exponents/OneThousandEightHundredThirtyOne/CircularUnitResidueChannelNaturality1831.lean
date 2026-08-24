@@ -1,6 +1,6 @@
+import Fermat.Certificates.CaseII_1.CircularUnitProjectionReceipt1831AtQ18311
+import Fermat.Certificates.CaseII_1.CircularUnitProjectionReceipt1831AtQ358877
 import Fermat.Descent.Irregular.AuxiliaryResidueCharacterNaturality
-import Fermat.Exponents.OneThousandEightHundredThirtyOne.CircularUnitResiduesChannels
-import Fermat.Exponents.OneThousandEightHundredThirtyOne.CircularUnitResiduesChannels18311
 
 /-!
 # Auxiliary-prime naturality of the 1831 irregular channel
@@ -14,9 +14,10 @@ Fourier frequency `278` (stored at zero-based slot `277`).
 
 For the stored cyclic conventions the scalars are `882` and `1165`, with
 `1165 = 1195 * 882 mod 1831`. Therefore the selected detectors are associates
-and have exactly the same kernel. The q=18311 full matrix is nevertheless
-singular, showing that characterwise equivalence is strictly weaker than
-full-matrix equivalence.
+and have exactly the same kernel. After multiplying by `882⁻¹` and `1165⁻¹`,
+both normalized detectors are literally the intrinsic projection. The
+q=18311 full matrix is nevertheless singular, showing that characterwise
+equivalence is strictly weaker than full-matrix equivalence.
 -/
 
 open scoped Matrix
@@ -103,7 +104,7 @@ theorem q18311_scalar_ne_zero : NewAdapter.factorization.scalar ≠ 0 := by
 
 /-- The intrinsic projection selected by Bernoulli index `1274`. -/
 def projection (e : Fin 914 → ZMod 1831) : ZMod 1831 :=
-  canonicalKummerChannel 1831 (by norm_num) irregularKummerRow e
+  CircularUnitProjection.projection e
 
 /-- The indexing statement linking the intrinsic row to Bernoulli `1274`. -/
 theorem projection_bernoulliIndex :
@@ -163,7 +164,9 @@ theorem q358877_detector_eq_scalar_mul_projection
     (e : Fin 914 → ZMod 1831) :
     q358877Factorization.residueDetector e =
       882 * projection e := by
-  simpa only [projection, q358877_scalar_eq] using
+  change q358877Factorization.residueDetector e =
+    882 * canonicalKummerChannel 1831 (by norm_num) irregularKummerRow e
+  simpa only [q358877_scalar_eq] using
     q358877Factorization.residueDetector_eq_scalar_mul_canonical e
 
 /-- The new cyclic detector factors as `1165 * projection`. -/
@@ -171,8 +174,39 @@ theorem q18311_detector_eq_scalar_mul_projection
     (e : Fin 914 → ZMod 1831) :
     NewAdapter.factorization.residueDetector e =
       1165 * projection e := by
-  simpa only [projection, q18311_scalar_eq] using
+  change NewAdapter.factorization.residueDetector e =
+    1165 * canonicalKummerChannel 1831 (by norm_num) irregularKummerRow e
+  simpa only [q18311_scalar_eq] using
     NewAdapter.factorization.residueDetector_eq_scalar_mul_canonical e
+
+/-- Dividing the original detector by `882` recovers the intrinsic
+projection exactly. -/
+theorem q358877_normalizedDetector_eq_projection
+    (e : Fin 914 → ZMod 1831) :
+    q358877Factorization.normalizedResidueDetector e = projection e := by
+  change q358877Factorization.normalizedResidueDetector e =
+    canonicalKummerChannel 1831 (by norm_num) irregularKummerRow e
+  exact q358877Factorization.normalizedResidueDetector_eq_canonical
+    q358877_scalar_ne_zero e
+
+/-- Dividing the smaller-prime detector by `1165` recovers the same
+intrinsic projection exactly. -/
+theorem q18311_normalizedDetector_eq_projection
+    (e : Fin 914 → ZMod 1831) :
+    NewAdapter.factorization.normalizedResidueDetector e = projection e := by
+  change NewAdapter.factorization.normalizedResidueDetector e =
+    canonicalKummerChannel 1831 (by norm_num) irregularKummerRow e
+  exact NewAdapter.factorization.normalizedResidueDetector_eq_canonical
+    q18311_scalar_ne_zero e
+
+/-- The two concrete auxiliary-prime detectors are literally equal after
+normalization, not merely projectively equivalent. -/
+theorem normalizedDetectors_eq (e : Fin 914 → ZMod 1831) :
+    q358877Factorization.normalizedResidueDetector e =
+      NewAdapter.factorization.normalizedResidueDetector e :=
+  Factorization.normalizedResidueDetectors_eq
+    q358877Factorization NewAdapter.factorization
+    q358877_scalar_ne_zero q18311_scalar_ne_zero e
 
 /-- Projective naturality for the two concrete cyclic detectors. -/
 theorem detector_cross_mul (e : Fin 914 → ZMod 1831) :
