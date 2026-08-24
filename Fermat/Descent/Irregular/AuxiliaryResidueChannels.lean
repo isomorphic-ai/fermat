@@ -1,4 +1,5 @@
 import Fermat.Descent.Irregular.CyclicDifferenceMatrixProjection
+import Fermat.Descent.Irregular.CanonicalKummerChannel
 import Fermat.Descent.Irregular.FiniteCharacterProjection
 import Fermat.Descent.Irregular.SelectiveKummerSaturation
 import Fermat.Descent.Irregular.CircularUnitResidues
@@ -17,7 +18,8 @@ the exact equality
 `q-dependent residue detector = q-dependent scalar * canonical channel`.
 
 Consequently, any two auxiliary-prime detectors with nonzero scalars have
-the same zero locus when they target the same canonical row.
+the same zero locus when they target the same canonical row. Multiplying each
+detector by the inverse of its scalar makes both literally equal to that row.
 -/
 
 open scoped BigOperators Matrix
@@ -94,12 +96,6 @@ theorem inverseMoment_frequency_eq_vandermonde
       rw [X.column_square]
 
 end CharacterCoordinates
-
-/-- The canonical, auxiliary-prime-independent Kummer character channel. -/
-def canonicalKummerChannel (p : ℕ) [Fact p.Prime] (hp_three : 3 ≤ p)
-    (j : Fin (kummerLogRank p))
-    (e : Fin (kummerLogRank p) → ZMod p) : ZMod p :=
-  (vandermondeTeichmullerEvenSubOneMatrix (p := p) hp_three *ᵥ e) j
 
 /-- A weighted residue functional for an auxiliary-prime certificate,
 together with its factorization through one fixed canonical Kummer channel.

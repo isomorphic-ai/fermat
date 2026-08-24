@@ -11,9 +11,10 @@ relation. This module exposes the remaining rows as a small certificate
 interface: an external detector only has to kill the Vandermonde coordinates
 supported on irregular Bernoulli rows.
 
-The detector is allowed to depend on an auxiliary split prime. Its relation
-is stated against the canonical Vandermonde coordinate, so the Bernoulli
-channel is independent of that choice.
+The primary interface asks directly for those intrinsic coordinates to
+vanish on power relations. A compatibility layer accepts detectors depending
+on an auxiliary split prime and cancels their nonzero scalars before entering
+the q-free core.
 -/
 
 namespace Fermat.Irregular.SelectiveKummerSaturation
