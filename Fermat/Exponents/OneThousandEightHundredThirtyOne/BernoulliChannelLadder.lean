@@ -2,7 +2,7 @@ import Fermat.Certificates.CaseII_1.BernoulliChannelCertificate1831
 import Fermat.Descent.GenericIrregular.BernoulliChannelLadder
 import Fermat.Exponents.OneThousandEightHundredThirtyOne.FirstCase
 import Fermat.Exponents.OneThousandEightHundredThirtyOne.GenericChannels
-import Fermat.Exponents.OneThousandEightHundredThirtyOne.GenericLemmaTwo
+import Fermat.Exponents.OneThousandEightHundredThirtyOne.GenericLemmaTwoChannels
 
 /-!
 # Full one-channel ladder at exponent 1831
@@ -63,7 +63,7 @@ def certificate : LadderCertificate 1831 1 where
     subst i
     rfl
   unitSystem :=
-    Fermat.OneThousandEightHundredThirtyOne.GenericLemmaTwo.lemmaTwoUnitSystem1831
+    Fermat.OneThousandEightHundredThirtyOne.GenericLemmaTwoChannels.lemmaTwoUnitSystem1831
   sophieGermain := sophieGermainCertificate
 
 /-- Fermat's Last Theorem at exponent `1831`, through the new one-channel
